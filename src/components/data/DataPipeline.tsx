@@ -2,6 +2,69 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { colors, typography, spacing } from '../../designTokens';
 import { pipelineStages } from '../../data/pipelineStages';
+import type { PipelineStage } from '../../data/pipelineStages';
+
+const sharedStages = pipelineStages.filter(s => s.branch === 'shared');
+const nationalStages = pipelineStages.filter(s => s.branch === 'national');
+const localStages = pipelineStages.filter(s => s.branch === 'local');
+
+function StageButton({ s, isActive, onClick, borderRadiusLeft, borderRadiusRight, marginLeft }: {
+  s: PipelineStage;
+  isActive: boolean;
+  onClick: () => void;
+  borderRadiusLeft?: boolean;
+  borderRadiusRight?: boolean;
+  marginLeft?: boolean;
+}) {
+  const r = spacing.radius.xl;
+  const borderRadius = borderRadiusLeft && borderRadiusRight
+    ? r
+    : borderRadiusLeft ? `${r} 0 0 ${r}`
+    : borderRadiusRight ? `0 ${r} ${r} 0`
+    : '0';
+
+  return (
+    <button
+      onClick={onClick}
+      style={{
+        flex: 1,
+        minWidth: '110px',
+        padding: `${spacing.md} ${spacing.sm}`,
+        border: `2px solid ${isActive ? colors.primary[500] : colors.border.light}`,
+        borderRadius,
+        backgroundColor: isActive ? colors.primary[50] : colors.white,
+        cursor: 'pointer',
+        textAlign: 'center',
+        fontFamily: typography.fontFamily.primary,
+        transition: 'all 0.2s ease',
+        marginLeft: marginLeft ? '-2px' : '0',
+        position: 'relative',
+      }}
+    >
+      <div style={{ fontSize: '20px', marginBottom: '2px' }}>{s.icon}</div>
+      <div style={{ fontSize: '11px', fontWeight: typography.fontWeight.bold, color: isActive ? colors.primary[800] : colors.text.primary, lineHeight: 1.3 }}>
+        {s.title}
+      </div>
+      <div style={{ fontSize: '9px', color: colors.text.tertiary, marginTop: '1px', lineHeight: 1.2 }}>{s.subtitle}</div>
+      {s.isFinalDataset && (
+        <div style={{
+          marginTop: spacing.xs,
+          fontSize: '8px',
+          fontWeight: typography.fontWeight.bold,
+          color: colors.white,
+          backgroundColor: colors.primary[500],
+          borderRadius: spacing.radius.sm,
+          padding: '1px 6px',
+          display: 'inline-block',
+          letterSpacing: '0.5px',
+          textTransform: 'uppercase' as const,
+        }}>
+          Final dataset
+        </div>
+      )}
+    </button>
+  );
+}
 
 export default function DataPipeline() {
   const [activeStage, setActiveStage] = useState(0);
@@ -12,44 +75,111 @@ export default function DataPipeline() {
     setExpandedSection(expandedSection === section ? null : section);
   };
 
+  const selectStage = (id: string) => {
+    const idx = pipelineStages.findIndex(s => s.id === id);
+    if (idx >= 0) {
+      setActiveStage(idx);
+      setExpandedSection(null);
+    }
+  };
+
   return (
     <div>
       <p style={{ fontSize: typography.fontSize.lg, color: colors.text.secondary, lineHeight: 1.7, marginBottom: spacing['3xl'], maxWidth: '720px' }}>
         PolicyEngine constructs its representative household dataset through a multi-stage pipeline,
-        starting from public survey data and ending with a calibrated, current-year microdata file
-        matched to 100+ administrative targets.
+        starting from public survey data and branching into two final datasets: one calibrated nationally,
+        one calibrated per state and congressional district.
       </p>
 
-      {/* Pipeline flow */}
-      <div style={{ display: 'flex', alignItems: 'stretch', gap: 0, marginBottom: spacing['3xl'], flexWrap: 'wrap' }}>
-        {pipelineStages.map((s, i) => (
-          <div key={s.id} style={{ flex: 1, minWidth: '130px', display: 'flex', alignItems: 'stretch' }}>
-            <button
-              onClick={() => { setActiveStage(i); setExpandedSection(null); }}
-              style={{
-                flex: 1,
-                padding: `${spacing.lg} ${spacing.md}`,
-                border: `2px solid ${i === activeStage ? colors.primary[500] : colors.border.light}`,
-                borderRadius: i === 0 ? `${spacing.radius.xl} 0 0 ${spacing.radius.xl}` : i === pipelineStages.length - 1 ? `0 ${spacing.radius.xl} ${spacing.radius.xl} 0` : '0',
-                backgroundColor: i === activeStage ? colors.primary[50] : colors.white,
-                cursor: 'pointer',
-                textAlign: 'center',
-                fontFamily: typography.fontFamily.primary,
-                transition: 'all 0.2s ease',
-                marginLeft: i > 0 ? '-2px' : '0',
-              }}
-            >
-              <div style={{ fontSize: '22px', marginBottom: spacing.xs }}>{s.icon}</div>
-              <div style={{ fontSize: typography.fontSize.xs, fontWeight: typography.fontWeight.bold, color: i === activeStage ? colors.primary[800] : colors.text.primary }}>
-                {s.title}
-              </div>
-              <div style={{ fontSize: '10px', color: colors.text.tertiary, marginTop: '2px' }}>{s.subtitle}</div>
-              {s.inputSize && (
-                <div style={{ fontSize: '9px', color: colors.text.tertiary, marginTop: spacing.xs, opacity: 0.7 }}>{s.outputSize || s.inputSize}</div>
-              )}
-            </button>
+      {/* Pipeline flow - branching layout */}
+      <div style={{ marginBottom: spacing['3xl'] }}>
+        {/* Shared linear portion */}
+        <div style={{ display: 'flex', alignItems: 'stretch', gap: 0 }}>
+          {sharedStages.map((s, i) => (
+            <div key={s.id} style={{ flex: 1, display: 'flex', alignItems: 'stretch' }}>
+              <StageButton
+                s={s}
+                isActive={pipelineStages.indexOf(s) === activeStage}
+                onClick={() => selectStage(s.id)}
+                borderRadiusLeft={i === 0}
+                marginLeft={i > 0}
+              />
+            </div>
+          ))}
+        </div>
+
+        {/* Fork connector */}
+        <div style={{ display: 'flex', justifyContent: 'center', position: 'relative', height: '40px' }}>
+          {/* Vertical line from shared row */}
+          <div style={{ position: 'absolute', top: 0, left: '50%', width: '2px', height: '20px', backgroundColor: colors.border.light }} />
+          {/* Horizontal bar spanning both branches */}
+          <div style={{ position: 'absolute', top: '20px', left: '25%', right: '25%', height: '2px', backgroundColor: colors.border.light }} />
+          {/* Left drop to national branch */}
+          <div style={{ position: 'absolute', top: '20px', left: '25%', width: '2px', height: '20px', backgroundColor: colors.border.light }} />
+          {/* Right drop to local branch */}
+          <div style={{ position: 'absolute', top: '20px', right: '25%', width: '2px', height: '20px', backgroundColor: colors.border.light }} />
+        </div>
+
+        {/* Two branches side by side */}
+        <div style={{ display: 'flex', gap: spacing['2xl'] }}>
+          {/* National branch */}
+          <div style={{ flex: 1 }}>
+            <div style={{
+              fontSize: typography.fontSize.xs,
+              fontWeight: typography.fontWeight.semibold,
+              color: colors.primary[700],
+              textAlign: 'center',
+              marginBottom: spacing.sm,
+              textTransform: 'uppercase' as const,
+              letterSpacing: '1px',
+            }}>
+              National
+            </div>
+            <div style={{ display: 'flex', alignItems: 'stretch', gap: 0 }}>
+              {nationalStages.map((s, i) => (
+                <div key={s.id} style={{ flex: 1, display: 'flex', alignItems: 'stretch' }}>
+                  <StageButton
+                    s={s}
+                    isActive={pipelineStages.indexOf(s) === activeStage}
+                    onClick={() => selectStage(s.id)}
+                    borderRadiusLeft={i === 0}
+                    borderRadiusRight={i === nationalStages.length - 1}
+                    marginLeft={i > 0}
+                  />
+                </div>
+              ))}
+            </div>
           </div>
-        ))}
+
+          {/* Local branch */}
+          <div style={{ flex: 1 }}>
+            <div style={{
+              fontSize: typography.fontSize.xs,
+              fontWeight: typography.fontWeight.semibold,
+              color: colors.primary[700],
+              textAlign: 'center',
+              marginBottom: spacing.sm,
+              textTransform: 'uppercase' as const,
+              letterSpacing: '1px',
+            }}>
+              Local (state / CD)
+            </div>
+            <div style={{ display: 'flex', alignItems: 'stretch', gap: 0 }}>
+              {localStages.map((s, i) => (
+                <div key={s.id} style={{ flex: 1, display: 'flex', alignItems: 'stretch' }}>
+                  <StageButton
+                    s={s}
+                    isActive={pipelineStages.indexOf(s) === activeStage}
+                    onClick={() => selectStage(s.id)}
+                    borderRadiusLeft={i === 0}
+                    borderRadiusRight={i === localStages.length - 1}
+                    marginLeft={i > 0}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Stage detail */}
@@ -63,18 +193,33 @@ export default function DataPipeline() {
           style={{
             padding: spacing['3xl'],
             borderRadius: spacing.radius.xl,
-            border: `1px solid ${colors.border.light}`,
+            border: `1px solid ${stage.isFinalDataset ? colors.primary[300] : colors.border.light}`,
             backgroundColor: colors.white,
-            boxShadow: spacing.shadow.sm,
+            boxShadow: stage.isFinalDataset ? `0 0 0 1px ${colors.primary[100]}, ${spacing.shadow.sm}` : spacing.shadow.sm,
           }}
         >
           {/* Header */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: spacing.xl, flexWrap: 'wrap', gap: spacing.md }}>
-            <div>
-              <h3 style={{ fontSize: typography.fontSize['2xl'], fontWeight: typography.fontWeight.bold, color: colors.primary[900], margin: 0 }}>
-                {stage.title}
-              </h3>
-              <div style={{ fontSize: typography.fontSize.sm, color: colors.text.tertiary, marginTop: spacing.xs }}>{stage.subtitle}</div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: spacing.md }}>
+              <div>
+                <h3 style={{ fontSize: typography.fontSize['2xl'], fontWeight: typography.fontWeight.bold, color: colors.primary[900], margin: 0 }}>
+                  {stage.title}
+                </h3>
+                <div style={{ fontSize: typography.fontSize.sm, color: colors.text.tertiary, marginTop: spacing.xs }}>{stage.subtitle}</div>
+              </div>
+              {stage.isFinalDataset && (
+                <span style={{
+                  fontSize: typography.fontSize.xs,
+                  fontWeight: typography.fontWeight.bold,
+                  color: colors.primary[700],
+                  backgroundColor: colors.primary[50],
+                  border: `1px solid ${colors.primary[200]}`,
+                  borderRadius: spacing.radius.md,
+                  padding: `2px ${spacing.md}`,
+                }}>
+                  Final dataset
+                </span>
+              )}
             </div>
             {(stage.inputSize || stage.outputSize) && (
               <div style={{ display: 'flex', gap: spacing.lg }}>

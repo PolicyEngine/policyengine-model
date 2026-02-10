@@ -22,11 +22,16 @@ export interface PipelineStage {
   imputations?: ImputationVariable[];
   calibrationTargets?: CalibrationTarget[];
   dataSources?: string[];
+  /** 'shared' = linear portion, 'national' or 'local' = branched portion */
+  branch: 'shared' | 'national' | 'local';
+  /** True if this is a final output dataset */
+  isFinalDataset?: boolean;
 }
 
 export const pipelineStages: PipelineStage[] = [
   {
     id: 'cps',
+    branch: 'shared',
     title: 'Census CPS ASEC',
     subtitle: 'Base microdata',
     description: 'The Current Population Survey Annual Social and Economic Supplement (CPS ASEC) provides the baseline microdata. The March 2025 supplement covers tax year 2024 with ~200,000 individuals across ~60,000 households.',
@@ -51,6 +56,7 @@ export const pipelineStages: PipelineStage[] = [
   },
   {
     id: 'cps-processing',
+    branch: 'shared',
     title: 'CPS processing',
     subtitle: 'Income splitting and take-up',
     description: 'Raw Census variables are mapped to PolicyEngine\'s variable system. Income is split into detailed components using IRS ratios, and program participation is calibrated using take-up rates from federal agencies.',
@@ -79,6 +85,7 @@ export const pipelineStages: PipelineStage[] = [
   },
   {
     id: 'puf',
+    branch: 'shared',
     title: 'IRS PUF',
     subtitle: 'Tax return data',
     description: 'The IRS Public Use File (PUF) from 2015 provides detailed tax return information not available in the CPS: itemized deductions, business income, capital gains, and credits. Records are uprated to 2024 using SOI growth factors.',
@@ -106,6 +113,7 @@ export const pipelineStages: PipelineStage[] = [
   },
   {
     id: 'extended',
+    branch: 'shared',
     title: 'Extended CPS',
     subtitle: 'PUF → CPS imputation',
     description: 'The CPS is doubled by stacking: (1) original CPS records keeping their income, and (2) a copy with PUF-imputed income variables. This creates a rich dataset with both CPS demographics and PUF tax detail. Quantile random forests transfer 84 variables from PUF to CPS.',
@@ -125,8 +133,10 @@ export const pipelineStages: PipelineStage[] = [
   },
   {
     id: 'enhanced',
+    branch: 'national',
+    isFinalDataset: true,
     title: 'Enhanced CPS',
-    subtitle: 'L0 calibration',
+    subtitle: 'National L0 calibration',
     description: 'Household weights are optimized using L0-regularized gradient descent so that weighted aggregates match 100+ administrative targets from IRS, CBO, SSA, CMS, and other agencies. The L0 penalty drives many weights to exactly zero, selecting the most informative records.',
     icon: '⚖️',
     inputSize: '~400,000 persons (extended)',
@@ -171,6 +181,7 @@ export const pipelineStages: PipelineStage[] = [
   },
   {
     id: 'stratified',
+    branch: 'local',
     title: 'Stratified CPS',
     subtitle: 'Geographic cloning',
     description: 'For state and congressional district analysis, the Enhanced CPS is cloned to 12,000 copies — one per geographic area — and pre-filtered so each clone starts with plausible households for that region.',
@@ -187,6 +198,8 @@ export const pipelineStages: PipelineStage[] = [
   },
   {
     id: 'local-l0',
+    branch: 'local',
+    isFinalDataset: true,
     title: 'L0-pruned local',
     subtitle: 'Local-area calibration',
     description: 'Each geographic clone is independently recalibrated using L0-regularized optimization to match state-level and congressional district-level administrative targets. The L0 penalty drives most household weights to zero, selecting only the records most representative of each local area.',
