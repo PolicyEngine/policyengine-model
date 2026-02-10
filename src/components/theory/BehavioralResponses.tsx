@@ -23,7 +23,8 @@ function generateBudgetData(substitutionElasticity: number, incomeElasticity: nu
   return data;
 }
 
-export default function BehavioralResponses({ country: _country = 'us' }: { country?: string }) {
+export default function BehavioralResponses({ country = 'us' }: { country?: string }) {
+  const currencySymbol = country === 'uk' ? '£' : '$';
   const [incomeElasticity, setIncomeElasticity] = useState(cboDefaults.incomeElasticity.central);
   const [substitutionElasticities, setSubstitutionElasticities] = useState(
     cboDefaults.substitutionElasticities.map(e => e.central)
@@ -96,8 +97,8 @@ export default function BehavioralResponses({ country: _country = 'us' }: { coun
             <LineChart data={budgetData}>
               <CartesianGrid strokeDasharray="3 3" stroke={colors.border.light} />
               <XAxis dataKey="hours" label={{ value: 'Hours worked per week', position: 'bottom', offset: -5, style: { fontSize: 12, fill: colors.text.secondary, fontFamily: typography.fontFamily.primary } }} tick={{ fontSize: 11, fill: colors.text.tertiary }} />
-              <YAxis tickFormatter={(v) => `$${(v / 1000).toFixed(0)}k`} tick={{ fontSize: 11, fill: colors.text.tertiary }} label={{ value: 'After-tax income', angle: -90, position: 'insideLeft', offset: 10, style: { fontSize: 12, fill: colors.text.secondary, fontFamily: typography.fontFamily.primary } }} />
-              <Tooltip formatter={(value) => [`$${Number(value).toLocaleString()}`, '']} contentStyle={{ borderRadius: spacing.radius.md, border: `1px solid ${colors.border.light}`, fontFamily: typography.fontFamily.primary, fontSize: 12 }} />
+              <YAxis tickFormatter={(v) => `${currencySymbol}${(v / 1000).toFixed(0)}k`} tick={{ fontSize: 11, fill: colors.text.tertiary }} label={{ value: 'After-tax income', angle: -90, position: 'insideLeft', offset: 10, style: { fontSize: 12, fill: colors.text.secondary, fontFamily: typography.fontFamily.primary } }} />
+              <Tooltip formatter={(value) => [`${currencySymbol}${Number(value).toLocaleString()}`, '']} contentStyle={{ borderRadius: spacing.radius.md, border: `1px solid ${colors.border.light}`, fontFamily: typography.fontFamily.primary, fontSize: 12 }} />
               <ReferenceLine x={40} stroke={colors.gray[300]} strokeDasharray="5 5" />
               <Line type="monotone" dataKey="baseline" stroke={colors.gray[400]} strokeWidth={2} dot={false} name="Baseline" />
               <Line type="monotone" dataKey="reform" stroke={colors.primary[500]} strokeWidth={2} dot={false} name="Reform (static)" />

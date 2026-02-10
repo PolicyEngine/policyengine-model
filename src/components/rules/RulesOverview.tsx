@@ -340,7 +340,7 @@ function StateDetailPanel({ stateCode, onClose }: { stateCode: string; onClose: 
   );
 }
 
-export default function RulesOverview({ country: _country = 'us' }: { country?: string }) {
+export default function RulesOverview({ country = 'us' }: { country?: string }) {
   const [viewMode, setViewMode] = useState<ViewMode>('programs');
   const [selectedProgram, setSelectedProgram] = useState<Program | null>(null);
   const [selectedState, setSelectedState] = useState<string | null>(null);
@@ -397,6 +397,21 @@ export default function RulesOverview({ country: _country = 'us' }: { country?: 
       return { state: st, complete, total, pct: total > 0 ? complete / total : 0 };
     }).sort((a, b) => b.pct - a.pct);
   }, []);
+
+  if (country === 'uk') {
+    return (
+      <div>
+        <p style={{ fontSize: typography.fontSize.lg, color: colors.text.secondary, lineHeight: 1.7, maxWidth: '720px' }}>
+          PolicyEngine UK models over 50 tax and benefit programs across HMRC, DWP, DfE, Treasury, and devolved administrations including income tax, National Insurance, VAT, Universal Credit, pension credit, child benefit, and many more.
+        </p>
+        <p style={{ fontSize: typography.fontSize.sm, color: colors.primary[600], marginTop: spacing.lg }}>
+          <a href="https://github.com/PolicyEngine/policyengine-uk" target="_blank" rel="noopener noreferrer" style={{ color: colors.primary[600], textDecoration: 'underline' }}>
+            View the full UK model on GitHub
+          </a>
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div>
