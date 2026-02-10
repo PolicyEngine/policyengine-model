@@ -100,7 +100,7 @@ export function getMicrosimSteps(country: string): MicrosimStep[] {
     {
       id: 4,
       title: 'Weight and aggregate',
-      description: 'Each household represents many real households. Multiply by survey weights and sum for population-level estimates.',
+      description: 'Each household in our survey data represents many real households. We determine weights using official government surveys (the Current Population Survey in the US, the Family Resources Survey in the UK) to ensure our sample matches the true population, then multiply and sum for population-level estimates.',
       ingredient: null,
       columns: ['Household', 'Tax change', 'Weight', 'Weighted impact'],
       getRowData: (h) => {

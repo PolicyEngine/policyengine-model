@@ -127,7 +127,7 @@ export default function BehavioralResponses({ country = 'us' }: { country?: stri
       </div>
 
       {/* Presets */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: spacing.lg, marginBottom: spacing['2xl'] }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: spacing.lg, marginBottom: spacing['2xl'], flexWrap: 'wrap' }}>
         <h3 style={{ fontSize: typography.fontSize['2xl'], fontWeight: typography.fontWeight.bold, color: colors.primary[900], margin: 0 }}>
           Elasticity parameters
         </h3>
@@ -192,12 +192,12 @@ export default function BehavioralResponses({ country = 'us' }: { country?: stri
         <h4 style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary, marginBottom: spacing.lg }}>
           Substitution elasticity by income decile
         </h4>
-        <div style={{ borderRadius: spacing.radius.xl, border: `1px solid ${colors.border.light}`, overflow: 'hidden', boxShadow: spacing.shadow.sm }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontFamily: typography.fontFamily.primary }}>
+        <div style={{ borderRadius: spacing.radius.xl, border: `1px solid ${colors.border.light}`, overflowX: 'auto', boxShadow: spacing.shadow.sm }}>
+          <table style={{ width: '100%', minWidth: '400px', borderCollapse: 'collapse', fontFamily: typography.fontFamily.primary }}>
             <thead>
               <tr>
-                {['Decile', 'CBO lower', 'Value', 'CBO higher'].map(col => (
-                  <th key={col} style={{ padding: `${spacing.sm} ${spacing.md}`, textAlign: col === 'Decile' ? 'left' : 'center', fontSize: typography.fontSize.xs, fontWeight: typography.fontWeight.semibold, color: colors.text.secondary, backgroundColor: colors.gray[50], borderBottom: `1px solid ${colors.border.light}` }}>
+                {['Decile', 'CBO lower', 'Value', 'CBO upper'].map(col => (
+                  <th key={col} style={{ padding: `${spacing.sm} ${spacing.md}`, textAlign: col === 'Decile' ? 'left' : 'center', fontSize: typography.fontSize.xs, fontWeight: typography.fontWeight.semibold, color: colors.text.secondary, backgroundColor: colors.gray[50], borderBottom: `1px solid ${colors.border.light}`, whiteSpace: 'nowrap' }}>
                     {col}
                   </th>
                 ))}
