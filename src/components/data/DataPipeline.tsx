@@ -4,6 +4,28 @@ import { colors, typography, spacing } from '../../designTokens';
 import { pipelineStages } from '../../data/pipelineStages';
 import { ukPipelineStages } from '../../data/ukPipelineStages';
 import type { PipelineStage } from '../../data/pipelineStages';
+import {
+  IconChartBar, IconSettings, IconBuildingBank, IconLink, IconScale,
+  IconMap, IconMapPin, IconCoin, IconShoppingCart, IconHeartbeat,
+  IconTrendingUp, IconSchool, IconCheckbox, IconBuildingCommunity,
+} from '@tabler/icons-react';
+
+const iconMap: Record<string, React.ComponentType<{ size?: number; stroke?: number }>> = {
+  'chart-bar': IconChartBar,
+  'settings': IconSettings,
+  'building-bank': IconBuildingBank,
+  'link': IconLink,
+  'scale': IconScale,
+  'map': IconMap,
+  'map-pin': IconMapPin,
+  'coin': IconCoin,
+  'shopping-cart': IconShoppingCart,
+  'heart-pulse': IconHeartbeat,
+  'trending-up': IconTrendingUp,
+  'school': IconSchool,
+  'checkbox': IconCheckbox,
+  'building-community': IconBuildingCommunity,
+};
 
 function StageButton({ s, isActive, onClick, borderRadiusLeft, borderRadiusRight, marginLeft }: {
   s: PipelineStage;
@@ -38,7 +60,9 @@ function StageButton({ s, isActive, onClick, borderRadiusLeft, borderRadiusRight
         position: 'relative',
       }}
     >
-      <div style={{ fontSize: '20px', marginBottom: '2px' }}>{s.icon}</div>
+      <div style={{ marginBottom: '2px', display: 'flex', justifyContent: 'center', color: isActive ? colors.primary[600] : colors.text.tertiary }}>
+        {(() => { const Icon = iconMap[s.icon]; return Icon ? <Icon size={20} stroke={1.5} /> : null; })()}
+      </div>
       <div style={{ fontSize: '11px', fontWeight: typography.fontWeight.bold, color: isActive ? colors.primary[800] : colors.text.primary, lineHeight: 1.3 }}>
         {s.title}
       </div>

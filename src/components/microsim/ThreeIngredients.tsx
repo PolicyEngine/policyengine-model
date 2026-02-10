@@ -1,10 +1,12 @@
+import { type ReactNode } from 'react';
 import { motion } from 'framer-motion';
 import { colors, typography, spacing } from '../../designTokens';
+import { IconFileText, IconUsers, IconTrendingUp } from '@tabler/icons-react';
 
 interface IngredientCardProps {
   title: string;
   description: string;
-  icon: string;
+  icon: ReactNode;
   delay: number;
   isActive?: boolean;
 }
@@ -27,8 +29,8 @@ function IngredientCard({ title, description, icon, delay, isActive }: Ingredien
     >
       <div
         style={{
-          fontSize: '36px',
           marginBottom: spacing.lg,
+          color: colors.primary[600],
         }}
       >
         {icon}
@@ -67,21 +69,21 @@ export default function ThreeIngredients({ activeIngredient }: ThreeIngredientsP
       title: 'Policy rules',
       description:
         'Tax codes, benefit formulas, and eligibility rules encoded as executable logic. Over 55 federal, state, and local programs.',
-      icon: '\u{1F4DC}',
+      icon: <IconFileText size={36} stroke={1.5} />,
       key: 'policies' as const,
     },
     {
       title: 'Household data',
       description:
         'A representative microdata sample of the population, with income, demographics, and program participation for each household.',
-      icon: '\u{1F465}',
+      icon: <IconUsers size={36} stroke={1.5} />,
       key: 'households' as const,
     },
     {
       title: 'Behavioral dynamics',
       description:
         'Elasticities capturing how people adjust their labor supply and income in response to tax and benefit changes.',
-      icon: '\u{1F4C8}',
+      icon: <IconTrendingUp size={36} stroke={1.5} />,
       key: 'dynamics' as const,
     },
   ];

@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { colors, typography, spacing, statusColors } from '../../designTokens';
 import { programs, getStatusCount } from '../../data/programs';
 import type { CoverageStatus, Program } from '../../types/Program';
+import { IconX } from '@tabler/icons-react';
 
 const ALL_STATES = [
   'AL','AK','AZ','AR','CA','CO','CT','DE','DC','FL','GA','HI','ID','IL','IN','IA',
@@ -159,8 +160,8 @@ function ProgramDetailPanel({ program, onClose }: { program: Program; onClose: (
             <div style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary, marginTop: spacing.xs }}>{program.fullName}</div>
           )}
         </div>
-        <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '20px', color: colors.text.tertiary, padding: spacing.sm }}>
-          ✕
+        <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: colors.text.tertiary, padding: spacing.sm, display: 'flex', alignItems: 'center' }}>
+          <IconX size={20} stroke={1.5} />
         </button>
       </div>
 
@@ -290,8 +291,8 @@ function StateDetailPanel({ stateCode, onClose }: { stateCode: string; onClose: 
             {complete} of {total} programs complete
           </div>
         </div>
-        <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '20px', color: colors.text.tertiary, padding: spacing.sm }}>
-          ✕
+        <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: colors.text.tertiary, padding: spacing.sm, display: 'flex', alignItems: 'center' }}>
+          <IconX size={20} stroke={1.5} />
         </button>
       </div>
 
