@@ -1,11 +1,13 @@
 import { colors, typography, spacing } from '../../designTokens';
 import { useScrollSpy } from '../../hooks/useScrollSpy';
 
+const isUK = new URLSearchParams(window.location.search).get('country') === 'uk';
+
 const sections = [
   { id: 'microsim', label: 'How it works' },
   { id: 'rules', label: 'Rules' },
   { id: 'data', label: 'Data' },
-  { id: 'theory', label: 'Behavioral responses' },
+  { id: 'theory', label: isUK ? 'Behavioural responses' : 'Behavioral responses' },
 ];
 
 export default function StickyNav() {

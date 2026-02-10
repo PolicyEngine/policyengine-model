@@ -21,7 +21,7 @@ export default function App() {
         title="How microsimulation works"
         subtitle="The engine"
       >
-        <Walkthrough />
+        <Walkthrough country={country} />
       </SectionContainer>
 
       <SectionContainer
@@ -43,7 +43,7 @@ export default function App() {
 
       <SectionContainer
         id="theory"
-        title="Behavioral responses"
+        title={country === 'uk' ? 'Behavioural responses' : 'Behavioral responses'}
         subtitle="Economic theory"
         background={colors.background.secondary}
       >

@@ -59,7 +59,7 @@ export default function BehavioralResponses({ country = 'us' }: { country?: stri
     <div>
       <p style={{ fontSize: typography.fontSize.lg, color: colors.text.secondary, lineHeight: 1.7, marginBottom: spacing.md, maxWidth: '720px' }}>
         Tax and benefit reforms change incentives to work and earn. PolicyEngine models these
-        behavioral responses using the elasticity of taxable income framework, capturing both
+        {country === 'uk' ? ' behavioural' : ' behavioral'} responses using the elasticity of taxable income framework, capturing both
         substitution effects (changing work effort) and income effects (adjusting for changes in after-tax income).
       </p>
       <p style={{ fontSize: typography.fontSize.sm, color: colors.primary[600], marginBottom: spacing['3xl'] }}>
@@ -103,7 +103,7 @@ export default function BehavioralResponses({ country = 'us' }: { country?: stri
               <Line type="monotone" dataKey="baseline" stroke={colors.gray[400]} strokeWidth={2} dot={false} name="Baseline" />
               <Line type="monotone" dataKey="reform" stroke={colors.primary[500]} strokeWidth={2} dot={false} name="Reform (static)" />
               {(incomeElasticity !== 0 || avgSubstitution !== 0) && (
-                <Line type="monotone" dataKey="behavioral" stroke={colors.warning} strokeWidth={2} dot={false} name="Reform (behavioral)" strokeDasharray="5 5" />
+                <Line type="monotone" dataKey="behavioral" stroke={colors.warning} strokeWidth={2} dot={false} name={country === 'uk' ? 'Reform (behavioural)' : 'Reform (behavioral)'} strokeDasharray="5 5" />
               )}
             </LineChart>
           </ResponsiveContainer>
@@ -119,7 +119,7 @@ export default function BehavioralResponses({ country = 'us' }: { country?: stri
             {(incomeElasticity !== 0 || avgSubstitution !== 0) && (
               <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
                 <div style={{ width: '20px', height: '3px', backgroundColor: colors.warning, borderRadius: '2px', borderTop: '1px dashed transparent' }} />
-                <span style={{ fontSize: typography.fontSize.xs, color: colors.text.secondary }}>Reform (behavioral)</span>
+                <span style={{ fontSize: typography.fontSize.xs, color: colors.text.secondary }}>{country === 'uk' ? 'Reform (behavioural)' : 'Reform (behavioral)'}</span>
               </div>
             )}
           </div>

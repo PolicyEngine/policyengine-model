@@ -22,8 +22,8 @@ export const sampleHouseholds: Household[] = [
   { id: 5, name: 'Household E', earnings: 200000, children: 1 },
 ];
 
-function fmt(n: number): string {
-  return '$' + n.toLocaleString();
+function fmt(n: number, currency: string): string {
+  return currency + n.toLocaleString();
 }
 
 function baselineTax(earnings: number): number {
@@ -32,75 +32,85 @@ function baselineTax(earnings: number): number {
   return 13900 + Math.round((earnings - 85000) * 0.32);
 }
 
-function reformTax(earnings: number, children: number): number {
+function reformTax(earnings: number, children: number, creditPerChild: number): number {
   const base = baselineTax(earnings);
-  const credit = children * 3000;
+  const credit = children * creditPerChild;
   return Math.max(0, base - credit);
 }
 
-function behavioralEarnings(earnings: number, children: number): number {
+function behavioralEarnings(earnings: number, children: number, creditPerChild: number): number {
   const mtrBefore = earnings <= 40000 ? 0.1 : earnings <= 85000 ? 0.22 : 0.32;
-  const creditRate = children > 0 ? (children * 3000) / earnings : 0;
+  const creditRate = children > 0 ? (children * creditPerChild) / earnings : 0;
   const elasticity = 0.25;
   const mtrAfter = Math.max(0, mtrBefore - creditRate);
   const pctChange = -elasticity * (mtrAfter - mtrBefore) / (1 - mtrBefore);
   return Math.round(earnings * (1 + pctChange));
 }
 
-export const microsimSteps: MicrosimStep[] = [
-  {
-    id: 0,
-    title: 'Start with households',
-    description: 'A representative sample of households, each with their own characteristics.',
-    ingredient: 'households',
-    columns: ['Household', 'Earnings', 'Children'],
-    getRowData: (h) => [h.name, fmt(h.earnings), h.children],
-  },
-  {
-    id: 1,
-    title: 'Calculate baseline taxes',
-    description: 'Apply current tax rules to each household to compute their tax liability.',
-    ingredient: 'policies',
-    columns: ['Household', 'Earnings', 'Baseline tax'],
-    getRowData: (h) => [h.name, fmt(h.earnings), fmt(baselineTax(h.earnings))],
-  },
-  {
-    id: 2,
-    title: 'Calculate reform taxes',
-    description: 'Apply the proposed reform (e.g., $3,000/child tax credit) to compute new tax liability.',
-    ingredient: 'policies',
-    columns: ['Household', 'Baseline tax', 'Reform tax', 'Change'],
-    getRowData: (h) => {
-      const base = baselineTax(h.earnings);
-      const reform = reformTax(h.earnings, h.children);
-      return [h.name, fmt(base), fmt(reform), fmt(reform - base)];
+export function getMicrosimSteps(country: string): MicrosimStep[] {
+  const c = country === 'uk' ? '£' : '$';
+  const creditPerChild = country === 'uk' ? 2000 : 3000;
+  const creditLabel = country === 'uk'
+    ? `£${creditPerChild.toLocaleString()}/child tax credit`
+    : `$${creditPerChild.toLocaleString()}/child tax credit`;
+
+  return [
+    {
+      id: 0,
+      title: 'Start with households',
+      description: 'A representative sample of households, each with their own characteristics.',
+      ingredient: 'households',
+      columns: ['Household', 'Earnings', 'Children'],
+      getRowData: (h) => [h.name, fmt(h.earnings, c), h.children],
     },
-  },
-  {
-    id: 3,
-    title: 'Model behavioral responses',
-    description: 'People change their behavior in response to tax changes. Using elasticity of taxable income, we estimate how earnings shift.',
-    ingredient: 'dynamics',
-    columns: ['Household', 'Original earnings', 'Adjusted earnings', 'Final tax'],
-    getRowData: (h) => {
-      const adj = behavioralEarnings(h.earnings, h.children);
-      const finalTax = reformTax(adj, h.children);
-      return [h.name, fmt(h.earnings), fmt(adj), fmt(finalTax)];
+    {
+      id: 1,
+      title: 'Calculate baseline taxes',
+      description: 'Apply current tax rules to each household to compute their tax liability.',
+      ingredient: 'policies',
+      columns: ['Household', 'Earnings', 'Baseline tax'],
+      getRowData: (h) => [h.name, fmt(h.earnings, c), fmt(baselineTax(h.earnings), c)],
     },
-  },
-  {
-    id: 4,
-    title: 'Weight and aggregate',
-    description: 'Each household represents many real households. Multiply by survey weights and sum for population-level estimates.',
-    ingredient: null,
-    columns: ['Household', 'Tax change', 'Weight', 'Weighted impact'],
-    getRowData: (h) => {
-      const adj = behavioralEarnings(h.earnings, h.children);
-      const base = baselineTax(h.earnings);
-      const reform = reformTax(adj, h.children);
-      const change = reform - base;
-      const weight = Math.round(20000 + Math.random() * 30000);
-      return [h.name, fmt(change), weight.toLocaleString(), fmt(change * weight)];
+    {
+      id: 2,
+      title: 'Calculate reform taxes',
+      description: `Apply the proposed reform (e.g., ${creditLabel}) to compute new tax liability.`,
+      ingredient: 'policies',
+      columns: ['Household', 'Baseline tax', 'Reform tax', 'Change'],
+      getRowData: (h) => {
+        const base = baselineTax(h.earnings);
+        const reform = reformTax(h.earnings, h.children, creditPerChild);
+        return [h.name, fmt(base, c), fmt(reform, c), fmt(reform - base, c)];
+      },
     },
-  },
-];
+    {
+      id: 3,
+      title: country === 'uk' ? 'Model behavioural responses' : 'Model behavioral responses',
+      description: country === 'uk'
+        ? 'People change their behaviour in response to tax changes. Using elasticity of taxable income, we estimate how earnings shift.'
+        : 'People change their behavior in response to tax changes. Using elasticity of taxable income, we estimate how earnings shift.',
+      ingredient: 'dynamics',
+      columns: ['Household', 'Original earnings', 'Adjusted earnings', 'Final tax'],
+      getRowData: (h) => {
+        const adj = behavioralEarnings(h.earnings, h.children, creditPerChild);
+        const finalTax = reformTax(adj, h.children, creditPerChild);
+        return [h.name, fmt(h.earnings, c), fmt(adj, c), fmt(finalTax, c)];
+      },
+    },
+    {
+      id: 4,
+      title: 'Weight and aggregate',
+      description: 'Each household represents many real households. Multiply by survey weights and sum for population-level estimates.',
+      ingredient: null,
+      columns: ['Household', 'Tax change', 'Weight', 'Weighted impact'],
+      getRowData: (h) => {
+        const adj = behavioralEarnings(h.earnings, h.children, creditPerChild);
+        const base = baselineTax(h.earnings);
+        const reform = reformTax(adj, h.children, creditPerChild);
+        const change = reform - base;
+        const weight = Math.round(20000 + Math.random() * 30000);
+        return [h.name, fmt(change, c), weight.toLocaleString(), fmt(change * weight, c)];
+      },
+    },
+  ];
+}

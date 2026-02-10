@@ -1,16 +1,17 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { colors, typography, spacing } from '../../designTokens';
-import { microsimSteps, sampleHouseholds } from '../../data/microsimSteps';
+import { getMicrosimSteps, sampleHouseholds } from '../../data/microsimSteps';
 import ThreeIngredients from './ThreeIngredients';
 
-export default function Walkthrough() {
+export default function Walkthrough({ country = 'us' }: { country?: string }) {
+  const steps = useMemo(() => getMicrosimSteps(country), [country]);
   const [stepIdx, setStepIdx] = useState(0);
-  const step = microsimSteps[stepIdx];
+  const step = steps[stepIdx];
 
   return (
     <div>
-      <ThreeIngredients activeIngredient={step.ingredient} />
+      <ThreeIngredients activeIngredient={step.ingredient} country={country} />
 
       {/* Step navigation */}
       <div
@@ -21,7 +22,7 @@ export default function Walkthrough() {
           flexWrap: 'wrap',
         }}
       >
-        {microsimSteps.map((s, i) => (
+        {steps.map((s, i) => (
           <button
             key={s.id}
             onClick={() => setStepIdx(i)}

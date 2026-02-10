@@ -61,9 +61,10 @@ function IngredientCard({ title, description, icon, delay, isActive }: Ingredien
 
 interface ThreeIngredientsProps {
   activeIngredient?: 'policies' | 'households' | 'dynamics' | null;
+  country?: string;
 }
 
-export default function ThreeIngredients({ activeIngredient }: ThreeIngredientsProps) {
+export default function ThreeIngredients({ activeIngredient, country = 'us' }: ThreeIngredientsProps) {
   const ingredients = [
     {
       title: 'Policy rules',
@@ -80,9 +81,11 @@ export default function ThreeIngredients({ activeIngredient }: ThreeIngredientsP
       key: 'households' as const,
     },
     {
-      title: 'Behavioral dynamics',
+      title: country === 'uk' ? 'Behavioural dynamics' : 'Behavioral dynamics',
       description:
-        'Elasticities capturing how people adjust their labor supply and income in response to tax and benefit changes.',
+        country === 'uk'
+          ? 'Elasticities capturing how people adjust their labour supply and income in response to tax and benefit changes.'
+          : 'Elasticities capturing how people adjust their labor supply and income in response to tax and benefit changes.',
       icon: <IconTrendingUp size={36} stroke={1.5} />,
       key: 'dynamics' as const,
     },
