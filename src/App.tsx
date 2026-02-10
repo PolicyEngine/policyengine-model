@@ -7,10 +7,12 @@ import DataPipeline from './components/data/DataPipeline';
 import BehavioralResponses from './components/theory/BehavioralResponses';
 import { colors } from './designTokens';
 
+const isEmbed = new URLSearchParams(window.location.search).has('embed');
+
 export default function App() {
   return (
     <div style={{ minHeight: '100vh' }}>
-      <StickyNav />
+      {!isEmbed && <StickyNav />}
 
       <SectionContainer
         id="microsim"
@@ -46,7 +48,7 @@ export default function App() {
         <BehavioralResponses />
       </SectionContainer>
 
-      <Footer />
+      {!isEmbed && <Footer />}
     </div>
   );
 }
