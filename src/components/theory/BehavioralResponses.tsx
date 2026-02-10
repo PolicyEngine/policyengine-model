@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { colors, typography, spacing } from '../../designTokens';
 import { cboDefaults, BLOG_URL, sources } from '../../data/elasticities';
@@ -25,35 +24,8 @@ function generateBudgetData(substitutionElasticity: number, incomeElasticity: nu
 
 export default function BehavioralResponses({ country = 'us' }: { country?: string }) {
   const currencySymbol = country === 'uk' ? '£' : '$';
-  const [incomeElasticity, setIncomeElasticity] = useState(cboDefaults.incomeElasticity.central);
-  const [substitutionElasticities, setSubstitutionElasticities] = useState(
-    cboDefaults.substitutionElasticities.map(e => e.central)
-  );
-  const [capGainsPersistent, setCapGainsPersistent] = useState(cboDefaults.capitalGainsPersistent);
-  const [preset, setPreset] = useState<'cbo' | 'off' | 'custom'>('cbo');
-
-  const avgSubstitution = substitutionElasticities.reduce((a, b) => a + b, 0) / substitutionElasticities.length;
-  const budgetData = generateBudgetData(avgSubstitution, incomeElasticity);
-
-  const applyPreset = (p: 'cbo' | 'off') => {
-    setPreset(p);
-    if (p === 'cbo') {
-      setIncomeElasticity(cboDefaults.incomeElasticity.central);
-      setSubstitutionElasticities(cboDefaults.substitutionElasticities.map(e => e.central));
-      setCapGainsPersistent(cboDefaults.capitalGainsPersistent);
-    } else {
-      setIncomeElasticity(0);
-      setSubstitutionElasticities(Array(10).fill(0));
-      setCapGainsPersistent(0);
-    }
-  };
-
-  const handleSubElasticityChange = (index: number, value: number) => {
-    const next = [...substitutionElasticities];
-    next[index] = value;
-    setSubstitutionElasticities(next);
-    setPreset('custom');
-  };
+  const avgSubstitution = cboDefaults.substitutionElasticities.reduce((a, b) => a + b.central, 0) / cboDefaults.substitutionElasticities.length;
+  const budgetData = generateBudgetData(avgSubstitution, cboDefaults.incomeElasticity.central);
 
   return (
     <div>
@@ -102,9 +74,7 @@ export default function BehavioralResponses({ country = 'us' }: { country?: stri
               <ReferenceLine x={40} stroke={colors.gray[300]} strokeDasharray="5 5" />
               <Line type="monotone" dataKey="baseline" stroke={colors.gray[400]} strokeWidth={2} dot={false} name="Baseline" />
               <Line type="monotone" dataKey="reform" stroke={colors.primary[500]} strokeWidth={2} dot={false} name="Reform (static)" />
-              {(incomeElasticity !== 0 || avgSubstitution !== 0) && (
-                <Line type="monotone" dataKey="behavioral" stroke={colors.warning} strokeWidth={2} dot={false} name={country === 'uk' ? 'Reform (behavioural)' : 'Reform (behavioral)'} strokeDasharray="5 5" />
-              )}
+              <Line type="monotone" dataKey="behavioral" stroke={colors.warning} strokeWidth={2} dot={false} name={country === 'uk' ? 'Reform (behavioural)' : 'Reform (behavioral)'} strokeDasharray="5 5" />
             </LineChart>
           </ResponsiveContainer>
           <div style={{ display: 'flex', gap: spacing['2xl'], justifyContent: 'center', marginTop: spacing.md, flexWrap: 'wrap' }}>
@@ -116,73 +86,43 @@ export default function BehavioralResponses({ country = 'us' }: { country?: stri
               <div style={{ width: '20px', height: '3px', backgroundColor: colors.primary[500], borderRadius: '2px' }} />
               <span style={{ fontSize: typography.fontSize.xs, color: colors.text.secondary }}>Reform (static)</span>
             </div>
-            {(incomeElasticity !== 0 || avgSubstitution !== 0) && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
-                <div style={{ width: '20px', height: '3px', backgroundColor: colors.warning, borderRadius: '2px', borderTop: '1px dashed transparent' }} />
-                <span style={{ fontSize: typography.fontSize.xs, color: colors.text.secondary }}>{country === 'uk' ? 'Reform (behavioural)' : 'Reform (behavioral)'}</span>
-              </div>
-            )}
+            <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
+              <div style={{ width: '20px', height: '3px', backgroundColor: colors.warning, borderRadius: '2px', borderTop: '1px dashed transparent' }} />
+              <span style={{ fontSize: typography.fontSize.xs, color: colors.text.secondary }}>{country === 'uk' ? 'Reform (behavioural)' : 'Reform (behavioral)'}</span>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Presets */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: spacing.lg, marginBottom: spacing['2xl'], flexWrap: 'wrap' }}>
-        <h3 style={{ fontSize: typography.fontSize['2xl'], fontWeight: typography.fontWeight.bold, color: colors.primary[900], margin: 0 }}>
-          Elasticity parameters
+      {/* CBO default parameters */}
+      <div style={{ marginBottom: spacing['2xl'] }}>
+        <h3 style={{ fontSize: typography.fontSize['2xl'], fontWeight: typography.fontWeight.bold, color: colors.primary[900], margin: `0 0 ${spacing.sm} 0` }}>
+          Default elasticity parameters
         </h3>
-        <div style={{ display: 'flex', gap: spacing.sm }}>
-          {(['cbo', 'off'] as const).map(p => (
-            <button
-              key={p}
-              onClick={() => applyPreset(p)}
-              style={{
-                padding: `${spacing.xs} ${spacing.lg}`,
-                borderRadius: spacing.radius.md,
-                border: `1px solid ${preset === p ? colors.primary[500] : colors.border.light}`,
-                backgroundColor: preset === p ? colors.primary[50] : colors.white,
-                color: preset === p ? colors.primary[700] : colors.text.secondary,
-                fontSize: typography.fontSize.xs,
-                fontWeight: typography.fontWeight.semibold,
-                fontFamily: typography.fontFamily.primary,
-                cursor: 'pointer',
-              }}
-            >
-              {p === 'cbo' ? 'CBO defaults' : 'Off (all zero)'}
-            </button>
-          ))}
-          {preset === 'custom' && (
-            <span style={{ fontSize: typography.fontSize.xs, color: colors.text.tertiary, padding: `${spacing.xs} ${spacing.md}`, backgroundColor: colors.gray[100], borderRadius: spacing.radius.md }}>
-              Custom
-            </span>
-          )}
-        </div>
+        <p style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary, lineHeight: 1.6, marginBottom: spacing['2xl'], maxWidth: '720px' }}>
+          PolicyEngine uses CBO elasticity estimates by default, but all parameters are fully adjustable in the model. Users can set custom values or disable
+          {country === 'uk' ? ' behavioural' : ' behavioral'} responses entirely.
+        </p>
       </div>
 
       {/* Income elasticity */}
       <div style={{ marginBottom: spacing['3xl'] }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.lg, marginBottom: spacing.md }}>
-          <h4 style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary, margin: 0 }}>
-            Income elasticity (all earners)
-          </h4>
-          <span style={{ fontSize: typography.fontSize.sm, fontFamily: typography.fontFamily.mono, color: colors.primary[700], fontWeight: typography.fontWeight.bold }}>
-            {incomeElasticity.toFixed(2)}
-          </span>
+        <h4 style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary, marginBottom: spacing.md }}>
+          Income elasticity (all earners)
+        </h4>
+        <div style={{ display: 'flex', gap: spacing['2xl'], flexWrap: 'wrap' }}>
+          {[
+            { label: 'Lower', value: cboDefaults.incomeElasticity.lower },
+            { label: 'Central', value: cboDefaults.incomeElasticity.central },
+            { label: 'Upper', value: cboDefaults.incomeElasticity.higher },
+          ].map(({ label, value }) => (
+            <div key={label} style={{ padding: `${spacing.md} ${spacing.xl}`, borderRadius: spacing.radius.lg, border: `1px solid ${label === 'Central' ? colors.primary[300] : colors.border.light}`, backgroundColor: label === 'Central' ? colors.primary[50] : colors.white, textAlign: 'center', minWidth: '100px' }}>
+              <div style={{ fontSize: typography.fontSize.xs, color: colors.text.tertiary, marginBottom: spacing.xs }}>{label}</div>
+              <div style={{ fontSize: typography.fontSize.lg, fontFamily: typography.fontFamily.mono, color: label === 'Central' ? colors.primary[700] : colors.text.primary, fontWeight: typography.fontWeight.bold }}>{value.toFixed(2)}</div>
+            </div>
+          ))}
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.md }}>
-          <span style={{ fontSize: typography.fontSize.xs, color: colors.text.tertiary, width: '40px' }}>-0.10</span>
-          <input
-            type="range"
-            min={-0.10}
-            max={0.00}
-            step={0.01}
-            value={incomeElasticity}
-            onChange={e => { setIncomeElasticity(parseFloat(e.target.value)); setPreset('custom'); }}
-            style={{ flex: 1, accentColor: colors.primary[500] }}
-          />
-          <span style={{ fontSize: typography.fontSize.xs, color: colors.text.tertiary, width: '30px' }}>0.00</span>
-        </div>
-        <p style={{ fontSize: typography.fontSize.xs, color: colors.text.tertiary, marginTop: spacing.xs }}>
+        <p style={{ fontSize: typography.fontSize.xs, color: colors.text.tertiary, marginTop: spacing.sm }}>
           {sources.laborSupply}
         </p>
       </div>
@@ -196,7 +136,7 @@ export default function BehavioralResponses({ country = 'us' }: { country?: stri
           <table style={{ width: '100%', minWidth: '400px', borderCollapse: 'collapse', fontFamily: typography.fontFamily.primary }}>
             <thead>
               <tr>
-                {['Decile', 'CBO lower', 'Value', 'CBO upper'].map(col => (
+                {['Decile', 'Lower', 'Central', 'Upper'].map(col => (
                   <th key={col} style={{ padding: `${spacing.sm} ${spacing.md}`, textAlign: col === 'Decile' ? 'left' : 'center', fontSize: typography.fontSize.xs, fontWeight: typography.fontWeight.semibold, color: colors.text.secondary, backgroundColor: colors.gray[50], borderBottom: `1px solid ${colors.border.light}`, whiteSpace: 'nowrap' }}>
                     {col}
                   </th>
@@ -213,29 +153,9 @@ export default function BehavioralResponses({ country = 'us' }: { country?: stri
                   style={{ borderBottom: i < 9 ? `1px solid ${colors.border.light}` : 'none' }}
                 >
                   <td style={{ padding: `${spacing.sm} ${spacing.md}`, fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.medium, color: colors.text.primary }}>{row.decile}</td>
-                  <td style={{ padding: `${spacing.sm} ${spacing.md}`, textAlign: 'center', fontSize: typography.fontSize.xs, color: colors.text.tertiary }}>{row.lower.toFixed(2)}</td>
-                  <td style={{ padding: `${spacing.sm} ${spacing.md}`, textAlign: 'center' }}>
-                    <input
-                      type="number"
-                      min={0}
-                      max={1}
-                      step={0.01}
-                      value={substitutionElasticities[i]}
-                      onChange={e => handleSubElasticityChange(i, parseFloat(e.target.value) || 0)}
-                      style={{
-                        width: '60px',
-                        padding: `2px ${spacing.sm}`,
-                        borderRadius: spacing.radius.sm,
-                        border: `1px solid ${colors.border.light}`,
-                        fontSize: typography.fontSize.sm,
-                        fontFamily: typography.fontFamily.mono,
-                        color: colors.primary[700],
-                        fontWeight: typography.fontWeight.bold,
-                        textAlign: 'center',
-                      }}
-                    />
-                  </td>
-                  <td style={{ padding: `${spacing.sm} ${spacing.md}`, textAlign: 'center', fontSize: typography.fontSize.xs, color: colors.text.tertiary }}>{row.higher.toFixed(2)}</td>
+                  <td style={{ padding: `${spacing.sm} ${spacing.md}`, textAlign: 'center', fontSize: typography.fontSize.sm, color: colors.text.tertiary }}>{row.lower.toFixed(2)}</td>
+                  <td style={{ padding: `${spacing.sm} ${spacing.md}`, textAlign: 'center', fontSize: typography.fontSize.sm, fontFamily: typography.fontFamily.mono, color: colors.primary[700], fontWeight: typography.fontWeight.bold }}>{row.central.toFixed(2)}</td>
+                  <td style={{ padding: `${spacing.sm} ${spacing.md}`, textAlign: 'center', fontSize: typography.fontSize.sm, color: colors.text.tertiary }}>{row.higher.toFixed(2)}</td>
                 </motion.tr>
               ))}
             </tbody>
@@ -248,29 +168,22 @@ export default function BehavioralResponses({ country = 'us' }: { country?: stri
 
       {/* Capital gains */}
       <div style={{ marginBottom: spacing['3xl'] }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.lg, marginBottom: spacing.md }}>
-          <h4 style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary, margin: 0 }}>
-            Capital gains elasticity (persistent)
-          </h4>
-          <span style={{ fontSize: typography.fontSize.sm, fontFamily: typography.fontFamily.mono, color: colors.primary[700], fontWeight: typography.fontWeight.bold }}>
-            {capGainsPersistent.toFixed(2)}
-          </span>
+        <h4 style={{ fontSize: typography.fontSize.base, fontWeight: typography.fontWeight.semibold, color: colors.text.primary, marginBottom: spacing.md }}>
+          Capital gains elasticity
+        </h4>
+        <div style={{ display: 'flex', gap: spacing['2xl'], flexWrap: 'wrap' }}>
+          {[
+            { label: 'Persistent', value: cboDefaults.capitalGainsPersistent },
+            { label: 'Transitory', value: cboDefaults.capitalGainsTransitory },
+          ].map(({ label, value }) => (
+            <div key={label} style={{ padding: `${spacing.md} ${spacing.xl}`, borderRadius: spacing.radius.lg, border: `1px solid ${colors.border.light}`, backgroundColor: colors.white, textAlign: 'center', minWidth: '120px' }}>
+              <div style={{ fontSize: typography.fontSize.xs, color: colors.text.tertiary, marginBottom: spacing.xs }}>{label}</div>
+              <div style={{ fontSize: typography.fontSize.lg, fontFamily: typography.fontFamily.mono, color: colors.text.primary, fontWeight: typography.fontWeight.bold }}>{value.toFixed(2)}</div>
+            </div>
+          ))}
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.md }}>
-          <span style={{ fontSize: typography.fontSize.xs, color: colors.text.tertiary, width: '40px' }}>-1.50</span>
-          <input
-            type="range"
-            min={-1.50}
-            max={0}
-            step={0.01}
-            value={capGainsPersistent}
-            onChange={e => { setCapGainsPersistent(parseFloat(e.target.value)); setPreset('custom'); }}
-            style={{ flex: 1, accentColor: colors.primary[500] }}
-          />
-          <span style={{ fontSize: typography.fontSize.xs, color: colors.text.tertiary, width: '30px' }}>0.00</span>
-        </div>
-        <p style={{ fontSize: typography.fontSize.xs, color: colors.text.tertiary, marginTop: spacing.xs }}>
-          CBO central estimate: {cboDefaults.capitalGainsPersistent} (persistent), {cboDefaults.capitalGainsTransitory} (transitory). {sources.capitalGains}
+        <p style={{ fontSize: typography.fontSize.xs, color: colors.text.tertiary, marginTop: spacing.sm }}>
+          {sources.capitalGains}
         </p>
       </div>
     </div>
