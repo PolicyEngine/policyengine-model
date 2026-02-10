@@ -2,11 +2,8 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { colors, typography, spacing } from '../../designTokens';
 import { pipelineStages } from '../../data/pipelineStages';
+import { ukPipelineStages } from '../../data/ukPipelineStages';
 import type { PipelineStage } from '../../data/pipelineStages';
-
-const sharedStages = pipelineStages.filter(s => s.branch === 'shared');
-const nationalStages = pipelineStages.filter(s => s.branch === 'national');
-const localStages = pipelineStages.filter(s => s.branch === 'local');
 
 function StageButton({ s, isActive, onClick, borderRadiusLeft, borderRadiusRight, marginLeft }: {
   s: PipelineStage;
@@ -66,29 +63,39 @@ function StageButton({ s, isActive, onClick, borderRadiusLeft, borderRadiusRight
   );
 }
 
-export default function DataPipeline() {
+export default function DataPipeline({ country = 'us' }: { country?: string }) {
+  const allStages = country === 'uk' ? ukPipelineStages : pipelineStages;
+  const sharedStages = allStages.filter(s => s.branch === 'shared');
+  const nationalStages = allStages.filter(s => s.branch === 'national');
+  const localStages = allStages.filter(s => s.branch === 'local');
+
   const [activeStage, setActiveStage] = useState(0);
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
-  const stage = pipelineStages[activeStage];
+  const stage = allStages[activeStage];
 
   const toggleSection = (section: string) => {
     setExpandedSection(expandedSection === section ? null : section);
   };
 
   const selectStage = (id: string) => {
-    const idx = pipelineStages.findIndex(s => s.id === id);
+    const idx = allStages.findIndex(s => s.id === id);
     if (idx >= 0) {
       setActiveStage(idx);
       setExpandedSection(null);
     }
   };
 
+  const introText = country === 'uk'
+    ? 'PolicyEngine constructs its representative household dataset through a multi-stage pipeline, starting from the Family Resources Survey and producing two weight matrices: one for 650 parliamentary constituencies and one for 360 local authorities.'
+    : 'PolicyEngine constructs its representative household dataset through a multi-stage pipeline, starting from public survey data and branching into two final datasets: one calibrated nationally, one calibrated per state and congressional district.';
+
+  const nationalLabel = country === 'uk' ? 'Constituency (national)' : 'National';
+  const localLabel = country === 'uk' ? 'Local authority' : 'Local (state / CD)';
+
   return (
     <div>
       <p style={{ fontSize: typography.fontSize.lg, color: colors.text.secondary, lineHeight: 1.7, marginBottom: spacing['3xl'], maxWidth: '720px' }}>
-        PolicyEngine constructs its representative household dataset through a multi-stage pipeline,
-        starting from public survey data and branching into two final datasets: one calibrated nationally,
-        one calibrated per state and congressional district.
+        {introText}
       </p>
 
       {/* Pipeline flow - branching layout */}
@@ -99,7 +106,7 @@ export default function DataPipeline() {
             <div key={s.id} style={{ flex: 1, display: 'flex', alignItems: 'stretch' }}>
               <StageButton
                 s={s}
-                isActive={pipelineStages.indexOf(s) === activeStage}
+                isActive={allStages.indexOf(s) === activeStage}
                 onClick={() => selectStage(s.id)}
                 borderRadiusLeft={i === 0}
                 marginLeft={i > 0}
@@ -110,13 +117,9 @@ export default function DataPipeline() {
 
         {/* Fork connector */}
         <div style={{ display: 'flex', justifyContent: 'center', position: 'relative', height: '40px' }}>
-          {/* Vertical line from shared row */}
           <div style={{ position: 'absolute', top: 0, left: '50%', width: '2px', height: '20px', backgroundColor: colors.border.light }} />
-          {/* Horizontal bar spanning both branches */}
           <div style={{ position: 'absolute', top: '20px', left: '25%', right: '25%', height: '2px', backgroundColor: colors.border.light }} />
-          {/* Left drop to national branch */}
           <div style={{ position: 'absolute', top: '20px', left: '25%', width: '2px', height: '20px', backgroundColor: colors.border.light }} />
-          {/* Right drop to local branch */}
           <div style={{ position: 'absolute', top: '20px', right: '25%', width: '2px', height: '20px', backgroundColor: colors.border.light }} />
         </div>
 
@@ -133,14 +136,14 @@ export default function DataPipeline() {
               textTransform: 'uppercase' as const,
               letterSpacing: '1px',
             }}>
-              National
+              {nationalLabel}
             </div>
             <div style={{ display: 'flex', alignItems: 'stretch', gap: 0 }}>
               {nationalStages.map((s, i) => (
                 <div key={s.id} style={{ flex: 1, display: 'flex', alignItems: 'stretch' }}>
                   <StageButton
                     s={s}
-                    isActive={pipelineStages.indexOf(s) === activeStage}
+                    isActive={allStages.indexOf(s) === activeStage}
                     onClick={() => selectStage(s.id)}
                     borderRadiusLeft={i === 0}
                     borderRadiusRight={i === nationalStages.length - 1}
@@ -162,14 +165,14 @@ export default function DataPipeline() {
               textTransform: 'uppercase' as const,
               letterSpacing: '1px',
             }}>
-              Local (state / CD)
+              {localLabel}
             </div>
             <div style={{ display: 'flex', alignItems: 'stretch', gap: 0 }}>
               {localStages.map((s, i) => (
                 <div key={s.id} style={{ flex: 1, display: 'flex', alignItems: 'stretch' }}>
                   <StageButton
                     s={s}
-                    isActive={pipelineStages.indexOf(s) === activeStage}
+                    isActive={allStages.indexOf(s) === activeStage}
                     onClick={() => selectStage(s.id)}
                     borderRadiusLeft={i === 0}
                     borderRadiusRight={i === localStages.length - 1}
@@ -275,7 +278,6 @@ export default function DataPipeline() {
 
           {/* Expandable sections */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: spacing.md }}>
-            {/* Imputations */}
             {stage.imputations && stage.imputations.length > 0 && (
               <div>
                 <button
@@ -338,7 +340,6 @@ export default function DataPipeline() {
               </div>
             )}
 
-            {/* Calibration targets */}
             {stage.calibrationTargets && stage.calibrationTargets.length > 0 && (
               <div>
                 <button

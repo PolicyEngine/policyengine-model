@@ -7,7 +7,9 @@ import DataPipeline from './components/data/DataPipeline';
 import BehavioralResponses from './components/theory/BehavioralResponses';
 import { colors } from './designTokens';
 
-const isEmbed = new URLSearchParams(window.location.search).has('embed');
+const params = new URLSearchParams(window.location.search);
+const isEmbed = params.has('embed');
+const country = params.get('country') || 'us';
 
 export default function App() {
   return (
@@ -28,7 +30,7 @@ export default function App() {
         subtitle="Coverage"
         background={colors.background.secondary}
       >
-        <RulesOverview />
+        <RulesOverview country={country} />
       </SectionContainer>
 
       <SectionContainer
@@ -36,7 +38,7 @@ export default function App() {
         title="How we build the data"
         subtitle="Microdata pipeline"
       >
-        <DataPipeline />
+        <DataPipeline country={country} />
       </SectionContainer>
 
       <SectionContainer
@@ -45,7 +47,7 @@ export default function App() {
         subtitle="Economic theory"
         background={colors.background.secondary}
       >
-        <BehavioralResponses />
+        <BehavioralResponses country={country} />
       </SectionContainer>
 
       {!isEmbed && <Footer />}

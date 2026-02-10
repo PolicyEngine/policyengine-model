@@ -339,7 +339,7 @@ function StateDetailPanel({ stateCode, onClose }: { stateCode: string; onClose: 
   );
 }
 
-export default function RulesOverview() {
+export default function RulesOverview({ country: _country = 'us' }: { country?: string }) {
   const [viewMode, setViewMode] = useState<ViewMode>('programs');
   const [selectedProgram, setSelectedProgram] = useState<Program | null>(null);
   const [selectedState, setSelectedState] = useState<string | null>(null);

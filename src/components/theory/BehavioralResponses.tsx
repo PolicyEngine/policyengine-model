@@ -23,7 +23,7 @@ function generateBudgetData(substitutionElasticity: number, incomeElasticity: nu
   return data;
 }
 
-export default function BehavioralResponses() {
+export default function BehavioralResponses({ country: _country = 'us' }: { country?: string }) {
   const [incomeElasticity, setIncomeElasticity] = useState(cboDefaults.incomeElasticity.central);
   const [substitutionElasticities, setSubstitutionElasticities] = useState(
     cboDefaults.substitutionElasticities.map(e => e.central)
