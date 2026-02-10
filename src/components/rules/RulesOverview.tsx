@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { colors, typography, spacing, statusColors } from '../../designTokens';
 import { programs, getStatusCount } from '../../data/programs';
+import { parameterStats } from '../../data/parameterStats';
 import type { CoverageStatus, Program } from '../../types/Program';
 
 const ALL_STATES = [
@@ -63,7 +64,8 @@ function StatusDot({ status, size = 10 }: { status: CoverageStatus; size?: numbe
   );
 }
 
-function StatCard({ label, count, color, delay }: { label: string; count: number; color: string; delay: number }) {
+function StatCard({ label, count, color, delay }: { label: string; count: number | string; color: string; delay: number }) {
+  const display = typeof count === 'number' ? count.toLocaleString() : count;
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
@@ -79,7 +81,7 @@ function StatCard({ label, count, color, delay }: { label: string; count: number
         textAlign: 'center',
       }}
     >
-      <div style={{ fontSize: typography.fontSize['3xl'], fontWeight: typography.fontWeight.bold, color, marginBottom: spacing.xs }}>{count}</div>
+      <div style={{ fontSize: typography.fontSize['3xl'], fontWeight: typography.fontWeight.bold, color, marginBottom: spacing.xs }}>{display}</div>
       <div style={{ fontSize: typography.fontSize.xs, color: colors.text.secondary, fontWeight: typography.fontWeight.medium }}>{label}</div>
     </motion.div>
   );
@@ -399,12 +401,19 @@ export default function RulesOverview() {
 
   return (
     <div>
-      {/* Summary stats */}
+      {/* Parameter stats */}
+      <div style={{ display: 'flex', gap: spacing.md, flexWrap: 'wrap', marginBottom: spacing.xl }}>
+        <StatCard label="Current parameters" count={parameterStats.combined.currentParams} color={colors.primary[700]} delay={0} />
+        <StatCard label="Historical values" count={parameterStats.combined.historicalValues} color={colors.primary[500]} delay={0.05} />
+        <StatCard label="Parameter files" count={parameterStats.combined.yamlFiles} color={colors.primary[400]} delay={0.1} />
+      </div>
+
+      {/* Program stats */}
       <div style={{ display: 'flex', gap: spacing.md, flexWrap: 'wrap', marginBottom: spacing['3xl'] }}>
-        <StatCard label="Total programs" count={total} color={colors.primary[900]} delay={0} />
-        <StatCard label="Complete" count={counts.complete} color={statusColors.complete} delay={0.1} />
-        <StatCard label="Partial" count={counts.partial} color={statusColors.partial} delay={0.15} />
-        <StatCard label="In progress" count={counts.inProgress} color={statusColors.inProgress} delay={0.2} />
+        <StatCard label="Total programs" count={total} color={colors.primary[900]} delay={0.15} />
+        <StatCard label="Complete" count={counts.complete} color={statusColors.complete} delay={0.2} />
+        <StatCard label="Partial" count={counts.partial} color={statusColors.partial} delay={0.25} />
+        <StatCard label="In progress" count={counts.inProgress} color={statusColors.inProgress} delay={0.3} />
       </div>
 
       {/* View mode toggle + search */}
