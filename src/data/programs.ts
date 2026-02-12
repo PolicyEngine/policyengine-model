@@ -322,10 +322,10 @@ export const programs: Program[] = [
       },
       {
         state: 'AZ',
-        status: 'inProgress',
+        status: 'complete',
         name: 'Arizona TANF',
         fullName: 'Arizona Temporary Assistance for Needy Families',
-        notes: 'Eligibility implemented',
+        variable: 'az_tanf',
         githubLinks: {
           parameters: `${GITHUB_BASE}/parameters/gov/states/az/hhs/tanf`,
           variables: `${GITHUB_BASE}/variables/gov/states/az/hhs/tanf`,
@@ -370,14 +370,14 @@ export const programs: Program[] = [
       },
       {
         state: 'MD',
-        status: 'inProgress',
-        name: 'Maryland TANF',
+        status: 'complete',
+        name: 'Maryland TCA',
         fullName: 'Maryland Temporary Cash Assistance',
-        notes: 'Implementation in progress',
+        variable: 'md_tca',
         githubLinks: {
-          parameters: `${GITHUB_BASE}/parameters/gov/states/md`,
-          variables: `${GITHUB_BASE}/variables/gov/states/md`,
-          tests: `${TESTS_BASE}/policy/baseline/gov/states/md`,
+          parameters: `${GITHUB_BASE}/parameters/gov/states/md/tca`,
+          variables: `${GITHUB_BASE}/variables/gov/states/md/tca`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/md/tca`,
         }
       },
       {
@@ -682,10 +682,15 @@ export const programs: Program[] = [
       },
       {
         state: 'AL',
-        status: 'inProgress',
-        name: 'Alabama FA',
+        status: 'complete',
+        name: 'Alabama TANF',
         fullName: 'Alabama Family Assistance',
-        githubLinks: {}
+        variable: 'al_tanf',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/al/dhs/tanf`,
+          variables: `${GITHUB_BASE}/variables/gov/states/al/dhs/tanf`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/al/dhs/tanf`,
+        }
       },
       {
         state: 'AK',
@@ -744,17 +749,27 @@ export const programs: Program[] = [
       },
       {
         state: 'SC',
-        status: 'inProgress',
-        name: 'South Carolina FI',
+        status: 'complete',
+        name: 'South Carolina TANF',
         fullName: 'South Carolina Family Independence',
-        githubLinks: {}
+        variable: 'sc_tanf',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/sc/tanf`,
+          variables: `${GITHUB_BASE}/variables/gov/states/sc/tanf`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/sc/tanf`,
+        }
       },
       {
         state: 'VT',
-        status: 'inProgress',
+        status: 'complete',
         name: 'Vermont Reach Up',
         fullName: 'Vermont Reach Up',
-        githubLinks: {}
+        variable: 'vt_reach_up',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/vt/dcf/reach_up`,
+          variables: `${GITHUB_BASE}/variables/gov/states/vt/dcf/reach_up`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/vt/dcf/reach_up`,
+        }
       },
       {
         state: 'VA',
@@ -1656,6 +1671,51 @@ export const programs: Program[] = [
       parameters: `${GITHUB_BASE}/parameters/gov/states/il/hfs/hbwd`,
       variables: `${GITHUB_BASE}/variables/gov/states/il/hfs/hbwd`,
       tests: `${TESTS_BASE}/policy/baseline/gov/states/il/hfs/hbwd`,
+    },
+  },
+  {
+    id: 'il_ihwap',
+    name: 'Illinois IHWAP',
+    fullName: 'Illinois Home Weatherization Assistance Program',
+    agency: 'State',
+    status: 'complete',
+    coverage: 'IL',
+    variable: 'il_ihwap_eligible',
+    notes: 'Only includes eligibility rules',
+    githubLinks: {
+      parameters: `${GITHUB_BASE}/parameters/gov/states/il/dceo/ihwap`,
+      variables: `${GITHUB_BASE}/variables/gov/states/il/dceo/ihwap`,
+      tests: `${TESTS_BASE}/policy/baseline/gov/states/il/dceo/ihwap`,
+    },
+  },
+  {
+    id: 'il_scretd',
+    name: 'Illinois SCRETD',
+    fullName: 'Illinois Senior Citizens Real Estate Tax Deferral Program',
+    agency: 'State',
+    status: 'complete',
+    coverage: 'IL',
+    variable: 'il_scretd_deferral_amount',
+    notes: 'Deferral amount is a loan, not a benefit',
+    githubLinks: {
+      parameters: `${GITHUB_BASE}/parameters/gov/states/il/idor/scretd`,
+      variables: `${GITHUB_BASE}/variables/gov/states/il/idor/scretd`,
+      tests: `${TESTS_BASE}/policy/baseline/gov/states/il/idor/scretd`,
+    },
+  },
+  {
+    id: 'il_ipass_assist',
+    name: 'Illinois I-PASS Assist',
+    fullName: 'Illinois Tollway I-PASS Assist Program',
+    agency: 'State',
+    status: 'complete',
+    coverage: 'IL',
+    variable: 'il_ipass_assist_eligible',
+    notes: 'Only includes eligibility rules',
+    githubLinks: {
+      parameters: `${GITHUB_BASE}/parameters/gov/states/il/tollway/ipass_assist`,
+      variables: `${GITHUB_BASE}/variables/gov/states/il/tollway/ipass_assist`,
+      tests: `${TESTS_BASE}/policy/baseline/gov/states/il/tollway/ipass_assist`,
     },
   },
   {
