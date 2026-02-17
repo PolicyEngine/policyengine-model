@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import StickyNav from './components/layout/StickyNav';
 import SectionContainer from './components/layout/SectionContainer';
 import Footer from './components/layout/Footer';
@@ -11,9 +12,33 @@ const params = new URLSearchParams(window.location.search);
 const isEmbed = params.has('embed');
 const country = params.get('country') || 'us';
 
+function usePostHeightToParent(rootRef: React.RefObject<HTMLDivElement | null>) {
+  useEffect(() => {
+    if (!isEmbed) return;
+
+    const postHeight = () => {
+      if (rootRef.current) {
+        window.parent.postMessage(
+          { type: 'policyengine-model-height', height: rootRef.current.scrollHeight },
+          '*',
+        );
+      }
+    };
+
+    const observer = new ResizeObserver(postHeight);
+    if (rootRef.current) observer.observe(rootRef.current);
+    postHeight();
+
+    return () => observer.disconnect();
+  }, [rootRef]);
+}
+
 export default function App() {
+  const rootRef = useRef<HTMLDivElement>(null);
+  usePostHeightToParent(rootRef);
+
   return (
-    <div style={{ minHeight: '100vh' }}>
+    <div ref={rootRef} style={{ minHeight: '100vh' }}>
       {!isEmbed && <StickyNav />}
 
       <SectionContainer
