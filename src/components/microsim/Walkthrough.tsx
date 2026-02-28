@@ -7,7 +7,6 @@ import {
   getCellValues,
   getTotalRow,
   sampleHouseholds,
-  type Column,
 } from '../../data/microsimSteps';
 import ThreeIngredients from './ThreeIngredients';
 
@@ -39,7 +38,6 @@ export default function Walkthrough({ country = 'us' }: { country?: string }) {
    */
   const [newColKeys, setNewColKeys] = useState<Set<string>>(new Set());
 
-  const justEnteredStep3 = stepIdx === 3 && prevStepRef.current !== 3;
   const [flashingCells, setFlashingCells] = useState(false);
 
   const changeStep = useCallback(

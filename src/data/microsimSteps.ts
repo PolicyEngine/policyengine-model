@@ -60,7 +60,7 @@ function behavioralEarnings(earnings: number, children: number, creditPerChild: 
   return Math.round(earnings * (1 + pctChange));
 }
 
-export function getColumns(country: string): Column[] {
+export function getColumns(_country: string): Column[] {
   return [
     { key: 'household', label: 'Household', visibleFrom: 0, align: 'left' },
     { key: 'earnings', label: 'Earnings', visibleFrom: 0, align: 'right' },
