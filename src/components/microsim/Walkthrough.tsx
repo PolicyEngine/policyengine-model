@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef, useEffect } from 'react';
+import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { colors, typography, spacing } from '../../designTokens';
 import {
@@ -7,6 +7,7 @@ import {
   getCellValues,
   getTotalRow,
   sampleHouseholds,
+  type Column,
 } from '../../data/microsimSteps';
 import ThreeIngredients from './ThreeIngredients';
 
@@ -19,16 +20,70 @@ const BEHAVIORAL_FLASH_COLUMNS = new Set(['earnings', 'reformTax', 'taxChange'])
 /** Signed-value columns that should show green when negative (= tax cut). */
 const SIGNED_COLUMNS = new Set(['taxChange', 'impact']);
 
-const COL_TRANSITION = { duration: 0.45, ease: [0.4, 0, 0.2, 1] as number[] };
-
 export default function Walkthrough({ country = 'us' }: { country?: string }) {
   const steps = useMemo(() => getMicrosimSteps(country), [country]);
-  const columns = useMemo(() => getColumns(country), [country]);
+  const allColumns = useMemo(() => getColumns(country), [country]);
   const [stepIdx, setStepIdx] = useState(0);
   const prevStepRef = useRef(0);
   const step = steps[stepIdx];
 
+  /** Only columns whose visibleFrom <= current step. */
+  const visibleColumns = useMemo(
+    () => allColumns.filter((c) => c.visibleFrom <= stepIdx),
+    [allColumns, stepIdx],
+  );
+
+  /**
+   * Track which column keys just became visible so we can fade them in.
+   * We store them in state and clear after a rAF so the CSS transition fires.
+   */
+  const [newColKeys, setNewColKeys] = useState<Set<string>>(new Set());
+
   const justEnteredStep3 = stepIdx === 3 && prevStepRef.current !== 3;
+  const [flashingCells, setFlashingCells] = useState(false);
+
+  const changeStep = useCallback(
+    (newIdx: number) => {
+      const oldIdx = stepIdx;
+      // Identify columns that will become newly visible
+      const newKeys = new Set(
+        allColumns
+          .filter((c) => c.visibleFrom <= newIdx && c.visibleFrom > oldIdx)
+          .map((c) => c.key),
+      );
+
+      if (newKeys.size > 0) {
+        setNewColKeys(newKeys);
+      }
+
+      // Handle behavioral flash (step 3)
+      if (newIdx === 3 && oldIdx !== 3) {
+        setFlashingCells(true);
+      }
+
+      setStepIdx(newIdx);
+    },
+    [stepIdx, allColumns],
+  );
+
+  // Clear new-column fade markers after the transition completes
+  // Double-rAF ensures browser paints opacity:0 before transitioning to 1
+  useEffect(() => {
+    if (newColKeys.size === 0) return;
+    const id = requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        setNewColKeys(new Set());
+      });
+    });
+    return () => cancelAnimationFrame(id);
+  }, [newColKeys]);
+
+  // Clear behavioral flash after animation
+  useEffect(() => {
+    if (!flashingCells) return;
+    const timer = setTimeout(() => setFlashingCells(false), 1500);
+    return () => clearTimeout(timer);
+  }, [flashingCells]);
 
   useEffect(() => {
     prevStepRef.current = stepIdx;
@@ -59,7 +114,7 @@ export default function Walkthrough({ country = 'us' }: { country?: string }) {
           return (
             <button
               key={s.id}
-              onClick={() => setStepIdx(i)}
+              onClick={() => changeStep(i)}
               style={{
                 padding: `${spacing.sm} ${spacing.lg}`,
                 borderRadius: spacing.radius.lg,
@@ -111,7 +166,7 @@ export default function Walkthrough({ country = 'us' }: { country?: string }) {
         </AnimatePresence>
       </div>
 
-      {/* Single persistent table — columns animate in as steps advance */}
+      {/* Single persistent table — only visible columns rendered */}
       <div
         style={{
           borderRadius: spacing.radius.xl,
@@ -125,40 +180,29 @@ export default function Walkthrough({ country = 'us' }: { country?: string }) {
             width: '100%',
             borderCollapse: 'collapse',
             fontFamily: typography.fontFamily.primary,
-            tableLayout: 'auto',
           }}
         >
           <thead>
             <tr>
-              {columns.map((col) => {
-                const isVisible = col.visibleFrom <= stepIdx;
-                return (
-                  <motion.th
-                    key={col.key}
-                    animate={{
-                      maxWidth: isVisible ? 300 : 0,
-                      opacity: isVisible ? 1 : 0,
-                      paddingLeft: isVisible ? 16 : 0,
-                      paddingRight: isVisible ? 16 : 0,
-                    }}
-                    transition={COL_TRANSITION}
-                    style={{
-                      paddingTop: 12,
-                      paddingBottom: 12,
-                      textAlign: col.align,
-                      fontSize: typography.fontSize.sm,
-                      fontWeight: typography.fontWeight.semibold,
-                      color: colors.text.secondary,
-                      backgroundColor: colors.gray[50],
-                      borderBottom: `1px solid ${colors.border.light}`,
-                      overflow: 'hidden',
-                      whiteSpace: 'nowrap',
-                    }}
-                  >
-                    {isVisible ? col.label : ''}
-                  </motion.th>
-                );
-              })}
+              {visibleColumns.map((col) => (
+                <th
+                  key={col.key}
+                  style={{
+                    padding: '12px 16px',
+                    textAlign: col.align,
+                    fontSize: typography.fontSize.sm,
+                    fontWeight: typography.fontWeight.semibold,
+                    color: colors.text.secondary,
+                    backgroundColor: colors.gray[50],
+                    borderBottom: `1px solid ${colors.border.light}`,
+                    whiteSpace: 'nowrap',
+                    opacity: newColKeys.has(col.key) ? 0 : 1,
+                    transition: 'opacity 0.4s ease',
+                  }}
+                >
+                  {col.label}
+                </th>
+              ))}
             </tr>
           </thead>
           <tbody>
@@ -174,53 +218,35 @@ export default function Walkthrough({ country = 'us' }: { country?: string }) {
                         : 'none',
                   }}
                 >
-                  {columns.map((col) => {
-                    const isVisible = col.visibleFrom <= stepIdx;
-                    const shouldFlash =
-                      justEnteredStep3 && BEHAVIORAL_FLASH_COLUMNS.has(col.key);
+                  {visibleColumns.map((col) => {
                     const value = vals[col.key];
                     const isNegative =
                       SIGNED_COLUMNS.has(col.key) && value.startsWith('-');
+                    const isFlashing =
+                      flashingCells && BEHAVIORAL_FLASH_COLUMNS.has(col.key);
 
                     return (
-                      <motion.td
-                        key={
-                          shouldFlash
-                            ? `${h.id}-${col.key}-flash`
-                            : `${h.id}-${col.key}`
-                        }
-                        animate={{
-                          maxWidth: isVisible ? 300 : 0,
-                          opacity: isVisible ? 1 : 0,
-                          paddingLeft: isVisible ? 16 : 0,
-                          paddingRight: isVisible ? 16 : 0,
-                          backgroundColor: 'transparent',
-                        }}
-                        initial={
-                          shouldFlash
-                            ? { backgroundColor: colors.primary[100] }
-                            : undefined
-                        }
-                        transition={{
-                          ...COL_TRANSITION,
-                          backgroundColor: { duration: 1.5, ease: 'easeOut' },
-                        }}
+                      <td
+                        key={col.key}
                         style={{
-                          paddingTop: 12,
-                          paddingBottom: 12,
+                          padding: '12px 16px',
                           fontSize: typography.fontSize.sm,
-                          color:
-                            isVisible && isNegative
-                              ? colors.success
-                              : colors.text.primary,
+                          color: isNegative
+                            ? colors.success
+                            : colors.text.primary,
                           fontFeatureSettings: '"tnum"',
                           textAlign: col.align,
-                          overflow: 'hidden',
                           whiteSpace: 'nowrap',
+                          opacity: newColKeys.has(col.key) ? 0 : 1,
+                          backgroundColor: isFlashing
+                            ? colors.primary[100]
+                            : 'transparent',
+                          transition:
+                            'opacity 0.4s ease, background-color 1.5s ease-out',
                         }}
                       >
-                        {isVisible ? value : ''}
-                      </motion.td>
+                        {value}
+                      </td>
                     );
                   })}
                 </tr>
@@ -235,8 +261,7 @@ export default function Walkthrough({ country = 'us' }: { country?: string }) {
                 transition={{ duration: 0.4, delay: 0.2 }}
                 style={{ backgroundColor: colors.gray[50] }}
               >
-                {columns.map((col) => {
-                  const isVisible = col.visibleFrom <= stepIdx;
+                {visibleColumns.map((col) => {
                   const value = totalRow[col.key];
                   const isNegative =
                     SIGNED_COLUMNS.has(col.key) &&
@@ -244,18 +269,10 @@ export default function Walkthrough({ country = 'us' }: { country?: string }) {
                     value.startsWith('-');
 
                   return (
-                    <motion.td
+                    <td
                       key={`total-${col.key}`}
-                      animate={{
-                        maxWidth: isVisible ? 300 : 0,
-                        opacity: isVisible ? 1 : 0,
-                        paddingLeft: isVisible ? 16 : 0,
-                        paddingRight: isVisible ? 16 : 0,
-                      }}
-                      transition={COL_TRANSITION}
                       style={{
-                        paddingTop: 12,
-                        paddingBottom: 12,
+                        padding: '12px 16px',
                         fontSize: typography.fontSize.sm,
                         fontWeight:
                           col.key === 'household' || col.key === 'impact'
@@ -264,13 +281,12 @@ export default function Walkthrough({ country = 'us' }: { country?: string }) {
                         color: isNegative ? colors.success : colors.text.primary,
                         fontFeatureSettings: '"tnum"',
                         textAlign: col.align,
-                        overflow: 'hidden',
                         whiteSpace: 'nowrap',
                         borderTop: `2px solid ${colors.border.medium}`,
                       }}
                     >
-                      {isVisible ? value : ''}
-                    </motion.td>
+                      {value}
+                    </td>
                   );
                 })}
               </motion.tr>
