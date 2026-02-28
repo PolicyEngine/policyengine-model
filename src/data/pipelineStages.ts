@@ -186,7 +186,7 @@ export const pipelineStages: PipelineStage[] = [
     id: 'stratified',
     branch: 'local',
     title: 'Stratified CPS',
-    subtitle: 'Geographic cloning',
+    subtitle: 'Geographic stratification',
     description: 'For state and congressional district analysis, the Enhanced CPS is stratified down to ~12,000 representative households per geographic area, then recalibrated to match local administrative targets.',
     icon: 'map',
     inputSize: '~400,000 persons (enhanced)',
@@ -195,7 +195,7 @@ export const pipelineStages: PipelineStage[] = [
     details: [
       'Enhanced dataset subsampled to ~12,000 households per geographic area',
       'Top 99.5th percentile filtering to remove extreme outliers',
-      'Initial weights from national calibration; L0 optimization reweights for each area',
+      'Initial weights from national calibration preserved; local L0 reweighting happens in next stage',
       'Geographic targets attached: IRS filing counts, SNAP participation, Medicaid enrollment by area',
     ],
   },
