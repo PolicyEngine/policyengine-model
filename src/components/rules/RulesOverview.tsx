@@ -1,7 +1,8 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { colors, typography, spacing, statusColors } from '../../designTokens';
-import { programs, getStatusCount } from '../../data/programs';
+import { programs as fallbackPrograms } from '../../data/programs';
+import { fetchPrograms } from '../../data/fetchPrograms';
 import type { CoverageStatus, Program } from '../../types/Program';
 import { IconX } from '@tabler/icons-react';
 
@@ -114,7 +115,7 @@ function getStateStatusForProgram(program: Program, stateCode: string): Coverage
 
 type ViewMode = 'programs' | 'states';
 
-function ProgramDetailPanel({ program, onClose }: { program: Program; onClose: () => void }) {
+function ProgramDetailPanel({ program, onClose, allPrograms }: { program: Program; onClose: () => void; allPrograms: Program[] }) {
   const stateStatuses = useMemo(() => {
     const result: { state: string; status: CoverageStatus; name?: string }[] = [];
     for (const st of ALL_STATES) {
@@ -127,7 +128,7 @@ function ProgramDetailPanel({ program, onClose }: { program: Program; onClose: (
     return result;
   }, [program]);
 
-  const statePrograms = programs.filter(
+  const statePrograms = allPrograms.filter(
     p => (p.agency === 'State' || p.agency === 'Local') && p.id !== program.id
   );
   const relatedStatePrograms = statePrograms.filter(p => {
@@ -253,10 +254,10 @@ function ProgramDetailPanel({ program, onClose }: { program: Program; onClose: (
   );
 }
 
-function StateDetailPanel({ stateCode, onClose }: { stateCode: string; onClose: () => void }) {
+function StateDetailPanel({ stateCode, onClose, allPrograms }: { stateCode: string; onClose: () => void; allPrograms: Program[] }) {
   const statePrograms = useMemo(() => {
     const result: { program: Program; status: CoverageStatus; localName?: string }[] = [];
-    for (const p of programs) {
+    for (const p of allPrograms) {
       const status = getStateStatusForProgram(p, stateCode);
       if (status !== null) {
         const impl = p.stateImplementations?.find(s => s.state === stateCode);
@@ -264,7 +265,7 @@ function StateDetailPanel({ stateCode, onClose }: { stateCode: string; onClose: 
       }
     }
     return result;
-  }, [stateCode]);
+  }, [stateCode, allPrograms]);
 
   const complete = statePrograms.filter(p => p.status === 'complete').length;
   const total = statePrograms.length;
@@ -340,24 +341,54 @@ function StateDetailPanel({ stateCode, onClose }: { stateCode: string; onClose: 
   );
 }
 
+function computeStatusCount(programList: Program[]) {
+  const counts = { complete: 0, partial: 0, inProgress: 0, notStarted: 0 };
+  programList.forEach((program) => {
+    if (program.agency === 'State' || program.agency === 'Local') {
+      counts[program.status]++;
+      return;
+    }
+    if (program.id === 'tanf') {
+      counts.partial++;
+    } else if (program.stateImplementations && program.stateImplementations.length > 0) {
+      const statuses = new Set<string>();
+      program.stateImplementations.forEach((impl) => statuses.add(impl.status));
+      if (statuses.has('inProgress')) counts.inProgress++;
+      else if (statuses.has('partial')) counts.partial++;
+      else if (statuses.has('complete')) counts.complete++;
+      else if (statuses.has('notStarted')) counts.notStarted++;
+    } else {
+      counts[program.status]++;
+    }
+  });
+  return counts;
+}
+
 export default function RulesOverview({ country = 'us' }: { country?: string }) {
   const [viewMode, setViewMode] = useState<ViewMode>('programs');
   const [selectedProgram, setSelectedProgram] = useState<Program | null>(null);
   const [selectedState, setSelectedState] = useState<string | null>(null);
   const [search, setSearch] = useState('');
+  const [programs, setPrograms] = useState<Program[]>(fallbackPrograms);
 
-  const counts = getStatusCount();
+  useEffect(() => {
+    if (country === 'us') {
+      fetchPrograms('us').then(setPrograms);
+    }
+  }, [country]);
+
+  const counts = useMemo(() => computeStatusCount(programs), [programs]);
   const total = programs.length;
 
   const federalPrograms = useMemo(() =>
     programs.filter(p => p.agency !== 'State' && p.agency !== 'Local'),
-  []);
+  [programs]);
   const stateOnlyPrograms = useMemo(() =>
     programs.filter(p => p.agency === 'State'),
-  []);
+  [programs]);
   const localPrograms = useMemo(() =>
     programs.filter(p => p.agency === 'Local'),
-  []);
+  [programs]);
 
   const filteredFederal = useMemo(() => {
     if (!search) return federalPrograms;
@@ -396,7 +427,7 @@ export default function RulesOverview({ country = 'us' }: { country?: string }) 
       }
       return { state: st, complete, total, pct: total > 0 ? complete / total : 0 };
     }).sort((a, b) => b.pct - a.pct);
-  }, []);
+  }, [programs]);
 
   if (country === 'uk') {
     return (
@@ -479,7 +510,7 @@ export default function RulesOverview({ country = 'us' }: { country?: string }) 
             {/* Selected program detail */}
             {selectedProgram && (
               <div style={{ marginBottom: spacing['2xl'] }}>
-                <ProgramDetailPanel program={selectedProgram} onClose={() => setSelectedProgram(null)} />
+                <ProgramDetailPanel program={selectedProgram} onClose={() => setSelectedProgram(null)} allPrograms={programs} />
               </div>
             )}
 
@@ -624,7 +655,7 @@ export default function RulesOverview({ country = 'us' }: { country?: string }) 
             {/* Selected state detail */}
             {selectedState && (
               <div style={{ marginBottom: spacing['2xl'] }}>
-                <StateDetailPanel stateCode={selectedState} onClose={() => setSelectedState(null)} />
+                <StateDetailPanel stateCode={selectedState} onClose={() => setSelectedState(null)} allPrograms={programs} />
               </div>
             )}
 
