@@ -4,7 +4,7 @@ import { colors, typography, spacing, statusColors } from '../../designTokens';
 import { programs as fallbackPrograms } from '../../data/programs';
 import { fetchPrograms } from '../../data/fetchPrograms';
 import type { CoverageStatus, Program } from '../../types/Program';
-import { IconX } from '@tabler/icons-react';
+import { IconX, IconCalendar } from '@tabler/icons-react';
 
 const ALL_STATES = [
   'AL','AK','AZ','AR','CA','CO','CT','DE','DC','FL','GA','HI','ID','IL','IN','IA',
@@ -29,6 +29,37 @@ const UNIVERSAL_STATE_PROGRAMS = new Set([
   'snap','tanf','medicaid','wic','state_income_tax','medicare',
   'aca_subsidies','payroll_taxes','school_meals','csfp','chip',
 ]);
+
+/** Parse a verifiedYears string like "2022-2026" or "2024" into a Set of year numbers. */
+function parseYearRange(verifiedYears?: string): Set<number> {
+  if (!verifiedYears) return new Set();
+  const trimmed = verifiedYears.trim();
+  const rangeMatch = trimmed.match(/^(\d{4})\s*-\s*(\d{4})$/);
+  if (rangeMatch) {
+    const start = parseInt(rangeMatch[1], 10);
+    const end = parseInt(rangeMatch[2], 10);
+    const years = new Set<number>();
+    for (let y = start; y <= end; y++) years.add(y);
+    return years;
+  }
+  const singleMatch = trimmed.match(/^(\d{4})$/);
+  if (singleMatch) return new Set([parseInt(singleMatch[1], 10)]);
+  return new Set();
+}
+
+/** Collect all unique years across all programs' verifiedYears fields. */
+function collectAllYears(programs: Program[]): number[] {
+  const allYears = new Set<number>();
+  for (const p of programs) {
+    for (const y of parseYearRange(p.verifiedYears)) allYears.add(y);
+  }
+  return Array.from(allYears).sort((a, b) => a - b);
+}
+
+/** Check if a program's verifiedYears includes a given year. */
+function programIncludesYear(program: Program, year: number): boolean {
+  return parseYearRange(program.verifiedYears).has(year);
+}
 
 const statusLabels: Record<CoverageStatus, string> = {
   complete: 'Complete',
@@ -369,6 +400,7 @@ export default function RulesOverview({ country = 'us' }: { country?: string }) 
   const [selectedProgram, setSelectedProgram] = useState<Program | null>(null);
   const [selectedState, setSelectedState] = useState<string | null>(null);
   const [search, setSearch] = useState('');
+  const [yearFilter, setYearFilter] = useState<number | null>(null);
   const [programs, setPrograms] = useState<Program[]>(fallbackPrograms);
 
   useEffect(() => {
@@ -377,18 +409,25 @@ export default function RulesOverview({ country = 'us' }: { country?: string }) 
     }
   }, [country]);
 
-  const counts = useMemo(() => computeStatusCount(programs), [programs]);
-  const total = programs.length;
+  const availableYears = useMemo(() => collectAllYears(programs), [programs]);
+
+  const yearFilteredPrograms = useMemo(() => {
+    if (yearFilter === null) return programs;
+    return programs.filter(p => programIncludesYear(p, yearFilter));
+  }, [programs, yearFilter]);
+
+  const counts = useMemo(() => computeStatusCount(yearFilteredPrograms), [yearFilteredPrograms]);
+  const total = yearFilteredPrograms.length;
 
   const federalPrograms = useMemo(() =>
-    programs.filter(p => p.agency !== 'State' && p.agency !== 'Local'),
-  [programs]);
+    yearFilteredPrograms.filter(p => p.agency !== 'State' && p.agency !== 'Local'),
+  [yearFilteredPrograms]);
   const stateOnlyPrograms = useMemo(() =>
-    programs.filter(p => p.agency === 'State'),
-  [programs]);
+    yearFilteredPrograms.filter(p => p.agency === 'State'),
+  [yearFilteredPrograms]);
   const localPrograms = useMemo(() =>
-    programs.filter(p => p.agency === 'Local'),
-  [programs]);
+    yearFilteredPrograms.filter(p => p.agency === 'Local'),
+  [yearFilteredPrograms]);
 
   const filteredFederal = useMemo(() => {
     if (!search) return federalPrograms;
@@ -418,7 +457,7 @@ export default function RulesOverview({ country = 'us' }: { country?: string }) 
     return ALL_STATES.map(st => {
       let complete = 0;
       let total = 0;
-      for (const p of programs) {
+      for (const p of yearFilteredPrograms) {
         const status = getStateStatusForProgram(p, st);
         if (status !== null) {
           total++;
@@ -427,7 +466,7 @@ export default function RulesOverview({ country = 'us' }: { country?: string }) 
       }
       return { state: st, complete, total, pct: total > 0 ? complete / total : 0 };
     }).sort((a, b) => b.pct - a.pct);
-  }, [programs]);
+  }, [yearFilteredPrograms]);
 
   if (country === 'uk') {
     return (
@@ -493,6 +532,32 @@ export default function RulesOverview({ country = 'us' }: { country?: string }) 
             maxWidth: '400px',
           }}
         />
+        {availableYears.length > 0 && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: spacing.xs }}>
+            <IconCalendar size={16} stroke={1.5} style={{ color: colors.text.tertiary }} />
+            <select
+              value={yearFilter ?? ''}
+              onChange={e => setYearFilter(e.target.value ? parseInt(e.target.value, 10) : null)}
+              style={{
+                padding: `${spacing.sm} ${spacing.lg}`,
+                borderRadius: spacing.radius.lg,
+                border: `1px solid ${colors.border.light}`,
+                fontSize: typography.fontSize.sm,
+                fontFamily: typography.fontFamily.primary,
+                outline: 'none',
+                backgroundColor: colors.white,
+                color: colors.text.primary,
+                cursor: 'pointer',
+                appearance: 'auto',
+              }}
+            >
+              <option value="">All years</option>
+              {availableYears.map(y => (
+                <option key={y} value={y}>{y}</option>
+              ))}
+            </select>
+          </div>
+        )}
         {/* Legend */}
         <div style={{ display: 'flex', gap: spacing.lg, flexWrap: 'wrap' }}>
           {(Object.keys(statusLabels) as CoverageStatus[]).map(status => (

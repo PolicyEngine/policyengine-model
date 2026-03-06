@@ -34,5 +34,6 @@ export interface Program {
     tests?: string;
   };
   notes?: string;
+  verifiedYears?: string;
   lastUpdated?: string;
 }

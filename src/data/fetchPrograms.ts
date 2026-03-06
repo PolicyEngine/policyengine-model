@@ -75,6 +75,7 @@ function transformProgram(p: ApiProgram): Program {
     notes: p.notes
       ? (p.verified_years ? `${p.notes}. Years: ${p.verified_years}` : p.notes)
       : (p.verified_years ? `Years: ${p.verified_years}` : undefined),
+    verifiedYears: p.verified_years,
     stateImplementations,
     githubLinks: buildGithubLinks(p.parameter_prefix),
   };
