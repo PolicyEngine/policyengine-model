@@ -15,6 +15,8 @@ interface ApiProgram {
   variable?: string;
   parameter_prefix?: string;
   verified_years?: string;
+  verified_start_year?: number;
+  verified_end_year?: number;
   notes?: string;
   state_implementations?: Array<{
     state: string;
@@ -46,6 +48,18 @@ function buildGithubLinks(paramPrefix?: string): Program['githubLinks'] {
   };
 }
 
+function buildVerifiedYears(p: ApiProgram): string | undefined {
+  // New structured format: verified_start_year / verified_end_year
+  if (p.verified_start_year != null) {
+    if (p.verified_end_year != null) {
+      return `${p.verified_start_year}-${p.verified_end_year}`;
+    }
+    return `${p.verified_start_year}+`;
+  }
+  // Legacy string format
+  return p.verified_years;
+}
+
 function transformProgram(p: ApiProgram): Program {
   const stateImplementations: StateImplementation[] | undefined =
     p.state_implementations?.map(si => ({
@@ -62,6 +76,8 @@ function transformProgram(p: ApiProgram): Program {
         : {},
     }));
 
+  const verifiedYears = buildVerifiedYears(p);
+
   return {
     id: p.id,
     name: p.name,
@@ -73,8 +89,9 @@ function transformProgram(p: ApiProgram): Program {
     hasStateVariation: p.has_state_variation,
     variable: p.variable,
     notes: p.notes
-      ? (p.verified_years ? `${p.notes}. Years: ${p.verified_years}` : p.notes)
-      : (p.verified_years ? `Years: ${p.verified_years}` : undefined),
+      ? (verifiedYears ? `${p.notes}. Years: ${verifiedYears}` : p.notes)
+      : (verifiedYears ? `Years: ${verifiedYears}` : undefined),
+    verifiedYears,
     stateImplementations,
     githubLinks: buildGithubLinks(p.parameter_prefix),
   };
