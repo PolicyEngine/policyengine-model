@@ -30,10 +30,21 @@ const UNIVERSAL_STATE_PROGRAMS = new Set([
   'aca_subsidies','payroll_taxes','school_meals','csfp','chip',
 ]);
 
-/** Parse a verifiedYears string like "2022-2026" or "2024" into a Set of year numbers. */
+const MAX_FORWARD_YEAR = new Date().getFullYear() + 5;
+
+/** Parse a verifiedYears string like "2022-2026", "2022+", or "2024" into a Set of year numbers. */
 function parseYearRange(verifiedYears?: string): Set<number> {
   if (!verifiedYears) return new Set();
   const trimmed = verifiedYears.trim();
+  // "2022+" means from 2022 onward (no end year — uprating covers future)
+  const openMatch = trimmed.match(/^(\d{4})\+$/);
+  if (openMatch) {
+    const start = parseInt(openMatch[1], 10);
+    const years = new Set<number>();
+    for (let y = start; y <= MAX_FORWARD_YEAR; y++) years.add(y);
+    return years;
+  }
+  // "2022-2026" range
   const rangeMatch = trimmed.match(/^(\d{4})\s*-\s*(\d{4})$/);
   if (rangeMatch) {
     const start = parseInt(rangeMatch[1], 10);
@@ -42,6 +53,7 @@ function parseYearRange(verifiedYears?: string): Set<number> {
     for (let y = start; y <= end; y++) years.add(y);
     return years;
   }
+  // Single year "2024"
   const singleMatch = trimmed.match(/^(\d{4})$/);
   if (singleMatch) return new Set([parseInt(singleMatch[1], 10)]);
   return new Set();
