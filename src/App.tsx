@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import StickyNav from './components/layout/StickyNav';
 import SectionContainer from './components/layout/SectionContainer';
 import Footer from './components/layout/Footer';
@@ -12,8 +13,27 @@ const isEmbed = params.has('embed');
 const country = params.get('country') || 'us';
 
 export default function App() {
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  // When embedded, report document height to parent for seamless iframe sizing
+  useEffect(() => {
+    if (!isEmbed || !rootRef.current) {
+      return;
+    }
+    const observer = new ResizeObserver(() => {
+      if (rootRef.current) {
+        window.parent.postMessage(
+          { height: rootRef.current.scrollHeight },
+          '*'
+        );
+      }
+    });
+    observer.observe(rootRef.current);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <div style={{ minHeight: '100vh' }}>
+    <div ref={rootRef} style={{ minHeight: '100vh' }}>
       {!isEmbed && <StickyNav />}
 
       <SectionContainer
