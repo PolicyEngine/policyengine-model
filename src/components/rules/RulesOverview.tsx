@@ -90,10 +90,8 @@ const statusIcons: Record<CoverageStatus, string> = {
 function StatusDot({ status, size = 10 }: { status: CoverageStatus; size?: number }) {
   return (
     <span
+      className="tw:inline-flex tw:items-center tw:justify-center"
       style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        justifyContent: 'center',
         width: size,
         height: size,
         borderRadius: '50%',
@@ -114,14 +112,13 @@ function StatCard({ label, count, color, delay }: { label: string; count: number
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.4, delay }}
+      className="tw:flex-1 tw:text-center"
       style={{
-        flex: 1,
         minWidth: '120px',
         padding: spacing.xl,
         borderRadius: spacing.radius.xl,
         border: `1px solid ${colors.border.light}`,
         backgroundColor: colors.white,
-        textAlign: 'center',
       }}
     >
       <div style={{ fontSize: typography.fontSize['3xl'], fontWeight: typography.fontWeight.bold, color, marginBottom: spacing.xs }}>{count}</div>
@@ -195,7 +192,7 @@ function ProgramDetailPanel({ program, onClose, allPrograms }: { program: Progra
         boxShadow: spacing.shadow.md,
       }}
     >
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: spacing.xl }}>
+      <div className="tw:flex tw:justify-between tw:items-start" style={{ marginBottom: spacing.xl }}>
         <div>
           <h3 style={{ fontSize: typography.fontSize['2xl'], fontWeight: typography.fontWeight.bold, color: colors.primary[900], margin: 0 }}>
             {program.name}
@@ -204,13 +201,13 @@ function ProgramDetailPanel({ program, onClose, allPrograms }: { program: Progra
             <div style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary, marginTop: spacing.xs }}>{program.fullName}</div>
           )}
         </div>
-        <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: colors.text.tertiary, padding: spacing.sm, display: 'flex', alignItems: 'center' }}>
+        <button onClick={onClose} className="tw:flex tw:items-center tw:cursor-pointer" style={{ background: 'none', border: 'none', color: colors.text.tertiary, padding: spacing.sm }}>
           <IconX size={20} stroke={1.5} />
         </button>
       </div>
 
-      <div style={{ display: 'flex', gap: spacing.lg, flexWrap: 'wrap', marginBottom: spacing.xl }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
+      <div className="tw:flex tw:flex-wrap" style={{ gap: spacing.lg, marginBottom: spacing.xl }}>
+        <div className="tw:flex tw:items-center" style={{ gap: spacing.sm }}>
           <StatusDot status={program.status} size={14} />
           <span style={{ fontSize: typography.fontSize.sm, color: statusColors[program.status], fontWeight: typography.fontWeight.semibold }}>
             {statusLabels[program.status]}
@@ -234,14 +231,14 @@ function ProgramDetailPanel({ program, onClose, allPrograms }: { program: Progra
       </div>
 
       {program.notes && (
-        <div style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary, marginBottom: spacing.xl, borderLeft: `3px solid ${colors.primary[200]}`, paddingLeft: spacing.md, fontStyle: 'italic' }}>
+        <div className="tw:italic" style={{ fontSize: typography.fontSize.sm, color: colors.text.secondary, marginBottom: spacing.xl, borderLeft: `3px solid ${colors.primary[200]}`, paddingLeft: spacing.md }}>
           {program.notes}
         </div>
       )}
 
       {/* GitHub links */}
       {(program.githubLinks.parameters || program.githubLinks.variables || program.githubLinks.tests) && (
-        <div style={{ display: 'flex', gap: spacing.md, marginBottom: spacing.xl, flexWrap: 'wrap' }}>
+        <div className="tw:flex tw:flex-wrap" style={{ gap: spacing.md, marginBottom: spacing.xl }}>
           {program.githubLinks.parameters && (
             <a href={program.githubLinks.parameters} target="_blank" rel="noopener noreferrer" style={{ fontSize: typography.fontSize.xs, color: colors.primary[600], textDecoration: 'none', padding: `${spacing.xs} ${spacing.md}`, border: `1px solid ${colors.primary[200]}`, borderRadius: spacing.radius.md }}>
               Parameters
@@ -266,20 +263,18 @@ function ProgramDetailPanel({ program, onClose, allPrograms }: { program: Progra
           <h4 style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold, color: colors.text.primary, marginBottom: spacing.md }}>
             State coverage ({stateStatuses.filter(s => s.status === 'complete').length} / {stateStatuses.length} complete)
           </h4>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+          <div className="tw:flex tw:flex-wrap" style={{ gap: '4px' }}>
             {stateStatuses.map(({ state, status, name }) => (
               <div
                 key={state}
                 title={name ? `${STATE_NAMES[state]}: ${name} (${statusLabels[status]})` : `${STATE_NAMES[state]}: ${statusLabels[status]}`}
+                className="tw:flex tw:items-center tw:justify-center"
                 style={{
                   width: '36px',
                   height: '36px',
                   borderRadius: spacing.radius.sm,
                   backgroundColor: statusColors[status],
                   color: status === 'notStarted' ? colors.gray[600] : colors.white,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
                   fontSize: '10px',
                   fontWeight: typography.fontWeight.bold,
                   fontFamily: typography.fontFamily.primary,
@@ -326,7 +321,7 @@ function StateDetailPanel({ stateCode, onClose, allPrograms }: { stateCode: stri
         boxShadow: spacing.shadow.md,
       }}
     >
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: spacing.xl }}>
+      <div className="tw:flex tw:justify-between tw:items-start" style={{ marginBottom: spacing.xl }}>
         <div>
           <h3 style={{ fontSize: typography.fontSize['2xl'], fontWeight: typography.fontWeight.bold, color: colors.primary[900], margin: 0 }}>
             {STATE_NAMES[stateCode]} ({stateCode})
@@ -335,18 +330,17 @@ function StateDetailPanel({ stateCode, onClose, allPrograms }: { stateCode: stri
             {complete} of {total} programs complete
           </div>
         </div>
-        <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: colors.text.tertiary, padding: spacing.sm, display: 'flex', alignItems: 'center' }}>
+        <button onClick={onClose} className="tw:flex tw:items-center tw:cursor-pointer" style={{ background: 'none', border: 'none', color: colors.text.tertiary, padding: spacing.sm }}>
           <IconX size={20} stroke={1.5} />
         </button>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: spacing.sm }}>
+      <div className="tw:flex tw:flex-col" style={{ gap: spacing.sm }}>
         {statePrograms.map(({ program, status, localName }) => (
           <div
             key={program.id}
+            className="tw:flex tw:items-center"
             style={{
-              display: 'flex',
-              alignItems: 'center',
               gap: spacing.md,
               padding: `${spacing.sm} ${spacing.md}`,
               borderRadius: spacing.radius.md,
@@ -354,7 +348,7 @@ function StateDetailPanel({ stateCode, onClose, allPrograms }: { stateCode: stri
             }}
           >
             <StatusDot status={status} size={12} />
-            <div style={{ flex: 1 }}>
+            <div className="tw:flex-1">
               <span style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.medium, color: colors.text.primary }}>
                 {program.name}
               </span>
@@ -498,7 +492,7 @@ export default function RulesOverview({ country = 'us' }: { country?: string }) 
   return (
     <div>
       {/* Summary stats */}
-      <div style={{ display: 'flex', gap: spacing.md, flexWrap: 'wrap', marginBottom: spacing['3xl'] }}>
+      <div className="tw:flex tw:flex-wrap" style={{ gap: spacing.md, marginBottom: spacing['3xl'] }}>
         <StatCard label="Total programs" count={total} color={colors.primary[900]} delay={0} />
         <StatCard label="Complete" count={counts.complete} color={statusColors.complete} delay={0.1} />
         <StatCard label="Partial" count={counts.partial} color={statusColors.partial} delay={0.15} />
@@ -506,12 +500,13 @@ export default function RulesOverview({ country = 'us' }: { country?: string }) 
       </div>
 
       {/* View mode toggle + search */}
-      <div style={{ display: 'flex', gap: spacing.lg, alignItems: 'center', marginBottom: spacing['2xl'], flexWrap: 'wrap' }}>
-        <div style={{ display: 'flex', borderRadius: spacing.radius.lg, overflow: 'hidden', border: `1px solid ${colors.border.light}` }}>
+      <div className="tw:flex tw:flex-wrap tw:items-center" style={{ gap: spacing.lg, marginBottom: spacing['2xl'] }}>
+        <div className="tw:flex tw:overflow-hidden" style={{ borderRadius: spacing.radius.lg, border: `1px solid ${colors.border.light}` }}>
           {(['programs', 'states'] as ViewMode[]).map(mode => (
             <button
               key={mode}
               onClick={() => { setViewMode(mode); setSelectedProgram(null); setSelectedState(null); }}
+              className="tw:cursor-pointer"
               style={{
                 padding: `${spacing.sm} ${spacing.xl}`,
                 border: 'none',
@@ -520,7 +515,6 @@ export default function RulesOverview({ country = 'us' }: { country?: string }) 
                 fontSize: typography.fontSize.sm,
                 fontWeight: typography.fontWeight.semibold,
                 fontFamily: typography.fontFamily.primary,
-                cursor: 'pointer',
               }}
             >
               {mode === 'programs' ? 'By program' : 'By state'}
@@ -532,6 +526,7 @@ export default function RulesOverview({ country = 'us' }: { country?: string }) 
           placeholder="Search programs..."
           value={search}
           onChange={e => setSearch(e.target.value)}
+          className="tw:flex-1"
           style={{
             padding: `${spacing.sm} ${spacing.lg}`,
             borderRadius: spacing.radius.lg,
@@ -539,17 +534,17 @@ export default function RulesOverview({ country = 'us' }: { country?: string }) 
             fontSize: typography.fontSize.sm,
             fontFamily: typography.fontFamily.primary,
             outline: 'none',
-            flex: 1,
             minWidth: '200px',
             maxWidth: '400px',
           }}
         />
         {availableYears.length > 0 && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: spacing.xs }}>
+          <div className="tw:flex tw:items-center" style={{ gap: spacing.xs }}>
             <IconCalendar size={16} stroke={1.5} style={{ color: colors.text.tertiary }} />
             <select
               value={yearFilter ?? ''}
               onChange={e => setYearFilter(e.target.value ? parseInt(e.target.value, 10) : null)}
+              className="tw:cursor-pointer"
               style={{
                 padding: `${spacing.sm} ${spacing.lg}`,
                 borderRadius: spacing.radius.lg,
@@ -559,7 +554,6 @@ export default function RulesOverview({ country = 'us' }: { country?: string }) 
                 outline: 'none',
                 backgroundColor: colors.white,
                 color: colors.text.primary,
-                cursor: 'pointer',
                 appearance: 'auto',
               }}
             >
@@ -571,9 +565,9 @@ export default function RulesOverview({ country = 'us' }: { country?: string }) 
           </div>
         )}
         {/* Legend */}
-        <div style={{ display: 'flex', gap: spacing.lg, flexWrap: 'wrap' }}>
+        <div className="tw:flex tw:flex-wrap" style={{ gap: spacing.lg }}>
           {(Object.keys(statusLabels) as CoverageStatus[]).map(status => (
-            <div key={status} style={{ display: 'flex', alignItems: 'center', gap: spacing.xs }}>
+            <div key={status} className="tw:flex tw:items-center" style={{ gap: spacing.xs }}>
               <StatusDot status={status} size={10} />
               <span style={{ fontSize: typography.fontSize.xs, color: colors.text.tertiary }}>{statusLabels[status]}</span>
             </div>
@@ -597,25 +591,24 @@ export default function RulesOverview({ country = 'us' }: { country?: string }) 
                 <h3 style={{ fontSize: typography.fontSize.lg, fontWeight: typography.fontWeight.semibold, color: colors.primary[800], marginBottom: spacing.lg, paddingBottom: spacing.sm, borderBottom: `2px solid ${colors.primary[100]}` }}>
                   Federal programs ({filteredFederal.length})
                 </h3>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: spacing.md }}>
+                <div className="tw:grid tw:grid-cols-[repeat(auto-fill,minmax(280px,1fr))]" style={{ gap: spacing.md }}>
                   {filteredFederal.map(program => (
                     <button
                       key={program.id}
                       onClick={() => setSelectedProgram(selectedProgram?.id === program.id ? null : program)}
+                      className="tw:cursor-pointer tw:text-left"
                       style={{
                         padding: spacing.lg,
                         borderRadius: spacing.radius.lg,
                         border: `1px solid ${selectedProgram?.id === program.id ? colors.primary[400] : colors.border.light}`,
                         backgroundColor: selectedProgram?.id === program.id ? colors.primary[50] : colors.white,
-                        cursor: 'pointer',
-                        textAlign: 'left',
                         fontFamily: typography.fontFamily.primary,
                         transition: 'all 0.15s ease',
                       }}
                     >
-                      <div style={{ display: 'flex', alignItems: 'flex-start', gap: spacing.md }}>
+                      <div className="tw:flex tw:items-start" style={{ gap: spacing.md }}>
                         <div style={{ paddingTop: '3px' }}><StatusDot status={program.status} /></div>
-                        <div style={{ flex: 1 }}>
+                        <div className="tw:flex-1">
                           <div style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
                             {program.name}
                           </div>
@@ -623,7 +616,7 @@ export default function RulesOverview({ country = 'us' }: { country?: string }) 
                             <div style={{ fontSize: typography.fontSize.xs, color: colors.text.tertiary, marginTop: '2px' }}>{program.fullName}</div>
                           )}
                           {program.stateImplementations && (
-                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '2px', marginTop: spacing.sm }}>
+                            <div className="tw:flex tw:flex-wrap" style={{ gap: '2px', marginTop: spacing.sm }}>
                               {program.stateImplementations.slice(0, 12).map(impl => (
                                 <span
                                   key={impl.state}
@@ -649,7 +642,7 @@ export default function RulesOverview({ country = 'us' }: { country?: string }) 
                             <div style={{ fontSize: typography.fontSize.xs, color: colors.primary[500], marginTop: spacing.xs }}>All states</div>
                           )}
                         </div>
-                        <div style={{ fontSize: typography.fontSize.xs, color: statusColors[program.status], fontWeight: typography.fontWeight.medium, whiteSpace: 'nowrap' }}>
+                        <div className="tw:whitespace-nowrap" style={{ fontSize: typography.fontSize.xs, color: statusColors[program.status], fontWeight: typography.fontWeight.medium }}>
                           {statusLabels[program.status]}
                         </div>
                       </div>
@@ -665,24 +658,23 @@ export default function RulesOverview({ country = 'us' }: { country?: string }) 
                 <h3 style={{ fontSize: typography.fontSize.lg, fontWeight: typography.fontWeight.semibold, color: colors.primary[800], marginBottom: spacing.lg, paddingBottom: spacing.sm, borderBottom: `2px solid ${colors.primary[100]}` }}>
                   State programs ({filteredState.length})
                 </h3>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: spacing.md }}>
+                <div className="tw:grid tw:grid-cols-[repeat(auto-fill,minmax(280px,1fr))]" style={{ gap: spacing.md }}>
                   {filteredState.map(program => (
                     <button
                       key={program.id}
                       onClick={() => setSelectedProgram(selectedProgram?.id === program.id ? null : program)}
+                      className="tw:cursor-pointer tw:text-left"
                       style={{
                         padding: spacing.lg,
                         borderRadius: spacing.radius.lg,
                         border: `1px solid ${selectedProgram?.id === program.id ? colors.primary[400] : colors.border.light}`,
                         backgroundColor: selectedProgram?.id === program.id ? colors.primary[50] : colors.white,
-                        cursor: 'pointer',
-                        textAlign: 'left',
                         fontFamily: typography.fontFamily.primary,
                       }}
                     >
-                      <div style={{ display: 'flex', alignItems: 'flex-start', gap: spacing.md }}>
+                      <div className="tw:flex tw:items-start" style={{ gap: spacing.md }}>
                         <div style={{ paddingTop: '3px' }}><StatusDot status={program.status} /></div>
-                        <div style={{ flex: 1 }}>
+                        <div className="tw:flex-1">
                           <div style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>{program.name}</div>
                           {program.coverage && <div style={{ fontSize: typography.fontSize.xs, color: colors.text.tertiary, marginTop: '2px' }}>{program.coverage}</div>}
                         </div>
@@ -699,24 +691,23 @@ export default function RulesOverview({ country = 'us' }: { country?: string }) 
                 <h3 style={{ fontSize: typography.fontSize.lg, fontWeight: typography.fontWeight.semibold, color: colors.primary[800], marginBottom: spacing.lg, paddingBottom: spacing.sm, borderBottom: `2px solid ${colors.primary[100]}` }}>
                   Local programs ({filteredLocal.length})
                 </h3>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: spacing.md }}>
+                <div className="tw:grid tw:grid-cols-[repeat(auto-fill,minmax(280px,1fr))]" style={{ gap: spacing.md }}>
                   {filteredLocal.map(program => (
                     <button
                       key={program.id}
                       onClick={() => setSelectedProgram(selectedProgram?.id === program.id ? null : program)}
+                      className="tw:cursor-pointer tw:text-left"
                       style={{
                         padding: spacing.lg,
                         borderRadius: spacing.radius.lg,
                         border: `1px solid ${selectedProgram?.id === program.id ? colors.primary[400] : colors.border.light}`,
                         backgroundColor: selectedProgram?.id === program.id ? colors.primary[50] : colors.white,
-                        cursor: 'pointer',
-                        textAlign: 'left',
                         fontFamily: typography.fontFamily.primary,
                       }}
                     >
-                      <div style={{ display: 'flex', alignItems: 'flex-start', gap: spacing.md }}>
+                      <div className="tw:flex tw:items-start" style={{ gap: spacing.md }}>
                         <div style={{ paddingTop: '3px' }}><StatusDot status={program.status} /></div>
-                        <div style={{ flex: 1 }}>
+                        <div className="tw:flex-1">
                           <div style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>{program.name}</div>
                           {program.coverage && <div style={{ fontSize: typography.fontSize.xs, color: colors.text.tertiary, marginTop: '2px' }}>{program.coverage}</div>}
                         </div>
@@ -737,30 +728,28 @@ export default function RulesOverview({ country = 'us' }: { country?: string }) 
             )}
 
             {/* State grid */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))', gap: spacing.sm }}>
+            <div className="tw:grid tw:grid-cols-[repeat(auto-fill,minmax(100px,1fr))]" style={{ gap: spacing.sm }}>
               {stateCompleteness.map(({ state, complete, total, pct }) => (
                 <button
                   key={state}
                   onClick={() => setSelectedState(selectedState === state ? null : state)}
+                  className="tw:cursor-pointer tw:text-center"
                   style={{
                     padding: spacing.md,
                     borderRadius: spacing.radius.lg,
                     border: `2px solid ${selectedState === state ? colors.primary[500] : colors.border.light}`,
                     backgroundColor: selectedState === state ? colors.primary[50] : colors.white,
-                    cursor: 'pointer',
-                    textAlign: 'center',
                     fontFamily: typography.fontFamily.primary,
                     transition: 'all 0.15s ease',
                   }}
                 >
                   <div style={{ fontSize: typography.fontSize.lg, fontWeight: typography.fontWeight.bold, color: colors.primary[800] }}>{state}</div>
-                  <div style={{
+                  <div className="tw:overflow-hidden" style={{
                     width: '100%',
                     height: '4px',
                     borderRadius: '2px',
                     backgroundColor: colors.gray[200],
                     margin: `${spacing.sm} 0`,
-                    overflow: 'hidden',
                   }}>
                     <div style={{
                       width: `${pct * 100}%`,

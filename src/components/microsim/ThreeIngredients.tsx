@@ -1,6 +1,6 @@
 import { type ReactNode } from 'react';
 import { motion } from 'framer-motion';
-import { colors, typography, spacing } from '../../designTokens';
+import { colors } from '../../designTokens';
 import { IconFileText, IconUsers, IconTrendingUp } from '@tabler/icons-react';
 
 interface IngredientCardProps {
@@ -17,42 +17,19 @@ function IngredientCard({ title, description, icon, delay, isActive }: Ingredien
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay }}
+      className="tw:flex-1 tw:min-w-[250px] tw:p-8 tw:rounded-xl tw:transition-all tw:duration-300 tw:ease-in-out"
       style={{
-        flex: 1,
-        minWidth: '250px',
-        padding: spacing['3xl'],
-        borderRadius: spacing.radius.xl,
         border: `2px solid ${isActive ? colors.primary[500] : colors.border.light}`,
         backgroundColor: isActive ? colors.primary[50] : colors.white,
-        transition: 'all 0.3s ease',
       }}
     >
-      <div
-        style={{
-          marginBottom: spacing.lg,
-          color: colors.primary[600],
-        }}
-      >
+      <div className="tw:mb-4 tw:text-pe-primary-600">
         {icon}
       </div>
-      <h3
-        style={{
-          fontSize: typography.fontSize.xl,
-          fontWeight: typography.fontWeight.bold,
-          color: colors.primary[900],
-          margin: `0 0 ${spacing.sm} 0`,
-        }}
-      >
+      <h3 className="tw:text-xl tw:font-bold tw:text-pe-primary-900 tw:mt-0 tw:mb-2 tw:mx-0">
         {title}
       </h3>
-      <p
-        style={{
-          fontSize: typography.fontSize.base,
-          color: colors.text.secondary,
-          lineHeight: 1.6,
-          margin: 0,
-        }}
-      >
+      <p className="tw:text-base tw:text-[#5A5A5A] tw:leading-[1.6] tw:m-0">
         {description}
       </p>
     </motion.div>
@@ -92,26 +69,12 @@ export default function ThreeIngredients({ activeIngredient, country = 'us' }: T
   ];
 
   return (
-    <div style={{ marginBottom: spacing['4xl'] }}>
-      <p
-        style={{
-          fontSize: typography.fontSize.lg,
-          color: colors.text.secondary,
-          lineHeight: 1.7,
-          marginBottom: spacing['3xl'],
-          maxWidth: '720px',
-        }}
-      >
+    <div className="tw:mb-12">
+      <p className="tw:text-lg tw:text-[#5A5A5A] tw:leading-[1.7] tw:mb-8 tw:max-w-[720px]">
         PolicyEngine's microsimulation model combines three ingredients to estimate the impact of any
         tax or benefit reform on every household in the country.
       </p>
-      <div
-        style={{
-          display: 'flex',
-          gap: spacing['2xl'],
-          flexWrap: 'wrap',
-        }}
-      >
+      <div className="tw:flex tw:gap-6 tw:flex-wrap">
         {ingredients.map((ing, i) => (
           <IngredientCard
             key={ing.key}

@@ -1,41 +1,15 @@
-import { colors, typography, spacing } from '../../designTokens';
-
 export default function Footer() {
   return (
-    <footer
-      style={{
-        backgroundColor: colors.primary[900],
-        color: colors.white,
-        padding: `${spacing['4xl']} 0`,
-        fontFamily: typography.fontFamily.primary,
-      }}
-    >
-      <div
-        style={{
-          maxWidth: '1200px',
-          margin: '0 auto',
-          padding: `0 ${spacing['2xl']}`,
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          flexWrap: 'wrap',
-          gap: spacing.xl,
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.md }}>
+    <footer className="tw:bg-pe-primary-900 tw:text-white tw:py-[48px]">
+      <div className="tw:max-w-[1200px] tw:mx-auto tw:px-6 tw:flex tw:justify-between tw:items-center tw:flex-wrap tw:gap-5">
+        <div className="tw:flex tw:items-center tw:gap-3">
           <img
             src="https://policyengine.org/assets/logos/policyengine/white.svg"
             alt="PolicyEngine"
-            style={{ height: '24px' }}
+            className="tw:h-6"
           />
         </div>
-        <p
-          style={{
-            fontSize: typography.fontSize.sm,
-            opacity: 0.7,
-            margin: 0,
-          }}
-        >
+        <p className="tw:text-sm tw:opacity-70 tw:m-0">
           PolicyEngine {new Date().getFullYear()}
         </p>
       </div>
