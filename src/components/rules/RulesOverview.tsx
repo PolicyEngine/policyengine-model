@@ -410,9 +410,7 @@ export default function RulesOverview({ country = 'us' }: { country?: string }) 
   const [programs, setPrograms] = useState<Program[]>(fallbackPrograms);
 
   useEffect(() => {
-    if (country === 'us') {
-      fetchPrograms('us').then(setPrograms);
-    }
+    fetchPrograms(country).then(setPrograms);
   }, [country]);
 
   const availableYears = useMemo(() => collectAllYears(programs), [programs]);
