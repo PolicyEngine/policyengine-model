@@ -98,14 +98,7 @@ export default function Walkthrough({ country = 'us' }: { country?: string }) {
       <ThreeIngredients activeIngredient={step.ingredient} country={country} />
 
       {/* Step navigation */}
-      <div
-        style={{
-          display: 'flex',
-          gap: spacing.sm,
-          marginBottom: spacing.xl,
-          flexWrap: 'wrap',
-        }}
-      >
+      <div className="tw:flex tw:gap-2 tw:mb-5 tw:flex-wrap">
         {steps.map((s, i) => {
           const isDone = i < stepIdx;
           const isActive = i === stepIdx;
@@ -113,6 +106,7 @@ export default function Walkthrough({ country = 'us' }: { country?: string }) {
             <button
               key={s.id}
               onClick={() => changeStep(i)}
+              className="tw:text-sm tw:cursor-pointer tw:transition-all tw:duration-200 tw:ease-in-out"
               style={{
                 padding: `${spacing.sm} ${spacing.lg}`,
                 borderRadius: spacing.radius.lg,
@@ -127,14 +121,8 @@ export default function Walkthrough({ country = 'us' }: { country?: string }) {
                   : isDone
                     ? colors.primary[700]
                     : colors.text.secondary,
-                fontSize: typography.fontSize.sm,
-                fontWeight:
-                  isActive || isDone
-                    ? typography.fontWeight.semibold
-                    : typography.fontWeight.medium,
+                fontWeight: isActive || isDone ? 600 : 500,
                 fontFamily: typography.fontFamily.primary,
-                cursor: 'pointer',
-                transition: 'all 0.2s ease',
               }}
             >
               {i + 1}. {s.title}
@@ -144,7 +132,7 @@ export default function Walkthrough({ country = 'us' }: { country?: string }) {
       </div>
 
       {/* Step description — crossfade between steps */}
-      <div style={{ minHeight: '3.2em', marginBottom: spacing['2xl'] }}>
+      <div className="tw:min-h-[3.2em] tw:mb-6">
         <AnimatePresence mode="wait">
           <motion.p
             key={step.id}
@@ -152,12 +140,8 @@ export default function Walkthrough({ country = 'us' }: { country?: string }) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            style={{
-              fontSize: typography.fontSize.lg,
-              color: colors.text.secondary,
-              lineHeight: 1.6,
-              margin: 0,
-            }}
+            className="tw:text-lg tw:leading-relaxed tw:m-0"
+            style={{ color: colors.text.secondary }}
           >
             {step.description}
           </motion.p>
@@ -166,34 +150,24 @@ export default function Walkthrough({ country = 'us' }: { country?: string }) {
 
       {/* Single persistent table — only visible columns rendered */}
       <div
+        className="tw:rounded-xl tw:overflow-hidden"
         style={{
-          borderRadius: spacing.radius.xl,
           border: `1px solid ${colors.border.light}`,
-          overflow: 'hidden',
           boxShadow: spacing.shadow.sm,
         }}
       >
-        <table
-          style={{
-            width: '100%',
-            borderCollapse: 'collapse',
-            fontFamily: typography.fontFamily.primary,
-          }}
-        >
+        <table className="tw:w-full tw:border-collapse">
           <thead>
             <tr>
               {visibleColumns.map((col) => (
                 <th
                   key={col.key}
+                  className="tw:px-4 tw:py-3 tw:text-sm tw:font-semibold tw:whitespace-nowrap"
                   style={{
-                    padding: '12px 16px',
                     textAlign: col.align,
-                    fontSize: typography.fontSize.sm,
-                    fontWeight: typography.fontWeight.semibold,
                     color: colors.text.secondary,
                     backgroundColor: colors.gray[50],
                     borderBottom: `1px solid ${colors.border.light}`,
-                    whiteSpace: 'nowrap',
                     opacity: newColKeys.has(col.key) ? 0 : 1,
                     transition: 'opacity 0.4s ease',
                   }}
@@ -226,15 +200,13 @@ export default function Walkthrough({ country = 'us' }: { country?: string }) {
                     return (
                       <td
                         key={col.key}
+                        className="tw:px-4 tw:py-3 tw:text-sm tw:whitespace-nowrap"
                         style={{
-                          padding: '12px 16px',
-                          fontSize: typography.fontSize.sm,
                           color: isNegative
                             ? colors.success
                             : colors.text.primary,
                           fontFeatureSettings: '"tnum"',
                           textAlign: col.align,
-                          whiteSpace: 'nowrap',
                           opacity: newColKeys.has(col.key) ? 0 : 1,
                           backgroundColor: isFlashing
                             ? colors.primary[100]
@@ -269,17 +241,15 @@ export default function Walkthrough({ country = 'us' }: { country?: string }) {
                   return (
                     <td
                       key={`total-${col.key}`}
+                      className="tw:px-4 tw:py-3 tw:text-sm tw:whitespace-nowrap"
                       style={{
-                        padding: '12px 16px',
-                        fontSize: typography.fontSize.sm,
                         fontWeight:
                           col.key === 'household' || col.key === 'impact'
-                            ? typography.fontWeight.bold
-                            : typography.fontWeight.medium,
+                            ? 700
+                            : 500,
                         color: isNegative ? colors.success : colors.text.primary,
                         fontFeatureSettings: '"tnum"',
                         textAlign: col.align,
-                        whiteSpace: 'nowrap',
                         borderTop: `2px solid ${colors.border.medium}`,
                       }}
                     >

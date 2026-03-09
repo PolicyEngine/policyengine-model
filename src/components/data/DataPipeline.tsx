@@ -45,41 +45,33 @@ function StageButton({ s, isActive, onClick, borderRadiusLeft, borderRadiusRight
   return (
     <button
       onClick={onClick}
+      className="tw:flex-1 tw:min-w-[110px] tw:cursor-pointer tw:text-center tw:relative tw:transition-all tw:duration-200 tw:ease-in-out"
       style={{
-        flex: 1,
-        minWidth: '110px',
         padding: `${spacing.md} ${spacing.sm}`,
         border: `2px solid ${isActive ? colors.primary[500] : colors.border.light}`,
         borderRadius,
         backgroundColor: isActive ? colors.primary[50] : colors.white,
-        cursor: 'pointer',
-        textAlign: 'center',
         fontFamily: typography.fontFamily.primary,
-        transition: 'all 0.2s ease',
         marginLeft: marginLeft ? '-2px' : '0',
-        position: 'relative',
       }}
     >
-      <div style={{ marginBottom: '2px', display: 'flex', justifyContent: 'center', color: isActive ? colors.primary[600] : colors.text.tertiary }}>
+      <div className="tw:mb-[2px] tw:flex tw:justify-center" style={{ color: isActive ? colors.primary[600] : colors.text.tertiary }}>
         {(() => { const Icon = iconMap[s.icon]; return Icon ? <Icon size={20} stroke={1.5} /> : null; })()}
       </div>
-      <div style={{ fontSize: '11px', fontWeight: typography.fontWeight.bold, color: isActive ? colors.primary[800] : colors.text.primary, lineHeight: 1.3 }}>
+      <div className="tw:text-[11px] tw:font-bold tw:leading-tight" style={{ color: isActive ? colors.primary[800] : colors.text.primary }}>
         {s.title}
       </div>
-      <div style={{ fontSize: '9px', color: colors.text.tertiary, marginTop: '1px', lineHeight: 1.2 }}>{s.subtitle}</div>
+      <div className="tw:text-[9px] tw:mt-[1px] tw:leading-tight" style={{ color: colors.text.tertiary }}>{s.subtitle}</div>
       {s.isFinalDataset && (
-        <div style={{
-          marginTop: spacing.xs,
-          fontSize: '8px',
-          fontWeight: typography.fontWeight.bold,
-          color: colors.white,
-          backgroundColor: colors.primary[500],
-          borderRadius: spacing.radius.sm,
-          padding: '1px 6px',
-          display: 'inline-block',
-          letterSpacing: '0.5px',
-          textTransform: 'uppercase' as const,
-        }}>
+        <div
+          className="tw:mt-1 tw:text-[8px] tw:font-bold tw:inline-block tw:uppercase tw:tracking-wide"
+          style={{
+            color: colors.white,
+            backgroundColor: colors.primary[500],
+            borderRadius: spacing.radius.sm,
+            padding: '1px 6px',
+          }}
+        >
           Final dataset
         </div>
       )}
@@ -118,16 +110,16 @@ export default function DataPipeline({ country = 'us' }: { country?: string }) {
 
   return (
     <div>
-      <p style={{ fontSize: typography.fontSize.lg, color: colors.text.secondary, lineHeight: 1.7, marginBottom: spacing['3xl'], maxWidth: '720px' }}>
+      <p className="tw:text-lg tw:leading-relaxed tw:mb-8 tw:max-w-[720px]" style={{ color: colors.text.secondary }}>
         {introText}
       </p>
 
       {/* Pipeline flow - branching layout */}
-      <div style={{ marginBottom: spacing['3xl'] }}>
+      <div className="tw:mb-8">
         {/* Shared linear portion */}
-        <div style={{ display: 'flex', alignItems: 'stretch', gap: 0 }}>
+        <div className="tw:flex tw:items-stretch tw:gap-0">
           {sharedStages.map((s, i) => (
-            <div key={s.id} style={{ flex: 1, display: 'flex', alignItems: 'stretch' }}>
+            <div key={s.id} className="tw:flex-1 tw:flex tw:items-stretch">
               <StageButton
                 s={s}
                 isActive={allStages.indexOf(s) === activeStage}
@@ -140,31 +132,26 @@ export default function DataPipeline({ country = 'us' }: { country?: string }) {
         </div>
 
         {/* Fork connector */}
-        <div style={{ display: 'flex', justifyContent: 'center', position: 'relative', height: '40px' }}>
-          <div style={{ position: 'absolute', top: 0, left: '50%', width: '2px', height: '20px', backgroundColor: colors.border.light }} />
-          <div style={{ position: 'absolute', top: '20px', left: '25%', right: '25%', height: '2px', backgroundColor: colors.border.light }} />
-          <div style={{ position: 'absolute', top: '20px', left: '25%', width: '2px', height: '20px', backgroundColor: colors.border.light }} />
-          <div style={{ position: 'absolute', top: '20px', right: '25%', width: '2px', height: '20px', backgroundColor: colors.border.light }} />
+        <div className="tw:flex tw:justify-center tw:relative tw:h-10">
+          <div className="tw:absolute tw:top-0 tw:left-1/2 tw:w-[2px] tw:h-5" style={{ backgroundColor: colors.border.light }} />
+          <div className="tw:absolute tw:top-5 tw:left-1/4 tw:right-1/4 tw:h-[2px]" style={{ backgroundColor: colors.border.light }} />
+          <div className="tw:absolute tw:top-5 tw:left-1/4 tw:w-[2px] tw:h-5" style={{ backgroundColor: colors.border.light }} />
+          <div className="tw:absolute tw:top-5 tw:right-1/4 tw:w-[2px] tw:h-5" style={{ backgroundColor: colors.border.light }} />
         </div>
 
         {/* Two branches side by side */}
-        <div style={{ display: 'flex', gap: spacing['2xl'] }}>
+        <div className="tw:flex tw:gap-6">
           {/* National branch */}
-          <div style={{ flex: 1 }}>
-            <div style={{
-              fontSize: typography.fontSize.xs,
-              fontWeight: typography.fontWeight.semibold,
-              color: colors.primary[700],
-              textAlign: 'center',
-              marginBottom: spacing.sm,
-              textTransform: 'uppercase' as const,
-              letterSpacing: '1px',
-            }}>
+          <div className="tw:flex-1">
+            <div
+              className="tw:text-xs tw:font-semibold tw:text-center tw:mb-2 tw:uppercase tw:tracking-widest"
+              style={{ color: colors.primary[700] }}
+            >
               {nationalLabel}
             </div>
-            <div style={{ display: 'flex', alignItems: 'stretch', gap: 0 }}>
+            <div className="tw:flex tw:items-stretch tw:gap-0">
               {nationalStages.map((s, i) => (
-                <div key={s.id} style={{ flex: 1, display: 'flex', alignItems: 'stretch' }}>
+                <div key={s.id} className="tw:flex-1 tw:flex tw:items-stretch">
                   <StageButton
                     s={s}
                     isActive={allStages.indexOf(s) === activeStage}
@@ -179,21 +166,16 @@ export default function DataPipeline({ country = 'us' }: { country?: string }) {
           </div>
 
           {/* Local branch */}
-          <div style={{ flex: 1 }}>
-            <div style={{
-              fontSize: typography.fontSize.xs,
-              fontWeight: typography.fontWeight.semibold,
-              color: colors.primary[700],
-              textAlign: 'center',
-              marginBottom: spacing.sm,
-              textTransform: 'uppercase' as const,
-              letterSpacing: '1px',
-            }}>
+          <div className="tw:flex-1">
+            <div
+              className="tw:text-xs tw:font-semibold tw:text-center tw:mb-2 tw:uppercase tw:tracking-widest"
+              style={{ color: colors.primary[700] }}
+            >
               {localLabel}
             </div>
-            <div style={{ display: 'flex', alignItems: 'stretch', gap: 0 }}>
+            <div className="tw:flex tw:items-stretch tw:gap-0">
               {localStages.map((s, i) => (
-                <div key={s.id} style={{ flex: 1, display: 'flex', alignItems: 'stretch' }}>
+                <div key={s.id} className="tw:flex-1 tw:flex tw:items-stretch">
                   <StageButton
                     s={s}
                     isActive={allStages.indexOf(s) === activeStage}
@@ -217,52 +199,52 @@ export default function DataPipeline({ country = 'us' }: { country?: string }) {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 0.3 }}
+          className="tw:rounded-xl"
           style={{
             padding: spacing['3xl'],
-            borderRadius: spacing.radius.xl,
             border: `1px solid ${stage.isFinalDataset ? colors.primary[300] : colors.border.light}`,
             backgroundColor: colors.white,
             boxShadow: stage.isFinalDataset ? `0 0 0 1px ${colors.primary[100]}, ${spacing.shadow.sm}` : spacing.shadow.sm,
           }}
         >
           {/* Header */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: spacing.xl, flexWrap: 'wrap', gap: spacing.md }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: spacing.md }}>
+          <div className="tw:flex tw:justify-between tw:items-start tw:mb-5 tw:flex-wrap tw:gap-3">
+            <div className="tw:flex tw:items-center tw:gap-3">
               <div>
-                <h3 style={{ fontSize: typography.fontSize['2xl'], fontWeight: typography.fontWeight.bold, color: colors.primary[900], margin: 0 }}>
+                <h3 className="tw:text-2xl tw:font-bold tw:m-0" style={{ color: colors.primary[900] }}>
                   {stage.title}
                 </h3>
-                <div style={{ fontSize: typography.fontSize.sm, color: colors.text.tertiary, marginTop: spacing.xs }}>{stage.subtitle}</div>
+                <div className="tw:text-sm tw:mt-1" style={{ color: colors.text.tertiary }}>{stage.subtitle}</div>
               </div>
               {stage.isFinalDataset && (
-                <span style={{
-                  fontSize: typography.fontSize.xs,
-                  fontWeight: typography.fontWeight.bold,
-                  color: colors.primary[700],
-                  backgroundColor: colors.primary[50],
-                  border: `1px solid ${colors.primary[200]}`,
-                  borderRadius: spacing.radius.md,
-                  padding: `2px ${spacing.md}`,
-                }}>
+                <span
+                  className="tw:text-xs tw:font-bold tw:rounded-md"
+                  style={{
+                    color: colors.primary[700],
+                    backgroundColor: colors.primary[50],
+                    border: `1px solid ${colors.primary[200]}`,
+                    padding: `2px ${spacing.md}`,
+                  }}
+                >
                   Final dataset
                 </span>
               )}
             </div>
             {(stage.inputSize || stage.outputSize) && (
-              <div style={{ display: 'flex', gap: spacing.lg }}>
+              <div className="tw:flex tw:gap-4">
                 {stage.inputSize && (
-                  <div style={{ textAlign: 'center' }}>
-                    <div style={{ fontSize: typography.fontSize.xs, color: colors.text.tertiary }}>Input</div>
-                    <div style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.bold, color: colors.primary[700], fontFamily: typography.fontFamily.mono }}>{stage.inputSize}</div>
+                  <div className="tw:text-center">
+                    <div className="tw:text-xs" style={{ color: colors.text.tertiary }}>Input</div>
+                    <div className="tw:text-sm tw:font-bold tw:font-mono" style={{ color: colors.primary[700] }}>{stage.inputSize}</div>
                   </div>
                 )}
                 {stage.inputSize && stage.outputSize && (
-                  <div style={{ display: 'flex', alignItems: 'center', color: colors.text.tertiary, fontSize: '18px' }}>→</div>
+                  <div className="tw:flex tw:items-center tw:text-lg" style={{ color: colors.text.tertiary }}>→</div>
                 )}
                 {stage.outputSize && (
-                  <div style={{ textAlign: 'center' }}>
-                    <div style={{ fontSize: typography.fontSize.xs, color: colors.text.tertiary }}>Output</div>
-                    <div style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.bold, color: colors.primary[700], fontFamily: typography.fontFamily.mono }}>{stage.outputSize}</div>
+                  <div className="tw:text-center">
+                    <div className="tw:text-xs" style={{ color: colors.text.tertiary }}>Output</div>
+                    <div className="tw:text-sm tw:font-bold tw:font-mono" style={{ color: colors.primary[700] }}>{stage.outputSize}</div>
                   </div>
                 )}
               </div>
@@ -271,59 +253,69 @@ export default function DataPipeline({ country = 'us' }: { country?: string }) {
 
           {/* Data sources */}
           {stage.dataSources && (
-            <div style={{ display: 'flex', gap: spacing.sm, flexWrap: 'wrap', marginBottom: spacing.xl }}>
+            <div className="tw:flex tw:gap-2 tw:flex-wrap tw:mb-5">
               {stage.dataSources.map(src => (
-                <span key={src} style={{ fontSize: typography.fontSize.xs, color: colors.primary[700], backgroundColor: colors.primary[50], padding: `2px ${spacing.sm}`, borderRadius: spacing.radius.sm, fontWeight: typography.fontWeight.medium }}>
+                <span
+                  key={src}
+                  className="tw:text-xs tw:font-medium tw:rounded-sm"
+                  style={{
+                    color: colors.primary[700],
+                    backgroundColor: colors.primary[50],
+                    padding: `2px ${spacing.sm}`,
+                  }}
+                >
                   {src}
                 </span>
               ))}
             </div>
           )}
 
-          <p style={{ fontSize: typography.fontSize.base, color: colors.text.secondary, lineHeight: 1.7, marginBottom: spacing['2xl'] }}>
+          <p className="tw:text-base tw:leading-relaxed tw:mb-6" style={{ color: colors.text.secondary }}>
             {stage.description}
           </p>
 
           {/* Details */}
-          <ul style={{ listStyle: 'none', padding: 0, margin: `0 0 ${spacing['2xl']} 0`, display: 'flex', flexDirection: 'column', gap: spacing.md }}>
+          <ul className="tw:list-none tw:p-0 tw:mb-6 tw:flex tw:flex-col tw:gap-3">
             {stage.details.map((detail, i) => (
               <motion.li
                 key={i}
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.05 }}
-                style={{ display: 'flex', alignItems: 'flex-start', gap: spacing.md, fontSize: typography.fontSize.sm, color: colors.text.primary, lineHeight: 1.5 }}
+                className="tw:flex tw:items-start tw:gap-3 tw:text-sm tw:leading-normal"
+                style={{ color: colors.text.primary }}
               >
-                <span style={{ display: 'inline-block', width: '6px', height: '6px', borderRadius: '50%', backgroundColor: colors.primary[500], marginTop: '7px', flexShrink: 0 }} />
+                <span
+                  className="tw:inline-block tw:w-1.5 tw:h-1.5 tw:rounded-full tw:mt-[7px] tw:shrink-0"
+                  style={{ backgroundColor: colors.primary[500] }}
+                />
                 {detail}
               </motion.li>
             ))}
           </ul>
 
           {/* Expandable sections */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: spacing.md }}>
+          <div className="tw:flex tw:flex-col tw:gap-3">
             {stage.imputations && stage.imputations.length > 0 && (
               <div>
                 <button
                   onClick={() => toggleSection('imputations')}
+                  className="tw:w-full tw:cursor-pointer tw:text-left tw:flex tw:justify-between tw:items-center"
                   style={{
-                    width: '100%',
                     padding: `${spacing.md} ${spacing.lg}`,
                     borderRadius: spacing.radius.lg,
                     border: `1px solid ${colors.border.light}`,
                     backgroundColor: expandedSection === 'imputations' ? colors.primary[50] : colors.gray[50],
-                    cursor: 'pointer',
-                    textAlign: 'left',
                     fontFamily: typography.fontFamily.primary,
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
                   }}
                 >
-                  <span style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
+                  <span className="tw:text-sm tw:font-semibold" style={{ color: colors.text.primary }}>
                     Imputations and transformations ({stage.imputations.length})
                   </span>
-                  <span style={{ fontSize: '14px', color: colors.text.tertiary, transform: expandedSection === 'imputations' ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }}>
+                  <span
+                    className="tw:text-sm tw:transition-transform tw:duration-200"
+                    style={{ color: colors.text.tertiary, transform: expandedSection === 'imputations' ? 'rotate(180deg)' : 'none' }}
+                  >
                     ▾
                   </span>
                 </button>
@@ -334,14 +326,18 @@ export default function DataPipeline({ country = 'us' }: { country?: string }) {
                       animate={{ height: 'auto', opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
                       transition={{ duration: 0.2 }}
-                      style={{ overflow: 'hidden' }}
+                      className="tw:overflow-hidden"
                     >
-                      <div style={{ padding: `${spacing.md} 0` }}>
-                        <table style={{ width: '100%', borderCollapse: 'collapse', fontFamily: typography.fontFamily.primary }}>
+                      <div className="tw:py-3">
+                        <table className="tw:w-full tw:border-collapse">
                           <thead>
                             <tr>
                               {['Variable', 'Source', 'Method'].map(col => (
-                                <th key={col} style={{ padding: `${spacing.sm} ${spacing.md}`, textAlign: 'left', fontSize: typography.fontSize.xs, fontWeight: typography.fontWeight.semibold, color: colors.text.secondary, borderBottom: `1px solid ${colors.border.light}` }}>
+                                <th
+                                  key={col}
+                                  className="tw:text-left tw:text-xs tw:font-semibold"
+                                  style={{ padding: `${spacing.sm} ${spacing.md}`, color: colors.text.secondary, borderBottom: `1px solid ${colors.border.light}` }}
+                                >
                                   {col}
                                 </th>
                               ))}
@@ -350,9 +346,9 @@ export default function DataPipeline({ country = 'us' }: { country?: string }) {
                           <tbody>
                             {stage.imputations!.map((imp, i) => (
                               <tr key={i} style={{ borderBottom: i < stage.imputations!.length - 1 ? `1px solid ${colors.border.light}` : 'none' }}>
-                                <td style={{ padding: `${spacing.sm} ${spacing.md}`, fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.medium, color: colors.text.primary }}>{imp.name}</td>
-                                <td style={{ padding: `${spacing.sm} ${spacing.md}`, fontSize: typography.fontSize.xs, color: colors.primary[600] }}>{imp.source}</td>
-                                <td style={{ padding: `${spacing.sm} ${spacing.md}`, fontSize: typography.fontSize.xs, color: colors.text.secondary }}>{imp.method}</td>
+                                <td className="tw:text-sm tw:font-medium" style={{ padding: `${spacing.sm} ${spacing.md}`, color: colors.text.primary }}>{imp.name}</td>
+                                <td className="tw:text-xs" style={{ padding: `${spacing.sm} ${spacing.md}`, color: colors.primary[600] }}>{imp.source}</td>
+                                <td className="tw:text-xs" style={{ padding: `${spacing.sm} ${spacing.md}`, color: colors.text.secondary }}>{imp.method}</td>
                               </tr>
                             ))}
                           </tbody>
@@ -368,24 +364,22 @@ export default function DataPipeline({ country = 'us' }: { country?: string }) {
               <div>
                 <button
                   onClick={() => toggleSection('targets')}
+                  className="tw:w-full tw:cursor-pointer tw:text-left tw:flex tw:justify-between tw:items-center"
                   style={{
-                    width: '100%',
                     padding: `${spacing.md} ${spacing.lg}`,
                     borderRadius: spacing.radius.lg,
                     border: `1px solid ${colors.border.light}`,
                     backgroundColor: expandedSection === 'targets' ? colors.primary[50] : colors.gray[50],
-                    cursor: 'pointer',
-                    textAlign: 'left',
                     fontFamily: typography.fontFamily.primary,
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
                   }}
                 >
-                  <span style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
+                  <span className="tw:text-sm tw:font-semibold" style={{ color: colors.text.primary }}>
                     Calibration targets ({stage.calibrationTargets.length})
                   </span>
-                  <span style={{ fontSize: '14px', color: colors.text.tertiary, transform: expandedSection === 'targets' ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }}>
+                  <span
+                    className="tw:text-sm tw:transition-transform tw:duration-200"
+                    style={{ color: colors.text.tertiary, transform: expandedSection === 'targets' ? 'rotate(180deg)' : 'none' }}
+                  >
                     ▾
                   </span>
                 </button>
@@ -396,14 +390,18 @@ export default function DataPipeline({ country = 'us' }: { country?: string }) {
                       animate={{ height: 'auto', opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
                       transition={{ duration: 0.2 }}
-                      style={{ overflow: 'hidden' }}
+                      className="tw:overflow-hidden"
                     >
-                      <div style={{ padding: `${spacing.md} 0` }}>
-                        <table style={{ width: '100%', borderCollapse: 'collapse', fontFamily: typography.fontFamily.primary }}>
+                      <div className="tw:py-3">
+                        <table className="tw:w-full tw:border-collapse">
                           <thead>
                             <tr>
                               {['Variable', 'Target', 'Source'].map(col => (
-                                <th key={col} style={{ padding: `${spacing.sm} ${spacing.md}`, textAlign: 'left', fontSize: typography.fontSize.xs, fontWeight: typography.fontWeight.semibold, color: colors.text.secondary, borderBottom: `1px solid ${colors.border.light}` }}>
+                                <th
+                                  key={col}
+                                  className="tw:text-left tw:text-xs tw:font-semibold"
+                                  style={{ padding: `${spacing.sm} ${spacing.md}`, color: colors.text.secondary, borderBottom: `1px solid ${colors.border.light}` }}
+                                >
                                   {col}
                                 </th>
                               ))}
@@ -412,9 +410,9 @@ export default function DataPipeline({ country = 'us' }: { country?: string }) {
                           <tbody>
                             {stage.calibrationTargets!.map((target, i) => (
                               <tr key={i} style={{ borderBottom: i < stage.calibrationTargets!.length - 1 ? `1px solid ${colors.border.light}` : 'none' }}>
-                                <td style={{ padding: `${spacing.sm} ${spacing.md}`, fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.medium, color: colors.text.primary }}>{target.variable}</td>
-                                <td style={{ padding: `${spacing.sm} ${spacing.md}`, fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.bold, color: colors.primary[700], fontFamily: typography.fontFamily.mono }}>{target.target}</td>
-                                <td style={{ padding: `${spacing.sm} ${spacing.md}`, fontSize: typography.fontSize.xs, color: colors.text.tertiary }}>{target.source}</td>
+                                <td className="tw:text-sm tw:font-medium" style={{ padding: `${spacing.sm} ${spacing.md}`, color: colors.text.primary }}>{target.variable}</td>
+                                <td className="tw:text-sm tw:font-bold tw:font-mono" style={{ padding: `${spacing.sm} ${spacing.md}`, color: colors.primary[700] }}>{target.target}</td>
+                                <td className="tw:text-xs" style={{ padding: `${spacing.sm} ${spacing.md}`, color: colors.text.tertiary }}>{target.source}</td>
                               </tr>
                             ))}
                           </tbody>

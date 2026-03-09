@@ -97,10 +97,10 @@ function transformProgram(p: ApiProgram): Program {
   };
 }
 
-let cachedPrograms: Program[] | null = null;
+const cache = new Map<string, Program[]>();
 
 export async function fetchPrograms(country: string = 'us'): Promise<Program[]> {
-  if (cachedPrograms) return cachedPrograms;
+  if (cache.has(country)) return cache.get(country)!;
 
   try {
     const res = await fetch(`https://api.policyengine.org/${country}/metadata`);
@@ -110,8 +110,9 @@ export async function fetchPrograms(country: string = 'us'): Promise<Program[]> 
     if (!apiPrograms || !Array.isArray(apiPrograms)) {
       throw new Error('No programs array in API response');
     }
-    cachedPrograms = apiPrograms.map(transformProgram);
-    return cachedPrograms;
+    const result = apiPrograms.map(transformProgram);
+    cache.set(country, result);
+    return result;
   } catch (err) {
     console.warn('Failed to fetch programs from API, using fallback:', err);
     // Fall back to hardcoded data
