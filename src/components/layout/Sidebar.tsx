@@ -125,9 +125,8 @@ export default function Sidebar({ country, onClose }: SidebarProps) {
               </button>
 
               {/* Children */}
-              {item.children && isExpanded && (
-                <div>
-                  {item.children.map((child) => {
+              {item.children && isExpanded &&
+                item.children.map((child) => {
                     const childActive = child.path === currentPath;
                     return (
                       <button
@@ -155,9 +154,7 @@ export default function Sidebar({ country, onClose }: SidebarProps) {
                         {child.label}
                       </button>
                     );
-                  })}
-                </div>
-              )}
+                })}
             </div>
           );
         })}

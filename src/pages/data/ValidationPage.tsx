@@ -1,5 +1,6 @@
 import { colors, typography, spacing } from '../../designTokens';
 import { IconExternalLink } from '@tabler/icons-react';
+import PageHeader from '../../components/layout/PageHeader';
 
 export default function ValidationPage({ country }: { country: string }) {
   const taxsimUrl =
@@ -9,37 +10,9 @@ export default function ValidationPage({ country }: { country: string }) {
 
   return (
     <div>
-      <div style={{ marginBottom: spacing['4xl'] }}>
-        <p
-          style={{
-            fontSize: typography.fontSize.sm,
-            fontWeight: typography.fontWeight.semibold,
-            color: colors.primary[600],
-            textTransform: 'uppercase',
-            letterSpacing: '0.05em',
-            marginBottom: spacing.sm,
-          }}
-        >
-          Data
-        </p>
-        <h1
-          style={{
-            fontSize: typography.fontSize['5xl'],
-            fontWeight: typography.fontWeight.bold,
-            color: colors.primary[900],
-            lineHeight: 1.2,
-            margin: 0,
-          }}
-        >
-          Validation
-        </h1>
-      </div>
+      <PageHeader category="Data" title="Validation" />
 
-      <div
-        style={{
-          maxWidth: '720px',
-        }}
-      >
+      <div style={{ maxWidth: '720px' }}>
         <p
           style={{
             fontSize: typography.fontSize.lg,
