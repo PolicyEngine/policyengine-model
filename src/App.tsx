@@ -1,6 +1,5 @@
 import { useHashRoute, useSearchParams } from './router';
 import AppShell from './components/layout/AppShell';
-import SectionContainer from './components/layout/SectionContainer';
 import Walkthrough from './components/microsim/Walkthrough';
 import RulesOverview from './components/rules/RulesOverview';
 import DataPipeline from './components/data/DataPipeline';
@@ -15,49 +14,71 @@ import CalibrationPage from './pages/data/CalibrationPage';
 import ValidationPage from './pages/data/ValidationPage';
 import BehavioralPage from './pages/BehavioralPage';
 
+function EmbedSection({
+  title,
+  subtitle,
+  background,
+  children,
+}: {
+  title: string;
+  subtitle: string;
+  background?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <section
+      className="tw:py-24 tw:font-primary"
+      style={background ? { backgroundColor: background } : undefined}
+    >
+      <div className="tw:max-w-[1200px] tw:mx-auto tw:px-6">
+        <div className="tw:mb-12">
+          <p className="tw:text-sm tw:font-semibold tw:text-pe-primary-600 tw:uppercase tw:tracking-wider tw:m-0">
+            {subtitle}
+          </p>
+          <h2 className="tw:text-[40px] tw:font-bold tw:text-pe-primary-900 tw:mt-2 tw:mb-0 tw:ml-0 tw:mr-0 tw:leading-[1.2]">
+            {title}
+          </h2>
+        </div>
+        {children}
+      </div>
+    </section>
+  );
+}
+
 export default function App() {
   const path = useHashRoute();
   const params = useSearchParams();
   const isEmbed = params.has('embed');
   const country = params.get('country') || 'us';
 
-  // Embed mode: render all sections as a single scroll page (matches pre-sidebar layout)
+  // Embed mode: render all sections as a single scroll page without animations
+  // (IntersectionObserver doesn't fire reliably in cross-origin iframes)
   if (isEmbed) {
     return (
       <div style={{ minHeight: '100vh' }}>
-        <SectionContainer
-          id="microsim"
-          title="How microsimulation works"
-          subtitle="The engine"
-        >
+        <EmbedSection title="How microsimulation works" subtitle="The engine">
           <Walkthrough country={country} />
-        </SectionContainer>
+        </EmbedSection>
 
-        <SectionContainer
-          id="rules"
+        <EmbedSection
           title="Policy rules we model"
           subtitle="Coverage"
           background={colors.background.secondary}
         >
           <RulesOverview country={country} />
-        </SectionContainer>
+        </EmbedSection>
 
-        <SectionContainer
-          id="data"
-          title="How we build the data"
-          subtitle="Microdata pipeline"
-        >
+        <EmbedSection title="How we build the data" subtitle="Microdata pipeline">
           <DataPipeline country={country} />
-        </SectionContainer>
+        </EmbedSection>
 
-        <SectionContainer
-          id="theory"
+        <EmbedSection
           title={country === 'uk' ? 'Behavioural responses' : 'Behavioral responses'}
           subtitle="Economic theory"
           background={colors.background.secondary}
         >
           <BehavioralResponses country={country} />
-        </SectionContainer>
+        </EmbedSection>
       </div>
     );
   }
