@@ -77,8 +77,9 @@ export default function Sidebar({ country, onClose }: SidebarProps) {
       style={{ borderRight: `1px solid ${colors.border.light}` }}
     >
       {/* Logo */}
-      <div
-        className="tw:flex tw:items-center tw:gap-3 tw:px-6 tw:py-5"
+      <a
+        href="https://policyengine.org"
+        className="tw:flex tw:items-center tw:gap-3 tw:px-6 tw:py-5 tw:no-underline"
         style={{ borderBottom: `1px solid ${colors.border.light}` }}
       >
         <img
@@ -89,7 +90,7 @@ export default function Sidebar({ country, onClose }: SidebarProps) {
         <span className="tw:text-lg tw:font-bold" style={{ color: colors.primary[900] }}>
           Model
         </span>
-      </div>
+      </a>
 
       {/* Nav items */}
       <div className="tw:py-4 tw:flex-1">
