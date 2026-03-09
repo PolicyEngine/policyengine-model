@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { useHashRoute, useSearchParams } from './router';
 import AppShell from './components/layout/AppShell';
 import Walkthrough from './components/microsim/Walkthrough';
@@ -53,9 +54,21 @@ export default function App() {
 
   // Embed mode: render all sections as a single scroll page without animations
   // (IntersectionObserver doesn't fire reliably in cross-origin iframes)
+  // Post height to parent so the iframe can auto-resize
+  const embedRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!isEmbed || !embedRef.current) return;
+    const ro = new ResizeObserver(() => {
+      const height = document.documentElement.scrollHeight;
+      window.parent.postMessage({ type: 'policyengine-model-height', height }, '*');
+    });
+    ro.observe(embedRef.current);
+    return () => ro.disconnect();
+  }, [isEmbed]);
+
   if (isEmbed) {
     return (
-      <div style={{ minHeight: '100vh' }}>
+      <div ref={embedRef} style={{ minHeight: '100vh' }}>
         <EmbedSection title="How microsimulation works" subtitle="The engine">
           <Walkthrough country={country} />
         </EmbedSection>
