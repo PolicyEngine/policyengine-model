@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { IconMenu2, IconChevronDown, IconWorld, IconX } from '@tabler/icons-react';
+import { colors, spacing, typography } from '@policyengine/design-system/tokens';
 
 interface PEHeaderProps {
   country: string;
@@ -13,35 +14,25 @@ const COUNTRIES = [
 const PE_LOGO_URL =
   'https://raw.githubusercontent.com/PolicyEngine/policyengine-app-v2/main/app/public/assets/logos/policyengine/white.svg';
 
-const linkStyle: React.CSSProperties = {
-  color: '#fff',
-  fontWeight: 500,
-  fontSize: '18px',
+const navItemStyle: React.CSSProperties = {
+  color: colors.text.inverse,
+  fontWeight: typography.fontWeight.medium,
+  fontSize: '15px',
+  fontFamily: typography.fontFamily.primary,
   textDecoration: 'none',
-  fontFamily: "'Inter', sans-serif",
+  padding: '6px 14px',
+  borderRadius: '6px',
+  transition: 'background-color 0.15s ease',
+  letterSpacing: '0.01em',
 };
 
-const dropdownStyle: React.CSSProperties = {
-  position: 'absolute',
-  top: '100%',
-  left: 0,
-  marginTop: '4px',
-  width: '200px',
-  background: '#fff',
-  borderRadius: '8px',
-  boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)',
-  border: '1px solid #E2E8F0',
-  padding: '4px 0',
-  zIndex: 1001,
-};
-
-const dropdownItemStyle: React.CSSProperties = {
-  display: 'block',
-  padding: '8px 16px',
-  fontSize: '14px',
-  color: '#101828',
-  textDecoration: 'none',
-  fontFamily: "'Inter', sans-serif",
+const hoverHandlers = {
+  onMouseEnter: (e: React.MouseEvent<HTMLElement>) => {
+    e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.12)';
+  },
+  onMouseLeave: (e: React.MouseEvent<HTMLElement>) => {
+    e.currentTarget.style.backgroundColor = 'transparent';
+  },
 };
 
 function getNavItems(country: string) {
@@ -61,17 +52,132 @@ function getNavItems(country: string) {
   ];
 }
 
+/** Apple-style animated dropdown panel with glassmorphism */
+function AppleDropdown({
+  items,
+  open,
+  onClose,
+  align = 'center',
+}: {
+  items: { label: string; href: string; bold?: boolean }[];
+  open: boolean;
+  onClose: () => void;
+  align?: 'center' | 'right';
+}) {
+  const contentRef = useRef<HTMLDivElement>(null);
+  const [contentHeight, setContentHeight] = useState(0);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    if (open && contentRef.current) {
+      setContentHeight(contentRef.current.scrollHeight);
+      requestAnimationFrame(() => setVisible(true));
+    } else {
+      setVisible(false);
+      const timer = setTimeout(() => setContentHeight(0), 250);
+      return () => clearTimeout(timer);
+    }
+  }, [open]);
+
+  if (!open && contentHeight === 0) return null;
+
+  const positionStyle: React.CSSProperties =
+    align === 'right'
+      ? { right: 0, transform: visible ? 'translateY(0)' : 'translateY(-8px)' }
+      : {
+          left: '50%',
+          transform: visible
+            ? 'translateX(-50%) translateY(0)'
+            : 'translateX(-50%) translateY(-8px)',
+        };
+
+  return (
+    <>
+      {/* Click-away layer */}
+      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
+      <div
+        onClick={onClose}
+        style={{ position: 'fixed', inset: 0, zIndex: 999, cursor: 'default' }}
+      />
+      <div
+        style={{
+          position: 'absolute',
+          top: '100%',
+          ...positionStyle,
+          marginTop: '10px',
+          minWidth: '220px',
+          overflow: 'hidden',
+          maxHeight: visible ? `${contentHeight}px` : '0px',
+          opacity: visible ? 1 : 0,
+          transition:
+            'max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+          borderRadius: '14px',
+          background: 'linear-gradient(135deg, rgba(255,255,255,0.97), rgba(240,249,255,0.95))',
+          backdropFilter: 'blur(24px) saturate(200%)',
+          WebkitBackdropFilter: 'blur(24px) saturate(200%)',
+          boxShadow:
+            '0 20px 60px rgba(0, 0, 0, 0.15), 0 4px 16px rgba(0, 0, 0, 0.06), inset 0 0 0 1px rgba(255, 255, 255, 0.6)',
+          zIndex: 1001,
+        }}
+      >
+        <div ref={contentRef} style={{ padding: '8px' }}>
+          {items.map((item, i) => (
+            <a
+              key={item.label}
+              href={item.href}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                width: '100%',
+                textAlign: 'left' as const,
+                padding: '11px 16px',
+                borderRadius: '10px',
+                border: 'none',
+                background: 'transparent',
+                cursor: 'pointer',
+                fontSize: '14px',
+                fontFamily: typography.fontFamily.primary,
+                fontWeight: item.bold ? typography.fontWeight.bold : typography.fontWeight.semibold,
+                color: colors.primary[800],
+                transition: 'background-color 0.12s ease, color 0.12s ease, opacity 0.3s ease',
+                transitionDelay: visible ? `${i * 50}ms` : '0ms',
+                opacity: visible ? 1 : 0,
+                lineHeight: '1.3',
+                letterSpacing: '-0.01em',
+                textDecoration: 'none',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = colors.primary[500];
+                e.currentTarget.style.color = colors.text.inverse;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = 'transparent';
+                e.currentTarget.style.color = colors.primary[800];
+              }}
+            >
+              {item.label}
+              {item.bold && (
+                <span style={{ marginLeft: 'auto', fontSize: '12px', opacity: 0.6 }}>✓</span>
+              )}
+            </a>
+          ))}
+        </div>
+      </div>
+    </>
+  );
+}
+
 export default function PEHeader({ country }: PEHeaderProps) {
   const [aboutOpen, setAboutOpen] = useState(false);
   const [countryOpen, setCountryOpen] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileSheetOpen, setMobileSheetOpen] = useState(false);
   const [isDesktop, setIsDesktop] = useState(true);
   const aboutRef = useRef<HTMLDivElement>(null);
   const countryRef = useRef<HTMLDivElement>(null);
 
   const NAV_ITEMS = getNavItems(country);
 
-  // Media query for responsive behavior — same pattern as AppShell
+  // Media query for responsive behavior
   useEffect(() => {
     const mq = window.matchMedia('(min-width: 1024px)');
     setIsDesktop(mq.matches);
@@ -86,36 +192,50 @@ export default function PEHeader({ country }: PEHeaderProps) {
       if (aboutRef.current && !aboutRef.current.contains(e.target as Node)) setAboutOpen(false);
       if (countryRef.current && !countryRef.current.contains(e.target as Node)) setCountryOpen(false);
     }
+    function handleKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') {
+        setAboutOpen(false);
+        setCountryOpen(false);
+      }
+    }
     document.addEventListener('mousedown', handleClick);
-    return () => document.removeEventListener('mousedown', handleClick);
+    document.addEventListener('keydown', handleKey);
+    return () => {
+      document.removeEventListener('mousedown', handleClick);
+      document.removeEventListener('keydown', handleKey);
+    };
   }, []);
 
-  const countryDropdown = countryOpen && (
-    <div style={{ ...dropdownStyle, left: 'auto', right: 0 }}>
-      {COUNTRIES.map((c) => (
-        <a
-          key={c.id}
-          href={`https://policyengine.org/${c.id}/model`}
-          style={{ ...dropdownItemStyle, fontWeight: c.id === country ? 700 : 400 }}
-        >
-          {c.label}
-        </a>
-      ))}
-    </div>
-  );
+  const countryItems = COUNTRIES.map((c) => ({
+    label: c.label,
+    href: `https://policyengine.org/${c.id}/model`,
+    bold: c.id === country,
+  }));
+
+  const globeButtonStyle: React.CSSProperties = {
+    background: 'transparent',
+    border: 'none',
+    cursor: 'pointer',
+    padding: '6px',
+    borderRadius: '6px',
+    transition: 'background-color 0.15s ease',
+    lineHeight: 1,
+    display: 'flex',
+    alignItems: 'center',
+  };
 
   return (
     <header
       style={{
         position: 'sticky',
         top: 0,
-        padding: '8px 24px',
-        height: '58px',
-        backgroundColor: '#2C7A7B',
-        borderBottom: '0.5px solid #94A3B8',
-        boxShadow: '0px 2px 4px -1px rgba(16,24,40,0.05), 0px 4px 6px -1px rgba(16,24,40,0.1)',
+        padding: `${spacing.sm} ${spacing['2xl']}`,
+        height: spacing.layout.header,
+        background: `linear-gradient(to right, ${colors.primary[800]}, ${colors.primary[600]})`,
+        borderBottom: `0.5px solid ${colors.primary[700]}`,
+        boxShadow: `0px 2px 4px -1px ${colors.shadow.light}, 0px 4px 6px -1px ${colors.shadow.medium}`,
         zIndex: 1000,
-        fontFamily: "'Inter', sans-serif",
+        fontFamily: typography.fontFamily.primary,
         width: '100%',
         boxSizing: 'border-box' as const,
       }}
@@ -123,44 +243,52 @@ export default function PEHeader({ country }: PEHeaderProps) {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '100%' }}>
         {/* Left: Logo + Desktop Nav */}
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          <a href={`https://policyengine.org/${country}`} style={{ display: 'flex', alignItems: 'center', marginRight: '12px' }}>
-            <img src={PE_LOGO_URL} alt="PolicyEngine" style={{ height: '24px', width: 'auto' }} />
+          <a
+            href={`https://policyengine.org/${country}`}
+            style={{ display: 'flex', alignItems: 'center', marginRight: spacing.md }}
+          >
+            <img src={PE_LOGO_URL} alt="PolicyEngine" style={{ height: '24px', width: 'auto', marginRight: '12px' }} />
           </a>
 
           {/* Desktop nav */}
           {isDesktop && (
-            <nav style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+            <nav style={{ display: 'flex', alignItems: 'center', gap: spacing['2xl'] }}>
               {NAV_ITEMS.map((item) =>
                 item.hasDropdown ? (
                   <div key={item.label} ref={aboutRef} style={{ position: 'relative' }}>
                     <button
+                      type="button"
                       onClick={() => setAboutOpen(!aboutOpen)}
                       style={{
-                        ...linkStyle,
+                        ...navItemStyle,
                         background: 'transparent',
                         border: 'none',
                         cursor: 'pointer',
-                        padding: 0,
                         display: 'flex',
                         alignItems: 'center',
                         gap: '4px',
                       }}
+                      {...hoverHandlers}
                     >
-                      {item.label}
-                      <IconChevronDown size={18} color="white" />
+                      <span>{item.label}</span>
+                      <IconChevronDown
+                        size={15}
+                        color={colors.text.inverse}
+                        style={{
+                          opacity: 0.7,
+                          transition: 'transform 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
+                          transform: aboutOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+                        }}
+                      />
                     </button>
-                    {aboutOpen && (
-                      <div style={dropdownStyle}>
-                        {item.items!.map((sub) => (
-                          <a key={sub.label} href={sub.href} style={dropdownItemStyle}>
-                            {sub.label}
-                          </a>
-                        ))}
-                      </div>
-                    )}
+                    <AppleDropdown
+                      items={item.items!.map((sub) => ({ label: sub.label, href: sub.href }))}
+                      open={aboutOpen}
+                      onClose={() => setAboutOpen(false)}
+                    />
                   </div>
                 ) : (
-                  <a key={item.label} href={item.href} style={linkStyle}>
+                  <a key={item.label} href={item.href} style={navItemStyle} {...hoverHandlers}>
                     {item.label}
                   </a>
                 ),
@@ -171,48 +299,66 @@ export default function PEHeader({ country }: PEHeaderProps) {
 
         {/* Right side */}
         {isDesktop ? (
-          /* Desktop: Country selector on far right */
-          <div ref={countryRef} style={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
+          /* Desktop: Country selector */
+          <div ref={countryRef} style={{ position: 'relative' }}>
             <button
+              type="button"
               onClick={() => setCountryOpen(!countryOpen)}
-              style={{ background: 'transparent', border: 'none', cursor: 'pointer', padding: 0, lineHeight: 1 }}
+              style={globeButtonStyle}
               aria-label="Country selector"
+              {...hoverHandlers}
             >
-              <IconWorld size={18} color="white" />
+              <IconWorld size={18} color={colors.text.inverse} />
             </button>
-            {countryDropdown}
+            <AppleDropdown
+              items={countryItems}
+              open={countryOpen}
+              onClose={() => setCountryOpen(false)}
+              align="right"
+            />
           </div>
         ) : (
           /* Mobile: Country selector + hamburger */
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: spacing.md }}>
             <div ref={countryRef} style={{ position: 'relative' }}>
               <button
+                type="button"
                 onClick={() => setCountryOpen(!countryOpen)}
-                style={{ background: 'transparent', border: 'none', cursor: 'pointer', padding: 0, lineHeight: 1 }}
+                style={globeButtonStyle}
                 aria-label="Country selector"
+                {...hoverHandlers}
               >
-                <IconWorld size={18} color="white" />
+                <IconWorld size={18} color={colors.text.inverse} />
               </button>
-              {countryDropdown}
+              <AppleDropdown
+                items={countryItems}
+                open={countryOpen}
+                onClose={() => setCountryOpen(false)}
+                align="right"
+              />
             </div>
             <button
-              onClick={() => setMobileOpen(!mobileOpen)}
-              style={{ background: 'transparent', border: 'none', cursor: 'pointer', padding: '4px' }}
+              type="button"
+              onClick={() => setMobileSheetOpen(true)}
+              className="tw:p-1 tw:rounded tw:bg-transparent tw:border-none tw:cursor-pointer"
               aria-label="Toggle navigation"
             >
-              <IconMenu2 size={24} color="white" />
+              <IconMenu2 size={24} color={colors.text.inverse} />
             </button>
           </div>
         )}
       </div>
 
-      {/* Mobile slide-in menu */}
-      {mobileOpen && (
+      {/* Mobile slide-in sheet */}
+      {mobileSheetOpen && (
         <>
+          {/* Backdrop */}
+          {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
           <div
             style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.4)', zIndex: 1001 }}
-            onClick={() => setMobileOpen(false)}
+            onClick={() => setMobileSheetOpen(false)}
           />
+          {/* Sheet */}
           <div
             style={{
               position: 'fixed',
@@ -220,39 +366,72 @@ export default function PEHeader({ country }: PEHeaderProps) {
               right: 0,
               width: '300px',
               height: '100vh',
-              backgroundColor: '#2C7A7B',
+              backgroundColor: colors.primary[600],
               zIndex: 1002,
-              padding: '16px 24px',
-              fontFamily: "'Inter', sans-serif",
+              padding: `${spacing.lg} ${spacing['2xl']}`,
+              fontFamily: typography.fontFamily.primary,
             }}
           >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
-              <span style={{ color: '#fff', fontWeight: 700, fontSize: '16px' }}>Menu</span>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing['2xl'] }}>
+              <span style={{ color: colors.text.inverse, fontWeight: typography.fontWeight.bold, fontSize: typography.fontSize.base }}>
+                Menu
+              </span>
               <button
-                onClick={() => setMobileOpen(false)}
+                type="button"
+                onClick={() => setMobileSheetOpen(false)}
                 style={{ background: 'transparent', border: 'none', cursor: 'pointer' }}
                 aria-label="Close menu"
               >
                 <IconX size={24} color="white" />
               </button>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: spacing.lg }}>
               {NAV_ITEMS.map((item) =>
                 item.hasDropdown ? (
                   <div key={item.label}>
-                    <span style={{ color: '#fff', fontWeight: 500, fontSize: '14px', display: 'block', marginBottom: '4px' }}>
+                    <span
+                      style={{
+                        color: colors.text.inverse,
+                        fontWeight: typography.fontWeight.medium,
+                        fontSize: typography.fontSize.sm,
+                        marginBottom: spacing.xs,
+                        display: 'block',
+                        fontFamily: typography.fontFamily.primary,
+                      }}
+                    >
                       {item.label}
                     </span>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', paddingLeft: '12px' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: spacing.xs, paddingLeft: spacing.md }}>
                       {item.items!.map((sub) => (
-                        <a key={sub.label} href={sub.href} style={{ color: '#fff', textDecoration: 'none', fontSize: '14px' }}>
+                        <a
+                          key={sub.label}
+                          href={sub.href}
+                          style={{
+                            color: colors.text.inverse,
+                            textDecoration: 'none',
+                            fontWeight: typography.fontWeight.normal,
+                            fontSize: typography.fontSize.sm,
+                            fontFamily: typography.fontFamily.primary,
+                          }}
+                        >
                           {sub.label}
                         </a>
                       ))}
                     </div>
                   </div>
                 ) : (
-                  <a key={item.label} href={item.href} style={{ color: '#fff', textDecoration: 'none', fontWeight: 500, fontSize: '14px', display: 'block' }}>
+                  <a
+                    key={item.label}
+                    href={item.href}
+                    style={{
+                      color: colors.text.inverse,
+                      textDecoration: 'none',
+                      fontWeight: typography.fontWeight.medium,
+                      fontSize: typography.fontSize.sm,
+                      fontFamily: typography.fontFamily.primary,
+                      display: 'block',
+                    }}
+                  >
                     {item.label}
                   </a>
                 ),
