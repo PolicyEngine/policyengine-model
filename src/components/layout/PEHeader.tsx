@@ -1,132 +1,275 @@
-import { useState } from 'react';
-import { IconChevronDown, IconMenu2, IconX } from '@tabler/icons-react';
+'use client';
+
+import { useState, useRef, useEffect } from 'react';
+import { IconMenu2, IconChevronDown, IconWorld, IconX } from '@tabler/icons-react';
 
 interface PEHeaderProps {
   country: string;
 }
 
-const baseUrl = 'https://policyengine.org';
+const COUNTRIES = [
+  { id: 'us', label: 'United States' },
+  { id: 'uk', label: 'United Kingdom' },
+];
+
+const PE_LOGO_URL =
+  'https://raw.githubusercontent.com/PolicyEngine/policyengine-app-v2/main/app/public/assets/logos/policyengine/white.svg';
+
+const linkStyle: React.CSSProperties = {
+  color: '#fff',
+  fontWeight: 500,
+  fontSize: '18px',
+  textDecoration: 'none',
+  fontFamily: "'Inter', sans-serif",
+};
+
+function getNavItems(country: string) {
+  return [
+    { label: 'Research', href: `https://policyengine.org/${country}/research` },
+    { label: 'Model', href: `https://policyengine.org/${country}/model` },
+    {
+      label: 'About',
+      hasDropdown: true,
+      items: [
+        { label: 'Team', href: `https://policyengine.org/${country}/team` },
+        { label: 'Supporters', href: `https://policyengine.org/${country}/supporters` },
+      ],
+    },
+    { label: 'Donate', href: `https://policyengine.org/${country}/donate` },
+  ];
+}
 
 export default function PEHeader({ country }: PEHeaderProps) {
   const [aboutOpen, setAboutOpen] = useState(false);
+  const [countryOpen, setCountryOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const aboutRef = useRef<HTMLDivElement>(null);
+  const countryRef = useRef<HTMLDivElement>(null);
 
-  const links = [
-    { label: 'Research', href: `${baseUrl}/${country}/research` },
-    { label: 'Model', href: `${baseUrl}/${country}/model` },
-  ];
+  const NAV_ITEMS = getNavItems(country);
 
-  const aboutLinks = [
-    { label: 'Team', href: `${baseUrl}/${country}/team` },
-    { label: 'Supporters', href: `${baseUrl}/${country}/supporters` },
-  ];
+  // Close dropdowns on outside click
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (aboutRef.current && !aboutRef.current.contains(e.target as Node)) setAboutOpen(false);
+      if (countryRef.current && !countryRef.current.contains(e.target as Node)) setCountryOpen(false);
+    }
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, []);
 
   return (
     <header
-      className="tw:sticky tw:top-0 tw:z-[1000] tw:font-primary"
       style={{
-        backgroundColor: '#2c7a7b',
+        position: 'sticky',
+        top: 0,
+        padding: '8px 24px',
+        height: '58px',
+        backgroundColor: '#2C7A7B',
         borderBottom: '0.5px solid #94A3B8',
-        boxShadow: '0px 2px 4px -1px rgba(16, 24, 40, 0.05), 0px 4px 6px -1px rgba(16, 24, 40, 0.1)',
+        boxShadow: '0px 2px 4px -1px rgba(16,24,40,0.05), 0px 4px 6px -1px rgba(16,24,40,0.1)',
+        zIndex: 1000,
+        fontFamily: "'Inter', sans-serif",
+        width: '100%',
+        boxSizing: 'border-box' as const,
       }}
     >
-      <div className="tw:flex tw:justify-between tw:items-center tw:h-[58px] tw:px-6">
-        <a href={baseUrl} className="tw:flex tw:items-center">
-          <img
-            src={`${baseUrl}/assets/logos/policyengine/white.svg`}
-            alt="PolicyEngine"
-            className="tw:h-6 tw:w-auto tw:mr-3"
-          />
-        </a>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '100%' }}>
+        {/* Left: Logo + Desktop Nav */}
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <a href={`https://policyengine.org/${country}`} style={{ display: 'flex', alignItems: 'center', marginRight: '12px' }}>
+            <img src={PE_LOGO_URL} alt="PolicyEngine" style={{ height: '24px', width: 'auto' }} />
+          </a>
 
-        {/* Desktop nav */}
-        <nav className="tw:hidden lg:tw:flex tw:items-center tw:gap-6">
-          {links.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              className="tw:text-white tw:font-medium tw:text-[15px] tw:no-underline tw:px-3.5 tw:py-1.5 tw:rounded-md hover:tw:bg-white/12 tw:transition"
-            >
-              {link.label}
-            </a>
-          ))}
-
-          {/* About dropdown */}
-          <div className="tw:relative">
-            <button
-              onClick={() => setAboutOpen(!aboutOpen)}
-              onBlur={() => setTimeout(() => setAboutOpen(false), 150)}
-              className="tw:text-white tw:font-medium tw:text-[15px] tw:bg-transparent tw:border-none tw:cursor-pointer tw:flex tw:items-center tw:gap-1 tw:px-3.5 tw:py-1.5 tw:rounded-md hover:tw:bg-white/12 tw:transition"
-            >
-              About
-              <IconChevronDown
-                size={18}
-                stroke={2}
-                className="tw:transition-transform"
-                style={{ transform: aboutOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}
-              />
-            </button>
-            {aboutOpen && (
-              <div className="tw:absolute tw:top-full tw:right-0 tw:mt-1 tw:bg-white tw:rounded-lg tw:shadow-lg tw:py-1 tw:min-w-[160px]">
-                {aboutLinks.map((link) => (
-                  <a
-                    key={link.label}
-                    href={link.href}
-                    className="tw:block tw:px-4 tw:py-2 tw:text-sm tw:text-gray-700 tw:no-underline hover:tw:bg-gray-100 tw:transition"
+          {/* Desktop nav */}
+          <nav style={{ display: 'flex', alignItems: 'center', gap: '24px' }} className="tw:hidden lg:tw:flex">
+            {NAV_ITEMS.map((item) =>
+              item.hasDropdown ? (
+                <div key={item.label} ref={aboutRef} style={{ position: 'relative' }}>
+                  <button
+                    onClick={() => setAboutOpen(!aboutOpen)}
+                    style={{
+                      ...linkStyle,
+                      background: 'transparent',
+                      border: 'none',
+                      cursor: 'pointer',
+                      padding: 0,
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                    }}
                   >
-                    {link.label}
+                    {item.label}
+                    <IconChevronDown size={18} color="white" />
+                  </button>
+                  {aboutOpen && (
+                    <div style={{
+                      position: 'absolute',
+                      top: '100%',
+                      left: 0,
+                      marginTop: '4px',
+                      width: '200px',
+                      background: '#fff',
+                      borderRadius: '8px',
+                      boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)',
+                      border: '1px solid #E2E8F0',
+                      padding: '4px 0',
+                      zIndex: 1001,
+                    }}>
+                      {item.items!.map((sub) => (
+                        <a
+                          key={sub.label}
+                          href={sub.href}
+                          style={{
+                            display: 'block',
+                            padding: '8px 16px',
+                            fontSize: '14px',
+                            color: '#101828',
+                            textDecoration: 'none',
+                            fontFamily: "'Inter', sans-serif",
+                          }}
+                        >
+                          {sub.label}
+                        </a>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <a key={item.label} href={item.href} style={linkStyle}>
+                  {item.label}
+                </a>
+              ),
+            )}
+          </nav>
+        </div>
+
+        {/* Right: Country selector (desktop) */}
+        <div className="tw:hidden lg:tw:flex" style={{ display: 'flex', alignItems: 'center' }}>
+          <div ref={countryRef} style={{ position: 'relative' }}>
+            <button
+              onClick={() => setCountryOpen(!countryOpen)}
+              style={{ background: 'transparent', border: 'none', cursor: 'pointer', padding: 0, lineHeight: 1 }}
+              aria-label="Country selector"
+            >
+              <IconWorld size={18} color="white" />
+            </button>
+            {countryOpen && (
+              <div style={{
+                position: 'absolute',
+                top: '100%',
+                right: 0,
+                marginTop: '4px',
+                width: '200px',
+                background: '#fff',
+                borderRadius: '8px',
+                boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)',
+                border: '1px solid #E2E8F0',
+                padding: '4px 0',
+                zIndex: 1001,
+              }}>
+                {COUNTRIES.map((c) => (
+                  <a
+                    key={c.id}
+                    href={`https://policyengine.org/${c.id}/model`}
+                    style={{
+                      display: 'block',
+                      padding: '8px 16px',
+                      fontSize: '14px',
+                      color: '#101828',
+                      textDecoration: 'none',
+                      fontFamily: "'Inter', sans-serif",
+                      fontWeight: c.id === country ? 700 : 400,
+                    }}
+                  >
+                    {c.label}
                   </a>
                 ))}
               </div>
             )}
           </div>
+        </div>
 
-          <a
-            href={`${baseUrl}/${country}/donate`}
-            className="tw:text-white tw:font-medium tw:text-[15px] tw:no-underline tw:px-3.5 tw:py-1.5 tw:rounded-md hover:tw:bg-white/12 tw:transition"
+        {/* Mobile: Country selector + hamburger */}
+        <div className="tw:flex lg:tw:hidden" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{ position: 'relative' }}>
+            <button
+              onClick={() => setCountryOpen(!countryOpen)}
+              style={{ background: 'transparent', border: 'none', cursor: 'pointer', padding: 0, lineHeight: 1 }}
+              aria-label="Country selector"
+            >
+              <IconWorld size={18} color="white" />
+            </button>
+          </div>
+          <button
+            onClick={() => setMobileOpen(!mobileOpen)}
+            style={{ background: 'transparent', border: 'none', cursor: 'pointer', padding: '4px' }}
+            aria-label="Toggle navigation"
           >
-            Donate
-          </a>
-        </nav>
-
-        {/* Mobile hamburger */}
-        <button
-          onClick={() => setMobileOpen(!mobileOpen)}
-          className="lg:tw:hidden tw:bg-transparent tw:border-none tw:text-white tw:cursor-pointer"
-          aria-label="Toggle menu"
-        >
-          {mobileOpen ? <IconX size={24} /> : <IconMenu2 size={24} />}
-        </button>
+            <IconMenu2 size={24} color="white" />
+          </button>
+        </div>
       </div>
 
-      {/* Mobile menu */}
+      {/* Mobile slide-in menu */}
       {mobileOpen && (
-        <nav className="lg:tw:hidden tw:px-6 tw:pb-4 tw:flex tw:flex-col tw:gap-2">
-          {links.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              className="tw:text-white tw:font-medium tw:text-[15px] tw:no-underline tw:py-2"
-            >
-              {link.label}
-            </a>
-          ))}
-          {aboutLinks.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              className="tw:text-white/80 tw:font-medium tw:text-[15px] tw:no-underline tw:py-2 tw:pl-4"
-            >
-              {link.label}
-            </a>
-          ))}
-          <a
-            href={`${baseUrl}/${country}/donate`}
-            className="tw:text-white tw:font-medium tw:text-[15px] tw:no-underline tw:py-2"
+        <>
+          <div
+            style={{
+              position: 'fixed',
+              inset: 0,
+              backgroundColor: 'rgba(0,0,0,0.4)',
+              zIndex: 1001,
+            }}
+            onClick={() => setMobileOpen(false)}
+          />
+          <div
+            style={{
+              position: 'fixed',
+              top: 0,
+              right: 0,
+              width: '300px',
+              height: '100vh',
+              backgroundColor: '#2C7A7B',
+              zIndex: 1002,
+              padding: '16px 24px',
+              fontFamily: "'Inter', sans-serif",
+            }}
           >
-            Donate
-          </a>
-        </nav>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+              <span style={{ color: '#fff', fontWeight: 700, fontSize: '16px' }}>Menu</span>
+              <button
+                onClick={() => setMobileOpen(false)}
+                style={{ background: 'transparent', border: 'none', cursor: 'pointer' }}
+                aria-label="Close menu"
+              >
+                <IconX size={24} color="white" />
+              </button>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              {NAV_ITEMS.map((item) =>
+                item.hasDropdown ? (
+                  <div key={item.label}>
+                    <span style={{ color: '#fff', fontWeight: 500, fontSize: '14px', display: 'block', marginBottom: '4px' }}>
+                      {item.label}
+                    </span>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', paddingLeft: '12px' }}>
+                      {item.items!.map((sub) => (
+                        <a key={sub.label} href={sub.href} style={{ color: '#fff', textDecoration: 'none', fontSize: '14px' }}>
+                          {sub.label}
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <a key={item.label} href={item.href} style={{ color: '#fff', textDecoration: 'none', fontWeight: 500, fontSize: '14px', display: 'block' }}>
+                    {item.label}
+                  </a>
+                ),
+              )}
+            </div>
+          </div>
+        </>
       )}
     </header>
   );
