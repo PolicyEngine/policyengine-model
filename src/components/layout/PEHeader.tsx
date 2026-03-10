@@ -21,23 +21,6 @@ const linkStyle: React.CSSProperties = {
   fontFamily: "'Inter', sans-serif",
 };
 
-function getNavItems(country: string) {
-  return [
-    { label: 'Research', href: `https://policyengine.org/${country}/research` },
-    { label: 'Model', href: `https://policyengine.org/${country}/model` },
-    { label: 'API', href: `https://policyengine.org/${country}/api` },
-    {
-      label: 'About',
-      hasDropdown: true,
-      items: [
-        { label: 'Team', href: `https://policyengine.org/${country}/team` },
-        { label: 'Supporters', href: `https://policyengine.org/${country}/supporters` },
-      ],
-    },
-    { label: 'Donate', href: `https://policyengine.org/${country}/donate` },
-  ];
-}
-
 const dropdownStyle: React.CSSProperties = {
   position: 'absolute',
   top: '100%',
@@ -61,15 +44,43 @@ const dropdownItemStyle: React.CSSProperties = {
   fontFamily: "'Inter', sans-serif",
 };
 
+function getNavItems(country: string) {
+  return [
+    { label: 'Research', href: `https://policyengine.org/${country}/research` },
+    { label: 'Model', href: `https://policyengine.org/${country}/model` },
+    { label: 'API', href: `https://policyengine.org/${country}/api` },
+    {
+      label: 'About',
+      hasDropdown: true,
+      items: [
+        { label: 'Team', href: `https://policyengine.org/${country}/team` },
+        { label: 'Supporters', href: `https://policyengine.org/${country}/supporters` },
+      ],
+    },
+    { label: 'Donate', href: `https://policyengine.org/${country}/donate` },
+  ];
+}
+
 export default function PEHeader({ country }: PEHeaderProps) {
   const [aboutOpen, setAboutOpen] = useState(false);
   const [countryOpen, setCountryOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(true);
   const aboutRef = useRef<HTMLDivElement>(null);
   const countryRef = useRef<HTMLDivElement>(null);
 
   const NAV_ITEMS = getNavItems(country);
 
+  // Media query for responsive behavior — same pattern as AppShell
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 1024px)');
+    setIsDesktop(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+
+  // Close dropdowns on outside click
   useEffect(() => {
     function handleClick(e: MouseEvent) {
       if (aboutRef.current && !aboutRef.current.contains(e.target as Node)) setAboutOpen(false);
@@ -85,10 +96,7 @@ export default function PEHeader({ country }: PEHeaderProps) {
         <a
           key={c.id}
           href={`https://policyengine.org/${c.id}/model`}
-          style={{
-            ...dropdownItemStyle,
-            fontWeight: c.id === country ? 700 : 400,
-          }}
+          style={{ ...dropdownItemStyle, fontWeight: c.id === country ? 700 : 400 }}
         >
           {c.label}
         </a>
@@ -119,61 +127,52 @@ export default function PEHeader({ country }: PEHeaderProps) {
             <img src={PE_LOGO_URL} alt="PolicyEngine" style={{ height: '24px', width: 'auto' }} />
           </a>
 
-          {/* Desktop nav — hidden below lg */}
-          <nav className="tw:hidden tw:lg:flex" style={{ alignItems: 'center', gap: '24px' }}>
-            {NAV_ITEMS.map((item) =>
-              item.hasDropdown ? (
-                <div key={item.label} ref={aboutRef} style={{ position: 'relative' }}>
-                  <button
-                    onClick={() => setAboutOpen(!aboutOpen)}
-                    style={{
-                      ...linkStyle,
-                      background: 'transparent',
-                      border: 'none',
-                      cursor: 'pointer',
-                      padding: 0,
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '4px',
-                    }}
-                  >
+          {/* Desktop nav */}
+          {isDesktop && (
+            <nav style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+              {NAV_ITEMS.map((item) =>
+                item.hasDropdown ? (
+                  <div key={item.label} ref={aboutRef} style={{ position: 'relative' }}>
+                    <button
+                      onClick={() => setAboutOpen(!aboutOpen)}
+                      style={{
+                        ...linkStyle,
+                        background: 'transparent',
+                        border: 'none',
+                        cursor: 'pointer',
+                        padding: 0,
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '4px',
+                      }}
+                    >
+                      {item.label}
+                      <IconChevronDown size={18} color="white" />
+                    </button>
+                    {aboutOpen && (
+                      <div style={dropdownStyle}>
+                        {item.items!.map((sub) => (
+                          <a key={sub.label} href={sub.href} style={dropdownItemStyle}>
+                            {sub.label}
+                          </a>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <a key={item.label} href={item.href} style={linkStyle}>
                     {item.label}
-                    <IconChevronDown size={18} color="white" />
-                  </button>
-                  {aboutOpen && (
-                    <div style={dropdownStyle}>
-                      {item.items!.map((sub) => (
-                        <a key={sub.label} href={sub.href} style={dropdownItemStyle}>
-                          {sub.label}
-                        </a>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <a key={item.label} href={item.href} style={linkStyle}>
-                  {item.label}
-                </a>
-              ),
-            )}
-          </nav>
+                  </a>
+                ),
+              )}
+            </nav>
+          )}
         </div>
 
-        {/* Right: Country selector (desktop) — hidden below lg */}
-        <div ref={countryRef} className="tw:hidden tw:lg:flex" style={{ alignItems: 'center', position: 'relative' }}>
-          <button
-            onClick={() => setCountryOpen(!countryOpen)}
-            style={{ background: 'transparent', border: 'none', cursor: 'pointer', padding: 0, lineHeight: 1 }}
-            aria-label="Country selector"
-          >
-            <IconWorld size={18} color="white" />
-          </button>
-          {countryDropdown}
-        </div>
-
-        {/* Mobile: Country selector + hamburger — visible below lg */}
-        <div className="tw:flex tw:lg:hidden" style={{ alignItems: 'center', gap: '12px' }}>
-          <div ref={countryRef} style={{ position: 'relative' }}>
+        {/* Right side */}
+        {isDesktop ? (
+          /* Desktop: Country selector on far right */
+          <div ref={countryRef} style={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
             <button
               onClick={() => setCountryOpen(!countryOpen)}
               style={{ background: 'transparent', border: 'none', cursor: 'pointer', padding: 0, lineHeight: 1 }}
@@ -183,14 +182,28 @@ export default function PEHeader({ country }: PEHeaderProps) {
             </button>
             {countryDropdown}
           </div>
-          <button
-            onClick={() => setMobileOpen(!mobileOpen)}
-            style={{ background: 'transparent', border: 'none', cursor: 'pointer', padding: '4px' }}
-            aria-label="Toggle navigation"
-          >
-            <IconMenu2 size={24} color="white" />
-          </button>
-        </div>
+        ) : (
+          /* Mobile: Country selector + hamburger */
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div ref={countryRef} style={{ position: 'relative' }}>
+              <button
+                onClick={() => setCountryOpen(!countryOpen)}
+                style={{ background: 'transparent', border: 'none', cursor: 'pointer', padding: 0, lineHeight: 1 }}
+                aria-label="Country selector"
+              >
+                <IconWorld size={18} color="white" />
+              </button>
+              {countryDropdown}
+            </div>
+            <button
+              onClick={() => setMobileOpen(!mobileOpen)}
+              style={{ background: 'transparent', border: 'none', cursor: 'pointer', padding: '4px' }}
+              aria-label="Toggle navigation"
+            >
+              <IconMenu2 size={24} color="white" />
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Mobile slide-in menu */}
