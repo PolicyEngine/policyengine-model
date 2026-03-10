@@ -1,5 +1,3 @@
-'use client';
-
 import { useState, useRef, useEffect } from 'react';
 import { IconMenu2, IconChevronDown, IconWorld, IconX } from '@tabler/icons-react';
 
@@ -27,6 +25,7 @@ function getNavItems(country: string) {
   return [
     { label: 'Research', href: `https://policyengine.org/${country}/research` },
     { label: 'Model', href: `https://policyengine.org/${country}/model` },
+    { label: 'API', href: `https://policyengine.org/${country}/api` },
     {
       label: 'About',
       hasDropdown: true,
@@ -39,6 +38,29 @@ function getNavItems(country: string) {
   ];
 }
 
+const dropdownStyle: React.CSSProperties = {
+  position: 'absolute',
+  top: '100%',
+  left: 0,
+  marginTop: '4px',
+  width: '200px',
+  background: '#fff',
+  borderRadius: '8px',
+  boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)',
+  border: '1px solid #E2E8F0',
+  padding: '4px 0',
+  zIndex: 1001,
+};
+
+const dropdownItemStyle: React.CSSProperties = {
+  display: 'block',
+  padding: '8px 16px',
+  fontSize: '14px',
+  color: '#101828',
+  textDecoration: 'none',
+  fontFamily: "'Inter', sans-serif",
+};
+
 export default function PEHeader({ country }: PEHeaderProps) {
   const [aboutOpen, setAboutOpen] = useState(false);
   const [countryOpen, setCountryOpen] = useState(false);
@@ -48,7 +70,6 @@ export default function PEHeader({ country }: PEHeaderProps) {
 
   const NAV_ITEMS = getNavItems(country);
 
-  // Close dropdowns on outside click
   useEffect(() => {
     function handleClick(e: MouseEvent) {
       if (aboutRef.current && !aboutRef.current.contains(e.target as Node)) setAboutOpen(false);
@@ -57,6 +78,23 @@ export default function PEHeader({ country }: PEHeaderProps) {
     document.addEventListener('mousedown', handleClick);
     return () => document.removeEventListener('mousedown', handleClick);
   }, []);
+
+  const countryDropdown = countryOpen && (
+    <div style={{ ...dropdownStyle, left: 'auto', right: 0 }}>
+      {COUNTRIES.map((c) => (
+        <a
+          key={c.id}
+          href={`https://policyengine.org/${c.id}/model`}
+          style={{
+            ...dropdownItemStyle,
+            fontWeight: c.id === country ? 700 : 400,
+          }}
+        >
+          {c.label}
+        </a>
+      ))}
+    </div>
+  );
 
   return (
     <header
@@ -81,8 +119,8 @@ export default function PEHeader({ country }: PEHeaderProps) {
             <img src={PE_LOGO_URL} alt="PolicyEngine" style={{ height: '24px', width: 'auto' }} />
           </a>
 
-          {/* Desktop nav */}
-          <nav style={{ display: 'flex', alignItems: 'center', gap: '24px' }} className="tw:hidden lg:tw:flex">
+          {/* Desktop nav — hidden below lg */}
+          <nav className="tw:hidden tw:lg:flex" style={{ alignItems: 'center', gap: '24px' }}>
             {NAV_ITEMS.map((item) =>
               item.hasDropdown ? (
                 <div key={item.label} ref={aboutRef} style={{ position: 'relative' }}>
@@ -103,32 +141,9 @@ export default function PEHeader({ country }: PEHeaderProps) {
                     <IconChevronDown size={18} color="white" />
                   </button>
                   {aboutOpen && (
-                    <div style={{
-                      position: 'absolute',
-                      top: '100%',
-                      left: 0,
-                      marginTop: '4px',
-                      width: '200px',
-                      background: '#fff',
-                      borderRadius: '8px',
-                      boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)',
-                      border: '1px solid #E2E8F0',
-                      padding: '4px 0',
-                      zIndex: 1001,
-                    }}>
+                    <div style={dropdownStyle}>
                       {item.items!.map((sub) => (
-                        <a
-                          key={sub.label}
-                          href={sub.href}
-                          style={{
-                            display: 'block',
-                            padding: '8px 16px',
-                            fontSize: '14px',
-                            color: '#101828',
-                            textDecoration: 'none',
-                            fontFamily: "'Inter', sans-serif",
-                          }}
-                        >
+                        <a key={sub.label} href={sub.href} style={dropdownItemStyle}>
                           {sub.label}
                         </a>
                       ))}
@@ -144,8 +159,20 @@ export default function PEHeader({ country }: PEHeaderProps) {
           </nav>
         </div>
 
-        {/* Right: Country selector (desktop) */}
-        <div className="tw:hidden lg:tw:flex" style={{ display: 'flex', alignItems: 'center' }}>
+        {/* Right: Country selector (desktop) — hidden below lg */}
+        <div ref={countryRef} className="tw:hidden tw:lg:flex" style={{ alignItems: 'center', position: 'relative' }}>
+          <button
+            onClick={() => setCountryOpen(!countryOpen)}
+            style={{ background: 'transparent', border: 'none', cursor: 'pointer', padding: 0, lineHeight: 1 }}
+            aria-label="Country selector"
+          >
+            <IconWorld size={18} color="white" />
+          </button>
+          {countryDropdown}
+        </div>
+
+        {/* Mobile: Country selector + hamburger — visible below lg */}
+        <div className="tw:flex tw:lg:hidden" style={{ alignItems: 'center', gap: '12px' }}>
           <div ref={countryRef} style={{ position: 'relative' }}>
             <button
               onClick={() => setCountryOpen(!countryOpen)}
@@ -154,52 +181,7 @@ export default function PEHeader({ country }: PEHeaderProps) {
             >
               <IconWorld size={18} color="white" />
             </button>
-            {countryOpen && (
-              <div style={{
-                position: 'absolute',
-                top: '100%',
-                right: 0,
-                marginTop: '4px',
-                width: '200px',
-                background: '#fff',
-                borderRadius: '8px',
-                boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)',
-                border: '1px solid #E2E8F0',
-                padding: '4px 0',
-                zIndex: 1001,
-              }}>
-                {COUNTRIES.map((c) => (
-                  <a
-                    key={c.id}
-                    href={`https://policyengine.org/${c.id}/model`}
-                    style={{
-                      display: 'block',
-                      padding: '8px 16px',
-                      fontSize: '14px',
-                      color: '#101828',
-                      textDecoration: 'none',
-                      fontFamily: "'Inter', sans-serif",
-                      fontWeight: c.id === country ? 700 : 400,
-                    }}
-                  >
-                    {c.label}
-                  </a>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Mobile: Country selector + hamburger */}
-        <div className="tw:flex lg:tw:hidden" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div style={{ position: 'relative' }}>
-            <button
-              onClick={() => setCountryOpen(!countryOpen)}
-              style={{ background: 'transparent', border: 'none', cursor: 'pointer', padding: 0, lineHeight: 1 }}
-              aria-label="Country selector"
-            >
-              <IconWorld size={18} color="white" />
-            </button>
+            {countryDropdown}
           </div>
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
@@ -215,12 +197,7 @@ export default function PEHeader({ country }: PEHeaderProps) {
       {mobileOpen && (
         <>
           <div
-            style={{
-              position: 'fixed',
-              inset: 0,
-              backgroundColor: 'rgba(0,0,0,0.4)',
-              zIndex: 1001,
-            }}
+            style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.4)', zIndex: 1001 }}
             onClick={() => setMobileOpen(false)}
           />
           <div
