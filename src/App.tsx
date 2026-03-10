@@ -15,6 +15,17 @@ import CalibrationPage from './pages/data/CalibrationPage';
 import ValidationPage from './pages/data/ValidationPage';
 import BehavioralPage from './pages/BehavioralPage';
 
+const VALID_COUNTRIES = new Set(['us', 'uk']);
+
+/** Extract country ID from URL path, e.g. /us/model → 'us' */
+function extractCountryFromPath(): string | null {
+  const segments = window.location.pathname.split('/').filter(Boolean);
+  if (segments.length > 0 && VALID_COUNTRIES.has(segments[0])) {
+    return segments[0];
+  }
+  return null;
+}
+
 function EmbedSection({
   title,
   subtitle,
@@ -50,7 +61,8 @@ export default function App() {
   const path = useHashRoute();
   const params = useSearchParams();
   const isEmbed = params.has('embed');
-  const country = params.get('country') || 'us';
+  // Country from ?country= param, or extracted from URL path (e.g. /us/model via Vercel rewrite)
+  const country = params.get('country') || extractCountryFromPath() || 'us';
 
   // Embed mode: render all sections as a single scroll page without animations
   // (IntersectionObserver doesn't fire reliably in cross-origin iframes)
