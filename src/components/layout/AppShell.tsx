@@ -2,6 +2,7 @@ import { useState, useEffect, type ReactNode } from 'react';
 import Sidebar from './Sidebar';
 import MobileHeader from './MobileHeader';
 import Footer from './Footer';
+import PEHeader from './PEHeader';
 
 interface AppShellProps {
   children: ReactNode;
@@ -40,7 +41,8 @@ export default function AppShell({ children, isEmbed, country }: AppShellProps) 
 
   if (isMobile) {
     return (
-      <div className="tw:min-h-screen">
+      <div className="tw:min-h-screen tw:flex tw:flex-col">
+        <PEHeader country={country} />
         <MobileHeader
           isOpen={mobileMenuOpen}
           onToggle={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -56,7 +58,7 @@ export default function AppShell({ children, isEmbed, country }: AppShellProps) 
             </div>
           </>
         )}
-        <main className="tw:max-w-[1200px] tw:mx-auto tw:p-6">
+        <main className="tw:flex-1 tw:max-w-[1200px] tw:mx-auto tw:p-6">
           {children}
         </main>
         <Footer />
@@ -65,13 +67,16 @@ export default function AppShell({ children, isEmbed, country }: AppShellProps) 
   }
 
   return (
-    <div className="tw:flex tw:min-h-screen">
-      <Sidebar country={country} />
-      <div className="tw:ml-64 tw:flex-1 tw:flex tw:flex-col">
-        <main className="tw:flex-1 tw:max-w-[1200px] tw:w-full tw:mx-auto tw:px-6 tw:py-12">
-          {children}
-        </main>
-        <Footer />
+    <div className="tw:min-h-screen tw:flex tw:flex-col">
+      <PEHeader country={country} />
+      <div className="tw:flex tw:flex-1">
+        <Sidebar country={country} />
+        <div className="tw:flex-1 tw:flex tw:flex-col">
+          <main className="tw:flex-1 tw:max-w-[1200px] tw:w-full tw:mx-auto tw:px-6 tw:py-12">
+            {children}
+          </main>
+          <Footer />
+        </div>
       </div>
     </div>
   );

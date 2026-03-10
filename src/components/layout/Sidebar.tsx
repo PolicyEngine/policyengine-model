@@ -73,7 +73,7 @@ export default function Sidebar({ country, onClose }: SidebarProps) {
 
   return (
     <nav
-      className="tw:w-64 tw:min-w-64 tw:h-screen tw:fixed tw:top-0 tw:left-0 tw:bg-white tw:flex tw:flex-col tw:z-50 tw:overflow-y-auto"
+      className="tw:w-64 tw:min-w-64 tw:sticky tw:top-[58px] tw:h-[calc(100vh-58px)] tw:bg-white tw:flex tw:flex-col tw:z-50 tw:overflow-y-auto tw:shrink-0"
       style={{ borderRight: `1px solid ${colors.border.light}` }}
     >
       {/* Logo */}
