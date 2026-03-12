@@ -85,6 +85,9 @@ export default function VariableCard({ variable, isSelected, onClick }: Variable
           </span>
           {/* Input/Computed badge */}
           <span
+            title={variable.isInputVariable
+              ? 'User-provided value (e.g. age, income, filing status)'
+              : 'Calculated from inputs and other variables via formulas'}
             style={{
               fontSize: '10px',
               fontWeight: typography.fontWeight.semibold,

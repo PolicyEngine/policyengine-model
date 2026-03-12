@@ -47,7 +47,9 @@ function MetaRow({ label, value }: { label: string; value: string }) {
 }
 
 export default function VariableDetail({ variable, variables, parameters, country }: VariableDetailProps) {
-  const hasTree = (variable.adds?.length ?? 0) > 0 || (variable.subtracts?.length ?? 0) > 0;
+  const adds = Array.isArray(variable.adds) ? variable.adds : (variable.adds ? Object.keys(variable.adds) : []);
+  const subtracts = Array.isArray(variable.subtracts) ? variable.subtracts : (variable.subtracts ? Object.keys(variable.subtracts) : []);
+  const hasTree = adds.length > 0 || subtracts.length > 0;
   const githubRepo = country === 'uk' ? 'policyengine-uk' : 'policyengine-us';
   const modulePath = variable.moduleName?.replace(/\./g, '/');
 

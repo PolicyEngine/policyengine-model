@@ -6,6 +6,13 @@ import { colors, typography, spacing } from '../../designTokens';
 
 const MAX_DEPTH = 5;
 
+/** Normalize adds/subtracts which may be an array, object, or null. */
+function toArray(val: unknown): string[] {
+  if (Array.isArray(val)) return val;
+  if (val && typeof val === 'object') return Object.keys(val);
+  return [];
+}
+
 interface ComputationTreeProps {
   variableName: string;
   variables: Record<string, Variable>;
@@ -57,7 +64,9 @@ function TreeNode({
     );
   }
 
-  const hasChildren = (variable.adds?.length ?? 0) > 0 || (variable.subtracts?.length ?? 0) > 0;
+  const adds = toArray(variable.adds);
+  const subtracts = toArray(variable.subtracts);
+  const hasChildren = adds.length > 0 || subtracts.length > 0;
   const isCircular = visited.has(varName);
   const atMaxDepth = depth >= MAX_DEPTH;
 
@@ -164,7 +173,7 @@ function TreeNode({
             transition={{ duration: 0.2 }}
             style={{ overflow: 'hidden' }}
           >
-            {variable.adds?.map((child) => (
+            {adds.map((child) => (
               <TreeNode
                 key={`add-${child}`}
                 varName={child}
@@ -176,7 +185,7 @@ function TreeNode({
                 sign="+"
               />
             ))}
-            {variable.subtracts?.map((child) => (
+            {subtracts.map((child) => (
               <TreeNode
                 key={`sub-${child}`}
                 varName={child}
@@ -224,10 +233,10 @@ export default function ComputationTree({
   const variable = variables[variableName];
   if (!variable) return null;
 
-  const hasAdds = (variable.adds?.length ?? 0) > 0;
-  const hasSubtracts = (variable.subtracts?.length ?? 0) > 0;
+  const adds = toArray(variable.adds);
+  const subtracts = toArray(variable.subtracts);
 
-  if (!hasAdds && !hasSubtracts) return null;
+  if (adds.length === 0 && subtracts.length === 0) return null;
 
   const nextVisited = new Set([...visited, variableName]);
 
@@ -253,7 +262,7 @@ export default function ComputationTree({
           backgroundColor: colors.white,
         }}
       >
-        {variable.adds?.map((child) => (
+        {adds.map((child) => (
           <TreeNode
             key={`add-${child}`}
             varName={child}
@@ -265,7 +274,7 @@ export default function ComputationTree({
             sign="+"
           />
         ))}
-        {variable.subtracts?.map((child) => (
+        {subtracts.map((child) => (
           <TreeNode
             key={`sub-${child}`}
             varName={child}
