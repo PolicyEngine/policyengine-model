@@ -103,10 +103,10 @@ export async function fetchPrograms(country: string = 'us'): Promise<Program[]> 
   if (cache.has(country)) return cache.get(country)!;
 
   try {
-    const res = await fetch(`https://api.policyengine.org/${country}/metadata`);
-    if (!res.ok) throw new Error(`API returned ${res.status}`);
-    const data = await res.json();
-    const apiPrograms: ApiProgram[] = data.result?.modelled_policies?.programs;
+    // Use the shared metadata fetch to avoid duplicate API calls
+    const { fetchMetadataRaw } = await import('./fetchMetadata');
+    const data = await fetchMetadataRaw(country);
+    const apiPrograms: ApiProgram[] = data.modelled_policies?.programs;
     if (!apiPrograms || !Array.isArray(apiPrograms)) {
       throw new Error('No programs array in API response');
     }
