@@ -1,82 +1,59 @@
 import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { IconSearch, IconArrowLeft } from '@tabler/icons-react';
-import type { Variable, Parameter } from '../../types/Variable';
+import type { Parameter, ParameterLeaf } from '../../types/Variable';
 import { colors, typography, spacing } from '../../designTokens';
 import { useDebounce } from '../../hooks/useDebounce';
 import {
-  getLevel as getLevelFromPath, getSubGroup as getSubGroupFromPath,
-  getSubGroupLabel, getSubGroupDescription,
+  getLevel, getSubGroup, getSubGroupLabel, getSubGroupDescription,
   LEVEL_CONFIG, LEVELS_ORDERED,
   type Level,
 } from '../shared/categoryUtils';
-import VariableCard from './VariableCard';
-import VariableDetail from './VariableDetail';
+import ParameterCard from './ParameterCard';
+import ParameterDetail from './ParameterDetail';
 
 const PAGE_SIZE = 50;
 
-interface VariableExplorerProps {
-  variables: Record<string, Variable>;
+interface ParameterExplorerProps {
   parameters: Record<string, Parameter>;
   country: string;
-  onViewFlowchart?: (varName: string) => void;
 }
 
-function getLevel(v: Variable): Level {
-  return getLevelFromPath(v.moduleName);
-}
+// ─── Parameter list (shown after selecting a sub-group) ────────────────────
 
-function getSubGroup(v: Variable): string {
-  return getSubGroupFromPath(v.moduleName);
-}
-
-// ─── Variable list (shown after selecting a sub-group) ──────────────────────
-
-function VariableList({
-  vars,
-  allVariables,
-  parameters,
+function ParameterList({
+  params,
   country,
-  selectedVar,
+  selectedParam,
   onSelect,
-  onViewFlowchart,
 }: {
-  vars: Variable[];
-  allVariables: Record<string, Variable>;
-  parameters: Record<string, Parameter>;
+  params: Parameter[];
   country: string;
-  selectedVar: string | null;
+  selectedParam: string | null;
   onSelect: (name: string) => void;
-  onViewFlowchart?: (varName: string) => void;
 }) {
   const [showAll, setShowAll] = useState(false);
-  const visible = showAll ? vars : vars.slice(0, PAGE_SIZE);
+  const visible = showAll ? params : params.slice(0, PAGE_SIZE);
 
   return (
     <div>
       <div className="tw:flex tw:flex-col" style={{ gap: spacing.sm }}>
-        {visible.map((v) => (
-          <div key={v.name}>
-            <VariableCard
-              variable={v}
-              isSelected={selectedVar === v.name}
-              onClick={() => onSelect(v.name)}
+        {visible.map((p) => (
+          <div key={p.parameter}>
+            <ParameterCard
+              parameter={p}
+              isSelected={selectedParam === p.parameter}
+              onClick={() => onSelect(p.parameter)}
             />
             <AnimatePresence>
-              {selectedVar === v.name && (
-                <VariableDetail
-                  variable={v}
-                  variables={allVariables}
-                  parameters={parameters}
-                  country={country}
-                  onViewFlowchart={onViewFlowchart}
-                />
+              {selectedParam === p.parameter && (
+                <ParameterDetail parameter={p} country={country} />
               )}
             </AnimatePresence>
           </div>
         ))}
       </div>
-      {vars.length > PAGE_SIZE && !showAll && (
+      {params.length > PAGE_SIZE && !showAll && (
         <button
           onClick={() => setShowAll(true)}
           className="tw:cursor-pointer"
@@ -93,7 +70,7 @@ function VariableList({
             fontFamily: typography.fontFamily.primary,
           }}
         >
-          Show all {vars.length}
+          Show all {params.length.toLocaleString()}
         </button>
       )}
     </div>
@@ -107,11 +84,10 @@ function StateTileGrid({
   levelColor,
   onSelect,
 }: {
-  subGroups: [string, Variable[]][];
+  subGroups: [string, Parameter[]][];
   levelColor: string;
   onSelect: (key: string) => void;
 }) {
-  // Separate Cross-state from actual states
   const states = subGroups.filter(([k]) => k !== 'Cross-state' && k.length === 2);
   const other = subGroups.filter(([k]) => k === 'Cross-state' || k.length !== 2);
   const maxCount = Math.max(...states.map(([, v]) => v.length), 1);
@@ -122,8 +98,8 @@ function StateTileGrid({
         className="tw:grid tw:grid-cols-[repeat(auto-fill,minmax(64px,1fr))]"
         style={{ gap: spacing.sm }}
       >
-        {states.map(([key, vars]) => {
-          const intensity = Math.max(0.15, vars.length / maxCount);
+        {states.map(([key, params]) => {
+          const intensity = Math.max(0.15, params.length / maxCount);
           return (
             <motion.button
               key={key}
@@ -158,7 +134,7 @@ function StateTileGrid({
                 color: colors.text.tertiary,
                 marginTop: '2px',
               }}>
-                {vars.length}
+                {params.length.toLocaleString()}
               </div>
             </motion.button>
           );
@@ -166,7 +142,7 @@ function StateTileGrid({
       </div>
       {other.length > 0 && (
         <div className="tw:flex tw:flex-wrap" style={{ gap: spacing.sm, marginTop: spacing.lg }}>
-          {other.map(([key, vars]) => (
+          {other.map(([key, params]) => (
             <button
               key={key}
               onClick={() => onSelect(key)}
@@ -181,7 +157,7 @@ function StateTileGrid({
                 color: colors.text.secondary,
               }}
             >
-              {getSubGroupLabel(key, 'state')} ({vars.length})
+              {getSubGroupLabel(key, 'state')} ({params.length.toLocaleString()})
             </button>
           ))}
         </div>
@@ -190,7 +166,7 @@ function StateTileGrid({
   );
 }
 
-// ─── Sub-group card grid (for federal, local, household, territory) ──────────
+// ─── Sub-group card grid ──────────────────────────────────────────────────────
 
 function SubGroupCardGrid({
   subGroups,
@@ -198,7 +174,7 @@ function SubGroupCardGrid({
   levelColor,
   onSelect,
 }: {
-  subGroups: [string, Variable[]][];
+  subGroups: [string, Parameter[]][];
   level: Level;
   levelColor: string;
   onSelect: (key: string) => void;
@@ -208,7 +184,7 @@ function SubGroupCardGrid({
       className="tw:grid tw:grid-cols-[repeat(auto-fill,minmax(250px,1fr))]"
       style={{ gap: spacing.md }}
     >
-      {subGroups.map(([key, vars], i) => {
+      {subGroups.map(([key, params], i) => {
         const label = getSubGroupLabel(key, level);
         const desc = getSubGroupDescription(key, level);
         return (
@@ -246,7 +222,7 @@ function SubGroupCardGrid({
               color: colors.text.primary,
               marginBottom: desc ? spacing.xs : 0,
             }}>
-              {vars.length}
+              {params.length.toLocaleString()}
             </div>
             {desc && (
               <div style={{
@@ -266,62 +242,67 @@ function SubGroupCardGrid({
 
 // ─── Main explorer ───────────────────────────────────────────────────────────
 
-export default function VariableExplorer({ variables, parameters, country, onViewFlowchart }: VariableExplorerProps) {
+export default function ParameterExplorer({ parameters, country }: ParameterExplorerProps) {
   const [search, setSearch] = useState('');
   const [activeLevel, setActiveLevel] = useState<Level | null>(null);
   const [activeSubGroup, setActiveSubGroup] = useState<string | null>(null);
-  const [selectedVar, setSelectedVar] = useState<string | null>(null);
+  const [selectedParam, setSelectedParam] = useState<string | null>(null);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const sentinelRef = useRef<HTMLDivElement>(null);
 
   const debouncedSearch = useDebounce(search, 200);
   const isSearching = !!debouncedSearch;
 
-  // All variables (hidden_input + contrib excluded), sorted
-  const allVariables = useMemo(() => {
-    return Object.values(variables)
-      .filter((v) => !v.hidden_input && !v.moduleName?.startsWith('contrib'))
+  // Only show leaf parameters (actual values), exclude nodes and contrib
+  const allParameters = useMemo(() => {
+    return Object.values(parameters)
+      .filter((p): p is ParameterLeaf =>
+        p.type === 'parameter' && !p.parameter.startsWith('contrib')
+      )
       .sort((a, b) => a.label.localeCompare(b.label));
-  }, [variables]);
+  }, [parameters]);
 
   // Count per level
   const levelCounts = useMemo(() => {
     const counts: Record<Level, number> = { federal: 0, state: 0, local: 0, territory: 0, household: 0 };
-    for (const v of allVariables) counts[getLevel(v)]++;
+    for (const p of allParameters) counts[getLevel(p.parameter)]++;
     return counts;
-  }, [allVariables]);
+  }, [allParameters]);
 
   // Filtered list
   const filtered = useMemo(() => {
-    let result = allVariables;
+    let result: Parameter[] = allParameters;
 
     if (debouncedSearch) {
       const words = debouncedSearch.toLowerCase().split(/\s+/).filter(Boolean);
-      result = result.filter((v) => {
-        const haystack = [v.name, v.label, v.documentation || '', v.moduleName || '', v.entity, v.valueType, v.unit || ''].join(' ').toLowerCase();
+      result = result.filter((p) => {
+        const haystack = [
+          p.parameter, p.label, p.description || '',
+          p.type === 'parameter' ? ((p as ParameterLeaf).unit || '') : '',
+        ].join(' ').toLowerCase();
         return words.every((w) => haystack.includes(w));
       });
     }
 
-    if (activeLevel) result = result.filter((v) => getLevel(v) === activeLevel);
+    if (activeLevel) result = result.filter((p) => getLevel(p.parameter) === activeLevel);
 
     return result;
-  }, [allVariables, debouncedSearch, activeLevel]);
+  }, [allParameters, debouncedSearch, activeLevel]);
 
   // Sub-groups for the active level
   const subGroups = useMemo(() => {
     if (!activeLevel) return [];
-    const map = new Map<string, Variable[]>();
-    for (const v of filtered) {
-      const key = getSubGroup(v);
+    const map = new Map<string, Parameter[]>();
+    for (const p of filtered) {
+      const key = getSubGroup(p.parameter);
       if (!map.has(key)) map.set(key, []);
-      map.get(key)!.push(v);
+      map.get(key)!.push(p);
     }
     return [...map.entries()].sort(([a], [b]) => a.localeCompare(b));
   }, [filtered, activeLevel]);
 
-  // Variables in active sub-group
-  const subGroupVars = useMemo(() => {
+  // Parameters in active sub-group
+  const subGroupParams = useMemo(() => {
     if (!activeSubGroup) return [];
     const entry = subGroups.find(([k]) => k === activeSubGroup);
     return entry ? entry[1] : [];
@@ -350,7 +331,7 @@ export default function VariableExplorer({ variables, parameters, country, onVie
   }, [filtered.length, isSearching]);
 
   const handleSelect = useCallback((name: string) => {
-    setSelectedVar((prev) => (prev === name ? null : name));
+    setSelectedParam((prev) => (prev === name ? null : name));
   }, []);
 
   const visibleFlat = filtered.slice(0, visibleCount);
@@ -359,10 +340,10 @@ export default function VariableExplorer({ variables, parameters, country, onVie
   const goBack = () => {
     if (activeSubGroup) {
       setActiveSubGroup(null);
-      setSelectedVar(null);
+      setSelectedParam(null);
     } else {
       setActiveLevel(null);
-      setSelectedVar(null);
+      setSelectedParam(null);
     }
   };
 
@@ -371,8 +352,6 @@ export default function VariableExplorer({ variables, parameters, country, onVie
       ? `${LEVEL_CONFIG[activeLevel].label} / ${getSubGroupLabel(activeSubGroup, activeLevel)}`
       : LEVEL_CONFIG[activeLevel].label
     : null;
-
-  // ─── Render ──────────────────────────────────────────────────────────────
 
   return (
     <div>
@@ -385,7 +364,7 @@ export default function VariableExplorer({ variables, parameters, country, onVie
         />
         <input
           type="text"
-          placeholder="Search variables by name, label, or description..."
+          placeholder="Search parameters by name, label, or description..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           style={{
@@ -431,7 +410,7 @@ export default function VariableExplorer({ variables, parameters, country, onVie
             })}
           </div>
           <span style={{ fontSize: typography.fontSize.xs, color: colors.text.tertiary }}>
-            {filtered.length.toLocaleString()} variable{filtered.length !== 1 ? 's' : ''}
+            {filtered.length.toLocaleString()} parameter{filtered.length !== 1 ? 's' : ''}
           </span>
         </div>
       )}
@@ -440,12 +419,12 @@ export default function VariableExplorer({ variables, parameters, country, onVie
       {isSearching && (
         <>
           <div className="tw:flex tw:flex-col" style={{ gap: spacing.sm }}>
-            {visibleFlat.map((v) => (
-              <div key={v.name}>
-                <VariableCard variable={v} isSelected={selectedVar === v.name} onClick={() => handleSelect(v.name)} />
+            {visibleFlat.map((p) => (
+              <div key={p.parameter}>
+                <ParameterCard parameter={p} isSelected={selectedParam === p.parameter} onClick={() => handleSelect(p.parameter)} />
                 <AnimatePresence>
-                  {selectedVar === v.name && (
-                    <VariableDetail variable={v} variables={variables} parameters={parameters} country={country} onViewFlowchart={onViewFlowchart} />
+                  {selectedParam === p.parameter && (
+                    <ParameterDetail parameter={p} country={country} />
                   )}
                 </AnimatePresence>
               </div>
@@ -454,7 +433,7 @@ export default function VariableExplorer({ variables, parameters, country, onVie
           {visibleCount < filtered.length && <div ref={sentinelRef} style={{ height: '1px' }} />}
           {filtered.length === 0 && (
             <div style={{ textAlign: 'center', padding: spacing['4xl'], color: colors.text.tertiary, fontSize: typography.fontSize.sm }}>
-              No variables match your search.
+              No parameters match your search.
             </div>
           )}
         </>
@@ -548,21 +527,17 @@ export default function VariableExplorer({ variables, parameters, country, onVie
               {LEVEL_CONFIG[activeLevel].label}
             </h2>
             <span style={{ fontSize: typography.fontSize.xs, color: colors.text.tertiary }}>
-              {filtered.length.toLocaleString()} variables across {subGroups.length} groups
+              {filtered.length.toLocaleString()} parameters across {subGroups.length} groups
             </span>
           </div>
 
-          {/* State level: tile grid */}
-          {activeLevel === 'state' && (
+          {activeLevel === 'state' ? (
             <StateTileGrid
               subGroups={subGroups}
               levelColor={LEVEL_CONFIG[activeLevel].color}
               onSelect={setActiveSubGroup}
             />
-          )}
-
-          {/* Other levels: card grid */}
-          {activeLevel !== 'state' && (
+          ) : (
             <SubGroupCardGrid
               subGroups={subGroups}
               level={activeLevel}
@@ -573,7 +548,7 @@ export default function VariableExplorer({ variables, parameters, country, onVie
         </div>
       )}
 
-      {/* ─── View: Drilled into a sub-group (variable list) ─── */}
+      {/* ─── View: Drilled into a sub-group (parameter list) ─── */}
       {!isSearching && activeLevel && activeSubGroup && (
         <div>
           <button
@@ -600,18 +575,15 @@ export default function VariableExplorer({ variables, parameters, country, onVie
               {getSubGroupLabel(activeSubGroup, activeLevel)}
             </h2>
             <span style={{ fontSize: typography.fontSize.xs, color: colors.text.tertiary }}>
-              {subGroupVars.length} variables
+              {subGroupParams.length.toLocaleString()} parameters
             </span>
           </div>
 
-          <VariableList
-            vars={subGroupVars}
-            allVariables={variables}
-            parameters={parameters}
+          <ParameterList
+            params={subGroupParams}
             country={country}
-            selectedVar={selectedVar}
+            selectedParam={selectedParam}
             onSelect={handleSelect}
-            onViewFlowchart={onViewFlowchart}
           />
         </div>
       )}
