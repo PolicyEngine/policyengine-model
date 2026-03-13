@@ -1,7 +1,8 @@
 import BehavioralResponses from '../components/theory/BehavioralResponses';
 import PageHeader from '../components/layout/PageHeader';
+import type { Country } from '../hooks/useCountry';
 
-export default function BehavioralPage({ country }: { country: string }) {
+export default function BehavioralPage({ country }: { country: Country }) {
   return (
     <div>
       <PageHeader

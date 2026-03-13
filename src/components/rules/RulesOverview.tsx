@@ -5,6 +5,7 @@ import { programs as fallbackPrograms } from '../../data/programs';
 import { fetchPrograms } from '../../data/fetchPrograms';
 import type { CoverageStatus, Program } from '../../types/Program';
 import { IconX, IconCalendar } from '@tabler/icons-react';
+import type { Country } from '../../hooks/useCountry';
 
 const ALL_STATES = [
   'AL','AK','AZ','AR','CA','CO','CT','DE','DC','FL','GA','HI','ID','IL','IN','IA',
@@ -401,7 +402,7 @@ function computeStatusCount(programList: Program[]) {
   return counts;
 }
 
-export default function RulesOverview({ country = 'us' }: { country?: string }) {
+export default function RulesOverview({ country = 'us' }: { country?: Country }) {
   const [viewMode, setViewMode] = useState<ViewMode>('programs');
   const [selectedProgram, setSelectedProgram] = useState<Program | null>(null);
   const [selectedState, setSelectedState] = useState<string | null>(null);

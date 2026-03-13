@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { colors, typography, spacing } from '../../designTokens';
 import { IconChevronDown, IconChevronRight } from '@tabler/icons-react';
+import type { Country } from '../../hooks/useCountry';
 
 interface NavItem {
   path: string;
@@ -39,7 +40,7 @@ function isChildActive(item: NavItem, currentPath: string): boolean {
 }
 
 interface SidebarProps {
-  country: string;
+  country: Country;
   onClose?: () => void;
 }
 

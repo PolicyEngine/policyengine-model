@@ -5,11 +5,12 @@ import type { Program } from '../../types/Program';
 import { IconExternalLink } from '@tabler/icons-react';
 import PageHeader from '../../components/layout/PageHeader';
 import SearchInput from '../../components/layout/SearchInput';
+import type { Country } from '../../hooks/useCountry';
 
 type LinkType = 'parameters' | 'variables';
 
 interface ProgramListPageProps {
-  country: string;
+  country: Country;
   linkType: LinkType;
   title: string;
   description: string;

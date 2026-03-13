@@ -3,10 +3,11 @@ import Sidebar from './Sidebar';
 import MobileHeader from './MobileHeader';
 import Footer from './Footer';
 import PEHeader from './PEHeader';
+import type { Country } from '../../hooks/useCountry';
 
 interface AppShellProps {
   children: ReactNode;
-  country: string;
+  country: Country;
 }
 
 export default function AppShell({ children, country }: AppShellProps) {

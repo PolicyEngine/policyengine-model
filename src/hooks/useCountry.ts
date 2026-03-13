@@ -2,20 +2,28 @@
 import { createContext, useContext } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 
-const VALID_COUNTRIES = new Set(['us', 'uk']);
+export type Country = 'us' | 'uk';
+
+const VALID_COUNTRIES: Set<Country> = new Set(['us', 'uk']);
+
+function isCountry(s: string): s is Country {
+  return VALID_COUNTRIES.has(s as Country);
+}
 
 /** Derive country from search params and pathname. */
-export function useCountryFromUrl(): string {
+export function useCountryFromUrl(): Country {
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const pathCountry = pathname.split('/').filter(Boolean).find(s => VALID_COUNTRIES.has(s));
-  return searchParams.get('country') || pathCountry || 'us';
+  const param = searchParams.get('country');
+  if (param && isCountry(param)) return param;
+  const pathCountry = pathname.split('/').filter(Boolean).find(isCountry);
+  return pathCountry || 'us';
 }
 
 /** Context for passing country from layout to pages. */
-export const CountryContext = createContext<string>('us');
+export const CountryContext = createContext<Country>('us');
 
 /** Hook to read country from context (provided by ClientLayout). */
-export function useCountry(): string {
+export function useCountry(): Country {
   return useContext(CountryContext);
 }

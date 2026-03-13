@@ -1,3 +1,5 @@
+import type { Country } from '../hooks/useCountry';
+
 export interface Household {
   id: number;
   name: string;
@@ -61,7 +63,7 @@ function behavioralEarnings(earnings: number, children: number, creditPerChild: 
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function getColumns(_country?: string): Column[] {
+export function getColumns(_country?: Country): Column[] {
   return [
     { key: 'household', label: 'Household', visibleFrom: 0, align: 'left' },
     { key: 'earnings', label: 'Earnings', visibleFrom: 0, align: 'right' },
@@ -81,7 +83,7 @@ export function getColumns(_country?: string): Column[] {
 export function getCellValues(
   h: Household,
   stepIdx: number,
-  country: string,
+  country: Country,
 ): Record<string, string> {
   const c = country === 'uk' ? '£' : '$';
   const creditPerChild = country === 'uk' ? 2000 : 3000;
@@ -110,7 +112,7 @@ export function getCellValues(
 /** Total row for step 4 (weight & aggregate). */
 export function getTotalRow(
   stepIdx: number,
-  country: string,
+  country: Country,
 ): Record<string, string> {
   const c = country === 'uk' ? '£' : '$';
   const creditPerChild = country === 'uk' ? 2000 : 3000;
@@ -137,7 +139,7 @@ export function getTotalRow(
   };
 }
 
-export function getMicrosimSteps(country: string): MicrosimStep[] {
+export function getMicrosimSteps(country: Country): MicrosimStep[] {
   const creditPerChild = country === 'uk' ? 2000 : 3000;
   const c = country === 'uk' ? '£' : '$';
   const creditLabel = `${c}${creditPerChild.toLocaleString()}/child tax credit`;

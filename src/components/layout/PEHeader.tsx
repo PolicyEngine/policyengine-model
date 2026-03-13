@@ -1,9 +1,10 @@
 import { useState, useRef, useEffect } from 'react';
 import { IconMenu2, IconChevronDown, IconWorld, IconX } from '@tabler/icons-react';
 import { colors, spacing, typography } from '@policyengine/design-system/tokens';
+import type { Country } from '../../hooks/useCountry';
 
 interface PEHeaderProps {
-  country: string;
+  country: Country;
 }
 
 const COUNTRIES = [
@@ -35,7 +36,7 @@ const hoverHandlers = {
   },
 };
 
-function getNavItems(country: string) {
+function getNavItems(country: Country) {
   return [
     { label: 'Research', href: `https://policyengine.org/${country}/research` },
     { label: 'Model', href: `https://policyengine.org/${country}/model` },

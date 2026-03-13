@@ -1,8 +1,9 @@
 import { colors, typography, spacing } from '../../designTokens';
 import { IconExternalLink } from '@tabler/icons-react';
 import PageHeader from '../../components/layout/PageHeader';
+import type { Country } from '../../hooks/useCountry';
 
-export default function ValidationPage({ country }: { country: string }) {
+export default function ValidationPage({ country }: { country: Country }) {
   const taxsimUrl =
     country === 'uk'
       ? 'https://policyengine.github.io/policyengine-uk'

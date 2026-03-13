@@ -5,12 +5,13 @@ import { ukPipelineStages } from '../../data/ukPipelineStages';
 import type { CalibrationTarget } from '../../data/pipelineStages';
 import PageHeader from '../../components/layout/PageHeader';
 import SearchInput from '../../components/layout/SearchInput';
+import type { Country } from '../../hooks/useCountry';
 
 interface AggregatedTarget extends CalibrationTarget {
   stage: string;
 }
 
-export default function CalibrationPage({ country }: { country: string }) {
+export default function CalibrationPage({ country }: { country: Country }) {
   const [search, setSearch] = useState('');
   const stages = country === 'uk' ? ukPipelineStages : pipelineStages;
 
