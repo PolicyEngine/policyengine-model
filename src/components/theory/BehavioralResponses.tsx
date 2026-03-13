@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { colors, typography, spacing } from '../../designTokens';
 import { cboDefaults, BLOG_URL, sources } from '../../data/elasticities';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
+import type { Country } from '../../hooks/useCountry';
 
 function generateBudgetData(substitutionElasticity: number, incomeElasticity: number) {
   const data = [];
@@ -22,7 +23,7 @@ function generateBudgetData(substitutionElasticity: number, incomeElasticity: nu
   return data;
 }
 
-export default function BehavioralResponses({ country = 'us' }: { country?: string }) {
+export default function BehavioralResponses({ country = 'us' }: { country?: Country }) {
   const currencySymbol = country === 'uk' ? '£' : '$';
   const avgSubstitution = cboDefaults.substitutionElasticities.reduce((a, b) => a + b.central, 0) / cboDefaults.substitutionElasticities.length;
   const budgetData = generateBudgetData(avgSubstitution, cboDefaults.incomeElasticity.central);

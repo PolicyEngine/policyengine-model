@@ -3,41 +3,26 @@ import Sidebar from './Sidebar';
 import MobileHeader from './MobileHeader';
 import Footer from './Footer';
 import PEHeader from './PEHeader';
+import type { Country } from '../../hooks/useCountry';
 
 interface AppShellProps {
   children: ReactNode;
-  isEmbed: boolean;
-  country: string;
+  country: Country;
 }
 
-export default function AppShell({ children, isEmbed, country }: AppShellProps) {
+export default function AppShell({ children, country }: AppShellProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return window.matchMedia('(max-width: 768px)').matches;
+  });
 
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 768px)');
-    setIsMobile(mq.matches);
     const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
     mq.addEventListener('change', handler);
     return () => mq.removeEventListener('change', handler);
   }, []);
-
-  // Close mobile menu on route change
-  useEffect(() => {
-    const handleHash = () => setMobileMenuOpen(false);
-    window.addEventListener('hashchange', handleHash);
-    return () => window.removeEventListener('hashchange', handleHash);
-  }, []);
-
-  if (isEmbed) {
-    return (
-      <div className="tw:min-h-screen">
-        <main className="tw:max-w-[1200px] tw:mx-auto tw:p-6">
-          {children}
-        </main>
-      </div>
-    );
-  }
 
   if (isMobile) {
     return (

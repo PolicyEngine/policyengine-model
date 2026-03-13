@@ -1,77 +1,65 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { render } from '@testing-library/react';
-import App from '../App';
 
-describe('App routing', () => {
-  beforeEach(() => {
-    window.location.hash = '';
-    // Clear search params
-    window.history.replaceState(null, '', window.location.pathname);
-  });
+// Mock next/navigation for all page component tests
+vi.mock('next/navigation', () => ({
+  usePathname: () => '/',
+  useSearchParams: () => new URLSearchParams(),
+  useRouter: () => ({ push: vi.fn(), replace: vi.fn(), back: vi.fn() }),
+}));
 
-  it('renders overview page by default', () => {
-    const { container } = render(<App />);
+import OverviewPage from '../views/OverviewPage';
+import CoverageTrackerPage from '../views/rules/CoverageTrackerPage';
+import ParametersPage from '../views/rules/ParametersPage';
+import VariablesPage from '../views/rules/VariablesPage';
+import PipelinePage from '../views/data/PipelinePage';
+import CalibrationPage from '../views/data/CalibrationPage';
+import ValidationPage from '../views/data/ValidationPage';
+import BehavioralPage from '../views/BehavioralPage';
+
+describe('Page components render correctly', () => {
+  it('renders overview page', () => {
+    const { container } = render(<OverviewPage country="us" />);
     expect(container.querySelector('h1')).toHaveTextContent('How microsimulation works');
   });
 
-  it('renders coverage tracker for #/rules/coverage', () => {
-    window.location.hash = '#/rules/coverage';
-    const { container } = render(<App />);
+  it('renders coverage tracker page', () => {
+    const { container } = render(<CoverageTrackerPage country="us" />);
     expect(container.querySelector('h1')).toHaveTextContent('Coverage tracker');
   });
 
-  it('renders parameters page for #/rules/parameters', () => {
-    window.location.hash = '#/rules/parameters';
-    const { container } = render(<App />);
+  it('renders parameters page', () => {
+    const { container } = render(<ParametersPage country="us" />);
     expect(container.querySelector('h1')).toHaveTextContent('Parameters');
   });
 
-  it('renders variables page for #/rules/variables', () => {
-    window.location.hash = '#/rules/variables';
-    const { container } = render(<App />);
+  it('renders variables page', () => {
+    const { container } = render(<VariablesPage country="us" />);
     expect(container.querySelector('h1')).toHaveTextContent('Variables');
   });
 
-  it('renders pipeline page for #/data/pipeline', () => {
-    window.location.hash = '#/data/pipeline';
-    const { container } = render(<App />);
+  it('renders pipeline page', () => {
+    const { container } = render(<PipelinePage country="us" />);
     expect(container.querySelector('h1')).toHaveTextContent('Microdata pipeline');
   });
 
-  it('renders calibration page for #/data/calibration', () => {
-    window.location.hash = '#/data/calibration';
-    const { container } = render(<App />);
+  it('renders calibration page', () => {
+    const { container } = render(<CalibrationPage country="us" />);
     expect(container.querySelector('h1')).toHaveTextContent('Calibration targets');
   });
 
-  it('renders validation page for #/data/validation', () => {
-    window.location.hash = '#/data/validation';
-    const { container } = render(<App />);
+  it('renders validation page', () => {
+    const { container } = render(<ValidationPage country="us" />);
     expect(container.querySelector('h1')).toHaveTextContent('Validation');
   });
 
-  it('renders behavioral page for #/behavioral', () => {
-    window.location.hash = '#/behavioral';
-    const { container } = render(<App />);
+  it('renders behavioral page with US spelling', () => {
+    const { container } = render(<BehavioralPage country="us" />);
     expect(container.querySelector('h1')).toHaveTextContent('Behavioral responses');
   });
-});
 
-describe('App embed mode', () => {
-  it('hides sidebar when ?embed is present', () => {
-    window.history.replaceState(null, '', '?embed=true');
-    const { container } = render(<App />);
-    // Sidebar has nav element with width 256px — should not be present in embed
-    const nav = container.querySelector('nav');
-    expect(nav).toBeNull();
-  });
-});
-
-describe('App country param', () => {
-  it('uses UK spelling for behavioral page when country=uk', () => {
-    window.history.replaceState(null, '', '?country=uk');
-    window.location.hash = '#/behavioral';
-    const { container } = render(<App />);
+  it('renders behavioral page with UK spelling', () => {
+    const { container } = render(<BehavioralPage country="uk" />);
     expect(container.querySelector('h1')).toHaveTextContent('Behavioural responses');
   });
 });

@@ -4,6 +4,7 @@ import { colors, typography, spacing } from '../../designTokens';
 import { pipelineStages } from '../../data/pipelineStages';
 import { ukPipelineStages } from '../../data/ukPipelineStages';
 import type { PipelineStage } from '../../data/pipelineStages';
+import type { Country } from '../../hooks/useCountry';
 import {
   IconChartBar, IconSettings, IconBuildingBank, IconLink, IconScale,
   IconMap, IconMapPin, IconCoin, IconShoppingCart, IconHeartbeat,
@@ -79,7 +80,7 @@ function StageButton({ s, isActive, onClick, borderRadiusLeft, borderRadiusRight
   );
 }
 
-export default function DataPipeline({ country = 'us' }: { country?: string }) {
+export default function DataPipeline({ country = 'us' }: { country?: Country }) {
   const allStages = country === 'uk' ? ukPipelineStages : pipelineStages;
   const sharedStages = allStages.filter(s => s.branch === 'shared');
   const nationalStages = allStages.filter(s => s.branch === 'national');

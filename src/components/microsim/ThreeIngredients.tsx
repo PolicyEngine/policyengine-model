@@ -2,6 +2,7 @@ import { type ReactNode } from 'react';
 import { motion } from 'framer-motion';
 import { colors } from '../../designTokens';
 import { IconFileText, IconUsers, IconTrendingUp } from '@tabler/icons-react';
+import type { Country } from '../../hooks/useCountry';
 
 interface IngredientCardProps {
   title: string;
@@ -38,7 +39,7 @@ function IngredientCard({ title, description, icon, delay, isActive }: Ingredien
 
 interface ThreeIngredientsProps {
   activeIngredient?: 'policies' | 'households' | 'dynamics' | null;
-  country?: string;
+  country?: Country;
 }
 
 export default function ThreeIngredients({ activeIngredient, country = 'us' }: ThreeIngredientsProps) {

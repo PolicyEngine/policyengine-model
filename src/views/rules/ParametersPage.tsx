@@ -1,6 +1,7 @@
 import ProgramListPage from './ProgramListPage';
+import type { Country } from '../../hooks/useCountry';
 
-export default function ParametersPage({ country }: { country: string }) {
+export default function ParametersPage({ country }: { country: Country }) {
   return (
     <ProgramListPage
       country={country}
