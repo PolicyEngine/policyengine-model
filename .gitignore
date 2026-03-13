@@ -26,3 +26,6 @@ dist-ssr
 
 # Cloned repos used for research
 policyengine-uk-data
+
+# Pre-built metadata (generated at build time, ~58MB each)
+public/metadata-*.json

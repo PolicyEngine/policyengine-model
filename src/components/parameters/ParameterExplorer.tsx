@@ -19,7 +19,30 @@ interface ParameterExplorerProps {
   country: string;
 }
 
-// ─── Parameter list (shown after selecting a sub-group) ────────────────────
+/** Strip trailing ALL_CAPS enum values and numeric indices to find the parameter group. */
+function getParameterGroup(path: string): string {
+  const parts = path.split('.');
+  while (parts.length > 1 && (/^[A-Z_]+$/.test(parts[parts.length - 1]) || /^\d+$/.test(parts[parts.length - 1]))) {
+    parts.pop();
+  }
+  return parts.join('.');
+}
+
+/** Get a display label for a parameter group, using the parameterNode if available. */
+function getGroupLabel(groupKey: string, allParameters: Record<string, Parameter>): string {
+  const node = allParameters[groupKey];
+  if (node && node.label) return node.label;
+  // Fallback: use the last meaningful segment
+  const parts = groupKey.split('.');
+  return parts[parts.length - 1].replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
+function getGroupDescription(groupKey: string, allParameters: Record<string, Parameter>): string | null {
+  const node = allParameters[groupKey];
+  return node?.description || null;
+}
+
+// ─── Parameter list (shown after selecting a group) ─────────────────────────
 
 function ParameterList({
   params,
@@ -84,7 +107,7 @@ function StateTileGrid({
   levelColor,
   onSelect,
 }: {
-  subGroups: [string, Parameter[]][];
+  subGroups: [string, ParameterLeaf[]][];
   levelColor: string;
   onSelect: (key: string) => void;
 }) {
@@ -174,7 +197,7 @@ function SubGroupCardGrid({
   levelColor,
   onSelect,
 }: {
-  subGroups: [string, Parameter[]][];
+  subGroups: [string, ParameterLeaf[]][];
   level: Level;
   levelColor: string;
   onSelect: (key: string) => void;
@@ -240,12 +263,130 @@ function SubGroupCardGrid({
   );
 }
 
+// ─── Parameter group card grid ───────────────────────────────────────────────
+
+function ParameterGroupCardGrid({
+  groups,
+  levelColor,
+  allParameters,
+  onSelect,
+}: {
+  groups: [string, ParameterLeaf[]][];
+  levelColor: string;
+  allParameters: Record<string, Parameter>;
+  onSelect: (key: string) => void;
+}) {
+  const [showAll, setShowAll] = useState(false);
+  const visible = showAll ? groups : groups.slice(0, PAGE_SIZE);
+
+  return (
+    <div>
+      <div
+        className="tw:grid tw:grid-cols-[repeat(auto-fill,minmax(280px,1fr))]"
+        style={{ gap: spacing.sm }}
+      >
+        {visible.map(([key, params], i) => {
+          const label = getGroupLabel(key, allParameters);
+          const desc = getGroupDescription(key, allParameters);
+          const isSingle = params.length === 1;
+          return (
+            <motion.button
+              key={key}
+              onClick={() => onSelect(key)}
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.15, delay: i * 0.01 }}
+              className="tw:text-left tw:cursor-pointer"
+              style={{
+                padding: `${spacing.md} ${spacing.lg}`,
+                borderRadius: spacing.radius.lg,
+                border: `1px solid ${colors.border.light}`,
+                backgroundColor: colors.white,
+                fontFamily: typography.fontFamily.primary,
+                transition: 'border-color 0.15s ease, box-shadow 0.15s ease',
+              }}
+              whileHover={{
+                borderColor: levelColor,
+                boxShadow: `0 0 0 1px ${levelColor}25`,
+              }}
+            >
+              <div className="tw:flex tw:items-start tw:justify-between" style={{ gap: spacing.md }}>
+                <div className="tw:flex-1 tw:min-w-0">
+                  <div style={{
+                    fontSize: typography.fontSize.sm,
+                    fontWeight: typography.fontWeight.semibold,
+                    color: colors.text.primary,
+                  }}>
+                    {label}
+                  </div>
+                  <div style={{
+                    fontSize: typography.fontSize.xs,
+                    fontFamily: typography.fontFamily.mono,
+                    color: colors.text.tertiary,
+                    marginTop: '2px',
+                  }}>
+                    {key}
+                  </div>
+                  {desc && (
+                    <div className="tw:truncate" style={{
+                      fontSize: typography.fontSize.xs,
+                      color: colors.text.secondary,
+                      marginTop: spacing.xs,
+                      maxWidth: '400px',
+                    }}>
+                      {desc}
+                    </div>
+                  )}
+                </div>
+                {!isSingle && (
+                  <span style={{
+                    fontSize: '10px',
+                    fontWeight: typography.fontWeight.semibold,
+                    padding: `1px ${spacing.xs}`,
+                    borderRadius: spacing.radius.sm,
+                    backgroundColor: `${levelColor}15`,
+                    color: levelColor,
+                    flexShrink: 0,
+                  }}>
+                    {params.length} values
+                  </span>
+                )}
+              </div>
+            </motion.button>
+          );
+        })}
+      </div>
+      {groups.length > PAGE_SIZE && !showAll && (
+        <button
+          onClick={() => setShowAll(true)}
+          className="tw:cursor-pointer"
+          style={{
+            display: 'block',
+            margin: `${spacing.lg} auto`,
+            padding: `${spacing.xs} ${spacing.xl}`,
+            border: `1px solid ${colors.border.light}`,
+            borderRadius: spacing.radius.lg,
+            backgroundColor: colors.white,
+            color: colors.primary[600],
+            fontSize: typography.fontSize.xs,
+            fontWeight: typography.fontWeight.medium,
+            fontFamily: typography.fontFamily.primary,
+          }}
+        >
+          Show all {groups.length.toLocaleString()} groups
+        </button>
+      )}
+    </div>
+  );
+}
+
 // ─── Main explorer ───────────────────────────────────────────────────────────
 
 export default function ParameterExplorer({ parameters, country }: ParameterExplorerProps) {
   const [search, setSearch] = useState('');
   const [activeLevel, setActiveLevel] = useState<Level | null>(null);
   const [activeSubGroup, setActiveSubGroup] = useState<string | null>(null);
+  const [activeGroup, setActiveGroup] = useState<string | null>(null);
   const [selectedParam, setSelectedParam] = useState<string | null>(null);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const sentinelRef = useRef<HTMLDivElement>(null);
@@ -269,15 +410,12 @@ export default function ParameterExplorer({ parameters, country }: ParameterExpl
 
   // Filtered list
   const filtered = useMemo(() => {
-    let result: Parameter[] = allParameters;
+    let result: ParameterLeaf[] = allParameters;
 
     if (debouncedSearch) {
       const words = debouncedSearch.toLowerCase().split(/\s+/).filter(Boolean);
       result = result.filter((p) => {
-        const haystack = [
-          p.parameter, p.label, p.description || '',
-          p.type === 'parameter' ? ((p as ParameterLeaf).unit || '') : '',
-        ].join(' ').toLowerCase();
+        const haystack = [p.parameter, p.label, p.description || '', p.unit || ''].join(' ').toLowerCase();
         return words.every((w) => haystack.includes(w));
       });
     }
@@ -290,7 +428,7 @@ export default function ParameterExplorer({ parameters, country }: ParameterExpl
   // Sub-groups for the active level
   const subGroups = useMemo(() => {
     if (!activeLevel) return [];
-    const map = new Map<string, Parameter[]>();
+    const map = new Map<string, ParameterLeaf[]>();
     for (const p of filtered) {
       const key = getSubGroup(p.parameter);
       if (!map.has(key)) map.set(key, []);
@@ -306,10 +444,29 @@ export default function ParameterExplorer({ parameters, country }: ParameterExpl
     return entry ? entry[1] : [];
   }, [subGroups, activeSubGroup]);
 
+  // Parameter groups within the active sub-group
+  const parameterGroups = useMemo(() => {
+    if (!activeSubGroup) return [];
+    const map = new Map<string, ParameterLeaf[]>();
+    for (const p of subGroupParams) {
+      const key = getParameterGroup(p.parameter);
+      if (!map.has(key)) map.set(key, []);
+      map.get(key)!.push(p);
+    }
+    return [...map.entries()].sort(([a], [b]) => a.localeCompare(b));
+  }, [subGroupParams, activeSubGroup]);
+
+  // Parameters in active group
+  const activeGroupParams = useMemo(() => {
+    if (!activeGroup) return [];
+    const entry = parameterGroups.find(([k]) => k === activeGroup);
+    return entry ? entry[1] : [];
+  }, [parameterGroups, activeGroup]);
+
   // Reset on filter changes
   useEffect(() => {
     setVisibleCount(PAGE_SIZE);
-  }, [debouncedSearch, activeLevel, activeSubGroup]);
+  }, [debouncedSearch, activeLevel, activeSubGroup, activeGroup]);
 
   // Infinite scroll for search mode
   useEffect(() => {
@@ -336,7 +493,10 @@ export default function ParameterExplorer({ parameters, country }: ParameterExpl
 
   // Navigation helpers
   const goBack = () => {
-    if (activeSubGroup) {
+    if (activeGroup) {
+      setActiveGroup(null);
+      setSelectedParam(null);
+    } else if (activeSubGroup) {
       setActiveSubGroup(null);
       setSelectedParam(null);
     } else {
@@ -345,9 +505,24 @@ export default function ParameterExplorer({ parameters, country }: ParameterExpl
     }
   };
 
+  // For single-leaf groups, skip the group detail and go straight to expand
+  const handleGroupSelect = (key: string) => {
+    const entry = parameterGroups.find(([k]) => k === key);
+    if (entry && entry[1].length === 1) {
+      // Single parameter — just expand it inline
+      setActiveGroup(key);
+      setSelectedParam(entry[1][0].parameter);
+    } else {
+      setActiveGroup(key);
+      setSelectedParam(null);
+    }
+  };
+
   const breadcrumb = activeLevel
     ? activeSubGroup
-      ? `${LEVEL_CONFIG[activeLevel].label} / ${getSubGroupLabel(activeSubGroup, activeLevel)}`
+      ? activeGroup
+        ? `${LEVEL_CONFIG[activeLevel].label} / ${getSubGroupLabel(activeSubGroup, activeLevel)} / ${getGroupLabel(activeGroup, parameters)}`
+        : `${LEVEL_CONFIG[activeLevel].label} / ${getSubGroupLabel(activeSubGroup, activeLevel)}`
       : LEVEL_CONFIG[activeLevel].label
     : null;
 
@@ -450,7 +625,7 @@ export default function ParameterExplorer({ parameters, country }: ParameterExpl
             return (
               <motion.button
                 key={level}
-                onClick={() => { setActiveLevel(level); setActiveSubGroup(null); }}
+                onClick={() => { setActiveLevel(level); setActiveSubGroup(null); setActiveGroup(null); }}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: config.order * 0.05 }}
@@ -546,8 +721,48 @@ export default function ParameterExplorer({ parameters, country }: ParameterExpl
         </div>
       )}
 
-      {/* ─── View: Drilled into a sub-group (parameter list) ─── */}
-      {!isSearching && activeLevel && activeSubGroup && (
+      {/* ─── View: Drilled into a sub-group (parameter group cards) ─── */}
+      {!isSearching && activeLevel && activeSubGroup && !activeGroup && (
+        <div>
+          <button
+            onClick={goBack}
+            className="tw:flex tw:items-center tw:cursor-pointer"
+            style={{
+              gap: spacing.sm, padding: `${spacing.xs} 0`, border: 'none',
+              backgroundColor: 'transparent', fontFamily: typography.fontFamily.primary,
+              marginBottom: spacing.lg, color: colors.primary[600],
+              fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.medium,
+            }}
+          >
+            <IconArrowLeft size={16} stroke={1.5} />
+            {LEVEL_CONFIG[activeLevel].label} / {getSubGroupLabel(activeSubGroup, activeLevel)}
+          </button>
+
+          <div style={{ marginBottom: spacing.xl }}>
+            <h2 style={{
+              fontSize: typography.fontSize['2xl'],
+              fontWeight: typography.fontWeight.bold,
+              color: LEVEL_CONFIG[activeLevel].color,
+              margin: 0,
+            }}>
+              {getSubGroupLabel(activeSubGroup, activeLevel)}
+            </h2>
+            <span style={{ fontSize: typography.fontSize.xs, color: colors.text.tertiary }}>
+              {subGroupParams.length.toLocaleString()} parameters in {parameterGroups.length} groups
+            </span>
+          </div>
+
+          <ParameterGroupCardGrid
+            groups={parameterGroups}
+            levelColor={LEVEL_CONFIG[activeLevel].color}
+            allParameters={parameters}
+            onSelect={handleGroupSelect}
+          />
+        </div>
+      )}
+
+      {/* ─── View: Drilled into a parameter group (leaf list) ─── */}
+      {!isSearching && activeLevel && activeSubGroup && activeGroup && (
         <div>
           <button
             onClick={goBack}
@@ -570,15 +785,25 @@ export default function ParameterExplorer({ parameters, country }: ParameterExpl
               color: LEVEL_CONFIG[activeLevel].color,
               margin: 0,
             }}>
-              {getSubGroupLabel(activeSubGroup, activeLevel)}
+              {getGroupLabel(activeGroup, parameters)}
             </h2>
+            {getGroupDescription(activeGroup, parameters) && (
+              <p style={{
+                fontSize: typography.fontSize.sm,
+                color: colors.text.secondary,
+                margin: `${spacing.xs} 0 0`,
+                lineHeight: 1.5,
+              }}>
+                {getGroupDescription(activeGroup, parameters)}
+              </p>
+            )}
             <span style={{ fontSize: typography.fontSize.xs, color: colors.text.tertiary }}>
-              {subGroupParams.length.toLocaleString()} parameters
+              {activeGroupParams.length} parameter{activeGroupParams.length !== 1 ? 's' : ''}
             </span>
           </div>
 
           <ParameterList
-            params={subGroupParams}
+            params={activeGroupParams}
             country={country}
             selectedParam={selectedParam}
             onSelect={handleSelect}
