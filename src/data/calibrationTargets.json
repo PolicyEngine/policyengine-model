@@ -1,0 +1,1197 @@
+[
+  {
+    "variable": "aca_ptc",
+    "domain": "aca_ptc",
+    "geoLevels": [
+      "district",
+      "national",
+      "state"
+    ],
+    "nationalValue": 14191851000.0,
+    "nationalCount": 1,
+    "stateCount": 51,
+    "districtCount": 436,
+    "source": "IRS SOI",
+    "period": 2022
+  },
+  {
+    "variable": "adjusted_gross_income",
+    "domain": null,
+    "geoLevels": [
+      "district",
+      "national",
+      "state"
+    ],
+    "nationalValue": 14424810411000.0,
+    "nationalCount": 1,
+    "stateCount": 51,
+    "districtCount": 436,
+    "source": "IRS SOI",
+    "period": 2022
+  },
+  {
+    "variable": "alimony_expense",
+    "domain": null,
+    "geoLevels": [
+      "national"
+    ],
+    "nationalValue": 13000000000.0,
+    "nationalCount": 1,
+    "stateCount": 0,
+    "districtCount": 0,
+    "source": "PolicyEngine",
+    "period": 2024
+  },
+  {
+    "variable": "alimony_income",
+    "domain": null,
+    "geoLevels": [
+      "national"
+    ],
+    "nationalValue": 13000000000.0,
+    "nationalCount": 1,
+    "stateCount": 0,
+    "districtCount": 0,
+    "source": "PolicyEngine",
+    "period": 2024
+  },
+  {
+    "variable": "charitable_deduction",
+    "domain": null,
+    "geoLevels": [
+      "national"
+    ],
+    "nationalValue": 65301000000.0,
+    "nationalCount": 1,
+    "stateCount": 0,
+    "districtCount": 0,
+    "source": "PolicyEngine",
+    "period": 2024
+  },
+  {
+    "variable": "child_support_expense",
+    "domain": null,
+    "geoLevels": [
+      "national"
+    ],
+    "nationalValue": 33000000000.0,
+    "nationalCount": 1,
+    "stateCount": 0,
+    "districtCount": 0,
+    "source": "PolicyEngine",
+    "period": 2024
+  },
+  {
+    "variable": "child_support_received",
+    "domain": null,
+    "geoLevels": [
+      "national"
+    ],
+    "nationalValue": 33000000000.0,
+    "nationalCount": 1,
+    "stateCount": 0,
+    "districtCount": 0,
+    "source": "PolicyEngine",
+    "period": 2024
+  },
+  {
+    "variable": "dividend_income",
+    "domain": "dividend_income",
+    "geoLevels": [
+      "district",
+      "national",
+      "state"
+    ],
+    "nationalValue": 385116075000.0,
+    "nationalCount": 1,
+    "stateCount": 51,
+    "districtCount": 436,
+    "source": "IRS SOI",
+    "period": 2022
+  },
+  {
+    "variable": "eitc",
+    "domain": null,
+    "geoLevels": [
+      "national"
+    ],
+    "nationalValue": 67330000000.0,
+    "nationalCount": 1,
+    "stateCount": 0,
+    "districtCount": 0,
+    "source": "PolicyEngine",
+    "period": 2024
+  },
+  {
+    "variable": "eitc",
+    "domain": "eitc_child_count",
+    "geoLevels": [
+      "district",
+      "national",
+      "state"
+    ],
+    "nationalValue": 21519150000.0,
+    "nationalCount": 4,
+    "stateCount": 204,
+    "districtCount": 1744,
+    "source": "IRS SOI",
+    "period": 2022
+  },
+  {
+    "variable": "health_insurance_premiums_without_medicare_part_b",
+    "domain": null,
+    "geoLevels": [
+      "national"
+    ],
+    "nationalValue": 385000000000.0,
+    "nationalCount": 1,
+    "stateCount": 0,
+    "districtCount": 0,
+    "source": "PolicyEngine",
+    "period": 2024
+  },
+  {
+    "variable": "household_count",
+    "domain": "snap",
+    "geoLevels": [
+      "district",
+      "state"
+    ],
+    "nationalValue": null,
+    "nationalCount": 0,
+    "stateCount": 51,
+    "districtCount": 436,
+    "source": "USDA FNS SNAP",
+    "period": 2024
+  },
+  {
+    "variable": "income_tax",
+    "domain": "income_tax",
+    "geoLevels": [
+      "district",
+      "national",
+      "state"
+    ],
+    "nationalValue": 2050683698000.0,
+    "nationalCount": 1,
+    "stateCount": 51,
+    "districtCount": 436,
+    "source": "IRS SOI",
+    "period": 2022
+  },
+  {
+    "variable": "income_tax_before_credits",
+    "domain": "income_tax_before_credits",
+    "geoLevels": [
+      "district",
+      "national",
+      "state"
+    ],
+    "nationalValue": 2183251659000.0,
+    "nationalCount": 1,
+    "stateCount": 51,
+    "districtCount": 436,
+    "source": "IRS SOI",
+    "period": 2022
+  },
+  {
+    "variable": "income_tax_positive",
+    "domain": null,
+    "geoLevels": [
+      "national"
+    ],
+    "nationalValue": 2426067000000.0,
+    "nationalCount": 1,
+    "stateCount": 0,
+    "districtCount": 0,
+    "source": "PolicyEngine",
+    "period": 2024
+  },
+  {
+    "variable": "interest_deduction",
+    "domain": null,
+    "geoLevels": [
+      "national"
+    ],
+    "nationalValue": 24800000000.0,
+    "nationalCount": 1,
+    "stateCount": 0,
+    "districtCount": 0,
+    "source": "PolicyEngine",
+    "period": 2024
+  },
+  {
+    "variable": "medicaid",
+    "domain": null,
+    "geoLevels": [
+      "national"
+    ],
+    "nationalValue": 871700000000.0,
+    "nationalCount": 1,
+    "stateCount": 0,
+    "districtCount": 0,
+    "source": "PolicyEngine",
+    "period": 2024
+  },
+  {
+    "variable": "medical_expense_deduction",
+    "domain": null,
+    "geoLevels": [
+      "national"
+    ],
+    "nationalValue": 11400000000.0,
+    "nationalCount": 1,
+    "stateCount": 0,
+    "districtCount": 0,
+    "source": "PolicyEngine",
+    "period": 2024
+  },
+  {
+    "variable": "medical_expense_deduction",
+    "domain": "medical_expense_deduction",
+    "geoLevels": [
+      "district",
+      "national",
+      "state"
+    ],
+    "nationalValue": 78141531000.0,
+    "nationalCount": 1,
+    "stateCount": 51,
+    "districtCount": 436,
+    "source": "IRS SOI",
+    "period": 2022
+  },
+  {
+    "variable": "medicare_part_b_premiums",
+    "domain": null,
+    "geoLevels": [
+      "national"
+    ],
+    "nationalValue": 112000000000.0,
+    "nationalCount": 1,
+    "stateCount": 0,
+    "districtCount": 0,
+    "source": "PolicyEngine",
+    "period": 2024
+  },
+  {
+    "variable": "net_capital_gains",
+    "domain": "net_capital_gains",
+    "geoLevels": [
+      "district",
+      "national",
+      "state"
+    ],
+    "nationalValue": 1157234600000.0,
+    "nationalCount": 1,
+    "stateCount": 51,
+    "districtCount": 436,
+    "source": "IRS SOI",
+    "period": 2022
+  },
+  {
+    "variable": "net_worth",
+    "domain": null,
+    "geoLevels": [
+      "national"
+    ],
+    "nationalValue": 160000000000000.0,
+    "nationalCount": 1,
+    "stateCount": 0,
+    "districtCount": 0,
+    "source": "PolicyEngine",
+    "period": 2024
+  },
+  {
+    "variable": "other_medical_expenses",
+    "domain": null,
+    "geoLevels": [
+      "national"
+    ],
+    "nationalValue": 278000000000.0,
+    "nationalCount": 1,
+    "stateCount": 0,
+    "districtCount": 0,
+    "source": "PolicyEngine",
+    "period": 2024
+  },
+  {
+    "variable": "over_the_counter_health_expenses",
+    "domain": null,
+    "geoLevels": [
+      "national"
+    ],
+    "nationalValue": 72000000000.0,
+    "nationalCount": 1,
+    "stateCount": 0,
+    "districtCount": 0,
+    "source": "PolicyEngine",
+    "period": 2024
+  },
+  {
+    "variable": "person_count",
+    "domain": "aca_ptc",
+    "geoLevels": [
+      "national"
+    ],
+    "nationalValue": 19743689.0,
+    "nationalCount": 1,
+    "stateCount": 0,
+    "districtCount": 0,
+    "source": "PolicyEngine",
+    "period": 2024
+  },
+  {
+    "variable": "person_count",
+    "domain": "adjusted_gross_income",
+    "geoLevels": [
+      "district",
+      "state"
+    ],
+    "nationalValue": null,
+    "nationalCount": 0,
+    "stateCount": 459,
+    "districtCount": 3924,
+    "source": "IRS SOI",
+    "period": 2022
+  },
+  {
+    "variable": "person_count",
+    "domain": "age",
+    "geoLevels": [
+      "district",
+      "national",
+      "state"
+    ],
+    "nationalValue": 23874454.0,
+    "nationalCount": 18,
+    "stateCount": 918,
+    "districtCount": 7848,
+    "source": "Census ACS S0101",
+    "period": 2024
+  },
+  {
+    "variable": "person_count",
+    "domain": "medicaid",
+    "geoLevels": [
+      "national"
+    ],
+    "nationalValue": 72429055.0,
+    "nationalCount": 1,
+    "stateCount": 0,
+    "districtCount": 0,
+    "source": "PolicyEngine",
+    "period": 2024
+  },
+  {
+    "variable": "person_count",
+    "domain": "medicaid_enrolled",
+    "geoLevels": [
+      "state"
+    ],
+    "nationalValue": null,
+    "nationalCount": 0,
+    "stateCount": 51,
+    "districtCount": 0,
+    "source": "CMS Medicaid",
+    "period": 2024
+  },
+  {
+    "variable": "person_count",
+    "domain": "ssn_card_type",
+    "geoLevels": [
+      "national"
+    ],
+    "nationalValue": 13000000.0,
+    "nationalCount": 4,
+    "stateCount": 0,
+    "districtCount": 0,
+    "source": "PolicyEngine",
+    "period": 2025
+  },
+  {
+    "variable": "qualified_business_income_deduction",
+    "domain": null,
+    "geoLevels": [
+      "national"
+    ],
+    "nationalValue": 63100000000.0,
+    "nationalCount": 1,
+    "stateCount": 0,
+    "districtCount": 0,
+    "source": "PolicyEngine",
+    "period": 2024
+  },
+  {
+    "variable": "qualified_business_income_deduction",
+    "domain": "qualified_business_income_deduction",
+    "geoLevels": [
+      "district",
+      "national",
+      "state"
+    ],
+    "nationalValue": 208335245000.0,
+    "nationalCount": 1,
+    "stateCount": 51,
+    "districtCount": 436,
+    "source": "IRS SOI",
+    "period": 2022
+  },
+  {
+    "variable": "qualified_dividend_income",
+    "domain": "qualified_dividend_income",
+    "geoLevels": [
+      "district",
+      "national",
+      "state"
+    ],
+    "nationalValue": 290612997000.0,
+    "nationalCount": 1,
+    "stateCount": 51,
+    "districtCount": 436,
+    "source": "IRS SOI",
+    "period": 2022
+  },
+  {
+    "variable": "real_estate_taxes",
+    "domain": null,
+    "geoLevels": [
+      "national"
+    ],
+    "nationalValue": 500000000000.0,
+    "nationalCount": 1,
+    "stateCount": 0,
+    "districtCount": 0,
+    "source": "PolicyEngine",
+    "period": 2024
+  },
+  {
+    "variable": "real_estate_taxes",
+    "domain": "real_estate_taxes",
+    "geoLevels": [
+      "district",
+      "national",
+      "state"
+    ],
+    "nationalValue": 104783475000.0,
+    "nationalCount": 1,
+    "stateCount": 51,
+    "districtCount": 436,
+    "source": "IRS SOI",
+    "period": 2022
+  },
+  {
+    "variable": "refundable_ctc",
+    "domain": "refundable_ctc",
+    "geoLevels": [
+      "district",
+      "national",
+      "state"
+    ],
+    "nationalValue": 33069038000.0,
+    "nationalCount": 1,
+    "stateCount": 51,
+    "districtCount": 436,
+    "source": "IRS SOI",
+    "period": 2022
+  },
+  {
+    "variable": "rent",
+    "domain": null,
+    "geoLevels": [
+      "national"
+    ],
+    "nationalValue": 735000000000.0,
+    "nationalCount": 1,
+    "stateCount": 0,
+    "districtCount": 0,
+    "source": "PolicyEngine",
+    "period": 2024
+  },
+  {
+    "variable": "rental_income",
+    "domain": "rental_income",
+    "geoLevels": [
+      "district",
+      "national",
+      "state"
+    ],
+    "nationalValue": 82802445000.0,
+    "nationalCount": 1,
+    "stateCount": 51,
+    "districtCount": 436,
+    "source": "IRS SOI",
+    "period": 2022
+  },
+  {
+    "variable": "roth_ira_contributions",
+    "domain": null,
+    "geoLevels": [
+      "national"
+    ],
+    "nationalValue": 39000000000.0,
+    "nationalCount": 1,
+    "stateCount": 0,
+    "districtCount": 0,
+    "source": "PolicyEngine",
+    "period": 2024
+  },
+  {
+    "variable": "salt",
+    "domain": "salt",
+    "geoLevels": [
+      "district",
+      "national",
+      "state"
+    ],
+    "nationalValue": 250437565000.0,
+    "nationalCount": 1,
+    "stateCount": 51,
+    "districtCount": 436,
+    "source": "IRS SOI",
+    "period": 2022
+  },
+  {
+    "variable": "salt_deduction",
+    "domain": null,
+    "geoLevels": [
+      "national"
+    ],
+    "nationalValue": 21247000000.0,
+    "nationalCount": 1,
+    "stateCount": 0,
+    "districtCount": 0,
+    "source": "PolicyEngine",
+    "period": 2024
+  },
+  {
+    "variable": "self_employment_income",
+    "domain": "self_employment_income",
+    "geoLevels": [
+      "district",
+      "national",
+      "state"
+    ],
+    "nationalValue": 412013047000.0,
+    "nationalCount": 1,
+    "stateCount": 51,
+    "districtCount": 436,
+    "source": "IRS SOI",
+    "period": 2022
+  },
+  {
+    "variable": "snap",
+    "domain": null,
+    "geoLevels": [
+      "national"
+    ],
+    "nationalValue": 93730290000.0,
+    "nationalCount": 1,
+    "stateCount": 0,
+    "districtCount": 0,
+    "source": "PolicyEngine",
+    "period": 2024
+  },
+  {
+    "variable": "snap",
+    "domain": "snap",
+    "geoLevels": [
+      "state"
+    ],
+    "nationalValue": null,
+    "nationalCount": 0,
+    "stateCount": 51,
+    "districtCount": 0,
+    "source": "USDA FNS SNAP",
+    "period": 2024
+  },
+  {
+    "variable": "social_security",
+    "domain": null,
+    "geoLevels": [
+      "national"
+    ],
+    "nationalValue": 1454424000000.0,
+    "nationalCount": 1,
+    "stateCount": 0,
+    "districtCount": 0,
+    "source": "PolicyEngine",
+    "period": 2024
+  },
+  {
+    "variable": "social_security_dependents",
+    "domain": null,
+    "geoLevels": [
+      "national"
+    ],
+    "nationalValue": 84000000000.0,
+    "nationalCount": 1,
+    "stateCount": 0,
+    "districtCount": 0,
+    "source": "PolicyEngine",
+    "period": 2024
+  },
+  {
+    "variable": "social_security_disability",
+    "domain": null,
+    "geoLevels": [
+      "national"
+    ],
+    "nationalValue": 148000000000.0,
+    "nationalCount": 1,
+    "stateCount": 0,
+    "districtCount": 0,
+    "source": "PolicyEngine",
+    "period": 2024
+  },
+  {
+    "variable": "social_security_retirement",
+    "domain": null,
+    "geoLevels": [
+      "national"
+    ],
+    "nationalValue": 1060000000000.0,
+    "nationalCount": 1,
+    "stateCount": 0,
+    "districtCount": 0,
+    "source": "PolicyEngine",
+    "period": 2024
+  },
+  {
+    "variable": "social_security_survivors",
+    "domain": null,
+    "geoLevels": [
+      "national"
+    ],
+    "nationalValue": 160000000000.0,
+    "nationalCount": 1,
+    "stateCount": 0,
+    "districtCount": 0,
+    "source": "PolicyEngine",
+    "period": 2024
+  },
+  {
+    "variable": "spm_unit_capped_housing_subsidy",
+    "domain": null,
+    "geoLevels": [
+      "national"
+    ],
+    "nationalValue": 35000000000.0,
+    "nationalCount": 1,
+    "stateCount": 0,
+    "districtCount": 0,
+    "source": "PolicyEngine",
+    "period": 2024
+  },
+  {
+    "variable": "spm_unit_capped_work_childcare_expenses",
+    "domain": null,
+    "geoLevels": [
+      "national"
+    ],
+    "nationalValue": 348000000000.0,
+    "nationalCount": 1,
+    "stateCount": 0,
+    "districtCount": 0,
+    "source": "PolicyEngine",
+    "period": 2024
+  },
+  {
+    "variable": "ssi",
+    "domain": null,
+    "geoLevels": [
+      "national"
+    ],
+    "nationalValue": 57000000000.0,
+    "nationalCount": 1,
+    "stateCount": 0,
+    "districtCount": 0,
+    "source": "PolicyEngine",
+    "period": 2024
+  },
+  {
+    "variable": "state_income_tax",
+    "domain": null,
+    "geoLevels": [
+      "state"
+    ],
+    "nationalValue": null,
+    "nationalCount": 0,
+    "stateCount": 51,
+    "districtCount": 0,
+    "source": "Census STC",
+    "period": 2024
+  },
+  {
+    "variable": "tanf",
+    "domain": null,
+    "geoLevels": [
+      "national"
+    ],
+    "nationalValue": 9000000000.0,
+    "nationalCount": 1,
+    "stateCount": 0,
+    "districtCount": 0,
+    "source": "PolicyEngine",
+    "period": 2024
+  },
+  {
+    "variable": "tax_exempt_interest_income",
+    "domain": "tax_exempt_interest_income",
+    "geoLevels": [
+      "district",
+      "national",
+      "state"
+    ],
+    "nationalValue": 52418100000.0,
+    "nationalCount": 1,
+    "stateCount": 51,
+    "districtCount": 436,
+    "source": "IRS SOI",
+    "period": 2022
+  },
+  {
+    "variable": "tax_unit_count",
+    "domain": "aca_ptc",
+    "geoLevels": [
+      "district",
+      "national",
+      "state"
+    ],
+    "nationalValue": 6848330.0,
+    "nationalCount": 1,
+    "stateCount": 51,
+    "districtCount": 436,
+    "source": "IRS SOI",
+    "period": 2022
+  },
+  {
+    "variable": "tax_unit_count",
+    "domain": "dividend_income",
+    "geoLevels": [
+      "district",
+      "national",
+      "state"
+    ],
+    "nationalValue": 32043660.0,
+    "nationalCount": 1,
+    "stateCount": 51,
+    "districtCount": 436,
+    "source": "IRS SOI",
+    "period": 2022
+  },
+  {
+    "variable": "tax_unit_count",
+    "domain": "eitc_child_count",
+    "geoLevels": [
+      "district",
+      "national",
+      "state"
+    ],
+    "nationalValue": 8232160.0,
+    "nationalCount": 4,
+    "stateCount": 204,
+    "districtCount": 1744,
+    "source": "IRS SOI",
+    "period": 2022
+  },
+  {
+    "variable": "tax_unit_count",
+    "domain": "income_tax",
+    "geoLevels": [
+      "district",
+      "national",
+      "state"
+    ],
+    "nationalValue": 111637060.0,
+    "nationalCount": 1,
+    "stateCount": 51,
+    "districtCount": 436,
+    "source": "IRS SOI",
+    "period": 2022
+  },
+  {
+    "variable": "tax_unit_count",
+    "domain": "income_tax_before_credits",
+    "geoLevels": [
+      "district",
+      "national",
+      "state"
+    ],
+    "nationalValue": 126239280.0,
+    "nationalCount": 1,
+    "stateCount": 51,
+    "districtCount": 436,
+    "source": "IRS SOI",
+    "period": 2022
+  },
+  {
+    "variable": "tax_unit_count",
+    "domain": "medical_expense_deduction",
+    "geoLevels": [
+      "district",
+      "national",
+      "state"
+    ],
+    "nationalValue": 3833220.0,
+    "nationalCount": 1,
+    "stateCount": 51,
+    "districtCount": 436,
+    "source": "IRS SOI",
+    "period": 2022
+  },
+  {
+    "variable": "tax_unit_count",
+    "domain": "net_capital_gains",
+    "geoLevels": [
+      "district",
+      "national",
+      "state"
+    ],
+    "nationalValue": 29845710.0,
+    "nationalCount": 1,
+    "stateCount": 51,
+    "districtCount": 436,
+    "source": "IRS SOI",
+    "period": 2022
+  },
+  {
+    "variable": "tax_unit_count",
+    "domain": "qualified_business_income_deduction",
+    "geoLevels": [
+      "district",
+      "national",
+      "state"
+    ],
+    "nationalValue": 25015040.0,
+    "nationalCount": 1,
+    "stateCount": 51,
+    "districtCount": 436,
+    "source": "IRS SOI",
+    "period": 2022
+  },
+  {
+    "variable": "tax_unit_count",
+    "domain": "qualified_dividend_income",
+    "geoLevels": [
+      "district",
+      "national",
+      "state"
+    ],
+    "nationalValue": 30032560.0,
+    "nationalCount": 1,
+    "stateCount": 51,
+    "districtCount": 436,
+    "source": "IRS SOI",
+    "period": 2022
+  },
+  {
+    "variable": "tax_unit_count",
+    "domain": "real_estate_taxes",
+    "geoLevels": [
+      "district",
+      "national",
+      "state"
+    ],
+    "nationalValue": 12761330.0,
+    "nationalCount": 1,
+    "stateCount": 51,
+    "districtCount": 436,
+    "source": "IRS SOI",
+    "period": 2022
+  },
+  {
+    "variable": "tax_unit_count",
+    "domain": "refundable_ctc",
+    "geoLevels": [
+      "district",
+      "national",
+      "state"
+    ],
+    "nationalValue": 17312260.0,
+    "nationalCount": 1,
+    "stateCount": 51,
+    "districtCount": 436,
+    "source": "IRS SOI",
+    "period": 2022
+  },
+  {
+    "variable": "tax_unit_count",
+    "domain": "rental_income",
+    "geoLevels": [
+      "district",
+      "national",
+      "state"
+    ],
+    "nationalValue": 9199750.0,
+    "nationalCount": 1,
+    "stateCount": 51,
+    "districtCount": 436,
+    "source": "IRS SOI",
+    "period": 2022
+  },
+  {
+    "variable": "tax_unit_count",
+    "domain": "salt",
+    "geoLevels": [
+      "district",
+      "national",
+      "state"
+    ],
+    "nationalValue": 10842580.0,
+    "nationalCount": 1,
+    "stateCount": 51,
+    "districtCount": 436,
+    "source": "IRS SOI",
+    "period": 2022
+  },
+  {
+    "variable": "tax_unit_count",
+    "domain": "self_employment_income",
+    "geoLevels": [
+      "district",
+      "national",
+      "state"
+    ],
+    "nationalValue": 29730520.0,
+    "nationalCount": 1,
+    "stateCount": 51,
+    "districtCount": 436,
+    "source": "IRS SOI",
+    "period": 2022
+  },
+  {
+    "variable": "tax_unit_count",
+    "domain": "tax_exempt_interest_income",
+    "geoLevels": [
+      "district",
+      "national",
+      "state"
+    ],
+    "nationalValue": 6719610.0,
+    "nationalCount": 1,
+    "stateCount": 51,
+    "districtCount": 436,
+    "source": "IRS SOI",
+    "period": 2022
+  },
+  {
+    "variable": "tax_unit_count",
+    "domain": "tax_unit_partnership_s_corp_income",
+    "geoLevels": [
+      "district",
+      "national",
+      "state"
+    ],
+    "nationalValue": 9388080.0,
+    "nationalCount": 1,
+    "stateCount": 51,
+    "districtCount": 436,
+    "source": "IRS SOI",
+    "period": 2022
+  },
+  {
+    "variable": "tax_unit_count",
+    "domain": "taxable_interest_income",
+    "geoLevels": [
+      "district",
+      "national",
+      "state"
+    ],
+    "nationalValue": 48547160.0,
+    "nationalCount": 1,
+    "stateCount": 51,
+    "districtCount": 436,
+    "source": "IRS SOI",
+    "period": 2022
+  },
+  {
+    "variable": "tax_unit_count",
+    "domain": "taxable_ira_distributions",
+    "geoLevels": [
+      "district",
+      "national",
+      "state"
+    ],
+    "nationalValue": 16227430.0,
+    "nationalCount": 1,
+    "stateCount": 51,
+    "districtCount": 436,
+    "source": "IRS SOI",
+    "period": 2022
+  },
+  {
+    "variable": "tax_unit_count",
+    "domain": "taxable_pension_income",
+    "geoLevels": [
+      "district",
+      "national",
+      "state"
+    ],
+    "nationalValue": 29501160.0,
+    "nationalCount": 1,
+    "stateCount": 51,
+    "districtCount": 436,
+    "source": "IRS SOI",
+    "period": 2022
+  },
+  {
+    "variable": "tax_unit_count",
+    "domain": "taxable_social_security",
+    "geoLevels": [
+      "district",
+      "national",
+      "state"
+    ],
+    "nationalValue": 24167050.0,
+    "nationalCount": 1,
+    "stateCount": 51,
+    "districtCount": 436,
+    "source": "IRS SOI",
+    "period": 2022
+  },
+  {
+    "variable": "tax_unit_count",
+    "domain": "unemployment_compensation",
+    "geoLevels": [
+      "district",
+      "national",
+      "state"
+    ],
+    "nationalValue": 4573040.0,
+    "nationalCount": 1,
+    "stateCount": 51,
+    "districtCount": 436,
+    "source": "IRS SOI",
+    "period": 2022
+  },
+  {
+    "variable": "tax_unit_partnership_s_corp_income",
+    "domain": "tax_unit_partnership_s_corp_income",
+    "geoLevels": [
+      "district",
+      "national",
+      "state"
+    ],
+    "nationalValue": 996633005000.0,
+    "nationalCount": 1,
+    "stateCount": 51,
+    "districtCount": 436,
+    "source": "IRS SOI",
+    "period": 2022
+  },
+  {
+    "variable": "taxable_interest_income",
+    "domain": "taxable_interest_income",
+    "geoLevels": [
+      "district",
+      "national",
+      "state"
+    ],
+    "nationalValue": 123790578000.0,
+    "nationalCount": 1,
+    "stateCount": 51,
+    "districtCount": 436,
+    "source": "IRS SOI",
+    "period": 2022
+  },
+  {
+    "variable": "taxable_ira_distributions",
+    "domain": "taxable_ira_distributions",
+    "geoLevels": [
+      "district",
+      "national",
+      "state"
+    ],
+    "nationalValue": 427582079000.0,
+    "nationalCount": 1,
+    "stateCount": 51,
+    "districtCount": 436,
+    "source": "IRS SOI",
+    "period": 2022
+  },
+  {
+    "variable": "taxable_pension_income",
+    "domain": "taxable_pension_income",
+    "geoLevels": [
+      "district",
+      "national",
+      "state"
+    ],
+    "nationalValue": 884524169000.0,
+    "nationalCount": 1,
+    "stateCount": 51,
+    "districtCount": 436,
+    "source": "IRS SOI",
+    "period": 2022
+  },
+  {
+    "variable": "taxable_social_security",
+    "domain": "taxable_social_security",
+    "geoLevels": [
+      "district",
+      "national",
+      "state"
+    ],
+    "nationalValue": 450779980000.0,
+    "nationalCount": 1,
+    "stateCount": 51,
+    "districtCount": 436,
+    "source": "IRS SOI",
+    "period": 2022
+  },
+  {
+    "variable": "tip_income",
+    "domain": null,
+    "geoLevels": [
+      "national"
+    ],
+    "nationalValue": 53200000000.0,
+    "nationalCount": 1,
+    "stateCount": 0,
+    "districtCount": 0,
+    "source": "PolicyEngine",
+    "period": 2024
+  },
+  {
+    "variable": "traditional_ira_contributions",
+    "domain": null,
+    "geoLevels": [
+      "national"
+    ],
+    "nationalValue": 25000000000.0,
+    "nationalCount": 1,
+    "stateCount": 0,
+    "districtCount": 0,
+    "source": "PolicyEngine",
+    "period": 2024
+  },
+  {
+    "variable": "unemployment_compensation",
+    "domain": null,
+    "geoLevels": [
+      "national"
+    ],
+    "nationalValue": 34663000000.0,
+    "nationalCount": 1,
+    "stateCount": 0,
+    "districtCount": 0,
+    "source": "PolicyEngine",
+    "period": 2024
+  },
+  {
+    "variable": "unemployment_compensation",
+    "domain": "unemployment_compensation",
+    "geoLevels": [
+      "district",
+      "national",
+      "state"
+    ],
+    "nationalValue": 29336279000.0,
+    "nationalCount": 1,
+    "stateCount": 51,
+    "districtCount": 436,
+    "source": "IRS SOI",
+    "period": 2022
+  }
+]
