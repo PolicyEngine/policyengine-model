@@ -12,11 +12,13 @@ interface AppShellProps {
 
 export default function AppShell({ children, isEmbed, country }: AppShellProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return window.matchMedia('(max-width: 768px)').matches;
+  });
 
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 768px)');
-    setIsMobile(mq.matches);
     const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
     mq.addEventListener('change', handler);
     return () => mq.removeEventListener('change', handler);
@@ -24,9 +26,9 @@ export default function AppShell({ children, isEmbed, country }: AppShellProps) 
 
   // Close mobile menu on route change
   useEffect(() => {
-    const handleHash = () => setMobileMenuOpen(false);
-    window.addEventListener('hashchange', handleHash);
-    return () => window.removeEventListener('hashchange', handleHash);
+    const handleNav = () => setMobileMenuOpen(false);
+    window.addEventListener('popstate', handleNav);
+    return () => window.removeEventListener('popstate', handleNav);
   }, []);
 
   if (isEmbed) {

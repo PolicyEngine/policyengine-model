@@ -94,7 +94,7 @@ function AppleDropdown({
   return (
     <>
       {/* Click-away layer */}
-      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
+      {/* Click-away handler */}
       <div
         onClick={onClose}
         style={{ position: 'fixed', inset: 0, zIndex: 999, cursor: 'default' }}
@@ -171,7 +171,10 @@ export default function PEHeader({ country }: PEHeaderProps) {
   const [aboutOpen, setAboutOpen] = useState(false);
   const [countryOpen, setCountryOpen] = useState(false);
   const [mobileSheetOpen, setMobileSheetOpen] = useState(false);
-  const [isDesktop, setIsDesktop] = useState(true);
+  const [isDesktop, setIsDesktop] = useState(() => {
+    if (typeof window === 'undefined') return true;
+    return window.matchMedia('(min-width: 1024px)').matches;
+  });
   const aboutRef = useRef<HTMLDivElement>(null);
   const countryRef = useRef<HTMLDivElement>(null);
 
@@ -180,7 +183,6 @@ export default function PEHeader({ country }: PEHeaderProps) {
   // Media query for responsive behavior
   useEffect(() => {
     const mq = window.matchMedia('(min-width: 1024px)');
-    setIsDesktop(mq.matches);
     const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
     mq.addEventListener('change', handler);
     return () => mq.removeEventListener('change', handler);
@@ -353,7 +355,7 @@ export default function PEHeader({ country }: PEHeaderProps) {
       {mobileSheetOpen && (
         <>
           {/* Backdrop */}
-          {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
+          {/* Click-away handler */}
           <div
             style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.4)', zIndex: 1001 }}
             onClick={() => setMobileSheetOpen(false)}

@@ -1,10 +1,18 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
+
+// Mock next/navigation
+vi.mock('next/navigation', () => ({
+  usePathname: vi.fn(() => '/'),
+  useSearchParams: () => new URLSearchParams(),
+  useRouter: () => ({ push: vi.fn(), replace: vi.fn(), back: vi.fn() }),
+}));
+
 import Sidebar from '../components/layout/Sidebar';
 
 describe('Sidebar', () => {
   beforeEach(() => {
-    window.location.hash = '';
+    vi.clearAllMocks();
   });
 
   it('renders logo and "Model" text', () => {
@@ -28,7 +36,6 @@ describe('Sidebar', () => {
 
   it('expands Rules to show children when clicked', () => {
     render(<Sidebar country="us" />);
-    // Children should not be visible initially (unless auto-expanded)
     fireEvent.click(screen.getByText('Rules'));
     expect(screen.getByText('Coverage tracker')).toBeInTheDocument();
     expect(screen.getByText('Parameters')).toBeInTheDocument();

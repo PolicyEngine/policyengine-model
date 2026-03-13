@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useHashRoute, navigate } from '../../router';
 import { colors, typography, spacing } from '../../designTokens';
 import { IconChevronDown, IconChevronRight } from '@tabler/icons-react';
@@ -44,16 +44,16 @@ interface SidebarProps {
 
 export default function Sidebar({ country, onClose }: SidebarProps) {
   const currentPath = useHashRoute();
-  const [expanded, setExpanded] = useState<Record<string, boolean>>({});
-
-  // Auto-expand parent when navigating to a child route
-  useEffect(() => {
+  const [expanded, setExpanded] = useState<Record<string, boolean>>(() => {
+    // Auto-expand parent when initially rendering on a child route
+    const initial: Record<string, boolean> = {};
     for (const item of navItems) {
       if (item.children?.some((c) => c.path === currentPath)) {
-        setExpanded((prev) => ({ ...prev, [item.path]: true }));
+        initial[item.path] = true;
       }
     }
-  }, [currentPath]);
+    return initial;
+  });
 
   const handleNavClick = (item: NavItem) => {
     if (item.children) {
