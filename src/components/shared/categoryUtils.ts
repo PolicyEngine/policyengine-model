@@ -1,4 +1,4 @@
-export type Level = 'federal' | 'state' | 'local' | 'territory' | 'household';
+export type Level = 'federal' | 'state' | 'local' | 'territory' | 'household' | 'reform';
 
 /** Categorize an item by its path prefix (moduleName for variables, parameter path for parameters). */
 export function getLevel(path: string | null): Level {
@@ -6,7 +6,7 @@ export function getLevel(path: string | null): Level {
   if (path.startsWith('gov.local')) return 'local';
   if (path.startsWith('gov.states')) return 'state';
   if (path.startsWith('gov.territories')) return 'territory';
-  if (path.startsWith('contrib')) return 'household';
+  if (path.startsWith('gov.contrib') || path.startsWith('contrib')) return 'reform';
   if (path.startsWith('household') || path.startsWith('input')) return 'household';
   if (path.startsWith('gov.')) return 'federal';
   return 'household';
@@ -30,10 +30,13 @@ export function getSubGroup(path: string | null): string {
   if (path.startsWith('gov.territories.') && parts.length >= 3) {
     return parts[2].toUpperCase();
   }
-  if (path.startsWith('gov.')) {
+  if (path.startsWith('gov.contrib.') && parts.length >= 3) {
+    return parts[2];
+  }
+  if (path.startsWith('contrib.') && parts.length >= 2) {
     return parts[1];
   }
-  if (path.startsWith('contrib.')) {
+  if (path.startsWith('gov.')) {
     return parts[1];
   }
   if (path.startsWith('household.')) {
@@ -84,6 +87,10 @@ export function getSubGroupLabel(key: string, level: Level): string {
     const codes: Record<string, string> = { PR: 'Puerto Rico', GU: 'Guam', VI: 'US Virgin Islands' };
     return codes[key] || key;
   }
+  if (level === 'reform') {
+    // Reform sub-groups are typically program names
+    return key.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+  }
   if (level === 'household') {
     const names: Record<string, string> = {
       demographic: 'Demographics', income: 'Income', expense: 'Expenses',
@@ -129,7 +136,8 @@ export const LEVEL_CONFIG: Record<Level, { label: string; description: string; c
   state:     { label: 'State',            description: 'State-level tax and benefit programs across all 50 states + DC',   color: '#7C3AED', order: 1 },
   local:     { label: 'Local',            description: 'City and county programs',                                          color: '#059669', order: 2 },
   territory: { label: 'Territories',      description: 'Puerto Rico and other US territories',                              color: '#0891B2', order: 3 },
+  reform:    { label: 'Reforms',          description: 'Contributed reform proposals and policy experiments',               color: '#D97706', order: 4 },
   household: { label: 'Household inputs', description: 'Demographics, income, expenses, and geographic inputs',             color: '#6B7280', order: 5 },
 };
 
-export const LEVELS_ORDERED: Level[] = ['federal', 'state', 'local', 'territory', 'household'];
+export const LEVELS_ORDERED: Level[] = ['federal', 'state', 'local', 'territory', 'reform', 'household'];

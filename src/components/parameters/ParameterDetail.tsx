@@ -166,7 +166,7 @@ export default function ParameterDetail({ parameter: param, country }: Parameter
         {/* Links */}
         <div className="tw:flex tw:flex-wrap" style={{ gap: spacing.md }}>
           <a
-            href={`https://github.com/PolicyEngine/${githubRepo}/tree/master/${githubRepo.replace('-', '_')}/parameters/${yamlPath}`}
+            href={`https://github.com/PolicyEngine/${githubRepo}/tree/main/${githubRepo.replace('-', '_')}/parameters/${yamlPath}`}
             target="_blank"
             rel="noopener noreferrer"
             className="tw:flex tw:items-center"

@@ -253,18 +253,16 @@ export default function ParameterExplorer({ parameters, country }: ParameterExpl
   const debouncedSearch = useDebounce(search, 200);
   const isSearching = !!debouncedSearch;
 
-  // Only show leaf parameters (actual values), exclude nodes and contrib
+  // Only show leaf parameters (actual values), exclude nodes
   const allParameters = useMemo(() => {
     return Object.values(parameters)
-      .filter((p): p is ParameterLeaf =>
-        p.type === 'parameter' && !p.parameter.startsWith('contrib')
-      )
-      .sort((a, b) => a.label.localeCompare(b.label));
+      .filter((p): p is ParameterLeaf => p.type === 'parameter')
+      .sort((a, b) => (a.label ?? '').localeCompare(b.label ?? ''));
   }, [parameters]);
 
   // Count per level
   const levelCounts = useMemo(() => {
-    const counts: Record<Level, number> = { federal: 0, state: 0, local: 0, territory: 0, household: 0 };
+    const counts: Record<Level, number> = { federal: 0, state: 0, local: 0, territory: 0, reform: 0, household: 0 };
     for (const p of allParameters) counts[getLevel(p.parameter)]++;
     return counts;
   }, [allParameters]);

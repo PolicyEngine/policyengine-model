@@ -286,7 +286,7 @@ export default function VariableExplorer({ variables, parameters, country, onVie
 
   // Count per level
   const levelCounts = useMemo(() => {
-    const counts: Record<Level, number> = { federal: 0, state: 0, local: 0, territory: 0, household: 0 };
+    const counts: Record<Level, number> = { federal: 0, state: 0, local: 0, territory: 0, reform: 0, household: 0 };
     for (const v of allVariables) counts[getLevel(v)]++;
     return counts;
   }, [allVariables]);

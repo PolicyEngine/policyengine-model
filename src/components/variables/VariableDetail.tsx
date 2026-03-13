@@ -52,6 +52,8 @@ export default function VariableDetail({ variable, variables, parameters, countr
   const subtracts = Array.isArray(variable.subtracts) ? variable.subtracts : (variable.subtracts ? Object.keys(variable.subtracts) : []);
   const hasTree = adds.length > 0 || subtracts.length > 0;
   const githubRepo = country === 'uk' ? 'policyengine-uk' : 'policyengine-us';
+  // moduleName is e.g. "gov.states.al.tax.income.al_agi"
+  // maps to variables/gov/states/al/tax/income/al_agi.py
   const modulePath = variable.moduleName?.replace(/\./g, '/');
 
   return (
@@ -136,7 +138,7 @@ export default function VariableDetail({ variable, variables, parameters, countr
         <div className="tw:flex tw:flex-wrap" style={{ gap: spacing.md, marginBottom: hasTree ? spacing.lg : 0 }}>
           {variable.moduleName && (
             <a
-              href={`https://github.com/PolicyEngine/${githubRepo}/tree/master/${githubRepo.replace('-', '_')}/variables/${modulePath}`}
+              href={`https://github.com/PolicyEngine/${githubRepo}/blob/main/${githubRepo.replace('-', '_')}/variables/${modulePath}.py`}
               target="_blank"
               rel="noopener noreferrer"
               className="tw:flex tw:items-center"

@@ -1,7 +1,7 @@
 import type { Program, CoverageStatus, StateImplementation } from '../types/Program';
 
-const GITHUB_BASE = 'https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us';
-const TESTS_BASE = 'https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/tests';
+const GITHUB_BASE = 'https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us';
+const TESTS_BASE = 'https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/tests';
 
 interface ApiProgram {
   id: string;
