@@ -6,11 +6,10 @@ import PEHeader from './PEHeader';
 
 interface AppShellProps {
   children: ReactNode;
-  isEmbed: boolean;
   country: string;
 }
 
-export default function AppShell({ children, isEmbed, country }: AppShellProps) {
+export default function AppShell({ children, country }: AppShellProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(() => {
     if (typeof window === 'undefined') return false;
@@ -23,23 +22,6 @@ export default function AppShell({ children, isEmbed, country }: AppShellProps) 
     mq.addEventListener('change', handler);
     return () => mq.removeEventListener('change', handler);
   }, []);
-
-  // Close mobile menu on route change
-  useEffect(() => {
-    const handleNav = () => setMobileMenuOpen(false);
-    window.addEventListener('popstate', handleNav);
-    return () => window.removeEventListener('popstate', handleNav);
-  }, []);
-
-  if (isEmbed) {
-    return (
-      <div className="tw:min-h-screen">
-        <main className="tw:max-w-[1200px] tw:mx-auto tw:p-6">
-          {children}
-        </main>
-      </div>
-    );
-  }
 
   if (isMobile) {
     return (
