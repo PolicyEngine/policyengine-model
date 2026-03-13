@@ -44,11 +44,23 @@ interface SidebarProps {
   onClose?: () => void;
 }
 
+/** Extract the base prefix when embedded (e.g. '/us/model' from '/us/model/data/pipeline'). */
+function useBasePrefix(): string {
+  const pathname = usePathname();
+  const match = pathname.match(/^\/\w+\/model/);
+  return match ? match[0] : '';
+}
+
 export default function Sidebar({ country, onClose }: SidebarProps) {
-  const currentPath = usePathname();
+  const fullPath = usePathname();
+  const basePrefix = useBasePrefix();
+  const currentPath = basePrefix ? fullPath.slice(basePrefix.length) || '/' : fullPath;
   const searchParams = useSearchParams();
   const search = searchParams.toString();
-  const href = (path: string) => search ? `${path}?${search}` : path;
+  const href = (path: string) => {
+    const full = `${basePrefix}${path === '/' && basePrefix ? '' : path}`;
+    return search ? `${full}?${search}` : full;
+  };
 
   const [expanded, setExpanded] = useState<Record<string, boolean>>(() => {
     const initial: Record<string, boolean> = {};
