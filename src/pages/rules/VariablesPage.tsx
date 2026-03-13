@@ -1,19 +1,103 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { IconExternalLink } from '@tabler/icons-react';
 import PageHeader from '../../components/layout/PageHeader';
 import VariableExplorer from '../../components/variables/VariableExplorer';
 import { fetchMetadata } from '../../data/fetchMetadata';
 import type { Metadata } from '../../types/Variable';
 import { colors, typography, spacing } from '../../designTokens';
 
+const FLOWCHART_BASE = 'https://policyengine.github.io/flowchart';
+const DEFAULT_VAR = 'household_net_income';
+
+function FlowchartPreview({ country, variable, sectionRef }: {
+  country: string;
+  variable: string;
+  sectionRef: React.RefObject<HTMLDivElement | null>;
+}) {
+  const flowchartUrl = `${FLOWCHART_BASE}/?variable=${variable}&country=${country.toUpperCase()}`;
+
+  return (
+    <div ref={sectionRef} style={{ marginTop: spacing['4xl'], marginBottom: spacing['3xl'] }}>
+      <div className="tw:flex tw:items-center tw:justify-between tw:flex-wrap" style={{ gap: spacing.md, marginBottom: spacing.lg }}>
+        <div>
+          <h3 style={{
+            fontSize: typography.fontSize.lg,
+            fontWeight: typography.fontWeight.bold,
+            color: colors.primary[900],
+            margin: 0,
+          }}>
+            Computation flowchart
+          </h3>
+          <p style={{
+            fontSize: typography.fontSize.sm,
+            color: colors.text.secondary,
+            margin: `${spacing.xs} 0 0`,
+          }}>
+            {variable === DEFAULT_VAR
+              ? 'See how any variable is calculated from its dependencies'
+              : <>Showing <span style={{ fontFamily: typography.fontFamily.mono, fontWeight: typography.fontWeight.medium }}>{variable}</span></>
+            }
+          </p>
+        </div>
+        <a
+          href={flowchartUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="tw:flex tw:items-center"
+          style={{
+            gap: spacing.xs,
+            fontSize: typography.fontSize.sm,
+            fontWeight: typography.fontWeight.medium,
+            color: colors.primary[600],
+            textDecoration: 'none',
+          }}
+        >
+          Open in new tab <IconExternalLink size={14} stroke={1.5} />
+        </a>
+      </div>
+      <div
+        style={{
+          borderRadius: spacing.radius.xl,
+          border: `1px solid ${colors.border.light}`,
+          overflow: 'hidden',
+          backgroundColor: colors.white,
+        }}
+      >
+        <iframe
+          key={flowchartUrl}
+          src={flowchartUrl}
+          title="Variable computation flowchart"
+          style={{
+            width: '100%',
+            height: '600px',
+            border: 'none',
+            display: 'block',
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
 export default function VariablesPage({ country }: { country: string }) {
   const [metadata, setMetadata] = useState<Metadata | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [flowchartVar, setFlowchartVar] = useState(DEFAULT_VAR);
+  const flowchartRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     fetchMetadata(country)
       .then(setMetadata)
       .catch((err) => setError(err.message));
   }, [country]);
+
+  const handleViewFlowchart = (varName: string) => {
+    setFlowchartVar(varName);
+    // Small delay to let the iframe key change, then scroll
+    setTimeout(() => {
+      flowchartRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 50);
+  };
 
   return (
     <div>
@@ -42,8 +126,11 @@ export default function VariablesPage({ country }: { country: string }) {
           variables={metadata.variables}
           parameters={metadata.parameters}
           country={country}
+          onViewFlowchart={handleViewFlowchart}
         />
       )}
+
+      <FlowchartPreview country={country} variable={flowchartVar} sectionRef={flowchartRef} />
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { IconSearch, IconChevronDown, IconChevronRight, IconArrowLeft } from '@tabler/icons-react';
+import { IconSearch, IconArrowLeft } from '@tabler/icons-react';
 import type { Variable, Parameter } from '../../types/Variable';
 import { colors, typography, spacing } from '../../designTokens';
 import { useDebounce } from '../../hooks/useDebounce';
@@ -13,9 +13,10 @@ interface VariableExplorerProps {
   variables: Record<string, Variable>;
   parameters: Record<string, Parameter>;
   country: string;
+  onViewFlowchart?: (varName: string) => void;
 }
 
-type Level = 'federal' | 'state' | 'local' | 'territory' | 'contrib' | 'household';
+type Level = 'federal' | 'state' | 'local' | 'territory' | 'household';
 
 /** Categorize a variable by its moduleName prefix. */
 function getLevel(v: Variable): Level {
@@ -24,13 +25,13 @@ function getLevel(v: Variable): Level {
   if (m.startsWith('gov.local')) return 'local';
   if (m.startsWith('gov.states')) return 'state';
   if (m.startsWith('gov.territories')) return 'territory';
-  if (m.startsWith('contrib')) return 'contrib';
+  if (m.startsWith('contrib')) return 'household'; // filtered out upstream
   if (m.startsWith('household') || m.startsWith('input')) return 'household';
   if (m.startsWith('gov.')) return 'federal';
   return 'household';
 }
 
-/** Get a human-readable sub-group label for grouping within a level. */
+/** Get a human-readable sub-group key for grouping within a level. */
 function getSubGroup(v: Variable): string {
   const m = v.moduleName;
   if (!m) return 'Other';
@@ -44,170 +45,355 @@ function getSubGroup(v: Variable): string {
     return parts[2].toUpperCase();
   }
   if (m.startsWith('gov.local.') && parts.length >= 4) {
-    const state = parts[2].toUpperCase();
-    const locality = parts[3];
-    const localityNames: Record<string, string> = {
-      la: 'Los Angeles', riv: 'Riverside', nyc: 'New York City',
-      ala: 'Alameda', sf: 'San Francisco', denver: 'Denver',
-      harris: 'Harris County', montgomery: 'Montgomery County',
-      multnomah_county: 'Multnomah County',
-    };
-    return `${localityNames[locality] || locality} (${state})`;
+    return `${parts[2].toUpperCase()}-${parts[3]}`;
   }
   if (m.startsWith('gov.territories.') && parts.length >= 3) {
-    const codes: Record<string, string> = { pr: 'Puerto Rico', gu: 'Guam', vi: 'US Virgin Islands' };
-    return codes[parts[2]] || parts[2].toUpperCase();
+    return parts[2].toUpperCase();
   }
   if (m.startsWith('gov.')) {
-    const agencyNames: Record<string, string> = {
-      irs: 'IRS', hhs: 'HHS', usda: 'USDA', ssa: 'SSA', hud: 'HUD',
-      ed: 'Dept. of Education', aca: 'ACA', doe: 'Dept. of Energy',
-      fcc: 'FCC', puf: 'IRS PUF', simulation: 'Simulation',
-    };
-    return agencyNames[parts[1]] || parts[1].toUpperCase();
+    return parts[1];
   }
   if (m.startsWith('contrib.')) {
-    const names: Record<string, string> = {
-      taxsim: 'TAXSIM', ubi_center: 'UBI Center', congress: 'Congressional proposals',
-    };
-    return names[parts[1]] || parts[1];
+    return parts[1];
   }
   if (m.startsWith('household.')) {
-    const names: Record<string, string> = {
-      demographic: 'Demographics', income: 'Income', expense: 'Expenses',
-      assets: 'Assets', marginal_tax_rate: 'Marginal tax rates', cliff: 'Cliff analysis',
-    };
-    return names[parts[1]] || parts[1];
+    return parts[1];
   }
   return 'Other';
 }
 
+/** Get a display label for a sub-group key. */
+function getSubGroupLabel(key: string, level: Level): string {
+  if (level === 'federal') {
+    const agencyNames: Record<string, string> = {
+      irs: 'Internal Revenue Service (IRS)', hhs: 'Health & Human Services (HHS)',
+      usda: 'USDA', ssa: 'Social Security Administration (SSA)',
+      hud: 'Housing & Urban Development (HUD)', ed: 'Dept. of Education',
+      aca: 'Affordable Care Act (ACA)', doe: 'Dept. of Energy',
+      fcc: 'Federal Communications Commission (FCC)', puf: 'IRS Public Use File',
+      simulation: 'Simulation',
+    };
+    return agencyNames[key] || key.toUpperCase();
+  }
+  if (level === 'state') {
+    const stateNames: Record<string, string> = {
+      AL:'Alabama',AK:'Alaska',AZ:'Arizona',AR:'Arkansas',CA:'California',CO:'Colorado',
+      CT:'Connecticut',DE:'Delaware',DC:'District of Columbia',FL:'Florida',GA:'Georgia',
+      HI:'Hawaii',ID:'Idaho',IL:'Illinois',IN:'Indiana',IA:'Iowa',KS:'Kansas',KY:'Kentucky',
+      LA:'Louisiana',ME:'Maine',MD:'Maryland',MA:'Massachusetts',MI:'Michigan',MN:'Minnesota',
+      MS:'Mississippi',MO:'Missouri',MT:'Montana',NE:'Nebraska',NV:'Nevada',NH:'New Hampshire',
+      NJ:'New Jersey',NM:'New Mexico',NY:'New York',NC:'North Carolina',ND:'North Dakota',
+      OH:'Ohio',OK:'Oklahoma',OR:'Oregon',PA:'Pennsylvania',RI:'Rhode Island',SC:'South Carolina',
+      SD:'South Dakota',TN:'Tennessee',TX:'Texas',UT:'Utah',VT:'Vermont',VA:'Virginia',
+      WA:'Washington',WV:'West Virginia',WI:'Wisconsin',WY:'Wyoming',
+    };
+    if (key === 'Cross-state') return 'Cross-state';
+    return stateNames[key] || key;
+  }
+  if (level === 'local') {
+    const [state, locality] = key.split('-');
+    const localityNames: Record<string, string> = {
+      la: 'Los Angeles', riv: 'Riverside', nyc: 'New York City',
+      ala: 'Alameda', sf: 'San Francisco', denver: 'Denver',
+      harris: 'Harris County', montgomery: 'Montgomery County',
+      multnomah_county: 'Multnomah County', tax: 'Local taxes',
+    };
+    return `${localityNames[locality] || locality} (${state})`;
+  }
+  if (level === 'territory') {
+    const codes: Record<string, string> = { PR: 'Puerto Rico', GU: 'Guam', VI: 'US Virgin Islands' };
+    return codes[key] || key;
+  }
+  if (level === 'household') {
+    const names: Record<string, string> = {
+      demographic: 'Demographics', income: 'Income', expense: 'Expenses',
+      assets: 'Assets', marginal_tax_rate: 'Marginal tax rates', cliff: 'Cliff analysis',
+    };
+    return names[key] || key;
+  }
+  return key;
+}
+
+/** Description for federal agency sub-groups. */
+function getSubGroupDescription(key: string, level: Level): string | null {
+  if (level === 'federal') {
+    const desc: Record<string, string> = {
+      irs: 'Income tax, credits, deductions, and filing rules',
+      hhs: 'Medicaid, CHIP, ACA subsidies, and poverty guidelines',
+      usda: 'SNAP, school meals, WIC, and CSFP',
+      ssa: 'Social Security benefits and payroll taxes',
+      hud: 'Housing assistance and rental subsidies',
+      ed: 'Pell grants and student aid',
+      aca: 'Marketplace eligibility and premium subsidies',
+      doe: 'Energy efficiency rebates and credits',
+      fcc: 'Affordable Connectivity Program',
+    };
+    return desc[key] || null;
+  }
+  if (level === 'household') {
+    const desc: Record<string, string> = {
+      demographic: 'Age, marital status, disability, and household composition',
+      income: 'Employment, self-employment, investment, and other income sources',
+      expense: 'Childcare, medical, housing, and other deductible expenses',
+      assets: 'Savings, property, and other asset holdings',
+      marginal_tax_rate: 'Effective marginal rates on additional income',
+      cliff: 'Benefit cliffs from income changes',
+    };
+    return desc[key] || null;
+  }
+  return null;
+}
+
 const LEVEL_CONFIG: Record<Level, { label: string; description: string; color: string; order: number }> = {
-  federal:   { label: 'Federal',            description: 'IRS, HHS, USDA, SSA, HUD, and other federal agencies',            color: '#1D4ED8', order: 0 },
-  state:     { label: 'State',              description: 'State-level tax and benefit programs across all 50 states + DC',   color: '#7C3AED', order: 1 },
-  local:     { label: 'Local',              description: 'City and county programs',                                          color: '#059669', order: 2 },
-  territory: { label: 'Territories',        description: 'Puerto Rico and other US territories',                              color: '#0891B2', order: 3 },
-  contrib:   { label: 'Contributed / Reform', description: 'TAXSIM validation, UBI proposals, and congressional reforms',     color: '#D97706', order: 4 },
-  household: { label: 'Household inputs',   description: 'Demographics, income, expenses, and geographic inputs',             color: '#6B7280', order: 5 },
+  federal:   { label: 'Federal',          description: 'IRS, HHS, USDA, SSA, HUD, and other federal agencies',            color: '#1D4ED8', order: 0 },
+  state:     { label: 'State',            description: 'State-level tax and benefit programs across all 50 states + DC',   color: '#7C3AED', order: 1 },
+  local:     { label: 'Local',            description: 'City and county programs',                                          color: '#059669', order: 2 },
+  territory: { label: 'Territories',      description: 'Puerto Rico and other US territories',                              color: '#0891B2', order: 3 },
+  household: { label: 'Household inputs', description: 'Demographics, income, expenses, and geographic inputs',             color: '#6B7280', order: 5 },
 };
 
-const LEVELS_ORDERED: Level[] = ['federal', 'state', 'local', 'territory', 'contrib', 'household'];
+const LEVELS_ORDERED: Level[] = ['federal', 'state', 'local', 'territory', 'household'];
 
-// ─── Sub-group section (collapsible list of variables) ───────────────────────
+// ─── Variable list (shown after selecting a sub-group) ──────────────────────
 
-function SubGroupSection({
-  label,
-  color,
+function VariableList({
   vars,
-  allVariables: allVars,
+  allVariables,
   parameters,
   country,
   selectedVar,
   onSelect,
+  onViewFlowchart,
 }: {
-  label: string;
-  color: string;
   vars: Variable[];
   allVariables: Record<string, Variable>;
   parameters: Record<string, Parameter>;
   country: string;
   selectedVar: string | null;
   onSelect: (name: string) => void;
+  onViewFlowchart?: (varName: string) => void;
 }) {
-  const [expanded, setExpanded] = useState(false);
   const [showAll, setShowAll] = useState(false);
   const visible = showAll ? vars : vars.slice(0, PAGE_SIZE);
 
   return (
-    <div style={{ marginBottom: spacing.sm }}>
-      <button
-        onClick={() => setExpanded(!expanded)}
-        className="tw:flex tw:items-center tw:w-full tw:text-left tw:cursor-pointer"
-        style={{
-          gap: spacing.sm,
-          padding: `${spacing.sm} ${spacing.md}`,
-          borderRadius: spacing.radius.lg,
-          border: 'none',
-          backgroundColor: expanded ? `${color}08` : 'transparent',
-          fontFamily: typography.fontFamily.primary,
-          transition: 'background-color 0.15s ease',
-        }}
-      >
-        {expanded ? (
-          <IconChevronDown size={14} stroke={1.5} style={{ color, flexShrink: 0 }} />
-        ) : (
-          <IconChevronRight size={14} stroke={1.5} style={{ color, flexShrink: 0 }} />
-        )}
-        <span style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.medium, color: colors.text.primary }}>
-          {label}
-        </span>
-        <span style={{ fontSize: typography.fontSize.xs, color: colors.text.tertiary }}>
-          ({vars.length})
-        </span>
-      </button>
+    <div>
+      <div className="tw:flex tw:flex-col" style={{ gap: spacing.sm }}>
+        {visible.map((v) => (
+          <div key={v.name}>
+            <VariableCard
+              variable={v}
+              isSelected={selectedVar === v.name}
+              onClick={() => onSelect(v.name)}
+            />
+            <AnimatePresence>
+              {selectedVar === v.name && (
+                <VariableDetail
+                  variable={v}
+                  variables={allVariables}
+                  parameters={parameters}
+                  country={country}
+                  onViewFlowchart={onViewFlowchart}
+                />
+              )}
+            </AnimatePresence>
+          </div>
+        ))}
+      </div>
+      {vars.length > PAGE_SIZE && !showAll && (
+        <button
+          onClick={() => setShowAll(true)}
+          className="tw:cursor-pointer"
+          style={{
+            display: 'block',
+            margin: `${spacing.lg} auto`,
+            padding: `${spacing.xs} ${spacing.xl}`,
+            border: `1px solid ${colors.border.light}`,
+            borderRadius: spacing.radius.lg,
+            backgroundColor: colors.white,
+            color: colors.primary[600],
+            fontSize: typography.fontSize.xs,
+            fontWeight: typography.fontWeight.medium,
+            fontFamily: typography.fontFamily.primary,
+          }}
+        >
+          Show all {vars.length}
+        </button>
+      )}
+    </div>
+  );
+}
 
-      <AnimatePresence>
-        {expanded && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.2 }}
-            style={{ overflow: 'hidden' }}
+// ─── State tile grid ─────────────────────────────────────────────────────────
+
+function StateTileGrid({
+  subGroups,
+  levelColor,
+  onSelect,
+}: {
+  subGroups: [string, Variable[]][];
+  levelColor: string;
+  onSelect: (key: string) => void;
+}) {
+  // Separate Cross-state from actual states
+  const states = subGroups.filter(([k]) => k !== 'Cross-state' && k.length === 2);
+  const other = subGroups.filter(([k]) => k === 'Cross-state' || k.length !== 2);
+  const maxCount = Math.max(...states.map(([, v]) => v.length), 1);
+
+  return (
+    <div>
+      <div
+        className="tw:grid tw:grid-cols-[repeat(auto-fill,minmax(64px,1fr))]"
+        style={{ gap: spacing.sm }}
+      >
+        {states.map(([key, vars]) => {
+          const intensity = Math.max(0.15, vars.length / maxCount);
+          return (
+            <motion.button
+              key={key}
+              onClick={() => onSelect(key)}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.2 }}
+              className="tw:cursor-pointer tw:text-center"
+              style={{
+                padding: spacing.md,
+                borderRadius: spacing.radius.lg,
+                border: `1px solid ${colors.border.light}`,
+                backgroundColor: colors.white,
+                fontFamily: typography.fontFamily.primary,
+                transition: 'border-color 0.15s ease, box-shadow 0.15s ease',
+              }}
+              whileHover={{
+                borderColor: levelColor,
+                boxShadow: `0 0 0 1px ${levelColor}25`,
+              }}
+            >
+              <div style={{
+                fontSize: typography.fontSize.lg,
+                fontWeight: typography.fontWeight.bold,
+                color: levelColor,
+                opacity: 0.4 + intensity * 0.6,
+              }}>
+                {key}
+              </div>
+              <div style={{
+                fontSize: '10px',
+                color: colors.text.tertiary,
+                marginTop: '2px',
+              }}>
+                {vars.length}
+              </div>
+            </motion.button>
+          );
+        })}
+      </div>
+      {other.length > 0 && (
+        <div className="tw:flex tw:flex-wrap" style={{ gap: spacing.sm, marginTop: spacing.lg }}>
+          {other.map(([key, vars]) => (
+            <button
+              key={key}
+              onClick={() => onSelect(key)}
+              className="tw:cursor-pointer"
+              style={{
+                padding: `${spacing.sm} ${spacing.lg}`,
+                borderRadius: spacing.radius.lg,
+                border: `1px solid ${colors.border.light}`,
+                backgroundColor: colors.white,
+                fontFamily: typography.fontFamily.primary,
+                fontSize: typography.fontSize.sm,
+                color: colors.text.secondary,
+              }}
+            >
+              {getSubGroupLabel(key, 'state')} ({vars.length})
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── Sub-group card grid (for federal, local, household, territory) ──────────
+
+function SubGroupCardGrid({
+  subGroups,
+  level,
+  levelColor,
+  onSelect,
+}: {
+  subGroups: [string, Variable[]][];
+  level: Level;
+  levelColor: string;
+  onSelect: (key: string) => void;
+}) {
+  return (
+    <div
+      className="tw:grid tw:grid-cols-[repeat(auto-fill,minmax(250px,1fr))]"
+      style={{ gap: spacing.md }}
+    >
+      {subGroups.map(([key, vars], i) => {
+        const label = getSubGroupLabel(key, level);
+        const desc = getSubGroupDescription(key, level);
+        return (
+          <motion.button
+            key={key}
+            onClick={() => onSelect(key)}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.2, delay: i * 0.03 }}
+            className="tw:text-left tw:cursor-pointer"
+            style={{
+              padding: spacing.lg,
+              borderRadius: spacing.radius.xl,
+              border: `1px solid ${colors.border.light}`,
+              backgroundColor: colors.white,
+              fontFamily: typography.fontFamily.primary,
+              transition: 'border-color 0.15s ease, box-shadow 0.15s ease',
+            }}
+            whileHover={{
+              borderColor: levelColor,
+              boxShadow: `0 0 0 1px ${levelColor}25`,
+            }}
           >
-            <div className="tw:flex tw:flex-col" style={{ gap: spacing.sm, padding: `${spacing.sm} 0 0 ${spacing.lg}` }}>
-              {visible.map((v) => (
-                <div key={v.name}>
-                  <VariableCard
-                    variable={v}
-                    isSelected={selectedVar === v.name}
-                    onClick={() => onSelect(v.name)}
-                  />
-                  <AnimatePresence>
-                    {selectedVar === v.name && (
-                      <VariableDetail
-                        variable={v}
-                        variables={allVars}
-                        parameters={parameters}
-                        country={country}
-                      />
-                    )}
-                  </AnimatePresence>
-                </div>
-              ))}
+            <div style={{
+              fontSize: typography.fontSize.sm,
+              fontWeight: typography.fontWeight.bold,
+              color: levelColor,
+              marginBottom: spacing.xs,
+            }}>
+              {label}
             </div>
-            {vars.length > PAGE_SIZE && !showAll && (
-              <button
-                onClick={() => setShowAll(true)}
-                className="tw:cursor-pointer"
-                style={{
-                  display: 'block',
-                  margin: `${spacing.md} auto`,
-                  padding: `${spacing.xs} ${spacing.xl}`,
-                  border: `1px solid ${colors.border.light}`,
-                  borderRadius: spacing.radius.lg,
-                  backgroundColor: colors.white,
-                  color: colors.primary[600],
-                  fontSize: typography.fontSize.xs,
-                  fontWeight: typography.fontWeight.medium,
-                  fontFamily: typography.fontFamily.primary,
-                }}
-              >
-                Show all {vars.length}
-              </button>
+            <div style={{
+              fontSize: typography.fontSize.xl,
+              fontWeight: typography.fontWeight.bold,
+              color: colors.text.primary,
+              marginBottom: desc ? spacing.xs : 0,
+            }}>
+              {vars.length}
+            </div>
+            {desc && (
+              <div style={{
+                fontSize: typography.fontSize.xs,
+                color: colors.text.secondary,
+                lineHeight: 1.4,
+              }}>
+                {desc}
+              </div>
             )}
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </motion.button>
+        );
+      })}
     </div>
   );
 }
 
 // ─── Main explorer ───────────────────────────────────────────────────────────
 
-export default function VariableExplorer({ variables, parameters, country }: VariableExplorerProps) {
+export default function VariableExplorer({ variables, parameters, country, onViewFlowchart }: VariableExplorerProps) {
   const [search, setSearch] = useState('');
   const [activeLevel, setActiveLevel] = useState<Level | null>(null);
+  const [activeSubGroup, setActiveSubGroup] = useState<string | null>(null);
   const [selectedVar, setSelectedVar] = useState<string | null>(null);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const sentinelRef = useRef<HTMLDivElement>(null);
@@ -215,21 +401,21 @@ export default function VariableExplorer({ variables, parameters, country }: Var
   const debouncedSearch = useDebounce(search, 200);
   const isSearching = !!debouncedSearch;
 
-  // All variables (hidden_input excluded), sorted
+  // All variables (hidden_input + contrib excluded), sorted
   const allVariables = useMemo(() => {
     return Object.values(variables)
-      .filter((v) => !v.hidden_input)
+      .filter((v) => !v.hidden_input && !v.moduleName?.startsWith('contrib'))
       .sort((a, b) => a.label.localeCompare(b.label));
   }, [variables]);
 
   // Count per level
   const levelCounts = useMemo(() => {
-    const counts: Record<Level, number> = { federal: 0, state: 0, local: 0, territory: 0, contrib: 0, household: 0 };
+    const counts: Record<Level, number> = { federal: 0, state: 0, local: 0, territory: 0, household: 0 };
     for (const v of allVariables) counts[getLevel(v)]++;
     return counts;
   }, [allVariables]);
 
-  // Filtered list (search + kind + entity + active level)
+  // Filtered list
   const filtered = useMemo(() => {
     let result = allVariables;
 
@@ -248,7 +434,7 @@ export default function VariableExplorer({ variables, parameters, country }: Var
 
   // Sub-groups for the active level
   const subGroups = useMemo(() => {
-    if (!activeLevel && !isSearching) return [];
+    if (!activeLevel) return [];
     const map = new Map<string, Variable[]>();
     for (const v of filtered) {
       const key = getSubGroup(v);
@@ -256,12 +442,19 @@ export default function VariableExplorer({ variables, parameters, country }: Var
       map.get(key)!.push(v);
     }
     return [...map.entries()].sort(([a], [b]) => a.localeCompare(b));
-  }, [filtered, activeLevel, isSearching]);
+  }, [filtered, activeLevel]);
+
+  // Variables in active sub-group
+  const subGroupVars = useMemo(() => {
+    if (!activeSubGroup) return [];
+    const entry = subGroups.find(([k]) => k === activeSubGroup);
+    return entry ? entry[1] : [];
+  }, [subGroups, activeSubGroup]);
 
   // Reset on filter changes
   useEffect(() => {
     setVisibleCount(PAGE_SIZE);
-  }, [debouncedSearch, activeLevel]);
+  }, [debouncedSearch, activeLevel, activeSubGroup]);
 
   // Infinite scroll for search mode
   useEffect(() => {
@@ -285,6 +478,23 @@ export default function VariableExplorer({ variables, parameters, country }: Var
   }, []);
 
   const visibleFlat = filtered.slice(0, visibleCount);
+
+  // Navigation helpers
+  const goBack = () => {
+    if (activeSubGroup) {
+      setActiveSubGroup(null);
+      setSelectedVar(null);
+    } else {
+      setActiveLevel(null);
+      setSelectedVar(null);
+    }
+  };
+
+  const breadcrumb = activeLevel
+    ? activeSubGroup
+      ? `${LEVEL_CONFIG[activeLevel].label} / ${getSubGroupLabel(activeSubGroup, activeLevel)}`
+      : LEVEL_CONFIG[activeLevel].label
+    : null;
 
   // ─── Render ──────────────────────────────────────────────────────────────
 
@@ -315,40 +525,35 @@ export default function VariableExplorer({ variables, parameters, country }: Var
         />
       </div>
 
-      {/* Filters row (shown when drilling in or searching) */}
-      {(activeLevel || isSearching) && (
+      {/* Search filter pills */}
+      {isSearching && (
         <div className="tw:flex tw:flex-wrap tw:items-center" style={{ gap: spacing.lg, marginBottom: spacing.xl }}>
-          {/* Level filter pills */}
-          {isSearching && (
-            <div className="tw:flex tw:flex-wrap" style={{ gap: spacing.xs }}>
-              {([null, ...LEVELS_ORDERED] as (Level | null)[]).map((level) => {
-                const label = level ? LEVEL_CONFIG[level].label : 'All';
-                const color = level ? LEVEL_CONFIG[level].color : colors.text.secondary;
-                const isActive = activeLevel === level;
-                return (
-                  <button
-                    key={level ?? 'all'}
-                    onClick={() => setActiveLevel(level)}
-                    className="tw:cursor-pointer"
-                    style={{
-                      padding: `${spacing.xs} ${spacing.md}`,
-                      borderRadius: spacing.radius.lg,
-                      border: `1px solid ${isActive ? color : colors.border.light}`,
-                      backgroundColor: isActive ? `${color}12` : colors.white,
-                      color: isActive ? color : colors.text.tertiary,
-                      fontSize: typography.fontSize.xs,
-                      fontWeight: typography.fontWeight.semibold,
-                      fontFamily: typography.fontFamily.primary,
-                    }}
-                  >
-                    {label}
-                  </button>
-                );
-              })}
-            </div>
-          )}
-
-          {/* Count */}
+          <div className="tw:flex tw:flex-wrap" style={{ gap: spacing.xs }}>
+            {([null, ...LEVELS_ORDERED] as (Level | null)[]).map((level) => {
+              const label = level ? LEVEL_CONFIG[level].label : 'All';
+              const clr = level ? LEVEL_CONFIG[level].color : colors.text.secondary;
+              const isActive = activeLevel === level;
+              return (
+                <button
+                  key={level ?? 'all'}
+                  onClick={() => setActiveLevel(level)}
+                  className="tw:cursor-pointer"
+                  style={{
+                    padding: `${spacing.xs} ${spacing.md}`,
+                    borderRadius: spacing.radius.lg,
+                    border: `1px solid ${isActive ? clr : colors.border.light}`,
+                    backgroundColor: isActive ? `${clr}12` : colors.white,
+                    color: isActive ? clr : colors.text.tertiary,
+                    fontSize: typography.fontSize.xs,
+                    fontWeight: typography.fontWeight.semibold,
+                    fontFamily: typography.fontFamily.primary,
+                  }}
+                >
+                  {label}
+                </button>
+              );
+            })}
+          </div>
           <span style={{ fontSize: typography.fontSize.xs, color: colors.text.tertiary }}>
             {filtered.length.toLocaleString()} variable{filtered.length !== 1 ? 's' : ''}
           </span>
@@ -364,7 +569,7 @@ export default function VariableExplorer({ variables, parameters, country }: Var
                 <VariableCard variable={v} isSelected={selectedVar === v.name} onClick={() => handleSelect(v.name)} />
                 <AnimatePresence>
                   {selectedVar === v.name && (
-                    <VariableDetail variable={v} variables={variables} parameters={parameters} country={country} />
+                    <VariableDetail variable={v} variables={variables} parameters={parameters} country={country} onViewFlowchart={onViewFlowchart} />
                   )}
                 </AnimatePresence>
               </div>
@@ -392,7 +597,7 @@ export default function VariableExplorer({ variables, parameters, country }: Var
             return (
               <motion.button
                 key={level}
-                onClick={() => setActiveLevel(level)}
+                onClick={() => { setActiveLevel(level); setActiveSubGroup(null); }}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: config.order * 0.05 }}
@@ -440,23 +645,17 @@ export default function VariableExplorer({ variables, parameters, country }: Var
         </div>
       )}
 
-      {/* ─── View: Drilled into a level (sub-groups) ─── */}
-      {!isSearching && activeLevel && (
+      {/* ─── View: Drilled into a level ─── */}
+      {!isSearching && activeLevel && !activeSubGroup && (
         <div>
-          {/* Back button + level header */}
           <button
-            onClick={() => { setActiveLevel(null); setSelectedVar(null); }}
+            onClick={goBack}
             className="tw:flex tw:items-center tw:cursor-pointer"
             style={{
-              gap: spacing.sm,
-              padding: `${spacing.xs} 0`,
-              border: 'none',
-              backgroundColor: 'transparent',
-              fontFamily: typography.fontFamily.primary,
-              marginBottom: spacing.lg,
-              color: colors.primary[600],
-              fontSize: typography.fontSize.sm,
-              fontWeight: typography.fontWeight.medium,
+              gap: spacing.sm, padding: `${spacing.xs} 0`, border: 'none',
+              backgroundColor: 'transparent', fontFamily: typography.fontFamily.primary,
+              marginBottom: spacing.lg, color: colors.primary[600],
+              fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.medium,
             }}
           >
             <IconArrowLeft size={16} stroke={1.5} />
@@ -464,33 +663,80 @@ export default function VariableExplorer({ variables, parameters, country }: Var
           </button>
 
           <div style={{ marginBottom: spacing.xl }}>
-              <h2 style={{
-                fontSize: typography.fontSize['2xl'],
-                fontWeight: typography.fontWeight.bold,
-                color: LEVEL_CONFIG[activeLevel].color,
-                margin: 0,
-              }}>
-                {LEVEL_CONFIG[activeLevel].label}
-              </h2>
-              <span style={{ fontSize: typography.fontSize.xs, color: colors.text.tertiary }}>
-                {filtered.length.toLocaleString()} variables
-              </span>
+            <h2 style={{
+              fontSize: typography.fontSize['2xl'],
+              fontWeight: typography.fontWeight.bold,
+              color: LEVEL_CONFIG[activeLevel].color,
+              margin: 0,
+            }}>
+              {LEVEL_CONFIG[activeLevel].label}
+            </h2>
+            <span style={{ fontSize: typography.fontSize.xs, color: colors.text.tertiary }}>
+              {filtered.length.toLocaleString()} variables across {subGroups.length} groups
+            </span>
           </div>
 
-          {/* Sub-groups */}
-          {subGroups.map(([label, vars]) => (
-            <SubGroupSection
-              key={label}
-              label={label}
-              color={LEVEL_CONFIG[activeLevel].color}
-              vars={vars}
-              allVariables={variables}
-              parameters={parameters}
-              country={country}
-              selectedVar={selectedVar}
-              onSelect={handleSelect}
+          {/* State level: tile grid */}
+          {activeLevel === 'state' && (
+            <StateTileGrid
+              subGroups={subGroups}
+              levelColor={LEVEL_CONFIG[activeLevel].color}
+              onSelect={setActiveSubGroup}
             />
-          ))}
+          )}
+
+          {/* Other levels: card grid */}
+          {activeLevel !== 'state' && (
+            <SubGroupCardGrid
+              subGroups={subGroups}
+              level={activeLevel}
+              levelColor={LEVEL_CONFIG[activeLevel].color}
+              onSelect={setActiveSubGroup}
+            />
+          )}
+        </div>
+      )}
+
+      {/* ─── View: Drilled into a sub-group (variable list) ─── */}
+      {!isSearching && activeLevel && activeSubGroup && (
+        <div>
+          <button
+            onClick={goBack}
+            className="tw:flex tw:items-center tw:cursor-pointer"
+            style={{
+              gap: spacing.sm, padding: `${spacing.xs} 0`, border: 'none',
+              backgroundColor: 'transparent', fontFamily: typography.fontFamily.primary,
+              marginBottom: spacing.lg, color: colors.primary[600],
+              fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.medium,
+            }}
+          >
+            <IconArrowLeft size={16} stroke={1.5} />
+            {breadcrumb}
+          </button>
+
+          <div style={{ marginBottom: spacing.xl }}>
+            <h2 style={{
+              fontSize: typography.fontSize['2xl'],
+              fontWeight: typography.fontWeight.bold,
+              color: LEVEL_CONFIG[activeLevel].color,
+              margin: 0,
+            }}>
+              {getSubGroupLabel(activeSubGroup, activeLevel)}
+            </h2>
+            <span style={{ fontSize: typography.fontSize.xs, color: colors.text.tertiary }}>
+              {subGroupVars.length} variables
+            </span>
+          </div>
+
+          <VariableList
+            vars={subGroupVars}
+            allVariables={variables}
+            parameters={parameters}
+            country={country}
+            selectedVar={selectedVar}
+            onSelect={handleSelect}
+            onViewFlowchart={onViewFlowchart}
+          />
         </div>
       )}
     </div>

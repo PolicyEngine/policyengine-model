@@ -9,6 +9,7 @@ interface VariableDetailProps {
   variables: Record<string, Variable>;
   parameters: Record<string, Parameter>;
   country: string;
+  onViewFlowchart?: (varName: string) => void;
 }
 
 function formatUnit(unit: string | null, country: string): string {
@@ -46,7 +47,7 @@ function MetaRow({ label, value }: { label: string; value: string }) {
   );
 }
 
-export default function VariableDetail({ variable, variables, parameters, country }: VariableDetailProps) {
+export default function VariableDetail({ variable, variables, parameters, country, onViewFlowchart }: VariableDetailProps) {
   const adds = Array.isArray(variable.adds) ? variable.adds : (variable.adds ? Object.keys(variable.adds) : []);
   const subtracts = Array.isArray(variable.subtracts) ? variable.subtracts : (variable.subtracts ? Object.keys(variable.subtracts) : []);
   const hasTree = adds.length > 0 || subtracts.length > 0;
@@ -149,20 +150,21 @@ export default function VariableDetail({ variable, variables, parameters, countr
               View source <IconExternalLink size={12} stroke={1.5} />
             </a>
           )}
-          <a
-            href={`https://policyengine.github.io/flowchart/?variable=${variable.name}&country=${country.toUpperCase()}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="tw:flex tw:items-center"
+          <button
+            onClick={() => onViewFlowchart?.(variable.name)}
+            className="tw:flex tw:items-center tw:cursor-pointer"
             style={{
               fontSize: typography.fontSize.xs,
               color: colors.primary[600],
-              textDecoration: 'none',
+              background: 'none',
+              border: 'none',
+              padding: 0,
+              fontFamily: typography.fontFamily.primary,
               gap: spacing.xs,
             }}
           >
-            Full computation flowchart <IconExternalLink size={12} stroke={1.5} />
-          </a>
+            View in flowchart ↓
+          </button>
         </div>
 
         {/* Computation tree */}
