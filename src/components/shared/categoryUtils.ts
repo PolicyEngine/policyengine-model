@@ -114,6 +114,7 @@ export function getSubGroupDescription(key: string, level: Level): string | null
       aca: 'Marketplace eligibility and premium subsidies',
       doe: 'Energy efficiency rebates and credits',
       fcc: 'Affordable Connectivity Program',
+      simulation: 'Behavioral responses, labor supply elasticities, and simulation settings',
     };
     return desc[key] || null;
   }

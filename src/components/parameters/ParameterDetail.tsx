@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { IconExternalLink } from '@tabler/icons-react';
 import type { Parameter, ParameterLeaf } from '../../types/Variable';
@@ -113,10 +114,69 @@ function ValueTimeline({ param }: { param: ParameterLeaf }) {
   );
 }
 
+// ─── Parameter tree cache (loaded once per country) ──────────────────────────
+
+const treeCache = new Map<string, Set<string> | null>();
+
+async function loadParamTree(country: string): Promise<Set<string> | null> {
+  if (treeCache.has(country)) return treeCache.get(country)!;
+  try {
+    const res = await fetch(`${import.meta.env.BASE_URL}param-tree-${country}.json`);
+    if (!res.ok) throw new Error('not found');
+    const paths: string[] = await res.json();
+    const set = new Set(paths);
+    treeCache.set(country, set);
+    return set;
+  } catch {
+    treeCache.set(country, null);
+    return null;
+  }
+}
+
+/**
+ * Find the exact YAML file for a parameter path by trying progressively
+ * shorter path prefixes against the pre-built file tree.
+ */
+function findYamlFile(paramPath: string, yamlFiles: Set<string>): string | null {
+  const parts = paramPath.replace(/\./g, '/').split('/');
+  for (let i = parts.length; i > 0; i--) {
+    const candidate = parts.slice(0, i).join('/') + '.yaml';
+    if (yamlFiles.has(candidate)) return candidate;
+  }
+  return null;
+}
+
+function getGitHubUrl(paramPath: string, githubRepo: string, yamlFile: string | null): string {
+  const repoDir = githubRepo.replace('-', '_');
+  if (yamlFile) {
+    return `https://github.com/PolicyEngine/${githubRepo}/blob/main/${repoDir}/parameters/${yamlFile}`;
+  }
+  // Fallback: link to parent directory
+  const parts = paramPath.split('.');
+  while (parts.length > 1 && (/^[A-Z_]+$/.test(parts[parts.length - 1]) || /^\d+$/.test(parts[parts.length - 1]))) {
+    parts.pop();
+  }
+  const dirParts = parts.slice(0, Math.max(parts.length - 2, 1));
+  return `https://github.com/PolicyEngine/${githubRepo}/tree/main/${repoDir}/parameters/${dirParts.join('/')}`;
+}
+
 export default function ParameterDetail({ parameter: param, country }: ParameterDetailProps) {
   const isLeaf = param.type === 'parameter';
   const githubRepo = country === 'uk' ? 'policyengine-uk' : 'policyengine-us';
-  const yamlPath = param.parameter.replace(/\./g, '/');
+
+  const [yamlFile, setYamlFile] = useState<string | null>(null);
+  const [treeLoaded, setTreeLoaded] = useState(false);
+
+  useEffect(() => {
+    loadParamTree(country).then((tree) => {
+      if (tree) {
+        setYamlFile(findYamlFile(param.parameter, tree));
+      }
+      setTreeLoaded(true);
+    });
+  }, [country, param.parameter]);
+
+  const sourceUrl = treeLoaded ? getGitHubUrl(param.parameter, githubRepo, yamlFile) : '#';
 
   return (
     <motion.div
@@ -166,7 +226,7 @@ export default function ParameterDetail({ parameter: param, country }: Parameter
         {/* Links */}
         <div className="tw:flex tw:flex-wrap" style={{ gap: spacing.md }}>
           <a
-            href={`https://github.com/PolicyEngine/${githubRepo}/tree/main/${githubRepo.replace('-', '_')}/parameters/${yamlPath}`}
+            href={sourceUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="tw:flex tw:items-center"

@@ -319,7 +319,7 @@ function ParameterGroupCardGrid({
                   }}>
                     {label}
                   </div>
-                  <div style={{
+                  <div className="tw:truncate" style={{
                     fontSize: typography.fontSize.xs,
                     fontFamily: typography.fontFamily.mono,
                     color: colors.text.tertiary,
@@ -394,10 +394,10 @@ export default function ParameterExplorer({ parameters, country }: ParameterExpl
   const debouncedSearch = useDebounce(search, 200);
   const isSearching = !!debouncedSearch;
 
-  // Only show leaf parameters (actual values), exclude nodes
+  // Only show leaf parameters (actual values), exclude nodes and abolitions
   const allParameters = useMemo(() => {
     return Object.values(parameters)
-      .filter((p): p is ParameterLeaf => p.type === 'parameter')
+      .filter((p): p is ParameterLeaf => p.type === 'parameter' && !p.parameter.includes('.abolition'))
       .sort((a, b) => (a.label ?? '').localeCompare(b.label ?? ''));
   }, [parameters]);
 

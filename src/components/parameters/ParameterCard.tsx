@@ -47,7 +47,7 @@ export default function ParameterCard({ parameter: param, isSelected, onClick }:
           >
             {param.label}
           </div>
-          <div
+          <div className="tw:truncate"
             style={{
               fontSize: typography.fontSize.xs,
               fontFamily: typography.fontFamily.mono,
