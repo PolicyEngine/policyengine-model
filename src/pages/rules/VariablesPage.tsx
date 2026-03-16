@@ -61,6 +61,7 @@ function FlowchartPreview({ country, variable, sectionRef }: {
           border: `1px solid ${colors.border.light}`,
           overflow: 'hidden',
           backgroundColor: colors.white,
+          height: '600px',
         }}
       >
         <iframe
@@ -68,10 +69,12 @@ function FlowchartPreview({ country, variable, sectionRef }: {
           src={flowchartUrl}
           title="Variable computation flowchart"
           style={{
-            width: '100%',
-            height: '600px',
+            width: `${100 / 0.75}%`,
+            height: `${600 / 0.75}px`,
             border: 'none',
             display: 'block',
+            transform: 'scale(0.75)',
+            transformOrigin: 'top left',
           }}
         />
       </div>
