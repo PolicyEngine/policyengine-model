@@ -17,6 +17,16 @@ const entityColors: Record<string, string> = {
   benunit: '#0891B2',
 };
 
+export const entityLabels: Record<string, string> = {
+  person: 'Person',
+  tax_unit: 'Tax Unit',
+  spm_unit: 'SPM Unit',
+  household: 'Household',
+  family: 'Family',
+  marital_unit: 'Marital Unit',
+  benunit: 'Benefit Unit',
+};
+
 export default function VariableCard({ variable, isSelected, onClick }: VariableCardProps) {
   const entityColor = entityColors[variable.entity] || colors.gray[500];
 
@@ -81,7 +91,7 @@ export default function VariableCard({ variable, isSelected, onClick }: Variable
               color: entityColor,
             }}
           >
-            {variable.entity}
+            {entityLabels[variable.entity] || variable.entity}
           </span>
           {/* Input/Computed badge */}
           <span

@@ -3,6 +3,7 @@ import { IconExternalLink } from '@tabler/icons-react';
 import type { Variable, Parameter } from '../../types/Variable';
 import { colors, typography, spacing } from '../../designTokens';
 import ComputationTree from './ComputationTree';
+import { entityLabels } from './VariableCard';
 
 interface VariableDetailProps {
   variable: Variable;
@@ -90,7 +91,7 @@ export default function VariableDetail({ variable, variables, parameters, countr
 
         {/* Metadata */}
         <div style={{ marginBottom: spacing.lg }}>
-          <MetaRow label="Entity" value={variable.entity} />
+          <MetaRow label="Entity" value={entityLabels[variable.entity] || variable.entity} />
           <MetaRow label="Value type" value={variable.valueType} />
           <MetaRow label="Period" value={variable.definitionPeriod} />
           <MetaRow label="Unit" value={formatUnit(variable.unit, country)} />
