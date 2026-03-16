@@ -181,10 +181,23 @@ interface ParameterExplorerProps {
   country: string;
 }
 
-/** Strip trailing ALL_CAPS enum values and numeric indices to find the parameter group. */
+/** Count unique file-level parameter groups in a list of leaves. */
+function countUniqueGroups(params: ParameterLeaf[]): number {
+  const seen = new Set<string>();
+  for (const p of params) seen.add(getParameterGroup(p.parameter));
+  return seen.size;
+}
+
+/** Map a parameter path to its logical file-level group.
+ *  Strips bracket indices (e.g. [0].amount), trailing ALL_CAPS enum values,
+ *  and trailing pure-numeric segments so that all leaves from one YAML file
+ *  collapse into a single group. */
 function getParameterGroup(path: string): string {
-  const parts = path.split('.');
-  while (parts.length > 1 && (/^[A-Z_]+$/.test(parts[parts.length - 1]) || /^\d+$/.test(parts[parts.length - 1]))) {
+  // Strip bracket indices and everything after them
+  const clean = path.replace(/\[\d+\].*/g, '');
+  const parts = clean.split('.');
+  // Strip trailing ALL_CAPS enum values and pure-numeric segments
+  while (parts.length > 1 && (/^[A-Z][A-Z_0-9]+$/.test(parts[parts.length - 1]) || /^\d+$/.test(parts[parts.length - 1]))) {
     parts.pop();
   }
   return parts.join('.');
@@ -394,7 +407,7 @@ function StateTileGrid({
                 color: colors.text.tertiary,
                 marginTop: '2px',
               }}>
-                {params.length.toLocaleString()}
+                {countUniqueGroups(params).toLocaleString()}
               </div>
             </motion.button>
           );
@@ -417,7 +430,7 @@ function StateTileGrid({
                 color: colors.text.secondary,
               }}
             >
-              {getSubGroupLabel(key, 'state')} ({params.length.toLocaleString()})
+              {getSubGroupLabel(key, 'state')} ({countUniqueGroups(params).toLocaleString()})
             </button>
           ))}
         </div>
@@ -482,7 +495,7 @@ function SubGroupCardGrid({
               color: colors.text.primary,
               marginBottom: desc ? spacing.xs : 0,
             }}>
-              {params.length.toLocaleString()}
+              {countUniqueGroups(params).toLocaleString()}
             </div>
             {desc && (
               <div style={{
@@ -565,6 +578,9 @@ function FolderContentsGrid({
                         fontSize: typography.fontSize.sm,
                         fontWeight: typography.fontWeight.semibold,
                         color: colors.text.primary,
+                        overflowWrap: 'break-word',
+                        wordBreak: 'break-word',
+                        minWidth: 0,
                       }}>
                         {label}
                       </div>
@@ -590,7 +606,7 @@ function FolderContentsGrid({
                     color: levelColor,
                     flexShrink: 0,
                   }}>
-                    {item.paramCount} params
+                    {item.groupCount} params
                   </span>
                 </div>
               </motion.button>
@@ -626,6 +642,8 @@ function FolderContentsGrid({
                       fontSize: typography.fontSize.sm,
                       fontWeight: typography.fontWeight.semibold,
                       color: colors.text.primary,
+                      overflowWrap: 'break-word',
+                      wordBreak: 'break-word',
                     }}>
                       {label}
                     </div>
@@ -694,11 +712,13 @@ export default function ParameterExplorer({ parameters, country }: ParameterExpl
       .sort((a, b) => (a.label ?? '').localeCompare(b.label ?? ''));
   }, [parameters]);
 
-  // Count per level
+  // Count unique parameter groups (files) per level
   const levelCounts = useMemo(() => {
-    const counts: Record<Level, number> = { federal: 0, state: 0, local: 0, territory: 0, reform: 0, household: 0 };
-    for (const p of allParameters) counts[getLevel(p.parameter)]++;
-    return counts;
+    const seen: Record<Level, Set<string>> = { federal: new Set(), state: new Set(), local: new Set(), territory: new Set(), reform: new Set(), household: new Set() };
+    for (const p of allParameters) {
+      seen[getLevel(p.parameter)].add(getParameterGroup(p.parameter));
+    }
+    return Object.fromEntries(Object.entries(seen).map(([k, v]) => [k, v.size])) as Record<Level, number>;
   }, [allParameters]);
 
   // Filtered list
@@ -880,9 +900,9 @@ export default function ParameterExplorer({ parameters, country }: ParameterExpl
         ? getSubGroupLabel(activeSubGroup, activeLevel)
         : '';
 
-  // Param count summary for folder view
-  const currentFolderTotalParams = folderContents.folders.reduce((s, f) => s + f.paramCount, 0)
-    + folderContents.directGroups.reduce((s, [, p]) => s + p.length, 0);
+  // Param count summary for folder view (count groups, not individual leaves)
+  const currentFolderTotalParams = folderContents.folders.reduce((s, f) => s + f.groupCount, 0)
+    + folderContents.directGroups.length;
   const currentFolderTotalItems = folderContents.folders.length + folderContents.directGroups.length;
 
   return (
@@ -942,7 +962,7 @@ export default function ParameterExplorer({ parameters, country }: ParameterExpl
             })}
           </div>
           <span style={{ fontSize: typography.fontSize.xs, color: colors.text.tertiary }}>
-            {filtered.length.toLocaleString()} parameter{filtered.length !== 1 ? 's' : ''}
+            {countUniqueGroups(filtered).toLocaleString()} parameter{countUniqueGroups(filtered) !== 1 ? 's' : ''}
           </span>
         </div>
       )}
@@ -1047,7 +1067,7 @@ export default function ParameterExplorer({ parameters, country }: ParameterExpl
               {LEVEL_CONFIG[activeLevel].label}
             </h2>
             <span style={{ fontSize: typography.fontSize.xs, color: colors.text.tertiary }}>
-              {filtered.length.toLocaleString()} parameters across {subGroups.length} groups
+              {countUniqueGroups(filtered).toLocaleString()} parameters across {subGroups.length} groups
             </span>
           </div>
 

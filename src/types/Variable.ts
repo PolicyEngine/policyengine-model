@@ -24,7 +24,7 @@ export interface ParameterLeaf {
   label: string;
   unit: string | null;
   period: string | null;
-  values: Record<string, number | string | boolean>;
+  values: Record<string, number | string | boolean | string[]>;
 }
 
 export interface ParameterNode {

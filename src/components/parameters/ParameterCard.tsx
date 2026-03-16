@@ -7,16 +7,26 @@ interface ParameterCardProps {
   onClick: () => void;
 }
 
-function getCurrentValue(param: ParameterLeaf): string {
+function getCurrentValue(param: ParameterLeaf): { text: string; isList: boolean; count: number } {
   const entries = Object.entries(param.values).sort(([a], [b]) => b.localeCompare(a));
-  if (entries.length === 0) return '—';
+  if (entries.length === 0) return { text: '—', isList: false, count: 0 };
   const [, val] = entries[0];
-  if (typeof val === 'boolean') return val ? 'true' : 'false';
-  if (typeof val === 'number') {
-    if (param.unit === '/1') return `${(val * 100).toFixed(1)}%`;
-    return val.toLocaleString();
+  // Handle arrays (list-type parameters)
+  if (Array.isArray(val)) {
+    if (val.length === 0) return { text: '(empty)', isList: true, count: 0 };
+    return { text: val.join(', '), isList: true, count: val.length };
   }
-  return String(val);
+  if (typeof val === 'boolean') return { text: val ? 'true' : 'false', isList: false, count: 0 };
+  if (typeof val === 'number') {
+    if (param.unit === '/1') return { text: `${(val * 100).toFixed(1)}%`, isList: false, count: 0 };
+    return { text: val.toLocaleString(), isList: false, count: 0 };
+  }
+  const str = String(val);
+  if (str.includes(',')) {
+    const items = str.split(',').map(s => s.trim()).filter(Boolean);
+    return { text: str, isList: true, count: items.length };
+  }
+  return { text: str, isList: false, count: 0 };
 }
 
 export default function ParameterCard({ parameter: param, isSelected, onClick }: ParameterCardProps) {
@@ -73,22 +83,29 @@ export default function ParameterCard({ parameter: param, isSelected, onClick }:
         </div>
         <div className="tw:flex tw:items-center tw:flex-shrink-0" style={{ gap: spacing.xs }}>
           {/* Current value badge (leaf only) */}
-          {isLeaf && (
-            <span
-              title="Current value"
-              style={{
-                fontSize: '10px',
-                fontWeight: typography.fontWeight.semibold,
-                padding: `1px ${spacing.xs}`,
-                borderRadius: spacing.radius.sm,
-                backgroundColor: '#DBEAFE',
-                color: '#1D4ED8',
-                fontFamily: typography.fontFamily.mono,
-              }}
-            >
-              {getCurrentValue(param as ParameterLeaf)}
-            </span>
-          )}
+          {isLeaf && (() => {
+            const { text, isList, count } = getCurrentValue(param as ParameterLeaf);
+            return (
+              <span
+                title={isList ? text : `Current value: ${text}`}
+                style={{
+                  fontSize: '10px',
+                  fontWeight: typography.fontWeight.semibold,
+                  padding: `1px ${spacing.xs}`,
+                  borderRadius: spacing.radius.sm,
+                  backgroundColor: '#DBEAFE',
+                  color: '#1D4ED8',
+                  fontFamily: typography.fontFamily.mono,
+                  maxWidth: '120px',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {isList ? (count === 0 ? '(empty)' : `${count} items`) : text}
+              </span>
+            );
+          })()}
           {/* Unit badge */}
           {isLeaf && (param as ParameterLeaf).unit && (
             <span

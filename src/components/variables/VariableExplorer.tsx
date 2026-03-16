@@ -365,9 +365,9 @@ function FolderContentsView({
                   whileHover={{ borderColor: levelColor, boxShadow: `0 0 0 1px ${levelColor}25` }}
                 >
                   <div className="tw:flex tw:items-start tw:justify-between" style={{ gap: spacing.md }}>
-                    <div className="tw:flex tw:items-center" style={{ gap: spacing.xs }}>
-                      <IconFolder size={14} stroke={1.5} style={{ color: levelColor, flexShrink: 0 }} />
-                      <div style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
+                    <div className="tw:flex tw:items-start tw:flex-1 tw:min-w-0" style={{ gap: spacing.xs }}>
+                      <IconFolder size={14} stroke={1.5} style={{ color: levelColor, flexShrink: 0, marginTop: '2px' }} />
+                      <div style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold, color: colors.text.primary, overflowWrap: 'break-word', wordBreak: 'break-word', minWidth: 0 }}>
                         {label}
                       </div>
                     </div>
@@ -435,7 +435,7 @@ export default function VariableExplorer({ variables, parameters, country, onVie
   // All variables (hidden_input + contrib excluded), sorted
   const allVariables = useMemo(() => {
     return Object.values(variables)
-      .filter((v) => !v.hidden_input && !v.moduleName?.startsWith('contrib'))
+      .filter((v) => !v.hidden_input && !v.moduleName?.startsWith('contrib') && !v.moduleName?.startsWith('gov.puf'))
       .sort((a, b) => a.label.localeCompare(b.label));
   }, [variables]);
 

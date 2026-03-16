@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { IconExternalLink } from '@tabler/icons-react';
+import { IconExternalLink, IconChevronDown, IconChevronRight } from '@tabler/icons-react';
 import type { Parameter, ParameterLeaf } from '../../types/Variable';
 import { colors, typography, spacing } from '../../designTokens';
 
@@ -43,19 +43,103 @@ function MetaRow({ label, value }: { label: string; value: string }) {
   );
 }
 
-function formatValue(val: number | string | boolean, unit: string | null): string {
-  if (typeof val === 'boolean') return val ? 'true' : 'false';
-  if (typeof val === 'number') {
-    if (unit === '/1') return `${(val * 100).toFixed(2)}%`;
-    if (unit?.startsWith('currency-')) return val.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    return val.toLocaleString();
+function formatValue(val: number | string | boolean | string[], unit: string | null): { text: string; items: string[] | null } {
+  // Handle arrays (list-type parameters)
+  if (Array.isArray(val)) {
+    if (val.length === 0) return { text: '(empty)', items: [] };
+    return { text: val.join(', '), items: val };
   }
-  return String(val);
+  if (typeof val === 'boolean') return { text: val ? 'true' : 'false', items: null };
+  if (typeof val === 'number') {
+    if (unit === '/1') return { text: `${(val * 100).toFixed(2)}%`, items: null };
+    if (unit?.startsWith('currency-')) return { text: val.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }), items: null };
+    return { text: val.toLocaleString(), items: null };
+  }
+  const str = String(val);
+  if (str.includes(',')) {
+    const items = str.split(',').map(s => s.trim()).filter(Boolean);
+    return { text: str, items };
+  }
+  return { text: str, items: null };
+}
+
+const PROJECTION_CUTOFF = '2026-01-01';
+
+function ValueRow({ date, val, nextDate, unit, isProjected }: {
+  date: string;
+  val: number | string | boolean | string[];
+  nextDate: string | null;
+  unit: string | null;
+  isProjected: boolean;
+  isLast?: boolean;
+}) {
+  const { text, items } = formatValue(val, unit);
+  const dateLabel = nextDate ? `${date} → ${nextDate}` : `${date} → present`;
+
+  return (
+    <div style={{ padding: `${spacing.sm} ${spacing.sm}` }}>
+      <div className="tw:flex tw:items-center tw:justify-between" style={{ marginBottom: items ? spacing.sm : 0 }}>
+        <span
+          style={{
+            fontSize: typography.fontSize.xs,
+            fontFamily: typography.fontFamily.mono,
+            color: isProjected ? colors.text.tertiary : colors.text.secondary,
+            fontStyle: isProjected ? 'italic' : 'normal',
+          }}
+        >
+          {dateLabel}
+        </span>
+        {!items && (
+          <span
+            style={{
+              fontSize: typography.fontSize.sm,
+              fontWeight: typography.fontWeight.medium,
+              color: isProjected ? colors.text.secondary : colors.text.primary,
+              fontFamily: typography.fontFamily.mono,
+            }}
+          >
+            {text}
+          </span>
+        )}
+        {items && (
+          <span style={{ fontSize: typography.fontSize.xs, color: colors.text.tertiary }}>
+            {items.length} items
+          </span>
+        )}
+      </div>
+      {items && (
+        <div className="tw:flex tw:flex-wrap" style={{ gap: spacing.xs }}>
+          {items.map((item) => (
+            <span
+              key={item}
+              style={{
+                fontSize: '11px',
+                fontFamily: typography.fontFamily.mono,
+                padding: `1px ${spacing.sm}`,
+                borderRadius: spacing.radius.sm,
+                backgroundColor: colors.gray[100],
+                border: `1px solid ${colors.border.light}`,
+                color: colors.text.secondary,
+              }}
+            >
+              {item.replace(/_/g, ' ')}
+            </span>
+          ))}
+        </div>
+      )}
+    </div>
+  );
 }
 
 function ValueTimeline({ param }: { param: ParameterLeaf }) {
-  const entries = Object.entries(param.values).sort(([a], [b]) => a.localeCompare(b));
-  if (entries.length === 0) return null;
+  const allEntries = Object.entries(param.values).sort(([a], [b]) => a.localeCompare(b));
+  if (allEntries.length === 0) return null;
+
+  const legislated = allEntries.filter(([d]) => d < PROJECTION_CUTOFF);
+  const projected = allEntries.filter(([d]) => d >= PROJECTION_CUTOFF);
+  const hasProjected = projected.length > 1; // Only collapse if there are multiple projected entries
+
+  const [showProjected, setShowProjected] = useState(false);
 
   return (
     <div style={{ marginBottom: spacing.lg }}>
@@ -79,36 +163,59 @@ function ValueTimeline({ param }: { param: ParameterLeaf }) {
           backgroundColor: colors.white,
         }}
       >
-        {entries.map(([date, val], i) => (
-          <div
-            key={date}
-            className="tw:flex tw:items-center tw:justify-between"
-            style={{
-              padding: `${spacing.xs} ${spacing.sm}`,
-              borderBottom: i < entries.length - 1 ? `1px solid ${colors.border.light}` : 'none',
-            }}
-          >
-            <span
+        {/* Legislated values */}
+        {legislated.map(([date, val], i) => {
+          const nextDate = i < legislated.length - 1
+            ? legislated[i + 1][0]
+            : projected.length > 0 ? projected[0][0] : null;
+          return (
+            <div key={date} style={{ borderBottom: `1px solid ${colors.border.light}` }}>
+              <ValueRow date={date} val={val} nextDate={nextDate} unit={param.unit} isProjected={false} />
+            </div>
+          );
+        })}
+
+        {/* Projected values section */}
+        {hasProjected && (
+          <>
+            <button
+              onClick={() => setShowProjected(!showProjected)}
+              className="tw:flex tw:items-center tw:w-full tw:cursor-pointer"
               style={{
+                gap: spacing.xs,
+                padding: `${spacing.sm} ${spacing.sm}`,
+                border: 'none',
+                backgroundColor: 'transparent',
+                fontFamily: typography.fontFamily.primary,
                 fontSize: typography.fontSize.xs,
-                fontFamily: typography.fontFamily.mono,
-                color: colors.text.tertiary,
+                fontWeight: typography.fontWeight.semibold,
+                color: colors.primary[600],
+                borderBottom: showProjected ? `1px solid ${colors.border.light}` : 'none',
               }}
             >
-              {date}
-            </span>
-            <span
-              style={{
-                fontSize: typography.fontSize.sm,
-                fontWeight: typography.fontWeight.medium,
-                color: colors.text.primary,
-                fontFamily: typography.fontFamily.mono,
-              }}
-            >
-              {formatValue(val, param.unit)}
-            </span>
+              {showProjected
+                ? <IconChevronDown size={14} stroke={1.5} />
+                : <IconChevronRight size={14} stroke={1.5} />
+              }
+              Projected values ({projected.length} years, uprated)
+            </button>
+            {showProjected && projected.map(([date, val], i) => {
+              const nextDate = i < projected.length - 1 ? projected[i + 1][0] : null;
+              return (
+                <div key={date} style={{ borderBottom: i < projected.length - 1 ? `1px solid ${colors.border.light}` : 'none' }}>
+                  <ValueRow date={date} val={val} nextDate={nextDate} unit={param.unit} isProjected={true} />
+                </div>
+              );
+            })}
+          </>
+        )}
+
+        {/* Single projected entry (no collapse needed) */}
+        {projected.length === 1 && (
+          <div key={projected[0][0]}>
+            <ValueRow date={projected[0][0]} val={projected[0][1]} nextDate={null} unit={param.unit} isProjected={false} />
           </div>
-        ))}
+        )}
       </div>
     </div>
   );
