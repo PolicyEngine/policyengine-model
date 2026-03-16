@@ -1,6 +1,6 @@
 import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { IconSearch, IconArrowLeft } from '@tabler/icons-react';
+import { IconSearch, IconArrowLeft, IconFolder } from '@tabler/icons-react';
 import type { Parameter, ParameterLeaf } from '../../types/Variable';
 import { colors, typography, spacing } from '../../designTokens';
 import { useDebounce } from '../../hooks/useDebounce';
@@ -28,11 +28,10 @@ function getParameterGroup(path: string): string {
   return parts.join('.');
 }
 
-/** Get a display label for a parameter group, using the parameterNode if available. */
+/** Get a display label for a parameter group or folder, using the parameterNode if available. */
 function getGroupLabel(groupKey: string, allParameters: Record<string, Parameter>): string {
   const node = allParameters[groupKey];
   if (node && node.label) return node.label;
-  // Fallback: use the last meaningful segment
   const parts = groupKey.split('.');
   return parts[parts.length - 1].replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
 }
@@ -40,6 +39,104 @@ function getGroupLabel(groupKey: string, allParameters: Record<string, Parameter
 function getGroupDescription(groupKey: string, allParameters: Record<string, Parameter>): string | null {
   const node = allParameters[groupKey];
   return node?.description || null;
+}
+
+// ─── Folder tree helpers ────────────────────────────────────────────────────
+
+/** Find the longest common dot-separated prefix of a list of paths. */
+function commonPrefix(paths: string[]): string {
+  if (paths.length === 0) return '';
+  const parts0 = paths[0].split('.');
+  let len = parts0.length;
+  for (const p of paths.slice(1)) {
+    const parts = p.split('.');
+    len = Math.min(len, parts.length);
+    for (let i = 0; i < len; i++) {
+      if (parts[i] !== parts0[i]) { len = i; break; }
+    }
+  }
+  return parts0.slice(0, len).join('.');
+}
+
+/**
+ * At a given folder prefix, compute sub-folders and direct parameter groups.
+ * If a segment appears both as a direct group and has deeper groups, it becomes a folder.
+ */
+function getFolderContents(
+  groups: [string, ParameterLeaf[]][],
+  prefix: string,
+): {
+  folders: { segment: string; fullPath: string; paramCount: number; groupCount: number }[];
+  directGroups: [string, ParameterLeaf[]][];
+} {
+  const prefixDot = prefix + '.';
+
+  // Collect all groups by their next segment
+  const bySegment = new Map<string, {
+    direct: [string, ParameterLeaf[]] | null;
+    deeper: [string, ParameterLeaf[]][];
+  }>();
+
+  for (const [groupKey, params] of groups) {
+    if (!groupKey.startsWith(prefixDot)) continue;
+    const remaining = groupKey.slice(prefixDot.length);
+    const segments = remaining.split('.');
+    const segment = segments[0];
+
+    if (!bySegment.has(segment)) bySegment.set(segment, { direct: null, deeper: [] });
+    const entry = bySegment.get(segment)!;
+
+    if (segments.length === 1) {
+      entry.direct = [groupKey, params];
+    } else {
+      entry.deeper.push([groupKey, params]);
+    }
+  }
+
+  const folders: { segment: string; fullPath: string; paramCount: number; groupCount: number }[] = [];
+  const directGroups: [string, ParameterLeaf[]][] = [];
+
+  // Also include a group that exactly matches the prefix (params at this node level)
+  const exactGroup = groups.find(([k]) => k === prefix);
+  if (exactGroup) {
+    directGroups.push(exactGroup);
+  }
+
+  for (const [segment, entry] of [...bySegment.entries()].sort(([a], [b]) => a.localeCompare(b))) {
+    const fullPath = `${prefix}.${segment}`;
+
+    if (entry.deeper.length > 0) {
+      // It's a folder — include any direct group params in the count
+      let paramCount = entry.deeper.reduce((sum, [, p]) => sum + p.length, 0);
+      let groupCount = entry.deeper.length;
+      if (entry.direct) {
+        paramCount += entry.direct[1].length;
+        groupCount += 1;
+      }
+      folders.push({ segment, fullPath, paramCount, groupCount });
+    } else if (entry.direct) {
+      directGroups.push(entry.direct);
+    }
+  }
+
+  return { folders, directGroups };
+}
+
+/** Auto-collapse: skip folder levels that have exactly 1 sub-folder and 0 direct groups. */
+function autoCollapseFolder(
+  groups: [string, ParameterLeaf[]][],
+  prefix: string,
+): string {
+  let current = prefix;
+  for (let i = 0; i < 10; i++) {
+    const { folders, directGroups } = getFolderContents(groups, current);
+    if (folders.length === 1 && directGroups.length === 0) {
+      current = folders[0].fullPath;
+    } else {
+      break;
+    }
+  }
+  return current;
 }
 
 // ─── Parameter list (shown after selecting a group) ─────────────────────────
@@ -113,8 +210,6 @@ function StateTileGrid({
 }) {
   const states = subGroups.filter(([k]) => k !== 'Cross-state' && k.length === 2);
   const other = subGroups.filter(([k]) => k === 'Cross-state' || k.length !== 2);
-  const maxCount = Math.max(...states.map(([, v]) => v.length), 1);
-
   return (
     <div>
       <div
@@ -122,7 +217,6 @@ function StateTileGrid({
         style={{ gap: spacing.sm }}
       >
         {states.map(([key, params]) => {
-          const intensity = Math.max(0.15, params.length / maxCount);
           return (
             <motion.button
               key={key}
@@ -148,7 +242,6 @@ function StateTileGrid({
                 fontSize: typography.fontSize.lg,
                 fontWeight: typography.fontWeight.bold,
                 color: levelColor,
-                opacity: 0.4 + intensity * 0.6,
               }}>
                 {key}
               </div>
@@ -263,21 +356,30 @@ function SubGroupCardGrid({
   );
 }
 
-// ─── Parameter group card grid ───────────────────────────────────────────────
+// ─── Folder contents grid (sub-folders + direct parameter groups) ───────────
 
-function ParameterGroupCardGrid({
-  groups,
+function FolderContentsGrid({
+  folders,
+  directGroups,
   levelColor,
   allParameters,
-  onSelect,
+  onFolderSelect,
+  onGroupSelect,
 }: {
-  groups: [string, ParameterLeaf[]][];
+  folders: { segment: string; fullPath: string; paramCount: number; groupCount: number }[];
+  directGroups: [string, ParameterLeaf[]][];
   levelColor: string;
   allParameters: Record<string, Parameter>;
-  onSelect: (key: string) => void;
+  onFolderSelect: (fullPath: string) => void;
+  onGroupSelect: (key: string) => void;
 }) {
   const [showAll, setShowAll] = useState(false);
-  const visible = showAll ? groups : groups.slice(0, PAGE_SIZE);
+  const totalItems = folders.length + directGroups.length;
+  const allItems: ({ kind: 'folder' } & typeof folders[number] | { kind: 'group'; key: string; params: ParameterLeaf[] })[] = [
+    ...folders.map(f => ({ kind: 'folder' as const, ...f })),
+    ...directGroups.map(([key, params]) => ({ kind: 'group' as const, key, params })),
+  ];
+  const visible = showAll ? allItems : allItems.slice(0, PAGE_SIZE);
 
   return (
     <div>
@@ -285,60 +387,55 @@ function ParameterGroupCardGrid({
         className="tw:grid tw:grid-cols-[repeat(auto-fill,minmax(280px,1fr))]"
         style={{ gap: spacing.sm }}
       >
-        {visible.map(([key, params], i) => {
-          const label = getGroupLabel(key, allParameters);
-          const desc = getGroupDescription(key, allParameters);
-          const isSingle = params.length === 1;
-          return (
-            <motion.button
-              key={key}
-              onClick={() => onSelect(key)}
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.15, delay: i * 0.01 }}
-              className="tw:text-left tw:cursor-pointer"
-              style={{
-                padding: `${spacing.md} ${spacing.lg}`,
-                borderRadius: spacing.radius.lg,
-                border: `1px solid ${colors.border.light}`,
-                backgroundColor: colors.white,
-                fontFamily: typography.fontFamily.primary,
-                transition: 'border-color 0.15s ease, box-shadow 0.15s ease',
-              }}
-              whileHover={{
-                borderColor: levelColor,
-                boxShadow: `0 0 0 1px ${levelColor}25`,
-              }}
-            >
-              <div className="tw:flex tw:items-start tw:justify-between" style={{ gap: spacing.md }}>
-                <div className="tw:flex-1 tw:min-w-0">
-                  <div style={{
-                    fontSize: typography.fontSize.sm,
-                    fontWeight: typography.fontWeight.semibold,
-                    color: colors.text.primary,
-                  }}>
-                    {label}
-                  </div>
-                  <div className="tw:truncate" style={{
-                    fontSize: typography.fontSize.xs,
-                    fontFamily: typography.fontFamily.mono,
-                    color: colors.text.tertiary,
-                    marginTop: '2px',
-                  }}>
-                    {key}
-                  </div>
-                  {desc && (
-                    <div className="tw:truncate" style={{
-                      fontSize: typography.fontSize.xs,
-                      color: colors.text.secondary,
-                      marginTop: spacing.xs,
-                      maxWidth: '400px',
-                    }}>
-                      {desc}
+        {visible.map((item, i) => {
+          if (item.kind === 'folder') {
+            const label = getGroupLabel(item.fullPath, allParameters);
+            const desc = getGroupDescription(item.fullPath, allParameters);
+            return (
+              <motion.button
+                key={item.fullPath}
+                onClick={() => onFolderSelect(item.fullPath)}
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.15, delay: i * 0.01 }}
+                className="tw:text-left tw:cursor-pointer"
+                style={{
+                  padding: `${spacing.md} ${spacing.lg}`,
+                  borderRadius: spacing.radius.lg,
+                  border: `1px solid ${colors.border.light}`,
+                  backgroundColor: colors.white,
+                  fontFamily: typography.fontFamily.primary,
+                  transition: 'border-color 0.15s ease, box-shadow 0.15s ease',
+                }}
+                whileHover={{
+                  borderColor: levelColor,
+                  boxShadow: `0 0 0 1px ${levelColor}25`,
+                }}
+              >
+                <div className="tw:flex tw:items-start tw:justify-between" style={{ gap: spacing.md }}>
+                  <div className="tw:flex-1 tw:min-w-0">
+                    <div className="tw:flex tw:items-center" style={{ gap: spacing.xs }}>
+                      <IconFolder size={14} stroke={1.5} style={{ color: levelColor, flexShrink: 0 }} />
+                      <div style={{
+                        fontSize: typography.fontSize.sm,
+                        fontWeight: typography.fontWeight.semibold,
+                        color: colors.text.primary,
+                      }}>
+                        {label}
+                      </div>
                     </div>
-                  )}
-                </div>
-                {!isSingle && (
+                    {desc && (
+                      <div className="tw:truncate" style={{
+                        fontSize: typography.fontSize.xs,
+                        color: colors.text.secondary,
+                        marginTop: spacing.xs,
+                        paddingLeft: '18px',
+                        maxWidth: '400px',
+                      }}>
+                        {desc}
+                      </div>
+                    )}
+                  </div>
                   <span style={{
                     fontSize: '10px',
                     fontWeight: typography.fontWeight.semibold,
@@ -348,15 +445,84 @@ function ParameterGroupCardGrid({
                     color: levelColor,
                     flexShrink: 0,
                   }}>
-                    {params.length} values
+                    {item.paramCount} params
                   </span>
-                )}
-              </div>
-            </motion.button>
-          );
+                </div>
+              </motion.button>
+            );
+          } else {
+            const label = getGroupLabel(item.key, allParameters);
+            const desc = getGroupDescription(item.key, allParameters);
+            const isSingle = item.params.length === 1;
+            return (
+              <motion.button
+                key={item.key}
+                onClick={() => onGroupSelect(item.key)}
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.15, delay: i * 0.01 }}
+                className="tw:text-left tw:cursor-pointer"
+                style={{
+                  padding: `${spacing.md} ${spacing.lg}`,
+                  borderRadius: spacing.radius.lg,
+                  border: `1px solid ${colors.border.light}`,
+                  backgroundColor: colors.white,
+                  fontFamily: typography.fontFamily.primary,
+                  transition: 'border-color 0.15s ease, box-shadow 0.15s ease',
+                }}
+                whileHover={{
+                  borderColor: levelColor,
+                  boxShadow: `0 0 0 1px ${levelColor}25`,
+                }}
+              >
+                <div className="tw:flex tw:items-start tw:justify-between" style={{ gap: spacing.md }}>
+                  <div className="tw:flex-1 tw:min-w-0">
+                    <div style={{
+                      fontSize: typography.fontSize.sm,
+                      fontWeight: typography.fontWeight.semibold,
+                      color: colors.text.primary,
+                    }}>
+                      {label}
+                    </div>
+                    <div className="tw:truncate" style={{
+                      fontSize: typography.fontSize.xs,
+                      fontFamily: typography.fontFamily.mono,
+                      color: colors.text.tertiary,
+                      marginTop: '2px',
+                    }}>
+                      {item.key}
+                    </div>
+                    {desc && (
+                      <div className="tw:truncate" style={{
+                        fontSize: typography.fontSize.xs,
+                        color: colors.text.secondary,
+                        marginTop: spacing.xs,
+                        maxWidth: '400px',
+                      }}>
+                        {desc}
+                      </div>
+                    )}
+                  </div>
+                  {!isSingle && (
+                    <span style={{
+                      fontSize: '10px',
+                      fontWeight: typography.fontWeight.semibold,
+                      padding: `1px ${spacing.xs}`,
+                      borderRadius: spacing.radius.sm,
+                      backgroundColor: `${levelColor}15`,
+                      color: levelColor,
+                      flexShrink: 0,
+                    }}>
+                      {item.params.length} values
+                    </span>
+                  )}
+                </div>
+              </motion.button>
+            );
+          }
         })}
       </div>
-      {groups.length > PAGE_SIZE && !showAll && (
+      {totalItems > PAGE_SIZE && !showAll && (
         <button
           onClick={() => setShowAll(true)}
           className="tw:cursor-pointer"
@@ -373,7 +539,7 @@ function ParameterGroupCardGrid({
             fontFamily: typography.fontFamily.primary,
           }}
         >
-          Show all {groups.length.toLocaleString()} groups
+          Show all {totalItems.toLocaleString()} items
         </button>
       )}
     </div>
@@ -386,6 +552,7 @@ export default function ParameterExplorer({ parameters, country }: ParameterExpl
   const [search, setSearch] = useState('');
   const [activeLevel, setActiveLevel] = useState<Level | null>(null);
   const [activeSubGroup, setActiveSubGroup] = useState<string | null>(null);
+  const [folderStack, setFolderStack] = useState<string[]>([]);
   const [activeGroup, setActiveGroup] = useState<string | null>(null);
   const [selectedParam, setSelectedParam] = useState<string | null>(null);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
@@ -456,12 +623,35 @@ export default function ParameterExplorer({ parameters, country }: ParameterExpl
     return [...map.entries()].sort(([a], [b]) => a.localeCompare(b));
   }, [subGroupParams, activeSubGroup]);
 
+  // Root folder prefix: common prefix of all groups, auto-collapsed
+  const rootFolderPrefix = useMemo(() => {
+    if (parameterGroups.length === 0) return '';
+    const prefix = commonPrefix(parameterGroups.map(([k]) => k));
+    return autoCollapseFolder(parameterGroups, prefix);
+  }, [parameterGroups]);
+
+  // Current folder: last in stack, or root
+  const currentFolder = folderStack.length > 0 ? folderStack[folderStack.length - 1] : rootFolderPrefix;
+
+  // Folder contents at current level
+  const folderContents = useMemo(() => {
+    if (!activeSubGroup || !currentFolder) return { folders: [], directGroups: [] };
+    return getFolderContents(parameterGroups, currentFolder);
+  }, [parameterGroups, currentFolder, activeSubGroup]);
+
   // Parameters in active group
   const activeGroupParams = useMemo(() => {
     if (!activeGroup) return [];
     const entry = parameterGroups.find(([k]) => k === activeGroup);
     return entry ? entry[1] : [];
   }, [parameterGroups, activeGroup]);
+
+  // Reset folder stack when sub-group changes
+  useEffect(() => {
+    setFolderStack([]);
+    setActiveGroup(null);
+    setSelectedParam(null);
+  }, [activeSubGroup]);
 
   // Reset on filter changes
   useEffect(() => {
@@ -496,6 +686,8 @@ export default function ParameterExplorer({ parameters, country }: ParameterExpl
     if (activeGroup) {
       setActiveGroup(null);
       setSelectedParam(null);
+    } else if (folderStack.length > 0) {
+      setFolderStack((prev) => prev.slice(0, -1));
     } else if (activeSubGroup) {
       setActiveSubGroup(null);
       setSelectedParam(null);
@@ -505,11 +697,14 @@ export default function ParameterExplorer({ parameters, country }: ParameterExpl
     }
   };
 
-  // For single-leaf groups, skip the group detail and go straight to expand
+  const handleFolderSelect = (fullPath: string) => {
+    const collapsed = autoCollapseFolder(parameterGroups, fullPath);
+    setFolderStack((prev) => [...prev, collapsed]);
+  };
+
   const handleGroupSelect = (key: string) => {
     const entry = parameterGroups.find(([k]) => k === key);
     if (entry && entry[1].length === 1) {
-      // Single parameter — just expand it inline
       setActiveGroup(key);
       setSelectedParam(entry[1][0].parameter);
     } else {
@@ -518,13 +713,33 @@ export default function ParameterExplorer({ parameters, country }: ParameterExpl
     }
   };
 
-  const breadcrumb = activeLevel
-    ? activeSubGroup
-      ? activeGroup
-        ? `${LEVEL_CONFIG[activeLevel].label} / ${getSubGroupLabel(activeSubGroup, activeLevel)} / ${getGroupLabel(activeGroup, parameters)}`
-        : `${LEVEL_CONFIG[activeLevel].label} / ${getSubGroupLabel(activeSubGroup, activeLevel)}`
-      : LEVEL_CONFIG[activeLevel].label
-    : null;
+  // Breadcrumb: Level / SubGroup / Folder... / Group
+  const breadcrumbParts = useMemo(() => {
+    const parts: string[] = [];
+    if (activeLevel) parts.push(LEVEL_CONFIG[activeLevel].label);
+    if (activeSubGroup && activeLevel) parts.push(getSubGroupLabel(activeSubGroup, activeLevel));
+    for (const folder of folderStack) {
+      parts.push(getGroupLabel(folder, parameters));
+    }
+    if (activeGroup) parts.push(getGroupLabel(activeGroup, parameters));
+    return parts;
+  }, [activeLevel, activeSubGroup, folderStack, activeGroup, parameters]);
+
+  const breadcrumb = breadcrumbParts.join(' / ');
+
+  // Current heading label
+  const currentHeadingLabel = activeGroup
+    ? getGroupLabel(activeGroup, parameters)
+    : folderStack.length > 0
+      ? getGroupLabel(currentFolder, parameters)
+      : activeSubGroup && activeLevel
+        ? getSubGroupLabel(activeSubGroup, activeLevel)
+        : '';
+
+  // Param count summary for folder view
+  const currentFolderTotalParams = folderContents.folders.reduce((s, f) => s + f.paramCount, 0)
+    + folderContents.directGroups.reduce((s, [, p]) => s + p.length, 0);
+  const currentFolderTotalItems = folderContents.folders.length + folderContents.directGroups.length;
 
   return (
     <div>
@@ -625,7 +840,7 @@ export default function ParameterExplorer({ parameters, country }: ParameterExpl
             return (
               <motion.button
                 key={level}
-                onClick={() => { setActiveLevel(level); setActiveSubGroup(null); setActiveGroup(null); }}
+                onClick={() => { setActiveLevel(level); setActiveSubGroup(null); setActiveGroup(null); setFolderStack([]); }}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: config.order * 0.05 }}
@@ -721,7 +936,7 @@ export default function ParameterExplorer({ parameters, country }: ParameterExpl
         </div>
       )}
 
-      {/* ─── View: Drilled into a sub-group (parameter group cards) ─── */}
+      {/* ─── View: Folder navigation (sub-group drill-in) ─── */}
       {!isSearching && activeLevel && activeSubGroup && !activeGroup && (
         <div>
           <button
@@ -735,7 +950,7 @@ export default function ParameterExplorer({ parameters, country }: ParameterExpl
             }}
           >
             <IconArrowLeft size={16} stroke={1.5} />
-            {LEVEL_CONFIG[activeLevel].label} / {getSubGroupLabel(activeSubGroup, activeLevel)}
+            {breadcrumb}
           </button>
 
           <div style={{ marginBottom: spacing.xl }}>
@@ -745,18 +960,21 @@ export default function ParameterExplorer({ parameters, country }: ParameterExpl
               color: LEVEL_CONFIG[activeLevel].color,
               margin: 0,
             }}>
-              {getSubGroupLabel(activeSubGroup, activeLevel)}
+              {currentHeadingLabel}
             </h2>
             <span style={{ fontSize: typography.fontSize.xs, color: colors.text.tertiary }}>
-              {subGroupParams.length.toLocaleString()} parameters in {parameterGroups.length} groups
+              {currentFolderTotalParams.toLocaleString()} parameters
+              {currentFolderTotalItems > 1 && ` across ${currentFolderTotalItems} ${folderContents.folders.length > 0 ? 'programs' : 'groups'}`}
             </span>
           </div>
 
-          <ParameterGroupCardGrid
-            groups={parameterGroups}
+          <FolderContentsGrid
+            folders={folderContents.folders}
+            directGroups={folderContents.directGroups}
             levelColor={LEVEL_CONFIG[activeLevel].color}
             allParameters={parameters}
-            onSelect={handleGroupSelect}
+            onFolderSelect={handleFolderSelect}
+            onGroupSelect={handleGroupSelect}
           />
         </div>
       )}
