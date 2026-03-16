@@ -15,6 +15,11 @@ function FlowchartPreview({ country, variable, sectionRef }: {
   sectionRef: React.RefObject<HTMLDivElement | null>;
 }) {
   const flowchartUrl = `${FLOWCHART_BASE}/?variable=${variable}&country=${country.toUpperCase()}`;
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+  }, [flowchartUrl]);
 
   return (
     <div ref={sectionRef} style={{ marginTop: spacing['4xl'], marginBottom: spacing['3xl'] }}>
@@ -62,12 +67,24 @@ function FlowchartPreview({ country, variable, sectionRef }: {
           overflow: 'hidden',
           backgroundColor: colors.white,
           height: '600px',
+          position: 'relative',
         }}
       >
+        {loading && (
+          <div style={{
+            position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
+            backgroundColor: colors.white, zIndex: 1,
+          }}>
+            <span style={{ fontSize: typography.fontSize.sm, color: colors.text.tertiary }}>
+              Loading flowchart...
+            </span>
+          </div>
+        )}
         <iframe
           key={flowchartUrl}
           src={flowchartUrl}
           title="Variable computation flowchart"
+          onLoad={() => setLoading(false)}
           style={{
             width: `${100 / 0.75}%`,
             height: `${600 / 0.75}px`,

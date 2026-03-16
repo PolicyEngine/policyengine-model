@@ -1,6 +1,6 @@
 import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { IconSearch, IconArrowLeft, IconFolder } from '@tabler/icons-react';
+import { IconSearch, IconArrowLeft, IconFolder, IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 import type { Parameter, ParameterLeaf } from '../../types/Variable';
 import { colors, typography, spacing } from '../../designTokens';
 import { useDebounce } from '../../hooks/useDebounce';
@@ -13,6 +13,168 @@ import ParameterCard from './ParameterCard';
 import ParameterDetail from './ParameterDetail';
 
 const PAGE_SIZE = 50;
+
+// ─── Pagination ─────────────────────────────────────────────────────────────
+
+function Pagination({ page, totalPages, onPageChange }: {
+  page: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+}) {
+  if (totalPages <= 1) return null;
+
+  // Build page numbers: always show first, last, current ± 2, with ellipsis gaps
+  const pages: (number | '...')[] = [];
+  const addPage = (p: number) => {
+    if (p >= 1 && p <= totalPages && !pages.includes(p)) pages.push(p);
+  };
+
+  addPage(1);
+  for (let i = Math.max(2, page - 2); i <= Math.min(totalPages - 1, page + 2); i++) {
+    addPage(i);
+  }
+  addPage(totalPages);
+
+  // Insert ellipsis where there are gaps
+  const withEllipsis: (number | '...')[] = [];
+  for (let i = 0; i < pages.length; i++) {
+    const p = pages[i];
+    if (i > 0 && typeof p === 'number' && typeof pages[i - 1] === 'number' && p - (pages[i - 1] as number) > 1) {
+      withEllipsis.push('...');
+    }
+    withEllipsis.push(p);
+  }
+
+  const btnBase: React.CSSProperties = {
+    minWidth: '32px',
+    height: '32px',
+    borderRadius: spacing.radius.md,
+    border: `1px solid ${colors.border.light}`,
+    backgroundColor: colors.white,
+    fontFamily: typography.fontFamily.primary,
+    fontSize: typography.fontSize.xs,
+    fontWeight: typography.fontWeight.medium,
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: `0 ${spacing.sm}`,
+  };
+
+  return (
+    <div className="tw:flex tw:items-center tw:justify-center" style={{ gap: spacing.xs, marginTop: spacing.xl }}>
+      <button
+        onClick={() => onPageChange(page - 1)}
+        disabled={page === 1}
+        className="tw:cursor-pointer tw:disabled:cursor-default"
+        style={{
+          ...btnBase,
+          color: page === 1 ? colors.text.tertiary : colors.text.primary,
+          opacity: page === 1 ? 0.4 : 1,
+        }}
+      >
+        <IconChevronLeft size={14} stroke={1.5} />
+      </button>
+      {withEllipsis.map((p, i) =>
+        p === '...' ? (
+          <span key={`e${i}`} style={{ fontSize: typography.fontSize.xs, color: colors.text.tertiary, padding: `0 ${spacing.xs}` }}>
+            ...
+          </span>
+        ) : (
+          <button
+            key={p}
+            onClick={() => onPageChange(p)}
+            className="tw:cursor-pointer"
+            style={{
+              ...btnBase,
+              backgroundColor: p === page ? colors.primary[600] : colors.white,
+              color: p === page ? colors.white : colors.text.primary,
+              borderColor: p === page ? colors.primary[600] : colors.border.light,
+            }}
+          >
+            {p}
+          </button>
+        ),
+      )}
+      <button
+        onClick={() => onPageChange(page + 1)}
+        disabled={page === totalPages}
+        className="tw:cursor-pointer tw:disabled:cursor-default"
+        style={{
+          ...btnBase,
+          color: page === totalPages ? colors.text.tertiary : colors.text.primary,
+          opacity: page === totalPages ? 0.4 : 1,
+        }}
+      >
+        <IconChevronRight size={14} stroke={1.5} />
+      </button>
+    </div>
+  );
+}
+
+// ─── Breadcrumb navigation ──────────────────────────────────────────────────
+
+function BreadcrumbNav({ items, onBack }: {
+  items: { label: string; onClick: () => void }[];
+  onBack: () => void;
+}) {
+  return (
+    <div className="tw:flex tw:items-center tw:flex-wrap" style={{ gap: spacing.xs, marginBottom: spacing.lg }}>
+      <button
+        onClick={onBack}
+        className="tw:flex tw:items-center tw:cursor-pointer"
+        style={{
+          border: 'none',
+          backgroundColor: 'transparent',
+          color: colors.primary[600],
+          padding: `${spacing.xs} ${spacing.xs} ${spacing.xs} 0`,
+          fontFamily: typography.fontFamily.primary,
+          fontSize: typography.fontSize.sm,
+        }}
+      >
+        <IconArrowLeft size={16} stroke={1.5} />
+      </button>
+      {items.map((item, i) => {
+        const isLast = i === items.length - 1;
+        return (
+          <span key={i} className="tw:flex tw:items-center" style={{ gap: spacing.xs }}>
+            {i > 0 && (
+              <span style={{ color: colors.text.tertiary, fontSize: typography.fontSize.sm }}>/</span>
+            )}
+            {isLast ? (
+              <span style={{
+                fontSize: typography.fontSize.sm,
+                fontWeight: typography.fontWeight.semibold,
+                color: colors.text.primary,
+              }}>
+                {item.label}
+              </span>
+            ) : (
+              <button
+                onClick={item.onClick}
+                className="tw:cursor-pointer"
+                style={{
+                  border: 'none',
+                  backgroundColor: 'transparent',
+                  padding: `${spacing.xs} 0`,
+                  fontFamily: typography.fontFamily.primary,
+                  fontSize: typography.fontSize.sm,
+                  fontWeight: typography.fontWeight.medium,
+                  color: colors.primary[600],
+                  textDecoration: 'none',
+                }}
+                onMouseEnter={(e) => { (e.target as HTMLElement).style.textDecoration = 'underline'; }}
+                onMouseLeave={(e) => { (e.target as HTMLElement).style.textDecoration = 'none'; }}
+              >
+                {item.label}
+              </button>
+            )}
+          </span>
+        );
+      })}
+    </div>
+  );
+}
 
 interface ParameterExplorerProps {
   parameters: Record<string, Parameter>;
@@ -152,8 +314,9 @@ function ParameterList({
   selectedParam: string | null;
   onSelect: (name: string) => void;
 }) {
-  const [showAll, setShowAll] = useState(false);
-  const visible = showAll ? params : params.slice(0, PAGE_SIZE);
+  const [page, setPage] = useState(1);
+  const totalPages = Math.ceil(params.length / PAGE_SIZE);
+  const visible = params.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   return (
     <div>
@@ -173,26 +336,7 @@ function ParameterList({
           </div>
         ))}
       </div>
-      {params.length > PAGE_SIZE && !showAll && (
-        <button
-          onClick={() => setShowAll(true)}
-          className="tw:cursor-pointer"
-          style={{
-            display: 'block',
-            margin: `${spacing.lg} auto`,
-            padding: `${spacing.xs} ${spacing.xl}`,
-            border: `1px solid ${colors.border.light}`,
-            borderRadius: spacing.radius.lg,
-            backgroundColor: colors.white,
-            color: colors.primary[600],
-            fontSize: typography.fontSize.xs,
-            fontWeight: typography.fontWeight.medium,
-            fontFamily: typography.fontFamily.primary,
-          }}
-        >
-          Show all {params.length.toLocaleString()}
-        </button>
-      )}
+      <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
     </div>
   );
 }
@@ -373,13 +517,14 @@ function FolderContentsGrid({
   onFolderSelect: (fullPath: string) => void;
   onGroupSelect: (key: string) => void;
 }) {
-  const [showAll, setShowAll] = useState(false);
+  const [page, setPage] = useState(1);
   const totalItems = folders.length + directGroups.length;
+  const totalPages = Math.ceil(totalItems / PAGE_SIZE);
   const allItems: ({ kind: 'folder' } & typeof folders[number] | { kind: 'group'; key: string; params: ParameterLeaf[] })[] = [
     ...folders.map(f => ({ kind: 'folder' as const, ...f })),
     ...directGroups.map(([key, params]) => ({ kind: 'group' as const, key, params })),
   ];
-  const visible = showAll ? allItems : allItems.slice(0, PAGE_SIZE);
+  const visible = allItems.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   return (
     <div>
@@ -522,26 +667,7 @@ function FolderContentsGrid({
           }
         })}
       </div>
-      {totalItems > PAGE_SIZE && !showAll && (
-        <button
-          onClick={() => setShowAll(true)}
-          className="tw:cursor-pointer"
-          style={{
-            display: 'block',
-            margin: `${spacing.lg} auto`,
-            padding: `${spacing.xs} ${spacing.xl}`,
-            border: `1px solid ${colors.border.light}`,
-            borderRadius: spacing.radius.lg,
-            backgroundColor: colors.white,
-            color: colors.primary[600],
-            fontSize: typography.fontSize.xs,
-            fontWeight: typography.fontWeight.medium,
-            fontFamily: typography.fontFamily.primary,
-          }}
-        >
-          Show all {totalItems.toLocaleString()} items
-        </button>
-      )}
+      <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
     </div>
   );
 }
@@ -713,19 +839,37 @@ export default function ParameterExplorer({ parameters, country }: ParameterExpl
     }
   };
 
-  // Breadcrumb: Level / SubGroup / Folder... / Group
-  const breadcrumbParts = useMemo(() => {
-    const parts: string[] = [];
-    if (activeLevel) parts.push(LEVEL_CONFIG[activeLevel].label);
-    if (activeSubGroup && activeLevel) parts.push(getSubGroupLabel(activeSubGroup, activeLevel));
-    for (const folder of folderStack) {
-      parts.push(getGroupLabel(folder, parameters));
-    }
-    if (activeGroup) parts.push(getGroupLabel(activeGroup, parameters));
-    return parts;
-  }, [activeLevel, activeSubGroup, folderStack, activeGroup, parameters]);
+  // Breadcrumb: each entry has a label and navigation action
+  const breadcrumbItems = useMemo(() => {
+    const items: { label: string; onClick: () => void }[] = [];
 
-  const breadcrumb = breadcrumbParts.join(' / ');
+    if (activeLevel) {
+      items.push({
+        label: LEVEL_CONFIG[activeLevel].label,
+        onClick: () => { setActiveLevel(activeLevel); setActiveSubGroup(null); setFolderStack([]); setActiveGroup(null); setSelectedParam(null); },
+      });
+    }
+    if (activeSubGroup && activeLevel) {
+      items.push({
+        label: getSubGroupLabel(activeSubGroup, activeLevel),
+        onClick: () => { setFolderStack([]); setActiveGroup(null); setSelectedParam(null); },
+      });
+    }
+    for (let i = 0; i < folderStack.length; i++) {
+      const stackIndex = i;
+      items.push({
+        label: getGroupLabel(folderStack[i], parameters),
+        onClick: () => { setFolderStack((prev) => prev.slice(0, stackIndex + 1)); setActiveGroup(null); setSelectedParam(null); },
+      });
+    }
+    if (activeGroup) {
+      items.push({
+        label: getGroupLabel(activeGroup, parameters),
+        onClick: () => {},
+      });
+    }
+    return items;
+  }, [activeLevel, activeSubGroup, folderStack, activeGroup, parameters]);
 
   // Current heading label
   const currentHeadingLabel = activeGroup
@@ -891,19 +1035,7 @@ export default function ParameterExplorer({ parameters, country }: ParameterExpl
       {/* ─── View: Drilled into a level ─── */}
       {!isSearching && activeLevel && !activeSubGroup && (
         <div>
-          <button
-            onClick={goBack}
-            className="tw:flex tw:items-center tw:cursor-pointer"
-            style={{
-              gap: spacing.sm, padding: `${spacing.xs} 0`, border: 'none',
-              backgroundColor: 'transparent', fontFamily: typography.fontFamily.primary,
-              marginBottom: spacing.lg, color: colors.primary[600],
-              fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.medium,
-            }}
-          >
-            <IconArrowLeft size={16} stroke={1.5} />
-            Back to overview
-          </button>
+          <BreadcrumbNav items={breadcrumbItems} onBack={goBack} />
 
           <div style={{ marginBottom: spacing.xl }}>
             <h2 style={{
@@ -939,19 +1071,7 @@ export default function ParameterExplorer({ parameters, country }: ParameterExpl
       {/* ─── View: Folder navigation (sub-group drill-in) ─── */}
       {!isSearching && activeLevel && activeSubGroup && !activeGroup && (
         <div>
-          <button
-            onClick={goBack}
-            className="tw:flex tw:items-center tw:cursor-pointer"
-            style={{
-              gap: spacing.sm, padding: `${spacing.xs} 0`, border: 'none',
-              backgroundColor: 'transparent', fontFamily: typography.fontFamily.primary,
-              marginBottom: spacing.lg, color: colors.primary[600],
-              fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.medium,
-            }}
-          >
-            <IconArrowLeft size={16} stroke={1.5} />
-            {breadcrumb}
-          </button>
+          <BreadcrumbNav items={breadcrumbItems} onBack={goBack} />
 
           <div style={{ marginBottom: spacing.xl }}>
             <h2 style={{
@@ -982,19 +1102,7 @@ export default function ParameterExplorer({ parameters, country }: ParameterExpl
       {/* ─── View: Drilled into a parameter group (leaf list) ─── */}
       {!isSearching && activeLevel && activeSubGroup && activeGroup && (
         <div>
-          <button
-            onClick={goBack}
-            className="tw:flex tw:items-center tw:cursor-pointer"
-            style={{
-              gap: spacing.sm, padding: `${spacing.xs} 0`, border: 'none',
-              backgroundColor: 'transparent', fontFamily: typography.fontFamily.primary,
-              marginBottom: spacing.lg, color: colors.primary[600],
-              fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.medium,
-            }}
-          >
-            <IconArrowLeft size={16} stroke={1.5} />
-            {breadcrumb}
-          </button>
+          <BreadcrumbNav items={breadcrumbItems} onBack={goBack} />
 
           <div style={{ marginBottom: spacing.xl }}>
             <h2 style={{
