@@ -134,6 +134,7 @@ function ValueRow({ date, val, nextDate, unit, isProjected }: {
 }
 
 function ValueTimeline({ param }: { param: ParameterLeaf }) {
+  const [showProjected, setShowProjected] = useState(false);
   const rawEntries = Object.entries(param.values).sort(([a], [b]) => a.localeCompare(b));
   if (rawEntries.length === 0) return null;
 
@@ -178,8 +179,6 @@ function ValueTimeline({ param }: { param: ParameterLeaf }) {
     ? allEntries.filter(([d]) => d >= projectionStart)
     : [];
   const hasProjected = projected.length > 1;
-
-  const [showProjected, setShowProjected] = useState(false);
 
   return (
     <div style={{ marginBottom: spacing.lg }}>
@@ -268,7 +267,7 @@ const treeCache = new Map<string, Set<string> | null>();
 async function loadParamTree(country: string): Promise<Set<string> | null> {
   if (treeCache.has(country)) return treeCache.get(country)!;
   try {
-    const res = await fetch(`${import.meta.env.BASE_URL}param-tree-${country}.json`);
+    const res = await fetch(`/param-tree-${country}.json`);
     if (!res.ok) throw new Error('not found');
     const paths: string[] = await res.json();
     const set = new Set(paths);

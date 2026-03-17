@@ -1,7 +1,9 @@
-import { useState, useEffect } from 'react';
-import { useHashRoute, navigate } from '../../router';
+import { useState } from 'react';
+import Link from 'next/link';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { colors, typography, spacing } from '../../designTokens';
 import { IconChevronDown, IconChevronRight } from '@tabler/icons-react';
+import type { Country } from '../../hooks/useCountry';
 
 interface NavItem {
   path: string;
@@ -38,38 +40,51 @@ function isChildActive(item: NavItem, currentPath: string): boolean {
 }
 
 interface SidebarProps {
-  country: string;
+  country: Country;
   onClose?: () => void;
 }
 
-export default function Sidebar({ country, onClose }: SidebarProps) {
-  const currentPath = useHashRoute();
-  const [expanded, setExpanded] = useState<Record<string, boolean>>({});
+/** Extract the base prefix when embedded (e.g. '/us/model' from '/us/model/data/pipeline'). */
+function useBasePrefix(): string {
+  const pathname = usePathname();
+  const match = pathname.match(/^\/\w+\/model/);
+  return match ? match[0] : '';
+}
 
-  // Auto-expand parent when navigating to a child route
-  useEffect(() => {
+export default function Sidebar({ country, onClose }: SidebarProps) {
+  const fullPath = usePathname();
+  const basePrefix = useBasePrefix();
+  const currentPath = basePrefix ? fullPath.slice(basePrefix.length) || '/' : fullPath;
+  const searchParams = useSearchParams();
+  const search = searchParams.toString();
+  const href = (path: string) => {
+    const full = `${basePrefix}${path === '/' && basePrefix ? '' : path}`;
+    return search ? `${full}?${search}` : full;
+  };
+
+  const [expanded, setExpanded] = useState<Record<string, boolean>>(() => {
+    const initial: Record<string, boolean> = {};
     for (const item of navItems) {
       if (item.children?.some((c) => c.path === currentPath)) {
-        setExpanded((prev) => ({ ...prev, [item.path]: true }));
+        initial[item.path] = true;
       }
     }
-  }, [currentPath]);
-
-  const handleNavClick = (item: NavItem) => {
-    if (item.children) {
-      setExpanded((prev) => ({ ...prev, [item.path]: !prev[item.path] }));
-      if (!expanded[item.path]) {
-        navigate(item.children[0].path);
-        onClose?.();
-      }
-    } else {
-      navigate(item.path);
-      onClose?.();
-    }
-  };
+    return initial;
+  });
 
   const behavioralLabel =
     country === 'uk' ? 'Behavioural responses' : 'Behavioral responses';
+
+  const navLinkStyle = (active: boolean, isLeaf: boolean) => ({
+    padding: `${spacing.sm} ${spacing['2xl']}`,
+    backgroundColor: isLeaf && active ? colors.primary[50] : 'transparent',
+    color: active ? colors.primary[700] : colors.text.secondary,
+    fontWeight: active ? 600 : 500,
+    fontFamily: typography.fontFamily.primary,
+    borderLeft: isLeaf && active
+      ? `3px solid ${colors.primary[500]}`
+      : '3px solid transparent',
+  });
 
   return (
     <nav
@@ -99,52 +114,34 @@ export default function Sidebar({ country, onClose }: SidebarProps) {
           const isExpanded = expanded[item.path] ?? false;
           const label = item.path === '/behavioral' ? behavioralLabel : item.label;
 
-          return (
-            <div key={item.path}>
-              <button
-                onClick={() => handleNavClick(item)}
-                className="tw:w-full tw:flex tw:items-center tw:justify-between tw:border-none tw:cursor-pointer tw:text-left tw:text-sm tw:transition-all tw:duration-150 tw:ease-in-out"
-                style={{
-                  padding: `${spacing.sm} ${spacing['2xl']}`,
-                  backgroundColor:
-                    !item.children && isActive ? colors.primary[50] : 'transparent',
-                  color: isActive ? colors.primary[700] : colors.text.secondary,
-                  fontWeight: isActive ? 600 : 500,
-                  fontFamily: typography.fontFamily.primary,
-                  borderLeft: !item.children && isActive
-                    ? `3px solid ${colors.primary[500]}`
-                    : '3px solid transparent',
-                }}
-              >
-                <span>{label}</span>
-                {item.children &&
-                  (isExpanded ? (
+          if (item.children) {
+            return (
+              <div key={item.path}>
+                <button
+                  onClick={() => setExpanded((prev) => ({ ...prev, [item.path]: !prev[item.path] }))}
+                  className="tw:w-full tw:flex tw:items-center tw:justify-between tw:border-none tw:cursor-pointer tw:text-left tw:text-sm tw:transition-all tw:duration-150 tw:ease-in-out"
+                  style={navLinkStyle(isActive, false)}
+                >
+                  <span>{label}</span>
+                  {isExpanded ? (
                     <IconChevronDown size={16} stroke={1.5} />
                   ) : (
                     <IconChevronRight size={16} stroke={1.5} />
-                  ))}
-              </button>
-
-              {/* Children */}
-              {item.children && isExpanded &&
-                item.children.map((child) => {
+                  )}
+                </button>
+                {isExpanded &&
+                  item.children.map((child) => {
                     const childActive = child.path === currentPath;
                     return (
-                      <button
+                      <Link
                         key={child.path}
-                        onClick={() => {
-                          navigate(child.path);
-                          onClose?.();
-                        }}
-                        className="tw:w-full tw:block tw:border-none tw:cursor-pointer tw:text-left tw:text-sm tw:transition-all tw:duration-150 tw:ease-in-out"
+                        href={href(child.path)}
+                        onClick={onClose}
+                        className="tw:block tw:no-underline tw:text-sm tw:transition-all tw:duration-150 tw:ease-in-out"
                         style={{
                           padding: `${spacing.xs} ${spacing['2xl']} ${spacing.xs} ${spacing['4xl']}`,
-                          backgroundColor: childActive
-                            ? colors.primary[50]
-                            : 'transparent',
-                          color: childActive
-                            ? colors.primary[700]
-                            : colors.text.tertiary,
+                          backgroundColor: childActive ? colors.primary[50] : 'transparent',
+                          color: childActive ? colors.primary[700] : colors.text.tertiary,
                           fontWeight: childActive ? 600 : 400,
                           fontFamily: typography.fontFamily.primary,
                           borderLeft: childActive
@@ -153,10 +150,23 @@ export default function Sidebar({ country, onClose }: SidebarProps) {
                         }}
                       >
                         {child.label}
-                      </button>
+                      </Link>
                     );
-                })}
-            </div>
+                  })}
+              </div>
+            );
+          }
+
+          return (
+            <Link
+              key={item.path}
+              href={href(item.path)}
+              onClick={onClose}
+              className="tw:flex tw:items-center tw:no-underline tw:text-sm tw:transition-all tw:duration-150 tw:ease-in-out"
+              style={navLinkStyle(isActive, true)}
+            >
+              {label}
+            </Link>
           );
         })}
       </div>

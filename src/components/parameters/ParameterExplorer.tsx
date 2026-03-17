@@ -633,16 +633,12 @@ export default function ParameterExplorer({ parameters, country }: ParameterExpl
   }, [parameterGroups, activeGroup]);
 
   // Reset folder stack when sub-group changes
-  useEffect(() => {
-    setFolderStack([]);
-    setActiveGroup(null);
-    setSelectedParam(null);
-  }, [activeSubGroup]);
+  // eslint-disable-next-line react-hooks/set-state-in-effect -- reset navigation when sub-group changes
+  useEffect(() => { setFolderStack([]); setActiveGroup(null); setSelectedParam(null); }, [activeSubGroup]);
 
   // Reset on filter changes
-  useEffect(() => {
-    setVisibleCount(PAGE_SIZE);
-  }, [debouncedSearch, activeLevel, activeSubGroup, activeGroup]);
+  // eslint-disable-next-line react-hooks/set-state-in-effect -- reset pagination when filters change
+  useEffect(() => { setVisibleCount(PAGE_SIZE); }, [debouncedSearch, activeLevel, activeSubGroup, activeGroup]);
 
   // Infinite scroll for search mode
   useEffect(() => {

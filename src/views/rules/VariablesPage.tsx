@@ -15,11 +15,8 @@ function FlowchartPreview({ country, variable, sectionRef }: {
   sectionRef: React.RefObject<HTMLDivElement | null>;
 }) {
   const flowchartUrl = `${FLOWCHART_BASE}/?variable=${variable}&country=${country.toUpperCase()}`;
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    setLoading(true);
-  }, [flowchartUrl]);
+  const [loadedUrl, setLoadedUrl] = useState<string | null>(null);
+  const loading = loadedUrl !== flowchartUrl;
 
   return (
     <div ref={sectionRef} style={{ marginTop: spacing['4xl'], marginBottom: spacing['3xl'] }}>
@@ -84,7 +81,7 @@ function FlowchartPreview({ country, variable, sectionRef }: {
           key={flowchartUrl}
           src={flowchartUrl}
           title="Variable computation flowchart"
-          onLoad={() => setLoading(false)}
+          onLoad={() => setLoadedUrl(flowchartUrl)}
           style={{
             width: `${100 / 0.75}%`,
             height: `${600 / 0.75}px`,
@@ -113,7 +110,6 @@ export default function VariablesPage({ country }: { country: string }) {
 
   const handleViewFlowchart = (varName: string) => {
     setFlowchartVar(varName);
-    // Small delay to let the iframe key change, then scroll
     setTimeout(() => {
       flowchartRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 50);

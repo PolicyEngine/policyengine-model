@@ -1,6 +1,7 @@
 import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { colors, typography, spacing } from '../../designTokens';
+import type { Country } from '../../hooks/useCountry';
 import {
   getMicrosimSteps,
   getColumns,
@@ -19,7 +20,7 @@ const BEHAVIORAL_FLASH_COLUMNS = new Set(['earnings', 'reformTax', 'taxChange'])
 /** Signed-value columns that should show green when negative (= tax cut). */
 const SIGNED_COLUMNS = new Set(['taxChange', 'impact']);
 
-export default function Walkthrough({ country = 'us' }: { country?: string }) {
+export default function Walkthrough({ country = 'us' }: { country?: Country }) {
   const steps = useMemo(() => getMicrosimSteps(country), [country]);
   const allColumns = useMemo(() => getColumns(country), [country]);
   const [stepIdx, setStepIdx] = useState(0);

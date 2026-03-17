@@ -411,15 +411,12 @@ export default function VariableExplorer({ variables, parameters, country, onVie
   }, [subGroupVars, currentFolder, activeSubGroup]);
 
   // Reset folder stack when sub-group changes
-  useEffect(() => {
-    setFolderStack([]);
-    setSelectedVar(null);
-  }, [activeSubGroup]);
+  // eslint-disable-next-line react-hooks/set-state-in-effect -- reset navigation when sub-group changes
+  useEffect(() => { setFolderStack([]); setSelectedVar(null); }, [activeSubGroup]);
 
   // Reset on filter changes
-  useEffect(() => {
-    setVisibleCount(PAGE_SIZE);
-  }, [debouncedSearch, activeLevel, activeSubGroup]);
+  // eslint-disable-next-line react-hooks/set-state-in-effect -- reset pagination when filters change
+  useEffect(() => { setVisibleCount(PAGE_SIZE); }, [debouncedSearch, activeLevel, activeSubGroup]);
 
   // Infinite scroll for search mode
   useEffect(() => {

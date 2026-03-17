@@ -9,7 +9,7 @@ const metadataCache = new Map<string, Metadata>();
 async function fetchFromStaticOrAPI(country: string): Promise<any> {
   // Try the pre-built static file (generated at build time by scripts/fetch-metadata.js)
   try {
-    const staticUrl = `${import.meta.env.BASE_URL}metadata-${country}.json`;
+    const staticUrl = `/metadata-${country}.json`;
     const res = await fetch(staticUrl);
     if (res.ok) {
       const data = await res.json();
