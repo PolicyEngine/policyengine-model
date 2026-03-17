@@ -65,7 +65,7 @@ function formatValue(val: number | string | boolean | string[], unit: string | n
   return { text: str, items: null };
 }
 
-const PROJECTION_CUTOFF = '2026-01-01';
+const CURRENT_YEAR = new Date().getFullYear();
 
 function ValueRow({ date, val, nextDate, unit, isProjected }: {
   date: string;
@@ -147,9 +147,37 @@ function ValueTimeline({ param }: { param: ParameterLeaf }) {
     allEntries.push([date, val]);
   }
 
-  const legislated = allEntries.filter(([d]) => d < PROJECTION_CUTOFF);
-  const projected = allEntries.filter(([d]) => d >= PROJECTION_CUTOFF);
-  const hasProjected = projected.length > 1; // Only collapse if there are multiple projected entries
+  // Find where uprated projections begin. Only applies to parameters that
+  // extend to 2100. Within future entries (post current year), find where
+  // a consecutive yearly run of 5+ starts — that's where uprating takes over.
+  // Everything before that is explicitly legislated.
+  const projectionStart = (() => {
+    const lastDate = rawEntries.length > 0 ? rawEntries[rawEntries.length - 1][0] : '';
+    if (lastDate < '2100') return null; // Not uprated
+
+    // Use raw (un-merged) entries to detect the yearly pattern
+    const futureRaw = rawEntries.filter(([d]) => parseInt(d) > CURRENT_YEAR);
+    if (futureRaw.length < 5) return null;
+
+    const years = futureRaw.map(([d]) => parseInt(d));
+    for (let i = 0; i < years.length; i++) {
+      let consecutive = 1;
+      for (let j = i + 1; j < years.length; j++) {
+        if (years[j] - years[j - 1] === 1) consecutive++;
+        else break;
+      }
+      if (consecutive >= 5) return futureRaw[i][0];
+    }
+    return null;
+  })();
+
+  const legislated = projectionStart
+    ? allEntries.filter(([d]) => d < projectionStart)
+    : allEntries;
+  const projected = projectionStart
+    ? allEntries.filter(([d]) => d >= projectionStart)
+    : [];
+  const hasProjected = projected.length > 1;
 
   const [showProjected, setShowProjected] = useState(false);
 
