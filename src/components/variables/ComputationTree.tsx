@@ -95,8 +95,8 @@ function TreeNode({
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: sign === '+' ? '#ECFDF5' : '#FEF2F2',
-            color: sign === '+' ? '#059669' : '#DC2626',
+            backgroundColor: sign === '+' ? colors.primary[50] : '#FEF2F2',
+            color: sign === '+' ? colors.primary[600] : colors.error,
             fontSize: '11px',
             fontWeight: typography.fontWeight.bold,
             flexShrink: 0,
@@ -144,8 +144,8 @@ function TreeNode({
               fontWeight: typography.fontWeight.semibold,
               padding: `1px ${spacing.xs}`,
               borderRadius: spacing.radius.sm,
-              backgroundColor: '#DBEAFE',
-              color: '#1D4ED8',
+              backgroundColor: colors.primary[50],
+              color: colors.primary[700],
             }}
           >
             input

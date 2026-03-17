@@ -18,7 +18,7 @@ function getCurrentValue(param: ParameterLeaf): { text: string; isList: boolean;
   }
   if (typeof val === 'boolean') return { text: val ? 'true' : 'false', isList: false, count: 0 };
   if (typeof val === 'number') {
-    if (param.unit === '/1') return { text: `${(val * 100).toFixed(1)}%`, isList: false, count: 0 };
+    if (param.unit === '/1') { const pct = val * 100; return { text: `${Number.isInteger(pct) ? pct.toFixed(0) : pct.toFixed(2)}%`, isList: false, count: 0 }; }
     return { text: val.toLocaleString(), isList: false, count: 0 };
   }
   const str = String(val);
@@ -69,12 +69,11 @@ export default function ParameterCard({ parameter: param, isSelected, onClick }:
           </div>
           {param.description && (
             <div
-              className="tw:truncate"
               style={{
                 fontSize: typography.fontSize.xs,
                 color: colors.text.secondary,
                 marginTop: spacing.xs,
-                maxWidth: '500px',
+                lineHeight: 1.4,
               }}
             >
               {param.description}
@@ -93,8 +92,8 @@ export default function ParameterCard({ parameter: param, isSelected, onClick }:
                   fontWeight: typography.fontWeight.semibold,
                   padding: `1px ${spacing.xs}`,
                   borderRadius: spacing.radius.sm,
-                  backgroundColor: '#DBEAFE',
-                  color: '#1D4ED8',
+                  backgroundColor: colors.primary[50],
+                  color: colors.primary[700],
                   fontFamily: typography.fontFamily.mono,
                   maxWidth: '120px',
                   overflow: 'hidden',
@@ -118,7 +117,13 @@ export default function ParameterCard({ parameter: param, isSelected, onClick }:
                 fontFamily: typography.fontFamily.mono,
               }}
             >
-              {(param as ParameterLeaf).unit === '/1' ? '%' : (param as ParameterLeaf).unit}
+              {(() => {
+                const u = (param as ParameterLeaf).unit;
+                if (u === '/1') return '%';
+                if (u === 'currency-USD' || u === 'currency_USD' || u === 'USD') return '$';
+                if (u === 'currency-GBP' || u === 'currency_GBP' || u === 'GBP') return '£';
+                return u;
+              })()}
             </span>
           )}
           {/* Type badge */}
@@ -128,8 +133,8 @@ export default function ParameterCard({ parameter: param, isSelected, onClick }:
               fontWeight: typography.fontWeight.semibold,
               padding: `1px ${spacing.xs}`,
               borderRadius: spacing.radius.sm,
-              backgroundColor: isLeaf ? '#F0FDF4' : '#FEF3C7',
-              color: isLeaf ? '#166534' : '#92400E',
+              backgroundColor: isLeaf ? colors.primary[100] : colors.gray[100],
+              color: isLeaf ? colors.primary[800] : colors.gray[600],
             }}
           >
             {isLeaf ? 'value' : 'group'}

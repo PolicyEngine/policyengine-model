@@ -15,8 +15,8 @@ interface VariableDetailProps {
 
 function formatUnit(unit: string | null, country: string): string {
   if (!unit) return 'none';
-  if (unit === 'currency-USD') return 'USD ($)';
-  if (unit === 'currency-GBP') return 'GBP (£)';
+  if (unit === 'currency-USD' || unit === 'currency_USD' || unit === 'USD') return 'USD ($)';
+  if (unit === 'currency-GBP' || unit === 'currency_GBP' || unit === 'GBP') return 'GBP (£)';
   if (unit === '/1') return 'ratio (0–1)';
   void country;
   return unit;

@@ -11,9 +11,11 @@ interface ParameterDetailProps {
 
 function formatUnit(unit: string | null): string {
   if (!unit) return 'none';
-  if (unit === 'currency-USD') return 'USD ($)';
-  if (unit === 'currency-GBP') return 'GBP (£)';
+  if (unit === 'currency-USD' || unit === 'currency_USD' || unit === 'USD') return 'USD ($)';
+  if (unit === 'currency-GBP' || unit === 'currency_GBP' || unit === 'GBP') return 'GBP (£)';
   if (unit === '/1') return 'ratio (0–1)';
+  if (unit === 'bool') return 'boolean';
+  if (unit === 'int' || unit === 'float') return 'number';
   return unit;
 }
 
@@ -51,8 +53,8 @@ function formatValue(val: number | string | boolean | string[], unit: string | n
   }
   if (typeof val === 'boolean') return { text: val ? 'true' : 'false', items: null };
   if (typeof val === 'number') {
-    if (unit === '/1') return { text: `${(val * 100).toFixed(2)}%`, items: null };
-    if (unit?.startsWith('currency-')) return { text: val.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }), items: null };
+    if (unit === '/1') { const pct = val * 100; return { text: `${Number.isInteger(pct) ? pct.toFixed(0) : pct.toFixed(2)}%`, items: null }; }
+    if (unit?.startsWith('currency-') || unit?.startsWith('currency_') || unit === 'USD' || unit === 'GBP') return { text: val.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }), items: null };
     return { text: val.toLocaleString(), items: null };
   }
   const str = String(val);
@@ -132,8 +134,18 @@ function ValueRow({ date, val, nextDate, unit, isProjected }: {
 }
 
 function ValueTimeline({ param }: { param: ParameterLeaf }) {
-  const allEntries = Object.entries(param.values).sort(([a], [b]) => a.localeCompare(b));
-  if (allEntries.length === 0) return null;
+  const rawEntries = Object.entries(param.values).sort(([a], [b]) => a.localeCompare(b));
+  if (rawEntries.length === 0) return null;
+
+  // Merge consecutive entries with identical values
+  const allEntries: [string, number | string | boolean | string[]][] = [];
+  for (const [date, val] of rawEntries) {
+    if (allEntries.length > 0) {
+      const prevVal = allEntries[allEntries.length - 1][1];
+      if (JSON.stringify(prevVal) === JSON.stringify(val)) continue;
+    }
+    allEntries.push([date, val]);
+  }
 
   const legislated = allEntries.filter(([d]) => d < PROJECTION_CUTOFF);
   const projected = allEntries.filter(([d]) => d >= PROJECTION_CUTOFF);

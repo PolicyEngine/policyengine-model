@@ -8,13 +8,13 @@ interface VariableCardProps {
 }
 
 const entityColors: Record<string, string> = {
-  person: '#7C3AED',
-  tax_unit: '#2563EB',
-  spm_unit: '#0891B2',
-  household: '#059669',
-  family: '#D97706',
-  marital_unit: '#DC2626',
-  benunit: '#0891B2',
+  person: '#2C7A7B',
+  tax_unit: '#2C7A7B',
+  spm_unit: '#2C7A7B',
+  household: '#2C7A7B',
+  family: '#2C7A7B',
+  marital_unit: '#2C7A7B',
+  benunit: '#2C7A7B',
 };
 
 export const entityLabels: Record<string, string> = {
@@ -103,8 +103,8 @@ export default function VariableCard({ variable, isSelected, onClick }: Variable
               fontWeight: typography.fontWeight.semibold,
               padding: `1px ${spacing.xs}`,
               borderRadius: spacing.radius.sm,
-              backgroundColor: variable.isInputVariable ? '#DBEAFE' : '#F0FDF4',
-              color: variable.isInputVariable ? '#1D4ED8' : '#166534',
+              backgroundColor: variable.isInputVariable ? colors.primary[50] : colors.gray[100],
+              color: variable.isInputVariable ? colors.primary[700] : colors.gray[600],
             }}
           >
             {variable.isInputVariable ? 'input' : 'computed'}

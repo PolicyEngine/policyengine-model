@@ -133,12 +133,12 @@ export function getSubGroupDescription(key: string, level: Level): string | null
 }
 
 export const LEVEL_CONFIG: Record<Level, { label: string; description: string; color: string; order: number }> = {
-  federal:   { label: 'Federal',          description: 'IRS, HHS, USDA, SSA, HUD, and other federal agencies',            color: '#1D4ED8', order: 0 },
-  state:     { label: 'State',            description: 'State-level tax and benefit programs across all 50 states + DC',   color: '#7C3AED', order: 1 },
-  local:     { label: 'Local',            description: 'City and county programs',                                          color: '#059669', order: 2 },
-  territory: { label: 'Territories',      description: 'Puerto Rico and other US territories',                              color: '#0891B2', order: 3 },
-  reform:    { label: 'Reforms',          description: 'Contributed reform proposals and policy experiments',               color: '#D97706', order: 4 },
-  household: { label: 'Household inputs', description: 'Demographics, income, expenses, and geographic inputs',             color: '#6B7280', order: 5 },
+  federal:   { label: 'Federal',          description: 'IRS, HHS, USDA, SSA, HUD, and other federal agencies',            color: '#2C7A7B', order: 0 },
+  state:     { label: 'State',            description: 'State-level tax and benefit programs across all 50 states + DC',   color: '#2C7A7B', order: 1 },
+  local:     { label: 'Local',            description: 'City and county programs',                                          color: '#2C7A7B', order: 2 },
+  territory: { label: 'Territories',      description: 'Puerto Rico and other US territories',                              color: '#2C7A7B', order: 3 },
+  reform:    { label: 'Reforms',          description: 'Contributed reform proposals and policy experiments',               color: '#2C7A7B', order: 4 },
+  household: { label: 'Household inputs', description: 'Demographics, income, expenses, and geographic inputs',             color: '#475569', order: 5 },
 };
 
 export const LEVELS_ORDERED: Level[] = ['federal', 'state', 'local', 'territory', 'reform', 'household'];
