@@ -7,16 +7,17 @@ interface ParameterTimelineProps {
   country: string;
 }
 
-function formatValue(val: number | string | boolean, unit: string | null): string {
+function formatValue(val: number | string | boolean | string[], unit: string | null): string {
+  if (Array.isArray(val)) return val.length === 0 ? '(empty)' : val.join(', ');
   if (typeof val === 'boolean') return val ? 'Yes' : 'No';
   if (typeof val === 'number') {
-    if (unit?.startsWith('currency-')) {
-      const currency = unit === 'currency-GBP' ? '£' : '$';
+    if (unit?.startsWith('currency-') || unit?.startsWith('currency_') || unit === 'USD' || unit === 'GBP') {
+      const currency = (unit === 'currency-GBP' || unit === 'currency_GBP' || unit === 'GBP') ? '£' : '$';
       return val >= 1000
         ? `${currency}${val.toLocaleString()}`
         : `${currency}${val}`;
     }
-    if (unit === '/1') return `${(val * 100).toFixed(1)}%`;
+    if (unit === '/1') { const pct = val * 100; return `${Number.isInteger(pct) ? pct.toFixed(0) : pct.toFixed(2)}%`; }
     return val.toLocaleString();
   }
   return String(val);

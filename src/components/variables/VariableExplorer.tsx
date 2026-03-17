@@ -1,6 +1,6 @@
 import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { IconSearch, IconArrowLeft, IconFolder, IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
+import { IconSearch, IconFolder } from '@tabler/icons-react';
 import type { Variable, Parameter } from '../../types/Variable';
 import { colors, typography, spacing } from '../../designTokens';
 import { useDebounce } from '../../hooks/useDebounce';
@@ -12,107 +12,10 @@ import {
 } from '../shared/categoryUtils';
 import VariableCard from './VariableCard';
 import VariableDetail from './VariableDetail';
+import Pagination from '../shared/Pagination';
+import BreadcrumbNav from '../shared/BreadcrumbNav';
 
 const PAGE_SIZE = 50;
-
-// ─── Pagination ─────────────────────────────────────────────────────────────
-
-function Pagination({ page, totalPages, onPageChange }: {
-  page: number;
-  totalPages: number;
-  onPageChange: (page: number) => void;
-}) {
-  if (totalPages <= 1) return null;
-
-  const pages: (number | '...')[] = [];
-  const addPage = (p: number) => {
-    if (p >= 1 && p <= totalPages && !pages.includes(p)) pages.push(p);
-  };
-  addPage(1);
-  for (let i = Math.max(2, page - 2); i <= Math.min(totalPages - 1, page + 2); i++) addPage(i);
-  addPage(totalPages);
-
-  const withEllipsis: (number | '...')[] = [];
-  for (let i = 0; i < pages.length; i++) {
-    const p = pages[i];
-    if (i > 0 && typeof p === 'number' && typeof pages[i - 1] === 'number' && p - (pages[i - 1] as number) > 1) {
-      withEllipsis.push('...');
-    }
-    withEllipsis.push(p);
-  }
-
-  const btnBase: React.CSSProperties = {
-    minWidth: '32px', height: '32px', borderRadius: spacing.radius.md,
-    border: `1px solid ${colors.border.light}`, backgroundColor: colors.white,
-    fontFamily: typography.fontFamily.primary, fontSize: typography.fontSize.xs,
-    fontWeight: typography.fontWeight.medium, cursor: 'pointer',
-    display: 'flex', alignItems: 'center', justifyContent: 'center', padding: `0 ${spacing.sm}`,
-  };
-
-  return (
-    <div className="tw:flex tw:items-center tw:justify-center" style={{ gap: spacing.xs, marginTop: spacing.xl }}>
-      <button onClick={() => onPageChange(page - 1)} disabled={page === 1} className="tw:cursor-pointer tw:disabled:cursor-default"
-        style={{ ...btnBase, color: page === 1 ? colors.text.tertiary : colors.text.primary, opacity: page === 1 ? 0.4 : 1 }}>
-        <IconChevronLeft size={14} stroke={1.5} />
-      </button>
-      {withEllipsis.map((p, i) =>
-        p === '...' ? (
-          <span key={`e${i}`} style={{ fontSize: typography.fontSize.xs, color: colors.text.tertiary, padding: `0 ${spacing.xs}` }}>...</span>
-        ) : (
-          <button key={p} onClick={() => onPageChange(p)} className="tw:cursor-pointer"
-            style={{ ...btnBase, backgroundColor: p === page ? colors.primary[600] : colors.white,
-              color: p === page ? colors.white : colors.text.primary,
-              borderColor: p === page ? colors.primary[600] : colors.border.light }}>
-            {p}
-          </button>
-        ),
-      )}
-      <button onClick={() => onPageChange(page + 1)} disabled={page === totalPages} className="tw:cursor-pointer tw:disabled:cursor-default"
-        style={{ ...btnBase, color: page === totalPages ? colors.text.tertiary : colors.text.primary, opacity: page === totalPages ? 0.4 : 1 }}>
-        <IconChevronRight size={14} stroke={1.5} />
-      </button>
-    </div>
-  );
-}
-
-// ─── Breadcrumb navigation ──────────────────────────────────────────────────
-
-function BreadcrumbNav({ items, onBack }: {
-  items: { label: string; onClick: () => void }[];
-  onBack: () => void;
-}) {
-  return (
-    <div className="tw:flex tw:items-center tw:flex-wrap" style={{ gap: spacing.xs, marginBottom: spacing.lg }}>
-      <button onClick={onBack} className="tw:flex tw:items-center tw:cursor-pointer"
-        style={{ border: 'none', backgroundColor: 'transparent', color: colors.primary[600],
-          padding: `${spacing.xs} ${spacing.xs} ${spacing.xs} 0`, fontFamily: typography.fontFamily.primary, fontSize: typography.fontSize.sm }}>
-        <IconArrowLeft size={16} stroke={1.5} />
-      </button>
-      {items.map((item, i) => {
-        const isLast = i === items.length - 1;
-        return (
-          <span key={i} className="tw:flex tw:items-center" style={{ gap: spacing.xs }}>
-            {i > 0 && <span style={{ color: colors.text.tertiary, fontSize: typography.fontSize.sm }}>/</span>}
-            {isLast ? (
-              <span style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
-                {item.label}
-              </span>
-            ) : (
-              <button onClick={item.onClick} className="tw:cursor-pointer"
-                style={{ border: 'none', backgroundColor: 'transparent', padding: `${spacing.xs} 0`,
-                  fontFamily: typography.fontFamily.primary, fontSize: typography.fontSize.sm,
-                  fontWeight: typography.fontWeight.medium, color: colors.primary[600], textDecoration: 'none' }}
-                onMouseEnter={(e) => { (e.target as HTMLElement).style.textDecoration = 'underline'; }}
-                onMouseLeave={(e) => { (e.target as HTMLElement).style.textDecoration = 'none'; }}>
-                {item.label}
-              </button>
-            )}
-          </span>
-        );
-      })}
-    </div>
-  );
-}
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
