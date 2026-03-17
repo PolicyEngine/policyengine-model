@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build",
+    "fetch-metadata": "node scripts/fetch-metadata.js",
+    "build": "node scripts/fetch-metadata.js && next build",
     "start": "next start",
     "lint": "next lint",
     "test": "vitest run",

@@ -1,8 +1,8 @@
 import type { Program, CoverageStatus, StateImplementation } from '../types/Program';
 import type { Country } from '../hooks/useCountry';
 
-const GITHUB_BASE = 'https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us';
-const TESTS_BASE = 'https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/tests';
+const GITHUB_BASE = 'https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us';
+const TESTS_BASE = 'https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/tests';
 
 interface ApiProgram {
   id: string;
@@ -104,10 +104,10 @@ export async function fetchPrograms(country: Country = 'us'): Promise<Program[]>
   if (cache.has(country)) return cache.get(country)!;
 
   try {
-    const res = await fetch(`https://api.policyengine.org/${country}/metadata`);
-    if (!res.ok) throw new Error(`API returned ${res.status}`);
-    const data = await res.json();
-    const apiPrograms: ApiProgram[] = data.result?.modelled_policies?.programs;
+    // Use the shared metadata fetch to avoid duplicate API calls
+    const { fetchMetadataRaw } = await import('./fetchMetadata');
+    const data = await fetchMetadataRaw(country);
+    const apiPrograms: ApiProgram[] = data.modelled_policies?.programs;
     if (!apiPrograms || !Array.isArray(apiPrograms)) {
       throw new Error('No programs array in API response');
     }

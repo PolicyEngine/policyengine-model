@@ -48,9 +48,10 @@ const geoLevelLabels: Record<string, string> = {
 export default function CalibrationPage({ country }: { country: Country }) {
   const [search, setSearch] = useState('');
 
-  const allTargets: CalibrationRow[] = country === 'us'
-    ? (usCalibrationTargets as CalibrationRow[])
-    : [];
+  const allTargets: CalibrationRow[] = useMemo(
+    () => country === 'us' ? (usCalibrationTargets as CalibrationRow[]) : [],
+    [country],
+  );
 
   const filtered = useMemo(() => {
     if (!search) return allTargets;
