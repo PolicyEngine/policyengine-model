@@ -3,10 +3,14 @@ import { Suspense } from 'react';
 import '../src/index.css';
 import ClientLayout from './client-layout';
 
+const origin = process.env.VERCEL_URL
+  ? `https://${process.env.VERCEL_URL}`
+  : 'https://policyengine-model-phi.vercel.app';
+
 export const metadata: Metadata = {
   title: 'PolicyEngine Model',
   icons: {
-    icon: 'https://policyengine-model-phi.vercel.app/icon.svg',
+    icon: `${origin}/icon.svg`,
   },
 };
 
