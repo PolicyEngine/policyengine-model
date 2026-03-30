@@ -5,6 +5,9 @@ import ClientLayout from './client-layout';
 
 export const metadata: Metadata = {
   title: 'PolicyEngine Model',
+  icons: {
+    icon: 'https://policyengine-model-phi.vercel.app/icon.svg',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
