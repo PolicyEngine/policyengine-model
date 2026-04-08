@@ -46,7 +46,7 @@ describe('Sidebar', () => {
     render(<Sidebar country="us" />);
     fireEvent.click(screen.getByText('Data'));
     expect(screen.getByText('Pipeline')).toBeInTheDocument();
-    expect(screen.getByText('Calibration')).toBeInTheDocument();
+    expect(screen.getByText('Calibration Targets')).toBeInTheDocument();
     expect(screen.getByText('Validation')).toBeInTheDocument();
   });
 });

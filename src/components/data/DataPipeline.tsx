@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Link from 'next/link';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { colors, typography, spacing } from '../../designTokens';
 import { pipelineStages } from '../../data/pipelineStages';
 import { ukPipelineStages } from '../../data/ukPipelineStages';
@@ -99,6 +101,15 @@ export default function DataPipeline({ country = 'us' }: { country?: Country }) 
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
   const stage = allStages[activeStage];
 
+  const fullPath = usePathname();
+  const basePrefix = fullPath.match(/^\/\w+\/model/)?.[0] ?? '';
+  const searchParams = useSearchParams();
+  const search = searchParams.toString();
+  const buildHref = (path: string) => {
+    const full = `${basePrefix}${path}`;
+    return search ? `${full}?${search}` : full;
+  };
+
   const toggleSection = (section: string) => {
     setExpandedSection(expandedSection === section ? null : section);
   };
@@ -144,10 +155,10 @@ export default function DataPipeline({ country = 'us' }: { country?: Country }) 
 
         {/* Fork connector */}
         <div className="tw:flex tw:justify-center tw:relative tw:h-10">
-          <div className="tw:absolute tw:top-0 tw:left-1/2 tw:w-[2px] tw:h-5" style={{ backgroundColor: colors.border.light }} />
-          <div className="tw:absolute tw:top-5 tw:left-1/4 tw:right-1/4 tw:h-[2px]" style={{ backgroundColor: colors.border.light }} />
-          <div className="tw:absolute tw:top-5 tw:left-1/4 tw:w-[2px] tw:h-5" style={{ backgroundColor: colors.border.light }} />
-          <div className="tw:absolute tw:top-5 tw:right-1/4 tw:w-[2px] tw:h-5" style={{ backgroundColor: colors.border.light }} />
+          <div className="tw:absolute tw:top-0 tw:w-[2px] tw:h-5" style={{ backgroundColor: colors.border.light, left: 'calc(50% - 2px)' }} />
+          <div className="tw:absolute tw:top-5 tw:h-[2px]" style={{ backgroundColor: colors.border.light, left: 'calc(25% - 6px)', right: 'calc(25% - 6px)' }} />
+          <div className="tw:absolute tw:top-5 tw:w-[2px] tw:h-5" style={{ backgroundColor: colors.border.light, left: 'calc(25% - 6px)' }} />
+          <div className="tw:absolute tw:top-5 tw:w-[2px] tw:h-5" style={{ backgroundColor: colors.border.light, right: 'calc(25% - 6px)' }} />
         </div>
 
         {/* Two branches side by side */}
@@ -663,7 +674,7 @@ export default function DataPipeline({ country = 'us' }: { country?: Country }) 
                   }}
                 >
                   <span className="tw:text-sm tw:font-semibold" style={{ color: colors.text.primary }}>
-                    Calibration targets ({stage.calibrationTargets.length})
+                    Calibration target domains ({stage.calibrationTargets.length})
                   </span>
                   <span
                     className="tw:text-sm tw:transition-transform tw:duration-200"
@@ -711,6 +722,25 @@ export default function DataPipeline({ country = 'us' }: { country?: Country }) 
                   )}
                 </AnimatePresence>
               </div>
+            )}
+
+            {stage.link && (
+              <Link
+                href={buildHref(stage.link.path)}
+                className="tw:w-full tw:text-left tw:flex tw:justify-between tw:items-center tw:no-underline"
+                style={{
+                  padding: `${spacing.md} ${spacing.lg}`,
+                  borderRadius: spacing.radius.lg,
+                  border: `1px solid ${colors.primary[200]}`,
+                  backgroundColor: colors.primary[50],
+                  fontFamily: typography.fontFamily.primary,
+                }}
+              >
+                <span className="tw:text-sm tw:font-semibold" style={{ color: colors.primary[700] }}>
+                  {stage.link.label}
+                </span>
+                <span className="tw:text-sm" style={{ color: colors.primary[500] }}>→</span>
+              </Link>
             )}
           </div>
         </motion.div>
