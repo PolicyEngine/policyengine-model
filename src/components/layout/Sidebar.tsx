@@ -27,7 +27,7 @@ const navItems: NavItem[] = [
     label: 'Data',
     children: [
       { path: '/data/pipeline', label: 'Pipeline' },
-      { path: '/data/calibration', label: 'Calibration' },
+      { path: '/data/calibration', label: 'Calibration targets' },
       { path: '/data/validation', label: 'Validation' },
     ],
   },
