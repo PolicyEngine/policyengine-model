@@ -57,6 +57,14 @@ export default function ClientLayout({ children }: { children: ReactNode }) {
     return () => ro.disconnect();
   }, [isEmbed]);
 
+  // Note: this page doesn't fire the tool_engaged event that the
+  // calculator tools fire, because tool_engaged is wired up as a
+  // Google Ads conversion trigger — firing it on reference content
+  // would overcount ad conversions. GA4's automatic user_engagement
+  // event (enabled by the gtag config in layout.tsx) still tracks
+  // engagement time, bounce rate, and scroll depth without conflating
+  // with the conversion signal.
+
   if (isEmbed) {
     return (
       <CountryContext value={country}>
