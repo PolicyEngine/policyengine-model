@@ -4,12 +4,23 @@ import type { Metadata } from '../types/Variable';
 const rawCache = new Map<string, any>();
 const metadataCache = new Map<string, Metadata>();
 
+function getModelOrigin(): string {
+  if (typeof document === 'undefined') return '';
+  return document
+    .querySelector('meta[name="policyengine-model-origin"]')
+    ?.getAttribute('content')
+    ?.trim() || '';
+}
+
 /** Try loading pre-built static metadata first, fall back to live API. */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function fetchFromStaticOrAPI(country: string): Promise<any> {
   // Try the pre-built static file (generated at build time by scripts/fetch-metadata.js)
   try {
-    const staticUrl = `/metadata-${country}.json`;
+    const modelOrigin = getModelOrigin();
+    const staticUrl = modelOrigin
+      ? `${modelOrigin}/metadata-${country}.json`
+      : `/metadata-${country}.json`;
     const res = await fetch(staticUrl);
     if (res.ok) {
       const data = await res.json();

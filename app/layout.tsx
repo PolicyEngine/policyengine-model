@@ -18,6 +18,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
+      <head>
+        <meta name="policyengine-model-origin" content={prodOrigin} />
+      </head>
       <body>
         <Suspense>
           <ClientLayout>{children}</ClientLayout>
