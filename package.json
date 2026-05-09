@@ -8,20 +8,20 @@
     "fetch-metadata": "node scripts/fetch-metadata.js",
     "build": "node scripts/fetch-metadata.js && next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "test": "vitest run",
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@policyengine/ui-kit": "^0.8.0",
+    "@policyengine/ui-kit": "^0.9.0",
     "@tabler/icons-react": "^3.36.1",
-    "@tailwindcss/postcss": "^4.2.1",
+    "@tailwindcss/postcss": "^4.2.4",
     "framer-motion": "^12.34.0",
-    "next": "^15.3.3",
+    "next": "^16.2.6",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "recharts": "^3.7.0",
-    "tailwindcss": "^4.2.1"
+    "tailwindcss": "^4.2.4"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
