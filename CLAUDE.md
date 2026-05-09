@@ -5,7 +5,7 @@ Deployed to Vercel as `policyengine-model`, embedded in policyengine-app-v2 at `
 
 ## Stack
 - Next.js 15 (App Router) + React 19 + TypeScript
-- Tailwind CSS v4 with `tw:` prefix + `@policyengine/design-system` tokens
+- Tailwind CSS v4 with `tw:` prefix + `@policyengine/ui-kit` tokens
 - framer-motion for animations
 - recharts for data visualizations
 - Vitest + React Testing Library for tests
@@ -45,7 +45,7 @@ Behavioral responses              (/behavioral)
 - Dynamic/conditional styles → inline `style={}` using designTokens JS imports
 - framer-motion style props → inline (required by motion API)
 - recharts color props → designTokens JS imports
-- PE design-system CSS vars available as `tw:text-pe-primary-500`, `tw:bg-pe-gray-50`, etc.
+- PE ui-kit CSS vars available as `tw:text-pe-primary-500`, `tw:bg-pe-gray-50`, etc.
 
 ## Commands
 - `bun dev` - Development server (Next.js with Turbopack)
