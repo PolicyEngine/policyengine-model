@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { IconMenu2, IconChevronDown, IconWorld, IconX } from '@tabler/icons-react';
-import { colors, spacing, typography } from '@policyengine/design-system/tokens';
+import { colors, spacing, typography } from '@policyengine/ui-kit/legacy/tokens';
 import type { Country } from '../../hooks/useCountry';
 
 interface PEHeaderProps {
