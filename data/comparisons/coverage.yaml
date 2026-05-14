@@ -308,13 +308,22 @@ coverage:
 
   - model: trim3
     program: us-premium-tax-credit
-    status: unknown
-    statuteTraceable: unknown
-    testCoverage: unknown
-    asOfYear: unknown
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    notes: >
+      TRIM3's official Programs Simulated list at
+      boreas.urban.org/T3IntroPrograms.php does not include an ACA
+      Premium Tax Credit or marketplace-subsidy module. Adjacent
+      health-coverage modules (Medicaid/SCHIP, Medicare,
+      Employer-Sponsored Health Insurance) are listed; PTC is not.
+      The federal-tax module may implicitly affect post-PTC AGI but
+      the marketplace-subsidy reconciliation (Form 8962, IRC 36B) is
+      not separately simulated.
     sources:
-      - label: TRIM3 program documentation
-        url: https://boreas.urban.org/T3IntroFedTax.php
+      - label: TRIM3 Programs Simulated (no ACA/PTC module listed)
+        url: https://boreas.urban.org/T3IntroPrograms.php
+        kind: self
 
   - model: trim3
     program: us-estate-tax
@@ -393,65 +402,87 @@ coverage:
 
   - model: trim3
     program: us-wic
-    status: implemented
-    statuteTraceable: unknown
-    testCoverage: unknown
-    asOfYear: unknown
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    notes: >
+      No WIC module in TRIM3's official Programs Simulated list at
+      boreas.urban.org/T3IntroPrograms.php (Aug 2025 Wayback). WIC
+      values used in TRIM3-based SPM analyses come from the Census
+      SPM Research File, not from a TRIM3 simulation.
     sources:
-      - label: TRIM3 module listing
-        url: https://boreas.urban.org/T3IntroHistory.php
+      - label: TRIM3 Programs Simulated (no WIC module listed)
+        url: https://boreas.urban.org/T3IntroPrograms.php
+        kind: self
 
   - model: trim3
     program: us-section-8
     status: implemented
     statuteTraceable: unknown
     testCoverage: unknown
-    docsUrl: https://boreas.urban.org/T3IntroHousing.php
+    docsUrl: https://boreas.urban.org/documentation/PubOrSubsidizedHousing/Main.php
     asOfYear: unknown
+    notes: Documented as "Public and Subsidized Housing" in TRIM3.
     sources:
-      - label: TRIM3 housing module
-        url: https://boreas.urban.org/T3IntroHousing.php
+      - label: TRIM3 Programs Simulated — Public and Subsidized Housing
+        url: https://boreas.urban.org/T3IntroPrograms.php
+        kind: self
 
   - model: trim3
     program: us-ssdi
-    status: implemented
-    statuteTraceable: unknown
-    testCoverage: unknown
-    asOfYear: unknown
+    status: partial
+    statuteTraceable: no
+    testCoverage: none
+    notes: >
+      TRIM3's official Programs Simulated list does not include an
+      OASDI module — TRIM3 simulates SSI but not Social Security
+      Disability Insurance benefit determination. SSDI income enters
+      the federal-tax module as exogenous CPS-reported income.
     sources:
-      - label: TRIM3 module listing
-        url: https://boreas.urban.org/T3IntroHistory.php
+      - label: TRIM3 Programs Simulated (no OASDI module)
+        url: https://boreas.urban.org/T3IntroPrograms.php
+        kind: self
 
   - model: trim3
     program: us-oasi
-    status: implemented
-    statuteTraceable: unknown
-    testCoverage: unknown
-    asOfYear: unknown
+    status: partial
+    statuteTraceable: no
+    testCoverage: none
+    notes: >
+      TRIM3 does not simulate OASI benefit determination per its
+      Programs Simulated list. OASI income enters the federal-tax
+      module as exogenous CPS-reported income.
     sources:
-      - label: TRIM3 module listing
-        url: https://boreas.urban.org/T3IntroHistory.php
+      - label: TRIM3 Programs Simulated (no OASDI module)
+        url: https://boreas.urban.org/T3IntroPrograms.php
+        kind: self
 
   - model: trim3
     program: us-ui
-    status: implemented
-    statuteTraceable: unknown
-    testCoverage: unknown
-    docsUrl: https://boreas.urban.org/T3IntroUI.php
-    asOfYear: unknown
+    status: partial
+    statuteTraceable: no
+    testCoverage: none
+    notes: >
+      TRIM3's official Programs Simulated list does not include a UI
+      module. UI benefits enter the federal-tax module as exogenous
+      CPS-reported income.
     sources:
-      - label: TRIM3 UI module
-        url: https://boreas.urban.org/T3IntroUI.php
+      - label: TRIM3 Programs Simulated (no UI module listed)
+        url: https://boreas.urban.org/T3IntroPrograms.php
+        kind: self
 
   - model: trim3
     program: us-liheap
-    status: implemented
-    statuteTraceable: unknown
-    testCoverage: unknown
-    asOfYear: unknown
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    notes: >
+      No LIHEAP module in TRIM3's official Programs Simulated list at
+      boreas.urban.org/T3IntroPrograms.php.
     sources:
-      - label: TRIM3 module listing
-        url: https://boreas.urban.org/T3IntroHistory.php
+      - label: TRIM3 Programs Simulated (no LIHEAP module)
+        url: https://boreas.urban.org/T3IntroPrograms.php
+        kind: self
 
   - model: trim3
     program: us-ccdf
