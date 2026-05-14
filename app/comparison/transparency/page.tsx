@@ -5,12 +5,12 @@ import { filterSelectedModels } from '../../../src/components/comparison/filterM
 export default async function TransparencyRoute({
   searchParams,
 }: {
-  searchParams: Promise<{ models?: string | string[] }>;
+  searchParams: Promise<{ models?: string | string[]; country?: string | string[] }>;
 }) {
   const data = loadComparisonData();
   const sp = await searchParams;
   const allModels = data.models;
-  const selectedModels = filterSelectedModels(allModels, sp.models);
+  const selectedModels = filterSelectedModels(allModels, sp.models, sp.country);
   return (
     <TransparencyTable
       data={{ ...data, models: selectedModels }}

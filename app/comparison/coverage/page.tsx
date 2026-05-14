@@ -5,12 +5,12 @@ import { filterSelectedModels } from '../../../src/components/comparison/filterM
 export default async function CoverageRoute({
   searchParams,
 }: {
-  searchParams: Promise<{ models?: string | string[] }>;
+  searchParams: Promise<{ models?: string | string[]; country?: string | string[] }>;
 }) {
   const data = loadComparisonData();
   const sp = await searchParams;
   const allModels = data.models;
-  const selectedModels = filterSelectedModels(allModels, sp.models);
+  const selectedModels = filterSelectedModels(allModels, sp.models, sp.country);
   return (
     <CoverageMatrix
       data={{ ...data, models: selectedModels }}

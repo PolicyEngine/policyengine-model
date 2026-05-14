@@ -31,7 +31,10 @@ import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import yaml from 'js-yaml';
 
-const DATA_DIR = path.join(import.meta.dir, '..', 'data', 'comparisons');
+// Use cwd rather than import.meta.dir so the file compiles under both Bun
+// (which has import.meta.dir) and Node/Next.js TypeScript compilation
+// (which doesn't). Script is invoked from the repo root via `bun run`.
+const DATA_DIR = path.join(process.cwd(), 'data', 'comparisons');
 const TIMEOUT_MS = 15000;
 const USER_AGENT =
   'Mozilla/5.0 (compatible; PolicyEngine-CitationChecker/1.0; ' +
