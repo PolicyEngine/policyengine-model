@@ -3,6 +3,7 @@ import { colors, spacing } from '../../designTokens';
 import { CoverageBadge } from './StatusBadge';
 import { coverageByProgram } from '../../data/comparisons';
 import ModelSelector from './ModelSelector';
+import YearFilter from './YearFilter';
 import {
   tableWrapperStyle,
   tableStyle,
@@ -14,18 +15,69 @@ import {
   sectionStyle,
 } from './comparisonStyles';
 import type { ComparisonData, Model } from '../../types/comparison';
+import type { StateImplementation } from '../../types/Program';
+
+export interface CoverageMatrixOverlay {
+  /** Per-program state implementations (PolicyEngine US has these). */
+  stateImplementations?: Map<string, StateImplementation[]>;
+  /** Per-program verified-years string (e.g. "2022-2026" or "2022+"). */
+  verifiedYears?: Map<string, string>;
+  /** Years that appear across the overlay, for the year-filter chip bar. */
+  availableYears?: number[];
+}
+
+const MAX_FORWARD_YEAR = new Date().getFullYear() + 5;
+
+function parseYearRange(verifiedYears?: string): Set<number> {
+  if (!verifiedYears) return new Set();
+  const trimmed = verifiedYears.trim();
+  const openMatch = trimmed.match(/^(\d{4})\+$/);
+  if (openMatch) {
+    const start = parseInt(openMatch[1], 10);
+    const years = new Set<number>();
+    for (let y = start; y <= MAX_FORWARD_YEAR; y++) years.add(y);
+    return years;
+  }
+  const rangeMatch = trimmed.match(/^(\d{4})\s*-\s*(\d{4})$/);
+  if (rangeMatch) {
+    const start = parseInt(rangeMatch[1], 10);
+    const end = parseInt(rangeMatch[2], 10);
+    const years = new Set<number>();
+    for (let y = start; y <= end; y++) years.add(y);
+    return years;
+  }
+  const singleMatch = trimmed.match(/^(\d{4})$/);
+  if (singleMatch) return new Set([parseInt(singleMatch[1], 10)]);
+  return new Set();
+}
+
+const STATE_COLOR: Record<string, string> = {
+  complete: '#2C7A7B',
+  partial: '#4FD1C5',
+  inProgress: '#94A3B8',
+  notStarted: '#E2E8F0',
+};
 
 export default function CoverageMatrix({
   data,
   allModels,
+  overlay,
+  selectedYear,
 }: {
   data: ComparisonData;
   allModels: Model[];
+  overlay?: CoverageMatrixOverlay;
+  selectedYear?: number;
 }) {
   const matrix = coverageByProgram(data);
 
-  // Programs in display order: group by jurisdiction then by listing order.
-  const orderedPrograms = data.programs;
+  // Programs in display order; if a year filter is on and we have per-program
+  // verifiedYears, drop programs that don't include the selected year.
+  const orderedPrograms = data.programs.filter((p) => {
+    if (!selectedYear || !overlay?.verifiedYears) return true;
+    const range = parseYearRange(overlay.verifiedYears.get(p.id));
+    return range.size === 0 || range.has(selectedYear);
+  });
 
   return (
     <div>
@@ -36,6 +88,10 @@ export default function CoverageMatrix({
       />
 
       <ModelSelector allModels={allModels} />
+
+      {overlay?.availableYears && overlay.availableYears.length > 0 && (
+        <YearFilter years={overlay.availableYears} />
+      )}
 
       <section style={sectionStyle}>
         <div style={tableWrapperStyle}>
@@ -52,47 +108,99 @@ export default function CoverageMatrix({
               </tr>
             </thead>
             <tbody>
-              {orderedPrograms.map((p) => (
-                <tr key={p.id}>
-                  <td style={tdStyle}>
-                    <div style={{ fontWeight: 600 }}>{p.name}</div>
-                    {p.statute && <div style={subTextStyle}>{p.statute}</div>}
-                  </td>
-                  <td style={tdStyle}>
-                    <span style={subTextStyle}>{p.jurisdiction}</span>
-                  </td>
-                  {data.models.map((m) => {
-                    const cell = matrix.get(p.id)?.get(m.id);
-                    if (!cell) {
+              {orderedPrograms.map((p) => {
+                const states = overlay?.stateImplementations?.get(p.id);
+                const verifiedYears = overlay?.verifiedYears?.get(p.id);
+                return (
+                  <tr key={p.id}>
+                    <td style={tdStyle}>
+                      <div style={{ fontWeight: 600 }}>{p.name}</div>
+                      {p.statute && <div style={subTextStyle}>{p.statute}</div>}
+                      {verifiedYears && (
+                        <div style={subTextStyle}>verified {verifiedYears}</div>
+                      )}
+                      {states && states.length > 0 && (
+                        <details
+                          style={{ marginTop: 6, fontSize: 11 }}
+                        >
+                          <summary
+                            style={{
+                              cursor: 'pointer',
+                              color: colors.primary[600],
+                            }}
+                          >
+                            {states.filter((s) => s.status === 'complete').length}/
+                            {states.length} states
+                          </summary>
+                          <div
+                            style={{
+                              display: 'grid',
+                              gridTemplateColumns: 'repeat(auto-fill, minmax(56px, 1fr))',
+                              gap: 3,
+                              marginTop: 6,
+                              maxWidth: 480,
+                            }}
+                          >
+                            {states.map((s) => (
+                              <span
+                                key={s.state}
+                                title={`${s.state}: ${s.status}${s.notes ? ' — ' + s.notes : ''}`}
+                                style={{
+                                  padding: '2px 4px',
+                                  borderRadius: 3,
+                                  backgroundColor: STATE_COLOR[s.status] ?? STATE_COLOR.notStarted,
+                                  color:
+                                    s.status === 'notStarted'
+                                      ? colors.text.tertiary
+                                      : colors.white,
+                                  textAlign: 'center',
+                                  fontSize: 10,
+                                  fontWeight: 600,
+                                }}
+                              >
+                                {s.state}
+                              </span>
+                            ))}
+                          </div>
+                        </details>
+                      )}
+                    </td>
+                    <td style={tdStyle}>
+                      <span style={subTextStyle}>{p.jurisdiction}</span>
+                    </td>
+                    {data.models.map((m) => {
+                      const cell = matrix.get(p.id)?.get(m.id);
+                      if (!cell) {
+                        return (
+                          <td key={m.id} style={tdStyle}>
+                            <CoverageBadge status="unknown" />
+                          </td>
+                        );
+                      }
                       return (
                         <td key={m.id} style={tdStyle}>
-                          <CoverageBadge status="unknown" />
+                          <CoverageBadge status={cell.status} />
+                          {cell.asOfYear && cell.asOfYear !== 'unknown' && (
+                            <div style={subTextStyle}>as of {cell.asOfYear}</div>
+                          )}
+                          {cell.docsUrl && (
+                            <div style={{ ...subTextStyle, marginTop: 4 }}>
+                              <a
+                                href={cell.docsUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{ color: colors.primary[600], textDecoration: 'none' }}
+                              >
+                                docs ↗
+                              </a>
+                            </div>
+                          )}
                         </td>
                       );
-                    }
-                    return (
-                      <td key={m.id} style={tdStyle}>
-                        <CoverageBadge status={cell.status} />
-                        {cell.asOfYear && cell.asOfYear !== 'unknown' && (
-                          <div style={subTextStyle}>as of {cell.asOfYear}</div>
-                        )}
-                        {cell.docsUrl && (
-                          <div style={{ ...subTextStyle, marginTop: 4 }}>
-                            <a
-                              href={cell.docsUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              style={{ color: colors.primary[600], textDecoration: 'none' }}
-                            >
-                              docs ↗
-                            </a>
-                          </div>
-                        )}
-                      </td>
-                    );
-                  })}
-                </tr>
-              ))}
+                    })}
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
