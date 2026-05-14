@@ -5,6 +5,7 @@ import yaml from 'js-yaml';
 import type {
   Model,
   Program,
+  Concept,
   Coverage,
   Transparency,
   UsageMetric,
@@ -36,6 +37,7 @@ function loadYaml<T>(filename: string, rootKey: string): T {
 export function loadComparisonData(): ComparisonData {
   const models = loadYaml<Model[]>('models.yaml', 'models');
   const programs = loadYaml<Program[]>('programs.yaml', 'programs');
+  const concepts = loadYaml<Concept[]>('concepts.yaml', 'concepts');
   const coverage = loadYaml<Coverage[]>('coverage.yaml', 'coverage');
   const transparency = loadYaml<Transparency[]>(
     'transparency.yaml',
@@ -49,6 +51,7 @@ export function loadComparisonData(): ComparisonData {
 
   const modelIds = new Set(models.map((m) => m.id));
   const programIds = new Set(programs.map((p) => p.id));
+  const conceptIds = new Set(concepts.map((c) => c.id));
 
   const errors: string[] = [];
 
@@ -82,6 +85,14 @@ export function loadComparisonData(): ComparisonData {
     if (!modelIds.has(row.model)) {
       errors.push(`imputations.yaml: unknown model "${row.model}"`);
     }
+    if (!conceptIds.has(row.concept)) {
+      errors.push(`imputations.yaml: unknown concept "${row.concept}"`);
+    }
+  }
+  for (const row of concepts) {
+    if (row.program && !programIds.has(row.program)) {
+      errors.push(`concepts.yaml: unknown program "${row.program}"`);
+    }
   }
   for (const row of artifacts) {
     if (!modelIds.has(row.model)) {
@@ -103,6 +114,7 @@ export function loadComparisonData(): ComparisonData {
   return {
     models,
     programs,
+    concepts,
     coverage,
     transparency,
     usage,
@@ -111,6 +123,29 @@ export function loadComparisonData(): ComparisonData {
     artifacts,
     freshness,
   };
+}
+
+export function conceptById(
+  data: ComparisonData,
+  id: string,
+): Concept | undefined {
+  return data.concepts.find((c) => c.id === id);
+}
+
+/**
+ * Imputation rows grouped by concept id, preserving concept order from
+ * concepts.yaml. Used by the methods view to render side-by-side model
+ * comparisons.
+ */
+export function imputationsByConcept(
+  data: ComparisonData,
+): Array<{ concept: Concept; rows: Imputation[] }> {
+  return data.concepts
+    .map((concept) => ({
+      concept,
+      rows: data.imputations.filter((i) => i.concept === concept.id),
+    }))
+    .filter((g) => g.rows.length > 0);
 }
 
 /** Convenience: model lookup by id. */

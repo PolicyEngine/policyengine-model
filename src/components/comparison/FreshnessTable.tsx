@@ -10,11 +10,13 @@ import {
   subTextStyle,
   sectionStyle,
 } from './comparisonStyles';
+import ModelSelector from './ModelSelector';
 import {
   sourcesFor,
   sourceKinds,
   type ComparisonData,
   type Freshness,
+  type Model,
   type SourceKind,
   type UpdateCadence,
 } from '../../types/comparison';
@@ -85,7 +87,13 @@ const ROWS: RowSpec[] = [
   },
 ];
 
-export default function FreshnessTable({ data }: { data: ComparisonData }) {
+export default function FreshnessTable({
+  data,
+  allModels,
+}: {
+  data: ComparisonData;
+  allModels: Model[];
+}) {
   return (
     <div>
       <PageHeader
@@ -93,6 +101,8 @@ export default function FreshnessTable({ data }: { data: ComparisonData }) {
         title="Freshness"
         description="How current each model's policy parameters are, whether it implements legislation enacted but not yet in effect, and how quickly it absorbs new statute. Each cell carries its own corroborating sources."
       />
+
+      <ModelSelector allModels={allModels} />
 
       <section style={sectionStyle}>
         <div style={tableWrapperStyle}>

@@ -11,7 +11,8 @@ import {
   h2Style,
   sectionStyle,
 } from './comparisonStyles';
-import type { ComparisonData, ArtifactType } from '../../types/comparison';
+import ModelSelector from './ModelSelector';
+import type { ComparisonData, ArtifactType, Model } from '../../types/comparison';
 
 const ARTIFACT_TYPE_LABELS: Record<ArtifactType, string> = {
   codebase: 'Codebase',
@@ -24,7 +25,13 @@ const ARTIFACT_TYPE_LABELS: Record<ArtifactType, string> = {
   cli: 'CLI / package',
 };
 
-export default function ArtifactsTable({ data }: { data: ComparisonData }) {
+export default function ArtifactsTable({
+  data,
+  allModels,
+}: {
+  data: ComparisonData;
+  allModels: Model[];
+}) {
   return (
     <div>
       <PageHeader
@@ -32,6 +39,8 @@ export default function ArtifactsTable({ data }: { data: ComparisonData }) {
         title="Artifacts"
         description="Concrete deliverables produced by each model: source code, datasets, parameter databases, public APIs, web applications, documentation sites, and papers. An artifact is anything an outside reader can verify exists."
       />
+
+      <ModelSelector allModels={allModels} />
 
       {data.models.map((model) => {
         const artifacts = data.artifacts.filter((a) => a.model === model.id);

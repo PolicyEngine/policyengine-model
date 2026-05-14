@@ -195,3 +195,188 @@ transparency:
         url: https://www.taxpolicycenter.org/publications/how-big-are-individual-income-tax-expenditures
         kind: academic
         supports: [codePublic, parameterSourcing]
+
+  - model: jct-microsim
+    codePublic: no
+    codeLicense: proprietary
+    contributorCount: unknown
+    issueTrackerPublic: no
+    documentationPublic: partial
+    documentationUrl: https://www.jct.gov/publications/
+    parameterSourcing: separate-doc
+    testSuitePublic: unknown
+    testCount: unknown
+    datasetPublic: no
+    reproducibleBuilds: no
+    notes: >
+      JCT's microsim runs on SOI tax-return microdata under formal
+      restricted-access agreements. Model implementation is not public;
+      revenue-estimate methodology papers describe the analytical
+      framework but not the code.
+    sources:
+      - label: JCT — Estimating revenue effects (methodology series)
+        url: https://www.jct.gov/publications/2023/jcx-46-23/
+        kind: government
+        supports: [codePublic, codeLicense, documentationPublic, parameterSourcing]
+      - label: JCT publications archive (output catalogue, not code)
+        url: https://www.jct.gov/publications/
+        kind: government
+        supports: [codePublic, documentationPublic]
+      - label: CRS — How tax revenue is estimated (third-party documentation)
+        url: https://crsreports.congress.gov/product/pdf/RL/RL31292
+        kind: government
+        supports: [codePublic, parameterSourcing]
+      - label: IRS SOI microdata restricted access (base data)
+        url: https://www.irs.gov/statistics/soi-tax-stats-individual-public-use-microdata-files
+        kind: government
+        supports: [datasetPublic]
+      - label: Brookings — Dynamic scoring at the JCT (academic review)
+        url: https://www.brookings.edu/articles/dynamic-scoring-an-overview/
+        kind: academic
+        supports: [codePublic, documentationPublic, parameterSourcing]
+
+  - model: cbo-microsim
+    codePublic: no
+    codeLicense: proprietary
+    contributorCount: unknown
+    issueTrackerPublic: no
+    documentationPublic: partial
+    documentationUrl: https://www.cbo.gov/topics/budget
+    parameterSourcing: separate-doc
+    testSuitePublic: unknown
+    testCount: unknown
+    datasetPublic: no
+    reproducibleBuilds: no
+    notes: >
+      CBO operates several microsim models (income, payroll, SNAP,
+      Medicaid). Model code is not public; methodology working papers
+      describe approach for each. CBO outputs (baseline projections,
+      distributional tables) are public.
+    sources:
+      - label: CBO methodology working paper series (model docs, not code)
+        url: https://www.cbo.gov/about/products/working-papers
+        kind: government
+        supports: [codePublic, codeLicense, documentationPublic, parameterSourcing, datasetPublic]
+      - label: CBO Budget and Economic Outlook (baseline outputs)
+        url: https://www.cbo.gov/topics/budget
+        kind: government
+        supports: [documentationPublic]
+      - label: CBO Income distribution publications
+        url: https://www.cbo.gov/topic/income-distribution
+        kind: government
+        supports: [documentationPublic]
+      - label: GAO review of CBO modeling approaches
+        url: https://www.gao.gov/products/gao-22-104747
+        kind: government
+        supports: [codePublic, parameterSourcing]
+      - label: CRFB — How CBO scores legislation
+        url: https://www.crfb.org/blogs/how-cbo-scores-legislation
+        kind: civilsociety
+        supports: [codePublic, documentationPublic]
+
+  - model: itep-microsim
+    codePublic: no
+    codeLicense: proprietary
+    contributorCount: unknown
+    issueTrackerPublic: no
+    documentationPublic: partial
+    documentationUrl: https://itep.org/methodology/
+    parameterSourcing: separate-doc
+    testSuitePublic: unknown
+    testCount: unknown
+    datasetPublic: no
+    reproducibleBuilds: no
+    notes: >
+      ITEP's microsim is a closed proprietary model. The methodology page
+      describes data sources and aging assumptions; the source code,
+      parameter files, and the SOI-derived microdata are not public.
+    sources:
+      - label: ITEP Microsimulation Tax Model methodology
+        url: https://itep.org/methodology/
+        kind: self
+        supports: [codePublic, codeLicense, documentationPublic, parameterSourcing, datasetPublic]
+      - label: ITEP Who Pays? state reports (output catalogue)
+        url: https://itep.org/whopays/
+        kind: self
+        supports: [documentationPublic]
+      - label: ITEP funder/supporter list (civil society funding base)
+        url: https://itep.org/about/itep-supporters/
+        kind: civilsociety
+        supports: [codeLicense]
+
+  - model: tax-calculator
+    codePublic: yes
+    codeLicense: CC0-1.0
+    codeUrl: https://github.com/PSLmodels/Tax-Calculator
+    contributorCount: unknown
+    issueTrackerPublic: yes
+    documentationPublic: yes
+    documentationUrl: https://taxcalc.pslmodels.org
+    parameterSourcing: inline-cite
+    testSuitePublic: yes
+    testCount: unknown
+    datasetPublic: partial
+    datasetUrl: https://github.com/PSLmodels/taxdata
+    reproducibleBuilds: yes
+    notes: >
+      Fully open source. CPS-only build is fully reproducible without
+      restricted data. PUF-based build requires purchasing the SOI Public
+      Use File from IRS; the matching code is open but the input data is
+      not redistributable.
+    sources:
+      - label: Tax-Calculator repository (LICENSE, tests, parameters)
+        url: https://github.com/PSLmodels/Tax-Calculator
+        kind: self
+        supports: [codePublic, codeLicense, issueTrackerPublic, testSuitePublic]
+      - label: Tax-Calculator documentation (parameter sourcing)
+        url: https://taxcalc.pslmodels.org
+        kind: self
+        supports: [documentationPublic, parameterSourcing, reproducibleBuilds]
+      - label: taxdata repository (data prep code, dataset partially open)
+        url: https://github.com/PSLmodels/taxdata
+        kind: self
+        supports: [datasetPublic, reproducibleBuilds]
+      - label: Jensen & Frailey — Tax-Calculator academic paper
+        url: https://onlinelibrary.wiley.com/doi/abs/10.1002/pam.22055
+        kind: academic
+        supports: [codePublic, documentationPublic]
+      - label: PSL — open-source modeling consortium
+        url: https://www.pslmodels.org
+        kind: civilsociety
+        supports: [codePublic, codeLicense]
+
+  - model: budgetlab-tax
+    codePublic: partial
+    codeLicense: MIT
+    codeUrl: https://github.com/yale-budget-lab
+    contributorCount: unknown
+    issueTrackerPublic: partial
+    documentationPublic: yes
+    documentationUrl: https://budgetlab.yale.edu/topic/methodology
+    parameterSourcing: separate-doc
+    testSuitePublic: unknown
+    testCount: unknown
+    datasetPublic: no
+    reproducibleBuilds: partial
+    notes: >
+      Budget Lab publishes methodology documents and selected code for
+      individual analyses; the consolidated model has not yet been
+      released as a single open-source artifact at scale. Per the
+      external comparison sheet flagged as open source; verifying.
+    sources:
+      - label: Budget Lab at Yale (organization page)
+        url: https://budgetlab.yale.edu
+        kind: self
+        supports: [documentationPublic]
+      - label: Budget Lab methodology page
+        url: https://budgetlab.yale.edu/topic/methodology
+        kind: self
+        supports: [documentationPublic, parameterSourcing, datasetPublic]
+      - label: Yale Budget Lab GitHub organization (public repos)
+        url: https://github.com/yale-budget-lab
+        kind: self
+        supports: [codePublic, codeLicense, issueTrackerPublic]
+      - label: Brookings press coverage of Budget Lab launch
+        url: https://www.brookings.edu/articles/the-budget-lab-at-yale/
+        kind: civilsociety
+        supports: [codePublic, documentationPublic]

@@ -68,3 +68,77 @@ usage:
     sources:
       - label: TPC distributional tables
         url: https://www.taxpolicycenter.org/model-estimates
+
+  - model: jct-microsim
+    academicCitations: unknown
+    governmentReports: unknown
+    pressMentions: unknown
+    monthlyActiveUsers: unknown
+    monthlyComputations: unknown
+    organizationUsers: unknown
+    notes: >
+      JCT estimates are the official Congressional score for tax
+      legislation — used in every CBO cost estimate of tax bills and
+      cited in essentially all major federal tax reform coverage. No
+      external-user metrics.
+    sources:
+      - label: JCT publications archive
+        url: https://www.jct.gov/publications/
+
+  - model: cbo-microsim
+    academicCitations: unknown
+    governmentReports: unknown
+    pressMentions: unknown
+    monthlyActiveUsers: unknown
+    monthlyComputations: unknown
+    organizationUsers: unknown
+    notes: >
+      CBO baseline projections and distributional analyses are the
+      authoritative federal benchmark. Used in essentially every
+      Congressional cost estimate and most academic papers analyzing US
+      fiscal policy.
+    sources:
+      - label: CBO publications archive
+        url: https://www.cbo.gov/publications
+
+  - model: itep-microsim
+    academicCitations: unknown
+    governmentReports: unknown
+    pressMentions: unknown
+    monthlyActiveUsers: unknown
+    monthlyComputations: unknown
+    organizationUsers: unknown
+    notes: >
+      ITEP's Who Pays? report is widely cited in state tax policy
+      debates and press coverage of state-level progressivity.
+    sources:
+      - label: ITEP press coverage page
+        url: https://itep.org/category/press/
+
+  - model: tax-calculator
+    academicCitations: unknown
+    governmentReports: unknown
+    pressMentions: unknown
+    monthlyActiveUsers: unknown
+    monthlyComputations: unknown
+    organizationUsers: unknown
+    notes: >
+      Tax-Calculator powers several derived tools (Tax-Brain, OG-USA) and
+      is used in academic research where reproducibility matters.
+    sources:
+      - label: PSL Tax-Brain web app (built on Tax-Calculator)
+        url: https://www.ospc.org
+
+  - model: budgetlab-tax
+    academicCitations: unknown
+    governmentReports: unknown
+    pressMentions: unknown
+    monthlyActiveUsers: unknown
+    monthlyComputations: unknown
+    organizationUsers: unknown
+    notes: >
+      Newly launched (2024); growing citation footprint in 2025 OBBBA
+      coverage and Brookings/Hamilton Project policy debates.
+    sources:
+      - label: Budget Lab research catalogue
+        url: https://budgetlab.yale.edu/research

@@ -1,0 +1,94 @@
+# Comparable methodology concepts.
+#
+# These IDs decouple the comparison from any one model's internal variable
+# names. Each concept is a question we can ask of every model: how do you
+# determine SNAP participation? How do you impute capital gains? How do you
+# age the dataset forward to the budget year? The answers (Imputation rows)
+# get grouped by concept in the UI so contributors can see model methods
+# side by side.
+
+concepts:
+  # ---------------- Participation / take-up imputations -------------------
+  - id: snap-participation
+    name: SNAP participation imputation
+    description: >
+      Determining which CPS/ACS units that are simulated-eligible for SNAP
+      actually receive benefits. Critical because measured eligibility
+      exceeds measured participation, and the gap varies by state, family
+      type, and over time.
+    category: imputation
+    program: us-snap
+
+  - id: tanf-participation
+    name: TANF participation imputation
+    description: >
+      Assigning TANF receipt to eligible families given the wide variation
+      across state rules and the very low national take-up rate (~20% of
+      eligible families nationally).
+    category: imputation
+    program: us-tanf
+
+  - id: ssi-participation
+    name: SSI participation imputation
+    description: >
+      Assigning SSI receipt to eligible individuals given disability
+      determination is not directly observable in survey microdata.
+    category: imputation
+    program: us-ssi
+
+  - id: medicaid-participation
+    name: Medicaid participation imputation
+    description: >
+      Assigning Medicaid coverage to eligible individuals, especially for
+      categorical-eligibility programs (e.g. waivers, pregnancy, age
+      groups) that survey data only partially captures.
+    category: imputation
+    program: us-medicaid
+
+  - id: child-care-subsidy-participation
+    name: Child care subsidy participation imputation
+    description: >
+      Assigning CCDF receipt to eligible families given the program is
+      heavily rationed (only ~15% of eligible children served nationally).
+    category: imputation
+    program: us-ccdf
+
+  # ------------------- Tax variable imputations ----------------------------
+  - id: capital-gains
+    name: Capital gains imputation
+    description: >
+      Imputing realized capital gains, which are top-coded or absent in
+      survey microdata. Models typically statistically match to SOI PUF
+      records or condition on AGI bins.
+    category: imputation
+
+  - id: itemized-deductions
+    name: Itemized deductions imputation
+    description: >
+      Imputing the components of itemized deductions (mortgage interest,
+      SALT paid, charitable contributions) onto survey microdata.
+    category: imputation
+
+  - id: retirement-income
+    name: Retirement income imputation
+    description: >
+      Imputing taxable vs nontaxable portions of pension, IRA, and Social
+      Security income onto survey microdata.
+    category: imputation
+
+  # ---------------- Calibration / aging --------------------------------------
+  - id: dataset-aging
+    name: Dataset aging to budget year
+    description: >
+      Projecting a base-year microdata file forward to the target budget
+      year — typically via per-cell or per-record growth factors tied to
+      a baseline forecast (CBO, Treasury, or in-house).
+    category: calibration
+
+  - id: aggregate-calibration
+    name: Aggregate-total calibration
+    description: >
+      Reconciling simulated program totals (caseloads, outlays, revenues)
+      to administrative or scorekeeper totals. Methods include caseload-
+      driven selection, reweighting, or post-hoc scaling.
+    category: calibration

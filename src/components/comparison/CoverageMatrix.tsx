@@ -2,6 +2,7 @@ import PageHeader from '../layout/PageHeader';
 import { colors, spacing } from '../../designTokens';
 import { CoverageBadge } from './StatusBadge';
 import { coverageByProgram } from '../../data/comparisons';
+import ModelSelector from './ModelSelector';
 import {
   tableWrapperStyle,
   tableStyle,
@@ -12,9 +13,15 @@ import {
   proseStyle,
   sectionStyle,
 } from './comparisonStyles';
-import type { ComparisonData } from '../../types/comparison';
+import type { ComparisonData, Model } from '../../types/comparison';
 
-export default function CoverageMatrix({ data }: { data: ComparisonData }) {
+export default function CoverageMatrix({
+  data,
+  allModels,
+}: {
+  data: ComparisonData;
+  allModels: Model[];
+}) {
   const matrix = coverageByProgram(data);
 
   // Programs in display order: group by jurisdiction then by listing order.
@@ -27,6 +34,8 @@ export default function CoverageMatrix({ data }: { data: ComparisonData }) {
         title="Coverage matrix"
         description="Which tax and transfer programs each model implements. Status reflects whether the program is computed end-to-end (implemented), simulated with simplifications (partial), or absent. Click any model name for its overview."
       />
+
+      <ModelSelector allModels={allModels} />
 
       <section style={sectionStyle}>
         <div style={tableWrapperStyle}>

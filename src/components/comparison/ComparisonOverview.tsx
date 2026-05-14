@@ -1,6 +1,7 @@
 import PageHeader from '../layout/PageHeader';
 import { colors, spacing } from '../../designTokens';
 import { SourceList } from './SourceList';
+import ModelSelector from './ModelSelector';
 import {
   tableWrapperStyle,
   tableStyle,
@@ -11,9 +12,15 @@ import {
   proseStyle,
   sectionStyle,
 } from './comparisonStyles';
-import type { ComparisonData } from '../../types/comparison';
+import type { ComparisonData, Model } from '../../types/comparison';
 
-export default function ComparisonOverview({ data }: { data: ComparisonData }) {
+export default function ComparisonOverview({
+  data,
+  allModels,
+}: {
+  data: ComparisonData;
+  allModels: Model[];
+}) {
   return (
     <div>
       <PageHeader
@@ -21,6 +28,8 @@ export default function ComparisonOverview({ data }: { data: ComparisonData }) {
         title="Open microsimulation reference"
         description="A structured comparison of US tax and transfer microsimulation models across coverage, transparency, methodology, artifacts, and usage. PolicyEngine maintains this index alongside its own model documentation so contributors and reviewers can audit our choices against the alternatives."
       />
+
+      <ModelSelector allModels={allModels} />
 
       <section style={sectionStyle}>
         <h2 style={h2Style}>Scope</h2>

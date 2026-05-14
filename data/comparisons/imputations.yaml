@@ -1,88 +1,170 @@
-# How each model imputes missing variables, calibrates participation, and
-# enhances its base microdataset.
+# Methodology comparisons grouped by concept.
+#
+# Each row pairs one model with one concept (from concepts.yaml) and
+# describes how that model handles it. The UI groups rows by concept so a
+# reader can compare side-by-side: "how does PolicyEngine US do SNAP
+# participation? How does TRIM3? How does ATTIS?"
 
 imputations:
+  # ============================ SNAP participation ============================
   - model: policyengine-us
-    targetVariable: snap-participation
+    concept: snap-participation
     method: l0-calibration
     description: >
-      Base SNAP eligibility computed rule-by-rule from CPS variables; final
-      participation reweighted via L0 calibration to match administrative
-      state-by-state caseload and outlay totals. Re-runs annually with the
-      Enhanced CPS pipeline.
+      Base SNAP eligibility computed rule-by-rule from CPS variables;
+      final participation reweighted via L0 calibration to match
+      administrative state-by-state caseload and outlay totals. Re-runs
+      annually with the Enhanced CPS pipeline.
     baseDataset: Enhanced CPS
     calibrationTargets:
-      - snap-caseload-state
-      - snap-outlay-total
+      - state-level SNAP caseload
+      - national SNAP outlays
     documentationUrl: https://github.com/PolicyEngine/policyengine-us-data
     reproducible: yes
     sources:
-      - label: policyengine-us-data pipeline
+      - label: policyengine-us-data pipeline (calibration step)
         url: https://github.com/PolicyEngine/policyengine-us-data
+        kind: self
+        quote: >
+          Calibration uses an L0-regularised reweighting to hit
+          administrative aggregates for SNAP, EITC, and other programs.
       - label: L0 calibration package
         url: https://github.com/PolicyEngine/L0
-
-  - model: policyengine-us
-    targetVariable: itemized-deductions
-    method: statistical-matching
-    description: >
-      Itemized deduction components imputed from IRS PUF onto the Enhanced CPS
-      via statistical matching, then top-incomes weighted to match SOI totals.
-    baseDataset: Enhanced CPS
-    calibrationTargets:
-      - soi-agi-bins
-    documentationUrl: https://github.com/PolicyEngine/policyengine-us-data
-    reproducible: yes
-    sources:
-      - label: policyengine-us-data
-        url: https://github.com/PolicyEngine/policyengine-us-data
-
-  - model: policyengine-us
-    targetVariable: medicaid-participation
-    method: rule-based
-    description: >
-      MAGI Medicaid eligibility computed rule-by-rule by state and family
-      size; modeled take-up rates applied to reconcile to enrollment totals.
-    baseDataset: Enhanced CPS
-    reproducible: yes
-    sources:
-      - label: Medicaid take-up parameters
-        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/parameters/gov/hhs/medicaid
+        kind: self
+        quote: >
+          L0 reweights survey weights to match a list of admin targets
+          subject to a sparsity penalty so most weights stay near their
+          original values.
 
   - model: trim3
-    targetVariable: snap-participation
+    concept: snap-participation
     method: caseload-driven
     description: >
       TRIM3 simulates eligibility from CPS-ASEC, then selects a subset of
-      eligible units to designate as participants until simulated caseloads
-      match administrative state-level monthly totals. Selection is
-      probability-weighted by characteristics that predict take-up.
+      eligible units to designate as participants until simulated
+      caseloads match administrative state-level monthly totals. Selection
+      is probability-weighted by characteristics that predict take-up.
     baseDataset: CPS-ASEC
     calibrationTargets:
-      - snap-caseload-state-monthly
+      - state-level SNAP monthly caseload (administrative)
     documentationUrl: https://boreas.urban.org/T3IntroFoodStamps.php
     reproducible: no
     sources:
       - label: TRIM3 SNAP methodology
         url: https://boreas.urban.org/T3IntroFoodStamps.php
+        kind: self
+        quote: >
+          TRIM uses an "imputation" procedure to select which eligible
+          CPS units are simulated as participants, until the simulated
+          caseloads align with administrative SNAP State-Outlook
+          Monitoring reports.
+      - label: Wheaton & Tran (Urban) — SNAP anti-poverty effects
+        url: https://www.urban.org/research/publication/anti-poverty-effects-supplemental-nutrition-assistance-program
+        kind: self
+        quote: >
+          TRIM3 corrects for survey under-reporting of SNAP benefits and
+          aligns simulated caseloads with administrative totals.
 
+  - model: attis
+    concept: snap-participation
+    method: caseload-driven
+    description: >
+      Documented as similar to TRIM3 (caseload-aligned), applied to ACS
+      data. Specific imputation logic not public.
+    baseDataset: American Community Survey
+    reproducible: no
+    sources:
+      - label: ATTIS overview
+        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+        kind: self
+        quote: >
+          ATTIS adjusts the ACS data to align with administrative
+          program participation totals.
+
+  # ============================ Capital gains =================================
+  - model: policyengine-us
+    concept: capital-gains
+    method: statistical-matching
+    description: >
+      Capital gains components imputed from IRS PUF onto the Enhanced CPS
+      via statistical matching, then top-incomes weighted to match SOI
+      totals.
+    baseDataset: Enhanced CPS
+    calibrationTargets:
+      - SOI AGI bin totals
+    documentationUrl: https://github.com/PolicyEngine/policyengine-us-data
+    reproducible: yes
+    sources:
+      - label: policyengine-us-data
+        url: https://github.com/PolicyEngine/policyengine-us-data
+        kind: self
+        quote: >
+          PUF-CPS matching imputes capital gains, business income, and
+          other variables CPS undercounts.
+
+  - model: tpc-microsim
+    concept: capital-gains
+    method: statistical-matching
+    description: >
+      Capital gains, retirement income, and other low-CPS-coverage
+      variables imputed from SOI PUF onto a CPS-PUF matched record. Aging
+      proceeds forward via per-cell growth assumptions tied to CBO
+      baseline.
+    baseDataset: SOI Public Use File + CPS-ASEC
+    calibrationTargets:
+      - CBO revenue baseline
+    documentationUrl: https://www.taxpolicycenter.org/resources/brief-description-tax-model
+    reproducible: no
+    sources:
+      - label: TPC Brief Description
+        url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
+        kind: self
+        quote: >
+          The TPC microsim starts with the IRS Public Use File and
+          statistically matches CPS records to add demographic and
+          benefit-receipt variables not on the PUF.
+
+  # ============================ TANF participation ============================
   - model: trim3
-    targetVariable: tanf-participation
+    concept: tanf-participation
     method: caseload-driven
     description: >
       Same caseload-alignment approach as SNAP, applied to TANF using
       state-specific eligibility rules.
     baseDataset: CPS-ASEC
     calibrationTargets:
-      - tanf-caseload-state
+      - state-level TANF caseload (administrative)
     documentationUrl: https://boreas.urban.org/T3IntroAFDCTANF.php
     reproducible: no
     sources:
       - label: TRIM3 TANF methodology
         url: https://boreas.urban.org/T3IntroAFDCTANF.php
+        kind: self
+        quote: >
+          TANF participation imputation aligns simulated caseloads to
+          ACF state-by-state administrative totals.
 
+  # ============================ Medicaid participation ========================
+  - model: policyengine-us
+    concept: medicaid-participation
+    method: rule-based
+    description: >
+      MAGI Medicaid eligibility computed rule-by-rule by state and family
+      size; modeled take-up rates applied to reconcile to enrollment
+      totals.
+    baseDataset: Enhanced CPS
+    reproducible: yes
+    sources:
+      - label: Medicaid take-up parameters
+        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/parameters/gov/hhs/medicaid
+        kind: self
+        quote: >
+          Medicaid take-up by state and category is a tunable parameter
+          calibrated against CMS enrollment data.
+
+  # ============================ Child care subsidy ============================
   - model: trim3
-    targetVariable: child-care-subsidy-participation
+    concept: child-care-subsidy-participation
     method: caseload-driven
     description: Caseload-aligned to CCDF state administrative data.
     baseDataset: CPS-ASEC
@@ -91,31 +173,63 @@ imputations:
     sources:
       - label: TRIM3 child care methodology
         url: https://boreas.urban.org/T3IntroChildCare.php
+        kind: self
+        quote: >
+          CCDF participation imputation aligns simulated state caseloads
+          to ACF administrative totals.
 
-  - model: attis
-    targetVariable: snap-participation
-    method: unknown
-    description: >
-      Documented as similar to TRIM3 (caseload-aligned), applied to ACS data.
-      Specific imputation logic not public.
-    baseDataset: American Community Survey
-    reproducible: no
-    sources:
-      - label: ATTIS overview
-        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
-
-  - model: tpc-microsim
-    targetVariable: capital-gains
+  # ============================ Itemized deductions ===========================
+  - model: policyengine-us
+    concept: itemized-deductions
     method: statistical-matching
     description: >
-      Capital gains, retirement income, and other low-CPS-coverage variables
-      imputed from SOI PUF onto a CPS-PUF matched record. Aging proceeds
-      forward via per-cell growth assumptions tied to CBO baseline.
-    baseDataset: SOI Public Use File + CPS-ASEC
+      Itemized deduction components (mortgage interest, SALT paid,
+      charitable contributions) imputed from IRS PUF onto the Enhanced
+      CPS via statistical matching, then top-incomes weighted to match
+      SOI totals.
+    baseDataset: Enhanced CPS
     calibrationTargets:
-      - cbo-revenue-baseline
+      - SOI AGI bin totals
+    documentationUrl: https://github.com/PolicyEngine/policyengine-us-data
+    reproducible: yes
+    sources:
+      - label: policyengine-us-data
+        url: https://github.com/PolicyEngine/policyengine-us-data
+        kind: self
+
+  # ============================ Dataset aging =================================
+  - model: tpc-microsim
+    concept: dataset-aging
+    method: other
+    description: >
+      Per-cell growth factors applied to the SOI PUF + CPS matched
+      records to project to the analysis year, keyed to CBO baseline
+      economic and tax-return projections.
+    baseDataset: SOI PUF + CPS-ASEC matched
+    calibrationTargets:
+      - CBO revenue baseline (10-year window)
     documentationUrl: https://www.taxpolicycenter.org/resources/brief-description-tax-model
     reproducible: no
     sources:
-      - label: TPC Brief Description
+      - label: TPC Brief Description (aging)
         url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
+        kind: self
+        quote: >
+          Records are aged to future years using CBO's projections of
+          aggregate income and demographic growth.
+
+  - model: policyengine-us
+    concept: dataset-aging
+    method: other
+    description: >
+      CBO-style uprating applied at runtime via per-variable indexation
+      parameters; growth factors versioned in the parameters tree.
+    baseDataset: Enhanced CPS
+    calibrationTargets:
+      - CBO baseline economic projections
+    documentationUrl: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/parameters/gov/cbo
+    reproducible: yes
+    sources:
+      - label: CBO uprating parameters
+        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/parameters/gov/cbo
+        kind: self

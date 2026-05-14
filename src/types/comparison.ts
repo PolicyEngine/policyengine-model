@@ -49,6 +49,13 @@ export interface Source {
    *   other         — anything else.
    */
   kind?: SourceKind;
+  /**
+   * Exact quote from the source that supports the claim. Shown as a
+   * tooltip on hover. Use this to make claims as precise as possible —
+   * a reader can verify the quote against the linked URL without
+   * re-reading the entire document.
+   */
+  quote?: string;
 }
 
 /**
@@ -81,6 +88,24 @@ export type ModelType =
   | 'rules-engine'
   | 'reduced-form';
 
+/**
+ * Capability flags — derived from the Sheets-based comparison Max maintains
+ * (see PR description). Each flag is a tristate so we can distinguish
+ * 'no' from 'unknown' from 'partial'.
+ */
+export interface ModelCapabilities {
+  /** Can simulate counterfactual policy reforms (vs. status-quo only). */
+  reformImpact: Tristate;
+  /** Single integrated microdataset spanning taxes and transfers. */
+  integratedMicrodata: Tristate;
+  /** Sub-state geographic detail (county, congressional district, etc.). */
+  localAreas: Tristate;
+  /** Public-facing web interface (not just internal use). */
+  publicInterface: Tristate;
+  /** Programmatic API access for external users. */
+  apiAccess: Tristate;
+}
+
 export interface Model {
   id: string;
   name: string;
@@ -88,6 +113,10 @@ export interface Model {
   organizationUrl?: string;
   /** Sibling/sister models that share infrastructure with this one. */
   siblings?: string[];
+  /** Country (e.g. 'us', 'uk'). Used for filtering in views. */
+  country: string;
+  /** Organizational sector: government, non-profit, for-profit, academic. */
+  sector: 'government' | 'non-profit' | 'for-profit' | 'academic' | 'other';
   type: ModelType;
   /** Jurisdictions covered, e.g. ['us-federal', 'us-states']. */
   jurisdictions: string[];
@@ -104,6 +133,7 @@ export interface Model {
   /** People typically associated with the model. */
   leads?: string[];
   summary: string;
+  capabilities: ModelCapabilities;
   sources: Source[];
 }
 
@@ -247,6 +277,28 @@ export interface AccuracyCheck {
 }
 
 /* -------------------------------------------------------------------------- */
+/*                               CONCEPTS                                     */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * A comparable methodology concept that can be implemented differently
+ * across models — e.g. "SNAP participation imputation", "capital gains
+ * imputation", "state income tax aging". Concept IDs decouple the
+ * comparison from any one model's internal variable names.
+ */
+export interface Concept {
+  id: string;
+  /** Human-readable name shown in the UI. */
+  name: string;
+  /** Short description of what the concept refers to. */
+  description: string;
+  /** Optional grouping for display (e.g. 'imputation', 'calibration'). */
+  category?: string;
+  /** Related program id, when applicable. */
+  program?: string;
+}
+
+/* -------------------------------------------------------------------------- */
 /*                              IMPUTATIONS                                   */
 /* -------------------------------------------------------------------------- */
 
@@ -263,13 +315,13 @@ export type ImputationMethod =
 
 export interface Imputation {
   model: string;
-  /** Variable being imputed/calibrated. */
-  targetVariable: string;
+  /** Concept id (from concepts.yaml) being imputed/calibrated. */
+  concept: string;
   method: ImputationMethod;
   /** Free-text description of the method. */
   description: string;
   baseDataset: string;
-  /** Calibration targets, e.g. ['snap-caseload-state', 'snap-outlay-total']. */
+  /** Calibration targets, free-text labels (e.g. 'state-level SNAP caseload'). */
   calibrationTargets?: string[];
   documentationUrl?: string;
   /** Is the imputation code publicly available and reproducible? */
@@ -343,6 +395,7 @@ export interface Freshness {
 export interface ComparisonData {
   models: Model[];
   programs: Program[];
+  concepts: Concept[];
   coverage: Coverage[];
   transparency: Transparency[];
   usage: UsageMetric[];

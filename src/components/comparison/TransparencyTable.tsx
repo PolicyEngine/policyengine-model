@@ -12,10 +12,12 @@ import {
   h2Style,
   proseStyle,
 } from './comparisonStyles';
+import ModelSelector from './ModelSelector';
 import {
   sourcesFor,
   sourceKinds,
   type ComparisonData,
+  type Model,
   type Source,
   type SourceKind,
   type Tristate,
@@ -69,7 +71,13 @@ function CellWithSources({
   );
 }
 
-export default function TransparencyTable({ data }: { data: ComparisonData }) {
+export default function TransparencyTable({
+  data,
+  allModels,
+}: {
+  data: ComparisonData;
+  allModels: Model[];
+}) {
   return (
     <div>
       <PageHeader
@@ -77,6 +85,8 @@ export default function TransparencyTable({ data }: { data: ComparisonData }) {
         title="Transparency"
         description="How verifiable each model is by an outside party. Public code, public documentation, public data, and a reproducible build pipeline are the four legs of model transparency — they let a reader confirm that what the model says happens is what actually happens. Each cell carries its own corroborating sources."
       />
+
+      <ModelSelector allModels={allModels} />
 
       <section style={sectionStyle}>
         <div style={tableWrapperStyle}>

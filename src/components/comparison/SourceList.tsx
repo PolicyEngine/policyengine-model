@@ -72,12 +72,26 @@ export function SourceList({
               href={s.url}
               target="_blank"
               rel="noopener noreferrer"
-              style={{ color: colors.primary[600], textDecoration: 'none' }}
+              title={s.quote ? `"${s.quote}"` : undefined}
+              style={{
+                color: colors.primary[600],
+                textDecoration: 'none',
+                borderBottom: s.quote ? `1px dotted ${colors.primary[400]}` : 'none',
+                cursor: s.quote ? 'help' : 'pointer',
+              }}
             >
               {s.label}
             </a>
           ) : (
-            <span>{s.label}</span>
+            <span
+              title={s.quote ? `"${s.quote}"` : undefined}
+              style={{
+                borderBottom: s.quote ? `1px dotted ${colors.gray[400]}` : 'none',
+                cursor: s.quote ? 'help' : 'default',
+              }}
+            >
+              {s.label}
+            </span>
           )}
         </li>
       ))}

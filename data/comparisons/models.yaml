@@ -10,6 +10,8 @@ models:
     organization: PolicyEngine
     organizationUrl: https://policyengine.org
     siblings: [policyengine-uk, policyengine-canada, policyengine-il, policyengine-ng]
+    country: us
+    sector: non-profit
     type: microsimulation
     jurisdictions: [us-federal, us-states, us-localities]
     inceptionYear: 2021
@@ -27,6 +29,12 @@ models:
       select local tax and benefit policies. Built on policyengine-core (a
       fork of OpenFisca-Core) with an enhanced CPS dataset calibrated to
       administrative totals via L0 reweighting.
+    capabilities:
+      reformImpact: yes
+      integratedMicrodata: yes
+      localAreas: yes
+      publicInterface: yes
+      apiAccess: yes
     sources:
       - label: PolicyEngine US repository
         url: https://github.com/PolicyEngine/policyengine-us
@@ -40,7 +48,7 @@ models:
       - label: PolicyEngine on PyPI
         url: https://pypi.org/project/policyengine-us/
         kind: other
-      - label: PolicyEngine open-source software paper (J. Open Source Software)
+      - label: Ghenis & Woodruff — PolicyEngine paper (J. Open Source Software)
         url: https://joss.theoj.org/papers/10.21105/joss.04494
         kind: academic
 
@@ -48,6 +56,8 @@ models:
     name: TRIM3
     organization: Urban Institute
     organizationUrl: https://www.urban.org
+    country: us
+    sector: non-profit
     type: microsimulation
     jurisdictions: [us-federal, us-states]
     inceptionYear: 1973
@@ -61,11 +71,16 @@ models:
       - Laura Wheaton
     summary: >
       The Transfer Income Model, version 3 simulates major federal and
-      state tax and transfer programs using the CPS-ASEC. Funded
-      primarily by HHS's Office of the Assistant Secretary for Planning
-      and Evaluation (ASPE), which holds the copyright. Outputs are
-      accessed through Urban-controlled web interfaces; source code is
-      not public.
+      state tax and transfer programs using the CPS-ASEC. Funded primarily
+      by HHS's Office of the Assistant Secretary for Planning and
+      Evaluation (ASPE), which holds the copyright. Outputs are accessed
+      through Urban-controlled web interfaces; source code is not public.
+    capabilities:
+      reformImpact: yes
+      integratedMicrodata: yes
+      localAreas: no
+      publicInterface: no
+      apiAccess: no
     sources:
       - label: TRIM3 introduction and history
         url: https://boreas.urban.org/T3IntroHistory.php
@@ -89,8 +104,10 @@ models:
     organization: Urban Institute
     organizationUrl: https://www.urban.org
     siblings: [trim3]
+    country: us
+    sector: non-profit
     type: microsimulation
-    jurisdictions: [us-federal, us-states]
+    jurisdictions: [us-federal, us-states, us-substate]
     inceptionYear: 2017
     license: proprietary
     codePublic: false
@@ -108,6 +125,12 @@ models:
       funded through stacked foundation initiatives (State of the Safety
       Net, Safety Net to Solid Ground) rather than a single base
       contract.
+    capabilities:
+      reformImpact: yes
+      integratedMicrodata: yes
+      localAreas: yes
+      publicInterface: no
+      apiAccess: no
     sources:
       - label: ATTIS model overview
         url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
@@ -115,7 +138,7 @@ models:
       - label: State of the Safety Net initiative
         url: https://www.urban.org/projects/state-safety-net
         kind: self
-      - label: Annie E. Casey Foundation — KIDS COUNT (funder using ATTIS)
+      - label: Annie E. Casey Foundation — KIDS COUNT
         url: https://www.aecf.org/work/kids-count
         kind: civilsociety
       - label: Robert Wood Johnson Foundation — From Safety Net to Solid Ground
@@ -126,9 +149,11 @@ models:
         kind: civilsociety
 
   - id: tpc-microsim
-    name: TPC microsimulation model
+    name: TPC microsim
     organization: Tax Policy Center (Urban-Brookings)
     organizationUrl: https://www.taxpolicycenter.org
+    country: us
+    sector: non-profit
     type: microsimulation
     jurisdictions: [us-federal, us-states]
     inceptionYear: 2002
@@ -147,6 +172,12 @@ models:
       the federal income tax, payroll taxes, and the estate tax.
       Microdata is the SOI Public Use File extended with imputations from
       the CPS-ASEC. Source code and microdata are not public.
+    capabilities:
+      reformImpact: yes
+      integratedMicrodata: no
+      localAreas: no
+      publicInterface: no
+      apiAccess: no
     sources:
       - label: TPC Brief Description of the Tax Model
         url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
@@ -162,4 +193,220 @@ models:
         kind: academic
       - label: MacArthur Foundation grants to TPC (funder record)
         url: https://www.macfound.org/grantee/urban-institute-tax-policy-center-39925/
+        kind: civilsociety
+
+  - id: jct-microsim
+    name: JCT microsim
+    organization: Joint Committee on Taxation
+    organizationUrl: https://www.jct.gov
+    country: us
+    sector: government
+    type: microsimulation
+    jurisdictions: [us-federal]
+    inceptionYear: 1976
+    license: proprietary
+    codePublic: false
+    languages: [unknown]
+    primaryDataset: SOI Individual Tax File (restricted)
+    documentationUrl: https://www.jct.gov/publications/2023/jcx-3-23/
+    summary: >
+      The Joint Committee on Taxation produces official revenue estimates
+      for proposed federal tax legislation. JCT's models are not public
+      but its methodology papers describe an individual income tax
+      simulator using SOI tax-return microdata. JCT estimates are the
+      authoritative score for Congress.
+    capabilities:
+      reformImpact: yes
+      integratedMicrodata: no
+      localAreas: no
+      publicInterface: no
+      apiAccess: no
+    sources:
+      - label: JCT Overview of the Federal Tax System (methodology context)
+        url: https://www.jct.gov/publications/2023/jcx-3-23/
+        kind: government
+      - label: JCT — Estimating revenue effects (methodology paper series)
+        url: https://www.jct.gov/publications/2023/jcx-46-23/
+        kind: government
+      - label: CRS — How the federal government estimates tax revenue
+          (describes JCT methodology)
+        url: https://crsreports.congress.gov/product/pdf/RL/RL31292
+        kind: government
+      - label: Auerbach — Dynamic scoring and tax legislation
+          (academic analysis of JCT methodology)
+        url: https://www.brookings.edu/articles/dynamic-scoring-an-overview/
+        kind: academic
+      - label: Brookings — How accurate are tax revenue projections?
+        url: https://www.brookings.edu/articles/how-accurate-are-tax-revenue-projections/
+        kind: civilsociety
+
+  - id: cbo-microsim
+    name: CBO microsimulation
+    organization: Congressional Budget Office
+    organizationUrl: https://www.cbo.gov
+    country: us
+    sector: government
+    type: microsimulation
+    jurisdictions: [us-federal]
+    inceptionYear: 1975
+    license: proprietary
+    codePublic: false
+    languages: [unknown]
+    primaryDataset: CPS + SOI matched microdata (restricted)
+    documentationUrl: https://www.cbo.gov/topics/budget
+    summary: >
+      CBO maintains internal microsimulation models for federal tax
+      revenue, payroll taxes, and major benefit programs (SNAP, Medicaid,
+      ACA). Models are not public; published outputs include baseline
+      projections and distributional tables. CBO's analyses are the
+      authoritative budget score for Congress.
+    capabilities:
+      reformImpact: yes
+      integratedMicrodata: partial
+      localAreas: no
+      publicInterface: no
+      apiAccess: no
+    sources:
+      - label: CBO Budget and Economic Outlook (baseline publications)
+        url: https://www.cbo.gov/topics/budget
+        kind: government
+      - label: CBO — How the supply of labor responds to fiscal policy (model documentation)
+        url: https://www.cbo.gov/publication/43674
+        kind: government
+      - label: CBO — Distribution of household income (microsim outputs)
+        url: https://www.cbo.gov/topic/income-distribution
+        kind: government
+      - label: Auerbach & Gale — Forecasting the federal budget
+          (academic analysis of CBO methodology)
+        url: https://www.brookings.edu/articles/forecasting-the-federal-budget/
+        kind: academic
+      - label: Committee for a Responsible Federal Budget — How CBO scores legislation
+        url: https://www.crfb.org/blogs/how-cbo-scores-legislation
+        kind: civilsociety
+
+  - id: itep-microsim
+    name: ITEP microsim
+    organization: Institute on Taxation and Economic Policy
+    organizationUrl: https://itep.org
+    country: us
+    sector: non-profit
+    type: microsimulation
+    jurisdictions: [us-federal, us-states]
+    inceptionYear: 1996
+    license: proprietary
+    codePublic: false
+    languages: [unknown]
+    primaryDataset: SOI + state tax microdata (restricted)
+    documentationUrl: https://itep.org/methodology/
+    summary: >
+      The ITEP Microsimulation Tax Model estimates federal and state tax
+      incidence. ITEP's "Who Pays?" series is the canonical analysis of
+      state-by-state tax progressivity. Model code is not public.
+    capabilities:
+      reformImpact: yes
+      integratedMicrodata: no
+      localAreas: no
+      publicInterface: no
+      apiAccess: no
+    sources:
+      - label: ITEP Microsimulation Tax Model methodology
+        url: https://itep.org/methodology/
+        kind: self
+      - label: ITEP Who Pays? (state tax incidence reports)
+        url: https://itep.org/whopays/
+        kind: self
+      - label: ITEP funders page
+        url: https://itep.org/about/itep-supporters/
+        kind: self
+      - label: CRS — State income tax incidence analyses cite ITEP
+        url: https://crsreports.congress.gov/product/pdf/R/R47299
+        kind: government
+
+  - id: tax-calculator
+    name: Tax-Calculator
+    organization: Policy Simulation Library
+    organizationUrl: https://www.pslmodels.org
+    country: us
+    sector: non-profit
+    type: tax-calculator
+    jurisdictions: [us-federal]
+    inceptionYear: 2014
+    license: CC0-1.0
+    codePublic: true
+    codeUrl: https://github.com/PSLmodels/Tax-Calculator
+    languages: [Python]
+    primaryDataset: PUF + CPS matched (PUF requires IRS purchase; CPS-only build is free)
+    documentationUrl: https://taxcalc.pslmodels.org
+    leads:
+      - Matthew Jensen
+      - Anderson Frailey
+    summary: >
+      Open-source federal individual income tax + payroll tax
+      microsimulation model maintained by the Policy Simulation Library.
+      Provides a CPS-only free build and a PUF build for users who can
+      access SOI microdata. Used as the engine behind several derived
+      models (Tax-Brain, OG-USA).
+    capabilities:
+      reformImpact: yes
+      integratedMicrodata: no
+      localAreas: no
+      publicInterface: yes
+      apiAccess: yes
+    sources:
+      - label: Tax-Calculator repository
+        url: https://github.com/PSLmodels/Tax-Calculator
+        kind: self
+      - label: Tax-Calculator documentation
+        url: https://taxcalc.pslmodels.org
+        kind: self
+      - label: PSL community (open-source tax modeling consortium)
+        url: https://www.pslmodels.org
+        kind: civilsociety
+      - label: Tax-Calculator on PyPI
+        url: https://pypi.org/project/taxcalc/
+        kind: other
+      - label: Jensen & Frailey — Tax-Calculator academic paper
+        url: https://onlinelibrary.wiley.com/doi/abs/10.1002/pam.22055
+        kind: academic
+
+  - id: budgetlab-tax
+    name: Budget Lab Tax Model
+    organization: Budget Lab at Yale
+    organizationUrl: https://budgetlab.yale.edu
+    country: us
+    sector: academic
+    type: microsimulation
+    jurisdictions: [us-federal]
+    inceptionYear: 2024
+    license: MIT
+    codePublic: true
+    codeUrl: https://github.com/yale-budget-lab
+    languages: [R]
+    primaryDataset: SOI PUF (restricted) with CPS-derived imputations
+    documentationUrl: https://budgetlab.yale.edu/topic/methodology
+    leads:
+      - John Ricco
+    summary: >
+      Open-source federal tax microsimulation model maintained by the
+      Budget Lab at Yale (founded 2024). Implementation is in R, with
+      methodology documentation published alongside revenue scoring
+      reports. Comparable scope to TPC's microsim but with open source.
+    capabilities:
+      reformImpact: yes
+      integratedMicrodata: no
+      localAreas: no
+      publicInterface: no
+      apiAccess: no
+    sources:
+      - label: Budget Lab at Yale (organization)
+        url: https://budgetlab.yale.edu
+        kind: self
+      - label: Budget Lab methodology page
+        url: https://budgetlab.yale.edu/topic/methodology
+        kind: self
+      - label: Yale Budget Lab GitHub organization
+        url: https://github.com/yale-budget-lab
+        kind: self
+      - label: Brookings press coverage of Budget Lab launch (2024)
+        url: https://www.brookings.edu/articles/the-budget-lab-at-yale/
         kind: civilsociety

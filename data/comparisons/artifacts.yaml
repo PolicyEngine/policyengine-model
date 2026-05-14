@@ -196,3 +196,159 @@ artifacts:
     sources:
       - label: Brief Description
         url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
+
+  # =================================== JCT microsim ==========================
+  - model: jct-microsim
+    type: codebase
+    name: JCT internal tax simulator
+    public: no
+    license: proprietary
+    description: SOI-microdata-based revenue estimating system; not public.
+    sources:
+      - label: JCT methodology publications
+        url: https://www.jct.gov/publications/
+
+  - model: jct-microsim
+    type: paper
+    name: JCT revenue estimates
+    public: yes
+    license: government
+    url: https://www.jct.gov/publications/
+    description: Official Congressional revenue estimates for proposed tax legislation.
+    sources:
+      - label: JCT publications
+        url: https://www.jct.gov/publications/
+
+  # =================================== CBO microsim ==========================
+  - model: cbo-microsim
+    type: codebase
+    name: CBO internal microsim models
+    public: no
+    license: proprietary
+    description: Multiple internal microsim models for tax revenue, payroll, SNAP, Medicaid.
+    sources:
+      - label: CBO working papers
+        url: https://www.cbo.gov/about/products/working-papers
+
+  - model: cbo-microsim
+    type: paper
+    name: CBO Budget and Economic Outlook
+    public: yes
+    license: government
+    url: https://www.cbo.gov/topics/budget
+    description: Authoritative 10-year baseline budget projection.
+    sources:
+      - label: CBO Budget topics
+        url: https://www.cbo.gov/topics/budget
+
+  - model: cbo-microsim
+    type: paper
+    name: CBO distribution of household income
+    public: yes
+    license: government
+    url: https://www.cbo.gov/topic/income-distribution
+    description: Distributional analyses of taxes, transfers, and income.
+    sources:
+      - label: CBO income distribution
+        url: https://www.cbo.gov/topic/income-distribution
+
+  # =================================== ITEP microsim =========================
+  - model: itep-microsim
+    type: codebase
+    name: ITEP Microsimulation Tax Model
+    public: no
+    license: proprietary
+    description: Federal + state tax incidence model; implementation not public.
+    sources:
+      - label: ITEP methodology
+        url: https://itep.org/methodology/
+
+  - model: itep-microsim
+    type: paper
+    name: Who Pays? state tax incidence reports
+    public: yes
+    license: ITEP editorial
+    url: https://itep.org/whopays/
+    description: The canonical analysis of state-by-state tax progressivity.
+    sources:
+      - label: Who Pays?
+        url: https://itep.org/whopays/
+
+  # =================================== Tax-Calculator ========================
+  - model: tax-calculator
+    type: codebase
+    name: Tax-Calculator
+    public: yes
+    license: CC0-1.0
+    url: https://github.com/PSLmodels/Tax-Calculator
+    description: Open-source federal individual income + payroll tax microsimulation.
+    sources:
+      - label: Tax-Calculator repo
+        url: https://github.com/PSLmodels/Tax-Calculator
+
+  - model: tax-calculator
+    type: parameter-database
+    name: Tax-Calculator policy parameters (JSON)
+    public: yes
+    license: CC0-1.0
+    url: https://github.com/PSLmodels/Tax-Calculator/blob/master/taxcalc/policy_current_law.json
+    description: All federal tax policy parameters with effective dates in JSON.
+    sources:
+      - label: policy_current_law.json
+        url: https://github.com/PSLmodels/Tax-Calculator/blob/master/taxcalc/policy_current_law.json
+
+  - model: tax-calculator
+    type: dataset
+    name: taxdata (Tax-Calculator data prep)
+    public: partial
+    license: CC0-1.0 (code); IRS PUF required separately
+    url: https://github.com/PSLmodels/taxdata
+    description: Open data-prep pipeline; PUF build requires SOI purchase.
+    sources:
+      - label: taxdata repo
+        url: https://github.com/PSLmodels/taxdata
+
+  - model: tax-calculator
+    type: documentation-site
+    name: Tax-Calculator documentation
+    public: yes
+    license: CC0-1.0
+    url: https://taxcalc.pslmodels.org
+    description: Full methodology and API documentation.
+    sources:
+      - label: Tax-Calculator docs
+        url: https://taxcalc.pslmodels.org
+
+  # =================================== Budget Lab ============================
+  - model: budgetlab-tax
+    type: codebase
+    name: Budget Lab Tax Model
+    public: partial
+    license: MIT
+    url: https://github.com/yale-budget-lab
+    description: Per-analysis R code published in Budget Lab GitHub organization.
+    sources:
+      - label: Yale Budget Lab GitHub
+        url: https://github.com/yale-budget-lab
+
+  - model: budgetlab-tax
+    type: paper
+    name: Budget Lab research catalogue
+    public: yes
+    license: Budget Lab editorial
+    url: https://budgetlab.yale.edu/research
+    description: Methodology and scoring papers for individual analyses.
+    sources:
+      - label: Budget Lab research
+        url: https://budgetlab.yale.edu/research
+
+  - model: budgetlab-tax
+    type: documentation-site
+    name: Budget Lab methodology
+    public: yes
+    license: Budget Lab editorial
+    url: https://budgetlab.yale.edu/topic/methodology
+    description: Documentation of methodology across Budget Lab analyses.
+    sources:
+      - label: Budget Lab methodology
+        url: https://budgetlab.yale.edu/topic/methodology

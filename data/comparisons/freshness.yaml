@@ -159,3 +159,139 @@ freshness:
         url: https://www.taxpolicycenter.org/about-us
         kind: self
         supports: [updateCadence, updateLag]
+
+  - model: jct-microsim
+    latestImplementedYear: 2025
+    forwardYearsThrough: 2035
+    handlesFutureDatedLegislation: yes
+    updateCadence: continuous
+    updateLag: >
+      Days when scoring a specific bill; baseline updated with each CBO
+      Budget and Economic Outlook (twice yearly).
+    lastMajorRefresh: unknown
+    notableRegimes: >
+      Current law (TCJA + OBBBA), with revenue scoring of proposed
+      legislation over the 10-year CBO budget window.
+    notes: >
+      JCT's core purpose is forward-looking revenue scoring of
+      legislation under consideration in Congress. Model maintenance is
+      tied to legislative cycles.
+    sources:
+      - label: JCT revenue estimate publications (forward-window scoring)
+        url: https://www.jct.gov/publications/
+        kind: government
+        supports: [forwardYearsThrough, handlesFutureDatedLegislation,
+                   notableRegimes, latestImplementedYear]
+      - label: CBO Budget and Economic Outlook (baseline JCT aligns with)
+        url: https://www.cbo.gov/topics/budget
+        kind: government
+        supports: [forwardYearsThrough, updateCadence]
+
+  - model: cbo-microsim
+    latestImplementedYear: 2025
+    forwardYearsThrough: 2035
+    handlesFutureDatedLegislation: yes
+    updateCadence: continuous
+    updateLag: Days to weeks for major legislation; baseline updated twice yearly.
+    lastMajorRefresh: unknown
+    notableRegimes: >
+      Current-law baseline (TCJA + OBBBA), extended-baseline scenarios,
+      and ad-hoc reform scoring through the 10-year CBO budget window.
+    notes: >
+      CBO's baseline projection is the canonical forward-looking budget
+      forecast that almost every other US model calibrates against.
+    sources:
+      - label: CBO Budget and Economic Outlook (latest baseline)
+        url: https://www.cbo.gov/publication/61172
+        kind: government
+        supports: [latestImplementedYear, forwardYearsThrough, notableRegimes,
+                   handlesFutureDatedLegislation]
+      - label: CBO long-term projections methodology
+        url: https://www.cbo.gov/about/products/budget-economic-data
+        kind: government
+        supports: [forwardYearsThrough, updateCadence]
+
+  - model: itep-microsim
+    latestImplementedYear: 2024
+    forwardYearsThrough: unknown
+    handlesFutureDatedLegislation: partial
+    updateCadence: annual
+    updateLag: Annual refresh tied to Who Pays? publication cycles.
+    lastMajorRefresh: 2024-10
+    notableRegimes: >
+      Current state tax law as of the most recent Who Pays? edition.
+      Some federal reform scoring (e.g. OBBBA) published on ad-hoc basis.
+    notes: >
+      ITEP's primary deliverable cadence is the Who Pays? state tax
+      incidence series; forward-projection of scheduled legislation is
+      not core to the model's purpose.
+    sources:
+      - label: ITEP Who Pays? 2024 edition (latest state incidence baseline)
+        url: https://itep.org/whopays/
+        kind: self
+        supports: [latestImplementedYear, lastMajorRefresh, updateCadence]
+      - label: ITEP federal tax analyses (occasional forward-looking)
+        url: https://itep.org/category/federal/
+        kind: self
+        supports: [handlesFutureDatedLegislation, notableRegimes]
+
+  - model: tax-calculator
+    latestImplementedYear: 2025
+    forwardYearsThrough: 2034
+    handlesFutureDatedLegislation: yes
+    updateCadence: continuous
+    updateLag: >
+      Open-source PR cadence — typically weeks for major legislation.
+      OBBBA implementation merged July 2025.
+    lastMajorRefresh: 2025-07
+    notableRegimes: >
+      Current-law baseline (TCJA + OBBBA), with reform parameters for
+      ARPA, build-back-better proposals, etc. Forward-projection over
+      CBO 10-year window.
+    notes: >
+      Date-indexed parameters in JSON allow scheduling of future-dated
+      changes. Aging via CBO baseline projections.
+    sources:
+      - label: Tax-Calculator releases page
+        url: https://github.com/PSLmodels/Tax-Calculator/releases
+        kind: self
+        supports: [latestImplementedYear, lastMajorRefresh, updateCadence]
+      - label: Tax-Calculator parameter files (date-indexed)
+        url: https://github.com/PSLmodels/Tax-Calculator/blob/master/taxcalc/policy_current_law.json
+        kind: self
+        supports: [handlesFutureDatedLegislation, forwardYearsThrough,
+                   notableRegimes]
+      - label: Tax-Calculator commit history
+        url: https://github.com/PSLmodels/Tax-Calculator/commits/master
+        kind: self
+        supports: [updateCadence, updateLag]
+
+  - model: budgetlab-tax
+    latestImplementedYear: 2025
+    forwardYearsThrough: 2034
+    handlesFutureDatedLegislation: yes
+    updateCadence: continuous
+    updateLag: >
+      Active analysis publication on individual reforms; consolidated
+      model release cadence not yet documented.
+    lastMajorRefresh: 2025
+    notableRegimes: >
+      OBBBA scoring published 2025; TCJA extension scenarios. Forward
+      projection over 10-year window per Budget Lab analyses.
+    notes: >
+      Budget Lab launched 2024; documentation patterns still
+      consolidating. Methodology and scoring papers published rapidly
+      around major legislation.
+    sources:
+      - label: Budget Lab OBBBA scoring analysis
+        url: https://budgetlab.yale.edu/research
+        kind: self
+        supports: [latestImplementedYear, notableRegimes, handlesFutureDatedLegislation]
+      - label: Yale Budget Lab GitHub commits
+        url: https://github.com/yale-budget-lab
+        kind: self
+        supports: [updateCadence, lastMajorRefresh, updateLag]
+      - label: CBO 10-year window (baseline alignment)
+        url: https://www.cbo.gov/topics/budget
+        kind: government
+        supports: [forwardYearsThrough]

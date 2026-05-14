@@ -12,8 +12,9 @@ import {
   proseStyle,
   sectionStyle,
 } from './comparisonStyles';
-import { modelById, programById } from '../../data/comparisons';
-import type { ComparisonData } from '../../types/comparison';
+import { modelById, programById, imputationsByConcept } from '../../data/comparisons';
+import ModelSelector from './ModelSelector';
+import type { ComparisonData, Model } from '../../types/comparison';
 
 function fmtUsd(n: number): string {
   if (n >= 1_000_000_000_000) return `$${(n / 1_000_000_000_000).toFixed(1)}T`;
@@ -28,81 +29,123 @@ function fmtCount(n: number): string {
   return n.toLocaleString();
 }
 
-export default function MethodsView({ data }: { data: ComparisonData }) {
+export default function MethodsView({
+  data,
+  allModels,
+}: {
+  data: ComparisonData;
+  allModels: Model[];
+}) {
+  const grouped = imputationsByConcept(data);
+
   return (
     <div>
       <PageHeader
         category="Comparison"
         title="Methods and accuracy"
-        description="How each model imputes missing variables, calibrates participation to administrative totals, and validates against benchmarks. Two-headed: a row-level catalogue of imputation approaches, plus a benchmark table of accuracy checks."
+        description="How each model imputes missing variables, calibrates participation to administrative totals, and validates against benchmarks. Methodology is grouped by comparable concept (e.g. 'SNAP participation imputation') so each row sits next to its peers across models. Accuracy benchmarks follow."
       />
 
+      <ModelSelector allModels={allModels} />
+
       <section style={sectionStyle}>
-        <h2 style={h2Style}>Imputations and calibration</h2>
+        <h2 style={h2Style}>Imputations and calibration, by concept</h2>
         <p style={proseStyle}>
-          Microsimulation models invariably impute variables that survey microdata do not capture
-          (capital gains, itemized deductions) and reconcile simulated participation to
-          administrative caseloads. The choice between rule-based eligibility and caseload-driven
-          alignment, and the choice between statistical matching and gradient-based calibration,
-          are the most consequential methodological decisions.
+          Each block below covers one methodological concept — e.g. how a
+          model goes from CPS-eligible to CPS-participant in SNAP. The rows
+          are model implementations of that same concept, side by side. Hover
+          a source label to see the supporting quote.
         </p>
-        <div style={{ ...tableWrapperStyle, marginTop: spacing.lg }}>
-          <table style={tableStyle}>
-            <thead>
-              <tr>
-                <th style={thStyle}>Model</th>
-                <th style={thStyle}>Target variable</th>
-                <th style={thStyle}>Method</th>
-                <th style={thStyle}>Base dataset</th>
-                <th style={thStyle}>Reproducible</th>
-                <th style={thStyle}>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.imputations.map((imp, i) => {
-                const model = modelById(data, imp.model);
-                return (
-                  <tr key={i}>
-                    <td style={tdStyle}>
-                      <div style={{ fontWeight: 600 }}>{model?.name ?? imp.model}</div>
-                    </td>
-                    <td style={tdStyle}>{imp.targetVariable}</td>
-                    <td style={tdStyle}>
-                      <code style={{ fontSize: 12 }}>{imp.method}</code>
-                    </td>
-                    <td style={tdStyle}>{imp.baseDataset}</td>
-                    <td style={tdStyle}>
-                      <TristateBadge value={imp.reproducible} />
-                    </td>
-                    <td style={{ ...tdStyle, maxWidth: 360, fontSize: 13 }}>
-                      {imp.description}
-                      {imp.documentationUrl && (
-                        <div style={{ ...subTextStyle, marginTop: 4 }}>
-                          <a
-                            href={imp.documentationUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            style={{ color: colors.primary[600], textDecoration: 'none' }}
-                          >
-                            docs ↗
-                          </a>
-                        </div>
-                      )}
-                    </td>
+
+        {grouped.map(({ concept, rows }) => (
+          <div key={concept.id} style={{ marginTop: spacing['3xl'] }}>
+            <h3
+              style={{
+                fontSize: 18,
+                fontWeight: 700,
+                color: colors.primary[800],
+                margin: 0,
+                marginBottom: spacing.sm,
+              }}
+            >
+              {concept.name}
+            </h3>
+            <p style={{ ...proseStyle, fontSize: 14, marginBottom: spacing.md }}>
+              {concept.description}
+            </p>
+            <div style={tableWrapperStyle}>
+              <table style={tableStyle}>
+                <thead>
+                  <tr>
+                    <th style={thStyle}>Model</th>
+                    <th style={thStyle}>Method</th>
+                    <th style={thStyle}>Base dataset</th>
+                    <th style={thStyle}>Reproducible</th>
+                    <th style={thStyle}>Description</th>
+                    <th style={thStyle}>Sources</th>
                   </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+                </thead>
+                <tbody>
+                  {rows.map((imp, i) => {
+                    const model = modelById(data, imp.model);
+                    return (
+                      <tr key={i}>
+                        <td style={tdStyle}>
+                          <div style={{ fontWeight: 600 }}>
+                            {model?.name ?? imp.model}
+                          </div>
+                        </td>
+                        <td style={tdStyle}>
+                          <code style={{ fontSize: 12 }}>{imp.method}</code>
+                        </td>
+                        <td style={tdStyle}>{imp.baseDataset}</td>
+                        <td style={tdStyle}>
+                          <TristateBadge value={imp.reproducible} />
+                        </td>
+                        <td style={{ ...tdStyle, maxWidth: 360, fontSize: 13 }}>
+                          {imp.description}
+                          {imp.calibrationTargets && imp.calibrationTargets.length > 0 && (
+                            <div style={{ ...subTextStyle, marginTop: spacing.xs }}>
+                              <strong>Calibration targets:</strong>{' '}
+                              {imp.calibrationTargets.join('; ')}
+                            </div>
+                          )}
+                          {imp.documentationUrl && (
+                            <div style={{ ...subTextStyle, marginTop: 4 }}>
+                              <a
+                                href={imp.documentationUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{
+                                  color: colors.primary[600],
+                                  textDecoration: 'none',
+                                }}
+                              >
+                                docs ↗
+                              </a>
+                            </div>
+                          )}
+                        </td>
+                        <td style={{ ...tdStyle, maxWidth: 280 }}>
+                          <SourceList sources={imp.sources} compact />
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        ))}
       </section>
 
       <section style={sectionStyle}>
         <h2 style={h2Style}>Accuracy benchmarks</h2>
         <p style={proseStyle}>
-          Each row pairs an administrative target with the model&apos;s predicted value (where
-          documented). Some rows are calibration targets — the model is built to match them —
-          while others are external validation. Predicted values marked <em>unknown</em> are
+          Each row pairs an administrative target with the model&apos;s
+          predicted value (where documented). Some rows are calibration
+          targets — the model is built to match them — while others are
+          external validation. Predicted values marked <em>unknown</em> are
           pending model runs.
         </p>
         <div style={{ ...tableWrapperStyle, marginTop: spacing.lg }}>
@@ -146,6 +189,7 @@ export default function MethodsView({ data }: { data: ComparisonData }) {
                           row.targetSource,
                           ...(row.predictedSource ? [row.predictedSource] : []),
                         ]}
+                        compact
                       />
                     </td>
                   </tr>

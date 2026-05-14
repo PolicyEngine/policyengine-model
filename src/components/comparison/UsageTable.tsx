@@ -9,7 +9,8 @@ import {
   subTextStyle,
   sectionStyle,
 } from './comparisonStyles';
-import type { ComparisonData, UsageMetric } from '../../types/comparison';
+import ModelSelector from './ModelSelector';
+import type { ComparisonData, Model, UsageMetric } from '../../types/comparison';
 
 function fmtCount(v: UsageMetric[keyof UsageMetric]): string {
   if (v === 'unknown' || v == null) return '—';
@@ -30,7 +31,13 @@ const ROWS: Array<{ key: keyof UsageMetric; label: string; description: string }
   { key: 'organizationUsers', label: 'Organization users', description: 'Distinct organizations using the model.' },
 ];
 
-export default function UsageTable({ data }: { data: ComparisonData }) {
+export default function UsageTable({
+  data,
+  allModels,
+}: {
+  data: ComparisonData;
+  allModels: Model[];
+}) {
   return (
     <div>
       <PageHeader
@@ -38,6 +45,8 @@ export default function UsageTable({ data }: { data: ComparisonData }) {
         title="Usage"
         description="How widely each model is used: academic citations, government reports, press mentions, and active users. Many cells are 'unknown' because incumbents do not publish usage metrics — we treat that absence as data, not noise."
       />
+
+      <ModelSelector allModels={allModels} />
 
       <section style={sectionStyle}>
         <div style={tableWrapperStyle}>
