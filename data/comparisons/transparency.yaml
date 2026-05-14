@@ -813,30 +813,33 @@ transparency:
         supports: [codePublic, codeLicense]
 
   - model: atlanta-fed-prd
-    codePublic: partial
-    codeLicense: proprietary
+    codePublic: yes
+    codeLicense: GPL-3.0
+    codeUrl: https://github.com/Research-Division/policy-rules-database
     contributorCount: unknown
-    issueTrackerPublic: no
+    issueTrackerPublic: yes
     documentationPublic: yes
     documentationUrl: https://www.atlantafed.org/economic-mobility-and-resilience/advancing-careers-for-low-income-families/policy-rules-database
     parameterSourcing: separate-doc
     testSuitePublic: unknown
     testCount: unknown
-    datasetPublic: partial
-    reproducibleBuilds: unknown
+    datasetPublic: yes
+    reproducibleBuilds: partial
     notes: >
-      Atlanta Fed describes the Policy Rules Database project page as
-      sharing rules data and code on request, with open-sourcing in
-      progress. Methodology briefs and a public-facing CLIFF tool suite
-      document the rules; the source database and ingestion code have
-      not been released to a public repository as of the last check.
+      Open-source under GPL-3.0 at
+      github.com/Research-Division/policy-rules-database with active
+      2026 commits. Project page and CLIFF tool suite document the
+      rules and policy applications.
     sources:
-      - label: Atlanta Fed — Policy Rules Database (project overview,
-          access on request)
+      - label: Policy Rules Database — public GitHub repo (GPL-3.0)
+        url: https://github.com/Research-Division/policy-rules-database
+        kind: self
+        supports: [codePublic, codeLicense, issueTrackerPublic,
+                   datasetPublic, reproducibleBuilds]
+      - label: Atlanta Fed — Policy Rules Database project page
         url: https://www.atlantafed.org/economic-mobility-and-resilience/advancing-careers-for-low-income-families/policy-rules-database
         kind: self
-        supports: [codePublic, codeLicense, documentationPublic,
-                   parameterSourcing, datasetPublic]
+        supports: [documentationPublic, parameterSourcing]
       - label: Atlanta Fed — Advancing Careers for Low-Income Families
         url: https://www.atlantafed.org/economic-mobility-and-resilience/advancing-careers-for-low-income-families
         kind: self
@@ -845,12 +848,12 @@ transparency:
           powers these calculators)
         url: https://www.atlantafed.org/economic-mobility-and-resilience/advancing-careers-for-low-income-families/cliff-tools
         kind: self
-        supports: [documentationPublic, codePublic]
+        supports: [documentationPublic]
       - label: Federal Reserve Board — community development research
           referencing benefit-cliff and policy-rule databases
         url: https://www.federalreserve.gov/publications/community-development.htm
         kind: government
-        supports: [codePublic, documentationPublic]
+        supports: [documentationPublic]
 
   - model: nber-taxsim
     codePublic: no

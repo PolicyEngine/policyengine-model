@@ -908,18 +908,20 @@ models:
     type: rules-engine
     jurisdictions: [us-federal, us-states]
     inceptionYear: 2020
-    license: proprietary
-    codePublic: false
-    languages: [unknown]
+    license: GPL-3.0
+    codePublic: true
+    codeUrl: https://github.com/Research-Division/policy-rules-database
+    languages: [Python]
     primaryDataset: state and federal benefit-program parameter tables
     documentationUrl: https://www.atlantafed.org/economic-mobility-and-resilience/advancing-careers-for-low-income-families/policy-rules-database
     summary: >
-      Database of federal and state benefit-program rules maintained by
-      the Atlanta Fed as part of the Advancing Careers for Low-Income
-      Families initiative. Powers the Career Ladder Identifier and
-      Financial Forecaster (CLIFF) suite of benefit-cliff tools. Data
-      and code are shared on request, with open-sourcing in progress.
-      Status-quo rules only — does not model counterfactual reforms.
+      Open-source (GPL-3.0) database of federal and state benefit-program
+      rules maintained by the Atlanta Fed as part of the Advancing
+      Careers for Low-Income Families initiative. Source code lives at
+      github.com/Research-Division/policy-rules-database; powers the
+      Career Ladder Identifier and Financial Forecaster (CLIFF) suite of
+      benefit-cliff tools. Status-quo rules only — does not model
+      counterfactual reforms.
     capabilities:
       reformImpact: no
       integratedMicrodata: no
@@ -927,8 +929,11 @@ models:
       publicInterface: partial
       apiAccess: unknown
     sources:
-      - label: Atlanta Fed — Policy Rules Database
+      - label: Atlanta Fed — Policy Rules Database project page
         url: https://www.atlantafed.org/economic-mobility-and-resilience/advancing-careers-for-low-income-families/policy-rules-database
+        kind: self
+      - label: Policy Rules Database — public GitHub repository (GPL-3.0)
+        url: https://github.com/Research-Division/policy-rules-database
         kind: self
       - label: Atlanta Fed — Advancing Careers for Low-Income Families
         url: https://www.atlantafed.org/economic-mobility-and-resilience/advancing-careers-for-low-income-families

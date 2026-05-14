@@ -671,17 +671,32 @@ artifacts:
 
   # ============================ Atlanta Fed Policy Rules DB =================
   - model: atlanta-fed-prd
+    type: codebase
+    name: Atlanta Fed Policy Rules Database (GitHub)
+    public: yes
+    license: GPL-3.0
+    url: https://github.com/Research-Division/policy-rules-database
+    description: >
+      Public source repository for the Policy Rules Database, GPL-3.0,
+      with active 2026 commit history.
+    sources:
+      - label: GitHub repository
+        url: https://github.com/Research-Division/policy-rules-database
+        kind: self
+
+  - model: atlanta-fed-prd
     type: parameter-database
-    name: Atlanta Fed Policy Rules Database
-    public: partial
-    license: proprietary
+    name: Policy Rules Database project page
+    public: yes
+    license: GPL-3.0
     url: https://www.atlantafed.org/economic-mobility-and-resilience/advancing-careers-for-low-income-families/policy-rules-database
     description: >
-      Federal and state benefit-program rules database. Data and code
-      are shared upon request; open-sourcing is in progress.
+      Project landing page describing federal and state
+      benefit-program rules data and methodology.
     sources:
       - label: Atlanta Fed — Policy Rules Database project page
         url: https://www.atlantafed.org/economic-mobility-and-resilience/advancing-careers-for-low-income-families/policy-rules-database
+        kind: self
 
   - model: atlanta-fed-prd
     type: web-application
