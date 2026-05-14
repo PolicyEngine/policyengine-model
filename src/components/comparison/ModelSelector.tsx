@@ -51,6 +51,16 @@ export default function ModelSelector({
     router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
   }
 
+  function clearAll() {
+    const newParams = new URLSearchParams(params.toString());
+    // Empty string is meaningful: filterSelectedModels treats it as
+    // "show none". Use 'none' as a friendlier sentinel — semantically
+    // equivalent because no model id matches.
+    newParams.set(paramName, 'none');
+    const qs = newParams.toString();
+    router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+  }
+
   return (
     <div
       style={{
@@ -101,22 +111,38 @@ export default function ModelSelector({
           </button>
         );
       })}
-      <button
-        type="button"
-        onClick={selectAll}
-        style={{
-          marginLeft: 'auto',
-          padding: `${spacing.xs} ${spacing.md}`,
-          border: 'none',
-          background: 'transparent',
-          color: colors.primary[600],
-          fontSize: 12,
-          fontWeight: 600,
-          cursor: 'pointer',
-        }}
-      >
-        All
-      </button>
+      <div style={{ marginLeft: 'auto', display: 'flex', gap: spacing.xs }}>
+        <button
+          type="button"
+          onClick={selectAll}
+          style={{
+            padding: `${spacing.xs} ${spacing.md}`,
+            border: 'none',
+            background: 'transparent',
+            color: colors.primary[600],
+            fontSize: 12,
+            fontWeight: 600,
+            cursor: 'pointer',
+          }}
+        >
+          All
+        </button>
+        <button
+          type="button"
+          onClick={clearAll}
+          style={{
+            padding: `${spacing.xs} ${spacing.md}`,
+            border: 'none',
+            background: 'transparent',
+            color: colors.text.tertiary,
+            fontSize: 12,
+            fontWeight: 600,
+            cursor: 'pointer',
+          }}
+        >
+          Clear
+        </button>
+      </div>
     </div>
   );
 }
