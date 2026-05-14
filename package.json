@@ -10,7 +10,9 @@
     "start": "next start",
     "lint": "eslint .",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "check:links": "bun run scripts/check-citations.ts",
+    "check:citations": "bun run scripts/check-citations.ts --quotes"
   },
   "dependencies": {
     "@policyengine/ui-kit": "^0.9.0",
