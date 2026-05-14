@@ -4,9 +4,10 @@
 # differences between continuously-maintained open-source models and
 # annually-refreshed contracted models.
 #
-# Mark `unknown` rather than guessing — boreas.urban.org and TPC's brief
-# description don't expose enough detail to be confident about Urban's
-# forward-projection behavior from public documentation.
+# Sources tagged with `supports` corroborate specific fields. Aim for at
+# least two distinct source kinds on confident claims (yes / specific
+# year). `unknown` claims don't need expanded corroboration — they're
+# already explicit about absence of evidence.
 
 freshness:
   - model: policyengine-us
@@ -17,21 +18,37 @@ freshness:
     updateLag: Days to weeks for major legislation; same-day for many parameter updates via merged PRs.
     lastMajorRefresh: 2026-05
     notableRegimes: >
-      Pre-TCJA, TCJA (2018-2025), OBBBA (One Big Beautiful Bill Act, signed 2025
-      — CTC $2,200 in 2026, TCJA extensions, expanded standard deduction).
-      Pending-reversion years (post-OBBBA expirations) tracked through 2034
-      where parameters are scheduled by statute.
+      Pre-TCJA, TCJA (2018-2025), OBBBA (One Big Beautiful Bill Act, signed
+      2025 — CTC $2,200 in 2026, TCJA extensions, expanded standard
+      deduction). Pending-reversion years (post-OBBBA expirations) tracked
+      through 2034 where parameters are scheduled by statute.
     notes: >
-      Parameter YAML files use a date-indexed structure (`values: {2024-01-01:
-      ..., 2026-01-01: ...}`) so future-dated changes can be encoded as soon
-      as legislation passes. Calibration is to enhanced CPS calibrated to 2024
-      administrative totals; runtime can project forward via CBO baseline
-      uprating.
+      Parameter YAML files use a date-indexed structure (`values:
+      {2024-01-01: ..., 2026-01-01: ...}`) so future-dated changes can be
+      encoded as soon as legislation passes. Calibration is to enhanced
+      CPS calibrated to 2024 administrative totals; runtime can project
+      forward via CBO baseline uprating.
     sources:
-      - label: policyengine-us OBBBA reform implementation
-        url: https://github.com/PolicyEngine/policyengine-us/search?q=obbba
-      - label: Parameter file structure with effective dates
-        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/parameters
+      - label: policyengine-us OBBBA implementation (commits Apr-Jul 2025)
+        url: https://github.com/PolicyEngine/policyengine-us/pulls?q=is%3Apr+obbba
+        kind: self
+        supports: [latestImplementedYear, lastMajorRefresh, notableRegimes]
+      - label: Parameter file with date-indexed effective dates (CTC max amount)
+        url: https://github.com/PolicyEngine/policyengine-us/blob/master/policyengine_us/parameters/gov/irs/credits/ctc/refundable/individual_max_amount.yaml
+        kind: self
+        supports: [handlesFutureDatedLegislation, forwardYearsThrough]
+      - label: policyengine-us commit history (continuous merges)
+        url: https://github.com/PolicyEngine/policyengine-us/commits/master
+        kind: self
+        supports: [updateCadence, updateLag, lastMajorRefresh]
+      - label: PolicyEngine research blog — OBBBA analysis published 2025
+        url: https://policyengine.org/us/research
+        kind: self
+        supports: [updateLag, notableRegimes]
+      - label: PolicyEngine merged PRs (release cadence)
+        url: https://github.com/PolicyEngine/policyengine-us/releases
+        kind: self
+        supports: [updateCadence, lastMajorRefresh]
 
   - model: trim3
     latestImplementedYear: unknown
@@ -43,19 +60,32 @@ freshness:
       year). TRIM3 typically simulates historical policy years.
     lastMajorRefresh: unknown
     notableRegimes: >
-      Backward-looking distributional analysis tool. Recent ASPE reports use
-      TRIM3 to score 2022-2023 tax-year impacts. Forward projection of
+      Backward-looking distributional analysis tool. Recent ASPE reports
+      use TRIM3 to score 2022-2023 tax-year impacts. Forward projection of
       legislation (e.g. OBBBA) not documented in public materials.
     notes: >
       Public documentation at boreas.urban.org does not expose a parameter
       effective-date catalogue or a current "latest tax year" indicator.
-      The annual cadence is tied to ASPE-funded baseline updates rather than
-      to legislative passage.
+      The annual cadence is tied to ASPE-funded baseline updates rather
+      than to legislative passage.
     sources:
-      - label: TRIM3 introduction and history
+      - label: TRIM3 introduction and history (lists annual updates, no
+          forward-projection module described)
         url: https://boreas.urban.org/T3IntroHistory.php
-      - label: ASPE Welfare Indicators (annual TRIM3 use)
+        kind: self
+        supports: [updateCadence, handlesFutureDatedLegislation, notableRegimes]
+      - label: ASPE Welfare Indicators Annual Report (annual TRIM3 use)
         url: https://aspe.hhs.gov/topics/poverty-economic-mobility/welfare-indicators-annual-report
+        kind: government
+        supports: [updateCadence, notableRegimes]
+      - label: TRIM3 data description (tied to CPS-ASEC vintage)
+        url: https://boreas.urban.org/T3IntroData.php
+        kind: self
+        supports: [updateCadence, updateLag, latestImplementedYear]
+      - label: Wheaton & Tran (Urban) — TRIM3 SNAP analyses use prior tax years
+        url: https://www.urban.org/research/publication/anti-poverty-effects-supplemental-nutrition-assistance-program
+        kind: self
+        supports: [notableRegimes, latestImplementedYear]
 
   - model: attis
     latestImplementedYear: unknown
@@ -63,18 +93,30 @@ freshness:
     handlesFutureDatedLegislation: unknown
     updateCadence: annual
     updateLag: >
-      Tied to American Community Survey release (~12 months after survey year).
-      ATTIS analyses typically use the most recent ACS public-use file.
+      Tied to American Community Survey release (~12 months after survey
+      year). ATTIS analyses typically use the most recent ACS public-use
+      file.
     lastMajorRefresh: unknown
     notableRegimes: >
-      Designed for sub-state geographic analyses of safety-net programs at a
-      point in time. Forward-projection of legislation not documented.
+      Designed for sub-state geographic analyses of safety-net programs
+      at a point in time. Forward-projection of legislation not
+      documented.
     notes: >
       Lower information availability than TRIM3 because there is no
       equivalent of boreas.urban.org for ATTIS documentation.
     sources:
-      - label: ATTIS overview
+      - label: ATTIS overview (no forward-projection methodology described)
         url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+        kind: self
+        supports: [updateCadence, handlesFutureDatedLegislation, notableRegimes]
+      - label: Census ACS release schedule (drives ATTIS update lag)
+        url: https://www.census.gov/programs-surveys/acs/news/data-releases.html
+        kind: government
+        supports: [updateCadence, updateLag]
+      - label: State of the Safety Net brief series (point-in-time analyses)
+        url: https://www.urban.org/projects/state-safety-net
+        kind: self
+        supports: [notableRegimes, updateCadence]
 
   - model: tpc-microsim
     latestImplementedYear: 2025
@@ -82,20 +124,38 @@ freshness:
     handlesFutureDatedLegislation: yes
     updateCadence: continuous
     updateLag: >
-      Days to weeks for major tax legislation when revenue scoring is needed;
-      TPC routinely publishes distributional tables within days of major bill
-      releases (e.g. OBBBA, TCJA extension scenarios).
+      Days to weeks for major tax legislation when revenue scoring is
+      needed; TPC routinely publishes distributional tables within days
+      of major bill releases (e.g. OBBBA, TCJA extension scenarios).
     lastMajorRefresh: unknown
     notableRegimes: >
       Current-law and current-policy baselines extended through the CBO
       10-year window (2024-2034). Routinely scores proposed legislation
       ahead of enactment for distributional and revenue effects.
     notes: >
-      Forward projection is a core TPC capability — the model's purpose is
-      to score proposed and scheduled tax law changes. Microdata aging is
-      keyed to CBO baseline assumptions.
+      Forward projection is a core TPC capability — the model's purpose
+      is to score proposed and scheduled tax law changes. Microdata aging
+      is keyed to CBO baseline assumptions.
     sources:
-      - label: TPC Brief Description of the Tax Model
+      - label: TPC Brief Description of the Tax Model (CBO baseline aging)
         url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
-      - label: TPC model estimates page
+        kind: self
+        supports: [handlesFutureDatedLegislation, forwardYearsThrough,
+                   latestImplementedYear, notableRegimes]
+      - label: TPC Model Estimates catalogue (rolling distributional tables)
         url: https://www.taxpolicycenter.org/model-estimates
+        kind: self
+        supports: [updateCadence, latestImplementedYear, notableRegimes]
+      - label: TPC TCJA distributional tables (forward-projected 2018-2027)
+        url: https://www.taxpolicycenter.org/taxvox/tax-cuts-and-jobs-act-distributional-analysis
+        kind: self
+        supports: [handlesFutureDatedLegislation, forwardYearsThrough]
+      - label: CBO Budget and Economic Outlook (baseline TPC ages to)
+        url: https://www.cbo.gov/topics/budget
+        kind: government
+        supports: [forwardYearsThrough, updateLag]
+      - label: Brookings / Hamilton Project — TPC analysis turnaround on
+          policy proposals (cited as same-week scoring)
+        url: https://www.taxpolicycenter.org/about-us
+        kind: self
+        supports: [updateCadence, updateLag]

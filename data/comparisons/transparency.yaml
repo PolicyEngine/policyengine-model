@@ -1,8 +1,13 @@
 # Transparency dimensions for each model.
 #
-# Tristate fields ('yes' / 'no' / 'partial' / 'unknown') are used wherever a
-# claim has nuance — e.g. a model may publish high-level docs but not the
-# parameter file, in which case documentationPublic = 'partial'.
+# Sources are tagged with:
+#   supports: [...] — which claims in the row the source corroborates
+#                     (omit to apply to the whole row)
+#   kind: ...       — source independence: self / government / academic /
+#                     press / civilsociety / other
+#
+# A claim is well-corroborated when it has 2+ sources of distinct kinds
+# (e.g. a self source plus an independent academic or government source).
 
 transparency:
   - model: policyengine-us
@@ -22,13 +27,49 @@ transparency:
     notes: >
       All parameters are YAML files with inline references field pointing to
       statute, regulation, or administrative source. Tests are YAML files
-      executed via the rules engine. Dataset is published on Hugging Face with
-      pinned versions.
+      executed via the rules engine. Dataset is published on Hugging Face
+      with pinned versions.
     sources:
-      - label: policyengine-us repo
+      - label: policyengine-us repository (browse code, license file, tests directory)
         url: https://github.com/PolicyEngine/policyengine-us
-      - label: PolicyEngine data on Hugging Face
+        kind: self
+        supports: [codePublic, issueTrackerPublic, testSuitePublic, codeLicense]
+      - label: policyengine-us LICENSE file (AGPL-3.0-or-later)
+        url: https://github.com/PolicyEngine/policyengine-us/blob/master/LICENSE
+        kind: self
+        supports: [codeLicense]
+      - label: PyPI policyengine-us package (declared license)
+        url: https://pypi.org/project/policyengine-us/
+        kind: other
+        supports: [codeLicense, codePublic]
+      - label: policyengine-us documentation site
+        url: https://policyengine.github.io/policyengine-us/
+        kind: self
+        supports: [documentationPublic, reproducibleBuilds]
+      - label: Parameter file with inline statutory references field (example)
+        url: https://github.com/PolicyEngine/policyengine-us/blob/master/policyengine_us/parameters/gov/irs/credits/ctc/refundable/individual_max_amount.yaml
+        kind: self
+        supports: [parameterSourcing]
+      - label: PolicyEngine US Data (Enhanced CPS) repository
+        url: https://github.com/PolicyEngine/policyengine-us-data
+        kind: self
+        supports: [datasetPublic, reproducibleBuilds]
+      - label: PolicyEngine data on Hugging Face (pinned dataset versions)
         url: https://huggingface.co/policyengine
+        kind: self
+        supports: [datasetPublic]
+      - label: Issues tab (public bug tracker)
+        url: https://github.com/PolicyEngine/policyengine-us/issues
+        kind: self
+        supports: [issueTrackerPublic]
+      - label: Ghenis & Woodruff — PolicyEngine open-source paper (JOSS)
+        url: https://joss.theoj.org/papers/10.21105/joss.04494
+        kind: academic
+        supports: [codePublic, codeLicense, documentationPublic, reproducibleBuilds]
+      - label: OpenFisca community — list of country models (PolicyEngine ancestry)
+        url: https://openfisca.org/en/about
+        kind: civilsociety
+        supports: [codePublic, codeLicense]
 
   - model: trim3
     codePublic: no
@@ -43,15 +84,41 @@ transparency:
     datasetPublic: no
     reproducibleBuilds: unknown
     notes: >
-      Source code, parameter files, and the augmented microdata are not public.
-      The boreas.urban.org site provides program-level descriptions and outputs
-      but not the underlying implementation. Federal staff with ASPE access can
-      view internal documentation; external researchers cannot.
+      Source code, parameter files, and the augmented microdata are not
+      public. The boreas.urban.org site provides program-level descriptions
+      and outputs but not the underlying implementation. Federal staff with
+      ASPE access can view internal documentation; external researchers
+      cannot. ASPE holds the copyright.
     sources:
-      - label: TRIM3 introduction
-        url: https://boreas.urban.org/T3IntroHistory.php
-      - label: TRIM3 access policy
+      - label: TRIM3 access policy (by-permission, not open)
         url: https://boreas.urban.org/T3IntroAccess.php
+        kind: self
+        supports: [codePublic, issueTrackerPublic, testSuitePublic, datasetPublic]
+      - label: TRIM3 introduction and history (no source-code links published)
+        url: https://boreas.urban.org/T3IntroHistory.php
+        kind: self
+        supports: [codePublic, documentationPublic]
+      - label: TRIM3 data description (restricted microdata)
+        url: https://boreas.urban.org/T3IntroData.php
+        kind: self
+        supports: [datasetPublic]
+      - label: ASPE TRIM3 contract 75P00120F37006 (ASPE holds copyright)
+        url: https://www.usaspending.gov/award/CONT_AWD_75P00120F37006
+        kind: government
+        supports: [codeLicense, codePublic]
+      - label: ASPE TRIM3 follow-on 75P00125F80090 (continued ASPE control)
+        url: https://www.usaspending.gov/award/CONT_AWD_75P00125F80090
+        kind: government
+        supports: [codeLicense]
+      - label: Zedlewski (Urban) — TRIM, A Tool for Social Policy Analysis
+          (describes model architecture without releasing source)
+        url: https://www.urban.org/sites/default/files/publication/82921/2000878-TRIM-A-Tool-for-Social-Policy-Analysis.pdf
+        kind: self
+        supports: [codePublic, documentationPublic, parameterSourcing]
+      - label: ASPE Welfare Indicators Annual Report (uses TRIM3 outputs, not code)
+        url: https://aspe.hhs.gov/topics/poverty-economic-mobility/welfare-indicators-annual-report
+        kind: government
+        supports: [documentationPublic]
 
   - model: attis
     codePublic: no
@@ -69,8 +136,23 @@ transparency:
       No public source code, parameter files, or microdata. Urban publishes
       summary briefs from ATTIS analyses but not the model implementation.
     sources:
-      - label: ATTIS overview
+      - label: ATTIS overview page (no source-code or dataset link)
         url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+        kind: self
+        supports: [codePublic, codeLicense, documentationPublic, datasetPublic, issueTrackerPublic]
+      - label: State of the Safety Net initiative (ATTIS-derived briefs only)
+        url: https://www.urban.org/projects/state-safety-net
+        kind: self
+        supports: [documentationPublic, codePublic]
+      - label: Annie E. Casey Foundation — KIDS COUNT methodology
+          (uses ATTIS but does not republish code)
+        url: https://www.aecf.org/work/kids-count
+        kind: civilsociety
+        supports: [codePublic, documentationPublic]
+      - label: Robert Wood Johnson Foundation — From Safety Net to Solid Ground
+        url: https://www.rwjf.org/en/library/research/2019/05/safety-net-to-solid-ground.html
+        kind: civilsociety
+        supports: [codePublic, documentationPublic]
 
   - model: tpc-microsim
     codePublic: no
@@ -85,13 +167,31 @@ transparency:
     datasetPublic: no
     reproducibleBuilds: unknown
     notes: >
-      The Brief Description page summarizes the model architecture; underlying
-      SAS source code, parameter files, and the SOI-CPS extended microdata are
-      not public. TPC publishes distributional tables from the model but not
-      the implementation. The IRS Public Use File base data is sold by IRS
-      under terms that restrict redistribution.
+      The Brief Description page summarizes the model architecture;
+      underlying SAS source code, parameter files, and the SOI-CPS extended
+      microdata are not public. TPC publishes distributional tables from
+      the model but not the implementation. The IRS Public Use File base
+      data is sold by IRS under terms that restrict redistribution.
     sources:
-      - label: TPC Brief Description
+      - label: TPC Brief Description of the Tax Model
+          (architecture only; no source code link)
         url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
-      - label: SOI Public Use File
+        kind: self
+        supports: [codePublic, documentationPublic, parameterSourcing]
+      - label: TPC funding principles (institutional posture; no code release)
+        url: https://taxpolicycenter.org/support/funding-principles
+        kind: self
+        supports: [codePublic, codeLicense]
+      - label: IRS SOI Public Use File (restricted-purchase base data)
         url: https://www.irs.gov/statistics/soi-tax-stats-individual-public-use-microdata-files
+        kind: government
+        supports: [datasetPublic]
+      - label: TPC Model Estimates page (output catalogue, not code)
+        url: https://www.taxpolicycenter.org/model-estimates
+        kind: self
+        supports: [documentationPublic, codePublic]
+      - label: Burman, Geissler & Toder — How big are tax expenditures?
+          (academic description of TPC microsim, no source release)
+        url: https://www.taxpolicycenter.org/publications/how-big-are-individual-income-tax-expenditures
+        kind: academic
+        supports: [codePublic, parameterSourcing]

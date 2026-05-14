@@ -1,5 +1,5 @@
 import PageHeader from '../layout/PageHeader';
-import { colors } from '../../designTokens';
+import { colors, spacing } from '../../designTokens';
 import { TristateBadge } from './StatusBadge';
 import { SourceList } from './SourceList';
 import {
@@ -9,14 +9,23 @@ import {
   tdStyle,
   subTextStyle,
   sectionStyle,
+  h2Style,
+  proseStyle,
 } from './comparisonStyles';
-import type { ComparisonData } from '../../types/comparison';
+import {
+  sourcesFor,
+  sourceKinds,
+  type ComparisonData,
+  type Source,
+  type SourceKind,
+  type Tristate,
+} from '../../types/comparison';
 
 const ROWS: Array<{
   key: string;
   label: string;
   description: string;
-  format: 'tristate' | 'text' | 'count';
+  format: 'tristate' | 'text';
 }> = [
   { key: 'codePublic', label: 'Code public', description: 'Source code available to read.', format: 'tristate' },
   { key: 'codeLicense', label: 'Code license', description: 'License terms.', format: 'text' },
@@ -35,13 +44,38 @@ const SOURCING_LABEL: Record<string, string> = {
   'unknown': 'Unknown',
 };
 
+function CellWithSources({
+  value,
+  format,
+  sources,
+}: {
+  value: unknown;
+  format: 'tristate' | 'text';
+  sources: Source[];
+}) {
+  return (
+    <div>
+      {format === 'tristate' ? (
+        <TristateBadge value={value as Tristate} />
+      ) : (
+        <span>{SOURCING_LABEL[String(value)] ?? String(value)}</span>
+      )}
+      {sources.length > 0 && (
+        <div style={{ marginTop: spacing.xs }}>
+          <SourceList sources={sources} compact />
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function TransparencyTable({ data }: { data: ComparisonData }) {
   return (
     <div>
       <PageHeader
         category="Comparison"
         title="Transparency"
-        description="How verifiable each model is by an outside party. Public code, public documentation, public data, and a reproducible build pipeline are the four legs of model transparency — they let a reader confirm that what the model says happens is what actually happens."
+        description="How verifiable each model is by an outside party. Public code, public documentation, public data, and a reproducible build pipeline are the four legs of model transparency — they let a reader confirm that what the model says happens is what actually happens. Each cell carries its own corroborating sources."
       />
 
       <section style={sectionStyle}>
@@ -74,23 +108,14 @@ export default function TransparencyTable({ data }: { data: ComparisonData }) {
                       );
                     }
                     const value = t[row.key as keyof typeof t];
-                    if (row.format === 'tristate') {
-                      return (
-                        <td key={m.id} style={tdStyle}>
-                          <TristateBadge value={value as 'yes' | 'no' | 'partial' | 'unknown'} />
-                        </td>
-                      );
-                    }
-                    if (row.key === 'parameterSourcing') {
-                      return (
-                        <td key={m.id} style={tdStyle}>
-                          {SOURCING_LABEL[value as string] ?? String(value)}
-                        </td>
-                      );
-                    }
+                    const cellSources = sourcesFor(t.sources, row.key);
                     return (
                       <td key={m.id} style={tdStyle}>
-                        {String(value)}
+                        <CellWithSources
+                          value={value}
+                          format={row.format}
+                          sources={cellSources}
+                        />
                       </td>
                     );
                   })}
@@ -159,13 +184,24 @@ export default function TransparencyTable({ data }: { data: ComparisonData }) {
               </tr>
               <tr>
                 <td style={tdStyle}>
-                  <div style={{ fontWeight: 600 }}>Sources</div>
+                  <div style={{ fontWeight: 600 }}>Corroboration</div>
+                  <div style={subTextStyle}>
+                    Total source count and distinct kinds across this row.
+                  </div>
                 </td>
                 {data.models.map((m) => {
                   const t = data.transparency.find((x) => x.model === m.id);
+                  const total = t?.sources.length ?? 0;
+                  const kinds = t ? sourceKinds(t.sources) : new Set<SourceKind>();
+                  const labels = Array.from(kinds)
+                    .filter((k) => k !== 'other')
+                    .join(', ');
                   return (
                     <td key={m.id} style={tdStyle}>
-                      <SourceList sources={t?.sources ?? []} />
+                      <span style={{ fontSize: 12, color: colors.text.tertiary }}>
+                        {total} sources
+                        {labels ? ` · ${labels}` : ''}
+                      </span>
                     </td>
                   );
                 })}
@@ -173,6 +209,18 @@ export default function TransparencyTable({ data }: { data: ComparisonData }) {
             </tbody>
           </table>
         </div>
+      </section>
+
+      <section style={sectionStyle}>
+        <h2 style={h2Style}>Sourcing convention</h2>
+        <p style={proseStyle}>
+          Each cell carries the sources that specifically corroborate it. Sources are tagged with
+          a kind — <strong>self</strong>, <strong>government</strong>, <strong>academic</strong>,{' '}
+          <strong>press</strong>, or <strong>civil society</strong> — to make independence
+          visible. A confident claim should be backed by at least two distinct kinds; a claim
+          backed only by the model owner&apos;s own publications is weaker than one with
+          government or academic corroboration.
+        </p>
       </section>
     </div>
   );

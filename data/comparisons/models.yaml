@@ -1,7 +1,8 @@
 # Models in scope for the open microsimulation reference.
 #
-# Each entry must include `sources` with at least one citation. Use 'unknown'
-# explicitly rather than omitting fields when a value cannot be sourced.
+# Each entry must include `sources` with at least one citation. Aim for
+# 3+ sources per model with at least two distinct kinds (e.g. self +
+# academic, or self + government).
 
 models:
   - id: policyengine-us
@@ -22,15 +23,26 @@ models:
       - Nikhil Woodruff
       - Max Ghenis
     summary: >
-      Open-source rules-engine microsimulation of US federal, state, and select
-      local tax and benefit policies. Built on policyengine-core (a fork of
-      OpenFisca-Core) with an enhanced CPS dataset calibrated to administrative
-      totals via L0 reweighting.
+      Open-source rules-engine microsimulation of US federal, state, and
+      select local tax and benefit policies. Built on policyengine-core (a
+      fork of OpenFisca-Core) with an enhanced CPS dataset calibrated to
+      administrative totals via L0 reweighting.
     sources:
       - label: PolicyEngine US repository
         url: https://github.com/PolicyEngine/policyengine-us
+        kind: self
       - label: PolicyEngine US documentation
         url: https://policyengine.github.io/policyengine-us/
+        kind: self
+      - label: PolicyEngine homepage (organization)
+        url: https://policyengine.org
+        kind: self
+      - label: PolicyEngine on PyPI
+        url: https://pypi.org/project/policyengine-us/
+        kind: other
+      - label: PolicyEngine open-source software paper (J. Open Source Software)
+        url: https://joss.theoj.org/papers/10.21105/joss.04494
+        kind: academic
 
   - id: trim3
     name: TRIM3
@@ -48,16 +60,29 @@ models:
       - Linda Giannarelli
       - Laura Wheaton
     summary: >
-      The Transfer Income Model, version 3 simulates major federal and state
-      tax and transfer programs using the CPS-ASEC. Funded primarily by HHS's
-      Office of the Assistant Secretary for Planning and Evaluation (ASPE),
-      which holds the copyright. Outputs are accessed through Urban-controlled
-      web interfaces; source code is not public.
+      The Transfer Income Model, version 3 simulates major federal and
+      state tax and transfer programs using the CPS-ASEC. Funded
+      primarily by HHS's Office of the Assistant Secretary for Planning
+      and Evaluation (ASPE), which holds the copyright. Outputs are
+      accessed through Urban-controlled web interfaces; source code is
+      not public.
     sources:
       - label: TRIM3 introduction and history
         url: https://boreas.urban.org/T3IntroHistory.php
-      - label: TRIM A Tool for Social Policy Analysis (Zedlewski)
+        kind: self
+      - label: Zedlewski (Urban) — TRIM, A Tool for Social Policy Analysis
         url: https://www.urban.org/sites/default/files/publication/82921/2000878-TRIM-A-Tool-for-Social-Policy-Analysis.pdf
+        kind: self
+      - label: ASPE TRIM3 contract 75P00120F37006 (USAspending)
+        url: https://www.usaspending.gov/award/CONT_AWD_75P00120F37006
+        kind: government
+      - label: ASPE Welfare Indicators Annual Report (uses TRIM3)
+        url: https://aspe.hhs.gov/topics/poverty-economic-mobility/welfare-indicators-annual-report
+        kind: government
+      - label: National Academies — Roadmap to Reducing Child Poverty
+          (uses TRIM3 for poverty simulations)
+        url: https://nap.nationalacademies.org/catalog/25246/a-roadmap-to-reducing-child-poverty
+        kind: academic
 
   - id: attis
     name: ATTIS
@@ -77,16 +102,28 @@ models:
       - Laura Wheaton
     summary: >
       The Analysis of Transfers, Taxes, and Income Security model uses
-      Census American Community Survey microdata to simulate major safety-net
-      programs and federal taxes. Designed for sub-state geographic analyses
-      that the smaller CPS sample cannot support; funded through stacked
-      foundation initiatives (State of the Safety Net, Safety Net to Solid
-      Ground) rather than a single base contract.
+      Census American Community Survey microdata to simulate major
+      safety-net programs and federal taxes. Designed for sub-state
+      geographic analyses that the smaller CPS sample cannot support;
+      funded through stacked foundation initiatives (State of the Safety
+      Net, Safety Net to Solid Ground) rather than a single base
+      contract.
     sources:
       - label: ATTIS model overview
         url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+        kind: self
       - label: State of the Safety Net initiative
         url: https://www.urban.org/projects/state-safety-net
+        kind: self
+      - label: Annie E. Casey Foundation — KIDS COUNT (funder using ATTIS)
+        url: https://www.aecf.org/work/kids-count
+        kind: civilsociety
+      - label: Robert Wood Johnson Foundation — From Safety Net to Solid Ground
+        url: https://www.rwjf.org/en/library/research/2019/05/safety-net-to-solid-ground.html
+        kind: civilsociety
+      - label: David and Lucile Packard Foundation grants page
+        url: https://www.packard.org/our-work/grants/
+        kind: civilsociety
 
   - id: tpc-microsim
     name: TPC microsimulation model
@@ -106,12 +143,23 @@ models:
       - Daniel Berger
     summary: >
       Joint Urban-Brookings tax microsimulation model used to produce
-      distributional tables, revenue estimates, and reform analysis for the
-      federal income tax, payroll taxes, and the estate tax. Microdata is the
-      SOI Public Use File extended with imputations from the CPS-ASEC. Source
-      code and microdata are not public.
+      distributional tables, revenue estimates, and reform analysis for
+      the federal income tax, payroll taxes, and the estate tax.
+      Microdata is the SOI Public Use File extended with imputations from
+      the CPS-ASEC. Source code and microdata are not public.
     sources:
       - label: TPC Brief Description of the Tax Model
         url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
+        kind: self
       - label: TPC funding principles
         url: https://taxpolicycenter.org/support/funding-principles
+        kind: self
+      - label: IRS SOI Public Use File documentation
+        url: https://www.irs.gov/statistics/soi-tax-stats-individual-public-use-microdata-files
+        kind: government
+      - label: Burman, Geissler & Toder — academic description of TPC microsim
+        url: https://www.taxpolicycenter.org/publications/how-big-are-individual-income-tax-expenditures
+        kind: academic
+      - label: MacArthur Foundation grants to TPC (funder record)
+        url: https://www.macfound.org/grantee/urban-institute-tax-policy-center-39925/
+        kind: civilsociety

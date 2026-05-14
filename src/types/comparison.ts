@@ -13,6 +13,19 @@
 
 export type Tristate = 'yes' | 'no' | 'partial' | 'unknown';
 
+/**
+ * Source independence kind. Used to assess corroboration strength —
+ * a claim backed only by `self` sources is weaker than one with
+ * `government` or `academic` corroboration.
+ */
+export type SourceKind =
+  | 'self'
+  | 'government'
+  | 'academic'
+  | 'press'
+  | 'civilsociety'
+  | 'other';
+
 export interface Source {
   /** Free-text label shown in the UI. */
   label: string;
@@ -20,6 +33,42 @@ export interface Source {
   url?: string;
   /** ISO date the source was checked. */
   checked?: string;
+  /**
+   * Which specific fields in the parent row this source corroborates.
+   * If omitted or empty, the source supports the whole row generally.
+   * Field names match the row keys (e.g. ['codePublic', 'codeLicense']).
+   */
+  supports?: string[];
+  /**
+   * Source independence indicator. Defaults to 'other' when omitted.
+   *   self          — published by the organization that owns the model.
+   *   government    — federal/state/local government publication or contract.
+   *   academic      — peer-reviewed or working-paper academic source.
+   *   press         — major news outlet.
+   *   civilsociety  — non-profit, foundation, or think-tank not the model's owner.
+   *   other         — anything else.
+   */
+  kind?: SourceKind;
+}
+
+/**
+ * Filter a row's sources to those that corroborate a specific field.
+ * A source with no `supports` or empty supports applies to all fields.
+ */
+export function sourcesFor(sources: Source[], field: string): Source[] {
+  return sources.filter(
+    (s) => !s.supports || s.supports.length === 0 || s.supports.includes(field),
+  );
+}
+
+/**
+ * Distinct source kinds present in a list of sources — used to assess
+ * corroboration diversity.
+ */
+export function sourceKinds(sources: Source[]): Set<SourceKind> {
+  const set = new Set<SourceKind>();
+  for (const s of sources) set.add(s.kind ?? 'other');
+  return set;
 }
 
 /* -------------------------------------------------------------------------- */

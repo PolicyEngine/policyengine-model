@@ -5,6 +5,7 @@ import {
   programById,
   coverageByProgram,
 } from '../data/comparisons';
+import { sourcesFor, sourceKinds } from '../types/comparison';
 
 describe('comparison data', () => {
   const data = loadComparisonData();
@@ -124,5 +125,76 @@ describe('comparison data', () => {
     for (const row of data.coverage) {
       expect(allowed.has(row.status)).toBe(true);
     }
+  });
+
+  describe('source corroboration', () => {
+    const TRANSPARENCY_FIELDS = [
+      'codePublic',
+      'codeLicense',
+      'documentationPublic',
+      'datasetPublic',
+    ] as const;
+
+    it('every confident transparency claim has at least one citing source', () => {
+      for (const t of data.transparency) {
+        for (const field of TRANSPARENCY_FIELDS) {
+          const value = t[field];
+          if (value === 'unknown' || value === '') continue;
+          const cite = sourcesFor(t.sources, field);
+          if (cite.length === 0) {
+            throw new Error(
+              `transparency[${t.model}].${field} = ${value} has no citing source`,
+            );
+          }
+        }
+      }
+    });
+
+    it('every transparency row exposes >=3 sources spanning >=2 distinct kinds', () => {
+      for (const t of data.transparency) {
+        expect(t.sources.length).toBeGreaterThanOrEqual(3);
+        const kinds = sourceKinds(t.sources);
+        kinds.delete('other');
+        expect(kinds.size).toBeGreaterThanOrEqual(2);
+      }
+    });
+
+    it('every model has >=3 sources spanning >=2 distinct kinds', () => {
+      for (const m of data.models) {
+        expect(m.sources.length).toBeGreaterThanOrEqual(3);
+        const kinds = sourceKinds(m.sources);
+        kinds.delete('other');
+        expect(kinds.size).toBeGreaterThanOrEqual(2);
+      }
+    });
+
+    it('every freshness row with confident values exposes >=2 sources', () => {
+      for (const f of data.freshness) {
+        const hasConfident =
+          f.latestImplementedYear !== 'unknown' ||
+          f.handlesFutureDatedLegislation !== 'unknown' ||
+          f.updateCadence !== 'unknown';
+        if (hasConfident) {
+          expect(f.sources.length).toBeGreaterThanOrEqual(2);
+        }
+      }
+    });
+
+    it('sourcesFor filters by supports field correctly', () => {
+      const t = data.transparency.find((x) => x.model === 'trim3');
+      expect(t).toBeDefined();
+      const codePublicSources = sourcesFor(t!.sources, 'codePublic');
+      expect(codePublicSources.length).toBeGreaterThan(0);
+      const kinds = sourceKinds(codePublicSources);
+      expect(kinds.has('government')).toBe(true);
+    });
+
+    it('sourcesFor returns untagged sources for any field', () => {
+      const tagged = { label: 'a', supports: ['codePublic'] };
+      const untagged = { label: 'b' };
+      const result = sourcesFor([tagged, untagged], 'codeLicense');
+      expect(result).toContain(untagged);
+      expect(result).not.toContain(tagged);
+    });
   });
 });

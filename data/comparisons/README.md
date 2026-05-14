@@ -41,6 +41,21 @@ The loader is in [`src/data/comparisons.ts`](../../src/data/comparisons.ts).
 - **Cite everything.** Every row carries at least one `sources` entry. Use
   `label` + `url`; when offline (e.g. private documentation), include `label`
   only.
+- **Source corroboration is per-claim, not per-row.** Each source can be tagged
+  with `supports: [field, field]` listing which specific fields in the row it
+  corroborates. Untagged sources apply to the whole row. The UI renders
+  per-cell sources by filtering the row's source array.
+- **Tag sources by independence kind.** Every source should carry a `kind`:
+  - `self` — published by the model's own organization.
+  - `government` — federal, state, or local government publication or contract.
+  - `academic` — peer-reviewed or working-paper academic source.
+  - `press` — major news outlet.
+  - `civilsociety` — non-profit, foundation, or think tank that is *not* the
+    model owner.
+  - `other` — anything else.
+  A confident claim should have at least two distinct kinds among its sources;
+  a claim backed only by `self` sources is weaker than one with independent
+  corroboration.
 - **Prefer `unknown` over guesses.** A thin row with `unknown` is better than a
   confident fabrication. Reviewers can fill in `unknown` over time.
 - **Neutral tone.** This is a reference, not a marketing surface. Describe what
@@ -49,3 +64,28 @@ The loader is in [`src/data/comparisons.ts`](../../src/data/comparisons.ts).
 - **No cost data here.** Budget estimates for incumbent models are kept
   separately (internal). This repo deliberately excludes cost as a comparison
   dimension to avoid embedding contested numbers in a public reference.
+
+## Source tagging example
+
+```yaml
+- model: trim3
+  codePublic: no
+  codeLicense: proprietary
+  ...
+  sources:
+    - label: TRIM3 access policy
+      url: https://boreas.urban.org/T3IntroAccess.php
+      kind: self
+      supports: [codePublic]
+    - label: ASPE TRIM3 contract 75P00120F37006
+      url: https://www.usaspending.gov/award/CONT_AWD_75P00120F37006
+      kind: government
+      supports: [codeLicense, codePublic]
+    - label: Zedlewski (Urban) — TRIM, A Tool for Social Policy Analysis
+      url: https://www.urban.org/sites/default/files/publication/82921/...
+      kind: self
+      supports: [codePublic, documentationPublic]
+```
+
+The Transparency and Freshness pages render the relevant sources directly
+under each cell value.
