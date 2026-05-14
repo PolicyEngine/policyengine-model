@@ -38,6 +38,7 @@ const navItems: NavItem[] = [
     children: [
       { path: '/comparison', label: 'Overview' },
       { path: '/comparison/coverage', label: 'Coverage' },
+      { path: '/comparison/freshness', label: 'Freshness' },
       { path: '/comparison/transparency', label: 'Transparency' },
       { path: '/comparison/methods', label: 'Methods & accuracy' },
       { path: '/comparison/artifacts', label: 'Artifacts' },

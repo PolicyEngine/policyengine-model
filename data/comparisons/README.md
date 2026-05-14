@@ -14,6 +14,7 @@ Source-of-truth YAML for the open microsimulation reference at `/comparison`.
 | `accuracy.yaml` | Accuracy benchmarks (model × metric). | `accuracy` |
 | `imputations.yaml` | Imputation and calibration approaches. | `imputations` |
 | `artifacts.yaml` | Concrete artifacts (code, data, papers). | `artifacts` |
+| `freshness.yaml` | Latest year encoded, forward coverage, update cadence. | `freshness` |
 
 The TypeScript shape is in [`src/types/comparison.ts`](../../src/types/comparison.ts).
 The loader is in [`src/data/comparisons.ts`](../../src/data/comparisons.ts).

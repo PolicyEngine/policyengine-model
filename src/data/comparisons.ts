@@ -11,6 +11,7 @@ import type {
   AccuracyCheck,
   Imputation,
   Artifact,
+  Freshness,
   ComparisonData,
 } from '../types/comparison';
 
@@ -44,6 +45,7 @@ export function loadComparisonData(): ComparisonData {
   const accuracy = loadYaml<AccuracyCheck[]>('accuracy.yaml', 'accuracy');
   const imputations = loadYaml<Imputation[]>('imputations.yaml', 'imputations');
   const artifacts = loadYaml<Artifact[]>('artifacts.yaml', 'artifacts');
+  const freshness = loadYaml<Freshness[]>('freshness.yaml', 'freshness');
 
   const modelIds = new Set(models.map((m) => m.id));
   const programIds = new Set(programs.map((p) => p.id));
@@ -86,6 +88,11 @@ export function loadComparisonData(): ComparisonData {
       errors.push(`artifacts.yaml: unknown model "${row.model}"`);
     }
   }
+  for (const row of freshness) {
+    if (!modelIds.has(row.model)) {
+      errors.push(`freshness.yaml: unknown model "${row.model}"`);
+    }
+  }
 
   if (errors.length > 0) {
     throw new Error(
@@ -102,6 +109,7 @@ export function loadComparisonData(): ComparisonData {
     accuracy,
     imputations,
     artifacts,
+    freshness,
   };
 }
 

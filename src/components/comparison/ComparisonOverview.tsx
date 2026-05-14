@@ -97,6 +97,10 @@ export default function ComparisonOverview({ data }: { data: ComparisonData }) {
             traceability and test coverage.
           </li>
           <li>
+            <strong>Freshness</strong> — latest policy year encoded, forward coverage of
+            scheduled changes, update cadence, and lag from enactment to implementation.
+          </li>
+          <li>
             <strong>Transparency</strong> — code license, documentation depth, dataset openness,
             reproducibility.
           </li>

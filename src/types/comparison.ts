@@ -257,6 +257,37 @@ export interface Artifact {
 }
 
 /* -------------------------------------------------------------------------- */
+/*                                FRESHNESS                                   */
+/* -------------------------------------------------------------------------- */
+
+export type UpdateCadence =
+  | 'continuous'
+  | 'quarterly'
+  | 'annual'
+  | 'as-funded'
+  | 'unknown';
+
+export interface Freshness {
+  model: string;
+  /** Most recent policy year fully implemented in the model. */
+  latestImplementedYear: number | 'unknown';
+  /** Latest year through which scheduled future-dated changes are tracked. */
+  forwardYearsThrough?: number | 'unknown';
+  /** Does the model implement legislation enacted but not yet effective? */
+  handlesFutureDatedLegislation: Tristate;
+  /** Typical update cadence for parameters. */
+  updateCadence: UpdateCadence;
+  /** Typical lag between legislative enactment and model implementation. */
+  updateLag?: string;
+  /** ISO date of last major refresh / release. */
+  lastMajorRefresh?: string;
+  /** Free-text on policy regimes specifically tracked (e.g. OBBBA, TCJA extension). */
+  notableRegimes?: string;
+  notes?: string;
+  sources: Source[];
+}
+
+/* -------------------------------------------------------------------------- */
 /*                            BUNDLE / LOADER                                 */
 /* -------------------------------------------------------------------------- */
 
@@ -269,4 +300,5 @@ export interface ComparisonData {
   accuracy: AccuracyCheck[];
   imputations: Imputation[];
   artifacts: Artifact[];
+  freshness: Freshness[];
 }

@@ -100,6 +100,19 @@ describe('comparison data', () => {
     }
   });
 
+  it('every model has a freshness row', () => {
+    const fModels = new Set(data.freshness.map((f) => f.model));
+    for (const m of data.models) {
+      expect(fModels.has(m.id)).toBe(true);
+    }
+  });
+
+  it('every freshness row has at least one source', () => {
+    for (const f of data.freshness) {
+      expect(f.sources.length).toBeGreaterThan(0);
+    }
+  });
+
   it('coverage status values are within the allowed set', () => {
     const allowed = new Set([
       'implemented',
