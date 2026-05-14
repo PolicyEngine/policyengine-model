@@ -104,6 +104,42 @@ export interface ModelCapabilities {
   publicInterface: Tristate;
   /** Programmatic API access for external users. */
   apiAccess: Tristate;
+
+  // -------------------------------------------------------------------------
+  // Optional capabilities — added incrementally. Models that haven't been
+  // audited for these fields leave them undefined (meaning "not asserted").
+  // The UI renders missing values as "—".
+  // -------------------------------------------------------------------------
+
+  /**
+   * Dynamic / lifecycle simulation: ages individuals forward through life
+   * events (aging, marriage, retirement, mortality) rather than running an
+   * annual cross-sectional simulation. DYNASIM3, CBOLT are dynamic; most
+   * tax microsims are not.
+   */
+  dynamic?: Tristate;
+  /**
+   * Long-term projection: forward simulation horizon beyond the standard
+   * CBO 10-year window (typically 30-75 years for Social Security
+   * solvency, long-term budget outlook, generational accounting).
+   */
+  longTermProjection?: Tristate;
+  /**
+   * Health insurance market simulation: models plan choice, enrollment
+   * dynamics, premiums, and market response — not just program
+   * eligibility. HIPSM (Urban) and HISIM2 (CBO) are designed for this;
+   * tax microsims that compute PTC eligibility from inputs are typically
+   * `partial` at most.
+   */
+  healthInsuranceMarket?: Tristate;
+  /**
+   * Macro feedback / CGE-style modeling: captures economy-wide effects
+   * of policy changes (GDP, employment, capital formation) via a
+   * general-equilibrium or behavioral-response framework. PWBM, Tax
+   * Foundation TAG, and CBO dynamic-scoring runs do this; static tax
+   * microsims do not.
+   */
+  macroFeedback?: Tristate;
 }
 
 export interface Model {
