@@ -90,16 +90,17 @@ transparency:
       ASPE access can view internal documentation; external researchers
       cannot. ASPE holds the copyright.
     sources:
-      - label: TRIM3 access policy (by-permission, not open)
-        url: https://boreas.urban.org/T3IntroAccess.php
+      - label: Zedlewski (Urban) — TRIM, A Tool for Social Policy Analysis
+          (access policy and architecture)
+        url: https://www.urban.org/sites/default/files/publication/82921/2000878-TRIM-A-Tool-for-Social-Policy-Analysis.pdf
         kind: self
         supports: [codePublic, issueTrackerPublic, testSuitePublic, datasetPublic]
       - label: TRIM3 introduction and history (no source-code links published)
         url: https://boreas.urban.org/T3IntroHistory.php
         kind: self
         supports: [codePublic, documentationPublic]
-      - label: TRIM3 data description (restricted microdata)
-        url: https://boreas.urban.org/T3IntroData.php
+      - label: TRIM3 Programs Simulated (lists modules; restricted microdata)
+        url: https://boreas.urban.org/T3IntroPrograms.php
         kind: self
         supports: [datasetPublic]
       - label: ASPE TRIM3 contract 75P00120F37006 (ASPE holds copyright)
@@ -126,7 +127,7 @@ transparency:
     contributorCount: unknown
     issueTrackerPublic: no
     documentationPublic: partial
-    documentationUrl: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+    documentationUrl: https://www.urban.org/research-methods/attis-microsimulation-model
     parameterSourcing: unknown
     testSuitePublic: unknown
     testCount: unknown
@@ -136,21 +137,21 @@ transparency:
       No public source code, parameter files, or microdata. Urban publishes
       summary briefs from ATTIS analyses but not the model implementation.
     sources:
-      - label: ATTIS overview page (no source-code or dataset link)
-        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+      - label: ATTIS canonical page (no source-code, dataset, or issue-tracker links)
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
         kind: self
         supports: [codePublic, codeLicense, documentationPublic, datasetPublic, issueTrackerPublic]
       - label: State of the Safety Net initiative (ATTIS-derived briefs only)
         url: https://www.urban.org/projects/state-safety-net
         kind: self
+        supports: [documentationPublic]
+      - label: Methods for Estimating SNAP Policy Impacts with an ACS-Based Simulation Model
+          (Wheaton, Giannarelli, Morton, 2018) — partial methodology document; source code not released
+        url: https://www.urban.org/sites/default/files/publication/98454/methods_for_estimating_snap_policy_impacts_with_an_acs-based_simulation_model_1.pdf
+        kind: self
         supports: [documentationPublic, codePublic]
-      - label: Annie E. Casey Foundation — KIDS COUNT methodology
-          (uses ATTIS but does not republish code)
-        url: https://www.aecf.org/work/kids-count
-        kind: civilsociety
-        supports: [codePublic, documentationPublic]
-      - label: Robert Wood Johnson Foundation — From Safety Net to Solid Ground
-        url: https://www.rwjf.org/en/library/research/2019/05/safety-net-to-solid-ground.html
+      - label: From Safety Net to Solid Ground (RWJF-funded initiative tag page at Urban)
+        url: https://www.urban.org/tags/safety-net-solid-ground
         kind: civilsociety
         supports: [codePublic, documentationPublic]
 
@@ -214,24 +215,24 @@ transparency:
       revenue-estimate methodology papers describe the analytical
       framework but not the code.
     sources:
-      - label: JCT — Estimating revenue effects (methodology series)
-        url: https://www.jct.gov/publications/2023/jcx-46-23/
+      - label: JCT — Description of the Individual Tax Model for 2023 (JCX-48-23)
+        url: https://www.jct.gov/publications/2023/jcx-48-23/
         kind: government
         supports: [codePublic, codeLicense, documentationPublic, parameterSourcing]
       - label: JCT publications archive (output catalogue, not code)
         url: https://www.jct.gov/publications/
         kind: government
         supports: [codePublic, documentationPublic]
-      - label: CRS — How tax revenue is estimated (third-party documentation)
-        url: https://crsreports.congress.gov/product/pdf/RL/RL31292
+      - label: CRS — Dynamic Scoring for Tax Legislation A Review of Models (R43381)
+        url: https://www.congress.gov/crs-product/R43381
         kind: government
         supports: [codePublic, parameterSourcing]
       - label: IRS SOI microdata restricted access (base data)
         url: https://www.irs.gov/statistics/soi-tax-stats-individual-public-use-microdata-files
         kind: government
         supports: [datasetPublic]
-      - label: Brookings — Dynamic scoring at the JCT (academic review)
-        url: https://www.brookings.edu/articles/dynamic-scoring-an-overview/
+      - label: Auerbach — Dynamic Scoring An Introduction to the Issues (academic review)
+        url: https://eml.berkeley.edu/~auerbach/dynamscor.pdf
         kind: academic
         supports: [codePublic, documentationPublic, parameterSourcing]
 
@@ -241,7 +242,7 @@ transparency:
     contributorCount: unknown
     issueTrackerPublic: no
     documentationPublic: partial
-    documentationUrl: https://www.cbo.gov/topics/budget
+    documentationUrl: https://www.cbo.gov/publication/54096
     parameterSourcing: separate-doc
     testSuitePublic: unknown
     testCount: unknown
@@ -265,12 +266,12 @@ transparency:
         url: https://www.cbo.gov/topic/income-distribution
         kind: government
         supports: [documentationPublic]
-      - label: GAO review of CBO modeling approaches
-        url: https://www.gao.gov/products/gao-22-104747
+      - label: US-CBO GitHub organization (verifies which CBO models have public source; tax microsim is absent)
+        url: https://github.com/US-CBO
         kind: government
-        supports: [codePublic, parameterSourcing]
-      - label: CRFB — How CBO scores legislation
-        url: https://www.crfb.org/blogs/how-cbo-scores-legislation
+        supports: [codePublic, codeLicense]
+      - label: CRFB — A Short Primer on the Congressional Budget Office
+        url: https://www.crfb.org/blogs/short-primer-congressional-budget-office
         kind: civilsociety
         supports: [codePublic, documentationPublic]
 
@@ -299,10 +300,10 @@ transparency:
         url: https://itep.org/whopays/
         kind: self
         supports: [documentationPublic]
-      - label: ITEP funder/supporter list (civil society funding base)
-        url: https://itep.org/about/itep-supporters/
-        kind: civilsociety
-        supports: [codeLicense]
+      - label: CRS — State income tax incidence analyses cite ITEP
+        url: https://crsreports.congress.gov/product/pdf/R/R47299
+        kind: government
+        supports: [codePublic]
 
   - model: tax-calculator
     codePublic: yes
@@ -336,10 +337,6 @@ transparency:
         url: https://github.com/PSLmodels/taxdata
         kind: self
         supports: [datasetPublic, reproducibleBuilds]
-      - label: Jensen & Frailey — Tax-Calculator academic paper
-        url: https://onlinelibrary.wiley.com/doi/abs/10.1002/pam.22055
-        kind: academic
-        supports: [codePublic, documentationPublic]
       - label: PSL — open-source modeling consortium
         url: https://www.pslmodels.org
         kind: civilsociety
@@ -380,9 +377,9 @@ transparency:
         url: https://github.com/Budget-Lab-Yale
         kind: self
         supports: [codePublic, codeLicense, issueTrackerPublic]
-      - label: Brookings press coverage of Budget Lab launch
-        url: https://www.brookings.edu/articles/the-budget-lab-at-yale/
-        kind: civilsociety
+      - label: Yale Daily News coverage of Budget Lab's policy forecasting (Sept 2025)
+        url: https://yaledailynews.com/blog/2025/09/04/yales-budget-lab-gains-traction-for-forecasting-impacts-of-trump-policies/
+        kind: press
         supports: [codePublic, documentationPublic]
 
   - model: policyengine-uk
@@ -443,53 +440,54 @@ transparency:
 
   - model: ukmod
     codePublic: yes
-    codeLicense: EUROMOD Public License (custom; free for research, no
-      commercial sublicensing)
-    codeUrl: https://www.microsimulation.ac.uk/ukmod/access
+    codeLicense: CC BY-NC-ND 4.0
+    codeUrl: https://github.com/centreformicrosimulation/UKMOD-PUBLIC
     contributorCount: unknown
-    issueTrackerPublic: no
+    issueTrackerPublic: yes
     documentationPublic: yes
     documentationUrl: https://www.microsimulation.ac.uk/ukmod
     parameterSourcing: separate-doc
-    testSuitePublic: unknown
+    testSuitePublic: no
     testCount: unknown
     datasetPublic: partial
-    datasetUrl: https://beta.ukdataservice.ac.uk/datacatalogue/series/series?id=200017
+    datasetUrl: https://datacatalogue.ukdataservice.ac.uk/series/series/200017
     reproducibleBuilds: yes
     notes: >
-      UKMOD source files (parameter rules and DSL policies) are
-      distributed to registered users free of charge under the EUROMOD
-      Public License. There is no public GitHub or open issue tracker;
-      bug reporting and contributions are handled via the CeMPA
-      helpdesk. The underlying FRS microdata is not open — researchers
-      must obtain a UK Data Service end-user licence separately.
-      Documentation and country reports are published openly.
+      UKMOD source files (EUROMOD-DSL policy rules in XMLParam/ and
+      Stata data-prep scripts) are distributed on GitHub at
+      centreformicrosimulation/UKMOD-PUBLIC under CC BY-NC-ND 4.0:
+      attribution required, non-commercial use only, no derivatives.
+      The repository has GitHub issues enabled but support is primarily
+      handled via the CeMPA helpdesk and user forum (registration
+      required for the forum, not for the code download). The
+      underlying FRS microdata is not open — researchers must obtain a
+      UK Data Service end-user licence separately. Documentation and
+      country reports are published openly via CeMPA and bundled in the
+      repo's Documentation/ folder.
     sources:
       - label: UKMOD home page (model description and documentation)
         url: https://www.microsimulation.ac.uk/ukmod
         kind: self
         supports: [codePublic, documentationPublic, parameterSourcing]
-      - label: UKMOD access and registration page (free for research,
-          terms of use)
+      - label: UKMOD access page (CC BY-NC-ND 4.0 terms, GitHub link)
         url: https://www.microsimulation.ac.uk/ukmod/access
         kind: self
         supports: [codePublic, codeLicense, issueTrackerPublic]
-      - label: UKMOD country reports (annual documentation of
-          policies modelled)
-        url: https://www.microsimulation.ac.uk/ukmod/country-reports
+      - label: UKMOD-PUBLIC GitHub repository
+        url: https://github.com/centreformicrosimulation/UKMOD-PUBLIC
         kind: self
-        supports: [documentationPublic, parameterSourcing]
-      - label: Richiardi, Collado & Popova — UKMOD/EUROMOD working
-          paper (academic description of model architecture)
-        url: https://www.microsimulation.ac.uk/publications/working-papers
+        supports: [codePublic, codeLicense, issueTrackerPublic, reproducibleBuilds]
+      - label: Richiardi, Collado & Popova (2021) — UKMOD reference paper
+          (IJM 14(1):92-101)
+        url: https://microsimulation.pub/articles/00231
         kind: academic
         supports: [codePublic, documentationPublic, parameterSourcing]
       - label: UK Data Service — Family Resources Survey series
           (underlying microdata licensing)
-        url: https://beta.ukdataservice.ac.uk/datacatalogue/series/series?id=200017
+        url: https://datacatalogue.ukdataservice.ac.uk/series/series/200017
         kind: government
         supports: [datasetPublic]
-      - label: JRC EUROMOD (parent framework; same license model)
+      - label: JRC EUROMOD (parent platform; EUPL-1.2 software, CC BY 4.0 rules)
         url: https://euromod-web.jrc.ec.europa.eu/
         kind: government
         supports: [codeLicense, codePublic]
@@ -500,7 +498,7 @@ transparency:
     contributorCount: unknown
     issueTrackerPublic: no
     documentationPublic: partial
-    documentationUrl: https://ifs.org.uk/tools_and_resources/taxben
+    documentationUrl: https://ifs.org.uk/publications/taxben-ifs-tax-and-benefit-microsimulation-model
     parameterSourcing: separate-doc
     testSuitePublic: unknown
     testCount: unknown
@@ -514,33 +512,33 @@ transparency:
       most of its distributional and Budget-response work, but does
       not release the model itself.
     sources:
-      - label: IFS TAXBEN tool page (model description; no source link)
-        url: https://ifs.org.uk/tools_and_resources/taxben
+      - label: IFS TAXBEN guide (Waters; 2017 page, 2021 PDF update)
+        url: https://ifs.org.uk/publications/taxben-ifs-tax-and-benefit-microsimulation-model
         kind: self
         supports: [codePublic, codeLicense, documentationPublic, parameterSourcing]
       - label: IFS Green Budget archive (annual TAXBEN-based
           distributional analyses)
-        url: https://ifs.org.uk/green-budget
+        url: https://ifs.org.uk/ifs-green-budget
         kind: self
         supports: [documentationPublic]
-      - label: Adam & Browne — A survey of the UK benefit system (IFS
-          Briefing Note; methodology context)
-        url: https://ifs.org.uk/publications/survey-uk-benefit-system
+      - label: Pope & Waters — A survey of the UK tax system (IFS
+          Briefing Note BN09; methodology context)
+        url: https://ifs.org.uk/publications/survey-uk-tax-system
         kind: self
         supports: [documentationPublic, parameterSourcing]
-      - label: Roantree & Shaw — Universal credit and labour supply
-          (IFS Working Paper using TAXBEN, no code release)
-        url: https://ifs.org.uk/publications/universal-credit-its-impact-work-incentives
-        kind: academic
+      - label: Adam — Universal credit and work incentives
+          (IFS presentation drawing on TAXBEN)
+        url: https://ifs.org.uk/publications/universal-credit-and-work-incentives
+        kind: self
         supports: [codePublic, documentationPublic]
-      - label: HM Treasury distributional analysis methodology
-          (independent reference to TAXBEN as benchmark)
+      - label: HM Treasury Spring Statement 2025 — Impact on households
+          (IGOTM-based; comparable UK distributional methodology)
         url: https://www.gov.uk/government/publications/supporting-documents-for-spring-statement-2025/impact-on-households-distributional-analysis-to-accompany-spring-statement-2025
         kind: government
         supports: [codePublic, documentationPublic]
       - label: UK Data Service — FRS licensing (TAXBEN base data
           requires registered licence, not redistributable)
-        url: https://beta.ukdataservice.ac.uk/datacatalogue/series/series?id=200017
+        url: https://datacatalogue.ukdataservice.ac.uk/series/series/200017
         kind: government
         supports: [datasetPublic]
 
@@ -619,9 +617,6 @@ transparency:
         url: https://povertycenter.columbia.edu/sites/povertycenter.columbia.edu/files/content/Publications/Monthly-Cash-Payments-Reduce-Spells-of-Poverty-CPSP-2022.pdf
         kind: academic
         supports: [codePublic, codeLicense, documentationPublic, parameterSourcing]
-        quote: >
-          We use the Current Population Survey Annual Social and
-          Economic Supplement and TAXSIM to estimate the policy impact.
       - label: National Academies child poverty report (CPSP simulations
           cited but code not released)
         url: https://nap.nationalacademies.org/catalog/25246
@@ -872,12 +867,15 @@ transparency:
     datasetPublic: yes
     reproducibleBuilds: partial
     notes: >
-      The Fortran engine (about 20,000 lines) is not distributed in
-      source form. Client wrappers (Stata, R, SAS, Python) and
-      example datasets are public. Users supply their own input
-      records; TAXSIM does not bundle a microdataset. Coverage is
-      documented in the web interface and the Feenberg-Coutts
-      reference paper rather than in inline parameter citations.
+      The Fortran engine is not distributed in source form. Client
+      wrappers (Stata, R, SAS, Python, Julia, WASM) and example
+      datasets are public. Users supply their own input records; TAXSIM
+      does not bundle a microdataset. Outputs are deterministic and
+      have been independently replicated by open-source models (e.g.,
+      Tax-Calculator validation against TAXSIM-35), but the engine
+      itself cannot be rebuilt by users. Coverage is documented in the
+      web interface and the Feenberg-Coutts reference paper rather than
+      in inline parameter citations.
     sources:
       - label: NBER TAXSIM home page (web interface and documentation)
         url: https://taxsim.nber.org/
@@ -1221,3 +1219,174 @@ transparency:
         url: https://ersa.org.uk/entitledto/
         kind: civilsociety
         supports: [documentationPublic]
+
+  - model: dynasim
+    codePublic: no
+    codeLicense: proprietary
+    contributorCount: unknown
+    issueTrackerPublic: no
+    documentationPublic: partial
+    documentationUrl: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/dynamic-simulation-income-model-dynasim
+    parameterSourcing: separate-doc
+    testSuitePublic: unknown
+    testCount: unknown
+    datasetPublic: no
+    reproducibleBuilds: no
+    notes: >
+      Source code, parameter files, and the SIPP-linked
+      administrative microdata are not public. Urban publishes
+      methodology primers and project briefs but not the
+      implementation. The SSA-linked Continuous Work History
+      Sample used to anchor lifetime earnings is restricted-access.
+    sources:
+      - label: DYNASIM overview page (no source-code or dataset links)
+        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/dynamic-simulation-income-model-dynasim
+        kind: self
+        supports: [codePublic, codeLicense, documentationPublic, datasetPublic, issueTrackerPublic]
+      - label: Favreault, Smith & Johnson — A Primer on DYNASIM3
+          (methodology document, no code release)
+        url: https://www.urban.org/sites/default/files/publication/71226/410961-A-Primer-on-the-Dynamic-Simulation-of-Income-Model-DYNASIM-.PDF
+        kind: self
+        supports: [codePublic, documentationPublic, parameterSourcing]
+      - label: ASPE — DYNASIM-based LTSS analysis (uses outputs,
+          not code; ASPE Contract HHSP23320095654WC)
+        url: https://aspe.hhs.gov/reports/risk-needing-ltss-dynasim-projections
+        kind: government
+        supports: [codeLicense, datasetPublic, documentationPublic]
+      - label: Semantic Scholar — Favreault & Smith DYNASIM
+          working paper (academic description without source)
+        url: https://www.semanticscholar.org/paper/The-Dynamic-Simulation-of-Income-Model-(DYNASIM)-Favreault-Smith/c51b608d278a59c16be0f38369ebf0ae0f200f14
+        kind: academic
+        supports: [codePublic, documentationPublic]
+
+  - model: cbolt
+    codePublic: no
+    codeLicense: proprietary
+    contributorCount: unknown
+    issueTrackerPublic: no
+    documentationPublic: partial
+    documentationUrl: https://www.cbo.gov/publication/53667
+    parameterSourcing: separate-doc
+    testSuitePublic: unknown
+    testCount: unknown
+    datasetPublic: no
+    reproducibleBuilds: no
+    notes: >
+      Source code, parameter files, and the SSA-linked earnings
+      microdata are not public. CBO publishes the 2018 model
+      overview (publication 53667) and recurring Social Security
+      and Long-Term Budget Outlook reports describing CBOLT-based
+      results. CBO has begun open-sourcing select adjacent models
+      on its GitHub but CBOLT itself remains closed.
+    sources:
+      - label: CBO — An Overview of CBOLT (April 2018; methodology
+          document, no source release)
+        url: https://www.cbo.gov/publication/53667
+        kind: government
+        supports: [codePublic, codeLicense, documentationPublic, parameterSourcing]
+      - label: CBO — Long-Term Budget Analysis topic page
+          (outputs only, no code)
+        url: https://www.cbo.gov/topics/budget/long-term-budget-analysis
+        kind: government
+        supports: [documentationPublic]
+      - label: CBO — Advanced Models page (CBOLT not in open
+          GitHub list)
+        url: https://www.cbo.gov/models/details
+        kind: government
+        supports: [codePublic, datasetPublic]
+      - label: CRFB — Analysis of CBO's 2025 Long-Term Budget
+          Outlook (third-party output review, no code)
+        url: https://www.crfb.org/papers/analysis-cbos-march-2025-long-term-budget-outlook
+        kind: civilsociety
+        supports: [documentationPublic, codePublic]
+
+  - model: hipsm
+    codePublic: no
+    codeLicense: proprietary
+    contributorCount: unknown
+    issueTrackerPublic: no
+    documentationPublic: partial
+    documentationUrl: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/health-insurance-policy-simulation-model-hipsm
+    parameterSourcing: separate-doc
+    testSuitePublic: unknown
+    testCount: unknown
+    datasetPublic: no
+    reproducibleBuilds: no
+    notes: >
+      Source code, parameter files, and the ACS/CPS/MEPS-matched
+      microdata are not public. Urban publishes annual methodology
+      updates (e.g. 'HIPSM for 2020') describing data sources,
+      calibration targets, and the marketplace-Medicaid behavioral
+      equations. Implementation and reproducible builds are not
+      released.
+    sources:
+      - label: HIPSM overview page (Urban; no source-code or
+          dataset link)
+        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/health-insurance-policy-simulation-model-hipsm
+        kind: self
+        supports: [codePublic, codeLicense, documentationPublic, datasetPublic, issueTrackerPublic]
+      - label: Urban — HIPSM for 2020 methodology report
+          (architecture without code)
+        url: https://www.urban.org/sites/default/files/publication/103412/the-health-insurance-policy-simulation-model-for-2020.pdf
+        kind: self
+        supports: [documentationPublic, parameterSourcing, codePublic]
+      - label: Garrett — HIPSM briefing to NCVHS
+          (HHS subcommittee; outputs not code)
+        url: https://www.ncvhs.hhs.gov/wp-content/uploads/2014/05/090227p4.pdf
+        kind: government
+        supports: [codePublic, documentationPublic]
+      - label: Buettgens et al. — America Under the Affordable
+          Care Act (academic HIPSM analysis, no source release)
+        url: https://www.urban.org/sites/default/files/publication/29396/412267-America-Under-the-Affordable-Care-Act.PDF
+        kind: academic
+        supports: [codePublic, parameterSourcing]
+
+  - model: hisim2
+    codePublic: no
+    codeLicense: proprietary
+    contributorCount: unknown
+    issueTrackerPublic: no
+    documentationPublic: partial
+    documentationUrl: https://www.cbo.gov/publication/57205
+    parameterSourcing: separate-doc
+    testSuitePublic: unknown
+    testCount: unknown
+    datasetPublic: no
+    reproducibleBuilds: no
+    notes: >
+      Source code is not public. CBO has released several
+      methodology working papers (2019-04 on data preparation,
+      2021-15 on synthetic firms) and a baseline-build report
+      (publication 57205). Underlying SIPP-tax-Medicaid linked
+      microdata is restricted-access.
+    sources:
+      - label: CBO — HISIM2 Used in Preparing July 2021 Baseline
+          (methodology, no code release)
+        url: https://www.cbo.gov/publication/57205
+        kind: government
+        supports: [codePublic, codeLicense, documentationPublic, parameterSourcing]
+      - label: CBO Working Paper 2019-04 — Sources and Preparation
+          of Data Used in HISIM2
+        url: https://www.cbo.gov/publication/55087
+        kind: government
+        supports: [documentationPublic, parameterSourcing, datasetPublic]
+      - label: CBO — HISIM2 introduction (publication 55390)
+        url: https://www.cbo.gov/publication/55390
+        kind: government
+        supports: [documentationPublic, codePublic]
+      - label: CBO — Methods for Analyzing Health Insurance
+          Coverage (catalogue without code)
+        url: https://www.cbo.gov/topics/health-care/methods-analyzing-health-insurance-coverage
+        kind: government
+        supports: [documentationPublic, codePublic]
+      - label: CBO — Advanced Models page (HISIM2 not in open
+          GitHub list)
+        url: https://www.cbo.gov/models/details
+        kind: government
+        supports: [codePublic, datasetPublic]
+      - label: Urban Institute HIPSM project page (cross-references
+          HISIM2 as CBO peer; independent confirmation of closed-
+          source status)
+        url: https://www.urban.org/policy-centers/health-policy-center/projects/health-insurance-policy-simulation-model-hipsm
+        kind: civilsociety
+        supports: [codePublic, documentationPublic]

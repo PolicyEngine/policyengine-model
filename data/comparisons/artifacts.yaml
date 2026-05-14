@@ -114,8 +114,8 @@ artifacts:
     license: proprietary
     description: SAS/Fortran codebase maintained at Urban Institute under ASPE contract.
     sources:
-      - label: TRIM3 access policy
-        url: https://boreas.urban.org/T3IntroAccess.php
+      - label: Zedlewski (Urban) — TRIM, A Tool for Social Policy Analysis (access policy)
+        url: https://www.urban.org/sites/default/files/publication/82921/2000878-TRIM-A-Tool-for-Social-Policy-Analysis.pdf
         kind: self
 
   - model: trim3
@@ -125,8 +125,8 @@ artifacts:
     license: ASPE-restricted
     description: CPS-ASEC enhanced with caseload-aligned program participation and imputed income components.
     sources:
-      - label: TRIM3 data description
-        url: https://boreas.urban.org/T3IntroData.php
+      - label: Zedlewski (Urban) — TRIM, A Tool for Social Policy Analysis (data construction)
+        url: https://www.urban.org/sites/default/files/publication/82921/2000878-TRIM-A-Tool-for-Social-Policy-Analysis.pdf
         kind: self
 
   - model: trim3
@@ -148,8 +148,8 @@ artifacts:
     license: proprietary
     description: Restricted-access web interface for running TRIM3 simulations.
     sources:
-      - label: TRIM3 access
-        url: https://boreas.urban.org/T3IntroAccess.php
+      - label: Zedlewski (Urban) — TRIM, A Tool for Social Policy Analysis (web interface)
+        url: https://www.urban.org/sites/default/files/publication/82921/2000878-TRIM-A-Tool-for-Social-Policy-Analysis.pdf
         kind: self
 
   # =================================== ATTIS ==================================
@@ -161,7 +161,7 @@ artifacts:
     description: Microsimulation built on ACS microdata; implementation not public.
     sources:
       - label: ATTIS overview
-        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
         kind: self
 
   - model: attis
@@ -172,7 +172,7 @@ artifacts:
     description: ACS microdata with imputed transfers and taxes.
     sources:
       - label: ATTIS overview
-        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
         kind: self
 
   - model: attis
@@ -478,13 +478,19 @@ artifacts:
   # =================================== UKMOD =================================
   - model: ukmod
     type: codebase
-    name: UKMOD source files
+    name: UKMOD-PUBLIC (GitHub repository)
     public: yes
-    license: EUROMOD Public License (custom; free for research)
-    url: https://www.microsimulation.ac.uk/ukmod/access
-    description: Parameter rules and DSL policy files distributed to registered users; no public source control.
+    license: CC BY-NC-ND 4.0
+    url: https://github.com/centreformicrosimulation/UKMOD-PUBLIC
+    description: >
+      Public GitHub repository hosting UKMOD's EUROMOD-DSL parameter
+      files (XMLParam/), data-preparation Stata scripts, and per-release
+      change logs in Documentation/.
     sources:
-      - label: UKMOD access
+      - label: UKMOD-PUBLIC GitHub
+        url: https://github.com/centreformicrosimulation/UKMOD-PUBLIC
+        kind: self
+      - label: UKMOD access page (links to GitHub)
         url: https://www.microsimulation.ac.uk/ukmod/access
         kind: self
 
@@ -516,11 +522,11 @@ artifacts:
     name: CeMPA working paper series
     public: yes
     license: CeMPA editorial
-    url: https://www.microsimulation.ac.uk/publications/working-papers
+    url: https://www.microsimulation.ac.uk/publications/
     description: Academic working papers using and documenting UKMOD.
     sources:
-      - label: CeMPA working papers
-        url: https://www.microsimulation.ac.uk/publications/working-papers
+      - label: CeMPA publications hub
+        url: https://www.microsimulation.ac.uk/publications/
         kind: self
 
   # =================================== IFS TAXBEN ============================
@@ -532,7 +538,7 @@ artifacts:
     description: IFS in-house tax-benefit microsimulation; implementation not public.
     sources:
       - label: IFS TAXBEN tool page
-        url: https://ifs.org.uk/tools_and_resources/taxben
+        url: https://ifs.org.uk/publications/taxben-ifs-tax-and-benefit-microsimulation-model
         kind: self
 
   - model: ifs-taxben
@@ -552,11 +558,11 @@ artifacts:
     name: IFS TAXBEN tool description
     public: yes
     license: IFS editorial
-    url: https://ifs.org.uk/tools_and_resources/taxben
+    url: https://ifs.org.uk/publications/taxben-ifs-tax-and-benefit-microsimulation-model
     description: High-level description of TAXBEN's scope and methodology.
     sources:
       - label: TAXBEN tool page
-        url: https://ifs.org.uk/tools_and_resources/taxben
+        url: https://ifs.org.uk/publications/taxben-ifs-tax-and-benefit-microsimulation-model
         kind: self
 
   # =================================== IGOTM =================================
@@ -787,8 +793,8 @@ artifacts:
     public: no
     license: proprietary
     description: >
-      Approximately 20,000 lines of FORTRAN 77, updated annually
-      since 1974. Engine source code is not distributed.
+      Fortran engine updated annually since the late 1970s. Engine
+      source code is not distributed.
     sources:
       - label: NBER TAXSIM home
         url: https://taxsim.nber.org/
@@ -820,7 +826,7 @@ artifacts:
     sources:
       - label: NBER TAXSIM data product page (lists client wrappers)
         url: https://www.nber.org/research/data/taxsim
-        kind: academic
+        kind: self
 
   - model: nber-taxsim
     type: paper
@@ -1190,4 +1196,148 @@ artifacts:
         kind: self
       - label: UK Digital Marketplace — EntitledTo G-Cloud listing
         url: https://www.applytosupply.digitalmarketplace.service.gov.uk/g-cloud/services/973658267289218
+        kind: government
+
+  # ================================== DYNASIM3 ===============================
+  - model: dynasim
+    type: codebase
+    name: DYNASIM3
+    public: no
+    license: proprietary
+    description: Dynamic lifecycle microsimulation maintained at Urban Institute; implementation not public.
+    sources:
+      - label: DYNASIM overview (Urban Institute)
+        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/dynamic-simulation-income-model-dynasim
+        kind: self
+
+  - model: dynasim
+    type: paper
+    name: A Primer on DYNASIM3
+    public: yes
+    license: Urban editorial
+    url: https://www.urban.org/sites/default/files/publication/71226/410961-A-Primer-on-the-Dynamic-Simulation-of-Income-Model-DYNASIM-.PDF
+    description: Methodology primer covering DYNASIM3's modules and lifecycle simulation approach.
+    sources:
+      - label: Favreault, Smith & Johnson — DYNASIM3 Primer
+        url: https://www.urban.org/sites/default/files/publication/71226/410961-A-Primer-on-the-Dynamic-Simulation-of-Income-Model-DYNASIM-.PDF
+        kind: self
+
+  - model: dynasim
+    type: paper
+    name: ASPE DYNASIM-based LTSS projections
+    public: yes
+    license: government
+    url: https://aspe.hhs.gov/reports/risk-needing-ltss-dynasim-projections
+    description: HHS/ASPE-funded long-term services and supports projections produced with DYNASIM.
+    sources:
+      - label: ASPE LTSS DYNASIM report
+        url: https://aspe.hhs.gov/reports/risk-needing-ltss-dynasim-projections
+        kind: government
+
+  # =================================== CBOLT =================================
+  - model: cbolt
+    type: codebase
+    name: CBOLT
+    public: no
+    license: proprietary
+    description: CBO's long-term microsim + demographic + budget model; source not released.
+    sources:
+      - label: CBO Overview of CBOLT (2018)
+        url: https://www.cbo.gov/publication/53667
+        kind: government
+
+  - model: cbolt
+    type: paper
+    name: An Overview of CBOLT
+    public: yes
+    license: government
+    url: https://www.cbo.gov/publication/53667
+    description: CBO's authoritative model documentation for CBOLT (publication 53667, April 2018).
+    sources:
+      - label: CBO publication 53667
+        url: https://www.cbo.gov/publication/53667
+        kind: government
+
+  - model: cbolt
+    type: paper
+    name: The Long-Term Budget Outlook 2025 to 2055
+    public: yes
+    license: government
+    url: https://www.cbo.gov/publication/61187
+    description: CBOLT-based 75-year projection of federal revenues, outlays, debt, and economic indicators.
+    sources:
+      - label: CBO publication 61187
+        url: https://www.cbo.gov/publication/61187
+        kind: government
+
+  # =================================== HIPSM =================================
+  - model: hipsm
+    type: codebase
+    name: HIPSM
+    public: no
+    license: proprietary
+    description: Health insurance microsim maintained at Urban Institute Health Policy Center; not public.
+    sources:
+      - label: HIPSM overview (Urban Institute)
+        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/health-insurance-policy-simulation-model-hipsm
+        kind: self
+
+  - model: hipsm
+    type: paper
+    name: The Health Insurance Policy Simulation Model for 2020
+    public: yes
+    license: Urban editorial
+    url: https://www.urban.org/sites/default/files/publication/103412/the-health-insurance-policy-simulation-model-for-2020.pdf
+    description: Annual HIPSM methodology refresh covering data inputs, calibration, and behavioral equations.
+    sources:
+      - label: Urban — HIPSM for 2020
+        url: https://www.urban.org/sites/default/files/publication/103412/the-health-insurance-policy-simulation-model-for-2020.pdf
+        kind: self
+
+  - model: hipsm
+    type: paper
+    name: HIPSM ACA and Medicaid policy briefs
+    public: yes
+    license: Urban editorial
+    url: https://www.urban.org/policy-centers/health-policy-center
+    description: Series of policy briefs scoring ACA marketplace, Medicaid expansion, and state-specific reforms using HIPSM.
+    sources:
+      - label: Urban Health Policy Center publications
+        url: https://www.urban.org/policy-centers/health-policy-center
+        kind: self
+
+  # =================================== HISIM2 ================================
+  - model: hisim2
+    type: codebase
+    name: HISIM2
+    public: no
+    license: proprietary
+    description: CBO's second-generation health insurance microsim; implementation not public.
+    sources:
+      - label: CBO HISIM2 baseline build documentation
+        url: https://www.cbo.gov/publication/57205
+        kind: government
+
+  - model: hisim2
+    type: paper
+    name: HISIM2 Used in Preparing July 2021 Baseline
+    public: yes
+    license: government
+    url: https://www.cbo.gov/publication/57205
+    description: CBO methodology document describing HISIM2 architecture and 2021 baseline implementation.
+    sources:
+      - label: CBO publication 57205
+        url: https://www.cbo.gov/publication/57205
+        kind: government
+
+  - model: hisim2
+    type: paper
+    name: Sources and Preparation of Data Used in HISIM2 (Working Paper 2019-04)
+    public: yes
+    license: government
+    url: https://www.cbo.gov/publication/55087
+    description: CBO Working Paper 2019-04 documenting data sources and preparation methodology for HISIM2.
+    sources:
+      - label: CBO Working Paper 2019-04
+        url: https://www.cbo.gov/publication/55087
         kind: government

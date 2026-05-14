@@ -66,7 +66,7 @@ models:
     languages: [SAS, Fortran]
     primaryDataset: TRIM3 augmented CPS-ASEC
     documentationUrl: https://boreas.urban.org/T3IntroHistory.php
-    siblings: [attis]
+    siblings: [attis, dynasim, hipsm]
     leads:
       - Linda Giannarelli
       - Laura Wheaton
@@ -104,28 +104,30 @@ models:
     name: ATTIS
     organization: Urban Institute
     organizationUrl: https://www.urban.org
-    siblings: [trim3]
+    siblings: [trim3, dynasim, hipsm]
     country: us
     sector: non-profit
     type: microsimulation
     jurisdictions: [us-federal, us-states, us-substate]
-    inceptionYear: 2017
+    inceptionYear: 2015
     license: proprietary
     codePublic: false
     languages: [unknown]
     primaryDataset: American Community Survey (ACS)
-    documentationUrl: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+    documentationUrl: https://www.urban.org/research-methods/attis-microsimulation-model
     leads:
       - Linda Giannarelli
+      - Sarah Minton
       - Laura Wheaton
     summary: >
       The Analysis of Transfers, Taxes, and Income Security model uses
       Census American Community Survey microdata to simulate major
-      safety-net programs and federal taxes. Designed for sub-state
-      geographic analyses that the smaller CPS sample cannot support;
-      funded through stacked foundation initiatives (State of the Safety
-      Net, Safety Net to Solid Ground) rather than a single base
-      contract.
+      safety-net programs and federal and state income taxes. Designed
+      for sub-state geographic analyses that the smaller CPS sample cannot
+      support. Primary funding from the Robert Wood Johnson Foundation
+      through Urban's From Safety Net to Solid Ground initiative; project
+      funding from Annie E. Casey Foundation, David and Lucile Packard
+      Foundation, and state agencies.
     capabilities:
       reformImpact: yes
       integratedMicrodata: yes
@@ -133,20 +135,21 @@ models:
       publicInterface: no
       apiAccess: no
     sources:
-      - label: ATTIS model overview
-        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+      - label: ATTIS Microsimulation Model (Urban canonical landing page)
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
+        kind: self
+      - label: Methods for Estimating SNAP Policy Impacts with an ACS-Based Simulation Model
+          (Wheaton, Giannarelli, Morton, 2018)
+        url: https://www.urban.org/sites/default/files/publication/98454/methods_for_estimating_snap_policy_impacts_with_an_acs-based_simulation_model_1.pdf
         kind: self
       - label: State of the Safety Net initiative
         url: https://www.urban.org/projects/state-safety-net
         kind: self
-      - label: Annie E. Casey Foundation — KIDS COUNT
-        url: https://www.aecf.org/work/kids-count
-        kind: civilsociety
-      - label: Robert Wood Johnson Foundation — From Safety Net to Solid Ground
-        url: https://www.rwjf.org/en/library/research/2019/05/safety-net-to-solid-ground.html
-        kind: civilsociety
-      - label: David and Lucile Packard Foundation grants page
-        url: https://www.packard.org/our-work/grants/
+      - label: Urban — From Safety Net to Solid Ground (RWJF-funded initiative)
+        url: https://www.urban.org/tags/safety-net-solid-ground
+        kind: self
+      - label: David and Lucile Packard Foundation
+        url: https://www.packard.org/
         kind: civilsociety
 
   - id: tpc-microsim
@@ -166,7 +169,6 @@ models:
     leads:
       - Eric Toder
       - Robert McClelland
-      - Daniel Berger
     summary: >
       Joint Urban-Brookings tax microsimulation model used to produce
       distributional tables, revenue estimates, and reform analysis for
@@ -189,8 +191,9 @@ models:
       - label: IRS SOI Public Use File documentation
         url: https://www.irs.gov/statistics/soi-tax-stats-individual-public-use-microdata-files
         kind: government
-      - label: Burman, Geissler & Toder — academic description of TPC microsim
-        url: https://www.taxpolicycenter.org/publications/how-big-are-individual-income-tax-expenditures
+      - label: Burman, Geissler & Toder (2008) — How Big Are Individual Income Tax Expenditures
+          (American Economic Review Papers and Proceedings)
+        url: https://www.aeaweb.org/articles?id=10.1257/aer.98.2.79
         kind: academic
       - label: MacArthur Foundation grants to TPC (funder record)
         url: https://www.macfound.org/grantee/urban-institute-tax-policy-center-39925/
@@ -204,12 +207,12 @@ models:
     sector: government
     type: microsimulation
     jurisdictions: [us-federal]
-    inceptionYear: 1976
+    inceptionYear: unknown
     license: proprietary
     codePublic: false
     languages: [unknown]
     primaryDataset: SOI Individual Tax File (restricted)
-    documentationUrl: https://www.jct.gov/publications/2023/jcx-3-23/
+    documentationUrl: https://www.jct.gov/publications/2023/jcx-48-23/
     summary: >
       The Joint Committee on Taxation produces official revenue estimates
       for proposed federal tax legislation. JCT's models are not public
@@ -223,38 +226,38 @@ models:
       publicInterface: no
       apiAccess: no
     sources:
-      - label: JCT Overview of the Federal Tax System (methodology context)
-        url: https://www.jct.gov/publications/2023/jcx-3-23/
+      - label: JCT — Description of the Individual Tax Model for 2023 (JCX-48-23)
+        url: https://www.jct.gov/publications/2023/jcx-48-23/
         kind: government
-      - label: JCT — Estimating revenue effects (methodology paper series)
-        url: https://www.jct.gov/publications/2023/jcx-46-23/
+      - label: JCT — Revenue Estimating (operations page describing all four microsim models)
+        url: https://www.jct.gov/operations/revenue-estimating/
         kind: government
-      - label: CRS — How the federal government estimates tax revenue
-          (describes JCT methodology)
-        url: https://crsreports.congress.gov/product/pdf/RL/RL31292
+      - label: JCT — Overview of the Federal Tax System (JCX-9R-23)
+        url: https://www.jct.gov/publications/2023/jcx-9r-23/
         kind: government
-      - label: Auerbach — Dynamic scoring and tax legislation
+      - label: Auerbach — Dynamic Scoring An Introduction to the Issues
           (academic analysis of JCT methodology)
-        url: https://www.brookings.edu/articles/dynamic-scoring-an-overview/
+        url: https://eml.berkeley.edu/~auerbach/dynamscor.pdf
         kind: academic
-      - label: Brookings — How accurate are tax revenue projections?
-        url: https://www.brookings.edu/articles/how-accurate-are-tax-revenue-projections/
-        kind: civilsociety
+      - label: CRS — Dynamic Scoring for Tax Legislation A Review of Models (R43381)
+        url: https://www.congress.gov/crs-product/R43381
+        kind: government
 
   - id: cbo-microsim
     name: CBO microsimulation
     organization: Congressional Budget Office
     organizationUrl: https://www.cbo.gov
+    siblings: [cbolt, hisim2]
     country: us
     sector: government
     type: microsimulation
     jurisdictions: [us-federal]
-    inceptionYear: 1975
+    inceptionYear: unknown
     license: proprietary
     codePublic: false
     languages: [unknown]
     primaryDataset: CPS + SOI matched microdata (restricted)
-    documentationUrl: https://www.cbo.gov/topics/budget
+    documentationUrl: https://www.cbo.gov/publication/54096
     summary: >
       CBO maintains internal microsimulation models for federal tax
       revenue, payroll taxes, and major benefit programs (SNAP, Medicaid,
@@ -268,6 +271,9 @@ models:
       publicInterface: no
       apiAccess: no
     sources:
+      - label: CBO — An Overview of CBO's Microsimulation Tax Model (2018)
+        url: https://www.cbo.gov/publication/54096
+        kind: government
       - label: CBO Budget and Economic Outlook (baseline publications)
         url: https://www.cbo.gov/topics/budget
         kind: government
@@ -277,12 +283,8 @@ models:
       - label: CBO — Distribution of household income (microsim outputs)
         url: https://www.cbo.gov/topic/income-distribution
         kind: government
-      - label: Auerbach & Gale — Forecasting the federal budget
-          (academic analysis of CBO methodology)
-        url: https://www.brookings.edu/articles/forecasting-the-federal-budget/
-        kind: academic
-      - label: Committee for a Responsible Federal Budget — How CBO scores legislation
-        url: https://www.crfb.org/blogs/how-cbo-scores-legislation
+      - label: Committee for a Responsible Federal Budget — A Short Primer on the Congressional Budget Office
+        url: https://www.crfb.org/blogs/short-primer-congressional-budget-office
         kind: civilsociety
 
   - id: itep-microsim
@@ -297,12 +299,23 @@ models:
     license: proprietary
     codePublic: false
     languages: [unknown]
-    primaryDataset: SOI + state tax microdata (restricted)
+    primaryDataset: IRS Public Use File + ACS PUMS + multi-survey
+      imputations (BLS CEX, SIPP, PSID, SCF); aged via CBO/IRS targets
     documentationUrl: https://itep.org/who-pays-7th-edition-methodology-and-discussion/
+    leads:
+      - Carl Davis
+      - Erika Frankel
+      - Matt Gardner
     summary: >
-      The ITEP Microsimulation Tax Model estimates federal and state tax
-      incidence. ITEP's "Who Pays?" series is the canonical analysis of
-      state-by-state tax progressivity. Model code is not public.
+      The ITEP Microsimulation Tax Model estimates federal, state, and
+      local tax incidence and revenue. Distinguishing capability is
+      comprehensive state-and-local coverage including personal income,
+      sales/excise, and property taxes for every state and DC; the
+      "Who Pays?" series (7th edition, 2024) is the canonical analysis
+      of state tax progressivity. Federal estate/gift, customs duties,
+      and federal excise are estimated off-model and folded into
+      distributional totals. Model code, parameters, and the SOI-PUF-
+      derived microdata are not public.
     capabilities:
       reformImpact: yes
       integratedMicrodata: no
@@ -310,14 +323,17 @@ models:
       publicInterface: no
       apiAccess: no
     sources:
-      - label: ITEP Microsimulation Tax Model methodology
+      - label: ITEP Tax Microsimulation Model Overview
+        url: https://itep.org/itep-tax-model/
+        kind: self
+      - label: ITEP Microsimulation Tax Model methodology (Who Pays? 7th edition)
         url: https://itep.org/who-pays-7th-edition-methodology-and-discussion/
         kind: self
       - label: ITEP Who Pays? (state tax incidence reports)
         url: https://itep.org/whopays/
         kind: self
-      - label: ITEP funders page
-        url: https://itep.org/about/itep-supporters/
+      - label: ITEP staff (Data and Model team)
+        url: https://itep.org/category/staff/
         kind: self
       - label: CRS — State income tax incidence analyses cite ITEP
         url: https://crsreports.congress.gov/product/pdf/R/R47299
@@ -336,22 +352,27 @@ models:
     codePublic: true
     codeUrl: https://github.com/PSLmodels/Tax-Calculator
     languages: [Python]
-    primaryDataset: PUF + CPS matched (PUF requires IRS purchase; CPS-only build is free)
+    primaryDataset: >
+      cps.csv (CPS-only, free; from PSLmodels/taxdata),
+      puf.csv (2011 IRS-SOI PUF; from PSLmodels/taxdata), and
+      tmd.csv (2015 PUF matched with 2022 CPS; from PSLmodels/tax-microdata-benchmarking).
+      PUF and TMD require IRS-SOI PUF purchase.
     documentationUrl: https://taxcalc.pslmodels.org
     leads:
+      - Martin Holmer
+      - Jason DeBacker
       - Matthew Jensen
-      - Anderson Frailey
     summary: >
       Open-source federal individual income tax + payroll tax
-      microsimulation model maintained by the Policy Simulation Library.
-      Provides a CPS-only free build and a PUF build for users who can
-      access SOI microdata. Used as the engine behind several derived
-      models (Tax-Brain, OG-USA).
+      microsimulation model cataloged by the Policy Simulation Library.
+      Provides a CPS-only free build, a PUF-based build, and a TMD
+      (matched PUF+CPS) build for users with IRS-SOI PUF access. Used as
+      the engine behind several derived models (Tax-Brain, OG-USA).
     capabilities:
       reformImpact: yes
       integratedMicrodata: no
       localAreas: no
-      publicInterface: yes
+      publicInterface: no
       apiAccess: yes
     sources:
       - label: Tax-Calculator repository
@@ -366,9 +387,6 @@ models:
       - label: Tax-Calculator on PyPI
         url: https://pypi.org/project/taxcalc/
         kind: other
-      - label: Jensen & Frailey — Tax-Calculator academic paper
-        url: https://onlinelibrary.wiley.com/doi/abs/10.1002/pam.22055
-        kind: academic
 
   - id: budgetlab-tax
     name: Budget Lab Tax Model
@@ -383,7 +401,7 @@ models:
     codePublic: partial
     codeUrl: https://github.com/Budget-Lab-Yale
     languages: [R]
-    primaryDataset: SOI PUF (restricted) with CPS-derived imputations
+    primaryDataset: SOI PUF (purchased from IRS) with non-filer imputation from CPS-based Piketty et al. 2018
     documentationUrl: https://budgetlab.yale.edu/topic/methodology
     leads:
       - John Ricco
@@ -413,9 +431,9 @@ models:
       - label: Yale Budget Lab GitHub organization
         url: https://github.com/Budget-Lab-Yale
         kind: self
-      - label: Brookings press coverage of Budget Lab launch (2024)
-        url: https://www.brookings.edu/articles/the-budget-lab-at-yale/
-        kind: civilsociety
+      - label: Yale Law School — Budget Lab at Yale celebrates one year of innovative policy analysis (2025)
+        url: https://law.yale.edu/yls-today/news/budget-lab-yale-celebrates-one-year-innovative-policy-analysis
+        kind: academic
 
   - id: policyengine-uk
     name: PolicyEngine UK
@@ -482,24 +500,26 @@ models:
     type: microsimulation
     jurisdictions: [uk]
     inceptionYear: 2020
-    license: EUROMOD Public License (custom; free for research)
+    license: CC BY-NC-ND 4.0
     codePublic: true
-    codeUrl: https://www.microsimulation.ac.uk/ukmod/access
-    languages: [EUROMOD DSL]
+    codeUrl: https://github.com/centreformicrosimulation/UKMOD-PUBLIC
+    languages: [EUROMOD DSL, Stata]
     primaryDataset: Family Resources Survey (FRS) under UK Data Service licence
     documentationUrl: https://www.microsimulation.ac.uk/ukmod
     leads:
       - Matteo Richiardi
+      - Daria Popova
       - Justin van de Ven
     summary: >
       Open-access tax-benefit microsimulation model for the UK,
-      maintained at the University of Essex's Centre for
-      Microsimulation and Policy Analysis. UKMOD is the UK component of
-      the European EUROMOD framework, ported from JRC-Seville to CeMPA
-      in 2020. The model and its source files (parameter rules and DSL
-      code) are freely available for research use after registration;
-      the underlying FRS microdata requires a separate UK Data Service
-      end-user licence.
+      maintained at the University of Essex's Centre for Microsimulation
+      and Policy Analysis. UKMOD replaced the UK component of EUROMOD as
+      a standalone model in 2020-21 and remains aligned with the EUROMOD
+      platform. Source files (parameter DSL and data-prep Stata scripts)
+      are freely available on GitHub under CC BY-NC-ND 4.0; the
+      underlying FRS microdata requires a separate UK Data Service
+      end-user licence. A free public web interface (UKMOD Explore)
+      provides limited online simulation.
     capabilities:
       reformImpact: yes
       integratedMicrodata: yes
@@ -510,24 +530,19 @@ models:
       - label: UKMOD home page (CeMPA, University of Essex)
         url: https://www.microsimulation.ac.uk/ukmod
         kind: self
-      - label: UKMOD access and registration
+      - label: UKMOD access and registration (CC BY-NC-ND 4.0 terms)
         url: https://www.microsimulation.ac.uk/ukmod/access
         kind: self
-      - label: Richiardi, Collado & Popova — UKMOD/EUROMOD modelling
-          report (CeMPA Working Paper)
-        url: https://www.microsimulation.ac.uk/publications/working-papers
+      - label: UKMOD-PUBLIC GitHub repository
+        url: https://github.com/centreformicrosimulation/UKMOD-PUBLIC
+        kind: self
+      - label: Richiardi, Collado & Popova (2021) — UKMOD reference paper,
+          International Journal of Microsimulation 14(1):92-101
+        url: https://microsimulation.pub/articles/00231
         kind: academic
-        quote: >
-          UKMOD is the United Kingdom component of EUROMOD, the
-          tax-benefit microsimulation model for the European Union.
-      - label: Joint Research Centre (European Commission) — EUROMOD,
-          parent framework
+      - label: Joint Research Centre (European Commission) — EUROMOD parent framework
         url: https://euromod-web.jrc.ec.europa.eu/
         kind: government
-      - label: International Journal of Microsimulation — Special
-          issue on UKMOD applications
-        url: https://microsimulation.pub/index.php/IJM
-        kind: academic
 
   - id: ifs-taxben
     name: TAXBEN
@@ -537,23 +552,23 @@ models:
     sector: non-profit
     type: microsimulation
     jurisdictions: [uk]
-    inceptionYear: 1985
+    inceptionYear: 1983
     license: proprietary
     codePublic: false
     languages: [unknown]
     primaryDataset: Family Resources Survey (FRS) with IFS in-house imputations
-    documentationUrl: https://ifs.org.uk/tools_and_resources/taxben
+    documentationUrl: https://ifs.org.uk/publications/taxben-ifs-tax-and-benefit-microsimulation-model
     leads:
       - Tom Waters
       - Stuart Adam
     summary: >
       IFS's in-house static tax and benefit microsimulation model,
-      maintained since the mid-1980s. TAXBEN is closed source but
-      widely used in IFS Green Budget chapters, Budget responses, and
-      academic work; its outputs are a routine reference in UK fiscal
-      policy debate. Implementation, parameters, and prepared microdata
-      are not public; methodology is described in IFS working papers
-      and briefing notes.
+      maintained since 1983. TAXBEN is closed source but widely used
+      in IFS Green Budget chapters, Budget responses, and academic work;
+      its outputs are a routine reference in UK fiscal policy debate.
+      Implementation, parameters, and prepared microdata are not public;
+      methodology is described in the IFS TAXBEN guide and supporting
+      briefing notes.
     capabilities:
       reformImpact: yes
       integratedMicrodata: yes
@@ -561,26 +576,27 @@ models:
       publicInterface: no
       apiAccess: no
     sources:
-      - label: IFS TAXBEN tool description
-        url: https://ifs.org.uk/tools_and_resources/taxben
+      - label: Waters — TAXBEN, The IFS tax and benefit microsimulation
+          model (2017, PDF update 2021)
+        url: https://ifs.org.uk/publications/taxben-ifs-tax-and-benefit-microsimulation-model
         kind: self
         quote: >
-          TAXBEN is the IFS tax and benefit microsimulation model.
-      - label: Waters — A survey of the UK tax system (IFS Briefing
-          Note BN09; TAXBEN underpins many estimates)
+          Since 1983 the IFS has built and maintained TAXBEN, a
+          microsimulation model of this kind.
+      - label: Pope & Waters — A survey of the UK tax system (IFS
+          Briefing Note BN09)
         url: https://ifs.org.uk/publications/survey-uk-tax-system
         kind: self
       - label: IFS Green Budget (annual; TAXBEN-based distributional
           chapters)
-        url: https://ifs.org.uk/green-budget
+        url: https://ifs.org.uk/ifs-green-budget
         kind: self
-      - label: Roantree & Shaw — Universal credit (IFS Working Paper
-          using TAXBEN)
-        url: https://ifs.org.uk/publications/universal-credit-its-impact-work-incentives
-        kind: academic
-      - label: HM Treasury distributional analysis methodology
-          (references IFS/TAXBEN as a comparison benchmark)
-        url: https://www.gov.uk/government/publications/supporting-documents-for-spring-statement-2025/impact-on-households-distributional-analysis-to-accompany-spring-statement-2025
+      - label: Adam — Universal credit and work incentives
+          (IFS presentation drawing on TAXBEN)
+        url: https://ifs.org.uk/publications/universal-credit-and-work-incentives
+        kind: self
+      - label: UK Data Service — Family Resources Survey series (base data)
+        url: https://datacatalogue.ukdataservice.ac.uk/series/series/200017
         kind: government
 
   - id: igotm
@@ -653,13 +669,14 @@ models:
     summary: >
       Tax-and-transfer microsimulation specialized for poverty
       measurement and reform analysis, particularly anchored SPM
-      historical trends, child-poverty projections (e.g. the National
-      Academies child poverty roadmap), and the monthly Child Tax
-      Credit poverty trackers during the 2021 ARPA expansion. Tax
-      computation is typically delegated to NBER's TAXSIM rather than
-      being implemented internally; CPSP layers benefit-program
-      simulation, household-level resource accounting, and SPM
-      threshold comparison on top.
+      historical trends, child-poverty projections, and the monthly
+      Child Tax Credit poverty trackers during the 2021 ARPA expansion.
+      Tax computation is handled case by case: Census ASEC tax variables
+      underpin most CPS-ASEC-based analyses; NBER's TAXSIM is used in
+      SIPP-based and pre-1980 historical work; Urban Institute TRIM3
+      adjustments are used for safety-net program analyses. CPSP layers
+      benefit-program simulation, household-level resource accounting,
+      and SPM threshold comparison on top.
     capabilities:
       reformImpact: yes
       integratedMicrodata: yes
@@ -674,19 +691,14 @@ models:
           reduce spells of poverty (CPSP working paper)
         url: https://povertycenter.columbia.edu/sites/povertycenter.columbia.edu/files/content/Publications/Monthly-Cash-Payments-Reduce-Spells-of-Poverty-CPSP-2022.pdf
         kind: academic
-        quote: >
-          We use the Current Population Survey Annual Social and
-          Economic Supplement and TAXSIM to estimate the policy impact.
-      - label: National Academies — A Roadmap to Reducing Child Poverty
-          (2019; Columbia CPSP one of two commissioned microsim teams)
+      - label: National Academies — A Roadmap to Reducing Child Poverty (2019)
         url: https://nap.nationalacademies.org/catalog/25246
         kind: academic
       - label: Koutavas, Wang, Slopen et al. (2024) — Expanding Paid
           Parental Leave in New York (CPSP working paper)
         url: https://povertycenter.columbia.edu/sites/povertycenter.columbia.edu/files/content/Publications/Expanding-Paid-Parental-Leave-in-New-York-CPSP-2024.pdf
         kind: academic
-      - label: Annie E. Casey Foundation — KIDS COUNT (cites CPSP child
-          poverty work)
+      - label: Annie E. Casey Foundation — KIDS COUNT (cites CPSP child poverty work)
         url: https://www.aecf.org/work/kids-count
         kind: civilsociety
 
@@ -963,7 +975,7 @@ models:
     sector: academic
     type: tax-calculator
     jurisdictions: [us-federal, us-states]
-    inceptionYear: 1974
+    inceptionYear: 1976
     license: proprietary
     codePublic: false
     languages: [Fortran]
@@ -973,12 +985,15 @@ models:
       - Daniel Feenberg
     summary: >
       Long-running federal and state individual income tax calculator
-      maintained at NBER, written in Fortran by Daniel Feenberg and
-      annually updated since 1974. TAXSIM accepts user-supplied
-      records of income and demographic characteristics and returns
-      computed federal and state liabilities. The engine itself is
-      not public; client wrappers in Stata, R, SAS, and Python are
-      widely used. Over a thousand academic papers cite the
+      maintained at NBER, written in Fortran and updated annually since
+      the late 1970s. TAXSIM accepts user-supplied records of income and
+      demographic characteristics and returns computed federal and state
+      liabilities. The engine itself is not public; client wrappers in
+      Stata, R, SAS, Python (and Julia) are widely used. Originally
+      written by Amy Taylor in 1976 for charitable-giving research
+      [Feldstein and Taylor, 1976] and given its present form by Daniel
+      Frisch for corporate-personal tax integration analysis [Feldstein
+      and Frisch, 1977]. Over a thousand academic papers cite the
       Feenberg & Coutts (1993) reference paper.
     capabilities:
       reformImpact: partial
@@ -1010,9 +1025,6 @@ models:
           (CPSP paper that relies on TAXSIM for tax computation)
         url: https://povertycenter.columbia.edu/sites/povertycenter.columbia.edu/files/content/Publications/Monthly-Cash-Payments-Reduce-Spells-of-Poverty-CPSP-2022.pdf
         kind: academic
-        quote: >-
-          We use the Current Population Survey Annual Social and
-          Economic Supplement and TAXSIM to estimate the policy impact.
 
   - id: tf-microsim
     name: Tax Foundation General Equilibrium Tax Model
@@ -1439,4 +1451,252 @@ models:
       - label: ERSA (Employment Related Services Association) —
           EntitledTo Better Off Calculator overview
         url: https://ersa.org.uk/entitledto/
+        kind: civilsociety
+
+  - id: dynasim
+    name: DYNASIM3
+    organization: Urban Institute
+    organizationUrl: https://www.urban.org
+    siblings: [trim3, attis, hipsm]
+    country: us
+    sector: non-profit
+    type: microsimulation
+    jurisdictions: [us-federal]
+    inceptionYear: 1976
+    license: proprietary
+    codePublic: false
+    languages: [unknown]
+    primaryDataset: Survey of Income and Program Participation (SIPP) panels matched to administrative earnings
+    documentationUrl: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/dynamic-simulation-income-model-dynasim
+    leads:
+      - Melissa Favreault
+      - Karen Smith
+      - Damir Cosic
+    summary: >
+      The Dynamic Simulation of Income Model (DYNASIM3) is Urban
+      Institute's dynamic, lifecycle microsimulation of retirement
+      income, aging, and intergenerational wealth. Unlike Urban's
+      annual cross-sectional models (TRIM3, ATTIS), DYNASIM3 ages
+      a representative starting sample year by year, simulating
+      demographic events (births, deaths, marriages, divorces) and
+      economic events (earnings, hours, disability onset,
+      retirement) decades into the future. Used extensively under
+      HHS/ASPE and SSA funding to project Social Security
+      benefits, long-term care need and financing, and lifetime
+      economic risk. Source code is not public.
+    capabilities:
+      reformImpact: yes
+      integratedMicrodata: partial
+      localAreas: no
+      publicInterface: no
+      apiAccess: no
+    sources:
+      - label: DYNASIM model overview (Urban Institute)
+        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/dynamic-simulation-income-model-dynasim
+        kind: self
+      - label: Favreault, Smith & Johnson — A Primer on DYNASIM3
+          (Urban Institute methodology report)
+        url: https://www.urban.org/sites/default/files/publication/71226/410961-A-Primer-on-the-Dynamic-Simulation-of-Income-Model-DYNASIM-.PDF
+        kind: self
+        quote: >-
+          DYNASIM3 is a dynamic microsimulation model designed to
+          analyze the long-run distributional consequences of
+          retirement and aging issues.
+      - label: ASPE — The Risk of Needing LTSS (DYNASIM
+          projections; ASPE Contract HHSP23320095654WC)
+        url: https://aspe.hhs.gov/reports/risk-needing-ltss-dynasim-projections
+        kind: government
+      - label: Favreault & Smith — The Dynamic Simulation of
+          Income Model (academic working paper)
+        url: https://www.semanticscholar.org/paper/The-Dynamic-Simulation-of-Income-Model-(DYNASIM)-Favreault-Smith/c51b608d278a59c16be0f38369ebf0ae0f200f14
+        kind: academic
+      - label: International Journal of Microsimulation — The
+          Retirement Decision in Dynamic Microsimulation Models
+          (review citing DYNASIM)
+        url: https://www.microsimulation.pub/articles/00287
+        kind: academic
+
+  - id: cbolt
+    name: CBOLT
+    fullName: CBO Long-Term Model
+    organization: Congressional Budget Office
+    organizationUrl: https://www.cbo.gov
+    siblings: [cbo-microsim, hisim2]
+    country: us
+    sector: government
+    type: microsimulation
+    jurisdictions: [us-federal]
+    inceptionYear: 2002
+    license: proprietary
+    codePublic: false
+    languages: [unknown]
+    primaryDataset: SSA Continuous Work History Sample + CPS-ASEC + administrative earnings records
+    documentationUrl: https://www.cbo.gov/publication/53667
+    summary: >
+      CBO's Long-Term Model is the agency's main analytical tool
+      for 75-year projections of Social Security finances, the
+      federal budget, and the economy. Originally built in the
+      early 2000s to score Social Security solvency, CBOLT now
+      underpins The Long-Term Budget Outlook, the annual Long-Term
+      Projections for Social Security, and Social Security Policy
+      Options. Combines demographic, microsimulation, long-term
+      budget, and policy-growth components. Source code is not
+      public; the 2018 working paper publication 53667 provides an
+      authoritative model overview.
+    capabilities:
+      reformImpact: yes
+      integratedMicrodata: partial
+      localAreas: no
+      publicInterface: no
+      apiAccess: no
+    sources:
+      - label: CBO — An Overview of CBOLT The Congressional
+          Budget Office Long-Term Model (April 2018)
+        url: https://www.cbo.gov/publication/53667
+        kind: government
+        quote: >-
+          CBOLT is the main analytical tool that CBO uses to make
+          long-term projections of the economy and federal budget.
+      - label: CBO — The Long-Term Budget Outlook 2025 to 2055
+          (CBOLT-based publication)
+        url: https://www.cbo.gov/publication/61187
+        kind: government
+      - label: CBO — 2025 Long-Term Projections for Social
+          Security (CBOLT-based publication)
+        url: https://www.cbo.gov/publication/61492
+        kind: government
+      - label: CBO — Long-Term Budget Analysis topic page
+          (catalogue of CBOLT outputs)
+        url: https://www.cbo.gov/topics/budget/long-term-budget-analysis
+        kind: government
+      - label: Committee for a Responsible Federal Budget —
+          Analysis of CBO's March 2025 Long-Term Budget Outlook
+          (third-party CBOLT reference)
+        url: https://www.crfb.org/papers/analysis-cbos-march-2025-long-term-budget-outlook
+        kind: civilsociety
+
+  - id: hipsm
+    name: HIPSM
+    fullName: Health Insurance Policy Simulation Model
+    organization: Urban Institute
+    organizationUrl: https://www.urban.org
+    siblings: [trim3, attis, dynasim]
+    country: us
+    sector: non-profit
+    type: microsimulation
+    jurisdictions: [us-federal, us-states]
+    inceptionYear: 2009
+    license: proprietary
+    codePublic: false
+    languages: [unknown]
+    primaryDataset: ACS + CPS-ASEC + MEPS-HC matched, calibrated to ACA marketplace and Medicaid administrative totals
+    documentationUrl: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/health-insurance-policy-simulation-model-hipsm
+    leads:
+      - Matthew Buettgens
+      - Linda Blumberg
+      - John Holahan
+      - Bowen Garrett
+    summary: >
+      Urban Institute's detailed microsimulation of the US health
+      insurance system. HIPSM jointly models ACA marketplace
+      eligibility and enrollment, Medicaid and CHIP, employer-
+      sponsored insurance, and the uninsured. Calibrated each year
+      to actual Medicaid and marketplace enrollment in each state.
+      Used for quick-turnaround scoring of ACA repeal/expand
+      scenarios, Medicaid expansion uptake, marketplace subsidy
+      generosity, and state-specific policy variants. Funded by
+      Robert Wood Johnson Foundation, Commonwealth Fund, Kaiser
+      Family Foundation, and others. Source code is not public.
+    capabilities:
+      reformImpact: yes
+      integratedMicrodata: partial
+      localAreas: yes
+      publicInterface: no
+      apiAccess: no
+    sources:
+      - label: HIPSM model overview (Urban Institute)
+        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/health-insurance-policy-simulation-model-hipsm
+        kind: self
+      - label: Urban Institute — The Health Insurance Policy
+          Simulation Model for 2020 (methodology report)
+        url: https://www.urban.org/sites/default/files/publication/103412/the-health-insurance-policy-simulation-model-for-2020.pdf
+        kind: self
+        quote: >-
+          Each year, the model is calibrated to reproduce the
+          latest available Medicaid and marketplace enrollment
+          numbers in each state under the ACA.
+      - label: Garrett — HIPSM presentation to NCVHS (HHS
+          subcommittee briefing)
+        url: https://www.ncvhs.hhs.gov/wp-content/uploads/2014/05/090227p4.pdf
+        kind: government
+      - label: Buettgens, Holahan & Garrett — America Under the
+          Affordable Care Act (HIPSM-based academic analysis)
+        url: https://www.urban.org/sites/default/files/publication/29396/412267-America-Under-the-Affordable-Care-Act.PDF
+        kind: academic
+      - label: Commonwealth Fund — Matthew Buettgens profile
+          (HIPSM lead developer; funder context)
+        url: https://www.commonwealthfund.org/person/matthew-buettgens
+        kind: civilsociety
+
+  - id: hisim2
+    name: HISIM2
+    fullName: CBO Health Insurance Simulation Model (version 2)
+    organization: Congressional Budget Office
+    organizationUrl: https://www.cbo.gov
+    siblings: [cbo-microsim, cbolt]
+    country: us
+    sector: government
+    type: microsimulation
+    jurisdictions: [us-federal]
+    inceptionYear: 2019
+    license: proprietary
+    codePublic: false
+    languages: [unknown]
+    primaryDataset: SIPP + American Community Survey + administrative tax and Medicaid records (restricted)
+    documentationUrl: https://www.cbo.gov/publication/57205
+    summary: >
+      CBO's second-generation Health Insurance Simulation Model,
+      replacing HISIM. Generates estimates of health insurance
+      coverage and premiums for the population under age 65, and
+      scores proposed changes to ACA marketplace subsidies,
+      Medicaid, employer-sponsored insurance, and the individual
+      mandate. The model underlies essentially every CBO score of
+      ACA-related legislation. Source code is not public; CBO has
+      released several methodology working papers including
+      2019-04 (data preparation), 2021-15 (synthetic firms), and
+      publication 57205 documenting the July 2021 baseline build.
+    capabilities:
+      reformImpact: yes
+      integratedMicrodata: partial
+      localAreas: no
+      publicInterface: no
+      apiAccess: no
+    sources:
+      - label: CBO — HISIM2 Used in Preparing July 2021 Baseline
+          Budget Projections (publication 57205)
+        url: https://www.cbo.gov/publication/57205
+        kind: government
+        quote: >-
+          HISIM2 is an updated version of the model CBO uses to
+          generate estimates of health insurance coverage and
+          premiums for people under age 65.
+      - label: CBO — Sources and Preparation of Data Used in
+          HISIM2 (Working Paper 2019-04)
+        url: https://www.cbo.gov/publication/55087
+        kind: government
+      - label: CBO — HISIM2 CBO's New Health Insurance
+          Simulation Model (introduction)
+        url: https://www.cbo.gov/publication/55390
+        kind: government
+      - label: CBO — Methods for Analyzing Health Insurance
+          Coverage (HISIM2 in CBO methodology stack)
+        url: https://www.cbo.gov/topics/health-care/methods-analyzing-health-insurance-coverage
+        kind: government
+      - label: CBO — HISIM2 Spring 2019 Baseline
+          (publication 55097; first HISIM2 baseline build)
+        url: https://www.cbo.gov/publication/55097
+        kind: government
+      - label: Urban Institute HIPSM project page (cross-references HISIM2
+          as the CBO peer health-insurance microsim)
+        url: https://www.urban.org/policy-centers/health-policy-center/projects/health-insurance-policy-simulation-model-hipsm
         kind: civilsociety

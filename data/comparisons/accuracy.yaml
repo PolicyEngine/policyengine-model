@@ -71,8 +71,8 @@ accuracy:
       kind: government
     notes: TRIM3 explicitly aligns simulated SNAP to administrative totals.
     predictedSource:
-      label: TRIM3 baseline output
-      url: https://boreas.urban.org/T3IntroFoodStamps.php
+      label: TRIM3 SNAP module
+      url: https://boreas.urban.org/documentation/foodstamps/main.php
       kind: self
 
   - model: tpc-microsim

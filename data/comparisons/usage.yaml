@@ -118,8 +118,8 @@ usage:
       ITEP's Who Pays? report is widely cited in state tax policy
       debates and press coverage of state-level progressivity.
     sources:
-      - label: ITEP press coverage page
-        url: https://itep.org/category/press/
+      - label: ITEP press coverage hub
+        url: https://itep.org/category/medias/
         kind: self
 
   - model: tax-calculator
@@ -184,13 +184,15 @@ usage:
       not publish download counts; usage footprint is observable
       through working-paper citations and country reports.
     sources:
-      - label: International Journal of Microsimulation — UKMOD
-          applications
-        url: https://microsimulation.pub/index.php/IJM
+      - label: International Journal of Microsimulation (IJM)
+        url: https://microsimulation.pub/
         kind: academic
-      - label: CeMPA UKMOD working papers
-        url: https://www.microsimulation.ac.uk/publications/working-papers
+      - label: CeMPA publications hub (Working Paper Series)
+        url: https://www.microsimulation.ac.uk/publications/
         kind: self
+      - label: Richiardi, Collado & Popova (2021) — UKMOD reference paper
+        url: https://microsimulation.pub/articles/00231
+        kind: academic
 
   - model: ifs-taxben
     academicCitations: unknown
@@ -206,11 +208,11 @@ usage:
       parliamentary debate. Per-call usage is not published; citation
       footprint visible through IFS publications search.
     sources:
-      - label: IFS in the media
-        url: https://ifs.org.uk/news-and-media
+      - label: IFS Press Office
+        url: https://ifs.org.uk/about/press-office
         kind: self
       - label: IFS publications search (TAXBEN-tagged outputs)
-        url: https://ifs.org.uk/publications
+        url: https://ifs.org.uk/research-and-analysis
         kind: self
 
   - model: igotm
@@ -560,3 +562,99 @@ usage:
           adviser-network use)
         url: https://ersa.org.uk/entitledto/
         kind: civilsociety
+
+  - model: dynasim
+    academicCitations: unknown
+    governmentReports: unknown
+    pressMentions: unknown
+    monthlyActiveUsers: unknown
+    monthlyComputations: unknown
+    organizationUsers: unknown
+    notes: >
+      DYNASIM underpins recurring HHS/ASPE projections of long-term
+      services and supports use, retirement income adequacy, and
+      Social Security solvency scenarios. SSA Office of Retirement
+      and Disability Policy and CMS have commissioned DYNASIM
+      analyses. Academic citations span retirement policy,
+      health economics, and lifecycle inequality literatures. No
+      public usage metrics.
+    sources:
+      - label: ASPE — DYNASIM-based LTSS projections
+        url: https://aspe.hhs.gov/reports/risk-needing-ltss-dynasim-projections
+        kind: government
+      - label: Favreault & Smith — DYNASIM academic working paper
+        url: https://www.semanticscholar.org/paper/The-Dynamic-Simulation-of-Income-Model-(DYNASIM)-Favreault-Smith/c51b608d278a59c16be0f38369ebf0ae0f200f14
+        kind: academic
+
+  - model: cbolt
+    academicCitations: unknown
+    governmentReports: unknown
+    pressMentions: unknown
+    monthlyActiveUsers: unknown
+    monthlyComputations: unknown
+    organizationUsers: unknown
+    notes: >
+      CBOLT projections appear in The Long-Term Budget Outlook
+      (annual), Long-Term Projections for Social Security
+      (annual), Social Security Policy Options, and selected
+      Options for Reducing the Deficit chapters. These are
+      authoritative reference points for federal long-run fiscal
+      analysis cited routinely by Congress, the Social Security
+      Trustees, GAO, and US press.
+    sources:
+      - label: CBO — Long-Term Budget Analysis topic page
+          (CBOLT-based publication catalogue)
+        url: https://www.cbo.gov/topics/budget/long-term-budget-analysis
+        kind: government
+      - label: CRFB — Analysis of CBO's 2025 Long-Term Budget
+          Outlook (third-party reference)
+        url: https://www.crfb.org/papers/analysis-cbos-march-2025-long-term-budget-outlook
+        kind: civilsociety
+
+  - model: hipsm
+    academicCitations: unknown
+    governmentReports: unknown
+    pressMentions: unknown
+    monthlyActiveUsers: unknown
+    monthlyComputations: unknown
+    organizationUsers: unknown
+    notes: >
+      HIPSM is the most widely cited non-government health
+      insurance microsim. Urban publishes dozens of HIPSM-based
+      briefs each year on ACA marketplace, Medicaid expansion,
+      and state coverage policy. Used in technical assistance to
+      Massachusetts, Missouri, New York, Virginia, Washington, and
+      the federal government during ACA implementation. Funders
+      include RWJF, Commonwealth Fund, and Kaiser Family
+      Foundation.
+    sources:
+      - label: Urban Health Policy Center publications
+        url: https://www.urban.org/policy-centers/health-policy-center
+        kind: self
+      - label: Commonwealth Fund — Matthew Buettgens profile
+          (HIPSM lead developer)
+        url: https://www.commonwealthfund.org/person/matthew-buettgens
+        kind: civilsociety
+
+  - model: hisim2
+    academicCitations: unknown
+    governmentReports: unknown
+    pressMentions: unknown
+    monthlyActiveUsers: unknown
+    monthlyComputations: unknown
+    organizationUsers: unknown
+    notes: >
+      HISIM2 generates the authoritative federal estimates for
+      ACA marketplace, Medicaid, and employer-coverage policy
+      changes. Used in essentially every CBO score of ACA-related
+      legislation, including OBBBA Medicaid and PTC provisions.
+      Outputs feed into JCT revenue scoring and HHS/CMS coverage
+      projections.
+    sources:
+      - label: CBO — Methods for Analyzing Health Insurance
+          Coverage (HISIM2 methodology stack)
+        url: https://www.cbo.gov/topics/health-care/methods-analyzing-health-insurance-coverage
+        kind: government
+      - label: CBO — HISIM2 baseline-build documentation
+        url: https://www.cbo.gov/publication/57205
+        kind: government

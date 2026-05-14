@@ -78,37 +78,43 @@ freshness:
         url: https://aspe.hhs.gov/reports/welfare-indicators-risk-factors-24th-report-congress
         kind: government
         supports: [updateCadence, notableRegimes]
-      - label: TRIM3 data description (tied to CPS-ASEC vintage)
-        url: https://boreas.urban.org/T3IntroData.php
+      - label: Zedlewski (Urban) — TRIM, A Tool for Social Policy Analysis (data description)
+        url: https://www.urban.org/sites/default/files/publication/82921/2000878-TRIM-A-Tool-for-Social-Policy-Analysis.pdf
         kind: self
         supports: [updateCadence, updateLag, latestImplementedYear]
       - label: Wheaton & Tran (Urban) — TRIM3 SNAP analyses use prior tax years
-        url: https://www.urban.org/research/publication/anti-poverty-effects-supplemental-nutrition-assistance-program
+        url: https://www.urban.org/research/publication/antipoverty-effects-supplemental-nutrition-assistance-program
         kind: self
         supports: [notableRegimes, latestImplementedYear]
 
   - model: attis
-    latestImplementedYear: unknown
-    forwardYearsThrough: unknown
-    handlesFutureDatedLegislation: unknown
-    updateCadence: annual
+    latestImplementedYear: 2023
+    forwardYearsThrough: 2025
+    handlesFutureDatedLegislation: yes
+    updateCadence: continuous
     updateLag: >
-      Tied to American Community Survey release (~12 months after survey
-      year). ATTIS analyses typically use the most recent ACS public-use
-      file.
-    lastMajorRefresh: unknown
+      Tied to ACS release plus reweighting to most recent year. ATTIS
+      published modeling of the Senate Budget Reconciliation SNAP
+      provisions within ~16 days of Senate passage (bill passed July 1,
+      2025; brief published July 2025).
+    lastMajorRefresh: 2025-07
     notableRegimes: >
-      Designed for sub-state geographic analyses of safety-net programs
-      at a point in time. Forward-projection of legislation not
-      documented.
+      One Big Beautiful Bill Act (2025) SNAP and budget reconciliation
+      provisions modeled in July 2025 brief. State-level analyses of
+      pandemic-era safety-net changes via State of the Safety Net Initiative.
     notes: >
-      Lower information availability than TRIM3 because there is no
-      equivalent of boreas.urban.org for ATTIS documentation.
+      Data baseline uses combined 2022 and 2023 ACS reweighted to 2023
+      population and income, with rules aged to recent policy year.
     sources:
-      - label: ATTIS overview (no forward-projection methodology described)
-        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+      - label: ATTIS canonical page
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
         kind: self
         supports: [updateCadence, handlesFutureDatedLegislation, notableRegimes]
+      - label: How the Senate Budget Reconciliation SNAP Proposals Will Affect Families in
+          Every US State (Wheaton et al., July 2025) — uses 2022+2023 ACS reweighted to 2023
+        url: https://www.urban.org/sites/default/files/2025-07/How-the-Senate-Budget-Reconciliation-SNAP-Proposals-Will-Affect-Families-in-Every-US-State.pdf
+        kind: self
+        supports: [latestImplementedYear, forwardYearsThrough, lastMajorRefresh, notableRegimes]
       - label: Census ACS release schedule (drives ATTIS update lag)
         url: https://www.census.gov/programs-surveys/acs/news/data-releases.html
         kind: government
@@ -119,19 +125,22 @@ freshness:
         supports: [notableRegimes, updateCadence]
 
   - model: tpc-microsim
-    latestImplementedYear: 2025
-    forwardYearsThrough: 2034
+    latestImplementedYear: 2022
+    forwardYearsThrough: 2031
     handlesFutureDatedLegislation: yes
-    updateCadence: continuous
+    updateCadence: annual
     updateLag: >
-      Days to weeks for major tax legislation when revenue scoring is
-      needed; TPC routinely publishes distributional tables within days
-      of major bill releases (e.g. OBBBA, TCJA extension scenarios).
-    lastMajorRefresh: unknown
+      Annual baseline refresh after the CBO Budget and Economic Outlook
+      (typically late January / early February). Interim adjustments
+      between annual updates when CBO substantially revises projections.
+      Distributional tables for major bills published within days of
+      Congressional releases.
+    lastMajorRefresh: 2021-10
     notableRegimes: >
-      Current-law and current-policy baselines extended through the CBO
-      10-year window (2024-2034). Routinely scores proposed legislation
-      ahead of enactment for distributional and revenue effects.
+      Current-law baseline including TCJA (P.L. 115-97), CARES Act, and
+      ARPA per the Brief Description (October 2021 baseline; 10-year
+      window 2022-2031). Subsequent TPC Model Estimates tables score
+      TCJA-extension scenarios and OBBBA.
     notes: >
       Forward projection is a core TPC capability — the model's purpose
       is to score proposed and scheduled tax law changes. Microdata aging
@@ -146,19 +155,10 @@ freshness:
         url: https://www.taxpolicycenter.org/model-estimates
         kind: self
         supports: [updateCadence, latestImplementedYear, notableRegimes]
-      - label: TPC TCJA distributional tables (forward-projected 2018-2027)
-        url: https://www.taxpolicycenter.org/taxvox/tax-cuts-and-jobs-act-distributional-analysis
-        kind: self
-        supports: [handlesFutureDatedLegislation, forwardYearsThrough]
       - label: CBO Budget and Economic Outlook (baseline TPC ages to)
         url: https://www.cbo.gov/topics/budget
         kind: government
         supports: [forwardYearsThrough, updateLag]
-      - label: Brookings / Hamilton Project — TPC analysis turnaround on
-          policy proposals (cited as same-week scoring)
-        url: https://www.taxpolicycenter.org/about-us
-        kind: self
-        supports: [updateCadence, updateLag]
 
   - model: jct-microsim
     latestImplementedYear: 2025
@@ -179,7 +179,7 @@ freshness:
     notes: >
       JCT operates four microsimulation models (Individual, Corporate,
       International Cross Border, and Estate and Gift). The Individual
-      model uses an SOI sample of approximately 200,000 returns. Models
+      model uses an SOI sample of approximately 360,000 returns. Models
       are reviewed and recalibrated annually; baseline aligns with CBO
       Budget and Economic Outlook updates twice yearly.
     sources:
@@ -202,9 +202,8 @@ freshness:
         url: https://www.jct.gov/publications/2024/jcx-48-24/
         kind: government
         supports: [latestImplementedYear, notableRegimes]
-      - label: CRS — How the federal government estimates tax revenue
-          (describes JCT methodology and revenue scoring)
-        url: https://crsreports.congress.gov/product/pdf/RL/RL31292
+      - label: CRS — Dynamic Scoring for Tax Legislation A Review of Models (R43381)
+        url: https://www.congress.gov/crs-product/R43381
         kind: government
         supports: [updateCadence, handlesFutureDatedLegislation]
       - label: CBO Budget and Economic Outlook (baseline JCT aligns with)
@@ -213,8 +212,8 @@ freshness:
         supports: [forwardYearsThrough, updateCadence]
 
   - model: cbo-microsim
-    latestImplementedYear: 2025
-    forwardYearsThrough: 2035
+    latestImplementedYear: 2026
+    forwardYearsThrough: 2036
     handlesFutureDatedLegislation: yes
     updateCadence: continuous
     updateLag: >
@@ -222,16 +221,15 @@ freshness:
       analysis of OBBBA SNAP provisions in June 2025 (publication
       61505) and an interactive distributional tool for H.R. 1
       (OBBBA) on June 13, 2025 (publication 61469), three weeks after
-      House passage on May 22, 2025. Baseline refreshed twice yearly
-      with the Budget and Economic Outlook.
-    lastMajorRefresh: 2025-01
+      House passage on May 22, 2025. Baseline refreshed annually with
+      the Budget and Economic Outlook.
+    lastMajorRefresh: 2026-02
     notableRegimes: >
       Current-law baseline reflecting TCJA (P.L. 115-97) and OBBBA
-      (P.L. 119-21), with extended-baseline alternative scenarios.
-      January 2025 Budget and Economic Outlook (publication 61172)
-      reflects legislation enacted through January 6, 2025. Subsequent
-      analyses score H.R. 1 / OBBBA standalone (publications 61387,
-      61422, 61461, 61469, 61505).
+      (P.L. 119-21). The February 2026 Budget and Economic Outlook
+      (publication 62105) reflects legislation enacted through
+      January 14, 2026. Earlier scorings of H.R. 1 / OBBBA standalone
+      include publications 61387, 61422, 61461, 61469, 61505.
     notes: >
       CBO is not one model but a family of models, including the
       microsimulation tax model (income and payroll), HISIM2 (health
@@ -240,14 +238,12 @@ freshness:
       Model, and an underreporting-adjustment model for means-tested
       transfers. Code for several models is published on CBO's GitHub.
     sources:
-      - label: CBO — Budget and Economic Outlook 2025 to 2035 (January 2025)
-        url: https://www.cbo.gov/publication/61172
+      - label: CBO — Budget and Economic Outlook 2026 to 2036 (February 2026)
+        url: https://www.cbo.gov/publication/62105
         kind: government
         supports: [latestImplementedYear, forwardYearsThrough,
                    lastMajorRefresh, notableRegimes,
                    handlesFutureDatedLegislation]
-        quote: >-
-          They also incorporate legislation enacted through January 6, 2025.
       - label: CBO — How H.R. 1 (OBBBA) would affect distribution of
           household resources (June 13, 2025)
         url: https://www.cbo.gov/publication/61469
@@ -271,7 +267,7 @@ freshness:
         supports: [updateCadence, handlesFutureDatedLegislation]
 
   - model: itep-microsim
-    latestImplementedYear: 2024
+    latestImplementedYear: 2025
     forwardYearsThrough: 2026
     handlesFutureDatedLegislation: partial
     updateCadence: annual
@@ -279,14 +275,15 @@ freshness:
       Annual refresh tied to the Who Pays? state tax incidence series.
       Federal legislation scored ad-hoc; ITEP published a national and
       state-level distributional analysis of OBBBA-as-passed-by-House
-      within days of the May 22, 2025 House passage.
+      within days of the May 22, 2025 House passage; post-enactment
+      analyses followed the July 4, 2025 signing.
     lastMajorRefresh: 2024-10
     notableRegimes: >
       Who Pays? 7th edition (October 2024) covers state and local tax
       law as of January 1, 2024 applied to 2023 income. Federal
-      analyses extend to TCJA (P.L. 115-97), OBBBA (P.L. 119-21),
-      proposed reconciliation bills, and the 2025 tariff package.
-      Aging through 2026 supported via CBO baseline targets.
+      analyses extend to TCJA (P.L. 115-97), OBBBA as enacted
+      (P.L. 119-21), and the 2025 tariff package. Aging through 2026
+      supported via CBO baseline targets.
     notes: >
       ITEP's primary cadence is the Who Pays? series; the underlying
       microsimulation supports federal reform scoring on demand. The
@@ -483,32 +480,41 @@ freshness:
         supports: [updateCadence, lastMajorRefresh]
 
   - model: ukmod
-    latestImplementedYear: 2025
-    forwardYearsThrough: 2025
+    latestImplementedYear: 2026
+    forwardYearsThrough: 2030
     handlesFutureDatedLegislation: partial
     updateCadence: annual
     updateLag: >
-      Annual release cycle tied to CeMPA's UKMOD update; new policy
-      year usually published within several months of the relevant
-      fiscal event and FRS data update.
-    lastMajorRefresh: 2025
+      Annual country-report cycle pegged to FRS data refresh, with
+      multiple intra-year point releases. In 2025 alone there were
+      nine releases (B2025.01 through B2025.09) tracking Autumn Budget,
+      Spring Statement and devolved measures. Pre-announced future-dated
+      reforms are usually encoded only once they take effect.
+    lastMajorRefresh: 2026
     notableRegimes: >
-      Annual UKMOD releases (UKMOD A1.0 onwards) implement Autumn
-      Budget and Spring Statement measures through the current tax
-      year. Devolved Scottish income tax bands tracked. Pre-announced
-      future-dated reforms generally only encoded once they take
-      effect.
+      UKMOD releases span A1.0 (2020) through B2026.01 (March 2026).
+      Annual country reports document tax-benefit systems through the
+      latest fiscal year plus six forward years (currently 2023-2030).
+      Devolved Scottish income tax rates and bands (devolved April 2016)
+      and Scottish family/social benefits (from 2018) are tracked
+      separately. Welsh income tax devolution (April 2019) is supported
+      structurally though rates have not diverged from rUK.
     notes: >
-      UKMOD follows the EUROMOD release model: one or two consolidated
-      releases per year with all enacted policies for the new policy
-      year. Forward projection of legislation that has been announced
-      but not yet effective is supported case-by-case rather than as a
-      standard 10-year window.
+      UKMOD inherits the EUROMOD release model: one annual full country
+      report plus multiple incremental point releases per year. Each
+      release ships with a versioned change log (Documentation/
+      directory in the GitHub repo). Forward projection of announced-
+      but-not-yet-effective legislation is supported case-by-case rather
+      than as a standard 10-year window.
     sources:
       - label: UKMOD release history and country reports
         url: https://www.microsimulation.ac.uk/ukmod/country-reports
         kind: self
         supports: [latestImplementedYear, lastMajorRefresh, updateCadence, notableRegimes]
+      - label: UKMOD-PUBLIC GitHub tags (B2024.21 ... B2026.01)
+        url: https://github.com/centreformicrosimulation/UKMOD-PUBLIC/tags
+        kind: self
+        supports: [lastMajorRefresh, updateCadence]
       - label: UKMOD home page (annual update cadence)
         url: https://www.microsimulation.ac.uk/ukmod
         kind: self
@@ -532,7 +538,7 @@ freshness:
       Days for major fiscal events — IFS routinely publishes TAXBEN
       distributional analyses within hours of Budget speeches and
       Spring Statements.
-    lastMajorRefresh: unknown
+    lastMajorRefresh: 2021
     notableRegimes: >
       Current law as of the most recent Budget or Spring Statement
       (Autumn Budget 2024 freezes, Spring Statement 2025 measures).
@@ -542,15 +548,17 @@ freshness:
       TAXBEN's purpose is to score proposed and scheduled fiscal
       changes; forward-projection over the OBR scorecard horizon is
       routine. Refresh cadence is event-driven (Budgets and Spring
-      Statements) rather than annual.
+      Statements) rather than annual. The TAXBEN guide was last
+      updated in 2021.
     sources:
       - label: IFS Green Budget 2024 (TAXBEN-based forward-projected
           distributional chapters)
-        url: https://ifs.org.uk/green-budget
+        url: https://ifs.org.uk/ifs-green-budget
         kind: self
         supports: [latestImplementedYear, forwardYearsThrough, handlesFutureDatedLegislation, notableRegimes]
-      - label: IFS Budget 2024 response (same-day TAXBEN analysis)
-        url: https://ifs.org.uk/articles/autumn-budget-2024-ifs-overview
+      - label: IFS Autumn Budget 2024 — initial response
+          (same-day TAXBEN-based analysis)
+        url: https://ifs.org.uk/articles/autumn-budget-2024-initial-ifs-response
         kind: self
         supports: [updateCadence, updateLag, lastMajorRefresh]
       - label: HM Treasury Autumn Budget 2024 (basis for forward window)
@@ -824,7 +832,7 @@ freshness:
         kind: self
         supports: [updateCadence, updateLag, notableRegimes]
       - label: Feenberg & Coutts (1993) — An Introduction to the TAXSIM
-          Model (annual update tradition since 1974)
+          Model (annual update tradition since the late 1970s)
         url: https://onlinelibrary.wiley.com/doi/10.2307/3325474
         kind: academic
         supports: [updateCadence]
@@ -1116,3 +1124,176 @@ freshness:
         url: https://www.gov.uk/benefits-calculators
         kind: government
         supports: [latestImplementedYear, updateCadence]
+
+  - model: dynasim
+    latestImplementedYear: unknown
+    forwardYearsThrough: unknown
+    handlesFutureDatedLegislation: partial
+    updateCadence: as-funded
+    updateLag: >
+      Major recalibrations tied to ASPE/SSA/foundation funding
+      cycles rather than to annual data releases. Behavioral
+      modules (mortality, disability, retirement) are updated
+      episodically; demographic inputs refresh when new SSA
+      Trustees assumptions or Census projections are released.
+    lastMajorRefresh: unknown
+    notableRegimes: >
+      Lifetime / lifecycle scope rather than annual policy
+      regimes. Projects Social Security benefits and long-term
+      services and supports need decades forward under current
+      law. Specific reform analyses include Social Security
+      solvency options, paid family leave, and retirement-age
+      adjustments.
+    notes: >
+      DYNASIM is unusual among Urban's microsims in that it
+      projects forward many decades, not just one tax-year
+      forward. The model handles future-dated legislation when an
+      analysis specifically scores it, but does not run a rolling
+      'current-law plus scheduled changes' baseline like CBO's
+      models.
+    sources:
+      - label: DYNASIM overview (Urban; lifetime projection
+          framing)
+        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/dynamic-simulation-income-model-dynasim
+        kind: self
+        supports: [updateCadence, notableRegimes, handlesFutureDatedLegislation]
+      - label: ASPE — DYNASIM long-term LTSS projections
+          (commissioned analysis cadence)
+        url: https://aspe.hhs.gov/reports/risk-needing-ltss-dynasim-projections
+        kind: government
+        supports: [updateCadence, updateLag, notableRegimes]
+      - label: Favreault, Smith & Johnson — A Primer on DYNASIM3
+          (lifecycle methodology)
+        url: https://www.urban.org/sites/default/files/publication/71226/410961-A-Primer-on-the-Dynamic-Simulation-of-Income-Model-DYNASIM-.PDF
+        kind: self
+        supports: [notableRegimes, handlesFutureDatedLegislation]
+
+  - model: cbolt
+    latestImplementedYear: 2025
+    forwardYearsThrough: 2100
+    handlesFutureDatedLegislation: yes
+    updateCadence: annual
+    updateLag: >
+      Annual refresh tied to The Long-Term Budget Outlook
+      (typically March) and the Long-Term Projections for Social
+      Security (typically late summer). Demographic and economic
+      assumptions update with each release. Major legislation
+      (e.g. OBBBA enacted July 4, 2025) is incorporated in the
+      next scheduled long-term update.
+    lastMajorRefresh: 2025-03
+    notableRegimes: >
+      75-year horizon covering Social Security under current law
+      and scheduled benefit/tax changes. The Long-Term Budget
+      Outlook 2025 to 2055 (March 2025, publication 61187) extends
+      projections through 2055; 2025 Long-Term Projections for
+      Social Security (publication 61492) project through ~2100.
+    notes: >
+      CBOLT's forward horizon is much longer than CBO's 10-year
+      microsim suite (which the cbo-microsim entry covers).
+      Updates are paced by the Long-Term Budget Outlook and
+      Long-Term Social Security cycle.
+    sources:
+      - label: CBO — An Overview of CBOLT (April 2018)
+        url: https://www.cbo.gov/publication/53667
+        kind: government
+        supports: [updateCadence, handlesFutureDatedLegislation, notableRegimes]
+      - label: CBO — The Long-Term Budget Outlook 2025 to 2055
+          (publication 61187; 2025 cycle refresh)
+        url: https://www.cbo.gov/publication/61187
+        kind: government
+        supports: [latestImplementedYear, forwardYearsThrough, lastMajorRefresh, notableRegimes]
+      - label: CBO — 2025 Long-Term Projections for Social
+          Security (publication 61492)
+        url: https://www.cbo.gov/publication/61492
+        kind: government
+        supports: [latestImplementedYear, forwardYearsThrough, notableRegimes]
+      - label: CBO — Long-Term Budget Analysis topic page
+          (annual cadence catalogue)
+        url: https://www.cbo.gov/topics/budget/long-term-budget-analysis
+        kind: government
+        supports: [updateCadence, updateLag]
+
+  - model: hipsm
+    latestImplementedYear: 2025
+    forwardYearsThrough: 2034
+    handlesFutureDatedLegislation: yes
+    updateCadence: annual
+    updateLag: >
+      Days to weeks for major health-care legislation when
+      funder-supported scoring is requested. The model is
+      recalibrated each year to actual Medicaid and marketplace
+      enrollment in each state. Forward projection through the
+      CBO 10-year budget window is supported.
+    lastMajorRefresh: unknown
+    notableRegimes: >
+      ACA marketplace under current law (including IRA-extended
+      premium tax credits), state Medicaid expansion variants,
+      and OBBBA changes to ACA subsidies. Urban routinely
+      publishes HIPSM scores of ACA repeal/expand scenarios and
+      state Medicaid policy options within days of major
+      proposals.
+    notes: >
+      Calibration cadence is annual but reform analyses are
+      published continuously. Coverage in each state is tied to
+      enrollment files that lag actual coverage by months.
+    sources:
+      - label: Urban — HIPSM for 2020 methodology
+          (annual recalibration described)
+        url: https://www.urban.org/sites/default/files/publication/103412/the-health-insurance-policy-simulation-model-for-2020.pdf
+        kind: self
+        supports: [updateCadence, latestImplementedYear, handlesFutureDatedLegislation, notableRegimes]
+        quote: >-
+          Each year, the model is calibrated to reproduce the
+          latest available Medicaid and marketplace enrollment
+          numbers in each state under the ACA.
+      - label: HIPSM overview (annual cadence; quick-turnaround
+          policy scoring)
+        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/health-insurance-policy-simulation-model-hipsm
+        kind: self
+        supports: [updateCadence, updateLag, notableRegimes]
+      - label: Urban — Health Care Providers Would Experience
+          Significant Revenue Losses (2025 HIPSM analysis of
+          Medicaid expansion rollback)
+        url: https://www.urban.org/sites/default/files/2025-03/Health-Care-Providers-Would-Experience-Significant-Revenue-Losses-and-Uncompensated-Care-Increases-in%20-the-Face-of-Reduced-Federal-Support-for-Medicaid-Expansion.pdf
+        kind: self
+        supports: [latestImplementedYear, notableRegimes, updateLag]
+
+  - model: hisim2
+    latestImplementedYear: 2025
+    forwardYearsThrough: 2035
+    handlesFutureDatedLegislation: yes
+    updateCadence: continuous
+    updateLag: >
+      Days to weeks for major health legislation. HISIM2 scored
+      OBBBA marketplace and Medicaid provisions in CBO's June 2025
+      OBBBA coverage analysis. Baseline refreshed twice yearly
+      with the Budget and Economic Outlook.
+    lastMajorRefresh: 2025-01
+    notableRegimes: >
+      Current-law baseline reflecting ACA, IRA-extended premium
+      tax credits, and OBBBA (P.L. 119-21, enacted July 4, 2025).
+      Coverage projections extend through the 10-year CBO budget
+      window (2025-2035). Used in essentially every CBO score of
+      ACA marketplace, Medicaid, and employer-coverage reforms.
+    notes: >
+      HISIM2 is one of several CBO models the agency uses jointly
+      with its microsim tax model (cbo-microsim) and CBOLT to
+      produce a unified federal score. Subsequent working papers
+      may refine specific modules but no public successor
+      ("HISIM3") has been released.
+    sources:
+      - label: CBO — HISIM2 Used in Preparing July 2021 Baseline
+          (model documentation)
+        url: https://www.cbo.gov/publication/57205
+        kind: government
+        supports: [updateCadence, handlesFutureDatedLegislation, notableRegimes]
+      - label: CBO — Methods for Analyzing Health Insurance
+          Coverage (HISIM2 in current methodology stack)
+        url: https://www.cbo.gov/topics/health-care/methods-analyzing-health-insurance-coverage
+        kind: government
+        supports: [latestImplementedYear, updateCadence, notableRegimes]
+      - label: CBO — Budget and Economic Outlook 2025 to 2035
+          (HISIM2-based health coverage baseline)
+        url: https://www.cbo.gov/publication/60870
+        kind: government
+        supports: [latestImplementedYear, forwardYearsThrough, lastMajorRefresh, notableRegimes]

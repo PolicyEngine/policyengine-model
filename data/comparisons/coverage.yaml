@@ -259,12 +259,12 @@ coverage:
     parametersModeled: unknown
     statuteTraceable: unknown
     testCoverage: unknown
-    docsUrl: https://boreas.urban.org/T3IntroFedTax.php
+    docsUrl: https://boreas.urban.org/documentation/federaltax/main.php
     asOfYear: unknown
     notes: Federal income tax simulated.
     sources:
       - label: TRIM3 federal tax module
-        url: https://boreas.urban.org/T3IntroFedTax.php
+        url: https://boreas.urban.org/documentation/federaltax/main.php
 
   - model: trim3
     program: us-payroll-tax
@@ -273,8 +273,8 @@ coverage:
     testCoverage: unknown
     asOfYear: unknown
     sources:
-      - label: TRIM3 federal tax module
-        url: https://boreas.urban.org/T3IntroFedTax.php
+      - label: TRIM3 payroll tax module
+        url: https://boreas.urban.org/documentation/PayrollTax/main.php
 
   - model: trim3
     program: us-eitc
@@ -284,7 +284,7 @@ coverage:
     asOfYear: unknown
     sources:
       - label: TRIM3 federal tax module
-        url: https://boreas.urban.org/T3IntroFedTax.php
+        url: https://boreas.urban.org/documentation/federaltax/main.php
 
   - model: trim3
     program: us-ctc
@@ -294,7 +294,7 @@ coverage:
     asOfYear: unknown
     sources:
       - label: TRIM3 federal tax module
-        url: https://boreas.urban.org/T3IntroFedTax.php
+        url: https://boreas.urban.org/documentation/federaltax/main.php
 
   - model: trim3
     program: us-cdcc
@@ -304,7 +304,7 @@ coverage:
     asOfYear: unknown
     sources:
       - label: TRIM3 federal tax module
-        url: https://boreas.urban.org/T3IntroFedTax.php
+        url: https://boreas.urban.org/documentation/federaltax/main.php
 
   - model: trim3
     program: us-premium-tax-credit
@@ -332,7 +332,7 @@ coverage:
     testCoverage: none
     sources:
       - label: TRIM3 program scope (no estate tax module)
-        url: https://boreas.urban.org/T3IntroFedTax.php
+        url: https://boreas.urban.org/T3IntroPrograms.php
 
   - model: trim3
     program: us-tariffs
@@ -348,57 +348,57 @@ coverage:
     status: implemented
     statuteTraceable: unknown
     testCoverage: unknown
-    docsUrl: https://boreas.urban.org/T3IntroFoodStamps.php
+    docsUrl: https://boreas.urban.org/documentation/foodstamps/main.php
     asOfYear: unknown
     notes: One of TRIM3's flagship modules; widely cited for SNAP take-up analysis.
     sources:
       - label: TRIM3 SNAP module
-        url: https://boreas.urban.org/T3IntroFoodStamps.php
+        url: https://boreas.urban.org/documentation/foodstamps/main.php
 
   - model: trim3
     program: us-tanf
     status: implemented
     statuteTraceable: unknown
     testCoverage: unknown
-    docsUrl: https://boreas.urban.org/T3IntroAFDCTANF.php
+    docsUrl: https://boreas.urban.org/documentation/TANF/Main.php
     asOfYear: unknown
     sources:
       - label: TRIM3 TANF module
-        url: https://boreas.urban.org/T3IntroAFDCTANF.php
+        url: https://boreas.urban.org/documentation/TANF/Main.php
 
   - model: trim3
     program: us-ssi
     status: implemented
     statuteTraceable: unknown
     testCoverage: unknown
-    docsUrl: https://boreas.urban.org/T3IntroSSI.php
+    docsUrl: https://boreas.urban.org/documentation/SSI/Main.php
     asOfYear: unknown
     sources:
       - label: TRIM3 SSI module
-        url: https://boreas.urban.org/T3IntroSSI.php
+        url: https://boreas.urban.org/documentation/SSI/Main.php
 
   - model: trim3
     program: us-medicaid
     status: implemented
     statuteTraceable: unknown
     testCoverage: unknown
-    docsUrl: https://boreas.urban.org/T3IntroMedicaid.php
+    docsUrl: https://boreas.urban.org/documentation/Medicaid/Main.php
     asOfYear: unknown
     sources:
       - label: TRIM3 Medicaid module
-        url: https://boreas.urban.org/T3IntroMedicaid.php
+        url: https://boreas.urban.org/documentation/Medicaid/Main.php
 
   - model: trim3
     program: us-chip
     status: implemented
     statuteTraceable: unknown
     testCoverage: unknown
-    docsUrl: https://boreas.urban.org/T3IntroMedicaid.php
+    docsUrl: https://boreas.urban.org/documentation/Medicaid/Main.php
     asOfYear: unknown
     notes: Modeled as part of Medicaid module.
     sources:
       - label: TRIM3 Medicaid/CHIP module
-        url: https://boreas.urban.org/T3IntroMedicaid.php
+        url: https://boreas.urban.org/documentation/Medicaid/Main.php
 
   - model: trim3
     program: us-wic
@@ -489,11 +489,11 @@ coverage:
     status: implemented
     statuteTraceable: unknown
     testCoverage: unknown
-    docsUrl: https://boreas.urban.org/T3IntroChildCare.php
+    docsUrl: https://boreas.urban.org/documentation/ChildCareExp/Main.php
     asOfYear: unknown
     sources:
       - label: TRIM3 child care module
-        url: https://boreas.urban.org/T3IntroChildCare.php
+        url: https://boreas.urban.org/documentation/ChildCareExp/Main.php
 
   - model: trim3
     program: us-state-income-tax
@@ -504,7 +504,7 @@ coverage:
     notes: State income taxes simulated.
     sources:
       - label: TRIM3 state tax module
-        url: https://boreas.urban.org/T3IntroFedTax.php
+        url: https://boreas.urban.org/documentation/StateTax/main.php
 
   - model: trim3
     program: us-state-eitc
@@ -514,7 +514,7 @@ coverage:
     asOfYear: unknown
     sources:
       - label: TRIM3 state tax module
-        url: https://boreas.urban.org/T3IntroFedTax.php
+        url: https://boreas.urban.org/documentation/StateTax/main.php
 
   - model: trim3
     program: us-state-ctc
@@ -534,7 +534,7 @@ coverage:
     asOfYear: unknown
     sources:
       - label: ATTIS model overview
-        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
 
   - model: attis
     program: us-payroll-tax
@@ -544,7 +544,7 @@ coverage:
     asOfYear: unknown
     sources:
       - label: ATTIS overview
-        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
 
   - model: attis
     program: us-eitc
@@ -554,7 +554,7 @@ coverage:
     asOfYear: unknown
     sources:
       - label: ATTIS overview
-        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
 
   - model: attis
     program: us-ctc
@@ -564,7 +564,7 @@ coverage:
     asOfYear: unknown
     sources:
       - label: ATTIS overview
-        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
 
   - model: attis
     program: us-snap
@@ -575,7 +575,7 @@ coverage:
     notes: SNAP is a primary use case for ATTIS sub-state analyses.
     sources:
       - label: ATTIS overview
-        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
 
   - model: attis
     program: us-tanf
@@ -585,7 +585,7 @@ coverage:
     asOfYear: unknown
     sources:
       - label: ATTIS overview
-        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
 
   - model: attis
     program: us-ssi
@@ -595,16 +595,19 @@ coverage:
     asOfYear: unknown
     sources:
       - label: ATTIS overview
-        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
 
   - model: attis
     program: us-medicaid
-    status: unknown
-    statuteTraceable: unknown
-    testCoverage: unknown
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    notes: >
+      Medicaid is not in ATTIS scope. Urban maintains separate models for
+      Medicaid (Medicaid/CHIP Eligibility Simulation Model and HIPSM).
     sources:
-      - label: ATTIS overview
-        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+      - label: ATTIS canonical page (no Medicaid in scope)
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
 
   - model: attis
     program: us-section-8
@@ -614,7 +617,7 @@ coverage:
     asOfYear: unknown
     sources:
       - label: ATTIS overview
-        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
 
   - model: attis
     program: us-ccdf
@@ -624,7 +627,7 @@ coverage:
     asOfYear: unknown
     sources:
       - label: ATTIS overview
-        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
 
   - model: attis
     program: us-wic
@@ -634,7 +637,7 @@ coverage:
     asOfYear: unknown
     sources:
       - label: ATTIS overview
-        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
 
   - model: attis
     program: us-estate-tax
@@ -643,7 +646,7 @@ coverage:
     testCoverage: none
     sources:
       - label: ATTIS overview (no estate tax)
-        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
 
   - model: attis
     program: us-tariffs
@@ -652,7 +655,7 @@ coverage:
     testCoverage: none
     sources:
       - label: ATTIS overview
-        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
 
   - model: attis
     program: us-state-income-tax
@@ -662,7 +665,7 @@ coverage:
     asOfYear: unknown
     sources:
       - label: ATTIS overview
-        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
 
   - model: attis
     program: us-state-eitc
@@ -672,7 +675,68 @@ coverage:
     asOfYear: unknown
     sources:
       - label: ATTIS overview
-        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
+
+  - model: attis
+    program: us-liheap
+    status: implemented
+    statuteTraceable: no
+    testCoverage: unknown
+    asOfYear: 2023
+    notes: LIHEAP is listed on Urban's canonical ATTIS scope document.
+    sources:
+      - label: ATTIS canonical page
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
+
+  - model: attis
+    program: us-ui
+    status: implemented
+    statuteTraceable: no
+    testCoverage: unknown
+    asOfYear: 2023
+    notes: >
+      ATTIS calculates what families receive in unemployment compensation
+      per Urban's canonical ATTIS page.
+    sources:
+      - label: ATTIS canonical page
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
+
+  - model: attis
+    program: us-cdcc
+    status: implemented
+    statuteTraceable: no
+    testCoverage: unknown
+    asOfYear: 2023
+    notes: >
+      Child and Dependent Care Tax Credit listed in ATTIS's tax credit
+      scope alongside EITC and CTC.
+    sources:
+      - label: ATTIS canonical page
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
+
+  - model: attis
+    program: us-premium-tax-credit
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    notes: >
+      Not in ATTIS scope. Urban uses HIPSM (separate model) for ACA
+      marketplace and premium tax credit modeling.
+    sources:
+      - label: ATTIS canonical page (no PTC in scope)
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
+
+  - model: attis
+    program: us-chip
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    notes: >
+      Not in ATTIS scope. Urban maintains separate Medicaid/CHIP
+      Eligibility Simulation Model.
+    sources:
+      - label: ATTIS canonical page (no CHIP in scope)
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
 
   # ============================ TPC microsim =================================
   - model: tpc-microsim
@@ -740,11 +804,11 @@ coverage:
     status: implemented
     statuteTraceable: unknown
     testCoverage: unknown
-    asOfYear: 2025
+    asOfYear: 2022
     notes: TPC has a separate estate-tax module driving its estate distributional tables.
     sources:
-      - label: TPC estate tax tables
-        url: https://www.taxpolicycenter.org/statistics/estate-tax-returns
+      - label: TPC Brief Description of the Tax Model (Estate Tax Calculator section)
+        url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
 
   - model: tpc-microsim
     program: us-tariffs
@@ -816,21 +880,28 @@ coverage:
     status: implemented
     statuteTraceable: unknown
     testCoverage: unknown
-    asOfYear: 2025
-    notes: State income taxes modeled in the State Tax Database extension.
+    asOfYear: 2022
+    notes: >
+      TPC has separately developed income tax calculators for DC and
+      the 43 states with income taxes; per TPC's Brief Description,
+      "Those state calculators rely on the same database used in TPC's
+      federal model."
     sources:
-      - label: TPC State and Local Finance Initiative
-        url: https://www.taxpolicycenter.org/programs/state-tax-and-economic-review
+      - label: TPC Brief Description of the Tax Model (state calculators)
+        url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
 
   - model: tpc-microsim
     program: us-state-eitc
     status: implemented
     statuteTraceable: unknown
     testCoverage: unknown
-    asOfYear: 2025
+    asOfYear: 2022
+    notes: >
+      State EITCs implemented within TPC's state income tax calculators
+      (most state EITCs are defined as a percentage of federal EITC).
     sources:
-      - label: TPC state EITC analysis
-        url: https://www.taxpolicycenter.org/briefing-book/what-state-earned-income-tax-credit
+      - label: TPC Brief Description (state income tax calculators)
+        url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
 
   # ============================ JCT microsim =================================
   - model: jct-microsim
@@ -840,11 +911,12 @@ coverage:
     testCoverage: unknown
     asOfYear: 2025
     notes: >
-      JCT's Individual Tax Model uses an SOI sample of ~200,000 individual
-      income tax returns to score federal income tax legislation.
+      JCT's Individual Tax Model uses an SOI sample of approximately
+      360,000 individual income tax returns to score federal income tax
+      legislation.
     sources:
-      - label: JCT — Overview of Work of the Staff (lists Individual Model)
-        url: https://www.jct.gov/getattachment/745c1c31-9111-420d-8294-e3c02cd6a96e/x-105-03-1691.pdf
+      - label: JCT — Description of the Individual Tax Model for 2023 (JCX-48-23)
+        url: https://www.jct.gov/publications/2023/jcx-48-23/
         kind: government
         quote: >-
           The largest microsimulation model employed by the Joint
@@ -852,8 +924,8 @@ coverage:
       - label: JCT — Revenue Estimating (operations page)
         url: https://www.jct.gov/operations/revenue-estimating/
         kind: government
-      - label: CRS — How federal government estimates tax revenue
-        url: https://crsreports.congress.gov/product/pdf/RL/RL31292
+      - label: CRS — Dynamic Scoring for Tax Legislation A Review of Models (R43381)
+        url: https://www.congress.gov/crs-product/R43381
         kind: government
 
   - model: jct-microsim
@@ -1312,13 +1384,17 @@ coverage:
     statuteTraceable: unknown
     testCoverage: unknown
     asOfYear: 2024
-    notes: State EITCs (31 states + DC) modeled within state personal income tax.
+    notes: >
+      State EITCs (31 states + DC) modeled within state personal income
+      tax modules; Who Pays? 7th edition tables report state-EITC
+      distributional impacts.
     sources:
-      - label: ITEP — Tax Microsimulation Model Overview (state-level EITC analysis)
-        url: https://itep.org/itep-tax-model/
+      - label: ITEP — Who Pays? 7th Edition methodology (state EITC
+          treatment within personal income tax)
+        url: https://itep.org/who-pays-7th-edition-methodology-and-discussion/
         kind: self
-      - label: ITEP — Local Earned Income Tax Credits
-        url: https://itep.org/local-earned-income-tax-credits/
+      - label: ITEP — Tax Microsimulation Model Overview
+        url: https://itep.org/itep-tax-model/
         kind: self
 
   - model: itep-microsim
@@ -1375,15 +1451,27 @@ coverage:
 
   - model: itep-microsim
     program: us-estate-tax
-    status: not-implemented
+    status: partial
     statuteTraceable: no
     testCoverage: none
+    asOfYear: 2024
     notes: >
-      Estate tax not separately modeled; ITEP's published estate-tax
-      analyses rely on other sources rather than its incidence model.
+      Federal estate and gift tax incidence is included in ITEP's
+      distributional totals but produced off-model; ITEP approximates
+      estate-tax burden from the share of capital income flowing to each
+      income group, rather than modeling 26 USC subtitle B rules. State
+      estate/inheritance taxes are included in Who Pays? state tables.
     sources:
-      - label: ITEP — Tax Microsimulation Model Overview (no estate module)
-        url: https://itep.org/itep-tax-model/
+      - label: ITEP — Who Pays Taxes in America in 2024 (off-model
+          treatment of federal estate/gift, excise, customs)
+        url: https://itep.org/who-pays-taxes-in-america-in-2024/
+        kind: self
+        quote: >-
+          It also includes federal excise taxes and customs duties and
+          estate and gift taxes which are estimated off-model.
+      - label: ITEP — Estate tax topic page (microsim-based distributional
+          analyses of estate-tax cuts)
+        url: https://itep.org/estate-tax/
         kind: self
 
   # ============================ Tax-Calculator (PSL) =========================
@@ -1581,9 +1669,9 @@ coverage:
       - label: Budget Lab — Tax Microsimulation at The Budget Lab (methodology)
         url: https://budgetlab.yale.edu/research/tax-microsimulation-budget-lab
         kind: self
-      - label: Brookings — The Budget Lab at Yale (independent description)
-        url: https://www.brookings.edu/articles/the-budget-lab-at-yale/
-        kind: civilsociety
+      - label: Yale Daily News coverage of Budget Lab (Sept 2025)
+        url: https://yaledailynews.com/blog/2025/09/04/yales-budget-lab-gains-traction-for-forecasting-impacts-of-trump-policies/
+        kind: press
 
   - model: budgetlab-tax
     program: us-payroll-tax

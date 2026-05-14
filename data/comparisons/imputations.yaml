@@ -40,14 +40,14 @@ imputations:
     baseDataset: CPS-ASEC
     calibrationTargets:
       - state-level SNAP monthly caseload (administrative)
-    documentationUrl: https://boreas.urban.org/T3IntroFoodStamps.php
+    documentationUrl: https://boreas.urban.org/documentation/foodstamps/main.php
     reproducible: no
     sources:
       - label: TRIM3 SNAP methodology
-        url: https://boreas.urban.org/T3IntroFoodStamps.php
+        url: https://boreas.urban.org/documentation/foodstamps/main.php
         kind: self
       - label: Wheaton & Tran (Urban) — SNAP anti-poverty effects
-        url: https://www.urban.org/research/publication/anti-poverty-effects-supplemental-nutrition-assistance-program
+        url: https://www.urban.org/research/publication/antipoverty-effects-supplemental-nutrition-assistance-program
         kind: self
 
   - model: attis
@@ -60,7 +60,7 @@ imputations:
     reproducible: no
     sources:
       - label: ATTIS overview
-        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
         kind: self
 
   # ============================ Capital gains =================================
@@ -109,11 +109,11 @@ imputations:
     baseDataset: CPS-ASEC
     calibrationTargets:
       - state-level TANF caseload (administrative)
-    documentationUrl: https://boreas.urban.org/T3IntroAFDCTANF.php
+    documentationUrl: https://boreas.urban.org/documentation/TANF/Main.php
     reproducible: no
     sources:
       - label: TRIM3 TANF methodology
-        url: https://boreas.urban.org/T3IntroAFDCTANF.php
+        url: https://boreas.urban.org/documentation/TANF/Main.php
         kind: self
 
   # ============================ Medicaid participation ========================
@@ -137,11 +137,11 @@ imputations:
     method: caseload-driven
     description: Caseload-aligned to CCDF state administrative data.
     baseDataset: CPS-ASEC
-    documentationUrl: https://boreas.urban.org/T3IntroChildCare.php
+    documentationUrl: https://boreas.urban.org/documentation/ChildCareExp/Main.php
     reproducible: no
     sources:
       - label: TRIM3 child care methodology
-        url: https://boreas.urban.org/T3IntroChildCare.php
+        url: https://boreas.urban.org/documentation/ChildCareExp/Main.php
         kind: self
 
   # ============================ Itemized deductions ===========================
@@ -274,7 +274,7 @@ imputations:
     baseDataset: Census SPM threshold tables
     reproducible: no
     sources:
-      - label: Wheaton, Giannarelli & Dehry (Urban) — TRIM3-based SPM analyses
+      - label: Giannarelli, Wheaton & Shantz (Urban) — 2021 Poverty Projections (TRIM3-based)
         url: https://www.urban.org/research/publication/2021-poverty-projections
         kind: self
 
@@ -286,7 +286,7 @@ imputations:
     reproducible: no
     sources:
       - label: ATTIS overview (uses Census SPM methodology)
-        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
         kind: self
 
   # ----------------------------- Cash income ----------------------------------
@@ -311,8 +311,8 @@ imputations:
     baseDataset: TRIM3 augmented CPS-ASEC
     reproducible: no
     sources:
-      - label: TRIM3 data description
-        url: https://boreas.urban.org/T3IntroData.php
+      - label: Zedlewski (Urban) — TRIM, A Tool for Social Policy Analysis (data construction)
+        url: https://www.urban.org/sites/default/files/publication/82921/2000878-TRIM-A-Tool-for-Social-Policy-Analysis.pdf
         kind: self
 
   # ----------------------------- EITC (resources +) ---------------------------
@@ -342,7 +342,7 @@ imputations:
     reproducible: no
     sources:
       - label: TRIM3 federal tax module
-        url: https://boreas.urban.org/T3IntroFedTax.php
+        url: https://boreas.urban.org/documentation/federaltax/main.php
         kind: self
 
   # ----------------------------- CTC refundable -------------------------------
@@ -365,7 +365,7 @@ imputations:
     reproducible: no
     sources:
       - label: TRIM3 federal tax module
-        url: https://boreas.urban.org/T3IntroFedTax.php
+        url: https://boreas.urban.org/documentation/federaltax/main.php
         kind: self
 
   # ----------------------------- SNAP -----------------------------------------
@@ -394,7 +394,7 @@ imputations:
     reproducible: no
     sources:
       - label: TRIM3 SNAP module
-        url: https://boreas.urban.org/T3IntroFoodStamps.php
+        url: https://boreas.urban.org/documentation/foodstamps/main.php
         kind: self
 
   - model: attis
@@ -405,7 +405,7 @@ imputations:
     reproducible: no
     sources:
       - label: ATTIS overview
-        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
         kind: self
 
   # ----------------------------- Housing subsidy ------------------------------
@@ -431,7 +431,7 @@ imputations:
     reproducible: no
     sources:
       - label: TRIM3 housing module
-        url: https://boreas.urban.org/T3IntroHousing.php
+        url: https://boreas.urban.org/documentation/PubOrSubsidizedHousing/Main.php
         kind: self
 
   # ----------------------------- LIHEAP ---------------------------------------
@@ -473,13 +473,16 @@ imputations:
 
   - model: trim3
     concept: spm-wic
-    method: rule-based
-    description: WIC simulated by TRIM3's WIC module and substituted into SPM resources.
+    method: census-research-file
+    description: >
+      WIC value typically taken from Census SPM Research File. TRIM3's
+      official Programs Simulated list does not include a WIC module,
+      matching the coverage matrix.
     baseDataset: TRIM3 augmented CPS-ASEC
     reproducible: no
     sources:
-      - label: TRIM3 program list
-        url: https://boreas.urban.org/T3IntroHistory.php
+      - label: TRIM3 Programs Simulated (no WIC module)
+        url: https://boreas.urban.org/T3IntroPrograms.php
         kind: self
 
   # ----------------------------- School meals ---------------------------------
@@ -529,7 +532,7 @@ imputations:
     reproducible: no
     sources:
       - label: TRIM3 federal tax module
-        url: https://boreas.urban.org/T3IntroFedTax.php
+        url: https://boreas.urban.org/documentation/federaltax/main.php
         kind: self
 
   # ----------------------------- Payroll tax ----------------------------------
@@ -547,12 +550,12 @@ imputations:
   - model: trim3
     concept: spm-tax-payroll
     method: rule-based
-    description: Employee-side FICA computed by TRIM3 federal tax module and substituted into SPM deductions.
+    description: Employee-side FICA computed by TRIM3 payroll tax module and substituted into SPM deductions.
     baseDataset: TRIM3 augmented CPS-ASEC
     reproducible: no
     sources:
-      - label: TRIM3 federal tax module
-        url: https://boreas.urban.org/T3IntroFedTax.php
+      - label: TRIM3 payroll tax module
+        url: https://boreas.urban.org/documentation/PayrollTax/main.php
         kind: self
 
   # ----------------------------- State income tax -----------------------------
@@ -578,7 +581,7 @@ imputations:
     reproducible: no
     sources:
       - label: TRIM3 state tax module
-        url: https://boreas.urban.org/T3IntroFedTax.php
+        url: https://boreas.urban.org/documentation/StateTax/main.php
         kind: self
 
   # ----------------------------- Work expenses --------------------------------
@@ -707,7 +710,7 @@ imputations:
     baseDataset: TRIM3 augmented CPS-ASEC
     reproducible: no
     sources:
-      - label: Giannarelli, Wheaton & Dehry — TRIM3 SPM child poverty projections
+      - label: Giannarelli, Wheaton & Shantz — 2021 Poverty Projections (TRIM3-based)
         url: https://www.urban.org/research/publication/2021-poverty-projections
         kind: self
 
@@ -758,23 +761,31 @@ imputations:
     concept: spm-tax-federal
     method: other
     description: >
-      Delegates federal income tax computation to NBER's TAXSIM rather
-      than implementing tax rules internally.
-    baseDataset: CPS-ASEC + TAXSIM
+      Federal income tax computed via Census ASEC tax variables for most
+      CPS-ASEC analyses and via NBER TAXSIM when the underlying data
+      lacks tax fields (e.g. SIPP-based volatility analyses) or when
+      historical years pre-date Census's tax model.
+    baseDataset: CPS-ASEC (or SIPP + TAXSIM in select analyses)
     reproducible: no
     sources:
       - label: Hamilton, Wimer, Collyer et al. — Monthly cash payments
+          (SIPP + TAXSIM example)
         url: https://povertycenter.columbia.edu/sites/povertycenter.columbia.edu/files/content/Publications/Monthly-Cash-Payments-Reduce-Spells-of-Poverty-CPSP-2022.pdf
         kind: academic
-      - label: NBER TAXSIM
+      - label: NBER TAXSIM home page
         url: https://taxsim.nber.org/
         kind: academic
 
   - model: columbia-cpsp
     concept: spm-tax-state
     method: other
-    description: State income tax computed via NBER TAXSIM rather than via CPSP-internal rules.
-    baseDataset: CPS-ASEC + TAXSIM
+    description: >
+      State income tax computed via Census ASEC variables in routine
+      CPS-ASEC analyses, via NBER TAXSIM in SIPP-based or pre-1978
+      historical analyses, and via Urban Institute TRIM3 adjustments in
+      some safety-net analyses. CPSP does not maintain its own state-tax
+      rules engine.
+    baseDataset: CPS-ASEC (or SIPP + TAXSIM in select analyses)
     reproducible: no
     sources:
       - label: NBER TAXSIM (state tax modules)
@@ -831,7 +842,6 @@ imputations:
     reproducible: no
     sources:
       - label: National Academies — Roadmap to Reducing Child Poverty
-          (CPSP one of two commissioned microsim teams)
         url: https://nap.nationalacademies.org/catalog/25246
         kind: academic
       - label: Hamilton, Wimer, Collyer et al. — Monthly cash payments
