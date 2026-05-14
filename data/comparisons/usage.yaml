@@ -21,6 +21,7 @@ usage:
     sources:
       - label: PolicyEngine in the news
         url: https://policyengine.org/us/research
+        kind: self
 
   - model: trim3
     academicCitations: unknown
@@ -36,7 +37,8 @@ usage:
       Public-facing usage outside ASPE-funded work is limited.
     sources:
       - label: ASPE Welfare Indicators Annual Report
-        url: https://aspe.hhs.gov/topics/poverty-economic-mobility/welfare-indicators-annual-report
+        url: https://aspe.hhs.gov/reports/welfare-indicators-risk-factors-24th-report-congress
+        kind: government
 
   - model: attis
     academicCitations: unknown
@@ -52,6 +54,7 @@ usage:
     sources:
       - label: State of the Safety Net
         url: https://www.urban.org/projects/state-safety-net
+        kind: self
 
   - model: tpc-microsim
     academicCitations: unknown
@@ -68,6 +71,7 @@ usage:
     sources:
       - label: TPC distributional tables
         url: https://www.taxpolicycenter.org/model-estimates
+        kind: self
 
   - model: jct-microsim
     academicCitations: unknown
@@ -84,6 +88,7 @@ usage:
     sources:
       - label: JCT publications archive
         url: https://www.jct.gov/publications/
+        kind: self
 
   - model: cbo-microsim
     academicCitations: unknown
@@ -100,6 +105,7 @@ usage:
     sources:
       - label: CBO publications archive
         url: https://www.cbo.gov/publications
+        kind: self
 
   - model: itep-microsim
     academicCitations: unknown
@@ -114,6 +120,7 @@ usage:
     sources:
       - label: ITEP press coverage page
         url: https://itep.org/category/press/
+        kind: self
 
   - model: tax-calculator
     academicCitations: unknown
@@ -128,6 +135,7 @@ usage:
     sources:
       - label: PSL Tax-Brain web app (built on Tax-Calculator)
         url: https://www.ospc.org
+        kind: self
 
   - model: budgetlab-tax
     academicCitations: unknown
@@ -140,8 +148,9 @@ usage:
       Newly launched (2024); growing citation footprint in 2025 OBBBA
       coverage and Brookings/Hamilton Project policy debates.
     sources:
-      - label: Budget Lab research catalogue
-        url: https://budgetlab.yale.edu/research
+      - label: Budget Lab methodology topic
+        url: https://budgetlab.yale.edu/topic/methodology
+        kind: self
 
   - model: policyengine-uk
     academicCitations: unknown
@@ -158,6 +167,7 @@ usage:
     sources:
       - label: PolicyEngine UK research catalogue
         url: https://policyengine.org/uk/research
+        kind: self
 
   - model: ukmod
     academicCitations: unknown
@@ -177,8 +187,10 @@ usage:
       - label: International Journal of Microsimulation — UKMOD
           applications
         url: https://microsimulation.pub/index.php/IJM
+        kind: academic
       - label: CeMPA UKMOD working papers
         url: https://www.microsimulation.ac.uk/publications/working-papers
+        kind: self
 
   - model: ifs-taxben
     academicCitations: unknown
@@ -196,8 +208,10 @@ usage:
     sources:
       - label: IFS in the media
         url: https://ifs.org.uk/news-and-media
+        kind: self
       - label: IFS publications search (TAXBEN-tagged outputs)
         url: https://ifs.org.uk/publications
+        kind: self
 
   - model: igotm
     academicCitations: unknown
@@ -216,6 +230,7 @@ usage:
       - label: HM Treasury Budget archive (IGOTM-based Impact on
           Households annexes)
         url: https://www.gov.uk/government/collections/budget
+        kind: government
 
   - model: columbia-cpsp
     academicCitations: unknown
@@ -236,8 +251,10 @@ usage:
       - label: National Academies — Roadmap to Reducing Child Poverty
           (uses CPSP simulations)
         url: https://nap.nationalacademies.org/catalog/25246
+        kind: academic
       - label: CPSP publications
         url: https://www.povertycenter.columbia.edu
+        kind: self
 
   - model: benefits-data-trust
     academicCitations: unknown
@@ -251,10 +268,12 @@ usage:
       and benefits secured; comparable academic-citation or
       press-mention counts are not maintained here.
     sources:
-      - label: Benefits Data Trust — homepage
-        url: https://bdtrust.org/
-      - label: Benefits Data Trust — what we do
-        url: https://bdtrust.org/what-we-do/
+      - label: Benefits Data Trust — homepage (archived)
+        url: https://web.archive.org/web/20240116222713/https://bdtrust.org/
+        kind: self
+      - label: Benefits Data Trust — what we do (archived)
+        url: https://web.archive.org/web/20220120132444/https://bdtrust.org/what-we-do/
+        kind: self
 
   - model: benefit-kitchen
     academicCitations: unknown
@@ -270,8 +289,10 @@ usage:
     sources:
       - label: BenefitKitchen — homepage
         url: https://benefitkitchen.com/
+        kind: self
       - label: BenefitKitchen — about
-        url: https://benefitkitchen.com/about
+        url: https://benefitkitchen.com/#about
+        kind: self
 
   - model: benefits-cliffs
     academicCitations: unknown
@@ -287,8 +308,10 @@ usage:
     sources:
       - label: BenefitsCliffs.com — homepage
         url: https://benefitscliffs.com/
+        kind: self
       - label: Georgia Center for Opportunity — benefits cliff page
         url: https://georgiaopportunity.org/the-benefits-cliff/
+        kind: civilsociety
 
   - model: snap-screener
     academicCitations: unknown
@@ -304,8 +327,10 @@ usage:
     sources:
       - label: SNAP Screener — homepage
         url: https://www.snapscreener.com/
+        kind: self
       - label: Medicaid Screener — homepage
         url: https://www.medicaidscreener.com/
+        kind: self
 
   - model: mrelief
     academicCitations: unknown
@@ -320,8 +345,10 @@ usage:
     sources:
       - label: mRelief — homepage
         url: https://www.mrelief.com/
+        kind: self
       - label: mRelief — about
         url: https://www.mrelief.com/about
+        kind: self
 
   - model: atlanta-fed-prd
     academicCitations: unknown
@@ -337,8 +364,10 @@ usage:
     sources:
       - label: Atlanta Fed — Policy Rules Database project page
         url: https://www.atlantafed.org/economic-mobility-and-resilience/advancing-careers-for-low-income-families/policy-rules-database
+        kind: self
       - label: Atlanta Fed — CLIFF tool suite
         url: https://www.atlantafed.org/economic-mobility-and-resilience/advancing-careers-for-low-income-families/cliff-tools
+        kind: self
 
   - model: nber-taxsim
     academicCitations: unknown
@@ -357,10 +386,13 @@ usage:
     sources:
       - label: NBER TAXSIM home page
         url: https://taxsim.nber.org/
+        kind: self
       - label: NBER TAXSIM data product page
         url: https://www.nber.org/research/data/taxsim
+        kind: academic
       - label: PolicyEngine-NBER MoU announcement
         url: https://www.policyengine.org/us/research/policyengine-nber-mou-taxsim
+        kind: self
 
   - model: tf-microsim
     academicCitations: unknown
@@ -378,9 +410,11 @@ usage:
     sources:
       - label: Tax Foundation model estimates archive
         url: https://taxfoundation.org/research/all/federal/general-equilibrium-model/
+        kind: self
       - label: PolitiFact profile of Tax Foundation (press coverage
           and fact-check references)
         url: https://www.politifact.com/personalities/tax-foundation/
+        kind: press
 
   - model: pwbm
     academicCitations: unknown
@@ -399,8 +433,10 @@ usage:
     sources:
       - label: PWBM research catalogue (working papers and analyses)
         url: https://budgetmodel.wharton.upenn.edu/working-papers
+        kind: self
       - label: Daily Pennsylvanian — PWBM in the 2024 election
         url: https://www.thedp.com/article/2024/10/penn-wharton-budget-model-2024-presidential-election
+        kind: press
 
   - model: tax-foundation-tg
     academicCitations: unknown
@@ -419,9 +455,11 @@ usage:
     sources:
       - label: Tax Foundation TAG topic archive
         url: https://taxfoundation.org/tags/taxes-and-growth-tag-model-overview-methodology/
+        kind: self
       - label: Tax Foundation — Modeling the Economic Effects of Past
           Tax Bills
         url: https://taxfoundation.org/research/all/federal/modeling-economic-effects-past-tax-bills/
+        kind: self
 
   - model: dwp-psm
     academicCitations: unknown
@@ -441,12 +479,15 @@ usage:
     sources:
       - label: DWP — Income-related benefits estimates of take-up
         url: https://www.gov.uk/government/statistics/income-related-benefits-estimates-of-take-up-financial-year-ending-2024
+        kind: government
       - label: DWP — Spring statement social security changes updated
           impact on poverty levels (PSM-based)
         url: https://www.gov.uk/government/publications/spring-statement-social-security-changes-updated-impact-on-poverty-levels-in-great-britain-july-2025/spring-statement-social-security-changes-updated-impact-on-poverty-levels-in-great-britain-july-2025
+        kind: government
       - label: DWP — Benefit uprating estimated number and type of GB
           families benefiting (annual PSM-based statistics)
         url: https://www.gov.uk/government/statistics/benefit-uprating-estimated-number-and-type-of-families-and-individuals-in-families-benefitting-from-the-uprating-of-benefits-in-2025-to-2026/estimated-number-and-type-of-gb-families-and-individuals-in-families-benefitting-from-the-uprating-of-benefits-in-2025-to-2026-and-the-fair-repayment
+        kind: government
 
   - model: ippr-tax-benefit
     academicCitations: unknown
@@ -465,8 +506,10 @@ usage:
       - label: MMU PERU — Modelling the tax and benefit system (lists
           partner organisations)
         url: https://mmuperu.co.uk/blog/projects/modelling-the-effects-of-the-tax-and-benefit-system/
+        kind: self
       - label: IPPR media office (recent model-based releases)
         url: https://www.ippr.org/media-office
+        kind: self
 
   - model: landman-economics
     academicCitations: unknown
@@ -486,9 +529,11 @@ usage:
       - label: EHRC — Cumulative impact reading list (Landman Economics
           TTM applications)
         url: https://www.equalityhumanrights.com/en/our-research/reading-lists/welfare-reform-reading-list
+        kind: government
       - label: Scottish Government — Tackling child poverty methodology
           appendix (commissioned application)
         url: https://www.gov.scot/publications/tackling-child-poverty-delivery-plan-forecasting-child-poverty-scotland/pages/8/
+        kind: government
 
   - model: entitledto
     academicCitations: unknown
@@ -507,8 +552,11 @@ usage:
     sources:
       - label: EntitledTo for organisations
         url: https://www.entitledto.co.uk/organisations
+        kind: self
       - label: GOV.UK — Benefits calculators (listed as recommended)
         url: https://www.gov.uk/benefits-calculators
+        kind: government
       - label: ERSA — EntitledTo Better Off Calculator (welfare-to-work
           adviser-network use)
         url: https://ersa.org.uk/entitledto/
+        kind: civilsociety

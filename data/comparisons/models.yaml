@@ -93,7 +93,7 @@ models:
         url: https://www.usaspending.gov/award/CONT_AWD_75P00120F37006
         kind: government
       - label: ASPE Welfare Indicators Annual Report (uses TRIM3)
-        url: https://aspe.hhs.gov/topics/poverty-economic-mobility/welfare-indicators-annual-report
+        url: https://aspe.hhs.gov/reports/welfare-indicators-risk-factors-24th-report-congress
         kind: government
       - label: National Academies — Roadmap to Reducing Child Poverty
           (uses TRIM3 for poverty simulations)
@@ -298,7 +298,7 @@ models:
     codePublic: false
     languages: [unknown]
     primaryDataset: SOI + state tax microdata (restricted)
-    documentationUrl: https://itep.org/methodology/
+    documentationUrl: https://itep.org/who-pays-7th-edition-methodology-and-discussion/
     summary: >
       The ITEP Microsimulation Tax Model estimates federal and state tax
       incidence. ITEP's "Who Pays?" series is the canonical analysis of
@@ -311,7 +311,7 @@ models:
       apiAccess: no
     sources:
       - label: ITEP Microsimulation Tax Model methodology
-        url: https://itep.org/methodology/
+        url: https://itep.org/who-pays-7th-edition-methodology-and-discussion/
         kind: self
       - label: ITEP Who Pays? (state tax incidence reports)
         url: https://itep.org/whopays/
@@ -693,7 +693,7 @@ models:
   - id: benefits-data-trust
     name: Benefits Data Trust (closed 2024)
     organization: Benefits Data Trust
-    organizationUrl: https://bdtrust.org/
+    organizationUrl: https://web.archive.org/web/20240116222713/https://bdtrust.org/
     country: us
     sector: non-profit
     type: rules-engine
@@ -703,7 +703,7 @@ models:
     codePublic: false
     languages: [unknown]
     primaryDataset: applicant-supplied case data
-    documentationUrl: https://bdtrust.org/
+    documentationUrl: https://web.archive.org/web/20240116222713/https://bdtrust.org/
     summary: >
       Philadelphia-based non-profit that ran benefits-access outreach
       (phone, text, web) helping low-income households screen for and
@@ -722,7 +722,7 @@ models:
       apiAccess: no
     sources:
       - label: Benefits Data Trust — homepage (archived)
-        url: https://bdtrust.org/
+        url: https://web.archive.org/web/20240116222713/https://bdtrust.org/
         kind: self
       - label: Pew Trusts — Benefits Data Trust's closure should prompt
           us to rebuild the public benefits system (Aug 2024)
@@ -770,7 +770,7 @@ models:
         url: https://benefitkitchen.com/
         kind: self
       - label: BenefitKitchen — about
-        url: https://benefitkitchen.com/about
+        url: https://benefitkitchen.com/#about
         kind: self
       - label: BenefitKitchen — API / partners
         url: https://benefitkitchen.com/api

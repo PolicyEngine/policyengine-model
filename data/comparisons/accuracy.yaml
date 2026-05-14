@@ -16,6 +16,7 @@ accuracy:
     targetSource:
       label: USDA SNAP FY2023 program data
       url: https://www.fns.usda.gov/pd/supplemental-nutrition-assistance-program-snap
+      kind: government
     notes: >
       Calibration target for the enhanced CPS dataset. Predicted value from
       model run pending.
@@ -30,6 +31,7 @@ accuracy:
     targetSource:
       label: IRS SOI EITC statistics 2023
       url: https://www.irs.gov/statistics/soi-tax-stats-individual-income-tax-returns
+      kind: government
     notes: Refundable portion of EITC outlays.
 
   - model: policyengine-us
@@ -42,6 +44,7 @@ accuracy:
     targetSource:
       label: SSA Annual Statistical Supplement
       url: https://www.ssa.gov/policy/docs/statcomps/supplement/
+      kind: government
 
   - model: policyengine-us
     metric: medicaid-enrollees
@@ -53,6 +56,7 @@ accuracy:
     targetSource:
       label: CMS Medicaid and CHIP enrollment data
       url: https://www.medicaid.gov/medicaid/program-information/medicaid-and-chip-enrollment-data/index.html
+      kind: government
 
   - model: trim3
     metric: snap-outlays
@@ -64,10 +68,12 @@ accuracy:
     targetSource:
       label: USDA SNAP FY2023
       url: https://www.fns.usda.gov/pd/supplemental-nutrition-assistance-program-snap
+      kind: government
     notes: TRIM3 explicitly aligns simulated SNAP to administrative totals.
     predictedSource:
       label: TRIM3 baseline output
       url: https://boreas.urban.org/T3IntroFoodStamps.php
+      kind: self
 
   - model: tpc-microsim
     metric: individual-income-tax-revenue
@@ -79,4 +85,5 @@ accuracy:
     targetSource:
       label: CBO Monthly Budget Review
       url: https://www.cbo.gov/topics/budget
+      kind: government
     notes: TPC reports calibrate to CBO/Treasury baseline revenue.

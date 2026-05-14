@@ -13,6 +13,7 @@ artifacts:
     sources:
       - label: Repository
         url: https://github.com/PolicyEngine/policyengine-us
+        kind: self
 
   - model: policyengine-us
     type: parameter-database
@@ -24,6 +25,7 @@ artifacts:
     sources:
       - label: Parameters tree
         url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/parameters
+        kind: self
 
   - model: policyengine-us
     type: dataset
@@ -35,6 +37,7 @@ artifacts:
     sources:
       - label: policyengine-us-data
         url: https://github.com/PolicyEngine/policyengine-us-data
+        kind: self
 
   - model: policyengine-us
     type: api
@@ -46,6 +49,7 @@ artifacts:
     sources:
       - label: PolicyEngine API
         url: https://api.policyengine.org
+        kind: self
 
   - model: policyengine-us
     type: web-application
@@ -57,6 +61,7 @@ artifacts:
     sources:
       - label: PolicyEngine
         url: https://policyengine.org/us
+        kind: self
 
   - model: policyengine-us
     type: documentation-site
@@ -68,6 +73,7 @@ artifacts:
     sources:
       - label: Docs
         url: https://policyengine.github.io/policyengine-us/
+        kind: self
 
   - model: policyengine-us
     type: cli
@@ -79,6 +85,7 @@ artifacts:
     sources:
       - label: policyengine.py
         url: https://github.com/PolicyEngine/policyengine.py
+        kind: self
 
   - model: policyengine-us
     type: cli
@@ -94,8 +101,10 @@ artifacts:
     sources:
       - label: policyengine-taxsim repository
         url: https://github.com/PolicyEngine/policyengine-taxsim
+        kind: self
       - label: PolicyEngine-NBER MoU on TAXSIM emulator development
         url: https://www.policyengine.org/us/research/policyengine-nber-mou-taxsim
+        kind: self
 
   # =================================== TRIM3 ==================================
   - model: trim3
@@ -107,6 +116,7 @@ artifacts:
     sources:
       - label: TRIM3 access policy
         url: https://boreas.urban.org/T3IntroAccess.php
+        kind: self
 
   - model: trim3
     type: dataset
@@ -117,6 +127,7 @@ artifacts:
     sources:
       - label: TRIM3 data description
         url: https://boreas.urban.org/T3IntroData.php
+        kind: self
 
   - model: trim3
     type: documentation-site
@@ -128,6 +139,7 @@ artifacts:
     sources:
       - label: TRIM3 docs
         url: https://boreas.urban.org/T3IntroHistory.php
+        kind: self
 
   - model: trim3
     type: web-application
@@ -138,6 +150,7 @@ artifacts:
     sources:
       - label: TRIM3 access
         url: https://boreas.urban.org/T3IntroAccess.php
+        kind: self
 
   # =================================== ATTIS ==================================
   - model: attis
@@ -149,6 +162,7 @@ artifacts:
     sources:
       - label: ATTIS overview
         url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+        kind: self
 
   - model: attis
     type: dataset
@@ -159,6 +173,7 @@ artifacts:
     sources:
       - label: ATTIS overview
         url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+        kind: self
 
   - model: attis
     type: paper
@@ -170,6 +185,7 @@ artifacts:
     sources:
       - label: State of the Safety Net
         url: https://www.urban.org/projects/state-safety-net
+        kind: self
 
   # ============================ TPC microsim =================================
   - model: tpc-microsim
@@ -181,6 +197,7 @@ artifacts:
     sources:
       - label: TPC Brief Description
         url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
+        kind: self
 
   - model: tpc-microsim
     type: dataset
@@ -191,6 +208,7 @@ artifacts:
     sources:
       - label: SOI Public Use File
         url: https://www.irs.gov/statistics/soi-tax-stats-individual-public-use-microdata-files
+        kind: government
 
   - model: tpc-microsim
     type: web-application
@@ -202,6 +220,7 @@ artifacts:
     sources:
       - label: TPC tables
         url: https://www.taxpolicycenter.org/model-estimates
+        kind: self
 
   - model: tpc-microsim
     type: documentation-site
@@ -213,6 +232,7 @@ artifacts:
     sources:
       - label: Brief Description
         url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
+        kind: self
 
   # =================================== JCT microsim ==========================
   - model: jct-microsim
@@ -224,6 +244,7 @@ artifacts:
     sources:
       - label: JCT methodology publications
         url: https://www.jct.gov/publications/
+        kind: self
 
   - model: jct-microsim
     type: paper
@@ -235,6 +256,7 @@ artifacts:
     sources:
       - label: JCT publications
         url: https://www.jct.gov/publications/
+        kind: self
 
   # =================================== CBO microsim ==========================
   - model: cbo-microsim
@@ -246,6 +268,7 @@ artifacts:
     sources:
       - label: CBO working papers
         url: https://www.cbo.gov/about/products/working-papers
+        kind: self
 
   - model: cbo-microsim
     type: paper
@@ -257,6 +280,7 @@ artifacts:
     sources:
       - label: CBO Budget topics
         url: https://www.cbo.gov/topics/budget
+        kind: self
 
   - model: cbo-microsim
     type: paper
@@ -268,6 +292,7 @@ artifacts:
     sources:
       - label: CBO income distribution
         url: https://www.cbo.gov/topic/income-distribution
+        kind: self
 
   # =================================== ITEP microsim =========================
   - model: itep-microsim
@@ -277,8 +302,9 @@ artifacts:
     license: proprietary
     description: Federal + state tax incidence model; implementation not public.
     sources:
-      - label: ITEP methodology
-        url: https://itep.org/methodology/
+      - label: ITEP Who Pays? methodology
+        url: https://itep.org/who-pays-7th-edition-methodology-and-discussion/
+        kind: self
 
   - model: itep-microsim
     type: paper
@@ -290,6 +316,7 @@ artifacts:
     sources:
       - label: Who Pays?
         url: https://itep.org/whopays/
+        kind: self
 
   # =================================== Tax-Calculator ========================
   - model: tax-calculator
@@ -302,6 +329,7 @@ artifacts:
     sources:
       - label: Tax-Calculator repo
         url: https://github.com/PSLmodels/Tax-Calculator
+        kind: self
 
   - model: tax-calculator
     type: parameter-database
@@ -313,6 +341,7 @@ artifacts:
     sources:
       - label: policy_current_law.json
         url: https://github.com/PSLmodels/Tax-Calculator/blob/master/taxcalc/policy_current_law.json
+        kind: self
 
   - model: tax-calculator
     type: dataset
@@ -324,6 +353,7 @@ artifacts:
     sources:
       - label: taxdata repo
         url: https://github.com/PSLmodels/taxdata
+        kind: self
 
   - model: tax-calculator
     type: documentation-site
@@ -335,6 +365,7 @@ artifacts:
     sources:
       - label: Tax-Calculator docs
         url: https://taxcalc.pslmodels.org
+        kind: self
 
   # =================================== Budget Lab ============================
   - model: budgetlab-tax
@@ -361,11 +392,12 @@ artifacts:
     name: Budget Lab research catalogue
     public: yes
     license: Budget Lab editorial
-    url: https://budgetlab.yale.edu/research
+    url: https://budgetlab.yale.edu/topic/methodology
     description: Methodology and scoring papers for individual analyses.
     sources:
-      - label: Budget Lab research
-        url: https://budgetlab.yale.edu/research
+      - label: Budget Lab methodology topic
+        url: https://budgetlab.yale.edu/topic/methodology
+        kind: self
 
   - model: budgetlab-tax
     type: documentation-site
@@ -377,6 +409,7 @@ artifacts:
     sources:
       - label: Budget Lab methodology
         url: https://budgetlab.yale.edu/topic/methodology
+        kind: self
 
   # =================================== PolicyEngine UK =======================
   - model: policyengine-uk
@@ -389,6 +422,7 @@ artifacts:
     sources:
       - label: Repository
         url: https://github.com/PolicyEngine/policyengine-uk
+        kind: self
 
   - model: policyengine-uk
     type: parameter-database
@@ -400,6 +434,7 @@ artifacts:
     sources:
       - label: Parameters tree
         url: https://github.com/PolicyEngine/policyengine-uk/tree/master/policyengine_uk/parameters
+        kind: self
 
   - model: policyengine-uk
     type: dataset
@@ -411,8 +446,10 @@ artifacts:
     sources:
       - label: policyengine-uk-data repository
         url: https://github.com/PolicyEngine/policyengine-uk-data
+        kind: self
       - label: UK Data Service FRS series
-        url: https://ukdataservice.ac.uk/find-data/series/?id=200017
+        url: https://beta.ukdataservice.ac.uk/datacatalogue/series/series?id=200017
+        kind: government
 
   - model: policyengine-uk
     type: web-application
@@ -424,6 +461,7 @@ artifacts:
     sources:
       - label: PolicyEngine UK
         url: https://policyengine.org/uk
+        kind: self
 
   - model: policyengine-uk
     type: documentation-site
@@ -435,6 +473,7 @@ artifacts:
     sources:
       - label: Docs
         url: https://policyengine.github.io/policyengine-uk/
+        kind: self
 
   # =================================== UKMOD =================================
   - model: ukmod
@@ -447,6 +486,7 @@ artifacts:
     sources:
       - label: UKMOD access
         url: https://www.microsimulation.ac.uk/ukmod/access
+        kind: self
 
   - model: ukmod
     type: dataset
@@ -456,7 +496,8 @@ artifacts:
     description: Prepared FRS-derived input file; underlying FRS requires UK Data Service registered licence.
     sources:
       - label: UK Data Service FRS
-        url: https://ukdataservice.ac.uk/find-data/series/?id=200017
+        url: https://beta.ukdataservice.ac.uk/datacatalogue/series/series?id=200017
+        kind: government
 
   - model: ukmod
     type: documentation-site
@@ -468,6 +509,7 @@ artifacts:
     sources:
       - label: UKMOD home
         url: https://www.microsimulation.ac.uk/ukmod
+        kind: self
 
   - model: ukmod
     type: paper
@@ -479,6 +521,7 @@ artifacts:
     sources:
       - label: CeMPA working papers
         url: https://www.microsimulation.ac.uk/publications/working-papers
+        kind: self
 
   # =================================== IFS TAXBEN ============================
   - model: ifs-taxben
@@ -490,6 +533,7 @@ artifacts:
     sources:
       - label: IFS TAXBEN tool page
         url: https://ifs.org.uk/tools_and_resources/taxben
+        kind: self
 
   - model: ifs-taxben
     type: paper
@@ -501,6 +545,7 @@ artifacts:
     sources:
       - label: IFS Green Budget
         url: https://ifs.org.uk/green-budget
+        kind: self
 
   - model: ifs-taxben
     type: documentation-site
@@ -512,6 +557,7 @@ artifacts:
     sources:
       - label: TAXBEN tool page
         url: https://ifs.org.uk/tools_and_resources/taxben
+        kind: self
 
   # =================================== IGOTM =================================
   - model: igotm
@@ -523,6 +569,7 @@ artifacts:
     sources:
       - label: HM Treasury distributional analysis
         url: https://www.gov.uk/government/publications/supporting-documents-for-spring-statement-2025/impact-on-households-distributional-analysis-to-accompany-spring-statement-2025
+        kind: government
 
   - model: igotm
     type: paper
@@ -534,6 +581,7 @@ artifacts:
     sources:
       - label: Impact on households (Autumn Budget 2024)
         url: https://www.gov.uk/government/publications/supporting-documents-for-spring-statement-2025/impact-on-households-distributional-analysis-to-accompany-spring-statement-2025
+        kind: government
 
   # ============================ Columbia CPSP ================================
   - model: columbia-cpsp
@@ -545,6 +593,7 @@ artifacts:
     sources:
       - label: CPSP working papers (methodology described, code not released)
         url: https://www.povertycenter.columbia.edu
+        kind: self
 
   - model: columbia-cpsp
     type: paper
@@ -556,8 +605,10 @@ artifacts:
     sources:
       - label: Hamilton, Wimer, Collyer et al. — Monthly cash payments paper
         url: https://povertycenter.columbia.edu/sites/povertycenter.columbia.edu/files/content/Publications/Monthly-Cash-Payments-Reduce-Spells-of-Poverty-CPSP-2022.pdf
+        kind: self
       - label: Koutavas, Wang, Slopen et al. — Expanding Paid Parental Leave
         url: https://povertycenter.columbia.edu/sites/povertycenter.columbia.edu/files/content/Publications/Expanding-Paid-Parental-Leave-in-New-York-CPSP-2024.pdf
+        kind: self
 
   - model: columbia-cpsp
     type: paper
@@ -569,6 +620,7 @@ artifacts:
     sources:
       - label: National Academies report page
         url: https://nap.nationalacademies.org/catalog/25246
+        kind: academic
 
   # ============================ Benefits Data Trust ===========================
   - model: benefits-data-trust
@@ -576,14 +628,15 @@ artifacts:
     name: BDT outreach and screening channels
     public: yes
     license: proprietary
-    url: https://bdtrust.org/
+    url: https://web.archive.org/web/20240116222713/https://bdtrust.org/
     description: >
       Phone, text, and web channels that screen applicants for benefit
       eligibility and assist with enrollment across SNAP, Medicaid,
       LIHEAP, and other programs.
     sources:
-      - label: Benefits Data Trust — what we do
-        url: https://bdtrust.org/what-we-do/
+      - label: Benefits Data Trust — what we do (archived)
+        url: https://web.archive.org/web/20220120132444/https://bdtrust.org/what-we-do/
+        kind: self
 
   # ============================ BenefitKitchen ===============================
   - model: benefit-kitchen
@@ -598,6 +651,7 @@ artifacts:
     sources:
       - label: BenefitKitchen — homepage
         url: https://benefitkitchen.com/
+        kind: self
 
   - model: benefit-kitchen
     type: api
@@ -611,6 +665,7 @@ artifacts:
     sources:
       - label: BenefitKitchen — API / partners
         url: https://benefitkitchen.com/api
+        kind: self
 
   # ============================ BenefitsCliffs.com ===========================
   - model: benefits-cliffs
@@ -625,6 +680,7 @@ artifacts:
     sources:
       - label: BenefitsCliffs.com — homepage
         url: https://benefitscliffs.com/
+        kind: self
 
   # ============================ SNAPScreener ================================
   - model: snap-screener
@@ -638,6 +694,7 @@ artifacts:
     sources:
       - label: SNAP Screener — homepage
         url: https://www.snapscreener.com/
+        kind: self
 
   - model: snap-screener
     type: parameter-database
@@ -651,6 +708,7 @@ artifacts:
     sources:
       - label: SNAP Screener — state rules
         url: https://www.snapscreener.com/screener
+        kind: self
 
   - model: snap-screener
     type: api
@@ -662,6 +720,7 @@ artifacts:
     sources:
       - label: SNAP Screener — homepage
         url: https://www.snapscreener.com/
+        kind: self
 
   # ============================ mRelief =====================================
   - model: mrelief
@@ -676,6 +735,7 @@ artifacts:
     sources:
       - label: mRelief — homepage
         url: https://www.mrelief.com/
+        kind: self
 
   # ============================ Atlanta Fed Policy Rules DB =================
   - model: atlanta-fed-prd
@@ -718,6 +778,7 @@ artifacts:
     sources:
       - label: Atlanta Fed — CLIFF tools
         url: https://www.atlantafed.org/economic-mobility-and-resilience/advancing-careers-for-low-income-families/cliff-tools
+        kind: self
 
   # =================================== NBER TAXSIM ============================
   - model: nber-taxsim
@@ -731,6 +792,7 @@ artifacts:
     sources:
       - label: NBER TAXSIM home
         url: https://taxsim.nber.org/
+        kind: self
 
   - model: nber-taxsim
     type: web-application
@@ -744,6 +806,7 @@ artifacts:
     sources:
       - label: NBER TAXSIM home
         url: https://taxsim.nber.org/
+        kind: self
 
   - model: nber-taxsim
     type: api
@@ -757,6 +820,7 @@ artifacts:
     sources:
       - label: NBER TAXSIM data product page (lists client wrappers)
         url: https://www.nber.org/research/data/taxsim
+        kind: academic
 
   - model: nber-taxsim
     type: paper
@@ -770,6 +834,7 @@ artifacts:
     sources:
       - label: JPAM paper
         url: https://onlinelibrary.wiley.com/doi/10.2307/3325474
+        kind: academic
 
   # ====================== Tax Foundation General Equilibrium ==================
   - model: tf-microsim
@@ -784,6 +849,7 @@ artifacts:
     sources:
       - label: TF General Equilibrium Model overview
         url: https://taxfoundation.org/research/all/federal/general-equilibrium-model/
+        kind: self
 
   - model: tf-microsim
     type: dataset
@@ -796,6 +862,7 @@ artifacts:
     sources:
       - label: IRS SOI Public Use File documentation
         url: https://www.irs.gov/statistics/soi-tax-stats-individual-public-use-microdata-files
+        kind: government
 
   - model: tf-microsim
     type: documentation-site
@@ -809,6 +876,7 @@ artifacts:
     sources:
       - label: TF model overview
         url: https://taxfoundation.org/research/all/federal/general-equilibrium-model/
+        kind: self
 
   - model: tf-microsim
     type: paper
@@ -822,6 +890,7 @@ artifacts:
     sources:
       - label: TF economic and tax modeling topic
         url: https://taxfoundation.org/topics/economic-and-tax-modeling/
+        kind: self
 
   # =============================== Penn Wharton Budget Model ==================
   - model: pwbm
@@ -836,6 +905,7 @@ artifacts:
     sources:
       - label: PWBM Microsimulation methodology page
         url: https://budgetmodel.wharton.upenn.edu/model/microsimulation/
+        kind: self
 
   - model: pwbm
     type: dataset
@@ -850,6 +920,7 @@ artifacts:
     sources:
       - label: PWBM home (Public Use File available under Data)
         url: https://budgetmodel.wharton.upenn.edu/
+        kind: self
 
   - model: pwbm
     type: web-application
@@ -863,6 +934,7 @@ artifacts:
     sources:
       - label: PWBM home
         url: https://budgetmodel.wharton.upenn.edu/
+        kind: self
 
   - model: pwbm
     type: documentation-site
@@ -876,6 +948,7 @@ artifacts:
     sources:
       - label: PWBM documentation
         url: https://budgetmodel.wharton.upenn.edu/microsim/documentation
+        kind: self
 
   - model: pwbm
     type: paper
@@ -889,6 +962,7 @@ artifacts:
     sources:
       - label: PWBM working papers
         url: https://budgetmodel.wharton.upenn.edu/working-papers
+        kind: self
 
   # ============================ Tax Foundation TAG ============================
   - model: tax-foundation-tg
@@ -903,6 +977,7 @@ artifacts:
       - label: TF Overview of the General Equilibrium Model (TAG and
           General Equilibrium are the same model)
         url: https://taxfoundation.org/research/all/federal/general-equilibrium-model/
+        kind: self
 
   - model: tax-foundation-tg
     type: documentation-site
@@ -916,6 +991,7 @@ artifacts:
     sources:
       - label: TF TAG topic archive
         url: https://taxfoundation.org/tags/taxes-and-growth-tag-model-overview-methodology/
+        kind: self
 
   - model: tax-foundation-tg
     type: paper
@@ -928,6 +1004,7 @@ artifacts:
     sources:
       - label: TF FF No. 429 (legacy PDF)
         url: https://files.taxfoundation.org/legacy/docs/FF429.pdf
+        kind: self
 
   - model: tax-foundation-tg
     type: paper
@@ -940,6 +1017,7 @@ artifacts:
     sources:
       - label: TF Modeling the Economic Effects of Past Tax Bills
         url: https://taxfoundation.org/research/all/federal/modeling-economic-effects-past-tax-bills/
+        kind: self
 
   # =================================== DWP PSM ===============================
   - model: dwp-psm
@@ -951,6 +1029,7 @@ artifacts:
     sources:
       - label: DWP PSM introduction (UKMOD Fest 2023)
         url: https://www.microsimulation.ac.uk/wp-content/uploads/2023/07/UKMODFest2023_DWP.pdf
+        kind: academic
 
   - model: dwp-psm
     type: dataset
@@ -960,7 +1039,8 @@ artifacts:
     description: FRS waveset cleaned, imputed, and CALMAR-calibrated by DWP; not redistributable.
     sources:
       - label: UK Data Service — Family Resources Survey
-        url: https://ukdataservice.ac.uk/find-data/series/?id=200017
+        url: https://beta.ukdataservice.ac.uk/datacatalogue/series/series?id=200017
+        kind: government
 
   - model: dwp-psm
     type: paper
@@ -972,6 +1052,7 @@ artifacts:
     sources:
       - label: DWP take-up statistics
         url: https://www.gov.uk/government/statistics/income-related-benefits-estimates-of-take-up-financial-year-ending-2024
+        kind: government
 
   - model: dwp-psm
     type: documentation-site
@@ -983,6 +1064,7 @@ artifacts:
     sources:
       - label: OBR PSM/FRS box
         url: https://obr.uk/box/dwps-policy-simulation-model-and-the-family-resources-survey/
+        kind: government
 
   # =================================== IPPR Tax-Benefit ======================
   - model: ippr-tax-benefit
@@ -994,6 +1076,7 @@ artifacts:
     sources:
       - label: MMU PERU project page
         url: https://mmuperu.co.uk/blog/projects/modelling-the-effects-of-the-tax-and-benefit-system/
+        kind: self
 
   - model: ippr-tax-benefit
     type: documentation-site
@@ -1005,6 +1088,7 @@ artifacts:
     sources:
       - label: PERU project description
         url: https://mmuperu.co.uk/blog/projects/modelling-the-effects-of-the-tax-and-benefit-system/
+        kind: self
 
   - model: ippr-tax-benefit
     type: paper
@@ -1016,6 +1100,7 @@ artifacts:
     sources:
       - label: IPPR wealth tax release
         url: https://www.ippr.org/media-office/slug-1306b49118532fe333771b8f2c1b31d3
+        kind: self
 
   # =================================== Landman Economics =====================
   - model: landman-economics
@@ -1027,6 +1112,7 @@ artifacts:
     sources:
       - label: Scottish Government TTM methodology appendix
         url: https://www.gov.scot/publications/tackling-child-poverty-delivery-plan-forecasting-child-poverty-scotland/pages/8/
+        kind: government
 
   - model: landman-economics
     type: paper
@@ -1038,6 +1124,7 @@ artifacts:
     sources:
       - label: EHRC cumulative impact assessment report
         url: https://www.equalityhumanrights.com/sites/default/files/cumulative-impact-assessment-report.pdf
+        kind: government
 
   - model: landman-economics
     type: paper
@@ -1049,6 +1136,7 @@ artifacts:
     sources:
       - label: Scottish Government child poverty forecast
         url: https://www.gov.scot/publications/tackling-child-poverty-delivery-plan-forecasting-child-poverty-scotland/
+        kind: government
 
   - model: landman-economics
     type: documentation-site
@@ -1060,6 +1148,7 @@ artifacts:
     sources:
       - label: Landman Economics website
         url: https://www.landman-economics.co.uk
+        kind: self
 
   # =================================== EntitledTo ============================
   - model: entitledto
@@ -1071,6 +1160,7 @@ artifacts:
     sources:
       - label: EntitledTo for organisations
         url: https://www.entitledto.co.uk/organisations
+        kind: self
 
   - model: entitledto
     type: web-application
@@ -1082,8 +1172,10 @@ artifacts:
     sources:
       - label: EntitledTo home page
         url: https://www.entitledto.co.uk/
+        kind: self
       - label: GOV.UK — Benefits calculators (recommends EntitledTo)
         url: https://www.gov.uk/benefits-calculators
+        kind: government
 
   - model: entitledto
     type: api
@@ -1095,5 +1187,7 @@ artifacts:
     sources:
       - label: EntitledTo for organisations (API integration)
         url: https://www.entitledto.co.uk/organisations
+        kind: self
       - label: UK Digital Marketplace — EntitledTo G-Cloud listing
         url: https://www.applytosupply.digitalmarketplace.service.gov.uk/g-cloud/services/973658267289218
+        kind: government

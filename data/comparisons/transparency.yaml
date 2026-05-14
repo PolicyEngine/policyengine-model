@@ -116,7 +116,7 @@ transparency:
         kind: self
         supports: [codePublic, documentationPublic, parameterSourcing]
       - label: ASPE Welfare Indicators Annual Report (uses TRIM3 outputs, not code)
-        url: https://aspe.hhs.gov/topics/poverty-economic-mobility/welfare-indicators-annual-report
+        url: https://aspe.hhs.gov/reports/welfare-indicators-risk-factors-24th-report-congress
         kind: government
         supports: [documentationPublic]
 
@@ -280,7 +280,7 @@ transparency:
     contributorCount: unknown
     issueTrackerPublic: no
     documentationPublic: partial
-    documentationUrl: https://itep.org/methodology/
+    documentationUrl: https://itep.org/who-pays-7th-edition-methodology-and-discussion/
     parameterSourcing: separate-doc
     testSuitePublic: unknown
     testCount: unknown
@@ -292,7 +292,7 @@ transparency:
       parameter files, and the SOI-derived microdata are not public.
     sources:
       - label: ITEP Microsimulation Tax Model methodology
-        url: https://itep.org/methodology/
+        url: https://itep.org/who-pays-7th-edition-methodology-and-discussion/
         kind: self
         supports: [codePublic, codeLicense, documentationPublic, parameterSourcing, datasetPublic]
       - label: ITEP Who Pays? state reports (output catalogue)
@@ -429,7 +429,7 @@ transparency:
         supports: [datasetPublic, reproducibleBuilds]
       - label: UK Data Service — FRS licensing (underlying microdata
           requires registered licence)
-        url: https://ukdataservice.ac.uk/find-data/series/?id=200017
+        url: https://beta.ukdataservice.ac.uk/datacatalogue/series/series?id=200017
         kind: government
         supports: [datasetPublic]
       - label: Ghenis & Woodruff — PolicyEngine open-source paper (JOSS)
@@ -454,7 +454,7 @@ transparency:
     testSuitePublic: unknown
     testCount: unknown
     datasetPublic: partial
-    datasetUrl: https://ukdataservice.ac.uk/find-data/series/?id=200017
+    datasetUrl: https://beta.ukdataservice.ac.uk/datacatalogue/series/series?id=200017
     reproducibleBuilds: yes
     notes: >
       UKMOD source files (parameter rules and DSL policies) are
@@ -486,7 +486,7 @@ transparency:
         supports: [codePublic, documentationPublic, parameterSourcing]
       - label: UK Data Service — Family Resources Survey series
           (underlying microdata licensing)
-        url: https://ukdataservice.ac.uk/find-data/series/?id=200017
+        url: https://beta.ukdataservice.ac.uk/datacatalogue/series/series?id=200017
         kind: government
         supports: [datasetPublic]
       - label: JRC EUROMOD (parent framework; same license model)
@@ -540,7 +540,7 @@ transparency:
         supports: [codePublic, documentationPublic]
       - label: UK Data Service — FRS licensing (TAXBEN base data
           requires registered licence, not redistributable)
-        url: https://ukdataservice.ac.uk/find-data/series/?id=200017
+        url: https://beta.ukdataservice.ac.uk/datacatalogue/series/series?id=200017
         kind: government
         supports: [datasetPublic]
 
@@ -580,7 +580,7 @@ transparency:
         supports: [codePublic, documentationPublic]
       - label: UK Data Service — FRS licensing (underlying microdata
           not redistributable)
-        url: https://ukdataservice.ac.uk/find-data/series/?id=200017
+        url: https://beta.ukdataservice.ac.uk/datacatalogue/series/series?id=200017
         kind: government
         supports: [datasetPublic]
       - label: IFS Green Budget — methodological commentary on IGOTM
@@ -642,7 +642,7 @@ transparency:
     contributorCount: unknown
     issueTrackerPublic: no
     documentationPublic: partial
-    documentationUrl: https://bdtrust.org/
+    documentationUrl: https://web.archive.org/web/20240116222713/https://bdtrust.org/
     parameterSourcing: unknown
     testSuitePublic: unknown
     testCount: unknown
@@ -655,12 +655,12 @@ transparency:
       organization publishes program-level methodology summaries and
       annual impact reports but not source code or parameter files.
     sources:
-      - label: Benefits Data Trust — homepage
-        url: https://bdtrust.org/
+      - label: Benefits Data Trust — homepage (archived)
+        url: https://web.archive.org/web/20240116222713/https://bdtrust.org/
         kind: self
         supports: [codePublic, codeLicense, documentationPublic]
-      - label: Benefits Data Trust — what we do
-        url: https://bdtrust.org/what-we-do/
+      - label: Benefits Data Trust — what we do (archived)
+        url: https://web.archive.org/web/20220120132444/https://bdtrust.org/what-we-do/
         kind: self
         supports: [documentationPublic, datasetPublic]
       - label: USDA FNS — SNAP outreach partner program
@@ -696,7 +696,7 @@ transparency:
         kind: self
         supports: [codePublic, codeLicense, documentationPublic]
       - label: BenefitKitchen — about page
-        url: https://benefitkitchen.com/about
+        url: https://benefitkitchen.com/#about
         kind: self
         supports: [documentationPublic]
       - label: BenefitKitchen — API / partners page
@@ -1077,7 +1077,7 @@ transparency:
         supports: [codePublic, documentationPublic]
       - label: UK Data Service — Family Resources Survey series
           (underlying microdata not redistributable)
-        url: https://ukdataservice.ac.uk/find-data/series/?id=200017
+        url: https://beta.ukdataservice.ac.uk/datacatalogue/series/series?id=200017
         kind: government
         supports: [datasetPublic]
       - label: Wikipedia — Policy Simulation Model (third-party
@@ -1121,7 +1121,7 @@ transparency:
         kind: self
         supports: [codePublic, documentationPublic]
       - label: UK Data Service — Family Resources Survey series
-        url: https://ukdataservice.ac.uk/find-data/series/?id=200017
+        url: https://beta.ukdataservice.ac.uk/datacatalogue/series/series?id=200017
         kind: government
         supports: [datasetPublic]
       - label: Fraser of Allander Institute — IPPR tax-benefit
@@ -1166,7 +1166,7 @@ transparency:
         kind: academic
         supports: [codePublic, documentationPublic]
       - label: UK Data Service — Family Resources Survey series
-        url: https://ukdataservice.ac.uk/find-data/series/?id=200017
+        url: https://beta.ukdataservice.ac.uk/datacatalogue/series/series?id=200017
         kind: government
         supports: [datasetPublic]
       - label: Reed (Northumbria PhD thesis) — methodological advances

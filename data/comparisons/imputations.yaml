@@ -25,16 +25,9 @@ imputations:
       - label: policyengine-us-data pipeline (calibration step)
         url: https://github.com/PolicyEngine/policyengine-us-data
         kind: self
-        quote: >
-          Calibration uses an L0-regularised reweighting to hit
-          administrative aggregates for SNAP, EITC, and other programs.
       - label: L0 calibration package
         url: https://github.com/PolicyEngine/L0
         kind: self
-        quote: >
-          L0 reweights survey weights to match a list of admin targets
-          subject to a sparsity penalty so most weights stay near their
-          original values.
 
   - model: trim3
     concept: snap-participation
@@ -53,17 +46,9 @@ imputations:
       - label: TRIM3 SNAP methodology
         url: https://boreas.urban.org/T3IntroFoodStamps.php
         kind: self
-        quote: >
-          TRIM uses an "imputation" procedure to select which eligible
-          CPS units are simulated as participants, until the simulated
-          caseloads align with administrative SNAP State-Outlook
-          Monitoring reports.
       - label: Wheaton & Tran (Urban) — SNAP anti-poverty effects
         url: https://www.urban.org/research/publication/anti-poverty-effects-supplemental-nutrition-assistance-program
         kind: self
-        quote: >
-          TRIM3 corrects for survey under-reporting of SNAP benefits and
-          aligns simulated caseloads with administrative totals.
 
   - model: attis
     concept: snap-participation
@@ -77,9 +62,6 @@ imputations:
       - label: ATTIS overview
         url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
         kind: self
-        quote: >
-          ATTIS adjusts the ACS data to align with administrative
-          program participation totals.
 
   # ============================ Capital gains =================================
   - model: policyengine-us
@@ -98,9 +80,6 @@ imputations:
       - label: policyengine-us-data
         url: https://github.com/PolicyEngine/policyengine-us-data
         kind: self
-        quote: >
-          PUF-CPS matching imputes capital gains, business income, and
-          other variables CPS undercounts.
 
   - model: tpc-microsim
     concept: capital-gains
@@ -119,10 +98,6 @@ imputations:
       - label: TPC Brief Description
         url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
         kind: self
-        quote: >
-          The TPC microsim starts with the IRS Public Use File and
-          statistically matches CPS records to add demographic and
-          benefit-receipt variables not on the PUF.
 
   # ============================ TANF participation ============================
   - model: trim3
@@ -140,9 +115,6 @@ imputations:
       - label: TRIM3 TANF methodology
         url: https://boreas.urban.org/T3IntroAFDCTANF.php
         kind: self
-        quote: >
-          TANF participation imputation aligns simulated caseloads to
-          ACF state-by-state administrative totals.
 
   # ============================ Medicaid participation ========================
   - model: policyengine-us
@@ -158,9 +130,6 @@ imputations:
       - label: Medicaid take-up parameters
         url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/parameters/gov/hhs/medicaid
         kind: self
-        quote: >
-          Medicaid take-up by state and category is a tunable parameter
-          calibrated against CMS enrollment data.
 
   # ============================ Child care subsidy ============================
   - model: trim3
@@ -174,9 +143,6 @@ imputations:
       - label: TRIM3 child care methodology
         url: https://boreas.urban.org/T3IntroChildCare.php
         kind: self
-        quote: >
-          CCDF participation imputation aligns simulated state caseloads
-          to ACF administrative totals.
 
   # ============================ Itemized deductions ===========================
   - model: policyengine-us
@@ -214,9 +180,6 @@ imputations:
       - label: TPC Brief Description (aging)
         url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
         kind: self
-        quote: >
-          Records are aged to future years using CBO's projections of
-          aggregate income and demographic growth.
 
   - model: policyengine-us
     concept: dataset-aging
@@ -227,11 +190,11 @@ imputations:
     baseDataset: Enhanced CPS
     calibrationTargets:
       - CBO baseline economic projections
-    documentationUrl: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/parameters/gov/cbo
+    documentationUrl: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/parameters/calibration/gov/cbo
     reproducible: yes
     sources:
       - label: CBO uprating parameters
-        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/parameters/gov/cbo
+        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/parameters/calibration/gov/cbo
         kind: self
 
   # ===========================================================================
@@ -314,10 +277,6 @@ imputations:
       - label: Wheaton, Giannarelli & Dehry (Urban) — TRIM3-based SPM analyses
         url: https://www.urban.org/research/publication/2021-poverty-projections
         kind: self
-        quote: >
-          We use the official SPM thresholds and modify each household's
-          SPM resources to reflect simulated changes in taxes and
-          benefits.
 
   - model: attis
     concept: spm-thresholds
@@ -437,9 +396,6 @@ imputations:
       - label: TRIM3 SNAP module
         url: https://boreas.urban.org/T3IntroFoodStamps.php
         kind: self
-        quote: >
-          TRIM corrects for survey under-reporting of SNAP and provides
-          benefit values aligned with administrative totals.
 
   - model: attis
     concept: spm-snap
@@ -754,9 +710,6 @@ imputations:
       - label: Giannarelli, Wheaton & Dehry — TRIM3 SPM child poverty projections
         url: https://www.urban.org/research/publication/2021-poverty-projections
         kind: self
-        quote: >
-          We start from Census's SPM resources and substitute simulated
-          values for components affected by the policy change.
 
   - model: attis
     concept: spm-poverty-rate
@@ -813,9 +766,6 @@ imputations:
       - label: Hamilton, Wimer, Collyer et al. — Monthly cash payments
         url: https://povertycenter.columbia.edu/sites/povertycenter.columbia.edu/files/content/Publications/Monthly-Cash-Payments-Reduce-Spells-of-Poverty-CPSP-2022.pdf
         kind: academic
-        quote: >
-          We use the Current Population Survey Annual Social and
-          Economic Supplement and TAXSIM to estimate the policy impact.
       - label: NBER TAXSIM
         url: https://taxsim.nber.org/
         kind: academic
@@ -855,9 +805,6 @@ imputations:
       - label: Hamilton, Wimer, Collyer et al. — Monthly cash payments
         url: https://povertycenter.columbia.edu/sites/povertycenter.columbia.edu/files/content/Publications/Monthly-Cash-Payments-Reduce-Spells-of-Poverty-CPSP-2022.pdf
         kind: academic
-        quote: >
-          We replace the actual Child Tax Credit value with what would
-          have been received under the 2021 ARPA-expanded rules.
 
   - model: columbia-cpsp
     concept: spm-snap

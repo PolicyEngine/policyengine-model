@@ -75,7 +75,7 @@ freshness:
         kind: self
         supports: [updateCadence, handlesFutureDatedLegislation, notableRegimes]
       - label: ASPE Welfare Indicators Annual Report (annual TRIM3 use)
-        url: https://aspe.hhs.gov/topics/poverty-economic-mobility/welfare-indicators-annual-report
+        url: https://aspe.hhs.gov/reports/welfare-indicators-risk-factors-24th-report-congress
         kind: government
         supports: [updateCadence, notableRegimes]
       - label: TRIM3 data description (tied to CPS-ASEC vintage)
@@ -513,13 +513,13 @@ freshness:
         url: https://www.microsimulation.ac.uk/ukmod
         kind: self
         supports: [updateCadence, updateLag]
-      - label: JRC EUROMOD release cycle (parent framework cadence)
-        url: https://euromod-web.jrc.ec.europa.eu/resources/release-notes
+      - label: JRC EUROMOD news and release announcements (parent framework cadence)
+        url: https://euromod-web.jrc.ec.europa.eu/news-and-events/news
         kind: government
         supports: [updateCadence, handlesFutureDatedLegislation]
       - label: UK Data Service FRS release schedule (drives data
           refresh timing)
-        url: https://ukdataservice.ac.uk/find-data/series/?id=200017
+        url: https://beta.ukdataservice.ac.uk/datacatalogue/series/series?id=200017
         kind: government
         supports: [updateLag, updateCadence]
 
@@ -652,8 +652,8 @@ freshness:
       with administrative rules but does not publish a release calendar
       or implementation-year metadata.
     sources:
-      - label: Benefits Data Trust — what we do
-        url: https://bdtrust.org/what-we-do/
+      - label: Benefits Data Trust — what we do (archived)
+        url: https://web.archive.org/web/20220120132444/https://bdtrust.org/what-we-do/
         kind: self
         supports: [updateCadence, notableRegimes,
                    handlesFutureDatedLegislation]
@@ -684,7 +684,7 @@ freshness:
         supports: [updateCadence, notableRegimes,
                    handlesFutureDatedLegislation]
       - label: BenefitKitchen — about
-        url: https://benefitkitchen.com/about
+        url: https://benefitkitchen.com/#about
         kind: self
         supports: [updateCadence, notableRegimes]
 
