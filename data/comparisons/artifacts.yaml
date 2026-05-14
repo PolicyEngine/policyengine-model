@@ -341,12 +341,20 @@ artifacts:
     type: codebase
     name: Budget Lab Tax Model
     public: partial
-    license: MIT
-    url: https://github.com/yale-budget-lab
-    description: Per-analysis R code published in Budget Lab GitHub organization.
+    license: no-license-declared
+    url: https://github.com/Budget-Lab-Yale
+    description: >
+      R code published across the Budget-Lab-Yale GitHub organization
+      (Tax-Simulator, Tax-Data, Macro-Projections, Estate-Tax-
+      Distribution, Safety-Net, Tariff-Model). Verified 2026-05-14 via
+      GitHub API: none of those repos declare a license, so the code
+      is source-available but not licensed for redistribution; reliance
+      on restricted SOI PUF data also blocks external end-to-end
+      reproduction.
     sources:
-      - label: Yale Budget Lab GitHub
-        url: https://github.com/yale-budget-lab
+      - label: Budget-Lab-Yale GitHub organization
+        url: https://github.com/Budget-Lab-Yale
+        kind: self
 
   - model: budgetlab-tax
     type: paper

@@ -347,8 +347,8 @@ transparency:
 
   - model: budgetlab-tax
     codePublic: partial
-    codeLicense: MIT
-    codeUrl: https://github.com/yale-budget-lab
+    codeLicense: no-license-declared
+    codeUrl: https://github.com/Budget-Lab-Yale
     contributorCount: unknown
     issueTrackerPublic: partial
     documentationPublic: yes
@@ -357,12 +357,16 @@ transparency:
     testSuitePublic: unknown
     testCount: unknown
     datasetPublic: no
-    reproducibleBuilds: partial
+    reproducibleBuilds: no
     notes: >
-      Budget Lab publishes methodology documents and selected code for
-      individual analyses; the consolidated model has not yet been
-      released as a single open-source artifact at scale. Per the
-      external comparison sheet flagged as open source; verifying.
+      Source code is publicly viewable across the Budget-Lab-Yale
+      GitHub organization (Tax-Simulator, Tax-Data, Macro-Projections,
+      Estate-Tax-Distribution, Safety-Net, Tariff-Model). Verified via
+      GitHub API on 2026-05-14: NONE of those repos declare a license,
+      so although the code is readable, redistribution and
+      modification rights are not explicitly granted. End-to-end
+      external reproduction is also blocked by reliance on restricted
+      SOI PUF data. Treat as source-available rather than open-source.
     sources:
       - label: Budget Lab at Yale (organization page)
         url: https://budgetlab.yale.edu
@@ -373,7 +377,7 @@ transparency:
         kind: self
         supports: [documentationPublic, parameterSourcing, datasetPublic]
       - label: Yale Budget Lab GitHub organization (public repos)
-        url: https://github.com/yale-budget-lab
+        url: https://github.com/Budget-Lab-Yale
         kind: self
         supports: [codePublic, codeLicense, issueTrackerPublic]
       - label: Brookings press coverage of Budget Lab launch

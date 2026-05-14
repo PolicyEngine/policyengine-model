@@ -378,19 +378,24 @@ models:
     type: microsimulation
     jurisdictions: [us-federal]
     inceptionYear: 2024
-    license: MIT
-    codePublic: true
-    codeUrl: https://github.com/yale-budget-lab
+    license: no-license-declared
+    codePublic: partial
+    codeUrl: https://github.com/Budget-Lab-Yale
     languages: [R]
     primaryDataset: SOI PUF (restricted) with CPS-derived imputations
     documentationUrl: https://budgetlab.yale.edu/topic/methodology
     leads:
       - John Ricco
     summary: >
-      Open-source federal tax microsimulation model maintained by the
-      Budget Lab at Yale (founded 2024). Implementation is in R, with
-      methodology documentation published alongside revenue scoring
-      reports. Comparable scope to TPC's microsim but with open source.
+      Federal tax microsimulation model maintained by the Budget Lab at
+      Yale (founded 2024). Implementation is in R; source code is
+      publicly viewable across the Budget-Lab-Yale GitHub organization
+      (Tax-Simulator, Tax-Data, Macro-Projections, Estate-Tax-
+      Distribution, Safety-Net, Tariff-Model) but none of those repos
+      declare a license, and the model cannot be run end-to-end
+      externally because key inputs rely on restricted SOI PUF data.
+      Methodology documentation is published alongside revenue scoring
+      reports.
     capabilities:
       reformImpact: yes
       integratedMicrodata: no
@@ -405,7 +410,7 @@ models:
         url: https://budgetlab.yale.edu/topic/methodology
         kind: self
       - label: Yale Budget Lab GitHub organization
-        url: https://github.com/yale-budget-lab
+        url: https://github.com/Budget-Lab-Yale
         kind: self
       - label: Brookings press coverage of Budget Lab launch (2024)
         url: https://www.brookings.edu/articles/the-budget-lab-at-yale/
