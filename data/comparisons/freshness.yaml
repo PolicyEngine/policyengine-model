@@ -295,3 +295,197 @@ freshness:
         url: https://www.cbo.gov/topics/budget
         kind: government
         supports: [forwardYearsThrough]
+
+  - model: policyengine-uk
+    latestImplementedYear: 2026
+    forwardYearsThrough: 2030
+    handlesFutureDatedLegislation: yes
+    updateCadence: continuous
+    updateLag: Days to weeks for major fiscal events; same-day for many parameter updates via merged PRs.
+    lastMajorRefresh: 2026-03
+    notableRegimes: >
+      Autumn Budget 2024 (employer NICs increase, Income Tax thresholds
+      frozen through 2028, Universal Credit deduction changes), Spring
+      Statement 2025, devolved Scottish income tax bands. Pre-frozen
+      regimes and announced post-2028 threshold unfreezes tracked where
+      legislated.
+    notes: >
+      Parameter YAML files use date-indexed structure so future-dated
+      changes (e.g. announced threshold uprating, scheduled benefit
+      cap changes) can be encoded as soon as legislation is announced.
+      Calibration to FRS with HMRC/DWP administrative totals.
+    sources:
+      - label: policyengine-uk Autumn Budget 2024 implementation PRs
+        url: https://github.com/PolicyEngine/policyengine-uk/pulls?q=is%3Apr+autumn+budget
+        kind: self
+        supports: [latestImplementedYear, lastMajorRefresh, notableRegimes]
+      - label: policyengine-uk parameter files (date-indexed structure)
+        url: https://github.com/PolicyEngine/policyengine-uk/tree/master/policyengine_uk/parameters
+        kind: self
+        supports: [handlesFutureDatedLegislation, forwardYearsThrough]
+      - label: policyengine-uk commit history (continuous merges)
+        url: https://github.com/PolicyEngine/policyengine-uk/commits/master
+        kind: self
+        supports: [updateCadence, updateLag, lastMajorRefresh]
+      - label: HM Treasury Autumn Budget 2024 (basis for tracked regime)
+        url: https://www.gov.uk/government/publications/autumn-budget-2024
+        kind: government
+        supports: [notableRegimes, latestImplementedYear]
+      - label: policyengine-uk releases
+        url: https://github.com/PolicyEngine/policyengine-uk/releases
+        kind: self
+        supports: [updateCadence, lastMajorRefresh]
+
+  - model: ukmod
+    latestImplementedYear: 2025
+    forwardYearsThrough: 2025
+    handlesFutureDatedLegislation: partial
+    updateCadence: annual
+    updateLag: >
+      Annual release cycle tied to CeMPA's UKMOD update; new policy
+      year usually published within several months of the relevant
+      fiscal event and FRS data update.
+    lastMajorRefresh: 2025
+    notableRegimes: >
+      Annual UKMOD releases (UKMOD A1.0 onwards) implement Autumn
+      Budget and Spring Statement measures through the current tax
+      year. Devolved Scottish income tax bands tracked. Pre-announced
+      future-dated reforms generally only encoded once they take
+      effect.
+    notes: >
+      UKMOD follows the EUROMOD release model: one or two consolidated
+      releases per year with all enacted policies for the new policy
+      year. Forward projection of legislation that has been announced
+      but not yet effective is supported case-by-case rather than as a
+      standard 10-year window.
+    sources:
+      - label: UKMOD release history and country reports
+        url: https://www.microsimulation.ac.uk/ukmod/country-reports
+        kind: self
+        supports: [latestImplementedYear, lastMajorRefresh, updateCadence, notableRegimes]
+      - label: UKMOD home page (annual update cadence)
+        url: https://www.microsimulation.ac.uk/ukmod
+        kind: self
+        supports: [updateCadence, updateLag]
+      - label: JRC EUROMOD release cycle (parent framework cadence)
+        url: https://euromod-web.jrc.ec.europa.eu/resources/release-notes
+        kind: government
+        supports: [updateCadence, handlesFutureDatedLegislation]
+      - label: UK Data Service FRS release schedule (drives data
+          refresh timing)
+        url: https://ukdataservice.ac.uk/find-data/series/?id=200017
+        kind: government
+        supports: [updateLag, updateCadence]
+
+  - model: ifs-taxben
+    latestImplementedYear: 2026
+    forwardYearsThrough: 2029
+    handlesFutureDatedLegislation: yes
+    updateCadence: continuous
+    updateLag: >
+      Days for major fiscal events — IFS routinely publishes TAXBEN
+      distributional analyses within hours of Budget speeches and
+      Spring Statements.
+    lastMajorRefresh: unknown
+    notableRegimes: >
+      Current law as of the most recent Budget or Spring Statement
+      (Autumn Budget 2024 freezes, Spring Statement 2025 measures).
+      IFS analyses regularly project frozen-threshold "fiscal drag"
+      and announced welfare changes several years forward.
+    notes: >
+      TAXBEN's purpose is to score proposed and scheduled fiscal
+      changes; forward-projection over the OBR scorecard horizon is
+      routine. Refresh cadence is event-driven (Budgets and Spring
+      Statements) rather than annual.
+    sources:
+      - label: IFS Green Budget 2024 (TAXBEN-based forward-projected
+          distributional chapters)
+        url: https://ifs.org.uk/green-budget
+        kind: self
+        supports: [latestImplementedYear, forwardYearsThrough, handlesFutureDatedLegislation, notableRegimes]
+      - label: IFS Budget 2024 response (same-day TAXBEN analysis)
+        url: https://ifs.org.uk/articles/autumn-budget-2024-ifs-overview
+        kind: self
+        supports: [updateCadence, updateLag, lastMajorRefresh]
+      - label: HM Treasury Autumn Budget 2024 (basis for forward window)
+        url: https://www.gov.uk/government/publications/autumn-budget-2024
+        kind: government
+        supports: [latestImplementedYear, notableRegimes]
+      - label: Office for Budget Responsibility — Economic and fiscal
+          outlook (OBR window IFS aligns TAXBEN projections to)
+        url: https://obr.uk/efo/economic-and-fiscal-outlook-october-2024/
+        kind: government
+        supports: [forwardYearsThrough]
+
+  - model: igotm
+    latestImplementedYear: 2026
+    forwardYearsThrough: 2029
+    handlesFutureDatedLegislation: yes
+    updateCadence: continuous
+    updateLag: >
+      Days — IGOTM outputs accompany every Budget and Spring
+      Statement document, scoring measures as they are announced.
+    lastMajorRefresh: 2024-10
+    notableRegimes: >
+      Current law as of the most recent Budget (Autumn Budget 2024,
+      Spring Budget 2024). Forward-projection over the OBR scorecard
+      horizon. Encoded regimes include frozen Income Tax thresholds,
+      Universal Credit transitional measures, and employer NICs
+      adjustments.
+    notes: >
+      IGOTM is Treasury's official distributional analysis tool;
+      refresh cadence is tied to fiscal events. Methodology document
+      and Impact on Households annex are updated at each event.
+    sources:
+      - label: HM Treasury — Impact on households (Autumn Budget 2024)
+        url: https://www.gov.uk/government/publications/impact-on-households-distributional-analysis-to-accompany-budget-2024
+        kind: government
+        supports: [latestImplementedYear, lastMajorRefresh, notableRegimes, handlesFutureDatedLegislation]
+      - label: HM Treasury — Impact on households (Spring Budget 2024)
+        url: https://www.gov.uk/government/publications/impact-on-households-distributional-analysis-to-accompany-spring-budget-2024
+        kind: government
+        supports: [updateCadence, updateLag, notableRegimes]
+      - label: OBR — Economic and fiscal outlook (forward window IGOTM
+          aligns with)
+        url: https://obr.uk/efo/economic-and-fiscal-outlook-october-2024/
+        kind: government
+        supports: [forwardYearsThrough]
+      - label: IFS — commentary on Treasury distributional analysis
+          cadence
+        url: https://ifs.org.uk/green-budget
+        kind: academic
+        supports: [updateCadence, updateLag]
+
+  - model: columbia-cpsp
+    latestImplementedYear: 2025
+    forwardYearsThrough: unknown
+    handlesFutureDatedLegislation: partial
+    updateCadence: as-funded
+    updateLag: >
+      Rapid release on policy events when funded — e.g. monthly CTC
+      poverty trackers were published within ~30 days of each monthly
+      payment during the 2021-2022 ARPA expansion.
+    lastMajorRefresh: 2025
+    notableRegimes: >
+      Anchored SPM historical series (1967 onward), ARPA expanded CTC
+      monthly poverty trackers (2021-2022), National Academies child
+      poverty roadmap simulations, OBBBA-era child-poverty analyses.
+    notes: >
+      Update cadence is project-driven rather than systematic; releases
+      align with major policy events and funded analyses. No public
+      release versioning.
+    sources:
+      - label: Hamilton, Wimer, Collyer et al. — Monthly cash payments
+          reduce spells of poverty (2022)
+        url: https://povertycenter.columbia.edu/sites/povertycenter.columbia.edu/files/content/Publications/Monthly-Cash-Payments-Reduce-Spells-of-Poverty-CPSP-2022.pdf
+        kind: academic
+        supports: [notableRegimes, updateLag, lastMajorRefresh]
+      - label: Koutavas, Wang, Slopen et al. — Expanding Paid Parental
+          Leave in NY (2024)
+        url: https://povertycenter.columbia.edu/sites/povertycenter.columbia.edu/files/content/Publications/Expanding-Paid-Parental-Leave-in-New-York-CPSP-2024.pdf
+        kind: academic
+        supports: [latestImplementedYear, updateCadence]
+      - label: CPSP home page (running list of recent publications)
+        url: https://www.povertycenter.columbia.edu
+        kind: self
+        supports: [updateCadence, lastMajorRefresh, latestImplementedYear]

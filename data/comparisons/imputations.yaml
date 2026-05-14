@@ -233,3 +233,660 @@ imputations:
       - label: CBO uprating parameters
         url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/parameters/gov/cbo
         kind: self
+
+  # ===========================================================================
+  # Supplemental Poverty Measure (SPM) — atomic methodology rows.
+  #
+  # Census publishes annual SPM Research File imputations for every
+  # resources component. The methodology question is per-component: does
+  # each model compute that component from its own rules, take Census's
+  # imputed value, or use survey-reported data unchanged?
+  #
+  # The pattern that emerges:
+  #   - PolicyEngine US computes every component it touches (taxes,
+  #     program benefits) from its own variables; only the genuinely
+  #     survey-reported deductions (medical OOP, child care, child
+  #     support paid) stay survey-reported.
+  #   - TRIM3 and ATTIS use Census's SPM Research File as the baseline
+  #     and overwrite specific components when the simulation changes
+  #     them — a hybrid that anchors to Census totals on unchanged
+  #     components.
+  # ===========================================================================
+
+  # ----------------------------- SPM unit definition --------------------------
+  - model: policyengine-us
+    concept: spm-unit-definition
+    method: rule-based
+    description: >
+      Implements its own SPM-unit construction in code, closely tracking
+      Census's definition: cohabitating partners, foster children, and
+      unrelated children under 15 share resources within an SPM unit.
+    baseDataset: Enhanced CPS
+    reproducible: yes
+    sources:
+      - label: policyengine-us SPM unit entity
+        url: https://github.com/PolicyEngine/policyengine-us/blob/master/policyengine_us/entities.py
+        kind: self
+      - label: Census Bureau — SPM technical documentation (definition)
+        url: https://www.census.gov/topics/income-poverty/supplemental-poverty-measure/methodology.html
+        kind: government
+
+  - model: trim3
+    concept: spm-unit-definition
+    method: census-research-file
+    description: >
+      Uses Census's SPM unit definition as published in the SPM
+      Research File.
+    baseDataset: TRIM3 augmented CPS-ASEC
+    reproducible: no
+    sources:
+      - label: Census Bureau — SPM Research File
+        url: https://www.census.gov/data/datasets/time-series/demo/supplemental-poverty-measure/spm.html
+        kind: government
+
+  # ----------------------------- SPM thresholds -------------------------------
+  - model: policyengine-us
+    concept: spm-thresholds
+    method: rule-based
+    description: >
+      Census-published SPM thresholds loaded as YAML parameters indexed
+      by year, housing tenure, and metropolitan/non-metro status; looked
+      up at runtime per SPM unit.
+    baseDataset: Census SPM threshold tables (published)
+    reproducible: yes
+    sources:
+      - label: SPM threshold parameter file
+        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/parameters/gov/census/spm_threshold
+        kind: self
+      - label: Census Bureau — SPM thresholds
+        url: https://www.census.gov/data/tables/time-series/demo/income-poverty/supplemental-poverty-measure-thresholds.html
+        kind: government
+
+  - model: trim3
+    concept: spm-thresholds
+    method: census-research-file
+    description: >
+      Adopts Census-published SPM thresholds directly; not modified for
+      policy simulations.
+    baseDataset: Census SPM threshold tables
+    reproducible: no
+    sources:
+      - label: Wheaton, Giannarelli & Dehry (Urban) — TRIM3-based SPM analyses
+        url: https://www.urban.org/research/publication/2021-poverty-projections
+        kind: self
+        quote: >
+          We use the official SPM thresholds and modify each household's
+          SPM resources to reflect simulated changes in taxes and
+          benefits.
+
+  - model: attis
+    concept: spm-thresholds
+    method: census-research-file
+    description: Adopts Census-published SPM thresholds.
+    baseDataset: Census SPM threshold tables
+    reproducible: no
+    sources:
+      - label: ATTIS overview (uses Census SPM methodology)
+        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+        kind: self
+
+  # ----------------------------- Cash income ----------------------------------
+  - model: policyengine-us
+    concept: spm-cash-income
+    method: survey-reported
+    description: >
+      Cash income components (earnings, interest, dividends, retirement
+      income, etc.) taken from CPS-ASEC as reported, with PUF-based
+      imputations for high-income tax variables.
+    baseDataset: Enhanced CPS
+    reproducible: yes
+    sources:
+      - label: policyengine-us-data (cash income variables)
+        url: https://github.com/PolicyEngine/policyengine-us-data
+        kind: self
+
+  - model: trim3
+    concept: spm-cash-income
+    method: survey-reported
+    description: Cash income components from CPS-ASEC with TRIM3-specific income corrections.
+    baseDataset: TRIM3 augmented CPS-ASEC
+    reproducible: no
+    sources:
+      - label: TRIM3 data description
+        url: https://boreas.urban.org/T3IntroData.php
+        kind: self
+
+  # ----------------------------- EITC (resources +) ---------------------------
+  - model: policyengine-us
+    concept: spm-eitc
+    method: rule-based
+    description: >
+      Refundable portion of EITC computed from PolicyEngine's EITC rules
+      and added to SPM resources directly.
+    baseDataset: Enhanced CPS
+    reproducible: yes
+    sources:
+      - label: spm_unit_net_income variable (assembles resources)
+        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/variables/household/income/spm_unit
+        kind: self
+      - label: EITC variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/variables/gov/irs/credits/eitc
+        kind: self
+
+  - model: trim3
+    concept: spm-eitc
+    method: rule-based
+    description: >
+      EITC computed by TRIM3's federal tax module and added to SPM
+      resources, overwriting Census's imputed EITC value for the unit.
+    baseDataset: TRIM3 augmented CPS-ASEC
+    reproducible: no
+    sources:
+      - label: TRIM3 federal tax module
+        url: https://boreas.urban.org/T3IntroFedTax.php
+        kind: self
+
+  # ----------------------------- CTC refundable -------------------------------
+  - model: policyengine-us
+    concept: spm-ctc
+    method: rule-based
+    description: Refundable portion of CTC computed from PolicyEngine's CTC rules.
+    baseDataset: Enhanced CPS
+    reproducible: yes
+    sources:
+      - label: CTC variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/variables/gov/irs/credits/ctc
+        kind: self
+
+  - model: trim3
+    concept: spm-ctc
+    method: rule-based
+    description: Refundable CTC computed by TRIM3's federal tax module and substituted into SPM resources.
+    baseDataset: TRIM3 augmented CPS-ASEC
+    reproducible: no
+    sources:
+      - label: TRIM3 federal tax module
+        url: https://boreas.urban.org/T3IntroFedTax.php
+        kind: self
+
+  # ----------------------------- SNAP -----------------------------------------
+  - model: policyengine-us
+    concept: spm-snap
+    method: rule-based
+    description: >
+      SNAP benefit value computed from rules-engine eligibility and
+      benefit formulae, with L0-calibrated participation, then added to
+      SPM resources.
+    baseDataset: Enhanced CPS
+    reproducible: yes
+    sources:
+      - label: SNAP variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/variables/gov/usda/snap
+        kind: self
+
+  - model: trim3
+    concept: spm-snap
+    method: rule-based
+    description: >
+      SNAP value from TRIM3's SNAP module (the model's flagship benefit
+      simulation) substituted into SPM resources, overwriting Census's
+      imputation.
+    baseDataset: TRIM3 augmented CPS-ASEC
+    reproducible: no
+    sources:
+      - label: TRIM3 SNAP module
+        url: https://boreas.urban.org/T3IntroFoodStamps.php
+        kind: self
+        quote: >
+          TRIM corrects for survey under-reporting of SNAP and provides
+          benefit values aligned with administrative totals.
+
+  - model: attis
+    concept: spm-snap
+    method: rule-based
+    description: SNAP value from ATTIS's SNAP module substituted into SPM resources.
+    baseDataset: ATTIS-prepared ACS
+    reproducible: no
+    sources:
+      - label: ATTIS overview
+        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+        kind: self
+
+  # ----------------------------- Housing subsidy ------------------------------
+  - model: policyengine-us
+    concept: spm-housing-subsidy
+    method: rule-based
+    description: >
+      Section 8 / public housing subsidy value computed from
+      PolicyEngine's HUD rules (Fair Market Rent, Total Tenant Payment,
+      etc.) and added to SPM resources.
+    baseDataset: Enhanced CPS
+    reproducible: yes
+    sources:
+      - label: HUD Section 8 variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/variables/gov/hud
+        kind: self
+
+  - model: trim3
+    concept: spm-housing-subsidy
+    method: rule-based
+    description: Housing subsidy value from TRIM3's housing module substituted into SPM resources.
+    baseDataset: TRIM3 augmented CPS-ASEC
+    reproducible: no
+    sources:
+      - label: TRIM3 housing module
+        url: https://boreas.urban.org/T3IntroHousing.php
+        kind: self
+
+  # ----------------------------- LIHEAP ---------------------------------------
+  - model: policyengine-us
+    concept: spm-liheap
+    method: rule-based
+    description: LIHEAP energy assistance value computed from state-specific rules and added to SPM resources.
+    baseDataset: Enhanced CPS
+    reproducible: yes
+    sources:
+      - label: LIHEAP variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/variables/gov/hhs/liheap
+        kind: self
+
+  - model: trim3
+    concept: spm-liheap
+    method: census-research-file
+    description: >
+      LIHEAP value typically taken from Census SPM Research File;
+      TRIM3 does not document a dedicated LIHEAP simulation.
+    baseDataset: TRIM3 augmented CPS-ASEC
+    reproducible: no
+    sources:
+      - label: TRIM3 program documentation (no LIHEAP module listed)
+        url: https://boreas.urban.org/T3IntroHistory.php
+        kind: self
+
+  # ----------------------------- WIC ------------------------------------------
+  - model: policyengine-us
+    concept: spm-wic
+    method: rule-based
+    description: WIC benefit value computed from PolicyEngine's WIC rules and added to SPM resources.
+    baseDataset: Enhanced CPS
+    reproducible: yes
+    sources:
+      - label: WIC variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/variables/gov/usda/wic
+        kind: self
+
+  - model: trim3
+    concept: spm-wic
+    method: rule-based
+    description: WIC simulated by TRIM3's WIC module and substituted into SPM resources.
+    baseDataset: TRIM3 augmented CPS-ASEC
+    reproducible: no
+    sources:
+      - label: TRIM3 program list
+        url: https://boreas.urban.org/T3IntroHistory.php
+        kind: self
+
+  # ----------------------------- School meals ---------------------------------
+  - model: policyengine-us
+    concept: spm-school-meals
+    method: rule-based
+    description: >
+      Free and reduced-price school meal value computed from National
+      School Lunch Program eligibility rules and added to SPM resources.
+    baseDataset: Enhanced CPS
+    reproducible: yes
+    sources:
+      - label: NSLP variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/variables/gov/usda/school_meals
+        kind: self
+
+  - model: trim3
+    concept: spm-school-meals
+    method: census-research-file
+    description: >
+      School meal value typically taken from Census SPM Research File;
+      not separately documented as a TRIM3 module.
+    baseDataset: TRIM3 augmented CPS-ASEC
+    reproducible: no
+    sources:
+      - label: TRIM3 program list
+        url: https://boreas.urban.org/T3IntroHistory.php
+        kind: self
+
+  # ----------------------------- Federal income tax ---------------------------
+  - model: policyengine-us
+    concept: spm-tax-federal
+    method: rule-based
+    description: Federal income tax computed from PolicyEngine's tax rules and subtracted from SPM resources.
+    baseDataset: Enhanced CPS
+    reproducible: yes
+    sources:
+      - label: Federal income tax variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/variables/gov/irs
+        kind: self
+
+  - model: trim3
+    concept: spm-tax-federal
+    method: rule-based
+    description: Federal income tax computed by TRIM3 federal tax module and substituted into SPM deductions.
+    baseDataset: TRIM3 augmented CPS-ASEC
+    reproducible: no
+    sources:
+      - label: TRIM3 federal tax module
+        url: https://boreas.urban.org/T3IntroFedTax.php
+        kind: self
+
+  # ----------------------------- Payroll tax ----------------------------------
+  - model: policyengine-us
+    concept: spm-tax-payroll
+    method: rule-based
+    description: Employee-side FICA computed from PolicyEngine's payroll tax rules and subtracted from SPM resources.
+    baseDataset: Enhanced CPS
+    reproducible: yes
+    sources:
+      - label: Payroll tax variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/variables/gov/irs/payroll
+        kind: self
+
+  - model: trim3
+    concept: spm-tax-payroll
+    method: rule-based
+    description: Employee-side FICA computed by TRIM3 federal tax module and substituted into SPM deductions.
+    baseDataset: TRIM3 augmented CPS-ASEC
+    reproducible: no
+    sources:
+      - label: TRIM3 federal tax module
+        url: https://boreas.urban.org/T3IntroFedTax.php
+        kind: self
+
+  # ----------------------------- State income tax -----------------------------
+  - model: policyengine-us
+    concept: spm-tax-state
+    method: rule-based
+    description: >
+      State income tax computed from PolicyEngine's per-state tax rules
+      (all 41 income-taxing states + DC) and subtracted from SPM
+      resources.
+    baseDataset: Enhanced CPS
+    reproducible: yes
+    sources:
+      - label: State tax parameters
+        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/parameters/gov/states
+        kind: self
+
+  - model: trim3
+    concept: spm-tax-state
+    method: rule-based
+    description: State income tax computed by TRIM3 state tax module and substituted into SPM deductions.
+    baseDataset: TRIM3 augmented CPS-ASEC
+    reproducible: no
+    sources:
+      - label: TRIM3 state tax module
+        url: https://boreas.urban.org/T3IntroFedTax.php
+        kind: self
+
+  # ----------------------------- Work expenses --------------------------------
+  - model: policyengine-us
+    concept: spm-work-expenses
+    method: rule-based
+    description: >
+      Work-related expenses computed via Census's published formula
+      (median weekly amount × weeks worked, capped at earnings) applied
+      per working adult.
+    baseDataset: Enhanced CPS
+    reproducible: yes
+    sources:
+      - label: Work expenses variable
+        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/variables/household/income/spm_unit
+        kind: self
+      - label: Census SPM work expenses methodology
+        url: https://www.census.gov/topics/income-poverty/supplemental-poverty-measure/methodology.html
+        kind: government
+
+  - model: trim3
+    concept: spm-work-expenses
+    method: census-research-file
+    description: Work-related expenses taken from Census SPM Research File.
+    baseDataset: TRIM3 augmented CPS-ASEC
+    reproducible: no
+    sources:
+      - label: Census SPM methodology
+        url: https://www.census.gov/topics/income-poverty/supplemental-poverty-measure/methodology.html
+        kind: government
+
+  # ----------------------------- Child care expenses --------------------------
+  - model: policyengine-us
+    concept: spm-child-care-expenses
+    method: survey-reported
+    description: >
+      Out-of-pocket child care expenses taken from CPS-ASEC reported
+      values with PolicyEngine-Data pipeline imputations where the
+      survey is blank.
+    baseDataset: Enhanced CPS
+    reproducible: yes
+    sources:
+      - label: policyengine-us-data child care imputations
+        url: https://github.com/PolicyEngine/policyengine-us-data
+        kind: self
+
+  - model: trim3
+    concept: spm-child-care-expenses
+    method: census-research-file
+    description: Child care expenses taken from Census SPM Research File.
+    baseDataset: TRIM3 augmented CPS-ASEC
+    reproducible: no
+    sources:
+      - label: Census SPM methodology
+        url: https://www.census.gov/topics/income-poverty/supplemental-poverty-measure/methodology.html
+        kind: government
+
+  # ----------------------------- Medical OOP ----------------------------------
+  - model: policyengine-us
+    concept: spm-medical-oop
+    method: survey-reported
+    description: Medical out-of-pocket expenses taken from CPS-ASEC reported MOOP fields.
+    baseDataset: Enhanced CPS
+    reproducible: yes
+    sources:
+      - label: policyengine-us-data MOOP variable
+        url: https://github.com/PolicyEngine/policyengine-us-data
+        kind: self
+
+  - model: trim3
+    concept: spm-medical-oop
+    method: census-research-file
+    description: Medical OOP taken from Census SPM Research File.
+    baseDataset: TRIM3 augmented CPS-ASEC
+    reproducible: no
+    sources:
+      - label: Census SPM methodology
+        url: https://www.census.gov/topics/income-poverty/supplemental-poverty-measure/methodology.html
+        kind: government
+
+  # ----------------------------- Child support paid ---------------------------
+  - model: policyengine-us
+    concept: spm-child-support-paid
+    method: survey-reported
+    description: Child support paid taken from CPS-ASEC reported amounts.
+    baseDataset: Enhanced CPS
+    reproducible: yes
+    sources:
+      - label: policyengine-us-data child support
+        url: https://github.com/PolicyEngine/policyengine-us-data
+        kind: self
+
+  - model: trim3
+    concept: spm-child-support-paid
+    method: census-research-file
+    description: Child support paid taken from Census SPM Research File.
+    baseDataset: TRIM3 augmented CPS-ASEC
+    reproducible: no
+    sources:
+      - label: Census SPM methodology
+        url: https://www.census.gov/topics/income-poverty/supplemental-poverty-measure/methodology.html
+        kind: government
+
+  # ----------------------------- Final poverty rate ---------------------------
+  - model: policyengine-us
+    concept: spm-poverty-rate
+    method: rule-based
+    description: >
+      SPM poverty rate computed from all PolicyEngine-computed resource
+      components against Census thresholds — internally consistent
+      across baseline and reform scenarios.
+    baseDataset: Enhanced CPS
+    reproducible: yes
+    sources:
+      - label: SPM poverty rate variable
+        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/variables/household/income/spm_unit
+        kind: self
+
+  - model: trim3
+    concept: spm-poverty-rate
+    method: rule-based
+    description: >
+      SPM poverty rate computed from Census thresholds and a hybrid
+      resources stack (TRIM3 outputs substituted for simulated
+      components, Census research file values used otherwise).
+    baseDataset: TRIM3 augmented CPS-ASEC
+    reproducible: no
+    sources:
+      - label: Giannarelli, Wheaton & Dehry — TRIM3 SPM child poverty projections
+        url: https://www.urban.org/research/publication/2021-poverty-projections
+        kind: self
+        quote: >
+          We start from Census's SPM resources and substitute simulated
+          values for components affected by the policy change.
+
+  - model: attis
+    concept: spm-poverty-rate
+    method: rule-based
+    description: >
+      SPM poverty rate produced for sub-state geographies using
+      ATTIS-computed program values and Census SPM Research File
+      values for unchanged components.
+    baseDataset: ATTIS-prepared ACS
+    reproducible: no
+    sources:
+      - label: State of the Safety Net (sub-state SPM analyses)
+        url: https://www.urban.org/projects/state-safety-net
+        kind: self
+
+  - model: cbo-microsim
+    concept: spm-poverty-rate
+    method: rule-based
+    description: >
+      CBO produces poverty rate estimates as part of its distributional
+      analyses of taxes and transfers; methodology details are in CBO's
+      published working papers.
+    baseDataset: CBO matched CPS + SOI
+    reproducible: no
+    sources:
+      - label: CBO Distribution of Household Income
+        url: https://www.cbo.gov/topic/income-distribution
+        kind: government
+
+  # ============================ Columbia CPSP SPM rows =======================
+  - model: columbia-cpsp
+    concept: spm-thresholds
+    method: census-research-file
+    description: >
+      Adopts Census-published SPM thresholds; also produces anchored
+      variants (threshold fixed at a base year and inflated by CPI) for
+      historical trend work.
+    baseDataset: CPS-ASEC
+    reproducible: no
+    sources:
+      - label: CPSP working papers
+        url: https://www.povertycenter.columbia.edu
+        kind: self
+
+  - model: columbia-cpsp
+    concept: spm-tax-federal
+    method: other
+    description: >
+      Delegates federal income tax computation to NBER's TAXSIM rather
+      than implementing tax rules internally.
+    baseDataset: CPS-ASEC + TAXSIM
+    reproducible: no
+    sources:
+      - label: Hamilton, Wimer, Collyer et al. — Monthly cash payments
+        url: https://povertycenter.columbia.edu/sites/povertycenter.columbia.edu/files/content/Publications/Monthly-Cash-Payments-Reduce-Spells-of-Poverty-CPSP-2022.pdf
+        kind: academic
+        quote: >
+          We use the Current Population Survey Annual Social and
+          Economic Supplement and TAXSIM to estimate the policy impact.
+      - label: NBER TAXSIM
+        url: https://taxsim.nber.org/
+        kind: academic
+
+  - model: columbia-cpsp
+    concept: spm-tax-state
+    method: other
+    description: State income tax computed via NBER TAXSIM rather than via CPSP-internal rules.
+    baseDataset: CPS-ASEC + TAXSIM
+    reproducible: no
+    sources:
+      - label: NBER TAXSIM (state tax modules)
+        url: https://taxsim.nber.org/
+        kind: academic
+
+  - model: columbia-cpsp
+    concept: spm-eitc
+    method: other
+    description: EITC value taken from TAXSIM output and added to SPM resources.
+    baseDataset: CPS-ASEC + TAXSIM
+    reproducible: no
+    sources:
+      - label: CPSP working papers
+        url: https://www.povertycenter.columbia.edu
+        kind: self
+
+  - model: columbia-cpsp
+    concept: spm-ctc
+    method: rule-based
+    description: >
+      CTC under simulated policy scenarios — CPSP's signature use case
+      during the 2021 ARPA expansion, simulating CTC under both
+      pre-ARPA and ARPA rules to estimate monthly poverty impacts.
+    baseDataset: CPS-ASEC
+    reproducible: no
+    sources:
+      - label: Hamilton, Wimer, Collyer et al. — Monthly cash payments
+        url: https://povertycenter.columbia.edu/sites/povertycenter.columbia.edu/files/content/Publications/Monthly-Cash-Payments-Reduce-Spells-of-Poverty-CPSP-2022.pdf
+        kind: academic
+        quote: >
+          We replace the actual Child Tax Credit value with what would
+          have been received under the 2021 ARPA-expanded rules.
+
+  - model: columbia-cpsp
+    concept: spm-snap
+    method: census-research-file
+    description: >
+      SNAP value taken from Census SPM Research File unless the
+      simulation specifically reforms SNAP.
+    baseDataset: CPS-ASEC
+    reproducible: no
+    sources:
+      - label: CPSP working papers (Census SPM baseline)
+        url: https://www.povertycenter.columbia.edu
+        kind: self
+
+  - model: columbia-cpsp
+    concept: spm-poverty-rate
+    method: rule-based
+    description: >
+      SPM poverty rate computed from CPSP-modified resources (TAXSIM
+      taxes, simulated reform components, Census Research File for
+      unchanged components) against Census thresholds; anchored
+      variants enable historical trend comparison.
+    baseDataset: CPS-ASEC + TAXSIM
+    reproducible: no
+    sources:
+      - label: National Academies — Roadmap to Reducing Child Poverty
+          (CPSP one of two commissioned microsim teams)
+        url: https://nap.nationalacademies.org/catalog/25246
+        kind: academic
+      - label: Hamilton, Wimer, Collyer et al. — Monthly cash payments
+        url: https://povertycenter.columbia.edu/sites/povertycenter.columbia.edu/files/content/Publications/Monthly-Cash-Payments-Reduce-Spells-of-Poverty-CPSP-2022.pdf
+        kind: academic

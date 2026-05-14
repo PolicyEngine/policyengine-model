@@ -800,3 +800,884 @@ coverage:
     sources:
       - label: TPC state EITC analysis
         url: https://www.taxpolicycenter.org/briefing-book/what-state-earned-income-tax-credit
+
+  # ============================ JCT microsim =================================
+  - model: jct-microsim
+    program: us-federal-income-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: >
+      JCT's Individual Tax Model uses an SOI sample of ~200,000 individual
+      income tax returns to score federal income tax legislation.
+    sources:
+      - label: JCT — Overview of Work of the Staff (lists Individual Model)
+        url: https://www.jct.gov/getattachment/745c1c31-9111-420d-8294-e3c02cd6a96e/x-105-03-1691.pdf
+        kind: government
+        quote: >-
+          The largest microsimulation model employed by the Joint
+          Committee staff is the individual income tax model.
+      - label: JCT — Revenue Estimating (operations page)
+        url: https://www.jct.gov/operations/revenue-estimating/
+        kind: government
+      - label: CRS — How federal government estimates tax revenue
+        url: https://crsreports.congress.gov/product/pdf/RL/RL31292
+        kind: government
+
+  - model: jct-microsim
+    program: us-payroll-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: >
+      JCT staff routinely score payroll tax proposals; an income and
+      payroll tax offset is built into the revenue-estimating process.
+    sources:
+      - label: JCT — Revenue Estimating (describes payroll tax offset)
+        url: https://www.jct.gov/operations/revenue-estimating/
+        kind: government
+        quote: >-
+          The Joint Committee staff incorporates an income and payroll
+          tax offset when estimating the effects of changes in payroll
+          taxes.
+      - label: JCT — Overview of Work of the Staff
+        url: https://www.jct.gov/getattachment/745c1c31-9111-420d-8294-e3c02cd6a96e/x-105-03-1691.pdf
+        kind: government
+
+  - model: jct-microsim
+    program: us-eitc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: EITC is included in JCT's annual tax expenditure estimates.
+    sources:
+      - label: JCT — Estimates of Federal Tax Expenditures FY 2024-2028 (JCX-48-24)
+        url: https://www.jct.gov/publications/2024/jcx-48-24/
+        kind: government
+      - label: JCT — Revenue Estimating (operations)
+        url: https://www.jct.gov/operations/revenue-estimating/
+        kind: government
+
+  - model: jct-microsim
+    program: us-ctc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2026
+    notes: CTC modeled in JCT's Individual Tax Model; OBBBA changes scored in 2025.
+    sources:
+      - label: JCT — Macroeconomic Analysis of a Permanent Child Tax Credit Expansion
+        url: https://www.jct.gov/getattachment/655c151f-fa6a-4660-a961-05d028c2d000/Child-Tax-Credit-Expansion.pdf
+        kind: government
+      - label: JCT — Estimates of Federal Tax Expenditures (JCX-48-24)
+        url: https://www.jct.gov/publications/2024/jcx-48-24/
+        kind: government
+
+  - model: jct-microsim
+    program: us-cdcc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: CDCC covered in JCT background papers; scored in 2025 reconciliation.
+    sources:
+      - label: JCT — Background on Various Family-Related Tax Provisions (JCX-33-23)
+        url: https://www.jct.gov/publications/2023/jcx-33-23/
+        kind: government
+      - label: JCT — Estimates of Federal Tax Expenditures (JCX-48-24)
+        url: https://www.jct.gov/publications/2024/jcx-48-24/
+        kind: government
+
+  - model: jct-microsim
+    program: us-premium-tax-credit
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: >
+      Premium Tax Credit included in annual tax expenditure estimates;
+      JCT staff augment CBO's HISIM2 with PTC revenue estimates.
+    sources:
+      - label: JCT — Estimates of Federal Tax Expenditures (JCX-48-24, includes PTC)
+        url: https://www.jct.gov/publications/2024/jcx-48-24/
+        kind: government
+      - label: CRS — Enhanced Premium Tax Credit and 2026 Exchange Premiums
+        url: https://www.congress.gov/crs-product/R48290
+        kind: government
+
+  - model: jct-microsim
+    program: us-estate-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: >
+      JCT maintains a separate Estate and Gift Model built on a 2008 SOI
+      estate-tax-return sample (~11,700 records, ~38,400 decedents).
+    sources:
+      - label: JCT — Modeling the Federal Revenue Effects of Changes in
+          Estate and Gift Taxation
+        url: https://www.jct.gov/getattachment/4912f291-c70b-47df-9e59-0c6a9c9494af/x-76-12-4492.pdf
+        kind: government
+        quote: >-
+          The Joint Committee staff begins with a sample of estate tax
+          returns filed in 2008 ... contains 11,726 records representing
+          the estates of 38,373 decedents.
+      - label: JCT — Revenue Estimating (lists Estate and Gift Model)
+        url: https://www.jct.gov/operations/revenue-estimating/
+        kind: government
+
+  - model: jct-microsim
+    program: us-snap
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    notes: JCT models federal taxation only; transfer programs are out of scope.
+    sources:
+      - label: JCT — Overview of Work of the Staff (lists models, all tax)
+        url: https://www.jct.gov/getattachment/745c1c31-9111-420d-8294-e3c02cd6a96e/x-105-03-1691.pdf
+        kind: government
+
+  - model: jct-microsim
+    program: us-medicaid
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    notes: JCT scope is federal taxation; healthcare coverage modeling is at CBO.
+    sources:
+      - label: JCT — Overview of Work of the Staff
+        url: https://www.jct.gov/getattachment/745c1c31-9111-420d-8294-e3c02cd6a96e/x-105-03-1691.pdf
+        kind: government
+
+  - model: jct-microsim
+    program: us-ssi
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    notes: JCT scope is federal taxation.
+    sources:
+      - label: JCT — Overview of Work of the Staff
+        url: https://www.jct.gov/getattachment/745c1c31-9111-420d-8294-e3c02cd6a96e/x-105-03-1691.pdf
+        kind: government
+
+  - model: jct-microsim
+    program: us-state-income-tax
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    notes: JCT scope is federal only.
+    sources:
+      - label: JCT — Revenue Estimating (federal scope)
+        url: https://www.jct.gov/operations/revenue-estimating/
+        kind: government
+
+  # ============================ CBO microsim =================================
+  - model: cbo-microsim
+    program: us-federal-income-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: >
+      CBO's microsimulation tax model covers regular income tax, AMT, and
+      preferential rates on long-term capital gains and qualified dividends.
+    sources:
+      - label: CBO — An Overview of CBO's Microsimulation Tax Model (2018)
+        url: https://www.cbo.gov/publication/54096
+        kind: government
+        quote: >-
+          CBO uses its microsimulation tax model to simulate the effects
+          of tax rules for a representative sample of tax filers in each
+          year of the budget window.
+      - label: CBO — Advanced Models and Details
+        url: https://www.cbo.gov/models/details
+        kind: government
+
+  - model: cbo-microsim
+    program: us-payroll-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: FICA and SECA modeled in CBO's microsimulation tax model.
+    sources:
+      - label: CBO — An Overview of CBO's Microsimulation Tax Model
+        url: https://www.cbo.gov/publication/54096
+        kind: government
+      - label: CBO — Advanced Models and Details
+        url: https://www.cbo.gov/models/details
+        kind: government
+
+  - model: cbo-microsim
+    program: us-eitc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    sources:
+      - label: CBO — An Overview of CBO's Microsimulation Tax Model
+          (lists EITC among credits modeled)
+        url: https://www.cbo.gov/publication/54096
+        kind: government
+      - label: CBO — Distribution of Household Income
+        url: https://www.cbo.gov/topic/income-distribution
+        kind: government
+
+  - model: cbo-microsim
+    program: us-ctc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2026
+    sources:
+      - label: CBO — An Overview of CBO's Microsimulation Tax Model
+          (lists CTC among credits modeled)
+        url: https://www.cbo.gov/publication/54096
+        kind: government
+      - label: CBO — How H.R. 1 (OBBBA) Would Affect Distribution of
+          Resources (uses CTC modeling)
+        url: https://www.cbo.gov/publication/61469
+        kind: government
+
+  - model: cbo-microsim
+    program: us-cdcc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    sources:
+      - label: CBO — An Overview of CBO's Microsimulation Tax Model
+          (lists CDCTC among credits)
+        url: https://www.cbo.gov/publication/54096
+        kind: government
+
+  - model: cbo-microsim
+    program: us-premium-tax-credit
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: >
+      Premium Tax Credit modeled through CBO's HISIM2 health-insurance
+      simulation model, not the microsim tax model directly.
+    sources:
+      - label: CBO — Health Insurance Coverage Projections 2023-2033 (HISIM2)
+        url: https://www.cbo.gov/publication/59132
+        kind: government
+      - label: CRS — Enhanced Premium Tax Credit and 2026 Exchange Premiums
+        url: https://www.congress.gov/crs-product/R48290
+        kind: government
+
+  - model: cbo-microsim
+    program: us-snap
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: >
+      CBO publishes SNAP outlay and caseload projections in baselines and
+      cost estimates (e.g. dynamic analysis of OBBBA's SNAP provisions).
+    sources:
+      - label: CBO — Dynamic Analysis of Changes to SNAP in H.R. 1 (2025)
+        url: https://www.cbo.gov/publication/61505
+        kind: government
+      - label: CBO — Work Requirements and Work Supports for Recipients
+          of Means-Tested Benefits
+        url: https://www.cbo.gov/system/files/2022-06/57702-Work-Requirements.pdf
+        kind: government
+
+  - model: cbo-microsim
+    program: us-medicaid
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: >
+      Medicaid enrollment projections produced by CBO's HISIM2 model,
+      augmented by a separate Medicaid model and T-MSIS data.
+    sources:
+      - label: CBO — Health Insurance Coverage Projections 2023-2033 (HISIM2)
+        url: https://www.cbo.gov/publication/59132
+        kind: government
+      - label: CBO — Advanced Models (lists T-MSIS Person Summary File)
+        url: https://www.cbo.gov/models/details
+        kind: government
+
+  - model: cbo-microsim
+    program: us-ssi
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: SSI outlays projected in CBO baselines and budget options.
+    sources:
+      - label: CBO — Budget and Economic Outlook 2025-2035
+        url: https://www.cbo.gov/publication/61172
+        kind: government
+      - label: CBO — Model to Adjust for Survey Underreporting of Receipt
+          from Means-Tested Transfer Programs
+        url: https://www.cbo.gov/models/details
+        kind: government
+
+  - model: cbo-microsim
+    program: us-oasi
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: >
+      OASI projections produced by CBOLT (long-term model) and the Social
+      Security Trust Funds Model.
+    sources:
+      - label: CBO — 2024 Long-Term Projections for Social Security
+        url: https://www.cbo.gov/publication/60679
+        kind: government
+      - label: CBO — Advanced Models (lists Social Security Trust Funds Model)
+        url: https://www.cbo.gov/models/details
+        kind: government
+
+  - model: cbo-microsim
+    program: us-ssdi
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: SSDI projected in CBOLT alongside OASI.
+    sources:
+      - label: CBO — 2024 Long-Term Projections for Social Security
+        url: https://www.cbo.gov/publication/60679
+        kind: government
+      - label: CBO — Advanced Models (Social Security Trust Funds Model)
+        url: https://www.cbo.gov/models/details
+        kind: government
+
+  - model: cbo-microsim
+    program: us-state-income-tax
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    notes: CBO scope is federal only.
+    sources:
+      - label: CBO — Advanced Models and Details (federal scope)
+        url: https://www.cbo.gov/models/details
+        kind: government
+
+  - model: cbo-microsim
+    program: us-tariffs
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: >
+      CBO maintains a Conventional Tariff Analysis Model with public code.
+    sources:
+      - label: CBO — Advanced Models (Conventional Tariff Analysis Model)
+        url: https://www.cbo.gov/models/details
+        kind: government
+
+  # ============================ ITEP microsim =================================
+  - model: itep-microsim
+    program: us-federal-income-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2024
+    notes: >
+      Federal income tax modeled alongside state and local taxes for
+      incidence and revenue analyses.
+    sources:
+      - label: ITEP — Tax Microsimulation Model Overview
+        url: https://itep.org/itep-tax-model/
+        kind: self
+        quote: >-
+          The Personal Income Tax Module analyzes the revenue and
+          incidence of current federal, state, and local personal
+          income taxes and policy options.
+      - label: Gardner (ITEP) — Who Pays and the ITEP Microsimulation Model
+          (presentation to state tax administrators)
+        url: https://taxadmin.org/wp-content/uploads/resources/10rev_est/gardner.pdf
+        kind: other
+      - label: Treasury (Cilke) — Re-weighting to Produce State-Level Tax
+          Microsimulation Estimates (cites ITEP methodology)
+        url: https://home.treasury.gov/system/files/131/TP-6.pdf
+        kind: government
+
+  - model: itep-microsim
+    program: us-payroll-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2024
+    notes: >
+      Payroll taxes included in incidence analyses; ITEP follows the
+      research consensus that employer-side FICA is shifted to workers.
+    sources:
+      - label: ITEP — Who Pays Taxes in America in 2024
+        url: https://itep.org/who-pays-taxes-in-america-in-2024/
+        kind: self
+      - label: ITEP — Why Does Tax Incidence Matter and How Do We Measure It?
+        url: https://itep.org/why-does-tax-incidence-matter-and-how-do-we-measure-it/
+        kind: self
+
+  - model: itep-microsim
+    program: us-eitc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: EITC reforms regularly scored at federal and state level.
+    sources:
+      - label: ITEP — Federal EITC Enhancements Help More Than One in Three
+          Young Workers (uses ITEP microsim)
+        url: https://itep.org/federal-eitc-enhancements-help-more-than-one-in-three-young-workers/
+        kind: self
+      - label: ITEP — Analysis of OBBBA tax provisions, national and state
+          estimates (May 2025)
+        url: https://itep.org/analysis-of-tax-provisions-in-house-reconciliation-bill/
+        kind: self
+
+  - model: itep-microsim
+    program: us-ctc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2026
+    notes: CTC reforms scored at federal and state level (e.g. OBBBA $2,200 CTC).
+    sources:
+      - label: ITEP — Analysis of OBBBA Tax Provisions (May 2025)
+        url: https://itep.org/analysis-of-tax-provisions-in-house-reconciliation-bill/
+        kind: self
+      - label: ITEP — OBBBA topic page
+        url: https://itep.org/one-big-beautiful-bill-act/
+        kind: self
+
+  - model: itep-microsim
+    program: us-state-income-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2024
+    notes: >
+      Personal income tax modeled for all 50 states + DC; Who Pays?
+      7th edition published 2024 covers 2024 tax law at 2023 income.
+    sources:
+      - label: ITEP — Who Pays? 7th Edition methodology
+        url: https://itep.org/who-pays-7th-edition-methodology-and-discussion/
+        kind: self
+        quote: >-
+          The report shows the amount of income, consumption, and
+          property taxes that would have been paid by residents in 2023
+          with the January 1, 2024 law in place.
+      - label: ITEP — Tax Microsimulation Model Overview
+        url: https://itep.org/itep-tax-model/
+        kind: self
+
+  - model: itep-microsim
+    program: us-state-eitc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2024
+    notes: State EITCs (31 states + DC) modeled within state personal income tax.
+    sources:
+      - label: ITEP — Tax Microsimulation Model Overview (state-level EITC analysis)
+        url: https://itep.org/itep-tax-model/
+        kind: self
+      - label: ITEP — Local Earned Income Tax Credits
+        url: https://itep.org/local-earned-income-tax-credits/
+        kind: self
+
+  - model: itep-microsim
+    program: us-state-ctc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2024
+    notes: State CTC analyses published using ITEP microsim.
+    sources:
+      - label: ITEP — Analysis of Tax Provisions in House Reconciliation
+          Bill (state-level CTC estimates)
+        url: https://itep.org/analysis-of-tax-provisions-in-house-reconciliation-bill/
+        kind: self
+      - label: ITEP — Tax Microsimulation Model Overview
+        url: https://itep.org/itep-tax-model/
+        kind: self
+
+  - model: itep-microsim
+    program: us-snap
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    notes: ITEP scope is taxes; transfer programs not modeled.
+    sources:
+      - label: ITEP — Tax Microsimulation Model Overview (tax-only scope)
+        url: https://itep.org/itep-tax-model/
+        kind: self
+
+  - model: itep-microsim
+    program: us-medicaid
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    notes: ITEP scope is taxes.
+    sources:
+      - label: ITEP — Tax Microsimulation Model Overview
+        url: https://itep.org/itep-tax-model/
+        kind: self
+
+  - model: itep-microsim
+    program: us-tariffs
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: >
+      Tariff incidence included in 2025 distributional analyses (e.g.
+      Who Pays Taxes in America 2024 update, OBBBA + tariffs analysis).
+    sources:
+      - label: ITEP — Who Pays Taxes in America in 2024 (includes tariff effects)
+        url: https://itep.org/who-pays-taxes-in-america-in-2024/
+        kind: self
+
+  - model: itep-microsim
+    program: us-estate-tax
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    notes: >
+      Estate tax not separately modeled; ITEP's published estate-tax
+      analyses rely on other sources rather than its incidence model.
+    sources:
+      - label: ITEP — Tax Microsimulation Model Overview (no estate module)
+        url: https://itep.org/itep-tax-model/
+        kind: self
+
+  # ============================ Tax-Calculator (PSL) =========================
+  - model: tax-calculator
+    program: us-federal-income-tax
+    status: implemented
+    statuteTraceable: partial
+    testCoverage: high
+    docsUrl: https://taxcalc.pslmodels.org
+    asOfYear: 2026
+    notes: >
+      Full federal individual income tax including AMT, NIIT, and OBBBA
+      provisions (overtime, tip, and senior deductions). Validated
+      against NBER TAXSIM-35 with cent-level agreement.
+    sources:
+      - label: Tax-Calculator documentation (scope)
+        url: https://taxcalc.pslmodels.org
+        kind: self
+        quote: >-
+          Tax-Calculator is an open-source microsimulation model for
+          analysis of USA federal income and payroll taxes.
+      - label: Tax-Calculator vs TAXSIM-35 validation README
+        url: https://github.com/PSLmodels/Tax-Calculator/blob/master/taxcalc/validation/taxsim35/README.md
+        kind: self
+        quote: >-
+          federal individual income tax liabilities and payroll tax
+          liabilities being compared have differences of no larger than
+          one cent.
+      - label: Tax-Calculator releases page (OBBBA implementation through 6.5.x)
+        url: https://github.com/PSLmodels/Tax-Calculator/releases
+        kind: self
+
+  - model: tax-calculator
+    program: us-payroll-tax
+    status: implemented
+    statuteTraceable: partial
+    testCoverage: high
+    asOfYear: 2026
+    notes: FICA and SECA modeled; validated against TAXSIM-35.
+    sources:
+      - label: Tax-Calculator README (federal income and payroll scope)
+        url: https://github.com/PSLmodels/Tax-Calculator
+        kind: self
+      - label: Tax-Calculator policy_current_law.json (FICA_ss_trt, FICA_mc_trt,
+          SS_Earnings_c parameters)
+        url: https://github.com/PSLmodels/Tax-Calculator/blob/master/taxcalc/policy_current_law.json
+        kind: self
+
+  - model: tax-calculator
+    program: us-eitc
+    status: implemented
+    statuteTraceable: partial
+    testCoverage: high
+    asOfYear: 2026
+    notes: EITC parameters configurable; eitc_claim_thd added in release 6.4.1.
+    sources:
+      - label: Tax-Calculator policy_current_law.json (EITC_c, EITC_rt,
+          EITC_ps, EITC_prt parameters)
+        url: https://github.com/PSLmodels/Tax-Calculator/blob/master/taxcalc/policy_current_law.json
+        kind: self
+      - label: Tax-Calculator 6.4.1 release notes (EITC claim threshold)
+        url: https://github.com/PSLmodels/Tax-Calculator/blob/master/docs/about/releases.md
+        kind: self
+
+  - model: tax-calculator
+    program: us-ctc
+    status: implemented
+    statuteTraceable: partial
+    testCoverage: high
+    asOfYear: 2026
+    notes: >
+      CTC and ACTC modeled with refundability switches; OBBBA $2,200 CTC
+      reflected in policy_current_law.json after release 5.2.
+    sources:
+      - label: Tax-Calculator policy_current_law.json (CTC_c, ACTC_c,
+          CTC_is_refundable parameters)
+        url: https://github.com/PSLmodels/Tax-Calculator/blob/master/taxcalc/policy_current_law.json
+        kind: self
+      - label: Tax-Calculator OBBBA implementation tracking issue #2926
+        url: https://github.com/PSLmodels/Tax-Calculator/issues/2926
+        kind: self
+
+  - model: tax-calculator
+    program: us-cdcc
+    status: implemented
+    statuteTraceable: partial
+    testCoverage: high
+    asOfYear: 2026
+    notes: CDCC modeled with refundability switch; OBBBA CDCC params added July 2025.
+    sources:
+      - label: Tax-Calculator policy_current_law.json (CDCC_c, CDCC_ps1,
+          CDCC_po1_rate_max parameters)
+        url: https://github.com/PSLmodels/Tax-Calculator/blob/master/taxcalc/policy_current_law.json
+        kind: self
+      - label: Tax-Calculator PR #2928 (new and renamed CDCC parameters for OBBBA)
+        url: https://github.com/PSLmodels/Tax-Calculator/pull/2928
+        kind: self
+
+  - model: tax-calculator
+    program: us-premium-tax-credit
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    notes: >
+      ACA Premium Tax Credit (IRC § 36B) not modeled. No PTC or APTC
+      parameters in policy_current_law.json; only RPTC parameters for a
+      proposed non-ACA refundable payroll credit.
+    sources:
+      - label: Tax-Calculator policy_current_law.json (no PTC or 36B parameters)
+        url: https://github.com/PSLmodels/Tax-Calculator/blob/master/taxcalc/policy_current_law.json
+        kind: self
+      - label: Tax-Calculator README (scope is federal individual income
+          and payroll taxes)
+        url: https://github.com/PSLmodels/Tax-Calculator
+        kind: self
+
+  - model: tax-calculator
+    program: us-estate-tax
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    notes: >
+      Federal estate and gift tax not modeled. No estate-tax parameters
+      in policy_current_law.json.
+    sources:
+      - label: Tax-Calculator policy_current_law.json (no estate-tax parameters)
+        url: https://github.com/PSLmodels/Tax-Calculator/blob/master/taxcalc/policy_current_law.json
+        kind: self
+
+  - model: tax-calculator
+    program: us-state-income-tax
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    notes: State taxes are out of scope. The Tax-Brain (PSL) model uses
+      Tax-Calculator outputs but state taxes themselves are not modeled.
+    sources:
+      - label: Tax-Calculator README (federal scope)
+        url: https://github.com/PSLmodels/Tax-Calculator
+        kind: self
+
+  - model: tax-calculator
+    program: us-snap
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    notes: Transfer programs are out of scope.
+    sources:
+      - label: Tax-Calculator README (taxes only)
+        url: https://github.com/PSLmodels/Tax-Calculator
+        kind: self
+
+  - model: tax-calculator
+    program: us-medicaid
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    notes: Health-coverage programs are out of scope.
+    sources:
+      - label: Tax-Calculator README (taxes only)
+        url: https://github.com/PSLmodels/Tax-Calculator
+        kind: self
+
+  - model: tax-calculator
+    program: us-tariffs
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    notes: Tariffs are out of scope.
+    sources:
+      - label: Tax-Calculator README (federal income and payroll taxes)
+        url: https://github.com/PSLmodels/Tax-Calculator
+        kind: self
+
+  # ============================ Budget Lab Tax Model =========================
+  - model: budgetlab-tax
+    program: us-federal-income-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: medium
+    docsUrl: https://github.com/Budget-Lab-Yale/Tax-Simulator
+    asOfYear: 2026
+    notes: >
+      Federal individual income tax with ordinary rates, preferred rates
+      (qualified dividends/long-term capital gains), AMT, and NIIT.
+      Implementation in R with YAML parameter files.
+    sources:
+      - label: Budget Lab Tax-Simulator README (federal individual income tax scope)
+        url: https://github.com/Budget-Lab-Yale/Tax-Simulator/blob/main/README.md
+        kind: self
+        quote: >-
+          Tax-Simulator calculates individual income tax liability for a
+          representative sample of U.S. tax units under current law and
+          hypothetical policy reforms.
+      - label: Budget Lab — Tax Microsimulation at The Budget Lab (methodology)
+        url: https://budgetlab.yale.edu/research/tax-microsimulation-budget-lab
+        kind: self
+      - label: Brookings — The Budget Lab at Yale (independent description)
+        url: https://www.brookings.edu/articles/the-budget-lab-at-yale/
+        kind: civilsociety
+
+  - model: budgetlab-tax
+    program: us-payroll-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: medium
+    asOfYear: 2026
+    notes: >
+      Payroll tax module (pr.yaml). Earnings split for joint returns
+      imputed by drawing from distributions of wage and self-employment
+      earnings by percentile.
+    sources:
+      - label: Budget Lab Tax-Simulator baseline payroll parameters (pr.yaml)
+        url: https://github.com/Budget-Lab-Yale/Tax-Simulator/tree/main/config/scenarios/tax_law/baseline
+        kind: self
+      - label: Budget Lab — Tax Microsimulation methodology (payroll tax handling)
+        url: https://budgetlab.yale.edu/research/tax-microsimulation-budget-lab
+        kind: self
+
+  - model: budgetlab-tax
+    program: us-eitc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: medium
+    asOfYear: 2026
+    notes: EITC module (eitc.yaml) in baseline configuration.
+    sources:
+      - label: Budget Lab Tax-Simulator baseline EITC parameters (eitc.yaml)
+        url: https://github.com/Budget-Lab-Yale/Tax-Simulator/blob/main/config/scenarios/tax_law/baseline/eitc.yaml
+        kind: self
+      - label: Budget Lab — Tax Microsimulation methodology
+        url: https://budgetlab.yale.edu/research/tax-microsimulation-budget-lab
+        kind: self
+
+  - model: budgetlab-tax
+    program: us-ctc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: medium
+    asOfYear: 2026
+    notes: >
+      CTC module (ctc.yaml) supports young-vs-older differential, SSN
+      requirements, baby bonus phase-out variants. CTC reform analyses
+      published 2024.
+    sources:
+      - label: Budget Lab Tax-Simulator baseline CTC parameters (ctc.yaml)
+        url: https://github.com/Budget-Lab-Yale/Tax-Simulator/blob/main/config/scenarios/tax_law/baseline/ctc.yaml
+        kind: self
+      - label: Budget Lab — Child Tax Credit Options for Reform (2024 report)
+        url: https://budgetlab.yale.edu/sites/default/files/2024-04/The%20Budget%20Lab%20CTC%20Report%202024.pdf
+        kind: self
+
+  - model: budgetlab-tax
+    program: us-cdcc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: medium
+    asOfYear: 2026
+    notes: CDCTC module (cdctc.yaml) with tests in scenarios/tax_law/tests.
+    sources:
+      - label: Budget Lab Tax-Simulator baseline CDCTC parameters (cdctc.yaml)
+        url: https://github.com/Budget-Lab-Yale/Tax-Simulator/blob/main/config/scenarios/tax_law/baseline/cdctc.yaml
+        kind: self
+
+  - model: budgetlab-tax
+    program: us-premium-tax-credit
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    notes: >
+      ACA Premium Tax Credit not modeled in Tax-Simulator. Budget Lab's
+      methodology page describes scope as the federal individual income
+      tax system.
+    sources:
+      - label: Budget Lab Tax-Simulator baseline parameter files (no PTC module)
+        url: https://github.com/Budget-Lab-Yale/Tax-Simulator/tree/main/config/scenarios/tax_law/baseline
+        kind: self
+
+  - model: budgetlab-tax
+    program: us-estate-tax
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    notes: >
+      Tax-Simulator does not include estate tax. A separate
+      Estate-Tax-Distribution repo models inheritances for the estate
+      tax distribution but is not integrated with the tax microsim.
+    sources:
+      - label: Budget Lab — Estate-Tax-Distribution repo (separate model)
+        url: https://github.com/Budget-Lab-Yale/Estate-Tax-Distribution
+        kind: self
+
+  - model: budgetlab-tax
+    program: us-state-income-tax
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    notes: Federal scope only.
+    sources:
+      - label: Budget Lab Tax-Simulator README (US federal tax system)
+        url: https://github.com/Budget-Lab-Yale/Tax-Simulator/blob/main/README.md
+        kind: self
+
+  - model: budgetlab-tax
+    program: us-snap
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    notes: >
+      SNAP and other safety-net programs are modeled in a separate
+      Budget Lab repo (Safety-Net), not the Tax-Simulator.
+    sources:
+      - label: Budget Lab — Safety-Net repo (separate microsim)
+        url: https://github.com/Budget-Lab-Yale/Safety-Net
+        kind: self
+
+  - model: budgetlab-tax
+    program: us-tariffs
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    notes: >
+      Tariffs handled by separate Budget Lab repos (Tariff-Model,
+      Household-Tariff-Distribution, Tariff-ETRs), not the Tax-Simulator.
+    sources:
+      - label: Budget Lab — Tariff-Model repo
+        url: https://github.com/Budget-Lab-Yale/Tariff-Model
+        kind: self

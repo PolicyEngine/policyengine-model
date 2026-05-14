@@ -309,6 +309,8 @@ export type ImputationMethod =
   | 'gradient-reweighting'
   | 'statistical-matching'
   | 'rule-based'
+  | 'survey-reported'
+  | 'census-research-file'
   | 'machine-learning'
   | 'other'
   | 'unknown';

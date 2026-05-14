@@ -352,3 +352,195 @@ artifacts:
     sources:
       - label: Budget Lab methodology
         url: https://budgetlab.yale.edu/topic/methodology
+
+  # =================================== PolicyEngine UK =======================
+  - model: policyengine-uk
+    type: codebase
+    name: policyengine-uk
+    public: yes
+    license: AGPL-3.0-or-later
+    url: https://github.com/PolicyEngine/policyengine-uk
+    description: Rules engine implementation of UK tax and benefit policy.
+    sources:
+      - label: Repository
+        url: https://github.com/PolicyEngine/policyengine-uk
+
+  - model: policyengine-uk
+    type: parameter-database
+    name: policyengine_uk parameters (YAML)
+    public: yes
+    license: AGPL-3.0-or-later
+    url: https://github.com/PolicyEngine/policyengine-uk/tree/master/policyengine_uk/parameters
+    description: All UK policy parameters as inspectable YAML with inline statutory references.
+    sources:
+      - label: Parameters tree
+        url: https://github.com/PolicyEngine/policyengine-uk/tree/master/policyengine_uk/parameters
+
+  - model: policyengine-uk
+    type: dataset
+    name: Enhanced Family Resources Survey (policyengine-uk-data)
+    public: partial
+    license: AGPL-3.0-or-later (code); UK Data Service licence required for base FRS
+    url: https://github.com/PolicyEngine/policyengine-uk-data
+    description: FRS enhanced with imputations and L0-calibrated weights to HMRC/DWP totals; base FRS access via UK Data Service.
+    sources:
+      - label: policyengine-uk-data repository
+        url: https://github.com/PolicyEngine/policyengine-uk-data
+      - label: UK Data Service FRS series
+        url: https://ukdataservice.ac.uk/find-data/series/?id=200017
+
+  - model: policyengine-uk
+    type: web-application
+    name: policyengine.org/uk
+    public: yes
+    license: AGPL-3.0-or-later
+    url: https://policyengine.org/uk
+    description: Public web app for household calculations, UK reform analyses, and policy comparisons.
+    sources:
+      - label: PolicyEngine UK
+        url: https://policyengine.org/uk
+
+  - model: policyengine-uk
+    type: documentation-site
+    name: PolicyEngine UK docs
+    public: yes
+    license: AGPL-3.0-or-later
+    url: https://policyengine.github.io/policyengine-uk/
+    description: Methodology, validation, and model documentation for UK.
+    sources:
+      - label: Docs
+        url: https://policyengine.github.io/policyengine-uk/
+
+  # =================================== UKMOD =================================
+  - model: ukmod
+    type: codebase
+    name: UKMOD source files
+    public: yes
+    license: EUROMOD Public License (custom; free for research)
+    url: https://www.microsimulation.ac.uk/ukmod/access
+    description: Parameter rules and DSL policy files distributed to registered users; no public source control.
+    sources:
+      - label: UKMOD access
+        url: https://www.microsimulation.ac.uk/ukmod/access
+
+  - model: ukmod
+    type: dataset
+    name: UKMOD-prepared FRS input
+    public: no
+    license: UK Data Service licence
+    description: Prepared FRS-derived input file; underlying FRS requires UK Data Service registered licence.
+    sources:
+      - label: UK Data Service FRS
+        url: https://ukdataservice.ac.uk/find-data/series/?id=200017
+
+  - model: ukmod
+    type: documentation-site
+    name: UKMOD country reports and home page
+    public: yes
+    license: CeMPA editorial
+    url: https://www.microsimulation.ac.uk/ukmod
+    description: Public documentation of UKMOD policies, releases, and methodology.
+    sources:
+      - label: UKMOD home
+        url: https://www.microsimulation.ac.uk/ukmod
+
+  - model: ukmod
+    type: paper
+    name: CeMPA working paper series
+    public: yes
+    license: CeMPA editorial
+    url: https://www.microsimulation.ac.uk/publications/working-papers
+    description: Academic working papers using and documenting UKMOD.
+    sources:
+      - label: CeMPA working papers
+        url: https://www.microsimulation.ac.uk/publications/working-papers
+
+  # =================================== IFS TAXBEN ============================
+  - model: ifs-taxben
+    type: codebase
+    name: TAXBEN
+    public: no
+    license: proprietary
+    description: IFS in-house tax-benefit microsimulation; implementation not public.
+    sources:
+      - label: IFS TAXBEN tool page
+        url: https://ifs.org.uk/tools_and_resources/taxben
+
+  - model: ifs-taxben
+    type: paper
+    name: IFS Green Budget (annual TAXBEN-based analysis)
+    public: yes
+    license: IFS editorial
+    url: https://ifs.org.uk/green-budget
+    description: Annual macroeconomic and distributional analysis built on TAXBEN.
+    sources:
+      - label: IFS Green Budget
+        url: https://ifs.org.uk/green-budget
+
+  - model: ifs-taxben
+    type: documentation-site
+    name: IFS TAXBEN tool description
+    public: yes
+    license: IFS editorial
+    url: https://ifs.org.uk/tools_and_resources/taxben
+    description: High-level description of TAXBEN's scope and methodology.
+    sources:
+      - label: TAXBEN tool page
+        url: https://ifs.org.uk/tools_and_resources/taxben
+
+  # =================================== IGOTM =================================
+  - model: igotm
+    type: codebase
+    name: HM Treasury Intra-Governmental Tax and Benefit Model
+    public: no
+    license: proprietary
+    description: HM Treasury microsimulation model shared with HMRC and DWP; not externally accessible.
+    sources:
+      - label: HM Treasury distributional analysis
+        url: https://www.gov.uk/government/publications/impact-on-households-distributional-analysis-to-accompany-budget-2024
+
+  - model: igotm
+    type: paper
+    name: HM Treasury — Impact on households (Budget annex)
+    public: yes
+    license: Open Government Licence
+    url: https://www.gov.uk/government/publications/impact-on-households-distributional-analysis-to-accompany-budget-2024
+    description: Official distributional analysis annex accompanying each Budget; outputs of IGOTM.
+    sources:
+      - label: Impact on households (Autumn Budget 2024)
+        url: https://www.gov.uk/government/publications/impact-on-households-distributional-analysis-to-accompany-budget-2024
+
+  # ============================ Columbia CPSP ================================
+  - model: columbia-cpsp
+    type: codebase
+    name: CPSP internal poverty microsimulation
+    public: no
+    license: proprietary
+    description: Stata/R poverty microsim layered on top of NBER TAXSIM for tax calculations; not public.
+    sources:
+      - label: CPSP working papers (methodology described, code not released)
+        url: https://www.povertycenter.columbia.edu
+
+  - model: columbia-cpsp
+    type: paper
+    name: CPSP working paper series
+    public: yes
+    license: CPSP editorial
+    url: https://www.povertycenter.columbia.edu
+    description: Methodology and findings papers from CPSP poverty analyses, including monthly poverty trackers and anchored SPM series.
+    sources:
+      - label: Hamilton, Wimer, Collyer et al. — Monthly cash payments paper
+        url: https://povertycenter.columbia.edu/sites/povertycenter.columbia.edu/files/content/Publications/Monthly-Cash-Payments-Reduce-Spells-of-Poverty-CPSP-2022.pdf
+      - label: Koutavas, Wang, Slopen et al. — Expanding Paid Parental Leave
+        url: https://povertycenter.columbia.edu/sites/povertycenter.columbia.edu/files/content/Publications/Expanding-Paid-Parental-Leave-in-New-York-CPSP-2024.pdf
+
+  - model: columbia-cpsp
+    type: paper
+    name: National Academies child poverty roadmap (CPSP simulations)
+    public: yes
+    license: NAS editorial
+    url: https://nap.nationalacademies.org/catalog/25246
+    description: Influential 2019 report using both CPSP and TRIM3 simulations to evaluate child poverty reduction options.
+    sources:
+      - label: National Academies report page
+        url: https://nap.nationalacademies.org/catalog/25246

@@ -142,3 +142,99 @@ usage:
     sources:
       - label: Budget Lab research catalogue
         url: https://budgetlab.yale.edu/research
+
+  - model: policyengine-uk
+    academicCitations: unknown
+    governmentReports: unknown
+    pressMentions: unknown
+    monthlyActiveUsers: unknown
+    monthlyComputations: unknown
+    organizationUsers: unknown
+    notes: >
+      Tracked via policyengine.org analytics and api.policyengine.org
+      logs; public dashboards not yet published. UK press cites include
+      coverage around Autumn Budget 2024 (Universal Credit, Income Tax
+      threshold freeze) and Nuffield Foundation-funded analyses.
+    sources:
+      - label: PolicyEngine UK research catalogue
+        url: https://policyengine.org/uk/research
+
+  - model: ukmod
+    academicCitations: unknown
+    governmentReports: unknown
+    pressMentions: unknown
+    monthlyActiveUsers: unknown
+    monthlyComputations: unknown
+    organizationUsers: unknown
+    notes: >
+      Used in academic research (CeMPA working paper series, IJM
+      special issues) and by third-sector analysts (e.g. Joseph
+      Rowntree Foundation, Resolution Foundation). UKMOD is the UK
+      microsim of choice for cross-country EUROMOD studies. CeMPA does
+      not publish download counts; usage footprint is observable
+      through working-paper citations and country reports.
+    sources:
+      - label: International Journal of Microsimulation — UKMOD
+          applications
+        url: https://microsimulation.pub/index.php/IJM
+      - label: CeMPA UKMOD working papers
+        url: https://www.microsimulation.ac.uk/publications/working-papers
+
+  - model: ifs-taxben
+    academicCitations: unknown
+    governmentReports: unknown
+    pressMentions: unknown
+    monthlyActiveUsers: unknown
+    monthlyComputations: unknown
+    organizationUsers: unknown
+    notes: >
+      TAXBEN is the engine behind IFS Green Budget chapters and most
+      IFS Budget-response briefings; estimates are routinely cited in
+      UK national press (BBC, FT, Guardian, Times) and in
+      parliamentary debate. Per-call usage is not published; citation
+      footprint visible through IFS publications search.
+    sources:
+      - label: IFS in the media
+        url: https://ifs.org.uk/news-and-media
+      - label: IFS publications search (TAXBEN-tagged outputs)
+        url: https://ifs.org.uk/publications
+
+  - model: igotm
+    academicCitations: unknown
+    governmentReports: unknown
+    pressMentions: unknown
+    monthlyActiveUsers: unknown
+    monthlyComputations: unknown
+    organizationUsers: unknown
+    notes: >
+      IGOTM's outputs are the Treasury's official distributional
+      analysis at each fiscal event and are routinely referenced in UK
+      press coverage of Budgets. Inter-departmental use across HMT,
+      HMRC, and DWP; not externally accessible. No external-user
+      metrics.
+    sources:
+      - label: HM Treasury Budget archive (IGOTM-based Impact on
+          Households annexes)
+        url: https://www.gov.uk/government/collections/budget
+
+  - model: columbia-cpsp
+    academicCitations: unknown
+    governmentReports: unknown
+    pressMentions: unknown
+    monthlyActiveUsers: unknown
+    monthlyComputations: unknown
+    organizationUsers: unknown
+    notes: >
+      CPSP's monthly Child Tax Credit poverty trackers (2021-2022) were
+      among the most widely cited research outputs on the ARPA-expanded
+      CTC, appearing across major US press (NYT, WaPo, NPR, Vox) and
+      Congressional testimony. The National Academies child-poverty
+      roadmap is the canonical reference for child-poverty reform
+      microsimulation and uses CPSP alongside TRIM3. No external-user
+      metrics published.
+    sources:
+      - label: National Academies — Roadmap to Reducing Child Poverty
+          (uses CPSP simulations)
+        url: https://nap.nationalacademies.org/catalog/25246
+      - label: CPSP publications
+        url: https://www.povertycenter.columbia.edu

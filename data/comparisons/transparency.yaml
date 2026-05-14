@@ -380,3 +380,254 @@ transparency:
         url: https://www.brookings.edu/articles/the-budget-lab-at-yale/
         kind: civilsociety
         supports: [codePublic, documentationPublic]
+
+  - model: policyengine-uk
+    codePublic: yes
+    codeLicense: AGPL-3.0-or-later
+    codeUrl: https://github.com/PolicyEngine/policyengine-uk
+    contributorCount: unknown
+    issueTrackerPublic: yes
+    documentationPublic: yes
+    documentationUrl: https://policyengine.github.io/policyengine-uk/
+    parameterSourcing: inline-cite
+    testSuitePublic: yes
+    testCount: unknown
+    datasetPublic: partial
+    datasetUrl: https://github.com/PolicyEngine/policyengine-uk-data
+    reproducibleBuilds: yes
+    notes: >
+      Source code and parameter YAML are fully public under AGPL-3.0.
+      The Enhanced Family Resources Survey requires a base FRS licence
+      from the UK Data Service before redistribution; PolicyEngine
+      publishes the public-domain calibration components (weights,
+      imputations) on Hugging Face while the underlying microdata
+      flows through licensed channels.
+    sources:
+      - label: policyengine-uk repository (browse code, license, tests)
+        url: https://github.com/PolicyEngine/policyengine-uk
+        kind: self
+        supports: [codePublic, codeLicense, issueTrackerPublic, testSuitePublic]
+      - label: policyengine-uk LICENSE file (AGPL-3.0-or-later)
+        url: https://github.com/PolicyEngine/policyengine-uk/blob/master/LICENSE
+        kind: self
+        supports: [codeLicense]
+      - label: policyengine-uk on PyPI (declared license)
+        url: https://pypi.org/project/policyengine-uk/
+        kind: other
+        supports: [codeLicense, codePublic]
+      - label: policyengine-uk documentation site
+        url: https://policyengine.github.io/policyengine-uk/
+        kind: self
+        supports: [documentationPublic, reproducibleBuilds]
+      - label: policyengine-uk-data repository (calibration code)
+        url: https://github.com/PolicyEngine/policyengine-uk-data
+        kind: self
+        supports: [datasetPublic, reproducibleBuilds]
+      - label: UK Data Service — FRS licensing (underlying microdata
+          requires registered licence)
+        url: https://ukdataservice.ac.uk/find-data/series/?id=200017
+        kind: government
+        supports: [datasetPublic]
+      - label: Ghenis & Woodruff — PolicyEngine open-source paper (JOSS)
+        url: https://joss.theoj.org/papers/10.21105/joss.04494
+        kind: academic
+        supports: [codePublic, codeLicense, documentationPublic, reproducibleBuilds]
+      - label: OpenFisca community — PolicyEngine listed as country model
+        url: https://openfisca.org/en/about
+        kind: civilsociety
+        supports: [codePublic]
+
+  - model: ukmod
+    codePublic: yes
+    codeLicense: EUROMOD Public License (custom; free for research, no
+      commercial sublicensing)
+    codeUrl: https://www.microsimulation.ac.uk/ukmod/access
+    contributorCount: unknown
+    issueTrackerPublic: no
+    documentationPublic: yes
+    documentationUrl: https://www.microsimulation.ac.uk/ukmod
+    parameterSourcing: separate-doc
+    testSuitePublic: unknown
+    testCount: unknown
+    datasetPublic: partial
+    datasetUrl: https://ukdataservice.ac.uk/find-data/series/?id=200017
+    reproducibleBuilds: yes
+    notes: >
+      UKMOD source files (parameter rules and DSL policies) are
+      distributed to registered users free of charge under the EUROMOD
+      Public License. There is no public GitHub or open issue tracker;
+      bug reporting and contributions are handled via the CeMPA
+      helpdesk. The underlying FRS microdata is not open — researchers
+      must obtain a UK Data Service end-user licence separately.
+      Documentation and country reports are published openly.
+    sources:
+      - label: UKMOD home page (model description and documentation)
+        url: https://www.microsimulation.ac.uk/ukmod
+        kind: self
+        supports: [codePublic, documentationPublic, parameterSourcing]
+      - label: UKMOD access and registration page (free for research,
+          terms of use)
+        url: https://www.microsimulation.ac.uk/ukmod/access
+        kind: self
+        supports: [codePublic, codeLicense, issueTrackerPublic]
+      - label: UKMOD country reports (annual documentation of
+          policies modelled)
+        url: https://www.microsimulation.ac.uk/ukmod/country-reports
+        kind: self
+        supports: [documentationPublic, parameterSourcing]
+      - label: Richiardi, Collado & Popova — UKMOD/EUROMOD working
+          paper (academic description of model architecture)
+        url: https://www.microsimulation.ac.uk/publications/working-papers
+        kind: academic
+        supports: [codePublic, documentationPublic, parameterSourcing]
+      - label: UK Data Service — Family Resources Survey series
+          (underlying microdata licensing)
+        url: https://ukdataservice.ac.uk/find-data/series/?id=200017
+        kind: government
+        supports: [datasetPublic]
+      - label: JRC EUROMOD (parent framework; same license model)
+        url: https://euromod-web.jrc.ec.europa.eu/
+        kind: government
+        supports: [codeLicense, codePublic]
+
+  - model: ifs-taxben
+    codePublic: no
+    codeLicense: proprietary
+    contributorCount: unknown
+    issueTrackerPublic: no
+    documentationPublic: partial
+    documentationUrl: https://ifs.org.uk/tools_and_resources/taxben
+    parameterSourcing: separate-doc
+    testSuitePublic: unknown
+    testCount: unknown
+    datasetPublic: no
+    reproducibleBuilds: unknown
+    notes: >
+      TAXBEN's implementation, parameter files, and prepared FRS
+      microdata are not public. IFS publishes high-level descriptions
+      of what TAXBEN covers (income tax, NICs, means-tested benefits,
+      Universal Credit, council tax) and uses it as the engine behind
+      most of its distributional and Budget-response work, but does
+      not release the model itself.
+    sources:
+      - label: IFS TAXBEN tool page (model description; no source link)
+        url: https://ifs.org.uk/tools_and_resources/taxben
+        kind: self
+        supports: [codePublic, codeLicense, documentationPublic, parameterSourcing]
+      - label: IFS Green Budget archive (annual TAXBEN-based
+          distributional analyses)
+        url: https://ifs.org.uk/green-budget
+        kind: self
+        supports: [documentationPublic]
+      - label: Adam & Browne — A survey of the UK benefit system (IFS
+          Briefing Note; methodology context)
+        url: https://ifs.org.uk/publications/survey-uk-benefit-system
+        kind: self
+        supports: [documentationPublic, parameterSourcing]
+      - label: Roantree & Shaw — Universal credit and labour supply
+          (IFS Working Paper using TAXBEN, no code release)
+        url: https://ifs.org.uk/publications/universal-credit-its-impact-work-incentives
+        kind: academic
+        supports: [codePublic, documentationPublic]
+      - label: HM Treasury distributional analysis methodology
+          (independent reference to TAXBEN as benchmark)
+        url: https://www.gov.uk/government/publications/impact-on-households-distributional-analysis-to-accompany-budget-2024
+        kind: government
+        supports: [codePublic, documentationPublic]
+      - label: UK Data Service — FRS licensing (TAXBEN base data
+          requires registered licence, not redistributable)
+        url: https://ukdataservice.ac.uk/find-data/series/?id=200017
+        kind: government
+        supports: [datasetPublic]
+
+  - model: igotm
+    codePublic: no
+    codeLicense: proprietary
+    contributorCount: unknown
+    issueTrackerPublic: no
+    documentationPublic: partial
+    documentationUrl: https://www.gov.uk/government/publications/impact-on-households-distributional-analysis-to-accompany-budget-2024
+    parameterSourcing: separate-doc
+    testSuitePublic: unknown
+    testCount: unknown
+    datasetPublic: no
+    reproducibleBuilds: no
+    notes: >
+      IGOTM is shared across HM Treasury, HMRC, and DWP under
+      restricted information-sharing arrangements. Source code,
+      parameters, and prepared FRS-based microdata are not public.
+      Treasury publishes outputs (the "Impact on Households" annex at
+      each fiscal event) and a brief methodology description, but the
+      model itself is internal to government.
+    sources:
+      - label: HM Treasury — Impact on households distributional
+          analysis (Autumn Budget 2024); names IGOTM as the model
+        url: https://www.gov.uk/government/publications/impact-on-households-distributional-analysis-to-accompany-budget-2024
+        kind: government
+        supports: [codePublic, codeLicense, documentationPublic, parameterSourcing]
+      - label: HM Treasury — Impact on households (Spring Budget 2024)
+        url: https://www.gov.uk/government/publications/impact-on-households-distributional-analysis-to-accompany-spring-budget-2024
+        kind: government
+        supports: [documentationPublic]
+      - label: Office for Budget Responsibility — Welfare trends
+          report (describes Treasury/DWP microsim toolchain)
+        url: https://obr.uk/welfare-trends-reports/
+        kind: government
+        supports: [codePublic, documentationPublic]
+      - label: UK Data Service — FRS licensing (underlying microdata
+          not redistributable)
+        url: https://ukdataservice.ac.uk/find-data/series/?id=200017
+        kind: government
+        supports: [datasetPublic]
+      - label: IFS Green Budget — methodological commentary on IGOTM
+          versus TAXBEN distributional results
+        url: https://ifs.org.uk/green-budget
+        kind: academic
+        supports: [codePublic, documentationPublic]
+      - label: Resolution Foundation — distributional analysis
+          methodology critiques
+        url: https://www.resolutionfoundation.org/publications/
+        kind: civilsociety
+        supports: [codePublic, documentationPublic]
+
+  - model: columbia-cpsp
+    codePublic: no
+    codeLicense: proprietary
+    contributorCount: unknown
+    issueTrackerPublic: no
+    documentationPublic: partial
+    documentationUrl: https://www.povertycenter.columbia.edu
+    parameterSourcing: separate-doc
+    testSuitePublic: unknown
+    testCount: unknown
+    datasetPublic: no
+    reproducibleBuilds: no
+    notes: >
+      Source code, parameter files, and CPS-derived microdata are not
+      public. Methodology for each analysis is documented in the
+      working paper that publishes results — typically a technical
+      appendix or methods section, but not a unified codebase. Tax
+      simulation is delegated to NBER's TAXSIM (separately closed
+      from CPSP, with a public web/API interface).
+    sources:
+      - label: Hamilton, Wimer, Collyer et al. — Monthly cash payments
+          methodology section
+        url: https://povertycenter.columbia.edu/sites/povertycenter.columbia.edu/files/content/Publications/Monthly-Cash-Payments-Reduce-Spells-of-Poverty-CPSP-2022.pdf
+        kind: academic
+        supports: [codePublic, codeLicense, documentationPublic, parameterSourcing]
+        quote: >
+          We use the Current Population Survey Annual Social and
+          Economic Supplement and TAXSIM to estimate the policy impact.
+      - label: National Academies child poverty report (CPSP simulations
+          cited but code not released)
+        url: https://nap.nationalacademies.org/catalog/25246
+        kind: academic
+        supports: [codePublic, documentationPublic]
+      - label: NBER TAXSIM (CPSP's tax dependency)
+        url: https://taxsim.nber.org/
+        kind: academic
+        supports: [codePublic, datasetPublic]
+      - label: Annie E. Casey Foundation (cites CPSP without code release)
+        url: https://www.aecf.org/work/kids-count
+        kind: civilsociety
+        supports: [codePublic, documentationPublic]

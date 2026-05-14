@@ -92,3 +92,149 @@ concepts:
       to administrative or scorekeeper totals. Methods include caseload-
       driven selection, reweighting, or post-hoc scaling.
     category: calibration
+
+  # ============================================================================
+  # Supplemental Poverty Measure (SPM) — one concept per atomic methodology
+  # choice. Census publishes annual SPM Research File imputations for each
+  # of these components; models can take Census's imputed values, compute
+  # the component from their own rules, or use a hybrid (compute when
+  # simulating a reform that affects the component, otherwise use Census).
+  # ============================================================================
+
+  - id: spm-unit-definition
+    name: SPM unit definition
+    description: >
+      How the family/resource-sharing unit is constructed for SPM
+      calculations (cohabitors, foster children, unmarried partners,
+      etc.). Census defines the SPM unit more broadly than the Census
+      family; models can adopt Census's definition or implement their
+      own.
+    category: spm
+
+  - id: spm-thresholds
+    name: SPM thresholds
+    description: >
+      Determining the poverty threshold for each SPM unit. Census
+      publishes thresholds annually keyed to housing tenure (owner with
+      mortgage, owner without mortgage, renter), geographic area, and
+      family composition. Models typically adopt Census thresholds
+      verbatim because they reflect consumer-expenditure-based amounts
+      that don't depend on policy parameters.
+    category: spm
+
+  - id: spm-cash-income
+    name: SPM resources — cash income
+    description: >
+      The cash income component of SPM resources (earnings, interest,
+      dividends, retirement income, etc.). Almost universally taken as
+      survey-reported from CPS-ASEC or ACS.
+    category: spm
+
+  - id: spm-eitc
+    name: SPM resources — EITC
+    description: >
+      The refundable Earned Income Tax Credit value added to SPM
+      resources. Census uses its own tax model imputation; tax-rules
+      models can compute EITC from their own EITC rules.
+    category: spm
+
+  - id: spm-ctc
+    name: SPM resources — CTC (refundable portion)
+    description: >
+      The refundable portion of the Child Tax Credit added to SPM
+      resources.
+    category: spm
+
+  - id: spm-snap
+    name: SPM resources — SNAP
+    description: >
+      SNAP benefit value added to SPM resources. Census imputes from
+      administrative SNAP totals; rules-engine models compute from
+      eligibility and benefit formulae.
+    category: spm
+
+  - id: spm-housing-subsidy
+    name: SPM resources — housing subsidy
+    description: >
+      Imputed value of HUD housing assistance (Section 8 vouchers,
+      public housing, project-based subsidies) added to SPM resources.
+    category: spm
+
+  - id: spm-liheap
+    name: SPM resources — LIHEAP / energy assistance
+    description: >
+      Value of LIHEAP energy assistance added to SPM resources.
+    category: spm
+
+  - id: spm-wic
+    name: SPM resources — WIC
+    description: >
+      Imputed value of WIC nutrition benefits added to SPM resources.
+    category: spm
+
+  - id: spm-school-meals
+    name: SPM resources — school meals
+    description: >
+      Imputed value of free or reduced-price school meals added to SPM
+      resources.
+    category: spm
+
+  - id: spm-tax-federal
+    name: SPM deduction — federal income tax
+    description: >
+      Federal income tax (before refundable credits) subtracted from SPM
+      resources. Census imputes via its tax model; rules-engine models
+      compute from their own tax rules.
+    category: spm
+
+  - id: spm-tax-payroll
+    name: SPM deduction — payroll tax (employee side)
+    description: >
+      FICA employee-side payroll tax subtracted from SPM resources.
+    category: spm
+
+  - id: spm-tax-state
+    name: SPM deduction — state income tax
+    description: >
+      State income tax subtracted from SPM resources. Census imputes via
+      TAXSIM or equivalent; state-rules models compute from their own
+      state tax rules.
+    category: spm
+
+  - id: spm-work-expenses
+    name: SPM deduction — work-related expenses
+    description: >
+      Work-related expenses subtracted from SPM resources for each
+      working adult. Census uses a fixed schedule (median weekly amount
+      from SIPP capped by earnings); models can replicate this or
+      implement an alternative.
+    category: spm
+
+  - id: spm-child-care-expenses
+    name: SPM deduction — child care expenses
+    description: >
+      Out-of-pocket child care expenses subtracted from SPM resources.
+      Imputed from survey-reported amounts.
+    category: spm
+
+  - id: spm-medical-oop
+    name: SPM deduction — medical out-of-pocket (MOOP)
+    description: >
+      Medical out-of-pocket expenses subtracted from SPM resources.
+      Census imputes from CPS / MEPS-derived measures.
+    category: spm
+
+  - id: spm-child-support-paid
+    name: SPM deduction — child support paid
+    description: >
+      Court-ordered child support paid subtracted from SPM resources
+      (paid by the payer, added to the SPM unit of the receiver).
+    category: spm
+
+  - id: spm-poverty-rate
+    name: SPM poverty rate (final output)
+    description: >
+      The final SPM poverty rate — share of population with SPM
+      resources below the SPM threshold, after all pluses and minuses.
+      All decisions on the previous components compose into this output.
+    category: spm
