@@ -535,7 +535,7 @@ transparency:
         supports: [codePublic, documentationPublic]
       - label: HM Treasury distributional analysis methodology
           (independent reference to TAXBEN as benchmark)
-        url: https://www.gov.uk/government/publications/impact-on-households-distributional-analysis-to-accompany-budget-2024
+        url: https://www.gov.uk/government/publications/supporting-documents-for-spring-statement-2025/impact-on-households-distributional-analysis-to-accompany-spring-statement-2025
         kind: government
         supports: [codePublic, documentationPublic]
       - label: UK Data Service — FRS licensing (TAXBEN base data
@@ -550,7 +550,7 @@ transparency:
     contributorCount: unknown
     issueTrackerPublic: no
     documentationPublic: partial
-    documentationUrl: https://www.gov.uk/government/publications/impact-on-households-distributional-analysis-to-accompany-budget-2024
+    documentationUrl: https://www.gov.uk/government/publications/supporting-documents-for-spring-statement-2025/impact-on-households-distributional-analysis-to-accompany-spring-statement-2025
     parameterSourcing: separate-doc
     testSuitePublic: unknown
     testCount: unknown
@@ -566,11 +566,11 @@ transparency:
     sources:
       - label: HM Treasury — Impact on households distributional
           analysis (Autumn Budget 2024); names IGOTM as the model
-        url: https://www.gov.uk/government/publications/impact-on-households-distributional-analysis-to-accompany-budget-2024
+        url: https://www.gov.uk/government/publications/supporting-documents-for-spring-statement-2025/impact-on-households-distributional-analysis-to-accompany-spring-statement-2025
         kind: government
         supports: [codePublic, codeLicense, documentationPublic, parameterSourcing]
       - label: HM Treasury — Impact on households (Spring Budget 2024)
-        url: https://www.gov.uk/government/publications/impact-on-households-distributional-analysis-to-accompany-spring-budget-2024
+        url: https://www.gov.uk/government/publications/supporting-documents-for-spring-statement-2025/impact-on-households-distributional-analysis-to-accompany-spring-statement-2025
         kind: government
         supports: [documentationPublic]
       - label: Office for Budget Responsibility — Welfare trends

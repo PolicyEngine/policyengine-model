@@ -584,11 +584,11 @@ freshness:
       and Impact on Households annex are updated at each event.
     sources:
       - label: HM Treasury — Impact on households (Autumn Budget 2024)
-        url: https://www.gov.uk/government/publications/impact-on-households-distributional-analysis-to-accompany-budget-2024
+        url: https://www.gov.uk/government/publications/supporting-documents-for-spring-statement-2025/impact-on-households-distributional-analysis-to-accompany-spring-statement-2025
         kind: government
         supports: [latestImplementedYear, lastMajorRefresh, notableRegimes, handlesFutureDatedLegislation]
       - label: HM Treasury — Impact on households (Spring Budget 2024)
-        url: https://www.gov.uk/government/publications/impact-on-households-distributional-analysis-to-accompany-spring-budget-2024
+        url: https://www.gov.uk/government/publications/supporting-documents-for-spring-statement-2025/impact-on-households-distributional-analysis-to-accompany-spring-statement-2025
         kind: government
         supports: [updateCadence, updateLag, notableRegimes]
       - label: OBR — Economic and fiscal outlook (forward window IGOTM

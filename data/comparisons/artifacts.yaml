@@ -522,18 +522,18 @@ artifacts:
     description: HM Treasury microsimulation model shared with HMRC and DWP; not externally accessible.
     sources:
       - label: HM Treasury distributional analysis
-        url: https://www.gov.uk/government/publications/impact-on-households-distributional-analysis-to-accompany-budget-2024
+        url: https://www.gov.uk/government/publications/supporting-documents-for-spring-statement-2025/impact-on-households-distributional-analysis-to-accompany-spring-statement-2025
 
   - model: igotm
     type: paper
     name: HM Treasury — Impact on households (Budget annex)
     public: yes
     license: Open Government Licence
-    url: https://www.gov.uk/government/publications/impact-on-households-distributional-analysis-to-accompany-budget-2024
+    url: https://www.gov.uk/government/publications/supporting-documents-for-spring-statement-2025/impact-on-households-distributional-analysis-to-accompany-spring-statement-2025
     description: Official distributional analysis annex accompanying each Budget; outputs of IGOTM.
     sources:
       - label: Impact on households (Autumn Budget 2024)
-        url: https://www.gov.uk/government/publications/impact-on-households-distributional-analysis-to-accompany-budget-2024
+        url: https://www.gov.uk/government/publications/supporting-documents-for-spring-statement-2025/impact-on-households-distributional-analysis-to-accompany-spring-statement-2025
 
   # ============================ Columbia CPSP ================================
   - model: columbia-cpsp

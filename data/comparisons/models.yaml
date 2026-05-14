@@ -579,7 +579,7 @@ models:
         kind: academic
       - label: HM Treasury distributional analysis methodology
           (references IFS/TAXBEN as a comparison benchmark)
-        url: https://www.gov.uk/government/publications/impact-on-households-distributional-analysis-to-accompany-budget-2024
+        url: https://www.gov.uk/government/publications/supporting-documents-for-spring-statement-2025/impact-on-households-distributional-analysis-to-accompany-spring-statement-2025
         kind: government
 
   - id: igotm
@@ -594,17 +594,19 @@ models:
     license: proprietary
     codePublic: false
     languages: [unknown]
-    primaryDataset: Family Resources Survey (FRS) with HMRC/DWP administrative uprating
-    documentationUrl: https://www.gov.uk/government/publications/impact-on-households-distributional-analysis-to-accompany-budget-2024
+    primaryDataset: ONS Living Costs and Food Survey (with HMRC/DWP administrative uprating)
+    documentationUrl: https://www.gov.uk/government/publications/supporting-documents-for-spring-statement-2025/impact-on-households-distributional-analysis-to-accompany-spring-statement-2025
     summary: >
       The Intra-Governmental Tax and Benefit Microsimulation Model is
       HM Treasury's official microsimulation tool for assessing the
       distributional impact of UK tax and benefit reforms at fiscal
       events. IGOTM is the basis for Treasury's published "Impact on
-      Households" annex that accompanies each Budget. The model is
-      shared across UK government departments (Treasury, HMRC, DWP)
-      under information-sharing arrangements; code, parameters, and
-      prepared microdata are not public.
+      Households" annex that accompanies each Budget. Per HMT's
+      methodology, IGOTM is underpinned by the ONS Living Costs and
+      Food Survey. The model is shared across UK government
+      departments (Treasury, HMRC, DWP) under information-sharing
+      arrangements; code, parameters, and prepared microdata are not
+      public.
     capabilities:
       reformImpact: yes
       integratedMicrodata: yes
@@ -613,16 +615,8 @@ models:
       apiAccess: no
     sources:
       - label: HM Treasury — Impact on households distributional
-          analysis (Autumn Budget 2024)
-        url: https://www.gov.uk/government/publications/impact-on-households-distributional-analysis-to-accompany-budget-2024
-        kind: government
-        quote: >
-          The Treasury's intra-governmental tax and benefit model
-          (IGOTM) is used to model the impact of tax, tax credit and
-          benefit changes on households.
-      - label: HM Treasury — Impact on households (Spring Budget 2024,
-          earlier methodology annex)
-        url: https://www.gov.uk/government/publications/impact-on-households-distributional-analysis-to-accompany-spring-budget-2024
+          analysis (Spring Statement 2025)
+        url: https://www.gov.uk/government/publications/supporting-documents-for-spring-statement-2025/impact-on-households-distributional-analysis-to-accompany-spring-statement-2025
         kind: government
       - label: Office for Budget Responsibility — Welfare trends report
           (discusses HMT/DWP microsim toolchain)
