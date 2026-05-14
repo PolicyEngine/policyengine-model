@@ -1,8 +1,16 @@
 # Canonical list of policies / programs compared across models.
 #
 # Each program is a discrete tax or benefit rule-set. Statutes use bluebook
-# citation style. annualOutlaysUsd is a rough order-of-magnitude (latest
-# available year) and is for context only.
+# citation style.
+#
+# Fiscal scale is split by direction of money flow:
+#   annualOutlaysUsd: government spending (benefit programs, refundable
+#                     tax credits paid out as refunds)
+#   annualRevenueUsd: government receipts (income tax, payroll tax,
+#                     tariffs, estate/gift tax)
+# Values are rough order-of-magnitude latest-available-year figures and
+# are for context only. Every program row carries `sources` citing the
+# statute and the fiscal figure.
 
 programs:
   # ----------------------------- US federal taxes -----------------------------
@@ -13,9 +21,16 @@ programs:
     agency: IRS
     type: income-tax
     statute: 26 USC §§ 1-59B
-    annualOutlaysUsd: 2_200_000_000_000
+    annualRevenueUsd: 2_200_000_000_000
     affectedUnits: ~155M tax units
     asOfYear: 2025
+    sources:
+      - label: 26 USC subtitle A — Income Taxes
+        url: https://uscode.house.gov/browse/prelim@title26/subtitleA&edition=prelim
+        kind: government
+      - label: CBO Monthly Budget Review — individual income tax receipts
+        url: https://www.cbo.gov/topics/budget/monthly-budget-review
+        kind: government
 
   - id: us-payroll-tax
     name: Federal payroll taxes
@@ -24,9 +39,16 @@ programs:
     agency: IRS / SSA
     type: payroll-tax
     statute: 26 USC §§ 3101-3128, 3301-3311
-    annualOutlaysUsd: 1_700_000_000_000
+    annualRevenueUsd: 1_700_000_000_000
     affectedUnits: ~170M workers
     asOfYear: 2025
+    sources:
+      - label: 26 USC chapter 21 (FICA), chapter 23 (FUTA)
+        url: https://uscode.house.gov/browse/prelim@title26/subtitleC&edition=prelim
+        kind: government
+      - label: SSA — Contribution and Benefit Base
+        url: https://www.ssa.gov/oact/cola/cbb.html
+        kind: government
 
   - id: us-eitc
     name: Earned Income Tax Credit
@@ -37,6 +59,13 @@ programs:
     annualOutlaysUsd: 70_000_000_000
     affectedUnits: ~23M tax units
     asOfYear: 2025
+    sources:
+      - label: 26 USC § 32 — Earned Income
+        url: https://www.law.cornell.edu/uscode/text/26/32
+        kind: government
+      - label: IRS SOI — EITC statistics
+        url: https://www.irs.gov/statistics/soi-tax-stats-individual-statistical-tables-by-size-of-adjusted-gross-income
+        kind: government
 
   - id: us-ctc
     name: Child Tax Credit
@@ -47,6 +76,13 @@ programs:
     annualOutlaysUsd: 110_000_000_000
     affectedUnits: ~40M children
     asOfYear: 2026
+    sources:
+      - label: 26 USC § 24 — Child Tax Credit
+        url: https://www.law.cornell.edu/uscode/text/26/24
+        kind: government
+      - label: JCT — Tax expenditure for CTC
+        url: https://www.jct.gov/publications/
+        kind: government
 
   - id: us-cdcc
     name: Child and Dependent Care Credit
@@ -56,6 +92,10 @@ programs:
     statute: 26 USC § 21
     affectedUnits: ~6M tax units
     asOfYear: 2025
+    sources:
+      - label: 26 USC § 21 — Expenses for household and dependent care services
+        url: https://www.law.cornell.edu/uscode/text/26/21
+        kind: government
 
   - id: us-premium-tax-credit
     name: Premium Tax Credit (ACA)
@@ -66,6 +106,13 @@ programs:
     annualOutlaysUsd: 100_000_000_000
     affectedUnits: ~21M enrollees
     asOfYear: 2025
+    sources:
+      - label: 26 USC § 36B — Refundable credit for coverage under a qualified health plan
+        url: https://www.law.cornell.edu/uscode/text/26/36B
+        kind: government
+      - label: CMS — Marketplace enrollment data
+        url: https://www.cms.gov/marketplace
+        kind: government
 
   - id: us-estate-tax
     name: Federal estate and gift tax
@@ -73,9 +120,13 @@ programs:
     agency: IRS
     type: wealth-tax
     statute: 26 USC §§ 2001-2801
-    annualOutlaysUsd: 30_000_000_000
+    annualRevenueUsd: 30_000_000_000
     affectedUnits: ~6K estates
     asOfYear: 2025
+    sources:
+      - label: 26 USC subtitle B — Estate and Gift Taxes
+        url: https://uscode.house.gov/browse/prelim@title26/subtitleB&edition=prelim
+        kind: government
 
   - id: us-tariffs
     name: US tariffs
@@ -83,8 +134,15 @@ programs:
     agency: USTR / CBP
     type: tariff
     statute: 19 USC § 1202
-    annualOutlaysUsd: 90_000_000_000
+    annualRevenueUsd: 90_000_000_000
     asOfYear: 2025
+    sources:
+      - label: 19 USC § 1202 — Harmonized Tariff Schedule
+        url: https://www.law.cornell.edu/uscode/text/19/1202
+        kind: government
+      - label: CBP — Trade statistics
+        url: https://www.cbp.gov/trade
+        kind: government
 
   # --------------------------- US federal benefits ----------------------------
   - id: us-snap
@@ -97,6 +155,13 @@ programs:
     annualOutlaysUsd: 113_000_000_000
     affectedUnits: ~42M individuals
     asOfYear: 2024
+    sources:
+      - label: 7 USC chapter 51 — SNAP
+        url: https://www.law.cornell.edu/uscode/text/7/chapter-51
+        kind: government
+      - label: USDA FNS — SNAP program data
+        url: https://www.fns.usda.gov/pd/supplemental-nutrition-assistance-program-snap
+        kind: government
 
   - id: us-tanf
     name: TANF
@@ -108,6 +173,13 @@ programs:
     annualOutlaysUsd: 31_000_000_000
     affectedUnits: ~1M families
     asOfYear: 2024
+    sources:
+      - label: 42 USC chapter 7 subchapter IV-A — TANF
+        url: https://www.law.cornell.edu/uscode/text/42/chapter-7/subchapter-IV/part-A
+        kind: government
+      - label: HHS ACF — TANF financial data
+        url: https://www.acf.hhs.gov/ofa/data/tanf-financial-data
+        kind: government
 
   - id: us-ssi
     name: SSI
@@ -119,6 +191,13 @@ programs:
     annualOutlaysUsd: 65_000_000_000
     affectedUnits: ~7.5M recipients
     asOfYear: 2024
+    sources:
+      - label: 42 USC chapter 7 subchapter XVI — SSI
+        url: https://www.law.cornell.edu/uscode/text/42/chapter-7/subchapter-XVI
+        kind: government
+      - label: SSA — Annual Statistical Supplement (SSI)
+        url: https://www.ssa.gov/policy/docs/statcomps/supplement/
+        kind: government
 
   - id: us-medicaid
     name: Medicaid
@@ -129,6 +208,13 @@ programs:
     annualOutlaysUsd: 880_000_000_000
     affectedUnits: ~88M enrollees
     asOfYear: 2024
+    sources:
+      - label: 42 USC chapter 7 subchapter XIX — Medicaid
+        url: https://www.law.cornell.edu/uscode/text/42/chapter-7/subchapter-XIX
+        kind: government
+      - label: CMS — Medicaid program data
+        url: https://www.medicaid.gov/medicaid/index.html
+        kind: government
 
   - id: us-chip
     name: CHIP
@@ -140,6 +226,13 @@ programs:
     annualOutlaysUsd: 24_000_000_000
     affectedUnits: ~7M children
     asOfYear: 2024
+    sources:
+      - label: 42 USC chapter 7 subchapter XXI — CHIP
+        url: https://www.law.cornell.edu/uscode/text/42/chapter-7/subchapter-XXI
+        kind: government
+      - label: CMS — CHIP program data
+        url: https://www.medicaid.gov/chip/index.html
+        kind: government
 
   - id: us-wic
     name: WIC
@@ -151,6 +244,13 @@ programs:
     annualOutlaysUsd: 7_000_000_000
     affectedUnits: ~6.6M participants
     asOfYear: 2024
+    sources:
+      - label: 42 USC § 1786 — WIC
+        url: https://www.law.cornell.edu/uscode/text/42/1786
+        kind: government
+      - label: USDA FNS — WIC program data
+        url: https://www.fns.usda.gov/pd/wic-program
+        kind: government
 
   - id: us-section-8
     name: Housing Choice Voucher (Section 8)
@@ -161,6 +261,13 @@ programs:
     annualOutlaysUsd: 32_000_000_000
     affectedUnits: ~2.3M households
     asOfYear: 2024
+    sources:
+      - label: 42 USC § 1437f — Section 8 Housing Choice Voucher
+        url: https://www.law.cornell.edu/uscode/text/42/1437f
+        kind: government
+      - label: HUD — Housing Choice Voucher Program
+        url: https://www.hud.gov/topics/housing_choice_voucher_program_section_8
+        kind: government
 
   - id: us-ssdi
     name: Social Security Disability Insurance
@@ -171,6 +278,13 @@ programs:
     annualOutlaysUsd: 150_000_000_000
     affectedUnits: ~8.6M workers
     asOfYear: 2024
+    sources:
+      - label: 42 USC chapter 7 subchapter II — OASDI
+        url: https://www.law.cornell.edu/uscode/text/42/chapter-7/subchapter-II
+        kind: government
+      - label: SSA — Disability Insurance Trust Fund
+        url: https://www.ssa.gov/oact/STATS/dibStat.html
+        kind: government
 
   - id: us-oasi
     name: Social Security retirement and survivors (OASI)
@@ -181,6 +295,13 @@ programs:
     annualOutlaysUsd: 1_350_000_000_000
     affectedUnits: ~57M beneficiaries
     asOfYear: 2024
+    sources:
+      - label: 42 USC chapter 7 subchapter II — OASDI
+        url: https://www.law.cornell.edu/uscode/text/42/chapter-7/subchapter-II
+        kind: government
+      - label: SSA — Trust Fund Data
+        url: https://www.ssa.gov/oact/STATS/table4a1.html
+        kind: government
 
   - id: us-ui
     name: Unemployment Insurance
@@ -191,6 +312,13 @@ programs:
     annualOutlaysUsd: 28_000_000_000
     affectedUnits: state-administered
     asOfYear: 2024
+    sources:
+      - label: 26 USC chapter 23 — FUTA
+        url: https://www.law.cornell.edu/uscode/text/26/chapter-23
+        kind: government
+      - label: DOL — Unemployment Insurance program statistics
+        url: https://oui.doleta.gov/unemploy/
+        kind: government
 
   - id: us-liheap
     name: LIHEAP
@@ -202,6 +330,13 @@ programs:
     annualOutlaysUsd: 4_100_000_000
     affectedUnits: ~5.9M households
     asOfYear: 2024
+    sources:
+      - label: 42 USC chapter 94 — LIHEAP
+        url: https://www.law.cornell.edu/uscode/text/42/chapter-94
+        kind: government
+      - label: HHS ACF — LIHEAP data
+        url: https://www.acf.hhs.gov/ocs/programs/liheap
+        kind: government
 
   - id: us-ccdf
     name: CCDF
@@ -213,6 +348,13 @@ programs:
     annualOutlaysUsd: 8_000_000_000
     affectedUnits: ~1.3M children
     asOfYear: 2024
+    sources:
+      - label: 42 USC chapter 105 subchapter II-B — CCDBG / CCDF
+        url: https://www.law.cornell.edu/uscode/text/42/chapter-105/subchapter-II-B
+        kind: government
+      - label: HHS ACF — CCDF program data
+        url: https://www.acf.hhs.gov/occ/data
+        kind: government
 
   # --------------------------- US state income taxes --------------------------
   - id: us-state-income-tax
@@ -220,9 +362,16 @@ programs:
     jurisdiction: us-states
     agency: state DORs
     type: income-tax
-    annualOutlaysUsd: 480_000_000_000
+    annualRevenueUsd: 480_000_000_000
     affectedUnits: 41 states tax wage income
     asOfYear: 2025
+    sources:
+      - label: Tax Foundation — State individual income tax structures
+        url: https://taxfoundation.org/state/state-income-tax/
+        kind: civilsociety
+      - label: NASBO — State Expenditure Report
+        url: https://www.nasbo.org/reports-data/state-expenditure-report
+        kind: civilsociety
 
   - id: us-state-eitc
     name: State Earned Income Tax Credits
@@ -231,6 +380,10 @@ programs:
     type: refundable-tax-credit
     affectedUnits: 31 states + DC
     asOfYear: 2025
+    sources:
+      - label: CBPP — State EITC overview
+        url: https://www.cbpp.org/research/state-budget-and-tax/state-earned-income-tax-credits
+        kind: civilsociety
 
   - id: us-state-ctc
     name: State Child Tax Credits
@@ -239,3 +392,7 @@ programs:
     type: refundable-tax-credit
     affectedUnits: 15 states + DC
     asOfYear: 2025
+    sources:
+      - label: NCCP — State CTC enactments
+        url: https://www.nccp.org/
+        kind: civilsociety

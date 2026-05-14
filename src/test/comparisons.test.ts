@@ -127,6 +127,23 @@ describe('comparison data', () => {
     }
   });
 
+  it('every program has at least one source citation', () => {
+    for (const p of data.programs) {
+      if (!p.sources || p.sources.length === 0) {
+        throw new Error(`programs.yaml: ${p.id} has no sources`);
+      }
+    }
+  });
+
+  it('tax/tariff programs use annualRevenueUsd, not annualOutlaysUsd', () => {
+    const revenueOnlyTypes = new Set(['income-tax', 'payroll-tax', 'tariff', 'wealth-tax']);
+    for (const p of data.programs) {
+      if (revenueOnlyTypes.has(p.type)) {
+        expect(p.annualOutlaysUsd).toBeUndefined();
+      }
+    }
+  });
+
   describe('source corroboration', () => {
     const TRANSPARENCY_FIELDS = [
       'codePublic',

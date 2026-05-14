@@ -166,12 +166,29 @@ export interface Program {
   type: ProgramType;
   /** Statutory citation. */
   statute?: string;
-  /** Annual outlays/expenditures in USD, point-in-time best estimate. */
+  /**
+   * Annual outlays/expenditures in USD for benefit programs. Use this
+   * field only for programs that disburse money (or in-kind benefits
+   * valued in dollars) — not for revenue-raising taxes.
+   */
   annualOutlaysUsd?: number;
+  /**
+   * Annual revenue in USD for taxes/tariffs that raise money rather
+   * than disburse it. Kept separate from `annualOutlaysUsd` because the
+   * semantics are opposite (one is government spending, the other is
+   * government receipts).
+   */
+  annualRevenueUsd?: number;
   /** Approximate number of households/units affected. */
   affectedUnits?: string;
   /** Year of latest major reform reflected. */
   asOfYear?: number;
+  /**
+   * Citations supporting the statutory, fiscal, and other claims in this
+   * program row. Programs are factual claims about US/UK law and budget
+   * scale; they need their own corroboration.
+   */
+  sources?: Source[];
 }
 
 /* -------------------------------------------------------------------------- */
