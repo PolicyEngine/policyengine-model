@@ -1,0 +1,117 @@
+# Models in scope for the open microsimulation reference.
+#
+# Each entry must include `sources` with at least one citation. Use 'unknown'
+# explicitly rather than omitting fields when a value cannot be sourced.
+
+models:
+  - id: policyengine-us
+    name: PolicyEngine US
+    organization: PolicyEngine
+    organizationUrl: https://policyengine.org
+    siblings: [policyengine-uk, policyengine-canada, policyengine-il, policyengine-ng]
+    type: microsimulation
+    jurisdictions: [us-federal, us-states, us-localities]
+    inceptionYear: 2021
+    license: AGPL-3.0-or-later
+    codePublic: true
+    codeUrl: https://github.com/PolicyEngine/policyengine-us
+    languages: [Python]
+    primaryDataset: Enhanced CPS (PolicyEngine US Data)
+    documentationUrl: https://policyengine.github.io/policyengine-us/
+    leads:
+      - Nikhil Woodruff
+      - Max Ghenis
+    summary: >
+      Open-source rules-engine microsimulation of US federal, state, and select
+      local tax and benefit policies. Built on policyengine-core (a fork of
+      OpenFisca-Core) with an enhanced CPS dataset calibrated to administrative
+      totals via L0 reweighting.
+    sources:
+      - label: PolicyEngine US repository
+        url: https://github.com/PolicyEngine/policyengine-us
+      - label: PolicyEngine US documentation
+        url: https://policyengine.github.io/policyengine-us/
+
+  - id: trim3
+    name: TRIM3
+    organization: Urban Institute
+    organizationUrl: https://www.urban.org
+    type: microsimulation
+    jurisdictions: [us-federal, us-states]
+    inceptionYear: 1973
+    license: proprietary
+    codePublic: false
+    languages: [SAS, Fortran]
+    primaryDataset: TRIM3 augmented CPS-ASEC
+    documentationUrl: https://boreas.urban.org/T3IntroHistory.php
+    leads:
+      - Linda Giannarelli
+      - Laura Wheaton
+    summary: >
+      The Transfer Income Model, version 3 simulates major federal and state
+      tax and transfer programs using the CPS-ASEC. Funded primarily by HHS's
+      Office of the Assistant Secretary for Planning and Evaluation (ASPE),
+      which holds the copyright. Outputs are accessed through Urban-controlled
+      web interfaces; source code is not public.
+    sources:
+      - label: TRIM3 introduction and history
+        url: https://boreas.urban.org/T3IntroHistory.php
+      - label: TRIM A Tool for Social Policy Analysis (Zedlewski)
+        url: https://www.urban.org/sites/default/files/publication/82921/2000878-TRIM-A-Tool-for-Social-Policy-Analysis.pdf
+
+  - id: attis
+    name: ATTIS
+    organization: Urban Institute
+    organizationUrl: https://www.urban.org
+    siblings: [trim3]
+    type: microsimulation
+    jurisdictions: [us-federal, us-states]
+    inceptionYear: 2017
+    license: proprietary
+    codePublic: false
+    languages: [unknown]
+    primaryDataset: American Community Survey (ACS)
+    documentationUrl: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+    leads:
+      - Linda Giannarelli
+      - Laura Wheaton
+    summary: >
+      The Analysis of Transfers, Taxes, and Income Security model uses
+      Census American Community Survey microdata to simulate major safety-net
+      programs and federal taxes. Designed for sub-state geographic analyses
+      that the smaller CPS sample cannot support; funded through stacked
+      foundation initiatives (State of the Safety Net, Safety Net to Solid
+      Ground) rather than a single base contract.
+    sources:
+      - label: ATTIS model overview
+        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+      - label: State of the Safety Net initiative
+        url: https://www.urban.org/projects/state-safety-net
+
+  - id: tpc-microsim
+    name: TPC microsimulation model
+    organization: Tax Policy Center (Urban-Brookings)
+    organizationUrl: https://www.taxpolicycenter.org
+    type: microsimulation
+    jurisdictions: [us-federal, us-states]
+    inceptionYear: 2002
+    license: proprietary
+    codePublic: false
+    languages: [SAS]
+    primaryDataset: Statistics of Income (SOI) Public Use File + CPS-ASEC match
+    documentationUrl: https://www.taxpolicycenter.org/resources/brief-description-tax-model
+    leads:
+      - Eric Toder
+      - Robert McClelland
+      - Daniel Berger
+    summary: >
+      Joint Urban-Brookings tax microsimulation model used to produce
+      distributional tables, revenue estimates, and reform analysis for the
+      federal income tax, payroll taxes, and the estate tax. Microdata is the
+      SOI Public Use File extended with imputations from the CPS-ASEC. Source
+      code and microdata are not public.
+    sources:
+      - label: TPC Brief Description of the Tax Model
+        url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
+      - label: TPC funding principles
+        url: https://taxpolicycenter.org/support/funding-principles

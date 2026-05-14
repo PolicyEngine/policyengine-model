@@ -1,0 +1,121 @@
+# How each model imputes missing variables, calibrates participation, and
+# enhances its base microdataset.
+
+imputations:
+  - model: policyengine-us
+    targetVariable: snap-participation
+    method: l0-calibration
+    description: >
+      Base SNAP eligibility computed rule-by-rule from CPS variables; final
+      participation reweighted via L0 calibration to match administrative
+      state-by-state caseload and outlay totals. Re-runs annually with the
+      Enhanced CPS pipeline.
+    baseDataset: Enhanced CPS
+    calibrationTargets:
+      - snap-caseload-state
+      - snap-outlay-total
+    documentationUrl: https://github.com/PolicyEngine/policyengine-us-data
+    reproducible: yes
+    sources:
+      - label: policyengine-us-data pipeline
+        url: https://github.com/PolicyEngine/policyengine-us-data
+      - label: L0 calibration package
+        url: https://github.com/PolicyEngine/L0
+
+  - model: policyengine-us
+    targetVariable: itemized-deductions
+    method: statistical-matching
+    description: >
+      Itemized deduction components imputed from IRS PUF onto the Enhanced CPS
+      via statistical matching, then top-incomes weighted to match SOI totals.
+    baseDataset: Enhanced CPS
+    calibrationTargets:
+      - soi-agi-bins
+    documentationUrl: https://github.com/PolicyEngine/policyengine-us-data
+    reproducible: yes
+    sources:
+      - label: policyengine-us-data
+        url: https://github.com/PolicyEngine/policyengine-us-data
+
+  - model: policyengine-us
+    targetVariable: medicaid-participation
+    method: rule-based
+    description: >
+      MAGI Medicaid eligibility computed rule-by-rule by state and family
+      size; modeled take-up rates applied to reconcile to enrollment totals.
+    baseDataset: Enhanced CPS
+    reproducible: yes
+    sources:
+      - label: Medicaid take-up parameters
+        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/parameters/gov/hhs/medicaid
+
+  - model: trim3
+    targetVariable: snap-participation
+    method: caseload-driven
+    description: >
+      TRIM3 simulates eligibility from CPS-ASEC, then selects a subset of
+      eligible units to designate as participants until simulated caseloads
+      match administrative state-level monthly totals. Selection is
+      probability-weighted by characteristics that predict take-up.
+    baseDataset: CPS-ASEC
+    calibrationTargets:
+      - snap-caseload-state-monthly
+    documentationUrl: https://boreas.urban.org/T3IntroFoodStamps.php
+    reproducible: no
+    sources:
+      - label: TRIM3 SNAP methodology
+        url: https://boreas.urban.org/T3IntroFoodStamps.php
+
+  - model: trim3
+    targetVariable: tanf-participation
+    method: caseload-driven
+    description: >
+      Same caseload-alignment approach as SNAP, applied to TANF using
+      state-specific eligibility rules.
+    baseDataset: CPS-ASEC
+    calibrationTargets:
+      - tanf-caseload-state
+    documentationUrl: https://boreas.urban.org/T3IntroAFDCTANF.php
+    reproducible: no
+    sources:
+      - label: TRIM3 TANF methodology
+        url: https://boreas.urban.org/T3IntroAFDCTANF.php
+
+  - model: trim3
+    targetVariable: child-care-subsidy-participation
+    method: caseload-driven
+    description: Caseload-aligned to CCDF state administrative data.
+    baseDataset: CPS-ASEC
+    documentationUrl: https://boreas.urban.org/T3IntroChildCare.php
+    reproducible: no
+    sources:
+      - label: TRIM3 child care methodology
+        url: https://boreas.urban.org/T3IntroChildCare.php
+
+  - model: attis
+    targetVariable: snap-participation
+    method: unknown
+    description: >
+      Documented as similar to TRIM3 (caseload-aligned), applied to ACS data.
+      Specific imputation logic not public.
+    baseDataset: American Community Survey
+    reproducible: no
+    sources:
+      - label: ATTIS overview
+        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+
+  - model: tpc-microsim
+    targetVariable: capital-gains
+    method: statistical-matching
+    description: >
+      Capital gains, retirement income, and other low-CPS-coverage variables
+      imputed from SOI PUF onto a CPS-PUF matched record. Aging proceeds
+      forward via per-cell growth assumptions tied to CBO baseline.
+    baseDataset: SOI Public Use File + CPS-ASEC
+    calibrationTargets:
+      - cbo-revenue-baseline
+    documentationUrl: https://www.taxpolicycenter.org/resources/brief-description-tax-model
+    reproducible: no
+    sources:
+      - label: TPC Brief Description
+        url: https://www.taxpolicycenter.org/resources/brief-description-tax-model

@@ -1,0 +1,97 @@
+# Transparency dimensions for each model.
+#
+# Tristate fields ('yes' / 'no' / 'partial' / 'unknown') are used wherever a
+# claim has nuance — e.g. a model may publish high-level docs but not the
+# parameter file, in which case documentationPublic = 'partial'.
+
+transparency:
+  - model: policyengine-us
+    codePublic: yes
+    codeLicense: AGPL-3.0-or-later
+    codeUrl: https://github.com/PolicyEngine/policyengine-us
+    contributorCount: unknown
+    issueTrackerPublic: yes
+    documentationPublic: yes
+    documentationUrl: https://policyengine.github.io/policyengine-us/
+    parameterSourcing: inline-cite
+    testSuitePublic: yes
+    testCount: unknown
+    datasetPublic: yes
+    datasetUrl: https://huggingface.co/policyengine
+    reproducibleBuilds: yes
+    notes: >
+      All parameters are YAML files with inline references field pointing to
+      statute, regulation, or administrative source. Tests are YAML files
+      executed via the rules engine. Dataset is published on Hugging Face with
+      pinned versions.
+    sources:
+      - label: policyengine-us repo
+        url: https://github.com/PolicyEngine/policyengine-us
+      - label: PolicyEngine data on Hugging Face
+        url: https://huggingface.co/policyengine
+
+  - model: trim3
+    codePublic: no
+    codeLicense: proprietary
+    contributorCount: unknown
+    issueTrackerPublic: no
+    documentationPublic: partial
+    documentationUrl: https://boreas.urban.org/T3IntroHistory.php
+    parameterSourcing: separate-doc
+    testSuitePublic: unknown
+    testCount: unknown
+    datasetPublic: no
+    reproducibleBuilds: unknown
+    notes: >
+      Source code, parameter files, and the augmented microdata are not public.
+      The boreas.urban.org site provides program-level descriptions and outputs
+      but not the underlying implementation. Federal staff with ASPE access can
+      view internal documentation; external researchers cannot.
+    sources:
+      - label: TRIM3 introduction
+        url: https://boreas.urban.org/T3IntroHistory.php
+      - label: TRIM3 access policy
+        url: https://boreas.urban.org/T3IntroAccess.php
+
+  - model: attis
+    codePublic: no
+    codeLicense: proprietary
+    contributorCount: unknown
+    issueTrackerPublic: no
+    documentationPublic: partial
+    documentationUrl: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+    parameterSourcing: unknown
+    testSuitePublic: unknown
+    testCount: unknown
+    datasetPublic: no
+    reproducibleBuilds: unknown
+    notes: >
+      No public source code, parameter files, or microdata. Urban publishes
+      summary briefs from ATTIS analyses but not the model implementation.
+    sources:
+      - label: ATTIS overview
+        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+
+  - model: tpc-microsim
+    codePublic: no
+    codeLicense: proprietary
+    contributorCount: unknown
+    issueTrackerPublic: no
+    documentationPublic: partial
+    documentationUrl: https://www.taxpolicycenter.org/resources/brief-description-tax-model
+    parameterSourcing: separate-doc
+    testSuitePublic: unknown
+    testCount: unknown
+    datasetPublic: no
+    reproducibleBuilds: unknown
+    notes: >
+      The Brief Description page summarizes the model architecture; underlying
+      SAS source code, parameter files, and the SOI-CPS extended microdata are
+      not public. TPC publishes distributional tables from the model but not
+      the implementation. The IRS Public Use File base data is sold by IRS
+      under terms that restrict redistribution.
+    sources:
+      - label: TPC Brief Description
+        url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
+      - label: SOI Public Use File
+        url: https://www.irs.gov/statistics/soi-tax-stats-individual-public-use-microdata-files

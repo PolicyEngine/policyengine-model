@@ -1,0 +1,802 @@
+# Coverage matrix: (model × program) -> status + metadata.
+#
+# When a model does not cover a program, prefer 'not-implemented' over 'unknown'
+# only when you have direct confirmation that it is excluded from scope. Default
+# to 'unknown' otherwise; a thin row with a citation is better than a guess.
+
+coverage:
+  # ============================ PolicyEngine US ===============================
+  - model: policyengine-us
+    program: us-federal-income-tax
+    status: implemented
+    parametersModeled: unknown
+    statuteTraceable: yes
+    testCoverage: high
+    docsUrl: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/parameters/gov/irs
+    asOfYear: 2026
+    sources:
+      - label: policyengine_us IRS parameters
+        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/parameters/gov/irs
+
+  - model: policyengine-us
+    program: us-payroll-tax
+    status: implemented
+    statuteTraceable: yes
+    testCoverage: high
+    docsUrl: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/variables/gov/irs/payroll
+    asOfYear: 2026
+    sources:
+      - label: policyengine_us payroll variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/variables/gov/irs/payroll
+
+  - model: policyengine-us
+    program: us-eitc
+    status: implemented
+    statuteTraceable: yes
+    testCoverage: high
+    docsUrl: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/variables/gov/irs/credits/eitc
+    asOfYear: 2026
+    sources:
+      - label: EITC variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/variables/gov/irs/credits/eitc
+
+  - model: policyengine-us
+    program: us-ctc
+    status: implemented
+    statuteTraceable: yes
+    testCoverage: high
+    docsUrl: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/variables/gov/irs/credits/ctc
+    asOfYear: 2026
+    notes: OBBBA-era $2,200 CTC implemented.
+    sources:
+      - label: CTC variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/variables/gov/irs/credits/ctc
+
+  - model: policyengine-us
+    program: us-cdcc
+    status: implemented
+    statuteTraceable: yes
+    testCoverage: high
+    asOfYear: 2025
+    sources:
+      - label: CDCC variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/variables/gov/irs/credits/cdcc
+
+  - model: policyengine-us
+    program: us-premium-tax-credit
+    status: implemented
+    statuteTraceable: yes
+    testCoverage: high
+    asOfYear: 2025
+    sources:
+      - label: PTC variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/variables/gov/irs/credits/premium_tax_credit
+
+  - model: policyengine-us
+    program: us-estate-tax
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    asOfYear: unknown
+    notes: Not covered. PolicyEngine focuses on annual income tax + transfers.
+    sources:
+      - label: Repository search (no estate-tax variables)
+        url: https://github.com/PolicyEngine/policyengine-us/search?q=estate+tax
+
+  - model: policyengine-us
+    program: us-tariffs
+    status: implemented
+    statuteTraceable: partial
+    testCoverage: medium
+    asOfYear: 2026
+    notes: Tariff incidence modeled via consumption imputation.
+    sources:
+      - label: tariff variable
+        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/variables/gov/usda
+
+  - model: policyengine-us
+    program: us-snap
+    status: implemented
+    statuteTraceable: yes
+    testCoverage: high
+    asOfYear: 2025
+    sources:
+      - label: SNAP variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/variables/gov/usda/snap
+
+  - model: policyengine-us
+    program: us-tanf
+    status: implemented
+    statuteTraceable: yes
+    testCoverage: medium
+    asOfYear: 2024
+    notes: State-level TANF rules implemented for selected states; eligibility rules vary by state.
+    sources:
+      - label: TANF variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/variables/gov/hhs/tanf
+
+  - model: policyengine-us
+    program: us-ssi
+    status: implemented
+    statuteTraceable: yes
+    testCoverage: high
+    asOfYear: 2025
+    sources:
+      - label: SSI variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/variables/gov/ssa/ssi
+
+  - model: policyengine-us
+    program: us-medicaid
+    status: implemented
+    statuteTraceable: yes
+    testCoverage: medium
+    asOfYear: 2025
+    notes: MAGI Medicaid eligibility modeled; long-term care Medicaid not modeled.
+    sources:
+      - label: Medicaid variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/variables/gov/hhs/medicaid
+
+  - model: policyengine-us
+    program: us-chip
+    status: implemented
+    statuteTraceable: yes
+    testCoverage: medium
+    asOfYear: 2025
+    sources:
+      - label: CHIP variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/variables/gov/hhs/chip
+
+  - model: policyengine-us
+    program: us-wic
+    status: implemented
+    statuteTraceable: yes
+    testCoverage: medium
+    asOfYear: 2025
+    sources:
+      - label: WIC variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/variables/gov/usda/wic
+
+  - model: policyengine-us
+    program: us-section-8
+    status: implemented
+    statuteTraceable: yes
+    testCoverage: medium
+    asOfYear: 2025
+    sources:
+      - label: Section 8 variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/variables/gov/hud/section8
+
+  - model: policyengine-us
+    program: us-ssdi
+    status: partial
+    statuteTraceable: partial
+    testCoverage: low
+    asOfYear: 2024
+    notes: SSDI benefits treated as exogenous income; benefit determination not modeled.
+    sources:
+      - label: Repository search for SSDI
+        url: https://github.com/PolicyEngine/policyengine-us/search?q=ssdi
+
+  - model: policyengine-us
+    program: us-oasi
+    status: partial
+    statuteTraceable: partial
+    testCoverage: low
+    asOfYear: 2024
+    notes: OASI benefits treated as exogenous income; PIA/AIME computation not modeled in detail.
+    sources:
+      - label: Social Security variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/variables/gov/ssa
+
+  - model: policyengine-us
+    program: us-ui
+    status: partial
+    statuteTraceable: partial
+    testCoverage: low
+    asOfYear: 2024
+    notes: UI benefits treated as exogenous income; eligibility not modeled.
+    sources:
+      - label: UI variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/variables/household/income/person/unemployment_compensation.py
+
+  - model: policyengine-us
+    program: us-liheap
+    status: implemented
+    statuteTraceable: yes
+    testCoverage: medium
+    asOfYear: 2025
+    sources:
+      - label: LIHEAP variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/variables/gov/hhs/liheap
+
+  - model: policyengine-us
+    program: us-ccdf
+    status: implemented
+    statuteTraceable: yes
+    testCoverage: medium
+    asOfYear: 2025
+    sources:
+      - label: CCDF variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/variables/gov/hhs/ccdf
+
+  - model: policyengine-us
+    program: us-state-income-tax
+    status: implemented
+    statuteTraceable: yes
+    testCoverage: high
+    asOfYear: 2025
+    notes: All 41 income-taxing states + DC implemented.
+    sources:
+      - label: State tax parameters
+        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/parameters/gov/states
+
+  - model: policyengine-us
+    program: us-state-eitc
+    status: implemented
+    statuteTraceable: yes
+    testCoverage: high
+    asOfYear: 2025
+    notes: 31 state EITCs + DC.
+    sources:
+      - label: State EITC variables
+        url: https://github.com/PolicyEngine/policyengine-us/search?q=state+eitc
+
+  - model: policyengine-us
+    program: us-state-ctc
+    status: implemented
+    statuteTraceable: yes
+    testCoverage: medium
+    asOfYear: 2025
+    notes: 15 state CTCs + DC.
+    sources:
+      - label: State CTC search
+        url: https://github.com/PolicyEngine/policyengine-us/search?q=state+ctc
+
+  # ================================== TRIM3 ===================================
+  - model: trim3
+    program: us-federal-income-tax
+    status: implemented
+    parametersModeled: unknown
+    statuteTraceable: unknown
+    testCoverage: unknown
+    docsUrl: https://boreas.urban.org/T3IntroFedTax.php
+    asOfYear: unknown
+    notes: Federal income tax simulated.
+    sources:
+      - label: TRIM3 federal tax module
+        url: https://boreas.urban.org/T3IntroFedTax.php
+
+  - model: trim3
+    program: us-payroll-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: unknown
+    sources:
+      - label: TRIM3 federal tax module
+        url: https://boreas.urban.org/T3IntroFedTax.php
+
+  - model: trim3
+    program: us-eitc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: unknown
+    sources:
+      - label: TRIM3 federal tax module
+        url: https://boreas.urban.org/T3IntroFedTax.php
+
+  - model: trim3
+    program: us-ctc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: unknown
+    sources:
+      - label: TRIM3 federal tax module
+        url: https://boreas.urban.org/T3IntroFedTax.php
+
+  - model: trim3
+    program: us-cdcc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: unknown
+    sources:
+      - label: TRIM3 federal tax module
+        url: https://boreas.urban.org/T3IntroFedTax.php
+
+  - model: trim3
+    program: us-premium-tax-credit
+    status: unknown
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: unknown
+    sources:
+      - label: TRIM3 program documentation
+        url: https://boreas.urban.org/T3IntroFedTax.php
+
+  - model: trim3
+    program: us-estate-tax
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    sources:
+      - label: TRIM3 program scope (no estate tax module)
+        url: https://boreas.urban.org/T3IntroFedTax.php
+
+  - model: trim3
+    program: us-tariffs
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    sources:
+      - label: TRIM3 program scope
+        url: https://boreas.urban.org/T3IntroHistory.php
+
+  - model: trim3
+    program: us-snap
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    docsUrl: https://boreas.urban.org/T3IntroFoodStamps.php
+    asOfYear: unknown
+    notes: One of TRIM3's flagship modules; widely cited for SNAP take-up analysis.
+    sources:
+      - label: TRIM3 SNAP module
+        url: https://boreas.urban.org/T3IntroFoodStamps.php
+
+  - model: trim3
+    program: us-tanf
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    docsUrl: https://boreas.urban.org/T3IntroAFDCTANF.php
+    asOfYear: unknown
+    sources:
+      - label: TRIM3 TANF module
+        url: https://boreas.urban.org/T3IntroAFDCTANF.php
+
+  - model: trim3
+    program: us-ssi
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    docsUrl: https://boreas.urban.org/T3IntroSSI.php
+    asOfYear: unknown
+    sources:
+      - label: TRIM3 SSI module
+        url: https://boreas.urban.org/T3IntroSSI.php
+
+  - model: trim3
+    program: us-medicaid
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    docsUrl: https://boreas.urban.org/T3IntroMedicaid.php
+    asOfYear: unknown
+    sources:
+      - label: TRIM3 Medicaid module
+        url: https://boreas.urban.org/T3IntroMedicaid.php
+
+  - model: trim3
+    program: us-chip
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    docsUrl: https://boreas.urban.org/T3IntroMedicaid.php
+    asOfYear: unknown
+    notes: Modeled as part of Medicaid module.
+    sources:
+      - label: TRIM3 Medicaid/CHIP module
+        url: https://boreas.urban.org/T3IntroMedicaid.php
+
+  - model: trim3
+    program: us-wic
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: unknown
+    sources:
+      - label: TRIM3 module listing
+        url: https://boreas.urban.org/T3IntroHistory.php
+
+  - model: trim3
+    program: us-section-8
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    docsUrl: https://boreas.urban.org/T3IntroHousing.php
+    asOfYear: unknown
+    sources:
+      - label: TRIM3 housing module
+        url: https://boreas.urban.org/T3IntroHousing.php
+
+  - model: trim3
+    program: us-ssdi
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: unknown
+    sources:
+      - label: TRIM3 module listing
+        url: https://boreas.urban.org/T3IntroHistory.php
+
+  - model: trim3
+    program: us-oasi
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: unknown
+    sources:
+      - label: TRIM3 module listing
+        url: https://boreas.urban.org/T3IntroHistory.php
+
+  - model: trim3
+    program: us-ui
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    docsUrl: https://boreas.urban.org/T3IntroUI.php
+    asOfYear: unknown
+    sources:
+      - label: TRIM3 UI module
+        url: https://boreas.urban.org/T3IntroUI.php
+
+  - model: trim3
+    program: us-liheap
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: unknown
+    sources:
+      - label: TRIM3 module listing
+        url: https://boreas.urban.org/T3IntroHistory.php
+
+  - model: trim3
+    program: us-ccdf
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    docsUrl: https://boreas.urban.org/T3IntroChildCare.php
+    asOfYear: unknown
+    sources:
+      - label: TRIM3 child care module
+        url: https://boreas.urban.org/T3IntroChildCare.php
+
+  - model: trim3
+    program: us-state-income-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: unknown
+    notes: State income taxes simulated.
+    sources:
+      - label: TRIM3 state tax module
+        url: https://boreas.urban.org/T3IntroFedTax.php
+
+  - model: trim3
+    program: us-state-eitc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: unknown
+    sources:
+      - label: TRIM3 state tax module
+        url: https://boreas.urban.org/T3IntroFedTax.php
+
+  - model: trim3
+    program: us-state-ctc
+    status: unknown
+    statuteTraceable: unknown
+    testCoverage: unknown
+    sources:
+      - label: TRIM3 module documentation
+        url: https://boreas.urban.org/T3IntroHistory.php
+
+  # ================================== ATTIS ===================================
+  - model: attis
+    program: us-federal-income-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: unknown
+    sources:
+      - label: ATTIS model overview
+        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+
+  - model: attis
+    program: us-payroll-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: unknown
+    sources:
+      - label: ATTIS overview
+        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+
+  - model: attis
+    program: us-eitc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: unknown
+    sources:
+      - label: ATTIS overview
+        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+
+  - model: attis
+    program: us-ctc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: unknown
+    sources:
+      - label: ATTIS overview
+        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+
+  - model: attis
+    program: us-snap
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: unknown
+    notes: SNAP is a primary use case for ATTIS sub-state analyses.
+    sources:
+      - label: ATTIS overview
+        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+
+  - model: attis
+    program: us-tanf
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: unknown
+    sources:
+      - label: ATTIS overview
+        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+
+  - model: attis
+    program: us-ssi
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: unknown
+    sources:
+      - label: ATTIS overview
+        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+
+  - model: attis
+    program: us-medicaid
+    status: unknown
+    statuteTraceable: unknown
+    testCoverage: unknown
+    sources:
+      - label: ATTIS overview
+        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+
+  - model: attis
+    program: us-section-8
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: unknown
+    sources:
+      - label: ATTIS overview
+        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+
+  - model: attis
+    program: us-ccdf
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: unknown
+    sources:
+      - label: ATTIS overview
+        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+
+  - model: attis
+    program: us-wic
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: unknown
+    sources:
+      - label: ATTIS overview
+        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+
+  - model: attis
+    program: us-estate-tax
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    sources:
+      - label: ATTIS overview (no estate tax)
+        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+
+  - model: attis
+    program: us-tariffs
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    sources:
+      - label: ATTIS overview
+        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+
+  - model: attis
+    program: us-state-income-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: unknown
+    sources:
+      - label: ATTIS overview
+        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+
+  - model: attis
+    program: us-state-eitc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: unknown
+    sources:
+      - label: ATTIS overview
+        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+
+  # ============================ TPC microsim =================================
+  - model: tpc-microsim
+    program: us-federal-income-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    sources:
+      - label: TPC Brief Description of the Tax Model
+        url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
+
+  - model: tpc-microsim
+    program: us-payroll-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    sources:
+      - label: TPC Brief Description
+        url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
+
+  - model: tpc-microsim
+    program: us-eitc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    sources:
+      - label: TPC Brief Description
+        url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
+
+  - model: tpc-microsim
+    program: us-ctc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    sources:
+      - label: TPC Brief Description
+        url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
+
+  - model: tpc-microsim
+    program: us-cdcc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    sources:
+      - label: TPC Brief Description
+        url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
+
+  - model: tpc-microsim
+    program: us-premium-tax-credit
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    sources:
+      - label: TPC Brief Description
+        url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
+
+  - model: tpc-microsim
+    program: us-estate-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: TPC has a separate estate-tax module driving its estate distributional tables.
+    sources:
+      - label: TPC estate tax tables
+        url: https://www.taxpolicycenter.org/statistics/estate-tax-returns
+
+  - model: tpc-microsim
+    program: us-tariffs
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    sources:
+      - label: TPC scope (no tariff module)
+        url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
+
+  - model: tpc-microsim
+    program: us-snap
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    notes: TPC microsim is tax-only; transfer programs are out of scope.
+    sources:
+      - label: TPC Brief Description (scope)
+        url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
+
+  - model: tpc-microsim
+    program: us-tanf
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    sources:
+      - label: TPC Brief Description (scope)
+        url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
+
+  - model: tpc-microsim
+    program: us-ssi
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    sources:
+      - label: TPC Brief Description (scope)
+        url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
+
+  - model: tpc-microsim
+    program: us-medicaid
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    sources:
+      - label: TPC Brief Description (scope)
+        url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
+
+  - model: tpc-microsim
+    program: us-section-8
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    sources:
+      - label: TPC Brief Description (scope)
+        url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
+
+  - model: tpc-microsim
+    program: us-oasi
+    status: partial
+    statuteTraceable: unknown
+    testCoverage: unknown
+    notes: OASI taxability of benefits modeled within income tax; benefit determination not modeled.
+    sources:
+      - label: TPC Brief Description
+        url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
+
+  - model: tpc-microsim
+    program: us-state-income-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: State income taxes modeled in the State Tax Database extension.
+    sources:
+      - label: TPC State and Local Finance Initiative
+        url: https://www.taxpolicycenter.org/programs/state-tax-and-economic-review
+
+  - model: tpc-microsim
+    program: us-state-eitc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    sources:
+      - label: TPC state EITC analysis
+        url: https://www.taxpolicycenter.org/briefing-book/what-state-earned-income-tax-credit

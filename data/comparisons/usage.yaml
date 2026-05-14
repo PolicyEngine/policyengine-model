@@ -1,0 +1,70 @@
+# Usage signal for each model.
+#
+# Most counts are 'unknown' for incumbents because they don't publish API
+# metrics or user counts. Where a public-facing surface exists (e.g. a TPC
+# distributional table page, an ATTIS report series), prefer to note that in
+# `notes` rather than fabricate a count.
+
+usage:
+  - model: policyengine-us
+    academicCitations: unknown
+    governmentReports: unknown
+    pressMentions: unknown
+    monthlyActiveUsers: unknown
+    monthlyComputations: unknown
+    organizationUsers: unknown
+    notes: >
+      Tracked via policyengine.org analytics and api.policyengine.org logs;
+      public dashboards not yet published. Major US press cites include
+      coverage of OBBBA, the 2024 election analyses, and CTC reform impact
+      tables. Pending: aggregate numbers from internal analytics.
+    sources:
+      - label: PolicyEngine in the news
+        url: https://policyengine.org/us/research
+
+  - model: trim3
+    academicCitations: unknown
+    governmentReports: unknown
+    pressMentions: unknown
+    monthlyActiveUsers: unknown
+    monthlyComputations: unknown
+    organizationUsers: unknown
+    notes: >
+      TRIM3 results underpin recurring HHS/ASPE reports on the Welfare Indicators,
+      poverty take-up estimates, and program participation. Census's Supplemental
+      Poverty Measure imputations are sometimes cross-checked against TRIM3.
+      Public-facing usage outside ASPE-funded work is limited.
+    sources:
+      - label: ASPE Welfare Indicators Annual Report
+        url: https://aspe.hhs.gov/topics/poverty-economic-mobility/welfare-indicators-annual-report
+
+  - model: attis
+    academicCitations: unknown
+    governmentReports: unknown
+    pressMentions: unknown
+    monthlyActiveUsers: unknown
+    monthlyComputations: unknown
+    organizationUsers: unknown
+    notes: >
+      Urban's State of the Safety Net series of briefs draws on ATTIS;
+      sub-state analyses for individual cities and counties are commissioned
+      by funders. No public usage metrics.
+    sources:
+      - label: State of the Safety Net
+        url: https://www.urban.org/projects/state-safety-net
+
+  - model: tpc-microsim
+    academicCitations: unknown
+    governmentReports: unknown
+    pressMentions: unknown
+    monthlyActiveUsers: unknown
+    monthlyComputations: unknown
+    organizationUsers: unknown
+    notes: >
+      TPC distributional tables are the most-cited reference for revenue and
+      distributional estimates of US tax reform proposals, appearing
+      routinely in major US press, congressional staff materials, and academic
+      papers. Per-call usage is not published.
+    sources:
+      - label: TPC distributional tables
+        url: https://www.taxpolicycenter.org/model-estimates

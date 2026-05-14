@@ -1,0 +1,241 @@
+# Canonical list of policies / programs compared across models.
+#
+# Each program is a discrete tax or benefit rule-set. Statutes use bluebook
+# citation style. annualOutlaysUsd is a rough order-of-magnitude (latest
+# available year) and is for context only.
+
+programs:
+  # ----------------------------- US federal taxes -----------------------------
+  - id: us-federal-income-tax
+    name: Federal individual income tax
+    fullName: Federal individual income tax
+    jurisdiction: us-federal
+    agency: IRS
+    type: income-tax
+    statute: 26 USC §§ 1-59B
+    annualOutlaysUsd: 2_200_000_000_000
+    affectedUnits: ~155M tax units
+    asOfYear: 2025
+
+  - id: us-payroll-tax
+    name: Federal payroll taxes
+    fullName: FICA, SECA, FUTA
+    jurisdiction: us-federal
+    agency: IRS / SSA
+    type: payroll-tax
+    statute: 26 USC §§ 3101-3128, 3301-3311
+    annualOutlaysUsd: 1_700_000_000_000
+    affectedUnits: ~170M workers
+    asOfYear: 2025
+
+  - id: us-eitc
+    name: Earned Income Tax Credit
+    jurisdiction: us-federal
+    agency: IRS
+    type: refundable-tax-credit
+    statute: 26 USC § 32
+    annualOutlaysUsd: 70_000_000_000
+    affectedUnits: ~23M tax units
+    asOfYear: 2025
+
+  - id: us-ctc
+    name: Child Tax Credit
+    jurisdiction: us-federal
+    agency: IRS
+    type: refundable-tax-credit
+    statute: 26 USC § 24
+    annualOutlaysUsd: 110_000_000_000
+    affectedUnits: ~40M children
+    asOfYear: 2026
+
+  - id: us-cdcc
+    name: Child and Dependent Care Credit
+    jurisdiction: us-federal
+    agency: IRS
+    type: nonrefundable-tax-credit
+    statute: 26 USC § 21
+    affectedUnits: ~6M tax units
+    asOfYear: 2025
+
+  - id: us-premium-tax-credit
+    name: Premium Tax Credit (ACA)
+    jurisdiction: us-federal
+    agency: IRS / HHS
+    type: refundable-tax-credit
+    statute: 26 USC § 36B
+    annualOutlaysUsd: 100_000_000_000
+    affectedUnits: ~21M enrollees
+    asOfYear: 2025
+
+  - id: us-estate-tax
+    name: Federal estate and gift tax
+    jurisdiction: us-federal
+    agency: IRS
+    type: wealth-tax
+    statute: 26 USC §§ 2001-2801
+    annualOutlaysUsd: 30_000_000_000
+    affectedUnits: ~6K estates
+    asOfYear: 2025
+
+  - id: us-tariffs
+    name: US tariffs
+    jurisdiction: us-federal
+    agency: USTR / CBP
+    type: tariff
+    statute: 19 USC § 1202
+    annualOutlaysUsd: 90_000_000_000
+    asOfYear: 2025
+
+  # --------------------------- US federal benefits ----------------------------
+  - id: us-snap
+    name: SNAP
+    fullName: Supplemental Nutrition Assistance Program
+    jurisdiction: us-federal
+    agency: USDA-FNS
+    type: in-kind-benefit
+    statute: 7 USC §§ 2011-2036c
+    annualOutlaysUsd: 113_000_000_000
+    affectedUnits: ~42M individuals
+    asOfYear: 2024
+
+  - id: us-tanf
+    name: TANF
+    fullName: Temporary Assistance for Needy Families
+    jurisdiction: us-federal
+    agency: HHS-ACF
+    type: cash-transfer
+    statute: 42 USC §§ 601-619
+    annualOutlaysUsd: 31_000_000_000
+    affectedUnits: ~1M families
+    asOfYear: 2024
+
+  - id: us-ssi
+    name: SSI
+    fullName: Supplemental Security Income
+    jurisdiction: us-federal
+    agency: SSA
+    type: cash-transfer
+    statute: 42 USC §§ 1381-1383f
+    annualOutlaysUsd: 65_000_000_000
+    affectedUnits: ~7.5M recipients
+    asOfYear: 2024
+
+  - id: us-medicaid
+    name: Medicaid
+    jurisdiction: us-federal
+    agency: HHS-CMS
+    type: health-coverage
+    statute: 42 USC §§ 1396-1396w
+    annualOutlaysUsd: 880_000_000_000
+    affectedUnits: ~88M enrollees
+    asOfYear: 2024
+
+  - id: us-chip
+    name: CHIP
+    fullName: Children's Health Insurance Program
+    jurisdiction: us-federal
+    agency: HHS-CMS
+    type: health-coverage
+    statute: 42 USC §§ 1397aa-1397mm
+    annualOutlaysUsd: 24_000_000_000
+    affectedUnits: ~7M children
+    asOfYear: 2024
+
+  - id: us-wic
+    name: WIC
+    fullName: Special Supplemental Nutrition Program for Women, Infants and Children
+    jurisdiction: us-federal
+    agency: USDA-FNS
+    type: in-kind-benefit
+    statute: 42 USC § 1786
+    annualOutlaysUsd: 7_000_000_000
+    affectedUnits: ~6.6M participants
+    asOfYear: 2024
+
+  - id: us-section-8
+    name: Housing Choice Voucher (Section 8)
+    jurisdiction: us-federal
+    agency: HUD
+    type: housing-assistance
+    statute: 42 USC § 1437f
+    annualOutlaysUsd: 32_000_000_000
+    affectedUnits: ~2.3M households
+    asOfYear: 2024
+
+  - id: us-ssdi
+    name: Social Security Disability Insurance
+    jurisdiction: us-federal
+    agency: SSA
+    type: cash-transfer
+    statute: 42 USC §§ 401-434
+    annualOutlaysUsd: 150_000_000_000
+    affectedUnits: ~8.6M workers
+    asOfYear: 2024
+
+  - id: us-oasi
+    name: Social Security retirement and survivors (OASI)
+    jurisdiction: us-federal
+    agency: SSA
+    type: cash-transfer
+    statute: 42 USC §§ 401-434
+    annualOutlaysUsd: 1_350_000_000_000
+    affectedUnits: ~57M beneficiaries
+    asOfYear: 2024
+
+  - id: us-ui
+    name: Unemployment Insurance
+    jurisdiction: us-federal
+    agency: DOL
+    type: cash-transfer
+    statute: 26 USC §§ 3301-3311
+    annualOutlaysUsd: 28_000_000_000
+    affectedUnits: state-administered
+    asOfYear: 2024
+
+  - id: us-liheap
+    name: LIHEAP
+    fullName: Low Income Home Energy Assistance Program
+    jurisdiction: us-federal
+    agency: HHS-ACF
+    type: energy-assistance
+    statute: 42 USC §§ 8621-8629
+    annualOutlaysUsd: 4_100_000_000
+    affectedUnits: ~5.9M households
+    asOfYear: 2024
+
+  - id: us-ccdf
+    name: CCDF
+    fullName: Child Care and Development Fund
+    jurisdiction: us-federal
+    agency: HHS-ACF
+    type: child-care
+    statute: 42 USC §§ 9858-9858q
+    annualOutlaysUsd: 8_000_000_000
+    affectedUnits: ~1.3M children
+    asOfYear: 2024
+
+  # --------------------------- US state income taxes --------------------------
+  - id: us-state-income-tax
+    name: State individual income taxes (all 50 + DC)
+    jurisdiction: us-states
+    agency: state DORs
+    type: income-tax
+    annualOutlaysUsd: 480_000_000_000
+    affectedUnits: 41 states tax wage income
+    asOfYear: 2025
+
+  - id: us-state-eitc
+    name: State Earned Income Tax Credits
+    jurisdiction: us-states
+    agency: state DORs
+    type: refundable-tax-credit
+    affectedUnits: 31 states + DC
+    asOfYear: 2025
+
+  - id: us-state-ctc
+    name: State Child Tax Credits
+    jurisdiction: us-states
+    agency: state DORs
+    type: refundable-tax-credit
+    affectedUnits: 15 states + DC
+    asOfYear: 2025

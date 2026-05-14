@@ -1,0 +1,198 @@
+# Concrete artifacts produced or maintained by each model: codebases,
+# datasets, parameter databases, web apps, APIs, papers.
+
+artifacts:
+  # ============================ PolicyEngine US ===============================
+  - model: policyengine-us
+    type: codebase
+    name: policyengine-us
+    public: yes
+    license: AGPL-3.0-or-later
+    url: https://github.com/PolicyEngine/policyengine-us
+    description: Rules engine implementation of US federal and state tax/benefit policy.
+    sources:
+      - label: Repository
+        url: https://github.com/PolicyEngine/policyengine-us
+
+  - model: policyengine-us
+    type: parameter-database
+    name: policyengine_us parameters (YAML)
+    public: yes
+    license: AGPL-3.0-or-later
+    url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/parameters
+    description: All policy parameters as inspectable YAML with inline statutory references.
+    sources:
+      - label: Parameters tree
+        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/parameters
+
+  - model: policyengine-us
+    type: dataset
+    name: Enhanced CPS (policyengine-us-data)
+    public: yes
+    license: AGPL-3.0-or-later
+    url: https://huggingface.co/policyengine
+    description: CPS-ASEC enhanced with PUF imputations and L0 calibration to admin totals.
+    sources:
+      - label: policyengine-us-data
+        url: https://github.com/PolicyEngine/policyengine-us-data
+
+  - model: policyengine-us
+    type: api
+    name: api.policyengine.org
+    public: yes
+    license: AGPL-3.0-or-later
+    url: https://api.policyengine.org
+    description: HTTP API for household calculations and society-wide simulations.
+    sources:
+      - label: PolicyEngine API
+        url: https://api.policyengine.org
+
+  - model: policyengine-us
+    type: web-application
+    name: policyengine.org
+    public: yes
+    license: AGPL-3.0-or-later
+    url: https://policyengine.org/us
+    description: Public web app for household calculations, reform analyses, and policy comparisons.
+    sources:
+      - label: PolicyEngine
+        url: https://policyengine.org/us
+
+  - model: policyengine-us
+    type: documentation-site
+    name: PolicyEngine US docs
+    public: yes
+    license: AGPL-3.0-or-later
+    url: https://policyengine.github.io/policyengine-us/
+    description: Methodology, validation results, model documentation.
+    sources:
+      - label: Docs
+        url: https://policyengine.github.io/policyengine-us/
+
+  - model: policyengine-us
+    type: cli
+    name: policyengine.py
+    public: yes
+    license: AGPL-3.0-or-later
+    url: https://github.com/PolicyEngine/policyengine.py
+    description: Python package for programmatic access to all country models.
+    sources:
+      - label: policyengine.py
+        url: https://github.com/PolicyEngine/policyengine.py
+
+  # =================================== TRIM3 ==================================
+  - model: trim3
+    type: codebase
+    name: TRIM3
+    public: no
+    license: proprietary
+    description: SAS/Fortran codebase maintained at Urban Institute under ASPE contract.
+    sources:
+      - label: TRIM3 access policy
+        url: https://boreas.urban.org/T3IntroAccess.php
+
+  - model: trim3
+    type: dataset
+    name: TRIM3 augmented CPS-ASEC
+    public: no
+    license: ASPE-restricted
+    description: CPS-ASEC enhanced with caseload-aligned program participation and imputed income components.
+    sources:
+      - label: TRIM3 data description
+        url: https://boreas.urban.org/T3IntroData.php
+
+  - model: trim3
+    type: documentation-site
+    name: boreas.urban.org TRIM3 documentation
+    public: yes
+    license: proprietary
+    url: https://boreas.urban.org/T3IntroHistory.php
+    description: Public summary documentation for TRIM3 modules.
+    sources:
+      - label: TRIM3 docs
+        url: https://boreas.urban.org/T3IntroHistory.php
+
+  - model: trim3
+    type: web-application
+    name: TRIM3 user interface
+    public: no
+    license: proprietary
+    description: Restricted-access web interface for running TRIM3 simulations.
+    sources:
+      - label: TRIM3 access
+        url: https://boreas.urban.org/T3IntroAccess.php
+
+  # =================================== ATTIS ==================================
+  - model: attis
+    type: codebase
+    name: ATTIS
+    public: no
+    license: proprietary
+    description: Microsimulation built on ACS microdata; implementation not public.
+    sources:
+      - label: ATTIS overview
+        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+
+  - model: attis
+    type: dataset
+    name: ATTIS-prepared ACS
+    public: no
+    license: proprietary
+    description: ACS microdata with imputed transfers and taxes.
+    sources:
+      - label: ATTIS overview
+        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/analysis-transfers-taxes-and-income-security-attis
+
+  - model: attis
+    type: paper
+    name: State of the Safety Net briefs (ATTIS-derived)
+    public: yes
+    license: Urban editorial
+    url: https://www.urban.org/projects/state-safety-net
+    description: Public-facing reports based on ATTIS analyses.
+    sources:
+      - label: State of the Safety Net
+        url: https://www.urban.org/projects/state-safety-net
+
+  # ============================ TPC microsim =================================
+  - model: tpc-microsim
+    type: codebase
+    name: TPC microsimulation model
+    public: no
+    license: proprietary
+    description: SAS implementation; not public.
+    sources:
+      - label: TPC Brief Description
+        url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
+
+  - model: tpc-microsim
+    type: dataset
+    name: SOI PUF + CPS-ASEC matched microdata
+    public: no
+    license: SOI restricted
+    description: SOI PUF (purchased from IRS) augmented with statistically-matched CPS variables.
+    sources:
+      - label: SOI Public Use File
+        url: https://www.irs.gov/statistics/soi-tax-stats-individual-public-use-microdata-files
+
+  - model: tpc-microsim
+    type: web-application
+    name: TPC distributional tables
+    public: yes
+    license: TPC editorial
+    url: https://www.taxpolicycenter.org/model-estimates
+    description: Public catalogue of model-produced distributional tables.
+    sources:
+      - label: TPC tables
+        url: https://www.taxpolicycenter.org/model-estimates
+
+  - model: tpc-microsim
+    type: documentation-site
+    name: TPC Brief Description of the Tax Model
+    public: yes
+    license: TPC editorial
+    url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
+    description: Summary description of the model architecture.
+    sources:
+      - label: Brief Description
+        url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
