@@ -635,3 +635,484 @@ freshness:
         url: https://www.povertycenter.columbia.edu
         kind: self
         supports: [updateCadence, lastMajorRefresh, latestImplementedYear]
+
+  - model: benefits-data-trust
+    latestImplementedYear: unknown
+    forwardYearsThrough: unknown
+    handlesFutureDatedLegislation: no
+    updateCadence: annual
+    updateLag: unknown
+    lastMajorRefresh: unknown
+    notableRegimes: >
+      Status-quo benefit rules only (SNAP, Medicaid, LIHEAP, and
+      others). BDT updates eligibility logic as state and federal
+      agencies revise rules; counterfactual reforms are out of scope.
+    notes: >
+      As a benefits-access service, BDT keeps screening logic current
+      with administrative rules but does not publish a release calendar
+      or implementation-year metadata.
+    sources:
+      - label: Benefits Data Trust — what we do
+        url: https://bdtrust.org/what-we-do/
+        kind: self
+        supports: [updateCadence, notableRegimes,
+                   handlesFutureDatedLegislation]
+      - label: USDA FNS — SNAP outreach partners (program rules BDT
+          tracks)
+        url: https://www.fns.usda.gov/snap/outreach/partners
+        kind: government
+        supports: [notableRegimes, updateCadence]
+
+  - model: benefit-kitchen
+    latestImplementedYear: unknown
+    forwardYearsThrough: unknown
+    handlesFutureDatedLegislation: no
+    updateCadence: annual
+    updateLag: unknown
+    lastMajorRefresh: unknown
+    notableRegimes: >
+      Current-law eligibility rules across a range of federal and
+      state benefits. No reform modeling.
+    notes: >
+      BenefitKitchen publishes neither a release log nor explicit
+      coverage years; cadence is inferred to be annual after federal
+      and state rule updates.
+    sources:
+      - label: BenefitKitchen — homepage
+        url: https://benefitkitchen.com/
+        kind: self
+        supports: [updateCadence, notableRegimes,
+                   handlesFutureDatedLegislation]
+      - label: BenefitKitchen — about
+        url: https://benefitkitchen.com/about
+        kind: self
+        supports: [updateCadence, notableRegimes]
+
+  - model: benefits-cliffs
+    latestImplementedYear: unknown
+    forwardYearsThrough: unknown
+    handlesFutureDatedLegislation: no
+    updateCadence: annual
+    updateLag: unknown
+    lastMajorRefresh: unknown
+    notableRegimes: >
+      Status-quo benefit-cliff analysis using current state and
+      federal program parameters. No reform scenarios published.
+    notes: >
+      Cadence inferred to be annual after state-rule updates;
+      BenefitsCliffs.com does not publish a release log.
+    sources:
+      - label: BenefitsCliffs.com — homepage
+        url: https://benefitscliffs.com/
+        kind: self
+        supports: [updateCadence, notableRegimes,
+                   handlesFutureDatedLegislation]
+      - label: Georgia Center for Opportunity — benefits cliff page
+        url: https://georgiaopportunity.org/the-benefits-cliff/
+        kind: self
+        supports: [updateCadence, notableRegimes]
+
+  - model: snap-screener
+    latestImplementedYear: unknown
+    forwardYearsThrough: unknown
+    handlesFutureDatedLegislation: no
+    updateCadence: annual
+    updateLag: unknown
+    lastMajorRefresh: unknown
+    notableRegimes: >
+      Current-law SNAP, WIC, and Medicaid eligibility rules.
+      Counterfactual reforms are out of scope.
+    notes: >
+      Cadence inferred to be annual following USDA SNAP cost-of-living
+      adjustments and state-level rule revisions; the screener does
+      not publish release notes.
+    sources:
+      - label: SNAP Screener — homepage
+        url: https://www.snapscreener.com/
+        kind: self
+        supports: [updateCadence, notableRegimes,
+                   handlesFutureDatedLegislation]
+      - label: USDA FNS — SNAP eligibility (federal rules that drive
+          the annual refresh)
+        url: https://www.fns.usda.gov/snap/recipient/eligibility
+        kind: government
+        supports: [updateCadence, notableRegimes]
+
+  - model: mrelief
+    latestImplementedYear: unknown
+    forwardYearsThrough: unknown
+    handlesFutureDatedLegislation: no
+    updateCadence: annual
+    updateLag: unknown
+    lastMajorRefresh: unknown
+    notableRegimes: >
+      Current-law SNAP eligibility rules only. No reform modeling.
+    notes: >
+      mRelief updates its SNAP screening logic to reflect annual USDA
+      and state revisions; no public release log.
+    sources:
+      - label: mRelief — homepage
+        url: https://www.mrelief.com/
+        kind: self
+        supports: [updateCadence, notableRegimes,
+                   handlesFutureDatedLegislation]
+      - label: USDA FNS — SNAP eligibility (federal rule source)
+        url: https://www.fns.usda.gov/snap/recipient/eligibility
+        kind: government
+        supports: [updateCadence, notableRegimes]
+
+  - model: atlanta-fed-prd
+    latestImplementedYear: unknown
+    forwardYearsThrough: unknown
+    handlesFutureDatedLegislation: no
+    updateCadence: annual
+    updateLag: unknown
+    lastMajorRefresh: unknown
+    notableRegimes: >
+      Status-quo federal and state benefit-program rules; powers the
+      CLIFF tool suite. No reform scenarios.
+    notes: >
+      The Policy Rules Database is updated as agencies revise rules;
+      no public release calendar. The Atlanta Fed states open-sourcing
+      is in progress.
+    sources:
+      - label: Atlanta Fed — Policy Rules Database project page
+        url: https://www.atlantafed.org/economic-mobility-and-resilience/advancing-careers-for-low-income-families/policy-rules-database
+        kind: self
+        supports: [updateCadence, notableRegimes,
+                   handlesFutureDatedLegislation]
+      - label: Atlanta Fed — CLIFF tool suite (downstream consumer of
+          the Policy Rules Database)
+        url: https://www.atlantafed.org/economic-mobility-and-resilience/advancing-careers-for-low-income-families/cliff-tools
+        kind: self
+        supports: [updateCadence, notableRegimes]
+
+  - model: nber-taxsim
+    latestImplementedYear: 2023
+    forwardYearsThrough: 2023
+    handlesFutureDatedLegislation: no
+    updateCadence: annual
+    updateLag: >
+      Annual refresh tied to NBER's release cycle; state laws are
+      typically encoded with a multi-year lag (state laws from
+      2021-2023 are not fully coded, with an inflated 2020 law used
+      as an estimate).
+    lastMajorRefresh: unknown
+    notableRegimes: >
+      Historical federal individual income tax law from 1960
+      onward; state individual income tax from 1977 onward. No
+      OBBBA or other post-2023 enactments are implemented. No
+      scheduled future-dated legislation is encoded.
+    notes: >
+      TAXSIM is designed for historical and current-law tax
+      computation rather than forward projection of pending
+      legislation. Coverage ends at tax year 2023 per the NBER
+      home page (federal) and is partial for state coverage in
+      2021-2023.
+    sources:
+      - label: NBER TAXSIM home page (latest year statement)
+        url: https://taxsim.nber.org/
+        kind: self
+        supports: [latestImplementedYear, forwardYearsThrough,
+                   handlesFutureDatedLegislation, notableRegimes]
+        quote: >-
+          Federal law from 1960-2023 and state laws from 1977-2018
+          are available.
+      - label: NBER TAXSIM data product page (annual update cadence
+          and state coverage approximation)
+        url: https://www.nber.org/research/data/taxsim
+        kind: self
+        supports: [updateCadence, updateLag, notableRegimes]
+      - label: Feenberg & Coutts (1993) — An Introduction to the TAXSIM
+          Model (annual update tradition since 1974)
+        url: https://onlinelibrary.wiley.com/doi/10.2307/3325474
+        kind: academic
+        supports: [updateCadence]
+
+  - model: tf-microsim
+    latestImplementedYear: 2025
+    forwardYearsThrough: 2034
+    handlesFutureDatedLegislation: yes
+    updateCadence: continuous
+    updateLag: >
+      Days to weeks for major federal tax legislation. Tax
+      Foundation routinely publishes TAG-model distributional and
+      revenue tables alongside Congressional bill releases.
+    lastMajorRefresh: 2025-02
+    notableRegimes: >
+      TCJA (P.L. 115-97), OBBBA (P.L. 119-21), and proposed federal
+      tax legislation scored over the CBO 10-year budget window
+      (2025-2034). Tariff scoring added in 2025. February 2025
+      enhancement update extended baseline and modeling framework.
+    notes: >
+      The model's baseline is aligned to CBO 10-year projections.
+      Federal-scope only; no state taxes or transfer programs in
+      the model. Forward-projection of pending legislation is a
+      core capability.
+    sources:
+      - label: Tax Foundation — Overview of the General Equilibrium Model
+          (February 2025 update; 2025-2034 budget window)
+        url: https://taxfoundation.org/research/all/federal/general-equilibrium-model/
+        kind: self
+        supports: [latestImplementedYear, forwardYearsThrough,
+                   handlesFutureDatedLegislation, lastMajorRefresh,
+                   notableRegimes]
+      - label: Tax Foundation update — Tax Foundation updates its
+          General Equilibrium Model with new data enhancements
+        url: https://thefederalnewswire.com/stories/670302216-tax-foundation-updates-its-general-equilibrium-model-with-new-data-enhancements
+        kind: press
+        supports: [lastMajorRefresh, updateCadence]
+      - label: Tax Foundation — Modeling the Economic Effects of Past
+          Tax Bills (TAG forward-projection examples)
+        url: https://taxfoundation.org/research/all/federal/modeling-economic-effects-past-tax-bills/
+        kind: self
+        supports: [handlesFutureDatedLegislation, forwardYearsThrough,
+                   notableRegimes]
+      - label: CBO Budget and Economic Outlook (baseline TAG aligns with)
+        url: https://www.cbo.gov/topics/budget
+        kind: government
+        supports: [forwardYearsThrough]
+
+  - model: pwbm
+    latestImplementedYear: 2025
+    forwardYearsThrough: 2054
+    handlesFutureDatedLegislation: yes
+    updateCadence: continuous
+    updateLag: >
+      Days to weeks for major federal legislation. PWBM published
+      rolling Trump and Harris 2024 campaign-proposal scorings and
+      Real-time Federal Budget Tracker updates through 2025 OBBBA
+      analysis.
+    lastMajorRefresh: 2025
+    notableRegimes: >
+      TCJA, OBBBA, Social Security trust-fund scenarios, healthcare
+      policy options, immigration scenarios, and tariff packages
+      scored over a long-horizon dynamic OLG window that extends
+      well beyond the CBO 10-year budget window.
+    notes: >
+      PWBM's dynamic OLG core supports very long-horizon
+      projections (multi-decade Social Security and debt
+      sustainability scoring) in addition to the standard 10-year
+      revenue window. Real-time Federal Budget Tracker provides
+      continuous public updates.
+    sources:
+      - label: PWBM Microsimulation page (forward simulation and
+          continuous-scenario capability)
+        url: https://budgetmodel.wharton.upenn.edu/model/microsimulation/
+        kind: self
+        supports: [handlesFutureDatedLegislation, forwardYearsThrough,
+                   notableRegimes]
+      - label: PWBM home page (Real-time Federal Budget Tracker;
+          rolling analyses)
+        url: https://budgetmodel.wharton.upenn.edu/
+        kind: self
+        supports: [updateCadence, lastMajorRefresh, notableRegimes]
+      - label: The Daily Pennsylvanian — PWBM 2024 election analysis
+          (independent press coverage of campaign scoring)
+        url: https://www.thedp.com/article/2024/10/penn-wharton-budget-model-2024-presidential-election
+        kind: press
+        supports: [updateLag, notableRegimes]
+      - label: Philadelphia Inquirer — PWBM coverage (independent
+          press; rolling federal policy scoring)
+        url: https://www.inquirer.com/business/penn-wharton-budget-model-biden-build-back-better-infrastructure-bill-20211123.html
+        kind: press
+        supports: [updateCadence, updateLag]
+
+  - model: tax-foundation-tg
+    latestImplementedYear: 2025
+    forwardYearsThrough: 2034
+    handlesFutureDatedLegislation: yes
+    updateCadence: continuous
+    updateLag: >
+      Same as tf-microsim — the Tax Foundation's own documentation
+      treats the General Equilibrium and Taxes and Growth labels as
+      referring to the same model.
+    lastMajorRefresh: 2025-02
+    notableRegimes: >
+      TCJA (P.L. 115-97), OBBBA (P.L. 119-21), and proposed
+      federal tax legislation scored over the CBO 10-year budget
+      window. Tariff scoring added in 2025.
+    notes: >
+      Freshness facts mirror tf-microsim because the Tax
+      Foundation documents these as a single model under two
+      names.
+    sources:
+      - label: Tax Foundation — Overview of the General Equilibrium
+          Model (TAG and General Equilibrium are the same model;
+          2025-2034 budget window)
+        url: https://taxfoundation.org/research/all/federal/general-equilibrium-model/
+        kind: self
+        supports: [latestImplementedYear, forwardYearsThrough,
+                   handlesFutureDatedLegislation, lastMajorRefresh,
+                   notableRegimes]
+      - label: Tax Foundation — Modeling the Economic Effects of Past
+          Tax Bills (TAG-labeled scoring of enacted bills)
+        url: https://taxfoundation.org/research/all/federal/modeling-economic-effects-past-tax-bills/
+        kind: self
+        supports: [handlesFutureDatedLegislation, notableRegimes]
+      - label: Tax Foundation update — TF updates its General
+          Equilibrium Model with new data enhancements (press)
+        url: https://thefederalnewswire.com/stories/670302216-tax-foundation-updates-its-general-equilibrium-model-with-new-data-enhancements
+        kind: press
+        supports: [lastMajorRefresh, updateCadence]
+      - label: CBO Budget and Economic Outlook (baseline alignment)
+        url: https://www.cbo.gov/topics/budget
+        kind: government
+        supports: [forwardYearsThrough]
+
+  - model: dwp-psm
+    latestImplementedYear: 2026
+    forwardYearsThrough: 2029
+    handlesFutureDatedLegislation: yes
+    updateCadence: continuous
+    updateLag: >
+      Days for major fiscal events — PSM-based costings accompany DWP
+      impact assessments and DWP-led official statistics publications,
+      aligned to Budget and Spring Statement cycles.
+    lastMajorRefresh: 2024-10
+    notableRegimes: >
+      Universal Credit migration and managed-move policy, Autumn Budget
+      2024 measures (benefit cap uprating, UC deduction changes),
+      Spring Statement 2025 measures, take-up modelling for legacy
+      income-related benefits and pension-age benefits.
+    notes: >
+      PSM is calibrated forward using OBR economic and labour market
+      forecasts plus DWP internally-generated benefit caseload forecasts;
+      a refreshed FRS waveset is pooled each year. Forward projection
+      typically aligns with the OBR scorecard horizon.
+    sources:
+      - label: DWP — PSM UKMOD Fest 2023 presentation (calibration and
+          forward projection methodology)
+        url: https://www.microsimulation.ac.uk/wp-content/uploads/2023/07/UKMODFest2023_DWP.pdf
+        kind: self
+        supports: [latestImplementedYear, updateCadence, updateLag,
+                   handlesFutureDatedLegislation, notableRegimes]
+      - label: OBR — DWP's policy simulation model and the Family
+          Resources Survey (data refresh and forward projection)
+        url: https://obr.uk/box/dwps-policy-simulation-model-and-the-family-resources-survey/
+        kind: government
+        supports: [updateCadence, updateLag, forwardYearsThrough]
+      - label: DWP — Child Poverty Strategy impact (December 2025;
+          PSM-based forward projection)
+        url: https://www.gov.uk/government/publications/child-poverty-strategy-impact-on-low-income-poverty-levels-and-children-gaining-in-the-uk-december-2025/child-poverty-strategy-impact-on-low-income-poverty-levels-and-children-gaining-in-the-uk-december-2025
+        kind: government
+        supports: [latestImplementedYear, lastMajorRefresh, notableRegimes]
+      - label: DWP — Low income poverty projections for children
+          (PSM-based forward projection to FYE 2030)
+        url: https://www.gov.uk/government/publications/low-income-poverty-projections-for-children-fye-2025-to-fye-2030-november-2025/low-income-poverty-projections-for-children-fye-2025-to-fye-2030-november-2025
+        kind: government
+        supports: [forwardYearsThrough, notableRegimes]
+      - label: HM Treasury Autumn Budget 2024 (basis for tracked regime)
+        url: https://www.gov.uk/government/publications/autumn-budget-2024
+        kind: government
+        supports: [latestImplementedYear, notableRegimes]
+
+  - model: ippr-tax-benefit
+    latestImplementedYear: unknown
+    forwardYearsThrough: unknown
+    handlesFutureDatedLegislation: partial
+    updateCadence: as-funded
+    updateLag: >
+      Project-driven. PERU and partner think-tanks update the model in
+      line with funded analyses and major fiscal events; specific cadence
+      not publicly documented.
+    lastMajorRefresh: unknown
+    notableRegimes: >
+      Tracks current law to support IPPR, Resolution Foundation, JRF,
+      NEF and Legatum analyses around Budgets and Spring Statements.
+      Specific regimes encoded depend on partner-commissioned work.
+    notes: >
+      Unlike publicly released models, IPPR/PERU does not publish a
+      release schedule or changelog. Latest implemented policy year is
+      inferred from the analyses partners publish in a given window
+      rather than from a public release record.
+    sources:
+      - label: MMU PERU — Modelling the tax and benefit system
+          (ongoing model maintenance)
+        url: https://mmuperu.co.uk/blog/projects/modelling-the-effects-of-the-tax-and-benefit-system/
+        kind: academic
+        supports: [updateCadence, notableRegimes]
+      - label: IPPR — Taxing income from wealth (recent model-based
+          publication)
+        url: https://www.ippr.org/media-office/slug-1306b49118532fe333771b8f2c1b31d3
+        kind: self
+        supports: [latestImplementedYear, notableRegimes]
+      - label: Fraser of Allander — IPPR microsimulation results and
+          policy analysis (timed to fiscal events)
+        url: https://fraserofallander.org/wp-content/uploads/2022/11/IPPR-microsimulation-results-and-policy-analysis.pdf
+        kind: academic
+        supports: [updateCadence, notableRegimes]
+
+  - model: landman-economics
+    latestImplementedYear: unknown
+    forwardYearsThrough: unknown
+    handlesFutureDatedLegislation: partial
+    updateCadence: as-funded
+    updateLag: >
+      Project-driven. Refreshes align with commissioned analyses
+      (EHRC cumulative impact, Scottish Government child poverty
+      delivery plan, Women's Budget Group reports).
+    lastMajorRefresh: unknown
+    notableRegimes: >
+      Cumulative impact of tax and welfare reforms since 2010
+      (EHRC commissions), Scottish child poverty forecast horizons,
+      Universal Credit roll-out distributional analyses.
+    notes: >
+      No public release schedule. The TTM's tracked regimes and latest
+      implemented year are inferred from each commissioned report's
+      modelled period rather than from a model-side changelog.
+    sources:
+      - label: Scottish Government — TTM methodology appendix (latest
+          implemented base year per report)
+        url: https://www.gov.scot/publications/tackling-child-poverty-delivery-plan-forecasting-child-poverty-scotland/pages/8/
+        kind: government
+        supports: [latestImplementedYear, updateCadence, notableRegimes]
+      - label: EHRC — Cumulative impact of tax, social security and
+          public spending decisions in Scotland (2010-onward regimes)
+        url: https://www.equalityhumanrights.com/en/publication-download/cumulative-impact-tax-social-security-and-public-spending-decisions
+        kind: government
+        supports: [notableRegimes, updateCadence]
+      - label: Northumbria University — Howard Reed profile (continuing
+          updates as commissioned)
+        url: https://www.northumbria.ac.uk/about-us/our-staff/r/howard-reed/
+        kind: academic
+        supports: [updateCadence, handlesFutureDatedLegislation]
+
+  - model: entitledto
+    latestImplementedYear: 2026
+    forwardYearsThrough: 2026
+    handlesFutureDatedLegislation: partial
+    updateCadence: continuous
+    updateLag: >
+      Days to weeks — benefit rate uprating, Council Tax Reduction
+      schemes, and Local Housing Allowance rates are updated as they
+      take effect for the public calculator.
+    lastMajorRefresh: 2026-04
+    notableRegimes: >
+      Current-year benefit rates including Universal Credit allowances,
+      tax credits run-down, Housing Benefit, Local Housing Allowance,
+      Council Tax Reduction schemes (varies by local authority), and
+      pension-age benefits. Forward-dated rates are typically loaded
+      once uprating statutory instruments are laid.
+    notes: >
+      EntitledTo is operationally a live system: rates and rules are
+      kept current rather than versioned for academic comparison. The
+      product's value proposition for advisers depends on near-real-time
+      tracking of statutory changes and local-authority-specific CTR
+      scheme variations.
+    sources:
+      - label: EntitledTo home page (continuously updated public
+          calculator)
+        url: https://www.entitledto.co.uk/
+        kind: self
+        supports: [latestImplementedYear, updateCadence, lastMajorRefresh]
+      - label: EntitledTo for organisations (continuously maintained
+          adviser product)
+        url: https://www.entitledto.co.uk/organisations
+        kind: self
+        supports: [updateCadence, updateLag, notableRegimes]
+      - label: GOV.UK — Benefits calculators (listed as currently
+          maintained calculator)
+        url: https://www.gov.uk/benefits-calculators
+        kind: government
+        supports: [latestImplementedYear, updateCadence]

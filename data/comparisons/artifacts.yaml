@@ -80,6 +80,23 @@ artifacts:
       - label: policyengine.py
         url: https://github.com/PolicyEngine/policyengine.py
 
+  - model: policyengine-us
+    type: cli
+    name: policyengine-taxsim
+    public: yes
+    license: MIT
+    url: https://github.com/PolicyEngine/policyengine-taxsim
+    description: >
+      NBER TAXSIM-compatible CLI emulator backed by PolicyEngine US.
+      Accepts TAXSIM-formatted input and produces TAXSIM-formatted
+      output, allowing tools and scripts written for NBER TAXSIM to
+      run on the open-source PolicyEngine engine.
+    sources:
+      - label: policyengine-taxsim repository
+        url: https://github.com/PolicyEngine/policyengine-taxsim
+      - label: PolicyEngine-NBER MoU on TAXSIM emulator development
+        url: https://www.policyengine.org/us/research/policyengine-nber-mou-taxsim
+
   # =================================== TRIM3 ==================================
   - model: trim3
     type: codebase
@@ -544,3 +561,516 @@ artifacts:
     sources:
       - label: National Academies report page
         url: https://nap.nationalacademies.org/catalog/25246
+
+  # ============================ Benefits Data Trust ===========================
+  - model: benefits-data-trust
+    type: web-application
+    name: BDT outreach and screening channels
+    public: yes
+    license: proprietary
+    url: https://bdtrust.org/
+    description: >
+      Phone, text, and web channels that screen applicants for benefit
+      eligibility and assist with enrollment across SNAP, Medicaid,
+      LIHEAP, and other programs.
+    sources:
+      - label: Benefits Data Trust — what we do
+        url: https://bdtrust.org/what-we-do/
+
+  # ============================ BenefitKitchen ===============================
+  - model: benefit-kitchen
+    type: web-application
+    name: BenefitKitchen eligibility app
+    public: yes
+    license: proprietary
+    url: https://benefitkitchen.com/
+    description: >
+      Free consumer-facing benefits eligibility screener spanning federal
+      and state programs.
+    sources:
+      - label: BenefitKitchen — homepage
+        url: https://benefitkitchen.com/
+
+  - model: benefit-kitchen
+    type: api
+    name: BenefitKitchen API
+    public: partial
+    license: proprietary
+    url: https://benefitkitchen.com/api
+    description: >
+      Paid API tier exposing the BenefitKitchen rules engine to partner
+      organizations.
+    sources:
+      - label: BenefitKitchen — API / partners
+        url: https://benefitkitchen.com/api
+
+  # ============================ BenefitsCliffs.com ===========================
+  - model: benefits-cliffs
+    type: web-application
+    name: BenefitsCliffs.com
+    public: partial
+    license: proprietary
+    url: https://benefitscliffs.com/
+    description: >
+      Paywalled benefit-cliff visualization tool from the Georgia Center
+      for Opportunity covering multiple US states.
+    sources:
+      - label: BenefitsCliffs.com — homepage
+        url: https://benefitscliffs.com/
+
+  # ============================ SNAPScreener ================================
+  - model: snap-screener
+    type: web-application
+    name: SNAP Screener / Medicaid Screener
+    public: yes
+    license: proprietary
+    url: https://www.snapscreener.com/
+    description: >
+      Consumer-facing eligibility screeners for SNAP, WIC, and Medicaid.
+    sources:
+      - label: SNAP Screener — homepage
+        url: https://www.snapscreener.com/
+
+  - model: snap-screener
+    type: parameter-database
+    name: SNAP Screener state-rules reference table
+    public: yes
+    license: proprietary
+    url: https://www.snapscreener.com/screener
+    description: >
+      State-by-state SNAP rules reference table published on
+      snapscreener.com.
+    sources:
+      - label: SNAP Screener — state rules
+        url: https://www.snapscreener.com/screener
+
+  - model: snap-screener
+    type: api
+    name: SNAP Screener API
+    public: partial
+    license: proprietary
+    url: https://www.snapscreener.com/
+    description: Paid API tier for partner organizations.
+    sources:
+      - label: SNAP Screener — homepage
+        url: https://www.snapscreener.com/
+
+  # ============================ mRelief =====================================
+  - model: mrelief
+    type: web-application
+    name: mRelief SNAP screener
+    public: yes
+    license: proprietary
+    url: https://www.mrelief.com/
+    description: >
+      SMS, web, and phone-based SNAP eligibility screener and
+      application-assistance service.
+    sources:
+      - label: mRelief — homepage
+        url: https://www.mrelief.com/
+
+  # ============================ Atlanta Fed Policy Rules DB =================
+  - model: atlanta-fed-prd
+    type: parameter-database
+    name: Atlanta Fed Policy Rules Database
+    public: partial
+    license: proprietary
+    url: https://www.atlantafed.org/economic-mobility-and-resilience/advancing-careers-for-low-income-families/policy-rules-database
+    description: >
+      Federal and state benefit-program rules database. Data and code
+      are shared upon request; open-sourcing is in progress.
+    sources:
+      - label: Atlanta Fed — Policy Rules Database project page
+        url: https://www.atlantafed.org/economic-mobility-and-resilience/advancing-careers-for-low-income-families/policy-rules-database
+
+  - model: atlanta-fed-prd
+    type: web-application
+    name: Atlanta Fed CLIFF tool suite
+    public: yes
+    license: proprietary
+    url: https://www.atlantafed.org/economic-mobility-and-resilience/advancing-careers-for-low-income-families/cliff-tools
+    description: >
+      Career Ladder Identifier and Financial Forecaster (CLIFF)
+      calculators built on top of the Policy Rules Database.
+    sources:
+      - label: Atlanta Fed — CLIFF tools
+        url: https://www.atlantafed.org/economic-mobility-and-resilience/advancing-careers-for-low-income-families/cliff-tools
+
+  # =================================== NBER TAXSIM ============================
+  - model: nber-taxsim
+    type: codebase
+    name: NBER TAXSIM (Fortran engine)
+    public: no
+    license: proprietary
+    description: >
+      Approximately 20,000 lines of FORTRAN 77, updated annually
+      since 1974. Engine source code is not distributed.
+    sources:
+      - label: NBER TAXSIM home
+        url: https://taxsim.nber.org/
+
+  - model: nber-taxsim
+    type: web-application
+    name: Internet TAXSIM
+    public: yes
+    license: proprietary
+    url: https://taxsim.nber.org/
+    description: >
+      Web form interface for entering household data and retrieving
+      computed federal and state tax liabilities.
+    sources:
+      - label: NBER TAXSIM home
+        url: https://taxsim.nber.org/
+
+  - model: nber-taxsim
+    type: api
+    name: TAXSIM web service
+    public: yes
+    license: proprietary
+    url: https://taxsim.nber.org/
+    description: >
+      Computation as a service: client wrappers in Stata, R, SAS,
+      and Python submit jobs to the NBER-hosted engine.
+    sources:
+      - label: NBER TAXSIM data product page (lists client wrappers)
+        url: https://www.nber.org/research/data/taxsim
+
+  - model: nber-taxsim
+    type: paper
+    name: Feenberg & Coutts (1993) — An Introduction to the TAXSIM Model
+    public: yes
+    license: Wiley editorial
+    url: https://onlinelibrary.wiley.com/doi/10.2307/3325474
+    description: >
+      Canonical reference paper for TAXSIM, published in the
+      Journal of Policy Analysis and Management vol 12 no 1.
+    sources:
+      - label: JPAM paper
+        url: https://onlinelibrary.wiley.com/doi/10.2307/3325474
+
+  # ====================== Tax Foundation General Equilibrium ==================
+  - model: tf-microsim
+    type: codebase
+    name: Tax Foundation General Equilibrium Tax Model
+    public: no
+    license: proprietary
+    description: >
+      Closed-source implementation of the TAG/General Equilibrium
+      model: a tax simulator plus a neoclassical production function
+      and a demand allocation function.
+    sources:
+      - label: TF General Equilibrium Model overview
+        url: https://taxfoundation.org/research/all/federal/general-equilibrium-model/
+
+  - model: tf-microsim
+    type: dataset
+    name: SOI PUF + IRS Statistics of Income tables
+    public: no
+    license: SOI restricted
+    description: >
+      Restricted IRS Public Use File supplemented by SOI tables;
+      not redistributed by Tax Foundation.
+    sources:
+      - label: IRS SOI Public Use File documentation
+        url: https://www.irs.gov/statistics/soi-tax-stats-individual-public-use-microdata-files
+
+  - model: tf-microsim
+    type: documentation-site
+    name: Tax Foundation General Equilibrium Model overview
+    public: yes
+    license: Tax Foundation editorial
+    url: https://taxfoundation.org/research/all/federal/general-equilibrium-model/
+    description: >
+      Public methodology page describing the General Equilibrium
+      (TAG) model architecture and recent enhancements.
+    sources:
+      - label: TF model overview
+        url: https://taxfoundation.org/research/all/federal/general-equilibrium-model/
+
+  - model: tf-microsim
+    type: paper
+    name: Tax Foundation revenue and distributional estimates
+    public: yes
+    license: Tax Foundation editorial
+    url: https://taxfoundation.org/topics/economic-and-tax-modeling/
+    description: >
+      Published TAG-model scoring tables for federal tax
+      legislation and proposed reforms.
+    sources:
+      - label: TF economic and tax modeling topic
+        url: https://taxfoundation.org/topics/economic-and-tax-modeling/
+
+  # =============================== Penn Wharton Budget Model ==================
+  - model: pwbm
+    type: codebase
+    name: PWBM Microsim, Tax Module, Social Security Module, Dynamic OLG
+    public: no
+    license: proprietary
+    description: >
+      Closed-source modular platform integrating a stochastic
+      microsim with a tax module, a Social Security module, and a
+      dynamic OLG general-equilibrium core.
+    sources:
+      - label: PWBM Microsimulation methodology page
+        url: https://budgetmodel.wharton.upenn.edu/model/microsimulation/
+
+  - model: pwbm
+    type: dataset
+    name: PWBM Public Use File
+    public: yes
+    license: PWBM research licence
+    url: https://budgetmodel.wharton.upenn.edu/
+    description: >
+      Public Use File of a 1-million-family microsim run with
+      projection data from 2020 to 2050, released for research
+      purposes.
+    sources:
+      - label: PWBM home (Public Use File available under Data)
+        url: https://budgetmodel.wharton.upenn.edu/
+
+  - model: pwbm
+    type: web-application
+    name: PWBM Real-time Federal Budget Tracker and Tariff Simulator
+    public: yes
+    license: PWBM editorial
+    url: https://budgetmodel.wharton.upenn.edu/
+    description: >
+      Public-facing interactive tools, including the Real-time
+      Federal Budget Tracker, Tariff Simulator, and DataView.
+    sources:
+      - label: PWBM home
+        url: https://budgetmodel.wharton.upenn.edu/
+
+  - model: pwbm
+    type: documentation-site
+    name: PWBM Documentation
+    public: yes
+    license: PWBM editorial
+    url: https://budgetmodel.wharton.upenn.edu/microsim/documentation
+    description: >
+      Public documentation pages for the microsim, tax module,
+      Social Security module, and dynamic OLG core.
+    sources:
+      - label: PWBM documentation
+        url: https://budgetmodel.wharton.upenn.edu/microsim/documentation
+
+  - model: pwbm
+    type: paper
+    name: PWBM working papers
+    public: yes
+    license: PWBM editorial
+    url: https://budgetmodel.wharton.upenn.edu/working-papers
+    description: >
+      Methodology and policy-scoring working papers, including
+      2024 campaign-proposal analyses and OBBBA scoring.
+    sources:
+      - label: PWBM working papers
+        url: https://budgetmodel.wharton.upenn.edu/working-papers
+
+  # ============================ Tax Foundation TAG ============================
+  - model: tax-foundation-tg
+    type: codebase
+    name: Taxes and Growth (TAG) Model
+    public: no
+    license: proprietary
+    description: >
+      The Tax Foundation's branded TAG model; documented as
+      identical to the General Equilibrium model (tf-microsim).
+    sources:
+      - label: TF Overview of the General Equilibrium Model (TAG and
+          General Equilibrium are the same model)
+        url: https://taxfoundation.org/research/all/federal/general-equilibrium-model/
+
+  - model: tax-foundation-tg
+    type: documentation-site
+    name: Tax Foundation TAG topic archive
+    public: yes
+    license: Tax Foundation editorial
+    url: https://taxfoundation.org/tags/taxes-and-growth-tag-model-overview-methodology/
+    description: >
+      Public catalogue of Tax Foundation publications using the
+      TAG-branded model.
+    sources:
+      - label: TF TAG topic archive
+        url: https://taxfoundation.org/tags/taxes-and-growth-tag-model-overview-methodology/
+
+  - model: tax-foundation-tg
+    type: paper
+    name: Tax Foundation Fiscal Fact No. 429 — The Taxes and Growth Model A Brief Overview
+    public: yes
+    license: Tax Foundation editorial
+    url: https://files.taxfoundation.org/legacy/docs/FF429.pdf
+    description: >
+      Historical brief introducing the TAG model.
+    sources:
+      - label: TF FF No. 429 (legacy PDF)
+        url: https://files.taxfoundation.org/legacy/docs/FF429.pdf
+
+  - model: tax-foundation-tg
+    type: paper
+    name: Modeling the Economic Effects of Past Tax Bills
+    public: yes
+    license: Tax Foundation editorial
+    url: https://taxfoundation.org/research/all/federal/modeling-economic-effects-past-tax-bills/
+    description: >
+      TAG-labeled retrospective scoring of major US tax bills.
+    sources:
+      - label: TF Modeling the Economic Effects of Past Tax Bills
+        url: https://taxfoundation.org/research/all/federal/modeling-economic-effects-past-tax-bills/
+
+  # =================================== DWP PSM ===============================
+  - model: dwp-psm
+    type: codebase
+    name: DWP Policy Simulation Model
+    public: no
+    license: proprietary
+    description: DWP's SAS-based static microsimulation of the GB tax and benefit system; not externally accessible.
+    sources:
+      - label: DWP PSM introduction (UKMOD Fest 2023)
+        url: https://www.microsimulation.ac.uk/wp-content/uploads/2023/07/UKMODFest2023_DWP.pdf
+
+  - model: dwp-psm
+    type: dataset
+    name: PSM-prepared FRS input
+    public: no
+    license: UK Data Service licence (base FRS)
+    description: FRS waveset cleaned, imputed, and CALMAR-calibrated by DWP; not redistributable.
+    sources:
+      - label: UK Data Service — Family Resources Survey
+        url: https://ukdataservice.ac.uk/find-data/series/?id=200017
+
+  - model: dwp-psm
+    type: paper
+    name: Income-related benefits estimates of take-up (annual)
+    public: yes
+    license: Open Government Licence
+    url: https://www.gov.uk/government/statistics/income-related-benefits-estimates-of-take-up-financial-year-ending-2024
+    description: Official statistics produced from PSM, published annually.
+    sources:
+      - label: DWP take-up statistics
+        url: https://www.gov.uk/government/statistics/income-related-benefits-estimates-of-take-up-financial-year-ending-2024
+
+  - model: dwp-psm
+    type: documentation-site
+    name: OBR — PSM and the Family Resources Survey
+    public: yes
+    license: Open Government Licence
+    url: https://obr.uk/box/dwps-policy-simulation-model-and-the-family-resources-survey/
+    description: OBR Welfare Trends Report box providing the most accessible public description of PSM methodology.
+    sources:
+      - label: OBR PSM/FRS box
+        url: https://obr.uk/box/dwps-policy-simulation-model-and-the-family-resources-survey/
+
+  # =================================== IPPR Tax-Benefit ======================
+  - model: ippr-tax-benefit
+    type: codebase
+    name: IPPR Tax-Benefit Model
+    public: no
+    license: proprietary
+    description: PERU-maintained tax-benefit microsimulation; licensed to partner think-tanks, implementation not public.
+    sources:
+      - label: MMU PERU project page
+        url: https://mmuperu.co.uk/blog/projects/modelling-the-effects-of-the-tax-and-benefit-system/
+
+  - model: ippr-tax-benefit
+    type: documentation-site
+    name: PERU — Modelling the tax and benefit system
+    public: yes
+    license: MMU editorial
+    url: https://mmuperu.co.uk/blog/projects/modelling-the-effects-of-the-tax-and-benefit-system/
+    description: Project page describing the IPPR Tax-Benefit Model, its partners, and applications.
+    sources:
+      - label: PERU project description
+        url: https://mmuperu.co.uk/blog/projects/modelling-the-effects-of-the-tax-and-benefit-system/
+
+  - model: ippr-tax-benefit
+    type: paper
+    name: IPPR — Taxing income from wealth the same as income from work
+    public: yes
+    license: IPPR editorial
+    url: https://www.ippr.org/media-office/slug-1306b49118532fe333771b8f2c1b31d3
+    description: Representative recent model-based IPPR publication on wealth taxation.
+    sources:
+      - label: IPPR wealth tax release
+        url: https://www.ippr.org/media-office/slug-1306b49118532fe333771b8f2c1b31d3
+
+  # =================================== Landman Economics =====================
+  - model: landman-economics
+    type: codebase
+    name: Landman Economics Tax-Transfer Model
+    public: no
+    license: proprietary
+    description: Static tax-benefit microsimulation written by Howard Reed; jointly maintained with Resolution Foundation and IPPR; not public.
+    sources:
+      - label: Scottish Government TTM methodology appendix
+        url: https://www.gov.scot/publications/tackling-child-poverty-delivery-plan-forecasting-child-poverty-scotland/pages/8/
+
+  - model: landman-economics
+    type: paper
+    name: EHRC — The cumulative impact of tax and welfare reforms
+    public: yes
+    license: Open Government Licence
+    url: https://www.equalityhumanrights.com/sites/default/files/cumulative-impact-assessment-report.pdf
+    description: Reed and Portes' EHRC commissioned cumulative impact assessment of UK tax and welfare reforms (2010-onwards).
+    sources:
+      - label: EHRC cumulative impact assessment report
+        url: https://www.equalityhumanrights.com/sites/default/files/cumulative-impact-assessment-report.pdf
+
+  - model: landman-economics
+    type: paper
+    name: Scottish Government — Tackling child poverty delivery plan
+    public: yes
+    license: Open Government Licence
+    url: https://www.gov.scot/publications/tackling-child-poverty-delivery-plan-forecasting-child-poverty-scotland/
+    description: Scottish Government child poverty forecast using the Landman/RF/IPPR tax-transfer model.
+    sources:
+      - label: Scottish Government child poverty forecast
+        url: https://www.gov.scot/publications/tackling-child-poverty-delivery-plan-forecasting-child-poverty-scotland/
+
+  - model: landman-economics
+    type: documentation-site
+    name: Landman Economics — Research
+    public: yes
+    license: Landman Economics editorial
+    url: https://www.landman-economics.co.uk
+    description: Landman Economics' own description of the tax-transfer model and commissioned applications.
+    sources:
+      - label: Landman Economics website
+        url: https://www.landman-economics.co.uk
+
+  # =================================== EntitledTo ============================
+  - model: entitledto
+    type: codebase
+    name: EntitledTo rules engine
+    public: no
+    license: proprietary
+    description: Commercial UK benefit entitlement rules engine; not open source.
+    sources:
+      - label: EntitledTo for organisations
+        url: https://www.entitledto.co.uk/organisations
+
+  - model: entitledto
+    type: web-application
+    name: EntitledTo public benefits calculator
+    public: yes
+    license: proprietary (free tier; fair-use limit)
+    url: https://www.entitledto.co.uk/
+    description: Free public benefits calculator covering UK means-tested and contributory benefits, Universal Credit, Council Tax Reduction, and Carer's Allowance.
+    sources:
+      - label: EntitledTo home page
+        url: https://www.entitledto.co.uk/
+      - label: GOV.UK — Benefits calculators (recommends EntitledTo)
+        url: https://www.gov.uk/benefits-calculators
+
+  - model: entitledto
+    type: api
+    name: EntitledTo API (paid)
+    public: partial
+    license: proprietary (paid subscription)
+    url: https://www.entitledto.co.uk/organisations
+    description: Programmatic access to the EntitledTo calculator for partner organisations and integrators; available under commercial licence.
+    sources:
+      - label: EntitledTo for organisations (API integration)
+        url: https://www.entitledto.co.uk/organisations
+      - label: UK Digital Marketplace — EntitledTo G-Cloud listing
+        url: https://www.applytosupply.digitalmarketplace.service.gov.uk/g-cloud/services/973658267289218

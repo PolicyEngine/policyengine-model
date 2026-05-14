@@ -689,3 +689,741 @@ models:
           poverty work)
         url: https://www.aecf.org/work/kids-count
         kind: civilsociety
+
+  - id: benefits-data-trust
+    name: Benefits Data Trust
+    organization: Benefits Data Trust
+    organizationUrl: https://bdtrust.org/
+    country: us
+    sector: non-profit
+    type: rules-engine
+    jurisdictions: [us-federal, us-states]
+    inceptionYear: 2005
+    license: proprietary
+    codePublic: false
+    languages: [unknown]
+    primaryDataset: applicant-supplied case data
+    documentationUrl: https://bdtrust.org/
+    summary: >
+      Non-profit benefits-access organization. Operates phone, text, and
+      web outreach channels that help low-income households screen for
+      and apply to safety-net programs (SNAP, Medicaid, LIHEAP, school
+      meals, others). Not a population microsimulation: BDT screens
+      individual applicants and assists with enrollment. Rules code and
+      eligibility logic are internal.
+    capabilities:
+      reformImpact: no
+      integratedMicrodata: no
+      localAreas: yes
+      publicInterface: yes
+      apiAccess: unknown
+    sources:
+      - label: Benefits Data Trust — homepage
+        url: https://bdtrust.org/
+        kind: self
+      - label: Benefits Data Trust — what we do
+        url: https://bdtrust.org/what-we-do/
+        kind: self
+      - label: USDA FNS — Benefits Data Trust SNAP outreach partnerships
+        url: https://www.fns.usda.gov/snap/outreach/partners
+        kind: government
+      - label: Annie E. Casey Foundation — funder of benefits-access work
+          including Benefits Data Trust
+        url: https://www.aecf.org/
+        kind: civilsociety
+
+  - id: benefit-kitchen
+    name: BenefitKitchen
+    organization: BenefitKitchen
+    organizationUrl: https://benefitkitchen.com/
+    country: us
+    sector: for-profit
+    type: rules-engine
+    jurisdictions: [us-federal, us-states]
+    inceptionYear: unknown
+    license: proprietary
+    codePublic: false
+    languages: [unknown]
+    primaryDataset: applicant-supplied case data
+    documentationUrl: https://benefitkitchen.com/
+    summary: >
+      For-profit benefits eligibility screener. Free consumer-facing app
+      lets households check eligibility across a range of federal and
+      state benefits; a paid API tier exposes the same rules engine to
+      partner organizations. Not a population microsimulation.
+    capabilities:
+      reformImpact: no
+      integratedMicrodata: no
+      localAreas: unknown
+      publicInterface: yes
+      apiAccess: yes
+    sources:
+      - label: BenefitKitchen — homepage
+        url: https://benefitkitchen.com/
+        kind: self
+      - label: BenefitKitchen — about
+        url: https://benefitkitchen.com/about
+        kind: self
+      - label: BenefitKitchen — API / partners
+        url: https://benefitkitchen.com/api
+        kind: self
+      - label: NYC Mayor's Office for Economic Opportunity — Benefits
+          Plus / NYC ACCESS HRA family of screeners (BenefitKitchen-
+          adjacent ecosystem)
+        url: https://www.nyc.gov/site/opportunity/portfolio/access-nyc.page
+        kind: government
+
+  - id: benefits-cliffs
+    name: BenefitsCliffs.com
+    organization: Georgia Center for Opportunity
+    organizationUrl: https://georgiaopportunity.org/
+    country: us
+    sector: non-profit
+    type: reduced-form
+    jurisdictions: [us-states]
+    inceptionYear: unknown
+    license: proprietary
+    codePublic: false
+    languages: [unknown]
+    primaryDataset: state benefit and tax parameter tables
+    documentationUrl: https://benefitscliffs.com/
+    summary: >
+      Benefit-cliff visualization and analysis tool from the Georgia
+      Center for Opportunity. Computes net resources, marginal tax
+      rates, and benefit phase-outs for stylized households across
+      multiple US states. Access is paywalled; rules engine and
+      parameter tables are not public. Status-quo only — no reform
+      modeling.
+    capabilities:
+      reformImpact: no
+      integratedMicrodata: no
+      localAreas: yes
+      publicInterface: partial
+      apiAccess: unknown
+    sources:
+      - label: BenefitsCliffs.com — homepage
+        url: https://benefitscliffs.com/
+        kind: self
+      - label: Georgia Center for Opportunity — benefits cliff initiative
+        url: https://georgiaopportunity.org/the-benefits-cliff/
+        kind: self
+      - label: Georgia Center for Opportunity — about
+        url: https://georgiaopportunity.org/about-us/
+        kind: self
+      - label: Atlanta Fed — Career Ladder Identifier and Financial
+          Forecaster (CLIFF) project, references state-level benefit
+          cliff work by GCO
+        url: https://www.atlantafed.org/economic-mobility-and-resilience/advancing-careers-for-low-income-families
+        kind: government
+
+  - id: snap-screener
+    name: SNAPScreener / MedicaidScreener
+    organization: Jump Credit
+    organizationUrl: https://www.snapscreener.com/
+    country: us
+    sector: for-profit
+    type: rules-engine
+    jurisdictions: [us-federal, us-states]
+    inceptionYear: unknown
+    license: proprietary
+    codePublic: false
+    languages: [unknown]
+    primaryDataset: state SNAP, WIC, and Medicaid parameter tables
+    documentationUrl: https://www.snapscreener.com/
+    leads:
+      - Ben Molin
+    summary: >
+      For-profit eligibility screeners for SNAP, WIC, and Medicaid.
+      Consumer-facing web tool walks applicants through eligibility
+      checks. Publishes a state-level parameter table for SNAP rules.
+      Paid API tier exists for partner organizations. Not a population
+      microsimulation.
+    capabilities:
+      reformImpact: no
+      integratedMicrodata: no
+      localAreas: yes
+      publicInterface: yes
+      apiAccess: yes
+    sources:
+      - label: SNAP Screener — homepage
+        url: https://www.snapscreener.com/
+        kind: self
+      - label: SNAP Screener — state-level rules table
+        url: https://www.snapscreener.com/screener
+        kind: self
+      - label: Medicaid Screener — homepage
+        url: https://www.medicaidscreener.com/
+        kind: self
+      - label: USDA FNS — SNAP eligibility (authoritative federal rules)
+        url: https://www.fns.usda.gov/snap/recipient/eligibility
+        kind: government
+
+  - id: mrelief
+    name: mRelief
+    organization: mRelief
+    organizationUrl: https://www.mrelief.com/
+    country: us
+    sector: non-profit
+    type: rules-engine
+    jurisdictions: [us-federal, us-states]
+    inceptionYear: 2014
+    license: proprietary
+    codePublic: false
+    languages: [unknown]
+    primaryDataset: applicant-supplied case data
+    documentationUrl: https://www.mrelief.com/
+    summary: >
+      Non-profit organization that helps low-income households apply for
+      SNAP via text message, web, and phone screeners. SNAP-only scope.
+      Not a population microsimulation: mRelief screens and assists
+      individual applicants rather than simulating program-wide
+      caseloads or reform impacts.
+    capabilities:
+      reformImpact: no
+      integratedMicrodata: no
+      localAreas: yes
+      publicInterface: yes
+      apiAccess: unknown
+    sources:
+      - label: mRelief — homepage
+        url: https://www.mrelief.com/
+        kind: self
+      - label: mRelief — about
+        url: https://www.mrelief.com/about
+        kind: self
+      - label: USDA FNS — SNAP outreach partner list
+        url: https://www.fns.usda.gov/snap/outreach/partners
+        kind: government
+      - label: Robin Hood Foundation — funder of mRelief and related
+          benefits-access non-profits
+        url: https://www.robinhood.org/
+        kind: civilsociety
+
+  - id: atlanta-fed-prd
+    name: Policy Rules Database
+    organization: Federal Reserve Bank of Atlanta
+    organizationUrl: https://www.atlantafed.org/
+    country: us
+    sector: government
+    type: rules-engine
+    jurisdictions: [us-federal, us-states]
+    inceptionYear: 2020
+    license: proprietary
+    codePublic: false
+    languages: [unknown]
+    primaryDataset: state and federal benefit-program parameter tables
+    documentationUrl: https://www.atlantafed.org/economic-mobility-and-resilience/advancing-careers-for-low-income-families/policy-rules-database
+    summary: >
+      Database of federal and state benefit-program rules maintained by
+      the Atlanta Fed as part of the Advancing Careers for Low-Income
+      Families initiative. Powers the Career Ladder Identifier and
+      Financial Forecaster (CLIFF) suite of benefit-cliff tools. Data
+      and code are shared on request, with open-sourcing in progress.
+      Status-quo rules only — does not model counterfactual reforms.
+    capabilities:
+      reformImpact: no
+      integratedMicrodata: no
+      localAreas: yes
+      publicInterface: partial
+      apiAccess: unknown
+    sources:
+      - label: Atlanta Fed — Policy Rules Database
+        url: https://www.atlantafed.org/economic-mobility-and-resilience/advancing-careers-for-low-income-families/policy-rules-database
+        kind: self
+      - label: Atlanta Fed — Advancing Careers for Low-Income Families
+        url: https://www.atlantafed.org/economic-mobility-and-resilience/advancing-careers-for-low-income-families
+        kind: self
+      - label: Atlanta Fed — CLIFF tool suite (benefit-cliff calculators
+          built on the Policy Rules Database)
+        url: https://www.atlantafed.org/economic-mobility-and-resilience/advancing-careers-for-low-income-families/cliff-tools
+        kind: self
+      - label: Federal Reserve Board — Community development research on
+          benefit cliffs cites the Atlanta Fed Policy Rules Database
+        url: https://www.federalreserve.gov/publications/community-development.htm
+        kind: government
+
+  - id: nber-taxsim
+    name: NBER TAXSIM
+    organization: National Bureau of Economic Research
+    organizationUrl: https://www.nber.org
+    country: us
+    sector: academic
+    type: tax-calculator
+    jurisdictions: [us-federal, us-states]
+    inceptionYear: 1974
+    license: proprietary
+    codePublic: false
+    languages: [Fortran]
+    primaryDataset: User-supplied (CPS-ASEC, SCF, custom records)
+    documentationUrl: https://taxsim.nber.org/
+    leads:
+      - Daniel Feenberg
+    summary: >
+      Long-running federal and state individual income tax calculator
+      maintained at NBER, written in Fortran by Daniel Feenberg and
+      annually updated since 1974. TAXSIM accepts user-supplied
+      records of income and demographic characteristics and returns
+      computed federal and state liabilities. The engine itself is
+      not public; client wrappers in Stata, R, SAS, and Python are
+      widely used. Over a thousand academic papers cite the
+      Feenberg & Coutts (1993) reference paper.
+    capabilities:
+      reformImpact: partial
+      integratedMicrodata: no
+      localAreas: no
+      publicInterface: yes
+      apiAccess: yes
+    sources:
+      - label: NBER TAXSIM home page
+        url: https://taxsim.nber.org/
+        kind: self
+        quote: >-
+          Federal law from 1960-2023 and state laws from 1977-2018
+          are available.
+      - label: NBER TAXSIM data product page
+        url: https://www.nber.org/research/data/taxsim
+        kind: self
+        quote: >-
+          It is easily accessible from Stata, SAS, R or Python.
+      - label: Feenberg & Coutts (1993) — An Introduction to the TAXSIM
+          Model (Journal of Policy Analysis and Management)
+        url: https://onlinelibrary.wiley.com/doi/10.2307/3325474
+        kind: academic
+      - label: PolicyEngine and NBER memorandum of understanding for
+          TAXSIM emulator development
+        url: https://www.policyengine.org/us/research/policyengine-nber-mou-taxsim
+        kind: self
+      - label: Hamilton, Wimer, Collyer et al. — Monthly cash payments
+          (CPSP paper that relies on TAXSIM for tax computation)
+        url: https://povertycenter.columbia.edu/sites/povertycenter.columbia.edu/files/content/Publications/Monthly-Cash-Payments-Reduce-Spells-of-Poverty-CPSP-2022.pdf
+        kind: academic
+        quote: >-
+          We use the Current Population Survey Annual Social and
+          Economic Supplement and TAXSIM to estimate the policy impact.
+
+  - id: tf-microsim
+    name: Tax Foundation General Equilibrium Tax Model
+    organization: Tax Foundation
+    organizationUrl: https://taxfoundation.org
+    siblings: [tax-foundation-tg]
+    country: us
+    sector: non-profit
+    type: microsimulation
+    jurisdictions: [us-federal]
+    inceptionYear: 2015
+    license: proprietary
+    codePublic: false
+    languages: [unknown]
+    primaryDataset: SOI Public Use File + supplementary IRS Statistics of Income tables
+    documentationUrl: https://taxfoundation.org/research/all/federal/general-equilibrium-model/
+    leads:
+      - Huaqun Li
+      - Garrett Watson
+      - Erica York
+    summary: >
+      Combines a static microsimulation tax simulator with a
+      neoclassical production function and a demand-side allocation
+      function to score federal tax reforms. Coverage is
+      federal-only (individual income, corporate, payroll, estate,
+      excise, value-added, and miscellaneous taxes); no state taxes
+      or transfer programs. Source code, parameter files, and the
+      SOI-derived microdata are not public. The Tax Foundation's
+      own documentation treats the General Equilibrium and Taxes
+      and Growth (TAG) labels as referring to this same model.
+    capabilities:
+      reformImpact: yes
+      integratedMicrodata: no
+      localAreas: no
+      publicInterface: no
+      apiAccess: no
+    sources:
+      - label: Tax Foundation — Overview of the General Equilibrium Model
+        url: https://taxfoundation.org/research/all/federal/general-equilibrium-model/
+        kind: self
+        quote: >-
+          The Tax Foundation uses and maintains a General
+          Equilibrium Model, known as our Taxes and Growth (TAG)
+          Model.
+      - label: Tax Foundation — The Tax Foundation's Taxes and Growth
+          Model (2018 overview)
+        url: https://taxfoundation.org/research/all/federal/overview-tax-foundations-taxes-growth-model/
+        kind: self
+      - label: Tax Foundation TAG model topic archive
+        url: https://taxfoundation.org/tags/taxes-and-growth-tag-model-overview-methodology/
+        kind: self
+      - label: IRS SOI Public Use File documentation (underlying microdata)
+        url: https://www.irs.gov/statistics/soi-tax-stats-individual-public-use-microdata-files
+        kind: government
+      - label: PolitiFact profile of Tax Foundation (third-party reference
+          to TAG model in policy debates)
+        url: https://www.politifact.com/personalities/tax-foundation/
+        kind: press
+
+  - id: pwbm
+    name: Penn Wharton Budget Model
+    organization: University of Pennsylvania - Penn Wharton Budget Model
+    organizationUrl: https://budgetmodel.wharton.upenn.edu
+    country: us
+    sector: academic
+    type: microsimulation
+    jurisdictions: [us-federal]
+    inceptionYear: 2016
+    license: proprietary
+    codePublic: false
+    languages: [unknown]
+    primaryDataset: ASEC + IRS Public Use File + administrative-record imputations
+    documentationUrl: https://budgetmodel.wharton.upenn.edu/model/microsimulation/
+    leads:
+      - Kent Smetters
+    summary: >
+      Nonpartisan microsimulation platform at the Wharton School of
+      the University of Pennsylvania. PWBM combines a stochastic
+      microsim (initialized from the American Community Survey
+      Economic Supplement and an anonymized representative sample
+      of tax returns) with a tax module, a Social Security module,
+      and a dynamic OLG general-equilibrium core to score federal
+      tax, entitlement, healthcare, immigration, and tariff
+      policies. Source code is not public; PWBM has released a
+      Public Use File of projected microsim populations for
+      research use.
+    capabilities:
+      reformImpact: yes
+      integratedMicrodata: partial
+      localAreas: no
+      publicInterface: yes
+      apiAccess: no
+    sources:
+      - label: Penn Wharton Budget Model home page
+        url: https://budgetmodel.wharton.upenn.edu/
+        kind: self
+      - label: PWBM Microsimulation methodology page
+        url: https://budgetmodel.wharton.upenn.edu/model/microsimulation/
+        kind: self
+        quote: >-
+          The Microsim integrates with PWBM's Tax Module, Social
+          Security Module, and Dynamic OLG to assess government
+          policy impacts.
+      - label: Wharton School press release — launch of Penn Wharton
+          Budget Model (June 27, 2016)
+        url: https://news.wharton.upenn.edu/press-releases/2016/06/the-wharton-school-of-the-university-of-pennsylvania-unveils-cutting-edge-budget-tool-to-help-fuel-data-driven-decisions/
+        kind: self
+      - label: Gokhale — Introduction to PWBM Microsimulation with
+          Application to Social Security (academic presentation)
+        url: https://s3-us-gov-west-1.amazonaws.com/cg-778536a2-e58c-44f1-9173-29749804ec54/uploads/2021/03/7-SLIDES-Gokhale-Penn-Wharton-Budget-Model.pdf
+        kind: academic
+      - label: Philadelphia Inquirer — PWBM coverage (independent press)
+        url: https://www.inquirer.com/business/penn-wharton-budget-model-biden-build-back-better-infrastructure-bill-20211123.html
+        kind: press
+
+  - id: tax-foundation-tg
+    name: Taxes and Growth Model
+    organization: Tax Foundation
+    organizationUrl: https://taxfoundation.org
+    siblings: [tf-microsim]
+    country: us
+    sector: non-profit
+    type: microsimulation
+    jurisdictions: [us-federal]
+    inceptionYear: 2012
+    license: proprietary
+    codePublic: false
+    languages: [unknown]
+    primaryDataset: SOI Public Use File + IRS Statistics of Income tables
+    documentationUrl: https://taxfoundation.org/tags/taxes-and-growth-tag-model-overview-methodology/
+    leads:
+      - Huaqun Li
+      - Garrett Watson
+      - Erica York
+    summary: >
+      The Taxes and Growth (TAG) Model is the Tax Foundation's
+      branded name for its microsimulation-plus-general-equilibrium
+      tax model; the Tax Foundation's own documentation treats it
+      as identical to its General Equilibrium Tax Model
+      (the `tf-microsim` entry in this reference). Listed
+      separately as a named artifact for traceability to Tax
+      Foundation publications that cite the model by this label.
+      Federal scope only; closed source. Web-accessible scoring
+      tables and simulator outputs are published as part of Tax
+      Foundation research briefs.
+    capabilities:
+      reformImpact: yes
+      integratedMicrodata: no
+      localAreas: no
+      publicInterface: yes
+      apiAccess: no
+    sources:
+      - label: Tax Foundation — Overview of the General Equilibrium Model
+          (states TAG and General Equilibrium are the same model)
+        url: https://taxfoundation.org/research/all/federal/general-equilibrium-model/
+        kind: self
+        quote: >-
+          The Tax Foundation uses and maintains a General
+          Equilibrium Model, known as our Taxes and Growth (TAG)
+          Model.
+      - label: Tax Foundation — The Taxes and Growth Model A Brief
+          Overview (Fiscal Fact No. 429)
+        url: https://files.taxfoundation.org/legacy/docs/FF429.pdf
+        kind: self
+      - label: Tax Foundation — Modeling the Economic Effects of Past
+          Tax Bills (uses TAG-branded estimates)
+        url: https://taxfoundation.org/research/all/federal/modeling-economic-effects-past-tax-bills/
+        kind: self
+      - label: Tax Foundation TAG topic archive
+        url: https://taxfoundation.org/tags/taxes-and-growth-tag-model-overview-methodology/
+        kind: self
+      - label: PolitiFact profile of Tax Foundation (third-party reference
+          to TAG model use in policy debates)
+        url: https://www.politifact.com/personalities/tax-foundation/
+        kind: press
+
+  - id: dwp-psm
+    name: DWP Policy Simulation Model
+    organization: Department for Work and Pensions
+    organizationUrl: https://www.gov.uk/government/organisations/department-for-work-pensions
+    country: uk
+    sector: government
+    type: microsimulation
+    jurisdictions: [uk]
+    inceptionYear: unknown
+    license: proprietary
+    codePublic: false
+    languages: [SAS]
+    primaryDataset: Family Resources Survey (FRS) with DWP-internal cleaning, imputation, and CALMAR calibration
+    documentationUrl: https://obr.uk/box/dwps-policy-simulation-model-and-the-family-resources-survey/
+    summary: >
+      DWP's static microsimulation model of the GB tax and benefit
+      system, used as the department's main tool for costing welfare
+      policy options, scoring Universal Credit migration, and assessing
+      distributional and equality impacts. The PSM is the benefit-side
+      counterpart to HM Treasury's IGOTM and is shared across DWP, HMT,
+      HMRC, the Scottish Government, the Office for Budget Responsibility,
+      and other UK departments. Source code, parameters, and prepared
+      microdata are not public; outputs appear in published official
+      statistics, impact assessments, and policy costings.
+    capabilities:
+      reformImpact: yes
+      integratedMicrodata: yes
+      localAreas: partial
+      publicInterface: no
+      apiAccess: no
+    sources:
+      - label: DWP — Introduction to the DWP Policy Simulation Model
+          (UKMOD Fest 2023 presentation)
+        url: https://www.microsimulation.ac.uk/wp-content/uploads/2023/07/UKMODFest2023_DWP.pdf
+        kind: self
+        quote: >
+          The Policy Simulation Model (PSM) is DWP's premier policy
+          analysis tool. It's a static microsimulation underpinned by
+          the FRS.
+      - label: Office for Budget Responsibility — DWP's policy simulation
+          model and the Family Resources Survey
+        url: https://obr.uk/box/dwps-policy-simulation-model-and-the-family-resources-survey/
+        kind: government
+        quote: >
+          The PSM is a static micro-simulation model that uses Family
+          Resources Survey (FRS) data to analyse policy changes.
+      - label: Universal Credit Programme — Full Business Case Summary
+          (June 2018; PSM cited as the model behind UC costings)
+        url: https://www.gov.uk/government/publications/universal-credit-programme-full-business-case-summary/universal-credit-programme-full-business-case-summary
+        kind: government
+      - label: DWP — Income-related benefits estimates of take-up
+          (PSM-based official statistics, annual)
+        url: https://www.gov.uk/government/statistics/income-related-benefits-estimates-of-take-up-financial-year-ending-2024
+        kind: government
+      - label: Wikipedia — Policy Simulation Model
+        url: https://en.wikipedia.org/wiki/Policy_Simulation_Model
+        kind: other
+      - label: SAS — DWP customer story (predictive analytics platform
+          underpinning PSM)
+        url: https://www.sas.com/content/dam/SAS/en_gb/doc/CustomerStories/dwp.pdf
+        kind: other
+
+  - id: ippr-tax-benefit
+    name: IPPR Tax-Benefit Model
+    organization: Institute for Public Policy Research
+    organizationUrl: https://www.ippr.org
+    siblings: [landman-economics]
+    country: uk
+    sector: non-profit
+    type: microsimulation
+    jurisdictions: [uk]
+    inceptionYear: unknown
+    license: proprietary
+    codePublic: false
+    languages: [unknown]
+    primaryDataset: Family Resources Survey (FRS) and Living Costs and Food Survey (LCF)
+    documentationUrl: https://mmuperu.co.uk/blog/projects/modelling-the-effects-of-the-tax-and-benefit-system/
+    leads:
+      - Ashwin Kumar
+      - Howard Reed
+    summary: >
+      A tax-benefit microsimulation model used by IPPR and a network of
+      UK third-sector partners (Resolution Foundation, Joseph Rowntree
+      Foundation, New Economics Foundation, Legatum Institute). The
+      model is maintained at the Policy Evaluation and Research Unit
+      (PERU) at Manchester Metropolitan University and shares its
+      tax-transfer engine lineage with the Landman Economics TTM
+      (originally written by Howard Reed at Landman Economics).
+      Implementation, parameter files, and prepared microdata are not
+      public; the model is licensed to partner organisations for a fee
+      and structural reforms typically require commissioning PERU.
+    capabilities:
+      reformImpact: yes
+      integratedMicrodata: yes
+      localAreas: no
+      publicInterface: no
+      apiAccess: no
+    sources:
+      - label: MMU PERU — Modelling the effects of the tax and benefit
+          system (project description)
+        url: https://mmuperu.co.uk/blog/projects/modelling-the-effects-of-the-tax-and-benefit-system/
+        kind: academic
+        quote: >
+          The IPPR Tax-Benefit Model is a tax-benefit microsimulation
+          model used by the IPPR, the Resolution Foundation, the Joseph
+          Rowntree Foundation, the New Economics Foundation and the
+          Legatum Institute.
+      - label: Fraser of Allander Institute — IPPR tax-benefit
+          microsimulation results and policy analysis
+        url: https://fraserofallander.org/wp-content/uploads/2022/11/IPPR-microsimulation-results-and-policy-analysis.pdf
+        kind: academic
+      - label: IPPR — Taxing income from wealth (model-based analysis)
+        url: https://www.ippr.org/media-office/slug-1306b49118532fe333771b8f2c1b31d3
+        kind: self
+      - label: Manchester Metropolitan University — Policy Evaluation
+          and Research Unit
+        url: https://www.mmu.ac.uk/research/groups/policy-evaluation-research-unit
+        kind: academic
+      - label: Scottish Government — Tackling child poverty delivery
+          plan, methodology appendix (sibling TTM)
+        url: https://www.gov.scot/publications/tackling-child-poverty-delivery-plan-forecasting-child-poverty-scotland/pages/8/
+        kind: government
+
+  - id: landman-economics
+    name: Landman Economics Tax-Transfer Model
+    organization: Landman Economics
+    organizationUrl: https://www.landman-economics.co.uk
+    siblings: [ippr-tax-benefit]
+    country: uk
+    sector: for-profit
+    type: microsimulation
+    jurisdictions: [uk]
+    inceptionYear: 2008
+    license: proprietary
+    codePublic: false
+    languages: [unknown]
+    primaryDataset: Family Resources Survey (FRS) and Living Costs and Food Survey (LCF)
+    documentationUrl: https://www.gov.scot/publications/tackling-child-poverty-delivery-plan-forecasting-child-poverty-scotland/pages/8/
+    leads:
+      - Howard Reed
+    summary: >
+      A static tax-benefit microsimulation model originally written by
+      Howard Reed (formerly responsible for IFS TAXBEN) in 2008-09 and
+      maintained at Landman Economics. The Tax-Transfer Model (TTM) is
+      jointly maintained with the Resolution Foundation and IPPR and
+      shares the engine that drives the IPPR Tax-Benefit Model. The
+      model uses the FRS for direct taxes, benefits, tax credits and
+      Universal Credit, and the Living Costs and Food Survey for
+      indirect taxes. Notable users include the Equality and Human
+      Rights Commission's cumulative impact assessments, Scottish
+      Government child poverty forecasts, Women's Budget Group analyses,
+      and Social Mobility and Child Poverty Commission work.
+    capabilities:
+      reformImpact: yes
+      integratedMicrodata: yes
+      localAreas: no
+      publicInterface: no
+      apiAccess: no
+    sources:
+      - label: Scottish Government — Appendix 2 The IPPR/Resolution
+          Foundation/Landman Economics tax-transfer model
+        url: https://www.gov.scot/publications/tackling-child-poverty-delivery-plan-forecasting-child-poverty-scotland/pages/8/
+        kind: government
+        quote: >
+          a tax-benefit microsimulation model (the tax-transfer model,
+          or TTM) which was originally written by Landman Economics,
+          and which is maintained jointly by Landman Economics, the
+          Resolution Foundation and the Institute for Public Policy
+          Research.
+      - label: Equality and Human Rights Commission — The cumulative
+          impact of tax and welfare reforms (Landman Economics TTM)
+        url: https://www.equalityhumanrights.com/sites/default/files/cumulative-impact-assessment-report.pdf
+        kind: government
+      - label: Northumbria University — Professor Howard Reed (director
+          of Landman Economics, lead developer)
+        url: https://www.northumbria.ac.uk/about-us/our-staff/r/howard-reed/
+        kind: academic
+      - label: EHRC — Cumulative impact of tax, social security and
+          public spending decisions in Scotland (Landman Economics-led)
+        url: https://www.equalityhumanrights.com/en/publication-download/cumulative-impact-tax-social-security-and-public-spending-decisions
+        kind: government
+      - label: Reed (Northumbria PhD thesis) — Microsimulation of the
+          impacts of tax, social security and public spending changes
+        url: https://researchportal.northumbria.ac.uk/en/studentTheses/microsimulation-of-the-impacts-of-tax-social-security-and-public-
+        kind: academic
+
+  - id: entitledto
+    name: EntitledTo
+    organization: EntitledTo Ltd
+    organizationUrl: https://www.entitledto.co.uk
+    country: uk
+    sector: for-profit
+    type: rules-engine
+    jurisdictions: [uk]
+    inceptionYear: 2000
+    license: proprietary
+    codePublic: false
+    languages: [unknown]
+    primaryDataset: n/a (per-claimant rules engine; no underlying microdata)
+    documentationUrl: https://www.entitledto.co.uk/help/default.aspx
+    leads:
+      - Phil Agulnik
+      - Steve Gibson
+    summary: >
+      A UK benefits entitlement calculator covering means-tested and
+      contribution-based benefits including Universal Credit, legacy
+      benefits, tax credits, Housing Benefit, Council Tax Reduction,
+      Carer's Allowance, and pension-age benefits. EntitledTo is
+      offered as a free public calculator (with a fair-use limit) and
+      as a paid product for advisers, local authorities, housing
+      associations, and other organisations. It is a per-claimant
+      rules engine rather than a population microsimulation: there is
+      no FRS-based weighting and the system answers eligibility and
+      entitlement for an individual household given user inputs.
+      Recommended on GOV.UK alongside Turn2us and Policy in Practice.
+    capabilities:
+      reformImpact: no
+      integratedMicrodata: no
+      localAreas: yes
+      publicInterface: yes
+      apiAccess: yes
+    sources:
+      - label: EntitledTo benefits calculator (home page; product
+          description and free public access)
+        url: https://www.entitledto.co.uk/
+        kind: self
+      - label: EntitledTo for organisations (Better Off Calculator,
+          adviser product, API)
+        url: https://www.entitledto.co.uk/organisations
+        kind: self
+      - label: GOV.UK — Benefits calculators (EntitledTo listed as a
+          recommended calculator)
+        url: https://www.gov.uk/benefits-calculators
+        kind: government
+        quote: >
+          Use one of the following free benefits calculators to check
+          what you could get... entitledto for information on
+          income-related benefits, tax credits, contribution-based
+          benefits, Carer's Allowance, Universal Credit and how your
+          benefits will be affected if you start work.
+      - label: UK Government Digital Marketplace — EntitledTo Benefits
+          Calculator (G-Cloud listing)
+        url: https://www.applytosupply.digitalmarketplace.service.gov.uk/g-cloud/services/973658267289218
+        kind: government
+      - label: EntitledTo — 20th birthday post (founded 2000)
+        url: https://www.entitledto.co.uk/blog/2020/june/we-made-ourselves-a-new-website-for-our-20th-birthday/
+        kind: self
+      - label: ERSA (Employment Related Services Association) —
+          EntitledTo Better Off Calculator overview
+        url: https://ersa.org.uk/entitledto/
+        kind: civilsociety

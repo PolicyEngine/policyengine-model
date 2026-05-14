@@ -238,3 +238,277 @@ usage:
         url: https://nap.nationalacademies.org/catalog/25246
       - label: CPSP publications
         url: https://www.povertycenter.columbia.edu
+
+  - model: benefits-data-trust
+    academicCitations: unknown
+    governmentReports: unknown
+    pressMentions: unknown
+    monthlyActiveUsers: unknown
+    monthlyComputations: unknown
+    organizationUsers: unknown
+    notes: >
+      BDT publishes annual impact reports describing applicants served
+      and benefits secured; comparable academic-citation or
+      press-mention counts are not maintained here.
+    sources:
+      - label: Benefits Data Trust — homepage
+        url: https://bdtrust.org/
+      - label: Benefits Data Trust — what we do
+        url: https://bdtrust.org/what-we-do/
+
+  - model: benefit-kitchen
+    academicCitations: unknown
+    governmentReports: unknown
+    pressMentions: unknown
+    monthlyActiveUsers: unknown
+    monthlyComputations: unknown
+    organizationUsers: unknown
+    notes: >
+      BenefitKitchen does not publish usage metrics. The product is
+      consumed both directly by households via the free app and by
+      partner organizations through a paid API tier.
+    sources:
+      - label: BenefitKitchen — homepage
+        url: https://benefitkitchen.com/
+      - label: BenefitKitchen — about
+        url: https://benefitkitchen.com/about
+
+  - model: benefits-cliffs
+    academicCitations: unknown
+    governmentReports: unknown
+    pressMentions: unknown
+    monthlyActiveUsers: unknown
+    monthlyComputations: unknown
+    organizationUsers: unknown
+    notes: >
+      BenefitsCliffs.com is paywalled; usage metrics are not published.
+      Georgia Center for Opportunity cites benefit-cliff analyses in
+      its state policy briefs.
+    sources:
+      - label: BenefitsCliffs.com — homepage
+        url: https://benefitscliffs.com/
+      - label: Georgia Center for Opportunity — benefits cliff page
+        url: https://georgiaopportunity.org/the-benefits-cliff/
+
+  - model: snap-screener
+    academicCitations: unknown
+    governmentReports: unknown
+    pressMentions: unknown
+    monthlyActiveUsers: unknown
+    monthlyComputations: unknown
+    organizationUsers: unknown
+    notes: >
+      Usage metrics are not published. The free consumer-facing
+      screener and the paid API tier are both in active use; no
+      external dashboard.
+    sources:
+      - label: SNAP Screener — homepage
+        url: https://www.snapscreener.com/
+      - label: Medicaid Screener — homepage
+        url: https://www.medicaidscreener.com/
+
+  - model: mrelief
+    academicCitations: unknown
+    governmentReports: unknown
+    pressMentions: unknown
+    monthlyActiveUsers: unknown
+    monthlyComputations: unknown
+    organizationUsers: unknown
+    notes: >
+      mRelief publishes outreach impact summaries on its site but no
+      structured usage metrics suitable for a comparison row.
+    sources:
+      - label: mRelief — homepage
+        url: https://www.mrelief.com/
+      - label: mRelief — about
+        url: https://www.mrelief.com/about
+
+  - model: atlanta-fed-prd
+    academicCitations: unknown
+    governmentReports: unknown
+    pressMentions: unknown
+    monthlyActiveUsers: unknown
+    monthlyComputations: unknown
+    organizationUsers: unknown
+    notes: >
+      The Policy Rules Database powers the Atlanta Fed CLIFF tool
+      suite and is referenced in community-development research; no
+      structured usage metrics are published.
+    sources:
+      - label: Atlanta Fed — Policy Rules Database project page
+        url: https://www.atlantafed.org/economic-mobility-and-resilience/advancing-careers-for-low-income-families/policy-rules-database
+      - label: Atlanta Fed — CLIFF tool suite
+        url: https://www.atlantafed.org/economic-mobility-and-resilience/advancing-careers-for-low-income-families/cliff-tools
+
+  - model: nber-taxsim
+    academicCitations: unknown
+    governmentReports: unknown
+    pressMentions: unknown
+    monthlyActiveUsers: unknown
+    monthlyComputations: unknown
+    organizationUsers: unknown
+    notes: >
+      TAXSIM is the longest-running US tax calculator in continuous
+      academic use; the Feenberg & Coutts (1993) reference paper has
+      been cited by more than a thousand subsequent papers per NBER.
+      Used by the Columbia CPSP poverty microsim and many other
+      academic projects as the tax-computation backend. Per-call
+      usage is not published.
+    sources:
+      - label: NBER TAXSIM home page
+        url: https://taxsim.nber.org/
+      - label: NBER TAXSIM data product page
+        url: https://www.nber.org/research/data/taxsim
+      - label: PolicyEngine-NBER MoU announcement
+        url: https://www.policyengine.org/us/research/policyengine-nber-mou-taxsim
+
+  - model: tf-microsim
+    academicCitations: unknown
+    governmentReports: unknown
+    pressMentions: unknown
+    monthlyActiveUsers: unknown
+    monthlyComputations: unknown
+    organizationUsers: unknown
+    notes: >
+      Tax Foundation TAG/General Equilibrium scoring tables appear in
+      major US press coverage of federal tax legislation. Used by
+      Congressional staff materials and cited in policy debate
+      coverage (TCJA, OBBBA, tariffs). Per-call usage is not
+      published.
+    sources:
+      - label: Tax Foundation model estimates archive
+        url: https://taxfoundation.org/research/all/federal/general-equilibrium-model/
+      - label: PolitiFact profile of Tax Foundation (press coverage
+          and fact-check references)
+        url: https://www.politifact.com/personalities/tax-foundation/
+
+  - model: pwbm
+    academicCitations: unknown
+    governmentReports: unknown
+    pressMentions: unknown
+    monthlyActiveUsers: unknown
+    monthlyComputations: unknown
+    organizationUsers: unknown
+    notes: >
+      PWBM's 2024 election analyses of Trump and Harris campaign
+      proposals were widely cited in major US press (NYT, WSJ,
+      Politico, Daily Pennsylvanian) and Congressional debate. The
+      Real-time Federal Budget Tracker, Tariff Simulator, and Public
+      Use File provide public-facing surfaces, but per-call usage
+      and visitor metrics are not published.
+    sources:
+      - label: PWBM research catalogue (working papers and analyses)
+        url: https://budgetmodel.wharton.upenn.edu/working-papers
+      - label: Daily Pennsylvanian — PWBM in the 2024 election
+        url: https://www.thedp.com/article/2024/10/penn-wharton-budget-model-2024-presidential-election
+
+  - model: tax-foundation-tg
+    academicCitations: unknown
+    governmentReports: unknown
+    pressMentions: unknown
+    monthlyActiveUsers: unknown
+    monthlyComputations: unknown
+    organizationUsers: unknown
+    notes: >
+      TAG-branded Tax Foundation scoring tables appear in major US
+      press coverage of federal tax legislation (TCJA, OBBBA,
+      tariffs, presidential campaign proposals). The Taxes and
+      Growth label is used in Tax Foundation publications
+      interchangeably with the General Equilibrium label
+      (tf-microsim). Per-call usage is not published.
+    sources:
+      - label: Tax Foundation TAG topic archive
+        url: https://taxfoundation.org/tags/taxes-and-growth-tag-model-overview-methodology/
+      - label: Tax Foundation — Modeling the Economic Effects of Past
+          Tax Bills
+        url: https://taxfoundation.org/research/all/federal/modeling-economic-effects-past-tax-bills/
+
+  - model: dwp-psm
+    academicCitations: unknown
+    governmentReports: unknown
+    pressMentions: unknown
+    monthlyActiveUsers: unknown
+    monthlyComputations: unknown
+    organizationUsers: unknown
+    notes: >
+      PSM underlies DWP-led official statistics (Income-related benefits
+      take-up estimates, Households Below Average Income projections,
+      child poverty projections to FYE 2030) and impact assessments
+      across DWP policy areas. The model is also accessed by HM
+      Treasury, HMRC, the Scottish Government, OBR and Northern Ireland
+      Executive analysts under information-sharing arrangements. No
+      external-user metrics are published.
+    sources:
+      - label: DWP — Income-related benefits estimates of take-up
+        url: https://www.gov.uk/government/statistics/income-related-benefits-estimates-of-take-up-financial-year-ending-2024
+      - label: DWP — Spring statement social security changes updated
+          impact on poverty levels (PSM-based)
+        url: https://www.gov.uk/government/publications/spring-statement-social-security-changes-updated-impact-on-poverty-levels-in-great-britain-july-2025/spring-statement-social-security-changes-updated-impact-on-poverty-levels-in-great-britain-july-2025
+      - label: DWP — Benefit uprating estimated number and type of GB
+          families benefiting (annual PSM-based statistics)
+        url: https://www.gov.uk/government/statistics/benefit-uprating-estimated-number-and-type-of-families-and-individuals-in-families-benefitting-from-the-uprating-of-benefits-in-2025-to-2026/estimated-number-and-type-of-gb-families-and-individuals-in-families-benefitting-from-the-uprating-of-benefits-in-2025-to-2026-and-the-fair-repayment
+
+  - model: ippr-tax-benefit
+    academicCitations: unknown
+    governmentReports: unknown
+    pressMentions: unknown
+    monthlyActiveUsers: unknown
+    monthlyComputations: unknown
+    organizationUsers: unknown
+    notes: >
+      Used by IPPR, Resolution Foundation, Joseph Rowntree Foundation,
+      New Economics Foundation, and the Legatum Institute for policy
+      research and Budget responses. IPPR routinely briefs UK national
+      press (Guardian, FT, BBC, Times) on tax and benefit reform
+      proposals. Per-call usage and license counts are not published.
+    sources:
+      - label: MMU PERU — Modelling the tax and benefit system (lists
+          partner organisations)
+        url: https://mmuperu.co.uk/blog/projects/modelling-the-effects-of-the-tax-and-benefit-system/
+      - label: IPPR media office (recent model-based releases)
+        url: https://www.ippr.org/media-office
+
+  - model: landman-economics
+    academicCitations: unknown
+    governmentReports: unknown
+    pressMentions: unknown
+    monthlyActiveUsers: unknown
+    monthlyComputations: unknown
+    organizationUsers: unknown
+    notes: >
+      Notable commissioned uses include the EHRC cumulative impact of
+      tax and welfare reforms (England, Wales, Scotland), the Scottish
+      Government's tackling-child-poverty delivery plan, Women's Budget
+      Group analyses, and Social Mobility and Child Poverty Commission
+      work. Reed and Portes (2018) is the canonical EHRC application.
+      No public per-call or organisation-user metrics.
+    sources:
+      - label: EHRC — Cumulative impact reading list (Landman Economics
+          TTM applications)
+        url: https://www.equalityhumanrights.com/en/our-research/reading-lists/welfare-reform-reading-list
+      - label: Scottish Government — Tackling child poverty methodology
+          appendix (commissioned application)
+        url: https://www.gov.scot/publications/tackling-child-poverty-delivery-plan-forecasting-child-poverty-scotland/pages/8/
+
+  - model: entitledto
+    academicCitations: unknown
+    governmentReports: unknown
+    pressMentions: unknown
+    monthlyActiveUsers: unknown
+    monthlyComputations: unknown
+    organizationUsers: unknown
+    notes: >
+      Used directly by claimants on the free public calculator and by
+      advisers, local authorities, housing associations, and welfare-to-
+      work providers via the paid product. EntitledTo states that its
+      organisational clients collectively calculated £11.8 billion in
+      benefits for service users in 2023/24. Recommended on GOV.UK
+      alongside Turn2us and Policy in Practice.
+    sources:
+      - label: EntitledTo for organisations
+        url: https://www.entitledto.co.uk/organisations
+      - label: GOV.UK — Benefits calculators (listed as recommended)
+        url: https://www.gov.uk/benefits-calculators
+      - label: ERSA — EntitledTo Better Off Calculator (welfare-to-work
+          adviser-network use)
+        url: https://ersa.org.uk/entitledto/
