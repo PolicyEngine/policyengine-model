@@ -579,24 +579,24 @@ freshness:
     updateLag: >
       Days — IGOTM outputs accompany every Budget and Spring
       Statement document, scoring measures as they are announced.
-    lastMajorRefresh: 2024-10
+    lastMajorRefresh: 2025-03
     notableRegimes: >
-      Current law as of the most recent Budget (Autumn Budget 2024,
-      Spring Budget 2024). Forward-projection over the OBR scorecard
-      horizon. Encoded regimes include frozen Income Tax thresholds,
-      Universal Credit transitional measures, and employer NICs
-      adjustments.
+      Current law as of the most recent fiscal event (Spring Statement
+      2025; Autumn Budget 2024 prior). Forward-projection over the OBR
+      scorecard horizon. Encoded regimes include frozen Income Tax
+      thresholds, Universal Credit transitional measures, and employer
+      NICs adjustments.
     notes: >
       IGOTM is Treasury's official distributional analysis tool;
       refresh cadence is tied to fiscal events. Methodology document
       and Impact on Households annex are updated at each event.
     sources:
-      - label: HM Treasury — Impact on households (Autumn Budget 2024)
+      - label: HM Treasury — Impact on households (Spring Statement 2025)
         url: https://www.gov.uk/government/publications/supporting-documents-for-spring-statement-2025/impact-on-households-distributional-analysis-to-accompany-spring-statement-2025
         kind: government
         supports: [latestImplementedYear, lastMajorRefresh, notableRegimes, handlesFutureDatedLegislation]
-      - label: HM Treasury — Impact on households (Spring Budget 2024)
-        url: https://www.gov.uk/government/publications/supporting-documents-for-spring-statement-2025/impact-on-households-distributional-analysis-to-accompany-spring-statement-2025
+      - label: HM Treasury — Autumn Budget 2024 distributional analysis
+        url: https://www.gov.uk/government/publications/autumn-budget-2024
         kind: government
         supports: [updateCadence, updateLag, notableRegimes]
       - label: OBR — Economic and fiscal outlook (forward window IGOTM
@@ -645,31 +645,30 @@ freshness:
         supports: [updateCadence, lastMajorRefresh, latestImplementedYear]
 
   - model: benefits-data-trust
-    latestImplementedYear: unknown
-    forwardYearsThrough: unknown
+    latestImplementedYear: 2024
+    forwardYearsThrough: 2024
     handlesFutureDatedLegislation: no
-    updateCadence: annual
-    updateLag: unknown
-    lastMajorRefresh: unknown
+    updateCadence: as-funded
+    updateLag: >
+      Historical. BDT wound down operations in August 2024 per Pew and
+      Inquirer coverage; no longer updating.
+    lastMajorRefresh: 2024-08
     notableRegimes: >
-      Status-quo benefit rules only (SNAP, Medicaid, LIHEAP, and
-      others). BDT updates eligibility logic as state and federal
-      agencies revise rules; counterfactual reforms are out of scope.
+      Historical: status-quo benefit rules (SNAP, Medicaid, LIHEAP,
+      others) as of the August 2024 wind-down. Counterfactual reforms
+      were always out of scope.
     notes: >
-      As a benefits-access service, BDT keeps screening logic current
-      with administrative rules but does not publish a release calendar
-      or implementation-year metadata.
+      BDT closed in 2024. Freshness rendered for historical
+      completeness; no future updates expected.
     sources:
-      - label: Benefits Data Trust — what we do (archived)
-        url: https://web.archive.org/web/20220120132444/https://bdtrust.org/what-we-do/
-        kind: self
-        supports: [updateCadence, notableRegimes,
-                   handlesFutureDatedLegislation]
-      - label: USDA FNS — SNAP outreach partners (program rules BDT
-          tracks)
-        url: https://www.fns.usda.gov/snap/outreach/partners
-        kind: government
-        supports: [notableRegimes, updateCadence]
+      - label: Pew — Benefits Data Trust closure (August 2024)
+        url: https://www.pew.org/en/about/news-room/opinion/2024/08/06/benefits-data-trusts-closure-should-prompt-us-to-rebuild-the-flawed-public-benefits-system
+        kind: civilsociety
+        supports: [lastMajorRefresh, latestImplementedYear, updateCadence]
+      - label: Philadelphia Inquirer — BDT shutting down
+        url: https://www.inquirer.com/health/benefits-data-trust-bdt-shutting-down-20240625.html
+        kind: press
+        supports: [lastMajorRefresh, latestImplementedYear]
 
   - model: benefit-kitchen
     latestImplementedYear: unknown
@@ -773,27 +772,32 @@ freshness:
     latestImplementedYear: unknown
     forwardYearsThrough: unknown
     handlesFutureDatedLegislation: no
-    updateCadence: annual
-    updateLag: unknown
-    lastMajorRefresh: unknown
+    updateCadence: continuous
+    updateLag: >
+      Rules updated as agencies revise; release cadence visible via
+      GitHub tagged releases on Research-Division/policy-rules-database.
+    lastMajorRefresh: 2026-04
     notableRegimes: >
       Status-quo federal and state benefit-program rules; powers the
       CLIFF tool suite. No reform scenarios.
     notes: >
-      The Policy Rules Database is updated as agencies revise rules;
-      no public release calendar. The Atlanta Fed states open-sourcing
-      is in progress.
+      Atlanta Fed publishes a PRD_Update_Schedule.md in the public repo
+      and tags releases on GitHub (latest April 2026). The codebase is
+      GPL-3.0 and openly readable.
     sources:
       - label: Atlanta Fed — Policy Rules Database project page
         url: https://www.atlantafed.org/economic-mobility-and-resilience/advancing-careers-for-low-income-families/policy-rules-database
         kind: self
         supports: [updateCadence, notableRegimes,
                    handlesFutureDatedLegislation]
-      - label: Atlanta Fed — CLIFF tool suite (downstream consumer of
-          the Policy Rules Database)
-        url: https://www.atlantafed.org/economic-mobility-and-resilience/advancing-careers-for-low-income-families/cliff-tools
+      - label: Research-Division/policy-rules-database GitHub releases
+        url: https://github.com/Research-Division/policy-rules-database/releases
         kind: self
-        supports: [updateCadence, notableRegimes]
+        supports: [updateCadence, lastMajorRefresh, updateLag]
+      - label: PRD_Update_Schedule.md (in-repo release calendar)
+        url: https://github.com/Research-Division/policy-rules-database/blob/main/PRD_Update_Schedule.md
+        kind: self
+        supports: [updateCadence, updateLag]
 
   - model: nber-taxsim
     latestImplementedYear: 2023

@@ -77,14 +77,6 @@ const SKIP_TIER2_DOMAINS = new Set([
   ...BOT_BLOCKED_DOMAINS,
 ]);
 
-interface SourceLike {
-  label?: string;
-  url?: string;
-  quote?: string;
-  kind?: string;
-  supports?: string[];
-}
-
 interface Finding {
   file: string;
   url: string;

@@ -159,7 +159,12 @@ export interface Model {
   inceptionYear: number | 'unknown';
   /** SPDX-style license identifier or 'proprietary'. */
   license: string;
-  codePublic: boolean;
+  /**
+   * Whether the model's source code is publicly readable.
+   * Tristate (not boolean) so we can distinguish "fully open" from
+   * "source-available without an open licence" (e.g. Budget Lab).
+   */
+  codePublic: Tristate;
   codeUrl?: string;
   /** Primary implementation language(s). */
   languages: string[];

@@ -1,6 +1,7 @@
 import PageHeader from '../layout/PageHeader';
 import { colors, spacing } from '../../designTokens';
 import { SourceList } from './SourceList';
+import { TristateBadge } from './StatusBadge';
 import ModelSelector from './ModelSelector';
 import {
   tableWrapperStyle,
@@ -26,7 +27,7 @@ export default function ComparisonOverview({
       <PageHeader
         category="Comparison"
         title="Open microsimulation reference"
-        description="A structured comparison of US tax and transfer microsimulation models across coverage, transparency, methodology, artifacts, and usage. PolicyEngine maintains this index alongside its own model documentation so contributors and reviewers can audit our choices against the alternatives."
+        description="A structured catalogue of tax and benefit microsimulation models across coverage, freshness, transparency, methodology, artifacts, and usage. The current index covers 32 US and UK models, from open-source rules engines and proprietary tax microsims to dynamic lifecycle and health-insurance market models. PolicyEngine maintains this reference; pull requests adding or correcting entries are welcome."
       />
 
       <ModelSelector allModels={allModels} />
@@ -34,11 +35,14 @@ export default function ComparisonOverview({
       <section style={sectionStyle}>
         <h2 style={h2Style}>Scope</h2>
         <p style={proseStyle}>
-          This reference compares four production microsimulation models maintained for US policy
-          analysis. The catalogue can extend to CBO, JCT, OpenFisca, TAXSIM, EUROMOD, and others;
-          each row in <code>data/comparisons/*.yaml</code> is the source of truth for one fact.
-          When a value is not publicly documented, the row reads <em>unknown</em> rather than a
-          guess.
+          The catalogue spans 32 US and UK tax and benefit microsimulation
+          models — open-source rules engines, proprietary tax microsims,
+          government scorekeeper models, dynamic lifecycle and long-term
+          projection models, health-insurance market models, and benefit-
+          eligibility calculators. Each row in{' '}
+          <code>data/comparisons/*.yaml</code> is the source of truth for
+          one fact. When a value is not publicly documented, the row reads{' '}
+          <em>unknown</em> rather than a guess.
         </p>
       </section>
 
@@ -80,7 +84,9 @@ export default function ComparisonOverview({
                   </td>
                   <td style={tdStyle}>{m.inceptionYear === 'unknown' ? '—' : m.inceptionYear}</td>
                   <td style={tdStyle}>{m.license}</td>
-                  <td style={tdStyle}>{m.codePublic ? 'Yes' : 'No'}</td>
+                  <td style={tdStyle}>
+                    <TristateBadge value={m.codePublic} />
+                  </td>
                   <td style={tdStyle}>{m.primaryDataset}</td>
                   <td style={tdStyle}>
                     <SourceList sources={m.sources} />
@@ -131,11 +137,15 @@ export default function ComparisonOverview({
       <section style={sectionStyle}>
         <h2 style={h2Style}>Editorial notes</h2>
         <p style={proseStyle}>
-          PolicyEngine maintains this index. Where evidence is one-sided we say so explicitly:
-          three of the four models in this catalogue do not publish source code, so transparency
-          comparisons are necessarily based on what is publicly documented. We welcome pull
-          requests adding or correcting entries — see{' '}
-          <code>data/comparisons/README.md</code> in the repository for contribution conventions.
+          PolicyEngine maintains this index. Most of the models in the
+          catalogue do not publish source code, so transparency comparisons
+          are necessarily based on what is publicly documented; we mark{' '}
+          <em>unknown</em> rather than guess. Citations are tagged with
+          source kind (<em>self / government / academic / press / civil
+          society</em>) to surface independence, and pull requests adding or
+          correcting entries are welcome — see{' '}
+          <code>data/comparisons/README.md</code> for contribution
+          conventions.
         </p>
       </section>
     </div>

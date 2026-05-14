@@ -3,6 +3,7 @@ import CoverageMatrix, {
 } from '../../../src/components/comparison/CoverageMatrix';
 import { loadComparisonData } from '../../../src/data/comparisons';
 import { fetchPrograms } from '../../../src/data/fetchPrograms';
+import { filterSelectedModels } from '../../../src/components/comparison/filterModels';
 import type { StateImplementation, Program } from '../../../src/types/Program';
 
 const MAX_FORWARD_YEAR = new Date().getFullYear() + 5;
@@ -84,16 +85,21 @@ export default async function CoverageRoute({
 }) {
   const sp = await searchParams;
   const country: 'us' | 'uk' = sp.country === 'uk' ? 'uk' : 'us';
-  const peId = country === 'uk' ? 'policyengine-uk' : 'policyengine-us';
   const selectedYear = sp.year ? parseInt(sp.year, 10) : undefined;
 
   const data = loadComparisonData();
 
-  // Filter the comparison data to the relevant PolicyEngine model. Other
-  // models are still passed to ModelSelector so the user can opt into a
-  // cross-model view from here.
-  const peModel = data.models.find((m) => m.id === peId);
-  const filteredModels = peModel ? [peModel] : [];
+  // Default to current-country PolicyEngine, but respect explicit
+  // ?models= selection so users can opt into a cross-model view by
+  // clicking pills in the selector.
+  const selectedRaw =
+    sp.models ??
+    (country === 'uk' ? 'policyengine-uk' : 'policyengine-us');
+  const filteredModels = filterSelectedModels(
+    data.models,
+    selectedRaw,
+    undefined,
+  );
 
   // Fetch PolicyEngine programs for state implementations + verified years.
   // Fall back to no overlay if the API is unreachable.
