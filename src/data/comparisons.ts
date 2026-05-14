@@ -104,6 +104,23 @@ export function loadComparisonData(): ComparisonData {
       errors.push(`freshness.yaml: unknown model "${row.model}"`);
     }
   }
+  // Sibling references must resolve to known models and be bidirectional.
+  for (const m of models) {
+    for (const sibling of m.siblings ?? []) {
+      if (!modelIds.has(sibling)) {
+        errors.push(
+          `models.yaml: ${m.id} lists unknown sibling "${sibling}"`,
+        );
+        continue;
+      }
+      const other = models.find((x) => x.id === sibling);
+      if (!other?.siblings?.includes(m.id)) {
+        errors.push(
+          `models.yaml: sibling link ${m.id} -> ${sibling} is not bidirectional`,
+        );
+      }
+    }
+  }
 
   if (errors.length > 0) {
     throw new Error(

@@ -9,7 +9,7 @@ models:
     name: PolicyEngine US
     organization: PolicyEngine
     organizationUrl: https://policyengine.org
-    siblings: [policyengine-uk, policyengine-canada, policyengine-il, policyengine-ng]
+    siblings: [policyengine-uk]
     country: us
     sector: non-profit
     type: microsimulation
@@ -66,6 +66,7 @@ models:
     languages: [SAS, Fortran]
     primaryDataset: TRIM3 augmented CPS-ASEC
     documentationUrl: https://boreas.urban.org/T3IntroHistory.php
+    siblings: [attis]
     leads:
       - Linda Giannarelli
       - Laura Wheaton
@@ -420,7 +421,7 @@ models:
     name: PolicyEngine UK
     organization: PolicyEngine
     organizationUrl: https://policyengine.org
-    siblings: [policyengine-us, policyengine-canada, policyengine-il, policyengine-ng]
+    siblings: [policyengine-us]
     country: uk
     sector: non-profit
     type: microsimulation

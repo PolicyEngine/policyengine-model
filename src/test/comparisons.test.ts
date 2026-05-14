@@ -144,6 +144,17 @@ describe('comparison data', () => {
     }
   });
 
+  it('sibling references resolve and are bidirectional', () => {
+    const ids = new Set(data.models.map((m) => m.id));
+    for (const m of data.models) {
+      for (const s of m.siblings ?? []) {
+        expect(ids.has(s)).toBe(true);
+        const other = data.models.find((x) => x.id === s);
+        expect(other?.siblings ?? []).toContain(m.id);
+      }
+    }
+  });
+
   describe('source corroboration', () => {
     const TRANSPARENCY_FIELDS = [
       'codePublic',
