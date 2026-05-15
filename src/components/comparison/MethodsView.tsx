@@ -95,9 +95,10 @@ function fmtBehavioralValue(row: BehavioralParameter): string {
 /**
  * One behavioral-rows table grouped by domain. Reused for the
  * Elasticities and Other-behavioral sections so the column shape stays
- * consistent across them.
+ * consistent across them. Also exported for the peer-aware
+ * `/behavioral` compare view so the column shape matches Methods.
  */
-function BehavioralDomainBlock({
+export function BehavioralDomainBlock({
   data,
   groups,
 }: {
