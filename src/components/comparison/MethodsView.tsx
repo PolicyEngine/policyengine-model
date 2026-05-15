@@ -158,11 +158,11 @@ export default function MethodsView({
                   </tr>
                 </thead>
                 <tbody>
-                  {rows.map((row) => {
+                  {rows.map((row, idx) => {
                     const model = modelById(data, row.model);
                     return (
                       <tr
-                        key={`${row.model}-${row.domain}-${row.parameter}-${row.population ?? ''}-${row.horizon ?? ''}`}
+                        key={`${row.model}-${row.domain}-${row.parameter}-${idx}`}
                       >
                         <td style={tdStyle}>
                           <div style={{ fontWeight: 600 }}>
