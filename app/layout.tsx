@@ -3,6 +3,8 @@ import Script from 'next/script';
 import { Suspense } from 'react';
 import '../src/index.css';
 import ClientLayout from './client-layout';
+import { loadComparisonData } from '../src/data/comparisons';
+import { hostModelId } from '../src/components/comparison/parseCompare';
 
 const prodOrigin =
   process.env.VERCEL_ENV === 'production' && process.env.VERCEL_PROJECT_PRODUCTION_URL
@@ -22,6 +24,24 @@ export const metadata: Metadata = {
 const GA_MEASUREMENT_ID = 'G-2YHG89FY0N';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  // Load the comparison catalogue once at the layout level so the
+  // compare drawer (a client component) doesn't have to re-load the
+  // YAML on every page. Split per-country here; ClientLayout picks the
+  // right list once it knows the active country.
+  const data = loadComparisonData();
+  const peersByCountry = {
+    us: data.models
+      .filter((m) => m.country === 'us' && m.id !== hostModelId('us'))
+      .map((m) => ({ id: m.id, name: m.name, organization: m.organization })),
+    uk: data.models
+      .filter((m) => m.country === 'uk' && m.id !== hostModelId('uk'))
+      .map((m) => ({ id: m.id, name: m.name, organization: m.organization })),
+  };
+  const hostNames = {
+    us: data.models.find((m) => m.id === hostModelId('us'))?.name ?? 'PolicyEngine US',
+    uk: data.models.find((m) => m.id === hostModelId('uk'))?.name ?? 'PolicyEngine UK',
+  };
+
   return (
     <html lang="en">
       <head>
@@ -41,7 +61,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <Suspense>
-          <ClientLayout>{children}</ClientLayout>
+          <ClientLayout peersByCountry={peersByCountry} hostNames={hostNames}>
+            {children}
+          </ClientLayout>
         </Suspense>
       </body>
     </html>

@@ -7,8 +7,21 @@ import Walkthrough from '../src/components/microsim/Walkthrough';
 import RulesOverview from '../src/components/rules/RulesOverview';
 import DataPipeline from '../src/components/data/DataPipeline';
 import BehavioralResponses from '../src/components/theory/BehavioralResponses';
+import CompareDrawer from '../src/components/comparison/CompareDrawer';
 import { colors } from '../src/designTokens';
-import { useCountryFromUrl, CountryContext } from '../src/hooks/useCountry';
+import { useCountryFromUrl, CountryContext, type Country } from '../src/hooks/useCountry';
+
+interface PeerStub {
+  id: string;
+  name: string;
+  organization: string;
+}
+
+interface ClientLayoutProps {
+  children: ReactNode;
+  peersByCountry: Record<Country, PeerStub[]>;
+  hostNames: Record<Country, string>;
+}
 
 function EmbedSection({
   title,
@@ -41,10 +54,16 @@ function EmbedSection({
   );
 }
 
-export default function ClientLayout({ children }: { children: ReactNode }) {
+export default function ClientLayout({
+  children,
+  peersByCountry,
+  hostNames,
+}: ClientLayoutProps) {
   const searchParams = useSearchParams();
   const isEmbed = searchParams.has('embed');
   const country = useCountryFromUrl();
+  const peers = peersByCountry[country];
+  const hostName = hostNames[country];
 
   const embedRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -99,6 +118,7 @@ export default function ClientLayout({ children }: { children: ReactNode }) {
       <AppShell country={country}>
         {children}
       </AppShell>
+      <CompareDrawer peers={peers} hostName={hostName} />
     </CountryContext>
   );
 }
