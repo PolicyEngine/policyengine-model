@@ -10,213 +10,52 @@ behavioralParameters:
   - model: policyengine-us
     domain: labor-supply
     kind: elasticity
-    parameter: labor_income_effect
-    label: Income elasticity of labor supply
-    status: numeric
-    lower: -0.10
-    central: -0.05
-    upper: 0
-    unit: percent hours per 1 percent net income
+    parameter: default_labor_income_elasticity
+    label: Default income elasticity of labor supply
+    status: not-modeled
+    value: 0
+    unit: elasticity
     population: all earners
     margin: income effect
-    horizon: reform simulation
-    functionalForm: Income effect plus substitution effect applied to top earners, then taxes and benefits are recomputed.
-    notes: Default CBO-style behavioral response; users can override or set zero.
+    horizon: static default
+    notes: PolicyEngine US does not pick a nonzero labor-supply elasticity by default; the production parameter defaults to zero. CBO values shown in this app are presets/explainer values, not the model default.
     sources:
-      - label: PolicyEngine US behavioral responses explainer
-        url: https://www.policyengine.org/us/research/us-behavioral-responses
-        kind: self
-      - label: policyengine-model elasticity defaults
-        url: https://github.com/PolicyEngine/policyengine-model/blob/c2190e9b2a084dbce590af1cf097ca7adf712a04/src/data/elasticities.ts
+      - label: policyengine-us income elasticity parameter
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/parameters/gov/simulation/labor_supply_responses/elasticities/income.yaml
         kind: self
 
   - model: policyengine-us
     domain: labor-supply
     kind: elasticity
-    parameter: labor_substitution_effect
-    label: Substitution elasticity of labor supply
-    status: numeric
-    lower: 0.15
-    central: 0.31
-    upper: 0.47
-    unit: percent hours per 1 percent net marginal wage
-    population: income decile 0-10%
+    parameter: default_labor_substitution_elasticity
+    label: Default substitution elasticity of labor supply
+    status: not-modeled
+    value: 0
+    unit: elasticity
+    population: all earners and deciles
     margin: substitution effect
-    horizon: reform simulation
-    sources: &policyengine_us_labor_sources
-      - label: PolicyEngine US behavioral responses explainer
-        url: https://www.policyengine.org/us/research/us-behavioral-responses
+    horizon: static default
+    notes: The all-earner override and position/decile-specific substitution elasticities default to zero.
+    sources:
+      - label: policyengine-us substitution elasticity parameter
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/parameters/gov/simulation/labor_supply_responses/elasticities/substitution.yaml
         kind: self
-      - label: policyengine-model elasticity defaults
-        url: https://github.com/PolicyEngine/policyengine-model/blob/c2190e9b2a084dbce590af1cf097ca7adf712a04/src/data/elasticities.ts
-        kind: self
-
-  - model: policyengine-us
-    domain: labor-supply
-    kind: elasticity
-    parameter: labor_substitution_effect
-    label: Substitution elasticity of labor supply
-    status: numeric
-    lower: 0.15
-    central: 0.28
-    upper: 0.42
-    unit: percent hours per 1 percent net marginal wage
-    population: income decile 10-20%
-    margin: substitution effect
-    horizon: reform simulation
-    sources: *policyengine_us_labor_sources
-
-  - model: policyengine-us
-    domain: labor-supply
-    kind: elasticity
-    parameter: labor_substitution_effect
-    label: Substitution elasticity of labor supply
-    status: numeric
-    lower: 0.15
-    central: 0.28
-    upper: 0.42
-    unit: percent hours per 1 percent net marginal wage
-    population: income decile 20-30%
-    margin: substitution effect
-    horizon: reform simulation
-    sources: *policyengine_us_labor_sources
-
-  - model: policyengine-us
-    domain: labor-supply
-    kind: elasticity
-    parameter: labor_substitution_effect
-    label: Substitution elasticity of labor supply
-    status: numeric
-    lower: 0.15
-    central: 0.27
-    upper: 0.38
-    unit: percent hours per 1 percent net marginal wage
-    population: income decile 30-40%
-    margin: substitution effect
-    horizon: reform simulation
-    sources: *policyengine_us_labor_sources
-
-  - model: policyengine-us
-    domain: labor-supply
-    kind: elasticity
-    parameter: labor_substitution_effect
-    label: Substitution elasticity of labor supply
-    status: numeric
-    lower: 0.15
-    central: 0.27
-    upper: 0.38
-    unit: percent hours per 1 percent net marginal wage
-    population: income decile 40-50%
-    margin: substitution effect
-    horizon: reform simulation
-    sources: *policyengine_us_labor_sources
-
-  - model: policyengine-us
-    domain: labor-supply
-    kind: elasticity
-    parameter: labor_substitution_effect
-    label: Substitution elasticity of labor supply
-    status: numeric
-    lower: 0.15
-    central: 0.25
-    upper: 0.35
-    unit: percent hours per 1 percent net marginal wage
-    population: income decile 50-60%
-    margin: substitution effect
-    horizon: reform simulation
-    sources: *policyengine_us_labor_sources
-
-  - model: policyengine-us
-    domain: labor-supply
-    kind: elasticity
-    parameter: labor_substitution_effect
-    label: Substitution elasticity of labor supply
-    status: numeric
-    lower: 0.15
-    central: 0.25
-    upper: 0.35
-    unit: percent hours per 1 percent net marginal wage
-    population: income decile 60-70%
-    margin: substitution effect
-    horizon: reform simulation
-    sources: *policyengine_us_labor_sources
-
-  - model: policyengine-us
-    domain: labor-supply
-    kind: elasticity
-    parameter: labor_substitution_effect
-    label: Substitution elasticity of labor supply
-    status: numeric
-    lower: 0.15
-    central: 0.22
-    upper: 0.29
-    unit: percent hours per 1 percent net marginal wage
-    population: income decile 70-80%
-    margin: substitution effect
-    horizon: reform simulation
-    sources: *policyengine_us_labor_sources
-
-  - model: policyengine-us
-    domain: labor-supply
-    kind: elasticity
-    parameter: labor_substitution_effect
-    label: Substitution elasticity of labor supply
-    status: numeric
-    lower: 0.15
-    central: 0.22
-    upper: 0.29
-    unit: percent hours per 1 percent net marginal wage
-    population: income decile 80-90%
-    margin: substitution effect
-    horizon: reform simulation
-    sources: *policyengine_us_labor_sources
-
-  - model: policyengine-us
-    domain: labor-supply
-    kind: elasticity
-    parameter: labor_substitution_effect
-    label: Substitution elasticity of labor supply
-    status: numeric
-    lower: 0.15
-    central: 0.22
-    upper: 0.29
-    unit: percent hours per 1 percent net marginal wage
-    population: income decile 90-100%
-    margin: substitution effect
-    horizon: reform simulation
-    sources: *policyengine_us_labor_sources
 
   - model: policyengine-us
     domain: capital-gains
     kind: elasticity
-    parameter: capital_gains_realization_persistent
-    label: Persistent capital-gains realization elasticity
-    status: numeric
-    value: -0.79
-    unit: percent realizations per 1 percent marginal tax rate
+    parameter: default_capital_gains_realization_elasticity
+    label: Default capital-gains realization elasticity
+    status: not-modeled
+    value: 0
+    unit: elasticity
     population: capital-gains realizers
     margin: realization timing and avoidance
-    horizon: persistent
-    notes: Public model default in the behavioral explainer data source.
+    horizon: static default
+    notes: PolicyEngine US defaults to static capital-gains realizations unless the parameter is explicitly changed.
     sources:
-      - label: policyengine-model elasticity defaults
-        url: https://github.com/PolicyEngine/policyengine-model/blob/c2190e9b2a084dbce590af1cf097ca7adf712a04/src/data/elasticities.ts
-        kind: self
-
-  - model: policyengine-us
-    domain: capital-gains
-    kind: elasticity
-    parameter: capital_gains_realization_transitory
-    label: Transitory capital-gains realization elasticity
-    status: numeric
-    value: -1.2
-    unit: percent realizations per 1 percent marginal tax rate
-    population: capital-gains realizers
-    margin: short-run timing response
-    horizon: transitory
-    sources:
-      - label: policyengine-model elasticity defaults
-        url: https://github.com/PolicyEngine/policyengine-model/blob/c2190e9b2a084dbce590af1cf097ca7adf712a04/src/data/elasticities.ts
+      - label: policyengine-us capital gains response parameter
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/parameters/gov/simulation/capital_gains_responses/elasticity.yaml
         kind: self
 
   # ============================ TRIM3 / Urban ================================
@@ -853,47 +692,56 @@ behavioralParameters:
   - model: policyengine-uk
     domain: labor-supply
     kind: elasticity
-    parameter: labor_income_effect
-    label: Income elasticity of labour supply
-    status: numeric
-    value: -0.05
-    unit: percent hours per 1 percent net income
+    parameter: default_labour_income_elasticity
+    label: Default income elasticity of labour supply
+    status: not-modeled
+    value: 0
+    unit: elasticity
     population: all earners
     policyScope: UK tax-benefit reform simulation
     margin: income effect
-    horizon: reform simulation
-    sources: &policyengine_uk_behavior_sources
-      - label: PolicyEngine UK behavioural responses explainer
-        url: https://www.policyengine.org/uk/research/behavioural-responses
+    horizon: static default
+    notes: PolicyEngine UK defaults to static labour supply unless this parameter is explicitly changed.
+    sources:
+      - label: policyengine-uk income elasticity parameter
+        url: https://github.com/PolicyEngine/policyengine-uk/blob/main/policyengine_uk/parameters/gov/simulation/labour_supply_responses/income_elasticity.yaml
         kind: self
 
   - model: policyengine-uk
     domain: labor-supply
     kind: elasticity
-    parameter: labor_substitution_effect
-    label: Substitution elasticity of labour supply
-    status: numeric
-    value: 0.25
-    unit: percent hours per 1 percent net marginal wage
+    parameter: default_labour_substitution_elasticity
+    label: Default substitution elasticity of labour supply
+    status: not-modeled
+    value: 0
+    unit: elasticity
     population: all earners
     policyScope: UK tax-benefit reform simulation
     margin: substitution effect
-    horizon: reform simulation
-    sources: *policyengine_uk_behavior_sources
+    horizon: static default
+    notes: PolicyEngine UK defaults to static labour supply unless this parameter is explicitly changed.
+    sources:
+      - label: policyengine-uk substitution elasticity parameter
+        url: https://github.com/PolicyEngine/policyengine-uk/blob/main/policyengine_uk/parameters/gov/simulation/labour_supply_responses/substitution_elasticity.yaml
+        kind: self
 
   - model: policyengine-uk
     domain: capital-gains
     kind: elasticity
-    parameter: capital_gains_realization
-    label: Capital-gains realization elasticity
-    status: numeric
-    value: -0.7
-    unit: percent gains per 1 percent marginal tax-rate change
+    parameter: default_capital_gains_realization_elasticity
+    label: Default capital-gains realization elasticity
+    status: not-modeled
+    value: 0
+    unit: elasticity
     population: capital-gains realizers
     policyScope: UK capital gains tax reform simulation
     margin: realization timing
-    horizon: reform simulation
-    sources: *policyengine_uk_behavior_sources
+    horizon: static default
+    notes: PolicyEngine UK defaults to static capital-gains realizations unless this parameter is explicitly changed.
+    sources:
+      - label: policyengine-uk capital gains response parameter
+        url: https://github.com/PolicyEngine/policyengine-uk/blob/main/policyengine_uk/parameters/gov/simulation/capital_gains_responses/elasticity.yaml
+        kind: self
 
   - model: ukmod
     domain: labor-supply
