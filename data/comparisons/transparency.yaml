@@ -637,42 +637,6 @@ transparency:
         kind: civilsociety
         supports: [codePublic, documentationPublic]
 
-  - model: benefits-data-trust
-    codePublic: no
-    codeLicense: proprietary
-    contributorCount: unknown
-    issueTrackerPublic: no
-    documentationPublic: partial
-    documentationUrl: https://web.archive.org/web/20240116222713/https://bdtrust.org/
-    parameterSourcing: unknown
-    testSuitePublic: unknown
-    testCount: unknown
-    datasetPublic: no
-    reproducibleBuilds: no
-    notes: >
-      Benefits Data Trust is a benefits-access service organization
-      rather than a published microsimulation. Eligibility rules,
-      screening code, and internal case data are not public; the
-      organization publishes program-level methodology summaries and
-      annual impact reports but not source code or parameter files.
-    sources:
-      - label: Benefits Data Trust — homepage (archived)
-        url: https://web.archive.org/web/20240116222713/https://bdtrust.org/
-        kind: self
-        supports: [codePublic, codeLicense, documentationPublic]
-      - label: Benefits Data Trust — what we do (archived)
-        url: https://web.archive.org/web/20220120132444/https://bdtrust.org/what-we-do/
-        kind: self
-        supports: [documentationPublic, datasetPublic]
-      - label: USDA FNS — SNAP outreach partner program
-        url: https://www.fns.usda.gov/snap/outreach
-        kind: government
-        supports: [codePublic]
-      - label: Annie E. Casey Foundation — non-profit funder ecosystem
-        url: https://www.aecf.org/
-        kind: civilsociety
-        supports: [codePublic, codeLicense]
-
   - model: benefit-kitchen
     codePublic: no
     codeLicense: proprietary

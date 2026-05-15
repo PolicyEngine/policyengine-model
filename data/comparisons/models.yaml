@@ -697,56 +697,6 @@ models:
         url: https://www.aecf.org/work/kids-count
         kind: civilsociety
 
-  - id: benefits-data-trust
-    name: Benefits Data Trust (closed 2024)
-    organization: Benefits Data Trust
-    organizationUrl: https://web.archive.org/web/20240116222713/https://bdtrust.org/
-    country: us
-    sector: non-profit
-    type: rules-engine
-    jurisdictions: [us-federal, us-states]
-    inceptionYear: 2005
-    license: proprietary
-    codePublic: no
-    languages: [unknown]
-    primaryDataset: applicant-supplied case data
-    documentationUrl: https://web.archive.org/web/20240116222713/https://bdtrust.org/
-    summary: >
-      Philadelphia-based non-profit that ran benefits-access outreach
-      (phone, text, web) helping low-income households screen for and
-      apply to SNAP, Medicaid, LIHEAP, school meals, and other safety-
-      net programs from 2005. Not a population microsimulation: BDT
-      screened individual applicants and assisted with enrollment.
-      Wound down operations in August 2024 (per Pew and The
-      Philadelphia Inquirer). Included here for catalogue completeness
-      against the external comparison sheet; rules code and
-      eligibility logic were never public.
-    capabilities:
-      reformImpact: no
-      integratedMicrodata: no
-      localAreas: yes
-      publicInterface: no
-      apiAccess: no
-    sources:
-      - label: Benefits Data Trust — homepage (archived)
-        url: https://web.archive.org/web/20240116222713/https://bdtrust.org/
-        kind: self
-      - label: Pew Trusts — Benefits Data Trust's closure should prompt
-          us to rebuild the public benefits system (Aug 2024)
-        url: https://www.pew.org/en/about/news-room/opinion/2024/08/06/benefits-data-trusts-closure-should-prompt-us-to-rebuild-the-flawed-public-benefits-system
-        kind: press
-      - label: Philadelphia Inquirer — Benefits Data Trust shutting
-          down (Jun 2024)
-        url: https://www.inquirer.com/health/benefits-data-trust-bdt-shutting-down-20240625.html
-        kind: press
-      - label: USDA FNS — historical Benefits Data Trust SNAP outreach
-          partnerships
-        url: https://www.fns.usda.gov/snap/outreach
-        kind: government
-      - label: Annie E. Casey Foundation — historical funder of BDT
-        url: https://www.aecf.org/
-        kind: civilsociety
-
   - id: benefit-kitchen
     name: BenefitKitchen
     organization: BenefitKitchen

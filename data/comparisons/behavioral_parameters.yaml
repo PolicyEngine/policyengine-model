@@ -1197,22 +1197,6 @@ behavioralParameters:
         url: https://www.povertycenter.columbia.edu/forecasting-monthly-poverty
         kind: academic
 
-  - model: benefits-data-trust
-    domain: take-up
-    kind: take-up-model
-    parameter: outreach_targeting_behavior
-    label: Outreach and enrollment targeting
-    status: qualitative
-    value: unknown
-    population: benefit-eligible households
-    policyScope: benefits access
-    margin: take-up response to outreach
-    notes: Public materials document screening and outreach, not a published microsimulation elasticity.
-    sources:
-      - label: Benefits Data Trust
-        url: https://web.archive.org/web/20240116222713/https://bdtrust.org/
-        kind: self
-
   - model: benefit-kitchen
     domain: take-up
     kind: functional-form

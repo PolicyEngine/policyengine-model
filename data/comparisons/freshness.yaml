@@ -664,32 +664,6 @@ freshness:
         kind: self
         supports: [updateCadence, lastMajorRefresh, latestImplementedYear]
 
-  - model: benefits-data-trust
-    latestImplementedYear: 2024
-    forwardYearsThrough: 2024
-    handlesFutureDatedLegislation: no
-    updateCadence: as-funded
-    updateLag: >
-      Historical. BDT wound down operations in August 2024 per Pew and
-      Inquirer coverage; no longer updating.
-    lastMajorRefresh: 2024-08
-    notableRegimes: >
-      Historical: status-quo benefit rules (SNAP, Medicaid, LIHEAP,
-      others) as of the August 2024 wind-down. Counterfactual reforms
-      were always out of scope.
-    notes: >
-      BDT closed in 2024. Freshness rendered for historical
-      completeness; no future updates expected.
-    sources:
-      - label: Pew — Benefits Data Trust closure (August 2024)
-        url: https://www.pew.org/en/about/news-room/opinion/2024/08/06/benefits-data-trusts-closure-should-prompt-us-to-rebuild-the-flawed-public-benefits-system
-        kind: civilsociety
-        supports: [lastMajorRefresh, latestImplementedYear, updateCadence]
-      - label: Philadelphia Inquirer — BDT shutting down
-        url: https://www.inquirer.com/health/benefits-data-trust-bdt-shutting-down-20240625.html
-        kind: press
-        supports: [lastMajorRefresh, latestImplementedYear]
-
   - model: benefit-kitchen
     latestImplementedYear: unknown
     forwardYearsThrough: unknown

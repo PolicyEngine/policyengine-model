@@ -628,22 +628,6 @@ artifacts:
         url: https://nap.nationalacademies.org/catalog/25246
         kind: academic
 
-  # ============================ Benefits Data Trust ===========================
-  - model: benefits-data-trust
-    type: web-application
-    name: BDT outreach and screening channels
-    public: yes
-    license: proprietary
-    url: https://web.archive.org/web/20240116222713/https://bdtrust.org/
-    description: >
-      Phone, text, and web channels that screen applicants for benefit
-      eligibility and assist with enrollment across SNAP, Medicaid,
-      LIHEAP, and other programs.
-    sources:
-      - label: Benefits Data Trust — what we do (archived)
-        url: https://web.archive.org/web/20220120132444/https://bdtrust.org/what-we-do/
-        kind: self
-
   # ============================ BenefitKitchen ===============================
   - model: benefit-kitchen
     type: web-application

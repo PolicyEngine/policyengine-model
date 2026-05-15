@@ -258,25 +258,6 @@ usage:
         url: https://www.povertycenter.columbia.edu
         kind: self
 
-  - model: benefits-data-trust
-    academicCitations: unknown
-    governmentReports: unknown
-    pressMentions: unknown
-    monthlyActiveUsers: unknown
-    monthlyComputations: unknown
-    organizationUsers: unknown
-    notes: >
-      BDT publishes annual impact reports describing applicants served
-      and benefits secured; comparable academic-citation or
-      press-mention counts are not maintained here.
-    sources:
-      - label: Benefits Data Trust — homepage (archived)
-        url: https://web.archive.org/web/20240116222713/https://bdtrust.org/
-        kind: self
-      - label: Benefits Data Trust — what we do (archived)
-        url: https://web.archive.org/web/20220120132444/https://bdtrust.org/what-we-do/
-        kind: self
-
   - model: benefit-kitchen
     academicCitations: unknown
     governmentReports: unknown

@@ -305,22 +305,6 @@ modeling:
         url: https://povertycenter.columbia.edu/sites/povertycenter.columbia.edu/files/content/Publications/Monthly-Cash-Payments-Reduce-Spells-of-Poverty-CPSP-2022.pdf
         kind: academic
 
-  - model: benefits-data-trust
-    category: simulation-unit
-    label: Applicant-level screening, not population microsimulation
-    detail: >
-      Operated as a benefits access and eligibility-screening service for
-      individual applicants rather than a weighted representative microdata
-      model for fiscal or distributional reform analysis.
-    scope: benefits screening
-    sources:
-      - label: Benefits Data Trust homepage (archived)
-        url: https://web.archive.org/web/20240116222713/https://bdtrust.org/
-        kind: self
-      - label: Pew — Benefits Data Trust closure
-        url: https://www.pew.org/en/about/news-room/opinion/2024/08/06/benefits-data-trusts-closure-should-prompt-us-to-rebuild-the-flawed-public-benefits-system
-        kind: press
-
   - model: benefit-kitchen
     category: simulation-unit
     label: Per-household eligibility screener
