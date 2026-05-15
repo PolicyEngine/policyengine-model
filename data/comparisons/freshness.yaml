@@ -42,7 +42,7 @@ freshness:
         kind: self
         supports: [updateCadence, updateLag, lastMajorRefresh]
       - label: PolicyEngine research blog — OBBBA analysis published 2025
-        url: https://policyengine.org/us/research
+        url: https://www.policyengine.org/us/research
         kind: self
         supports: [updateLag, notableRegimes]
       - label: PolicyEngine merged PRs (release cadence)

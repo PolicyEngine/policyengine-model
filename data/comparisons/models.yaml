@@ -8,7 +8,7 @@ models:
   - id: policyengine-us
     name: PolicyEngine US
     organization: PolicyEngine
-    organizationUrl: https://policyengine.org
+    organizationUrl: https://www.policyengine.org
     siblings: [policyengine-uk]
     country: us
     sector: non-profit
@@ -43,7 +43,7 @@ models:
         url: https://policyengine.github.io/policyengine-us/
         kind: self
       - label: PolicyEngine homepage (organization)
-        url: https://policyengine.org
+        url: https://www.policyengine.org
         kind: self
       - label: PolicyEngine on PyPI
         url: https://pypi.org/project/policyengine-us/
@@ -437,7 +437,7 @@ models:
   - id: policyengine-uk
     name: PolicyEngine UK
     organization: PolicyEngine
-    organizationUrl: https://policyengine.org
+    organizationUrl: https://www.policyengine.org
     siblings: [policyengine-us]
     country: uk
     sector: non-profit
@@ -473,7 +473,7 @@ models:
         url: https://policyengine.github.io/policyengine-uk/
         kind: self
       - label: PolicyEngine UK web application
-        url: https://policyengine.org/uk
+        url: https://www.policyengine.org/uk
         kind: self
       - label: PolicyEngine UK on PyPI
         url: https://pypi.org/project/policyengine-uk/

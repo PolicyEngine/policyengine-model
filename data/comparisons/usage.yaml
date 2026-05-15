@@ -20,7 +20,7 @@ usage:
       tables. Pending: aggregate numbers from internal analytics.
     sources:
       - label: PolicyEngine in the news
-        url: https://policyengine.org/us/research
+        url: https://www.policyengine.org/us/research
         kind: self
 
   - model: trim3
@@ -166,7 +166,7 @@ usage:
       threshold freeze) and Nuffield Foundation-funded analyses.
     sources:
       - label: PolicyEngine UK research catalogue
-        url: https://policyengine.org/uk/research
+        url: https://www.policyengine.org/uk/research
         kind: self
 
   - model: ukmod

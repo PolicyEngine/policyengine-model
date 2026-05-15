@@ -56,11 +56,11 @@ artifacts:
     name: policyengine.org
     public: yes
     license: AGPL-3.0-or-later
-    url: https://policyengine.org/us
+    url: https://www.policyengine.org/us
     description: Public web app for household calculations, reform analyses, and policy comparisons.
     sources:
       - label: PolicyEngine
-        url: https://policyengine.org/us
+        url: https://www.policyengine.org/us
         kind: self
 
   - model: policyengine-us
@@ -456,11 +456,11 @@ artifacts:
     name: policyengine.org/uk
     public: yes
     license: AGPL-3.0-or-later
-    url: https://policyengine.org/uk
+    url: https://www.policyengine.org/uk
     description: Public web app for household calculations, UK reform analyses, and policy comparisons.
     sources:
       - label: PolicyEngine UK
-        url: https://policyengine.org/uk
+        url: https://www.policyengine.org/uk
         kind: self
 
   - model: policyengine-uk
