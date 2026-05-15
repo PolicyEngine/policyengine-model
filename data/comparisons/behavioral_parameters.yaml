@@ -13,7 +13,9 @@ behavioralParameters:
     parameter: labor_income_effect
     label: Income elasticity of labor supply
     status: numeric
-    value: -0.05
+    lower: -0.10
+    central: -0.05
+    upper: 0
     unit: percent hours per 1 percent net income
     population: all earners
     margin: income effect
@@ -25,7 +27,7 @@ behavioralParameters:
         url: https://www.policyengine.org/us/research/us-behavioral-responses
         kind: self
       - label: policyengine-model elasticity defaults
-        url: https://github.com/PolicyEngine/policyengine-model/blob/add-model-comparison/src/data/elasticities.ts
+        url: https://github.com/PolicyEngine/policyengine-model/blob/c2190e9b2a084dbce590af1cf097ca7adf712a04/src/data/elasticities.ts
         kind: self
 
   - model: policyengine-us
@@ -46,7 +48,7 @@ behavioralParameters:
         url: https://www.policyengine.org/us/research/us-behavioral-responses
         kind: self
       - label: policyengine-model elasticity defaults
-        url: https://github.com/PolicyEngine/policyengine-model/blob/add-model-comparison/src/data/elasticities.ts
+        url: https://github.com/PolicyEngine/policyengine-model/blob/c2190e9b2a084dbce590af1cf097ca7adf712a04/src/data/elasticities.ts
         kind: self
 
   - model: policyengine-us
@@ -198,7 +200,7 @@ behavioralParameters:
     notes: Public model default in the behavioral explainer data source.
     sources:
       - label: policyengine-model elasticity defaults
-        url: https://github.com/PolicyEngine/policyengine-model/blob/add-model-comparison/src/data/elasticities.ts
+        url: https://github.com/PolicyEngine/policyengine-model/blob/c2190e9b2a084dbce590af1cf097ca7adf712a04/src/data/elasticities.ts
         kind: self
 
   - model: policyengine-us
@@ -214,7 +216,7 @@ behavioralParameters:
     horizon: transitory
     sources:
       - label: policyengine-model elasticity defaults
-        url: https://github.com/PolicyEngine/policyengine-model/blob/add-model-comparison/src/data/elasticities.ts
+        url: https://github.com/PolicyEngine/policyengine-model/blob/c2190e9b2a084dbce590af1cf097ca7adf712a04/src/data/elasticities.ts
         kind: self
 
   # ============================ TRIM3 / Urban ================================
@@ -371,6 +373,141 @@ behavioralParameters:
       - label: TPC microsimulation model FAQ
         url: https://taxpolicycenter.org/resources/tax-model-resources/tpcs-microsimulation-model-faq
         kind: self
+
+  - model: tpc-microsim
+    domain: tax-incidence
+    kind: incidence-assumption
+    parameter: individual_income_tax_incidence
+    label: Individual income tax borne by income taxpayers
+    status: numeric
+    value: 1
+    unit: share of tax burden
+    population: individual income taxpayers
+    policyScope: distribution tables
+    margin: statutory liability incidence
+    horizon: conventional distributional analysis
+    notes: TPC distributes the individual income tax directly to individual income taxpayers.
+    sources: &tpc_incidence_sources
+      - label: TPC microsimulation model FAQ
+        url: https://taxpolicycenter.org/resources/tax-model-resources/tpcs-microsimulation-model-faq
+        kind: self
+
+  - model: tpc-microsim
+    domain: tax-incidence
+    kind: incidence-assumption
+    parameter: payroll_tax_employee_incidence
+    label: Employee and employer payroll tax borne by employees
+    status: numeric
+    value: 1
+    unit: share of employee-plus-employer payroll tax burden
+    population: employees
+    policyScope: distribution tables
+    margin: wage incidence
+    horizon: conventional distributional analysis
+    notes: Employer-side payroll taxes are assigned to employees, consistent with a lower-wage incidence assumption.
+    sources: *tpc_incidence_sources
+
+  - model: tpc-microsim
+    domain: tax-incidence
+    kind: incidence-assumption
+    parameter: estate_tax_decedent_incidence
+    label: Estate tax borne by decedents
+    status: numeric
+    value: 1
+    unit: share of estate tax burden
+    population: decedents
+    policyScope: distribution tables
+    margin: estate-tax incidence
+    horizon: conventional distributional analysis
+    sources: *tpc_incidence_sources
+
+  - model: tpc-microsim
+    domain: tax-incidence
+    kind: incidence-assumption
+    parameter: corporate_income_tax_shareholder_incidence
+    label: Corporate income tax borne by corporate shareholders
+    status: numeric
+    value: 0.6
+    unit: share of corporate income tax burden
+    population: corporate shareholders
+    policyScope: distribution tables
+    margin: corporate-tax incidence
+    horizon: conventional distributional analysis
+    functionalForm: Assigned in proportion to reported dividends and the corporate-equity share of capital gains.
+    sources: *tpc_incidence_sources
+
+  - model: tpc-microsim
+    domain: tax-incidence
+    kind: incidence-assumption
+    parameter: corporate_income_tax_all_capital_incidence
+    label: Corporate income tax borne by all capital owners
+    status: numeric
+    value: 0.2
+    unit: share of corporate income tax burden
+    population: all capital owners
+    policyScope: distribution tables
+    margin: corporate-tax incidence
+    horizon: conventional distributional analysis
+    functionalForm: Assigned in proportion to capital income, including interest, dividends, capital gains, part of flow-through business income, and retirement-account investment returns.
+    sources: *tpc_incidence_sources
+
+  - model: tpc-microsim
+    domain: tax-incidence
+    kind: incidence-assumption
+    parameter: corporate_income_tax_labor_incidence
+    label: Corporate income tax borne by labor
+    status: numeric
+    value: 0.2
+    unit: share of corporate income tax burden
+    population: workers
+    policyScope: distribution tables
+    margin: corporate-tax incidence
+    horizon: conventional distributional analysis
+    functionalForm: Assigned in proportion to earnings.
+    sources: *tpc_incidence_sources
+
+  - model: tpc-microsim
+    domain: tax-incidence
+    kind: incidence-assumption
+    parameter: excise_tax_burdened_income_and_consumption
+    label: Excise-tax incidence through burdened income and consumption
+    status: qualitative
+    value: unknown
+    population: tax units consuming taxed goods and receiving burdened income
+    policyScope: distribution tables
+    margin: excise-tax incidence
+    horizon: conventional distributional analysis
+    functionalForm: Excise taxes lower real incomes in proportion to labor income, above-normal capital income, and wage-indexed cash transfers, then are assigned to tax units using CEX-imputed consumption.
+    sources: *tpc_incidence_sources
+
+  - model: tpc-microsim
+    domain: health-insurance
+    kind: incidence-assumption
+    parameter: aca_employer_mandate_employee_incidence
+    label: ACA employer mandate borne by affected employees
+    status: numeric
+    value: 1
+    unit: share of employer-mandate burden
+    population: employees of firms offering inadequate health insurance coverage
+    policyScope: distribution tables
+    margin: health-insurance mandate incidence
+    horizon: conventional distributional analysis
+    sources: *tpc_incidence_sources
+
+  - model: tpc-microsim
+    domain: taxable-income
+    kind: functional-form
+    parameter: distribution_tables_static_behavior
+    label: Distribution tables exclude behavioral responses
+    status: not-modeled
+    value: 0
+    unit: behavioral response in distribution tables
+    population: tax units
+    policyScope: distribution tables
+    margin: revenue-estimate behavior versus distributional burden
+    horizon: conventional distributional analysis
+    notes: TPC revenue estimates generally include taxable-income and capital-gains behavioral responses, but distribution tables conventionally distribute static tax changes, allowing tax-form behavior such as itemizers switching to the standard deduction.
+    sources: *tpc_incidence_sources
 
   - model: jct-microsim
     domain: taxable-income
@@ -566,18 +703,34 @@ behavioralParameters:
     domain: capital-gains
     kind: elasticity
     parameter: capital_gains_realization_overall
-    label: Overall capital-gains realization elasticity
+    label: Revenue-estimate overall capital-gains realization elasticity
     status: numeric
-    value: -0.72
+    value: -0.62
     unit: percent realizations per 1 percent tax-rate change
     population: all capital-gains realizers
     policyScope: capital-gains revenue scoring
     margin: realization response
     horizon: policy-specific
+    notes: Budget Lab starts from a historical overall elasticity of -0.72, estimates elastic and inelastic asset-group elasticities, then recomposes them with more recent asset shares to use -0.62 in revenue estimates.
     sources: &budgetlab_capgains_sources
       - label: Budget Lab capital-gains behavioral response
         url: https://budgetlab.yale.edu/research/behavioral-responses-capital-gains-realizations
         kind: self
+
+  - model: budgetlab-tax
+    domain: capital-gains
+    kind: elasticity
+    parameter: capital_gains_realization_historical_overall
+    label: Historical overall capital-gains realization elasticity
+    status: numeric
+    value: -0.72
+    unit: percent realizations per 1 percent tax-rate change
+    population: all capital-gains realizers under historical asset shares
+    policyScope: capital-gains elasticity calibration
+    margin: realization response
+    horizon: historical shares
+    notes: Used to solve for elastic and inelastic asset-group elasticities before recomposing with recent asset shares.
+    sources: *budgetlab_capgains_sources
 
   - model: budgetlab-tax
     domain: capital-gains
@@ -605,6 +758,62 @@ behavioralParameters:
     policyScope: capital-gains revenue scoring
     margin: realization response
     horizon: policy-specific
+    sources: *budgetlab_capgains_sources
+
+  - model: budgetlab-tax
+    domain: capital-gains
+    kind: calibration-target
+    parameter: capital_gains_elastic_asset_share_historical
+    label: Elastic asset share in historical SOCA composition
+    status: numeric
+    value: 0.52
+    unit: share of capital-gains assets
+    population: elastic assets
+    policyScope: capital-gains elasticity calibration
+    margin: asset-composition recomposition
+    horizon: 1997 SOCA data
+    sources: *budgetlab_capgains_sources
+
+  - model: budgetlab-tax
+    domain: capital-gains
+    kind: calibration-target
+    parameter: capital_gains_inelastic_asset_share_historical
+    label: Inelastic asset share in historical SOCA composition
+    status: numeric
+    value: 0.48
+    unit: share of capital-gains assets
+    population: inelastic assets
+    policyScope: capital-gains elasticity calibration
+    margin: asset-composition recomposition
+    horizon: 1997 SOCA data
+    sources: *budgetlab_capgains_sources
+
+  - model: budgetlab-tax
+    domain: capital-gains
+    kind: calibration-target
+    parameter: capital_gains_elastic_asset_share_recent
+    label: Elastic asset share in recent SOCA composition
+    status: numeric
+    value: 0.30
+    unit: share of capital-gains assets
+    population: elastic assets
+    policyScope: capital-gains revenue scoring
+    margin: asset-composition recomposition
+    horizon: 2015 SOCA data
+    sources: *budgetlab_capgains_sources
+
+  - model: budgetlab-tax
+    domain: capital-gains
+    kind: calibration-target
+    parameter: capital_gains_inelastic_asset_share_recent
+    label: Inelastic asset share in recent SOCA composition
+    status: numeric
+    value: 0.70
+    unit: share of capital-gains assets
+    population: inelastic assets
+    policyScope: capital-gains revenue scoring
+    margin: asset-composition recomposition
+    horizon: 2015 SOCA data
     sources: *budgetlab_capgains_sources
 
   - model: budgetlab-tax
@@ -859,6 +1068,35 @@ behavioralParameters:
 
   - model: tf-microsim
     domain: tax-incidence
+    kind: calibration-target
+    parameter: vat_noncompliance_rate
+    label: VAT noncompliance rate
+    status: numeric
+    value: 0.15
+    unit: share of VAT base
+    population: VAT base
+    policyScope: value-added tax revenue and distributional analysis
+    margin: compliance adjustment
+    horizon: static tax simulator
+    notes: Tax Foundation reduces the modeled VAT base by 15 percent for noncompliance before applying the tax-inclusive VAT rate.
+    sources: *taxfoundation_ge_pdf
+
+  - model: tf-microsim
+    domain: tax-incidence
+    kind: calibration-target
+    parameter: vat_initial_base_share_of_gdp
+    label: Initial VAT base before exemptions
+    status: numeric
+    value: 0.631
+    unit: share of GDP
+    population: US VAT base
+    policyScope: value-added tax revenue and distributional analysis
+    margin: tax-base construction
+    horizon: 2018 model base
+    sources: *taxfoundation_ge_pdf
+
+  - model: tf-microsim
+    domain: tax-incidence
     kind: incidence-assumption
     parameter: vat_passback_to_factor_income
     label: VAT incidence passed back to labor and capital
@@ -868,6 +1106,36 @@ behavioralParameters:
     policyScope: value-added tax distributional analysis
     margin: incidence/pass-through
     functionalForm: VAT reduces post-tax factor income through labor, corporate-capital, and noncorporate-capital income factors.
+    sources: *taxfoundation_ge_pdf
+
+  - model: tf-microsim
+    domain: tax-incidence
+    kind: incidence-assumption
+    parameter: corporate_income_tax_capital_incidence
+    label: Corporate income tax borne by capital
+    status: numeric
+    value: 0.5
+    unit: share of corporate income tax burden
+    population: capital owners
+    policyScope: conventional distributional table
+    margin: corporate-tax incidence
+    horizon: long-run burden
+    notes: Conventional distribution tables split corporate income tax incidence evenly between capital and labor.
+    sources: *taxfoundation_ge_pdf
+
+  - model: tf-microsim
+    domain: tax-incidence
+    kind: incidence-assumption
+    parameter: corporate_income_tax_labor_incidence
+    label: Corporate income tax borne by labor
+    status: numeric
+    value: 0.5
+    unit: share of corporate income tax burden
+    population: workers
+    policyScope: conventional distributional table
+    margin: corporate-tax incidence
+    horizon: long-run burden
+    notes: Conventional distribution tables split corporate income tax incidence evenly between capital and labor.
     sources: *taxfoundation_ge_pdf
 
   - model: tax-foundation-tg
@@ -923,6 +1191,36 @@ behavioralParameters:
 
   - model: tax-foundation-tg
     domain: tax-incidence
+    kind: calibration-target
+    parameter: vat_noncompliance_rate
+    label: VAT noncompliance rate
+    status: numeric
+    value: 0.15
+    unit: share of VAT base
+    population: VAT base
+    policyScope: TAG/GE model
+    margin: compliance adjustment
+    horizon: static tax simulator
+    notes: Same Tax Foundation GE model parameterization as tf-microsim.
+    sources: *taxfoundation_ge_pdf
+
+  - model: tax-foundation-tg
+    domain: tax-incidence
+    kind: calibration-target
+    parameter: vat_initial_base_share_of_gdp
+    label: Initial VAT base before exemptions
+    status: numeric
+    value: 0.631
+    unit: share of GDP
+    population: US VAT base
+    policyScope: TAG/GE model
+    margin: tax-base construction
+    horizon: 2018 model base
+    notes: Same Tax Foundation GE model parameterization as tf-microsim.
+    sources: *taxfoundation_ge_pdf
+
+  - model: tax-foundation-tg
+    domain: tax-incidence
     kind: incidence-assumption
     parameter: vat_passback_to_factor_income
     label: VAT incidence passed back to labor and capital
@@ -932,6 +1230,36 @@ behavioralParameters:
     policyScope: TAG/GE model
     margin: incidence/pass-through
     functionalForm: Same VAT incidence assumption as tf-microsim.
+    sources: *taxfoundation_ge_pdf
+
+  - model: tax-foundation-tg
+    domain: tax-incidence
+    kind: incidence-assumption
+    parameter: corporate_income_tax_capital_incidence
+    label: Corporate income tax borne by capital
+    status: numeric
+    value: 0.5
+    unit: share of corporate income tax burden
+    population: capital owners
+    policyScope: TAG/GE model conventional distributional table
+    margin: corporate-tax incidence
+    horizon: long-run burden
+    notes: Same Tax Foundation GE model parameterization as tf-microsim.
+    sources: *taxfoundation_ge_pdf
+
+  - model: tax-foundation-tg
+    domain: tax-incidence
+    kind: incidence-assumption
+    parameter: corporate_income_tax_labor_incidence
+    label: Corporate income tax borne by labor
+    status: numeric
+    value: 0.5
+    unit: share of corporate income tax burden
+    population: workers
+    policyScope: TAG/GE model conventional distributional table
+    margin: corporate-tax incidence
+    horizon: long-run burden
+    notes: Same Tax Foundation GE model parameterization as tf-microsim.
     sources: *taxfoundation_ge_pdf
 
   - model: pwbm
