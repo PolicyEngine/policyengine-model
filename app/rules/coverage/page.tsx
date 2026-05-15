@@ -42,10 +42,7 @@ export default async function CoverageRoute({
   return (
     <div>
       <PageHeader category="Rules" title="Coverage tracker" />
-      <CoverageMatrix
-        data={{ ...data, models: filteredModels }}
-        countryModels={filteredModels}
-      />
+      <CoverageMatrix data={{ ...data, models: filteredModels }} />
     </div>
   );
 }

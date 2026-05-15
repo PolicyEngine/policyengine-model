@@ -8,6 +8,52 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: process.cwd(),
   },
+  // Legacy /comparison/* routes redirect into the corresponding model
+  // section with `?compare=all`, mirroring the new unified design
+  // where comparison is a lens (drawer-controlled URL param) on the
+  // existing pages rather than a separate hierarchy.
+  async redirects() {
+    return [
+      {
+        source: '/comparison/coverage',
+        destination: '/rules/coverage?compare=all',
+        permanent: true,
+      },
+      {
+        source: '/comparison/methods',
+        destination: '/data/calibration?compare=all',
+        permanent: true,
+      },
+      // Transparency / Freshness / Artifacts / Usage now live in the
+      // Overview's "About this model" block. Send all four (plus the
+      // top-level /comparison) to the Overview with peers expanded.
+      {
+        source: '/comparison/transparency',
+        destination: '/?compare=all',
+        permanent: true,
+      },
+      {
+        source: '/comparison/freshness',
+        destination: '/?compare=all',
+        permanent: true,
+      },
+      {
+        source: '/comparison/artifacts',
+        destination: '/?compare=all',
+        permanent: true,
+      },
+      {
+        source: '/comparison/usage',
+        destination: '/?compare=all',
+        permanent: true,
+      },
+      {
+        source: '/comparison',
+        destination: '/?compare=all',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

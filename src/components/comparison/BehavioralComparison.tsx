@@ -3,7 +3,7 @@ import {
   behavioralParametersByDomain,
   ELASTICITY_KINDS,
 } from '../../data/comparisons';
-import { BehavioralDomainBlock } from './MethodsView';
+import { BehavioralDomainBlock } from './BehavioralDomainBlock';
 import { h2Style, proseStyle, sectionStyle } from './comparisonStyles';
 import type { ComparisonData } from '../../types/comparison';
 

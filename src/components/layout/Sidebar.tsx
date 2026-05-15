@@ -32,19 +32,6 @@ const navItems: NavItem[] = [
     ],
   },
   { path: '/behavioral', label: 'Behavioral responses' },
-  {
-    path: '/comparison',
-    label: 'Comparison',
-    children: [
-      { path: '/comparison', label: 'Overview' },
-      { path: '/comparison/coverage', label: 'Coverage' },
-      { path: '/comparison/freshness', label: 'Freshness' },
-      { path: '/comparison/transparency', label: 'Transparency' },
-      { path: '/comparison/methods', label: 'Methods & accuracy' },
-      { path: '/comparison/artifacts', label: 'Artifacts' },
-      { path: '/comparison/usage', label: 'Usage' },
-    ],
-  },
 ];
 
 function isChildActive(item: NavItem, currentPath: string): boolean {

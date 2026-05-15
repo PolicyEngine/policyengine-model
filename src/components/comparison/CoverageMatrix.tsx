@@ -1,11 +1,9 @@
-import PageHeader from '../layout/PageHeader';
 import { colors, spacing } from '../../designTokens';
 import { CoverageBadge } from './StatusBadge';
 import {
   coverageByProgram,
   programsWithCoverageForModels,
 } from '../../data/comparisons';
-import ModelSelector from './ModelSelector';
 import { SourceList } from './SourceList';
 import YearFilter from './YearFilter';
 import {
@@ -18,7 +16,7 @@ import {
   proseStyle,
   sectionStyle,
 } from './comparisonStyles';
-import type { ComparisonData, Model } from '../../types/comparison';
+import type { ComparisonData } from '../../types/comparison';
 import type { StateImplementation } from '../../types/Program';
 
 export interface CoverageMatrixOverlay {
@@ -64,12 +62,10 @@ const STATE_COLOR: Record<string, string> = {
 
 export default function CoverageMatrix({
   data,
-  countryModels,
   overlay,
   selectedYear,
 }: {
   data: ComparisonData;
-  countryModels: Model[];
   overlay?: CoverageMatrixOverlay;
   selectedYear?: number;
 }) {
@@ -86,14 +82,6 @@ export default function CoverageMatrix({
 
   return (
     <div>
-      <PageHeader
-        category="Comparison"
-        title="Coverage matrix"
-        description="Which tax and transfer programs each model implements. Status reflects whether the program is computed end-to-end (implemented), simulated with simplifications (partial), or absent. Click any model name for its overview."
-      />
-
-      <ModelSelector countryModels={countryModels} />
-
       {overlay?.availableYears && overlay.availableYears.length > 0 && (
         <YearFilter years={overlay.availableYears} />
       )}
