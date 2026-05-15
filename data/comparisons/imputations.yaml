@@ -11,41 +11,55 @@ imputations:
     concept: snap-participation
     method: l0-calibration
     description: >
-      Base SNAP eligibility computed rule-by-rule from CPS variables;
-      final participation reweighted via L0 calibration to match
-      administrative state-by-state caseload and outlay totals. Re-runs
-      annually with the Enhanced CPS pipeline.
+      Base SNAP eligibility and benefits are computed rule-by-rule. The
+      Enhanced CPS first assigns `takes_up_snap_if_eligible` using a
+      USDA take-up-rate prior while preserving CPS-reported SNAP
+      recipients as take-up anchors. Calibration/local-area builds then
+      rerandomize the SNAP gate with block-level seeded draws and L0
+      reweighting governs final state and national SNAP totals.
     baseDataset: Enhanced CPS
     calibrationTargets:
-      - state-level SNAP caseload
+      - state-level SNAP dollars
       - national SNAP outlays
     documentationUrl: https://github.com/PolicyEngine/policyengine-us-data
     reproducible: yes
     sources:
-      - label: policyengine-us-data pipeline (calibration step)
-        url: https://github.com/PolicyEngine/policyengine-us-data
+      - label: policyengine-us-data CPS take-up assignment
+        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/datasets/cps/cps.py
         kind: self
-      - label: L0 calibration package
-        url: https://github.com/PolicyEngine/L0
+      - label: policyengine-us-data take-up draw utilities
+        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/utils/takeup.py
+        kind: self
+      - label: policyengine-us-data calibration target config
+        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/calibration/target_config.yaml
+        kind: self
+      - label: policyengine-us SNAP formula
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/usda/snap/snap.py
         kind: self
 
   - model: trim3
     concept: snap-participation
     method: caseload-driven
     description: >
-      TRIM3 simulates eligibility from CPS-ASEC, then selects a subset of
-      eligible units to designate as participants until simulated
-      caseloads match administrative state-level monthly totals. Selection
-      is probability-weighted by characteristics that predict take-up.
+      TRIM3 simulates monthly SNAP eligibility and benefits, always
+      includes eligible true CPS reporters in the baseline caseload, and
+      selects other eligible units by comparing participation
+      probabilities to program-specific random numbers. Probabilities
+      vary by unit type, benefit level, state, and citizenship; the
+      baseline is aligned to administrative caseload targets.
     baseDataset: CPS-ASEC
     calibrationTargets:
-      - state-level SNAP monthly caseload (administrative)
+      - administrative caseload by state
+      - caseload composition by unit type, benefit band, and citizenship
     documentationUrl: https://boreas.urban.org/documentation/foodstamps/main.php
     reproducible: no
     sources:
       - label: TRIM3 SNAP methodology
         url: https://boreas.urban.org/documentation/foodstamps/main.php
         kind: self
+      - label: National Academies — TRIM3 technical specification
+        url: https://www.ncbi.nlm.nih.gov/books/NBK547352/
+        kind: government
       - label: Wheaton & Tran (Urban) — SNAP anti-poverty effects
         url: https://www.urban.org/research/publication/antipoverty-effects-supplemental-nutrition-assistance-program
         kind: self
@@ -102,47 +116,444 @@ imputations:
         kind: self
 
   # ============================ TANF participation ============================
+  - model: policyengine-us
+    concept: tanf-participation
+    method: l0-calibration
+    description: >
+      The Enhanced CPS assigns `takes_up_tanf_if_eligible` with a
+      scalar TANF prior from HHS ASPE / Urban participation-rate
+      sources. The PolicyEngine-US TANF formula multiplies state TANF
+      benefits by this gate. Calibration rerandomizes the TANF gate for
+      take-up-affected targets and L0 reweighting governs final TANF
+      dollars and recipient-unit counts.
+    baseDataset: Enhanced CPS
+    calibrationTargets:
+      - state-level TANF dollars
+      - national TANF dollars
+      - state and national TANF-recipient SPM unit counts
+    documentationUrl: https://github.com/PolicyEngine/policyengine-us-data
+    reproducible: yes
+    sources:
+      - label: TANF take-up prior
+        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/parameters/take_up/tanf.yaml
+        kind: self
+      - label: policyengine-us-data CPS take-up assignment
+        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/datasets/cps/cps.py
+        kind: self
+      - label: policyengine-us-data take-up draw utilities
+        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/utils/takeup.py
+        kind: self
+      - label: policyengine-us-data calibration target config
+        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/calibration/target_config.yaml
+        kind: self
+      - label: policyengine-us TANF formula
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/hhs/tanf/cash/tanf.py
+        kind: self
+
   - model: trim3
     concept: tanf-participation
     method: caseload-driven
     description: >
-      Same caseload-alignment approach as SNAP, applied to TANF using
-      state-specific eligibility rules.
+      TRIM3 computes monthly TANF eligibility, potential benefits, and
+      participation under detailed state rules. Participation uses a
+      monthly probit function with benefit, family-head, child,
+      employment, disability, and state-status predictors; baseline
+      probabilities and random numbers are adjusted so true reporters
+      are included and the caseload matches administrative targets.
     baseDataset: CPS-ASEC
     calibrationTargets:
-      - state-level TANF caseload (administrative)
+      - administrative TANF caseload size
+      - caseload composition by state and unit type
     documentationUrl: https://boreas.urban.org/documentation/TANF/Main.php
     reproducible: no
     sources:
       - label: TRIM3 TANF methodology
         url: https://boreas.urban.org/documentation/TANF/Main.php
         kind: self
+      - label: National Academies — TRIM3 technical specification
+        url: https://www.ncbi.nlm.nih.gov/books/NBK547352/
+        kind: government
+
+  # ============================ SSI participation =============================
+  - model: policyengine-us
+    concept: ssi-participation
+    method: l0-calibration
+    description: >
+      The Enhanced CPS assigns `takes_up_ssi_if_eligible` from an
+      external SSI participation-rate prior while preserving CPS-reported
+      SSI recipients as take-up anchors. It also marks under-65 reported
+      SSI recipients as disabled so the rule-based eligibility pathway is
+      internally consistent. Calibration rerandomizes the SSI gate for
+      take-up-affected targets and L0 reweighting governs final SSI
+      dollars.
+    baseDataset: Enhanced CPS
+    calibrationTargets:
+      - national SSI outlays
+    documentationUrl: https://github.com/PolicyEngine/policyengine-us-data
+    reproducible: yes
+    sources:
+      - label: SSI take-up prior
+        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/parameters/take_up/ssi.yaml
+        kind: self
+      - label: policyengine-us-data CPS take-up assignment
+        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/datasets/cps/cps.py
+        kind: self
+      - label: policyengine-us-data reported-recipient helpers
+        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/datasets/cps/takeup.py
+        kind: self
+      - label: policyengine-us SSI formula
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/ssa/ssi/ssi.py
+        kind: self
+
+  - model: trim3
+    concept: ssi-participation
+    method: caseload-driven
+    description: >
+      TRIM3 simulates monthly SSI eligibility and benefits, then makes an
+      annual participation decision for eligible units. Eligible true CPS
+      reporters participate in the baseline; other eligible units are
+      selected with participation probabilities by unit type, federal
+      benefit category, state, and citizenship, with random numbers
+      constrained for likely correct nonreporters.
+    baseDataset: CPS-ASEC
+    calibrationTargets:
+      - administrative SSI caseload and benefits
+      - caseload composition by benefit level, state, and citizenship
+    documentationUrl: https://boreas.urban.org/documentation/SSI/Main.php
+    reproducible: no
+    sources:
+      - label: TRIM3 SSI methodology
+        url: https://boreas.urban.org/documentation/SSI/Main.php
+        kind: self
+      - label: National Academies — TRIM3 technical specification
+        url: https://www.ncbi.nlm.nih.gov/books/NBK547352/
+        kind: government
 
   # ============================ Medicaid participation ========================
   - model: policyengine-us
     concept: medicaid-participation
-    method: rule-based
+    method: l0-calibration
     description: >
-      MAGI Medicaid eligibility computed rule-by-rule by state and family
-      size; modeled take-up rates applied to reconcile to enrollment
-      totals.
+      Medicaid eligibility is computed rule-by-rule by state. The
+      Enhanced CPS assigns `takes_up_medicaid_if_eligible` with
+      state-specific KFF / MACPAC-derived priors and preserves reported
+      Medicaid coverage at interview as an enrollment anchor. Calibration
+      rerandomizes the Medicaid gate for take-up-affected targets and L0
+      reweighting governs final Medicaid enrollment counts and spending.
     baseDataset: Enhanced CPS
+    calibrationTargets:
+      - state and national Medicaid enrollment counts
+      - national Medicaid spending
+    documentationUrl: https://github.com/PolicyEngine/policyengine-us-data
     reproducible: yes
     sources:
-      - label: Medicaid take-up parameters
-        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/parameters/gov/hhs/medicaid
+      - label: Medicaid take-up prior
+        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/parameters/take_up/medicaid.yaml
+        kind: self
+      - label: policyengine-us-data CPS take-up assignment
+        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/datasets/cps/cps.py
+        kind: self
+      - label: policyengine-us-data take-up draw utilities
+        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/utils/takeup.py
+        kind: self
+      - label: policyengine-us-data calibration target config
+        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/calibration/target_config.yaml
+        kind: self
+      - label: policyengine-us Medicaid enrollment formula
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/hhs/medicaid/medicaid_enrolled.py
+        kind: self
+
+  - model: trim3
+    concept: medicaid-participation
+    method: logistic-regression
+    description: >
+      TRIM3's Medicaid/CHIP module simulates monthly eligibility by
+      pathway and distinguishes eligibility from enrollment. Baseline
+      enrollment is produced outside the module and imported as an
+      enrollment decision file. In alternative simulations, baseline-
+      eligible people keep their baseline enrollment decision, while
+      newly eligible people receive documented logit enrollment
+      probabilities that are combined to a family-level decision.
+      Continuous-enrollment settings then extend coverage under state
+      and category-specific program rules.
+    baseDataset: CPS-ASEC
+    documentationUrl: https://boreas.urban.org/documentation/Medicaid/Main.php
+    reproducible: no
+    sources:
+      - label: TRIM3 Medicaid/SCHIP methodology
+        url: https://boreas.urban.org/documentation/Medicaid/Main.php
+        kind: self
+
+  # ============================ ACA / PTC participation =======================
+  - model: policyengine-us
+    concept: aca-ptc-participation
+    method: l0-calibration
+    description: >
+      The Enhanced CPS assigns `takes_up_aca_if_eligible` with an ACA
+      coverage take-up prior and preserves reported subsidized marketplace
+      coverage, aggregated from people to tax units, as an anchor.
+      Calibration rerandomizes the ACA gate for take-up-affected targets
+      and L0 reweighting governs final ACA PTC dollars, state tax-unit
+      recipient counts, national person recipient counts, and
+      selected-plan benchmark-ratio composition.
+    baseDataset: Enhanced CPS
+    calibrationTargets:
+      - district and national ACA PTC dollars
+      - state ACA PTC tax-unit recipient counts
+      - national ACA PTC person recipient count
+      - state selected-marketplace-plan benchmark-ratio counts
+    documentationUrl: https://github.com/PolicyEngine/policyengine-us-data
+    reproducible: yes
+    sources:
+      - label: ACA take-up prior
+        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/parameters/take_up/aca.yaml
+        kind: self
+      - label: policyengine-us-data CPS take-up assignment
+        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/datasets/cps/cps.py
+        kind: self
+      - label: policyengine-us-data take-up draw utilities
+        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/utils/takeup.py
+        kind: self
+      - label: policyengine-us-data calibration target config
+        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/calibration/target_config.yaml
+        kind: self
+      - label: policyengine-us ACA receipt formula
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/aca/person_receives_aca.py
+        kind: self
+
+  # ============================ EITC claiming =================================
+  - model: policyengine-us
+    concept: eitc-claiming
+    method: other
+    description: >
+      The Enhanced CPS assigns `takes_up_eitc` using external claim-rate
+      priors by EITC child count, then separately assigns voluntary filing
+      for nonrequired filers. PolicyEngine-US pays EITC only when the tax
+      unit is eligible, takes up EITC, and files. Final EITC totals are
+      governed by L0 reweighting against district, state, national, and
+      SOI-domain EITC targets; the take-up gate itself is not currently
+      one of the block-rerandomized target gates.
+    baseDataset: Enhanced CPS
+    calibrationTargets:
+      - district, state, and national EITC dollars
+      - national EITC dollars by child count and AGI domains
+      - national filer counts by EITC child-count domains
+    documentationUrl: https://github.com/PolicyEngine/policyengine-us-data
+    reproducible: yes
+    sources:
+      - label: EITC take-up prior
+        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/parameters/take_up/eitc.yaml
+        kind: self
+      - label: policyengine-us-data CPS take-up assignment
+        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/datasets/cps/cps.py
+        kind: self
+      - label: policyengine-us-data calibration target config
+        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/calibration/target_config.yaml
+        kind: self
+      - label: policyengine-us EITC formula
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/irs/credits/earned_income/eitc.py
+        kind: self
+
+  - model: trim3
+    concept: eitc-claiming
+    method: rule-based
+    description: >
+      TRIM3 assigns EITC to all units found eligible according to
+      CPS-ASEC data in the National Academies baseline specification. The
+      same source notes that assigning additional units would require
+      modeling noncompliant receipt or adjusting CPS earnings and family
+      composition, which was outside that study's scope.
+    baseDataset: CPS-ASEC
+    documentationUrl: https://www.ncbi.nlm.nih.gov/books/NBK547352/
+    reproducible: no
+    sources:
+      - label: National Academies — TRIM3 technical specification
+        url: https://www.ncbi.nlm.nih.gov/books/NBK547352/
+        kind: government
+
+  # ============================ DC PTC claiming ===============================
+  - model: policyengine-us
+    concept: dc-ptc-claiming
+    method: rule-based
+    description: >
+      The Enhanced CPS assigns `takes_up_dc_ptc` with a DC Tax
+      Expenditure Report-derived claiming-rate prior. The draw is listed
+      with take-up-affected targets in the shared take-up utilities, but
+      no active calibration target for `dc_property_tax_credit` appears
+      in the current target configuration, so this remains primarily an
+      initial microdata claiming prior.
+    baseDataset: Enhanced CPS
+    documentationUrl: https://github.com/PolicyEngine/policyengine-us-data
+    reproducible: yes
+    sources:
+      - label: DC PTC take-up prior
+        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/parameters/take_up/dc_ptc.yaml
+        kind: self
+      - label: policyengine-us-data CPS take-up assignment
+        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/datasets/cps/cps.py
+        kind: self
+      - label: policyengine-us DC property tax credit formula
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/states/dc/tax/income/credits/dc_ptc.py
+        kind: self
+
+  # ============================ WIC participation =============================
+  - model: policyengine-us
+    concept: wic-participation
+    method: other
+    description: >
+      The Enhanced CPS assigns `would_claim_wic` with category-specific
+      WIC take-up priors and separately imputes WIC nutritional risk by
+      category, always treating reported WIC recipients as nutritionally at
+      risk. The current calibration target config includes national WIC
+      dollar and recipient-count targets, so final WIC totals are
+      governed by reweighting even though WIC is not in the shared
+      block-rerandomized take-up target list.
+    baseDataset: Enhanced CPS
+    calibrationTargets:
+      - national WIC dollars
+      - national WIC recipient count
+    documentationUrl: https://github.com/PolicyEngine/policyengine-us-data
+    reproducible: yes
+    sources:
+      - label: WIC take-up prior
+        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/parameters/take_up/wic_takeup.yaml
+        kind: self
+      - label: WIC nutritional-risk prior
+        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/parameters/take_up/wic_nutritional_risk.yaml
+        kind: self
+      - label: policyengine-us-data CPS take-up assignment
+        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/datasets/cps/cps.py
+        kind: self
+      - label: policyengine-us-data calibration target config
+        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/calibration/target_config.yaml
+        kind: self
+      - label: policyengine-us WIC formula
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/usda/wic/wic.py
+        kind: self
+
+  - model: trim3
+    concept: wic-participation
+    method: caseload-driven
+    description: >
+      TRIM3 has a WIC module that simulates monthly demographic,
+      income, and adjunctive eligibility, assumes otherwise eligible
+      people are nutritionally at risk, and assigns family-level
+      participation. True family WIC reporters participate in the
+      baseline; other eligible families participate when a state/category
+      probability, adjusted by race/ethnicity and youngest eligible
+      person's age, exceeds their random number.
+    baseDataset: CPS-ASEC
+    calibrationTargets:
+      - administrative WIC targets for infants and children
+    documentationUrl: https://boreas.urban.org/documentation/wic/main.php
+    reproducible: no
+    sources:
+      - label: TRIM3 WIC methodology
+        url: https://boreas.urban.org/documentation/wic/main.php
+        kind: self
+      - label: National Academies — TRIM3 technical specification
+        url: https://www.ncbi.nlm.nih.gov/books/NBK547352/
+        kind: government
+
+  # ============================ Head Start participation ======================
+  - model: policyengine-us
+    concept: head-start-participation
+    method: rule-based
+    description: >
+      The Enhanced CPS assigns `takes_up_head_start_if_eligible` with a
+      scalar Head Start enrollment prior from NIEER. PolicyEngine-US then
+      multiplies eligible state-level per-enrollee Head Start value by
+      this gate. The shared take-up utilities define a Head Start target
+      key, but no active Head Start target appears in the current
+      calibration target configuration.
+    baseDataset: Enhanced CPS
+    documentationUrl: https://github.com/PolicyEngine/policyengine-us-data
+    reproducible: yes
+    sources:
+      - label: Head Start take-up prior
+        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/parameters/take_up/head_start.yaml
+        kind: self
+      - label: policyengine-us-data CPS take-up assignment
+        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/datasets/cps/cps.py
+        kind: self
+      - label: policyengine-us Head Start formula
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/hhs/head_start/head_start.py
+        kind: self
+
+  - model: policyengine-us
+    concept: early-head-start-participation
+    method: rule-based
+    description: >
+      The Enhanced CPS assigns `takes_up_early_head_start_if_eligible`
+      with a scalar Early Head Start enrollment prior from NIEER.
+      PolicyEngine-US then multiplies eligible state-level per-enrollee
+      Early Head Start value by this gate. The shared take-up utilities
+      define an Early Head Start target key, but no active Early Head
+      Start target appears in the current calibration target
+      configuration.
+    baseDataset: Enhanced CPS
+    documentationUrl: https://github.com/PolicyEngine/policyengine-us-data
+    reproducible: yes
+    sources:
+      - label: Early Head Start take-up prior
+        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/parameters/take_up/early_head_start.yaml
+        kind: self
+      - label: policyengine-us-data CPS take-up assignment
+        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/datasets/cps/cps.py
+        kind: self
+      - label: policyengine-us Early Head Start formula
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/hhs/head_start/early_head_start.py
+        kind: self
+
+  # ============================ Voluntary tax filing ==========================
+  - model: policyengine-us
+    concept: voluntary-tax-filing
+    method: rule-based
+    description: >
+      The Enhanced CPS assigns `would_file_taxes_voluntarily` for
+      non-EITC-claiming tax units from a demographic cell table by child
+      dependents, wage-income band, and head age. PolicyEngine-US uses
+      this alongside required filing and refundable-credit filing gates
+      to determine whether a tax unit files; there is no standalone
+      voluntary-filing calibration target, but it affects calibrated tax
+      and credit targets.
+    baseDataset: Enhanced CPS
+    documentationUrl: https://github.com/PolicyEngine/policyengine-us-data
+    reproducible: yes
+    sources:
+      - label: Voluntary filing prior
+        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/parameters/take_up/voluntary_filing.yaml
+        kind: self
+      - label: policyengine-us-data CPS take-up assignment
+        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/datasets/cps/cps.py
+        kind: self
+      - label: policyengine-us tax filing formula
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/irs/tax_unit_is_filer.py
         kind: self
 
   # ============================ Child care subsidy ============================
   - model: trim3
     concept: child-care-subsidy-participation
     method: caseload-driven
-    description: Caseload-aligned to CCDF state administrative data.
+    description: >
+      TRIM3 simulates monthly technical eligibility for CCDF subsidies
+      and assigns family-level participation, generally treating all
+      eligible children in a participating family as served. The baseline
+      uses participation probabilities, monthly random numbers, and
+      state-level caseload targets for average monthly children served;
+      alternatives can reuse baseline eligibility and participation
+      decisions.
     baseDataset: CPS-ASEC
-    documentationUrl: https://boreas.urban.org/documentation/ChildCareExp/Main.php
+    documentationUrl: https://boreas.urban.org/documentation/ChildCare/Main.php
     reproducible: no
     sources:
       - label: TRIM3 child care methodology
+        url: https://boreas.urban.org/documentation/ChildCare/Main.php
+        kind: self
+      - label: National Academies — TRIM3 technical specification
+        url: https://www.ncbi.nlm.nih.gov/books/NBK547352/
+        kind: government
+      - label: TRIM3 child care expense methodology
         url: https://boreas.urban.org/documentation/ChildCareExp/Main.php
         kind: self
 
@@ -475,17 +886,21 @@ imputations:
 
   - model: trim3
     concept: spm-wic
-    method: census-research-file
+    method: caseload-driven
     description: >
-      WIC value typically taken from Census SPM Research File. TRIM3's
-      official Programs Simulated list does not include a WIC module,
-      matching the coverage matrix.
+      WIC value computed by TRIM3's WIC module after simulated
+      eligibility and participation. The module assigns monthly food
+      package values by recipient category and state for simulated WIC
+      recipients.
     baseDataset: TRIM3 augmented CPS-ASEC
     reproducible: no
     sources:
-      - label: TRIM3 Programs Simulated (no WIC module)
-        url: https://boreas.urban.org/T3IntroPrograms.php
+      - label: TRIM3 WIC methodology
+        url: https://boreas.urban.org/documentation/wic/main.php
         kind: self
+      - label: National Academies — TRIM3 technical specification
+        url: https://www.ncbi.nlm.nih.gov/books/NBK547352/
+        kind: government
 
   # ----------------------------- School meals ---------------------------------
   - model: policyengine-us

@@ -45,6 +45,66 @@ concepts:
     category: imputation
     program: us-medicaid
 
+  - id: aca-ptc-participation
+    name: ACA marketplace / PTC take-up imputation
+    description: >
+      Assigning marketplace coverage and premium tax credit claiming to
+      eligible tax units. This affects whether the tax unit receives ACA
+      PTC values and whether members are treated as marketplace covered.
+    category: imputation
+    program: us-premium-tax-credit
+
+  - id: eitc-claiming
+    name: EITC claiming imputation
+    description: >
+      Assigning whether eligible tax units claim the EITC and file the
+      federal return needed to receive it. This is distinct from EITC
+      statutory eligibility because many otherwise eligible nonfilers or
+      low-income filers do not claim.
+    category: imputation
+    program: us-eitc
+
+  - id: dc-ptc-claiming
+    name: DC property tax credit claiming imputation
+    description: >
+      Assigning whether eligible District of Columbia tax units claim the
+      local property tax credit. Included as a model-specific claiming
+      gate even though it is narrower than the federal programs in the
+      main comparison matrix.
+    category: imputation
+
+  - id: wic-participation
+    name: WIC participation imputation
+    description: >
+      Assigning WIC claiming and related eligibility inputs such as
+      nutritional risk for otherwise eligible pregnant people, postpartum
+      or breastfeeding people, infants, and children.
+    category: imputation
+    program: us-wic
+
+  - id: head-start-participation
+    name: Head Start participation imputation
+    description: >
+      Assigning Head Start enrollment among eligible children when survey
+      microdata do not observe participation directly.
+    category: imputation
+
+  - id: early-head-start-participation
+    name: Early Head Start participation imputation
+    description: >
+      Assigning Early Head Start enrollment among eligible infants and
+      toddlers when survey microdata do not observe participation
+      directly.
+    category: imputation
+
+  - id: voluntary-tax-filing
+    name: Voluntary tax filing imputation
+    description: >
+      Assigning whether a tax unit files a return even when not legally
+      required and not filing to claim a refundable credit. This affects
+      tax liability and credit receipt for low-income nonrequired filers.
+    category: imputation
+
   - id: child-care-subsidy-participation
     name: Child care subsidy participation imputation
     description: >

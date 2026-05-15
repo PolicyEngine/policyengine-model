@@ -35,6 +35,50 @@ modeling:
         url: https://github.com/PolicyEngine/policyengine-us-data
         kind: self
 
+  - model: policyengine-us
+    category: take-up
+    label: Seeded take-up priors before calibration
+    detail: >
+      Enhanced CPS construction assigns take-up and claiming gates for
+      SNAP, ACA/PTC, DC PTC, Head Start, Early Head Start, SSI,
+      Medicaid, TANF, EITC, WIC, WIC nutritional risk, and voluntary tax
+      filing. Priors are external-rate tables; SNAP, SSI, ACA, and
+      Medicaid preserve available reported-recipient or coverage anchors.
+    scope: Enhanced CPS program participation and claiming inputs
+    sources:
+      - label: policyengine-us-data CPS take-up assignment
+        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/datasets/cps/cps.py
+        kind: self
+      - label: policyengine-us-data take-up parameters
+        url: https://github.com/PolicyEngine/policyengine-us-data/tree/main/policyengine_us_data/parameters/take_up
+        kind: self
+      - label: policyengine-us-data take-up helpers
+        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/datasets/cps/takeup.py
+        kind: self
+
+  - model: policyengine-us
+    category: calibration
+    label: Take-up targets recomputed in the calibration matrix
+    detail: >
+      For take-up-affected targets, PolicyEngine US Data computes
+      eligible target values with all relevant gates open, then applies
+      block-level seeded take-up draws while building calibration matrix
+      entries. L0 reweighting then determines the final weighted
+      population totals against administrative targets; WIC and EITC are
+      also constrained through target totals even when their gates are not
+      in the shared rerandomized target list.
+    scope: SNAP, ACA/PTC, Medicaid, TANF, SSI, selected tax and benefit targets
+    sources:
+      - label: policyengine-us-data take-up target mapping
+        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/utils/takeup.py
+        kind: self
+      - label: policyengine-us-data unified matrix builder
+        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/calibration/unified_matrix_builder.py
+        kind: self
+      - label: policyengine-us-data calibration target config
+        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/calibration/target_config.yaml
+        kind: self
+
   - model: trim3
     category: architecture
     label: Program modules on CPS-ASEC
@@ -55,13 +99,62 @@ modeling:
     category: take-up
     label: Caseload-aligned participation
     detail: >
-      For programs with incomplete survey participation, TRIM3 selects
-      eligible units into participation so aggregate simulated caseloads
-      match administrative program totals.
+      For benefit programs, TRIM3 generally determines eligibility and
+      potential benefits first, then selects eligible people or families
+      into receipt. True CPS reporters are included when eligible, while
+      nonreporters are selected probabilistically so baseline caseloads
+      come close to administrative size and composition targets.
     scope: means-tested transfers
+    sources:
+      - label: TRIM3 baseline simulation overview
+        url: https://boreas.urban.org/T3IntroBaselines.php
+        kind: self
+      - label: National Academies — TRIM3 technical specification
+        url: https://www.ncbi.nlm.nih.gov/books/NBK547352/
+        kind: government
+
+  - model: trim3
+    category: take-up
+    label: SNAP reporter and correct-response participation
+    detail: >
+      TRIM3's SNAP module can model annual or monthly participation.
+      Baseline participation preserves eligible true reporters, constrains
+      likely correct nonreporters out of receipt, and uses participation
+      probabilities by unit type and benefit level with state and
+      citizenship adjustments.
+    scope: SNAP / FoodStamps module
     sources:
       - label: TRIM3 SNAP methodology
         url: https://boreas.urban.org/documentation/foodstamps/main.php
+        kind: self
+
+  - model: trim3
+    category: take-up
+    label: Medicaid alternative-run enrollment logit
+    detail: >
+      TRIM3's Medicaid/CHIP baseline enrollment decisions are produced
+      outside the module and imported. Alternative simulations keep
+      baseline decisions for baseline-eligible people, while newly
+      eligible people receive documented logit enrollment probabilities
+      that are aggregated to family-level decisions.
+    scope: Medicaid and CHIP
+    sources:
+      - label: TRIM3 Medicaid/SCHIP methodology
+        url: https://boreas.urban.org/documentation/Medicaid/Main.php
+        kind: self
+
+  - model: trim3
+    category: take-up
+    label: WIC family-level participation
+    detail: >
+      TRIM3's WIC module simulates monthly eligibility, assumes
+      otherwise eligible people are nutritionally at risk, and assigns
+      family-level WIC participation using true-report anchors,
+      state/category participation probabilities, and random numbers.
+    scope: WIC supplemental food receipt/value
+    sources:
+      - label: TRIM3 WIC methodology
+        url: https://boreas.urban.org/documentation/wic/main.php
         kind: self
 
   - model: attis

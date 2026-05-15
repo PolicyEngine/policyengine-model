@@ -1403,17 +1403,18 @@ coverage:
 
   - model: trim3
     program: us-wic
-    status: not-implemented
-    statuteTraceable: no
-    testCoverage: none
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    docsUrl: https://boreas.urban.org/documentation/wic/main.php
     notes: >
-      No WIC module in TRIM3's official Programs Simulated list at
-      boreas.urban.org/T3IntroPrograms.php (Aug 2025 Wayback). WIC
-      values used in TRIM3-based SPM analyses come from the Census
-      SPM Research File, not from a TRIM3 simulation.
+      TRIM3 documents a WIC module that simulates eligibility,
+      participation, and the value of supplemental food packages. Public
+      documentation says it models supplemental food receipt/value, not
+      WIC nutrition education or breastfeeding promotion services.
     sources:
-      - label: TRIM3 Programs Simulated (no WIC module listed)
-        url: https://boreas.urban.org/T3IntroPrograms.php
+      - label: TRIM3 WIC module
+        url: https://boreas.urban.org/documentation/wic/main.php
         kind: self
 
   - model: trim3

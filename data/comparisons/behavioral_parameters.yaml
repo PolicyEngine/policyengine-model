@@ -58,6 +58,29 @@ behavioralParameters:
         url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/parameters/gov/simulation/capital_gains_responses/elasticity.yaml
         kind: self
 
+  - model: policyengine-us
+    domain: take-up
+    kind: take-up-model
+    parameter: enhanced_cps_takeup_priors
+    label: Enhanced CPS take-up and claiming priors
+    status: qualitative
+    value: unknown
+    population: Enhanced CPS tax units, SPM units, and people
+    policyScope: SNAP, ACA/PTC, Medicaid, TANF, SSI, EITC, WIC, Head Start, DC PTC, voluntary filing
+    margin: program take-up and claiming gates
+    functionalForm: Seeded random draws from external take-up or claiming-rate tables; selected programs preserve reported-recipient anchors.
+    notes: These are input-data priors, not endogenous behavioral elasticities. Final population-level take-up-sensitive totals are governed by calibration and reweighting where targets are available.
+    sources:
+      - label: policyengine-us-data CPS take-up assignment
+        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/datasets/cps/cps.py
+        kind: self
+      - label: policyengine-us-data take-up parameters
+        url: https://github.com/PolicyEngine/policyengine-us-data/tree/main/policyengine_us_data/parameters/take_up
+        kind: self
+      - label: policyengine-us-data take-up target mapping
+        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/utils/takeup.py
+        kind: self
+
   # ============================ TRIM3 / Urban ================================
   - model: trim3
     domain: take-up
