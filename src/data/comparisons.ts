@@ -618,37 +618,52 @@ export function conceptById(
 }
 
 /**
- * Behavioral parameter rows grouped by domain for side-by-side comparison.
+ * Kinds treated as elasticities — numeric response parameters that can
+ * be compared as scalars across models.
+ */
+export const ELASTICITY_KINDS = new Set<BehavioralParameter['kind']>([
+  'elasticity',
+  'semi-elasticity',
+  'participation-elasticity',
+]);
+
+const BEHAVIORAL_DOMAIN_ORDER: BehavioralParameter['domain'][] = [
+  'labor-supply',
+  'taxable-income',
+  'capital-gains',
+  'take-up',
+  'health-insurance',
+  'retirement',
+  'saving',
+  'tax-incidence',
+  'macro',
+  'tariff',
+  'financial-transactions',
+  'other',
+];
+
+/**
+ * Behavioral parameter rows grouped by domain for side-by-side
+ * comparison. An optional `predicate` narrows the rows (e.g. only
+ * elasticities, or everything else); domain order is stable.
  */
 export function behavioralParametersByDomain(
   data: ComparisonData,
+  predicate?: (row: BehavioralParameter) => boolean,
 ): Array<{
-  domain: string;
+  domain: BehavioralParameter['domain'];
   rows: BehavioralParameter[];
 }> {
   const modelIds = new Set(data.models.map((m) => m.id));
-  const orderedDomains = [
-    'labor-supply',
-    'taxable-income',
-    'capital-gains',
-    'take-up',
-    'health-insurance',
-    'retirement',
-    'saving',
-    'tax-incidence',
-    'macro',
-    'tariff',
-    'financial-transactions',
-    'other',
-  ];
-  return orderedDomains
-    .map((domain) => ({
-      domain,
-      rows: data.behavioralParameters.filter(
-        (row) => row.domain === domain && modelIds.has(row.model),
-      ),
-    }))
-    .filter((group) => group.rows.length > 0);
+  return BEHAVIORAL_DOMAIN_ORDER.map((domain) => ({
+    domain,
+    rows: data.behavioralParameters.filter(
+      (row) =>
+        row.domain === domain &&
+        modelIds.has(row.model) &&
+        (predicate ? predicate(row) : true),
+    ),
+  })).filter((group) => group.rows.length > 0);
 }
 
 /**
