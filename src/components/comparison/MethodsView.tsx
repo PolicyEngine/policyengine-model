@@ -12,9 +12,41 @@ import {
   proseStyle,
   sectionStyle,
 } from './comparisonStyles';
-import { modelById, programById, imputationsByConcept } from '../../data/comparisons';
+import {
+  modelById,
+  programById,
+  imputationsByConcept,
+  modelingByModel,
+} from '../../data/comparisons';
 import ModelSelector from './ModelSelector';
-import type { ComparisonData, Model } from '../../types/comparison';
+import CategoryFilter from './CategoryFilter';
+import type {
+  ComparisonData,
+  Model,
+  ModelingMechanicCategory,
+} from '../../types/comparison';
+
+const MECHANIC_CATEGORY_LABEL: Record<ModelingMechanicCategory, string> = {
+  architecture: 'Architecture',
+  'simulation-unit': 'Simulation unit',
+  'base-data': 'Base data',
+  'data-enhancement': 'Data enhancement',
+  'aging-uprating': 'Aging/uprating',
+  calibration: 'Calibration',
+  'take-up': 'Take-up',
+  'tax-modeling': 'Tax modeling',
+  'benefit-modeling': 'Benefit modeling',
+  'behavioral-response': 'Behavioral response',
+  'macro-feedback': 'Macro feedback',
+  'health-insurance': 'Health insurance',
+  'dynamic-lifecycle': 'Dynamic lifecycle',
+  geography: 'Geography',
+  'time-horizon': 'Time horizon',
+  validation: 'Validation',
+  output: 'Output',
+  access: 'Access',
+  other: 'Other',
+};
 
 function fmtUsd(n: number): string {
   if (n >= 1_000_000_000_000) return `$${(n / 1_000_000_000_000).toFixed(1)}T`;
@@ -32,11 +64,20 @@ function fmtCount(n: number): string {
 export default function MethodsView({
   data,
   allModels,
+  selectedCategories,
 }: {
   data: ComparisonData;
   allModels: Model[];
+  /**
+   * Optional filter — if provided, only renders modeling-mechanic rows
+   * whose category id is in this set. Server pages read
+   * `?categories=` and pass the parsed set; client `CategoryFilter`
+   * updates the URL.
+   */
+  selectedCategories?: Set<ModelingMechanicCategory>;
 }) {
   const grouped = imputationsByConcept(data);
+  const modelingGroups = modelingByModel(data);
 
   return (
     <div>
@@ -47,6 +88,102 @@ export default function MethodsView({
       />
 
       <ModelSelector allModels={allModels} />
+
+      {(() => {
+        // Group modeling rows by category for comparable side-by-side view.
+        // Each section: rows = (model × mechanic), grouped under category.
+        const byCategory = new Map<
+          ModelingMechanicCategory,
+          Array<{ model: Model; rowIdx: number; row: ReturnType<typeof modelingByModel>[number]['rows'][number] }>
+        >();
+        for (const { model, rows } of modelingGroups) {
+          rows.forEach((row, i) => {
+            const list = byCategory.get(row.category) ?? [];
+            list.push({ model, rowIdx: i, row });
+            byCategory.set(row.category, list);
+          });
+        }
+        // Render order: stable by enum declaration in ModelingMechanicCategory.
+        const orderedCategories = (
+          Object.keys(MECHANIC_CATEGORY_LABEL) as ModelingMechanicCategory[]
+        ).filter((c) => byCategory.has(c));
+
+        const visibleCategoryIds = selectedCategories ?? new Set(orderedCategories);
+        const visibleCategories = orderedCategories.filter((c) =>
+          visibleCategoryIds.has(c),
+        );
+
+        return (
+          <section style={sectionStyle}>
+            <h2 style={h2Style}>Modeling mechanics, by category</h2>
+            <p style={proseStyle}>
+              Atomic implementation details — architecture, base data, aging,
+              take-up, macro-linkage, health-insurance, dynamic lifecycle —
+              with one row per model per cited detail. Pick categories above
+              to focus the comparison; rows within each category are
+              side-by-side across models.
+            </p>
+            <CategoryFilter
+              categories={orderedCategories.map((id) => ({
+                id,
+                label: MECHANIC_CATEGORY_LABEL[id],
+              }))}
+            />
+
+            {visibleCategories.map((cat) => {
+              const entries = byCategory.get(cat) ?? [];
+              return (
+                <div key={cat} style={{ marginTop: spacing['3xl'] }}>
+                  <h3
+                    style={{
+                      fontSize: 18,
+                      fontWeight: 700,
+                      color: colors.primary[800],
+                      margin: 0,
+                      marginBottom: spacing.sm,
+                    }}
+                  >
+                    {MECHANIC_CATEGORY_LABEL[cat]}
+                  </h3>
+                  <div style={tableWrapperStyle}>
+                    <table style={tableStyle}>
+                      <thead>
+                        <tr>
+                          <th style={{ ...thStyle, minWidth: 180 }}>Model</th>
+                          <th style={thStyle}>Mechanic</th>
+                          <th style={thStyle}>Scope</th>
+                          <th style={thStyle}>Sources</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {entries.map(({ model, rowIdx, row }) => (
+                          <tr key={`${model.id}-${rowIdx}`}>
+                            <td style={tdStyle}>
+                              <div style={{ fontWeight: 600 }}>{model.name}</div>
+                            </td>
+                            <td style={{ ...tdStyle, maxWidth: 460 }}>
+                              <div style={{ fontWeight: 600, marginBottom: 4 }}>
+                                {row.label}
+                              </div>
+                              <div style={{ fontSize: 13, color: colors.text.secondary }}>
+                                {row.detail}
+                              </div>
+                            </td>
+                            <td style={tdStyle}>{row.scope ?? '—'}</td>
+                            <td style={{ ...tdStyle, maxWidth: 240 }}>
+                              <SourceList sources={row.sources} compact />
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              );
+            })}
+          </section>
+        );
+      })()}
 
       <section style={sectionStyle}>
         <h2 style={h2Style}>Imputations and calibration, by concept</h2>

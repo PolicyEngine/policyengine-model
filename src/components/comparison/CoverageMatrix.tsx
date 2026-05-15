@@ -1,8 +1,12 @@
 import PageHeader from '../layout/PageHeader';
 import { colors, spacing } from '../../designTokens';
 import { CoverageBadge } from './StatusBadge';
-import { coverageByProgram } from '../../data/comparisons';
+import {
+  coverageByProgram,
+  programsWithCoverageForModels,
+} from '../../data/comparisons';
 import ModelSelector from './ModelSelector';
+import { SourceList } from './SourceList';
 import YearFilter from './YearFilter';
 import {
   tableWrapperStyle,
@@ -71,9 +75,10 @@ export default function CoverageMatrix({
 }) {
   const matrix = coverageByProgram(data);
 
-  // Programs in display order; if a year filter is on and we have per-program
-  // verifiedYears, drop programs that don't include the selected year.
-  const orderedPrograms = data.programs.filter((p) => {
+  // Programs in display order; keep only programs with at least one explicit
+  // coverage row for the selected model set. If a year filter is on and we
+  // have per-program verifiedYears, drop programs that don't include the year.
+  const orderedPrograms = programsWithCoverageForModels(data).filter((p) => {
     if (!selectedYear || !overlay?.verifiedYears) return true;
     const range = parseYearRange(overlay.verifiedYears.get(p.id));
     return range.size === 0 || range.has(selectedYear);
@@ -94,7 +99,13 @@ export default function CoverageMatrix({
       )}
 
       <section style={sectionStyle}>
-        <div style={tableWrapperStyle}>
+        {orderedPrograms.length === 0 ? (
+          <p style={proseStyle}>
+            No explicit coverage rows have been catalogued for the selected
+            model set yet.
+          </p>
+        ) : (
+          <div style={tableWrapperStyle}>
           <table style={tableStyle}>
             <thead>
               <tr>
@@ -195,6 +206,25 @@ export default function CoverageMatrix({
                               </a>
                             </div>
                           )}
+                          {cell.notes && (
+                            <div style={{ ...subTextStyle, marginTop: 4 }}>
+                              {cell.notes}
+                            </div>
+                          )}
+                          {cell.sources.length > 0 && (
+                            <details style={{ marginTop: 4 }}>
+                              <summary
+                                style={{
+                                  cursor: 'pointer',
+                                  color: colors.primary[600],
+                                  fontSize: 11,
+                                }}
+                              >
+                                sources
+                              </summary>
+                              <SourceList sources={cell.sources} compact />
+                            </details>
+                          )}
                         </td>
                       );
                     })}
@@ -203,7 +233,8 @@ export default function CoverageMatrix({
               })}
             </tbody>
           </table>
-        </div>
+          </div>
+        )}
       </section>
 
       <section style={sectionStyle}>

@@ -85,13 +85,15 @@ imputations:
     concept: capital-gains
     method: statistical-matching
     description: >
-      Capital gains, retirement income, and other low-CPS-coverage
-      variables imputed from SOI PUF onto a CPS-PUF matched record. Aging
-      proceeds forward via per-cell growth assumptions tied to CBO
-      baseline.
+      The SOI Public Use File is the tax-return base. CPS-ASEC records are
+      matched in for demographics and nonfilers, while wealth/unrealized
+      gains inputs come from SCF-style matching. Realized capital-gains
+      tax-return variables are aged forward to CBO/SOI targets rather than
+      imputed from SOI onto a CPS base.
     baseDataset: SOI Public Use File + CPS-ASEC
     calibrationTargets:
       - CBO revenue baseline
+      - SOI tax-return tabulations
     documentationUrl: https://www.taxpolicycenter.org/resources/brief-description-tax-model
     reproducible: no
     sources:
@@ -128,7 +130,7 @@ imputations:
     reproducible: yes
     sources:
       - label: Medicaid take-up parameters
-        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/parameters/gov/hhs/medicaid
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/parameters/gov/hhs/medicaid
         kind: self
 
   # ============================ Child care subsidy ============================
@@ -190,11 +192,11 @@ imputations:
     baseDataset: Enhanced CPS
     calibrationTargets:
       - CBO baseline economic projections
-    documentationUrl: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/parameters/calibration/gov/cbo
+    documentationUrl: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/parameters/calibration/gov/cbo
     reproducible: yes
     sources:
       - label: CBO uprating parameters
-        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/parameters/calibration/gov/cbo
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/parameters/calibration/gov/cbo
         kind: self
 
   # ===========================================================================
@@ -228,10 +230,10 @@ imputations:
     reproducible: yes
     sources:
       - label: policyengine-us SPM unit entity
-        url: https://github.com/PolicyEngine/policyengine-us/blob/master/policyengine_us/entities.py
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/entities.py
         kind: self
       - label: Census Bureau — SPM technical documentation (definition)
-        url: https://www.census.gov/topics/income-poverty/supplemental-poverty-measure/methodology.html
+        url: https://www2.census.gov/programs-surveys/supplemental-poverty-measure/technical-documentation/spm_techdoc.pdf
         kind: government
 
   - model: trim3
@@ -244,7 +246,7 @@ imputations:
     reproducible: no
     sources:
       - label: Census Bureau — SPM Research File
-        url: https://www.census.gov/data/datasets/time-series/demo/supplemental-poverty-measure/spm.html
+        url: https://www.census.gov/topics/income-poverty/supplemental-poverty-measure/data/datasets.2019.html
         kind: government
 
   # ----------------------------- SPM thresholds -------------------------------
@@ -259,10 +261,10 @@ imputations:
     reproducible: yes
     sources:
       - label: SPM threshold parameter file
-        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/parameters/gov/census/spm_threshold
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/parameters/gov/census/spm
         kind: self
       - label: Census Bureau — SPM thresholds
-        url: https://www.census.gov/data/tables/time-series/demo/income-poverty/supplemental-poverty-measure-thresholds.html
+        url: https://www.census.gov/data/tables/2025/demo/supplemental-poverty-measure/poverty-thresholds.html
         kind: government
 
   - model: trim3
@@ -326,10 +328,10 @@ imputations:
     reproducible: yes
     sources:
       - label: spm_unit_net_income variable (assembles resources)
-        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/variables/household/income/spm_unit
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/household/income/spm_unit
         kind: self
       - label: EITC variables
-        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/variables/gov/irs/credits/eitc
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/irs/credits/earned_income
         kind: self
 
   - model: trim3
@@ -354,7 +356,7 @@ imputations:
     reproducible: yes
     sources:
       - label: CTC variables
-        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/variables/gov/irs/credits/ctc
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/irs/credits/ctc
         kind: self
 
   - model: trim3
@@ -380,7 +382,7 @@ imputations:
     reproducible: yes
     sources:
       - label: SNAP variables
-        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/variables/gov/usda/snap
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/usda/snap
         kind: self
 
   - model: trim3
@@ -420,7 +422,7 @@ imputations:
     reproducible: yes
     sources:
       - label: HUD Section 8 variables
-        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/variables/gov/hud
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/hud
         kind: self
 
   - model: trim3
@@ -443,7 +445,7 @@ imputations:
     reproducible: yes
     sources:
       - label: LIHEAP variables
-        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/variables/gov/hhs/liheap
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/parameters/gov/hhs/liheap
         kind: self
 
   - model: trim3
@@ -468,7 +470,7 @@ imputations:
     reproducible: yes
     sources:
       - label: WIC variables
-        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/variables/gov/usda/wic
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/usda/wic
         kind: self
 
   - model: trim3
@@ -496,7 +498,7 @@ imputations:
     reproducible: yes
     sources:
       - label: NSLP variables
-        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/variables/gov/usda/school_meals
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/usda/school_meals
         kind: self
 
   - model: trim3
@@ -521,7 +523,7 @@ imputations:
     reproducible: yes
     sources:
       - label: Federal income tax variables
-        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/variables/gov/irs
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/irs
         kind: self
 
   - model: trim3
@@ -544,7 +546,7 @@ imputations:
     reproducible: yes
     sources:
       - label: Payroll tax variables
-        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/variables/gov/irs/payroll
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/irs/tax/payroll
         kind: self
 
   - model: trim3
@@ -570,7 +572,7 @@ imputations:
     reproducible: yes
     sources:
       - label: State tax parameters
-        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/parameters/gov/states
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/parameters/gov/states
         kind: self
 
   - model: trim3
@@ -596,10 +598,10 @@ imputations:
     reproducible: yes
     sources:
       - label: Work expenses variable
-        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/variables/household/income/spm_unit
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/household/income/spm_unit
         kind: self
       - label: Census SPM work expenses methodology
-        url: https://www.census.gov/topics/income-poverty/supplemental-poverty-measure/methodology.html
+        url: https://www2.census.gov/programs-surveys/supplemental-poverty-measure/technical-documentation/spm_techdoc.pdf
         kind: government
 
   - model: trim3
@@ -610,7 +612,7 @@ imputations:
     reproducible: no
     sources:
       - label: Census SPM methodology
-        url: https://www.census.gov/topics/income-poverty/supplemental-poverty-measure/methodology.html
+        url: https://www2.census.gov/programs-surveys/supplemental-poverty-measure/technical-documentation/spm_techdoc.pdf
         kind: government
 
   # ----------------------------- Child care expenses --------------------------
@@ -636,7 +638,7 @@ imputations:
     reproducible: no
     sources:
       - label: Census SPM methodology
-        url: https://www.census.gov/topics/income-poverty/supplemental-poverty-measure/methodology.html
+        url: https://www2.census.gov/programs-surveys/supplemental-poverty-measure/technical-documentation/spm_techdoc.pdf
         kind: government
 
   # ----------------------------- Medical OOP ----------------------------------
@@ -659,7 +661,7 @@ imputations:
     reproducible: no
     sources:
       - label: Census SPM methodology
-        url: https://www.census.gov/topics/income-poverty/supplemental-poverty-measure/methodology.html
+        url: https://www2.census.gov/programs-surveys/supplemental-poverty-measure/technical-documentation/spm_techdoc.pdf
         kind: government
 
   # ----------------------------- Child support paid ---------------------------
@@ -682,7 +684,7 @@ imputations:
     reproducible: no
     sources:
       - label: Census SPM methodology
-        url: https://www.census.gov/topics/income-poverty/supplemental-poverty-measure/methodology.html
+        url: https://www2.census.gov/programs-surveys/supplemental-poverty-measure/technical-documentation/spm_techdoc.pdf
         kind: government
 
   # ----------------------------- Final poverty rate ---------------------------
@@ -697,7 +699,7 @@ imputations:
     reproducible: yes
     sources:
       - label: SPM poverty rate variable
-        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/variables/household/income/spm_unit
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/household/income/spm_unit
         kind: self
 
   - model: trim3

@@ -1,0 +1,586 @@
+# Atomic modeling mechanics by model.
+#
+# These rows capture concrete methodological details that are too granular for
+# models.yaml summaries: simulation unit, base microdata, aging/uprating,
+# take-up modeling, macro linkage, dynamic lifecycle events, and model
+# architecture. Add one row per cited detail rather than expanding prose
+# summaries.
+
+modeling:
+  - model: policyengine-us
+    category: architecture
+    label: Formula graph on policyengine-core
+    detail: >
+      Computes policy variables as period-indexed formulas over PolicyEngine
+      entities, with parameters stored separately as date-indexed YAML.
+    scope: tax-benefit rules
+    sources:
+      - label: policyengine-us documentation
+        url: https://policyengine.github.io/policyengine-us/
+        kind: self
+      - label: policyengine-us repository
+        url: https://github.com/PolicyEngine/policyengine-us
+        kind: self
+
+  - model: policyengine-us
+    category: data-enhancement
+    label: Enhanced CPS with tax and benefit imputations
+    detail: >
+      Starts from CPS-ASEC, imputes missing tax and benefit variables, and
+      calibrates weights/participation so simulated totals align with
+      administrative targets.
+    scope: US population microdata
+    sources:
+      - label: PolicyEngine US Data repository
+        url: https://github.com/PolicyEngine/policyengine-us-data
+        kind: self
+
+  - model: trim3
+    category: architecture
+    label: Program modules on CPS-ASEC
+    detail: >
+      Static microsimulation model with separate tax and transfer modules.
+      Eligibility is simulated from CPS-ASEC records and selected benefits
+      are aligned to administrative caseloads.
+    scope: US tax and transfer programs
+    sources:
+      - label: TRIM3 Programs Simulated
+        url: https://boreas.urban.org/T3IntroPrograms.php
+        kind: self
+      - label: Zedlewski (Urban) — TRIM, A Tool for Social Policy Analysis
+        url: https://www.urban.org/sites/default/files/publication/82921/2000878-TRIM-A-Tool-for-Social-Policy-Analysis.pdf
+        kind: self
+
+  - model: trim3
+    category: take-up
+    label: Caseload-aligned participation
+    detail: >
+      For programs with incomplete survey participation, TRIM3 selects
+      eligible units into participation so aggregate simulated caseloads
+      match administrative program totals.
+    scope: means-tested transfers
+    sources:
+      - label: TRIM3 SNAP methodology
+        url: https://boreas.urban.org/documentation/foodstamps/main.php
+        kind: self
+
+  - model: attis
+    category: base-data
+    label: ACS-based state and local simulation
+    detail: >
+      Uses ACS microdata to estimate safety-net program eligibility and
+      participation with greater state and substate geographic detail than
+      CPS-based models can usually support.
+    scope: US safety-net programs
+    sources:
+      - label: ATTIS overview
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
+        kind: self
+      - label: Urban — Methods for estimating SNAP policy impacts with ACS
+        url: https://www.urban.org/sites/default/files/publication/98454/methods_for_estimating_snap_policy_impacts_with_an_acs-based_simulation_model_1.pdf
+        kind: self
+
+  - model: tpc-microsim
+    category: base-data
+    label: SOI PUF plus CPS match
+    detail: >
+      Uses the IRS Statistics of Income Public Use File as the primary tax
+      record base and statistically matches CPS demographic and income
+      information not present on tax returns.
+    scope: federal tax
+    sources:
+      - label: TPC microsimulation model FAQ
+        url: https://taxpolicycenter.org/resources/tax-model-resources/tpcs-microsimulation-model-faq
+        kind: self
+
+  - model: tpc-microsim
+    category: aging-uprating
+    label: Aged to future tax years
+    detail: >
+      Ages the tax-return/survey file forward to analysis years using
+      baseline projections and tax-return tabulations before applying
+      current-law or reform policy parameters.
+    scope: federal tax
+    sources:
+      - label: TPC brief description of the tax model
+        url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
+        kind: self
+
+  - model: jct-microsim
+    category: tax-modeling
+    label: Individual Tax Model for federal revenue estimates
+    detail: >
+      JCT's Individual Tax Model simulates federal individual income tax
+      outcomes for many microeconomic agents and is used to estimate
+      proposed changes to the individual income tax.
+    scope: federal individual income tax
+    sources:
+      - label: JCT — Description of the Individual Tax Model for 2023
+        url: https://www.jct.gov/publications/2023/jcx-48-23/
+        kind: government
+
+  - model: jct-microsim
+    category: behavioral-response
+    label: Revenue-estimating behavioral assumptions
+    detail: >
+      Revenue estimates incorporate taxpayer behavioral responses specified
+      by JCT staff rather than simply recomputing liabilities mechanically
+      on unchanged behavior.
+    scope: federal tax estimates
+    sources:
+      - label: JCT — Revenue estimating process
+        url: https://www.jct.gov/operations/revenue-estimating/
+        kind: government
+
+  - model: cbo-microsim
+    category: tax-modeling
+    label: Federal tax microsimulation over budget window
+    detail: >
+      Simulates federal individual income and payroll tax rules for a
+      representative sample of tax filers in each year of the budget window.
+      Health, long-term Social Security, tariff, and transfer estimates use
+      other CBO models in the broader scoring system.
+    scope: federal individual income and payroll tax
+    sources:
+      - label: CBO — An Overview of CBO's Microsimulation Tax Model
+        url: https://www.cbo.gov/publication/54096
+        kind: government
+      - label: CBO — Advanced Models and Details
+        url: https://www.cbo.gov/models/details
+        kind: government
+
+  - model: itep-microsim
+    category: tax-modeling
+    label: Federal, state, and local tax incidence
+    detail: >
+      Estimates taxes paid by state residents at different income levels,
+      combining income, consumption, property, business, and administrative
+      data to model state and local tax incidence.
+    scope: state and local tax incidence
+    sources:
+      - label: ITEP — Who Pays? methodology
+        url: https://itep.org/who-pays-7th-edition-methodology-and-discussion/
+        kind: self
+      - label: ITEP Tax Microsimulation Model overview
+        url: https://itep.org/itep-tax-model/
+        kind: self
+
+  - model: tax-calculator
+    category: architecture
+    label: Open tax calculator on taxdata inputs
+    detail: >
+      Applies parameterized federal income and payroll tax rules to CPS or
+      PUF-based microdata produced by taxdata; reforms alter policy
+      parameters rather than model code.
+    scope: federal tax
+    sources:
+      - label: Tax-Calculator documentation
+        url: https://taxcalc.pslmodels.org
+        kind: self
+      - label: Open Source Policy Center tax models
+        url: https://www.ospc.org/taxmodels/
+        kind: civilsociety
+
+  - model: budgetlab-tax
+    category: architecture
+    label: Separate open tax and policy modules
+    detail: >
+      Budget Lab publishes separate repositories for its tax simulator,
+      safety-net, estate-tax, and tariff components, making the public
+      mechanics module-specific rather than a single monolithic model.
+    scope: US federal tax and selected policy areas
+    sources:
+      - label: Budget Lab Tax-Simulator repository
+        url: https://github.com/Budget-Lab-Yale/Tax-Simulator
+        kind: self
+      - label: Budget Lab methodology topic page
+        url: https://budgetlab.yale.edu/topic/methodology
+        kind: self
+
+  - model: policyengine-uk
+    category: architecture
+    label: Formula graph on policyengine-core
+    detail: >
+      Computes UK tax and benefit rules with the same entity/formula
+      architecture as PolicyEngine US, using separate parameter files and
+      country-specific entities.
+    scope: UK tax-benefit rules
+    sources:
+      - label: PolicyEngine UK repository
+        url: https://github.com/PolicyEngine/policyengine-uk
+        kind: self
+      - label: PolicyEngine UK documentation
+        url: https://policyengine.github.io/policyengine-uk/
+        kind: self
+
+  - model: ukmod
+    category: architecture
+    label: UK model powered by EUROMOD conventions
+    detail: >
+      Static tax-benefit microsimulation model derived from the UK component
+      of EUROMOD, using coded policy rules, input microdata, and the
+      EUROMOD software/language stack.
+    scope: UK tax-benefit system
+    sources:
+      - label: UKMOD article in International Journal of Microsimulation
+        url: https://microsimulation.pub/articles/00231
+        kind: academic
+      - label: EUROMOD overview
+        url: https://euromod-web.jrc.ec.europa.eu/overview/what-is-euromod
+        kind: government
+
+  - model: ukmod
+    category: base-data
+    label: FRS input data under licence
+    detail: >
+      Uses Family Resources Survey input data; model code is public but
+      access to the main survey microdata is governed by UK Data Service
+      licensing.
+    scope: UK population microdata
+    sources:
+      - label: UKMOD access page
+        url: https://www.microsimulation.ac.uk/ukmod/access
+        kind: self
+      - label: UK Data Service FRS series
+        url: https://datacatalogue.ukdataservice.ac.uk/series/series/200017
+        kind: government
+
+  - model: ifs-taxben
+    category: architecture
+    label: IFS household tax-benefit calculator
+    detail: >
+      Calculates the impact of tax and benefit policy on households and is
+      used heavily in IFS analysis of UK tax and benefit reforms.
+    scope: UK tax-benefit policy
+    sources:
+      - label: IFS — TAXBEN 2017 overview
+        url: https://ifs.org.uk/publications/taxben-ifs-tax-and-benefit-microsimulation-model
+        kind: self
+      - label: IFS — TAXBEN 1995 working paper
+        url: https://ifs.org.uk/publications/taxben-ifs-microsimulation-tax-and-benefit-model
+        kind: self
+
+  - model: ifs-taxben
+    category: base-data
+    label: FRS households with entitlement calculations
+    detail: >
+      TAXBEN uses Family Resources Survey households and computes UK taxes,
+      benefits, tax credits, and Universal Credit entitlements; it excludes
+      the value of public services and focuses on cash/direct tax-benefit
+      policy.
+    scope: UK household tax-benefit modelling
+    sources:
+      - label: IFS — TAXBEN guide (2021 update)
+        url: https://ifs.org.uk/sites/default/files/output_url_files/TAXBEN%252520Guide%252520-%252520UPDATE%2525202021.pdf
+        kind: self
+
+  - model: igotm
+    category: output
+    label: Official household distributional analysis
+    detail: >
+      Produces HM Treasury's distributional analysis at fiscal events,
+      combining direct tax, indirect tax, benefit, and public-service
+      effects in impact-on-households tables.
+    scope: UK fiscal events
+    sources:
+      - label: HM Treasury — Spring Statement 2025 distributional analysis
+        url: https://www.gov.uk/government/publications/supporting-documents-for-spring-statement-2025/impact-on-households-distributional-analysis-to-accompany-spring-statement-2025
+        kind: government
+
+  - model: columbia-cpsp
+    category: architecture
+    label: Poverty-focused CPS microsimulation
+    detail: >
+      Uses CPS-based tax and transfer simulation to estimate poverty impacts
+      of policy scenarios. Tax inputs are handled case by case: Census ASEC
+      tax variables underpin routine CPS-ASEC analyses, while TAXSIM appears
+      in SIPP-based or pre-1980/historical applications that need external
+      tax calculations.
+    scope: US poverty and child poverty
+    sources:
+      - label: Columbia CPSP publications
+        url: https://www.povertycenter.columbia.edu
+        kind: self
+      - label: Monthly cash payments CPSP paper
+        url: https://povertycenter.columbia.edu/sites/povertycenter.columbia.edu/files/content/Publications/Monthly-Cash-Payments-Reduce-Spells-of-Poverty-CPSP-2022.pdf
+        kind: academic
+
+  - model: benefits-data-trust
+    category: simulation-unit
+    label: Applicant-level screening, not population microsimulation
+    detail: >
+      Operated as a benefits access and eligibility-screening service for
+      individual applicants rather than a weighted representative microdata
+      model for fiscal or distributional reform analysis.
+    scope: benefits screening
+    sources:
+      - label: Benefits Data Trust homepage (archived)
+        url: https://web.archive.org/web/20240116222713/https://bdtrust.org/
+        kind: self
+      - label: Pew — Benefits Data Trust closure
+        url: https://www.pew.org/en/about/news-room/opinion/2024/08/06/benefits-data-trusts-closure-should-prompt-us-to-rebuild-the-flawed-public-benefits-system
+        kind: press
+
+  - model: benefit-kitchen
+    category: simulation-unit
+    label: Per-household eligibility screener
+    detail: >
+      Computes eligibility and benefits for applicant-supplied households,
+      including a partner/API product, but does not publish a weighted
+      population microsimulation dataset.
+    scope: benefits screening
+    sources:
+      - label: BenefitKitchen homepage
+        url: https://benefitkitchen.com/
+        kind: self
+      - label: BenefitKitchen API
+        url: https://benefitkitchen.com/api
+        kind: self
+
+  - model: benefits-cliffs
+    category: output
+    label: Stylized net-resource cliffs
+    detail: >
+      Produces benefit-cliff and net-resource profiles for stylized family
+      situations across selected states, focused on work incentives rather
+      than representative-population fiscal estimates.
+    scope: state benefit cliffs
+    sources:
+      - label: Georgia Center for Opportunity — BenefitCliffs
+        url: https://foropportunity.org/benefitcliffs/
+        kind: self
+      - label: Atlanta Fed — What Are Benefits Cliffs?
+        url: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/what-are-benefits-cliffs
+        kind: government
+
+  - model: snap-screener
+    category: benefit-modeling
+    label: SNAP and Medicaid screening rules
+    detail: >
+      Provides applicant-facing eligibility screening and a state-level SNAP
+      rules table; the public product is a rules screener rather than a
+      general-purpose microsimulation model.
+    scope: SNAP and Medicaid screening, plus public benefit guide pages
+    sources:
+      - label: SNAP Screener state-level rules table
+        url: https://www.snapscreener.com/screener
+        kind: self
+      - label: Medicaid Screener homepage
+        url: https://www.medicaidscreener.com/
+        kind: self
+
+  - model: mrelief
+    category: access
+    label: SNAP application assistance workflow
+    detail: >
+      Screens and assists individual SNAP applicants through web, text, and
+      phone workflows; its modeling surface is applicant eligibility and
+      assistance rather than simulated policy reform.
+    scope: SNAP access
+    sources:
+      - label: mRelief homepage
+        url: https://www.mrelief.com/
+        kind: self
+      - label: mRelief about
+        url: https://www.mrelief.com/about
+        kind: self
+
+  - model: atlanta-fed-prd
+    category: architecture
+    label: Public policy rules database
+    detail: >
+      Stores federal and state benefit-program rules as a public parameter
+      database used by Atlanta Fed CLIFF tools; it is rules data for
+      status-quo calculations, not a reform microsimulation engine.
+    scope: benefit-cliff rules
+    sources:
+      - label: Atlanta Fed Policy Rules Database
+        url: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
+        kind: self
+      - label: Policy Rules Database GitHub repository
+        url: https://github.com/Research-Division/policy-rules-database
+        kind: self
+
+  - model: nber-taxsim
+    category: tax-modeling
+    label: Input-record federal and state tax calculator
+    detail: >
+      Calculates federal and state income tax liabilities from
+      user-supplied records; it does not provide a representative
+      population file or transfer-program simulation.
+    scope: individual income tax
+    sources:
+      - label: NBER TAXSIM homepage
+        url: https://taxsim.nber.org/
+        kind: self
+      - label: NBER TAXSIM data product page
+        url: https://www.nber.org/research/data/taxsim
+        kind: self
+
+  - model: tf-microsim
+    category: macro-feedback
+    label: Microsimulation plus general equilibrium
+    detail: >
+      Combines a tax simulator, a neoclassical production function, and an
+      allocation model to produce conventional and dynamic revenue,
+      distributional, and macroeconomic estimates.
+    scope: federal tax
+    sources:
+      - label: Tax Foundation — General Equilibrium Model overview
+        url: https://taxfoundation.org/research/all/federal/general-equilibrium-model/
+        kind: self
+
+  - model: pwbm
+    category: macro-feedback
+    label: Microsim integrated with tax, Social Security, and OLG modules
+    detail: >
+      The PWBM microsimulation creates simulated populations and economies
+      and integrates with the tax module, Social Security module, and
+      dynamic overlapping-generations model to assess policy impacts.
+    scope: federal fiscal policy
+    sources:
+      - label: PWBM Microsimulation methodology page
+        url: https://budgetmodel.wharton.upenn.edu/model/microsimulation/
+        kind: self
+
+  - model: tax-foundation-tg
+    category: macro-feedback
+    label: Named Taxes and Growth implementation
+    detail: >
+      The Taxes and Growth label refers to the same Tax Foundation
+      general-equilibrium tax model, with a microsimulation tax simulator
+      feeding production and allocation components.
+    scope: federal tax
+    sources:
+      - label: Tax Foundation — General Equilibrium Model overview
+        url: https://taxfoundation.org/research/all/federal/general-equilibrium-model/
+        kind: self
+      - label: Tax Foundation — Taxes and Growth overview PDF
+        url: https://files.taxfoundation.org/legacy/docs/FF429.pdf
+        kind: self
+
+  - model: dwp-psm
+    category: architecture
+    label: Static FRS-based benefit microsimulation
+    detail: >
+      Main DWP microsimulation model for policy changes, based on the
+      annual Family Resources Survey and used in welfare spending analysis.
+    scope: GB benefits and welfare policy
+    sources:
+      - label: OBR — DWP policy simulation model and FRS
+        url: https://obr.uk/box/dwps-policy-simulation-model-and-the-family-resources-survey/
+        kind: government
+      - label: DWP UKMOD Fest 2023 PSM presentation
+        url: https://www.microsimulation.ac.uk/wp-content/uploads/2023/07/UKMODFest2023_DWP.pdf
+        kind: self
+
+  - model: ippr-tax-benefit
+    category: architecture
+    label: PERU-maintained tax-benefit model
+    detail: >
+      Tax-benefit microsimulation model used by IPPR and partner
+      organizations, maintained through Manchester Metropolitan
+      University's Policy Evaluation and Research Unit and related to the
+      Landman/Resolution Foundation tax-transfer model.
+    scope: UK tax-benefit policy
+    sources:
+      - label: MMU PERU — modelling the tax and benefit system
+        url: https://mmuperu.co.uk/blog/projects/modelling-the-effects-of-the-tax-and-benefit-system/
+        kind: academic
+      - label: Scottish Government TTM methodology appendix
+        url: https://www.gov.scot/publications/tackling-child-poverty-delivery-plan-forecasting-child-poverty-scotland/pages/8/
+        kind: government
+
+  - model: landman-economics
+    category: base-data
+    label: FRS for direct taxes and benefits, LCF for indirect taxes
+    detail: >
+      The tax-transfer model uses FRS data for direct taxes, benefits, tax
+      credits, and Universal Credit, and Living Costs and Food Survey data
+      for indirect taxes.
+    scope: UK tax-benefit and indirect tax analysis
+    sources:
+      - label: Scottish Government TTM methodology appendix
+        url: https://www.gov.scot/publications/tackling-child-poverty-delivery-plan-forecasting-child-poverty-scotland/pages/8/
+        kind: government
+
+  - model: entitledto
+    category: simulation-unit
+    label: Per-claimant calculator
+    detail: >
+      Computes entitlement for user-entered households and adviser/client
+      cases; it is not a representative-population model and does not
+      publish a public rules dataset.
+    scope: UK benefits entitlement
+    sources:
+      - label: EntitledTo benefits calculator
+        url: https://www.entitledto.co.uk/
+        kind: self
+      - label: GOV.UK — Benefits calculators
+        url: https://www.gov.uk/benefits-calculators
+        kind: government
+
+  - model: dynasim
+    category: dynamic-lifecycle
+    label: Year-by-year aging with demographic and economic events
+    detail: >
+      Dynamic microsimulation model that starts from representative
+      individuals/families and ages them year by year, simulating events
+      such as births, deaths, marriage, divorce, employment, retirement,
+      earnings, disability, and retirement income.
+    scope: long-run retirement and aging analysis
+    sources:
+      - label: Urban — Dynamic Simulation of Income Model 4 fact sheet
+        url: https://www.urban.org/sites/default/files/2024-09/Urban%E2%80%99s%20Dynamic%20Simulation%20of%20Income%20Model%204.pdf
+        kind: self
+      - label: Urban DYNASIM overview
+        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/dynamic-simulation-income-model-dynasim
+        kind: self
+
+  - model: cbolt
+    category: time-horizon
+    label: Long-term budget and Social Security projections
+    detail: >
+      Main CBO tool for long-term projections of the economy and federal
+      budget, including Social Security analyses beyond the standard
+      10-year budget window.
+    scope: long-term federal budget
+    sources:
+      - label: CBO — Overview of CBOLT
+        url: https://www.cbo.gov/publication/53667
+        kind: government
+      - label: CBO — Long-Term Budget Analysis
+        url: https://www.cbo.gov/topics/budget/long-term-budget-analysis
+        kind: government
+
+  - model: hipsm
+    category: health-insurance
+    label: ACA health insurance market simulation
+    detail: >
+      Simulates health insurance coverage, marketplace participation,
+      Medicaid/CHIP enrollment, and premiums using matched survey data and
+      calibration to observed Medicaid and marketplace enrollment.
+    scope: health insurance coverage
+    sources:
+      - label: Urban HIPSM overview
+        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/health-insurance-policy-simulation-model-hipsm
+        kind: self
+      - label: Urban HIPSM 2020 methodology report
+        url: https://www.urban.org/sites/default/files/publication/103412/the-health-insurance-policy-simulation-model-for-2020.pdf
+        kind: self
+
+  - model: hisim2
+    category: health-insurance
+    label: CBO health insurance simulation
+    detail: >
+      Updated CBO model for estimating health insurance coverage and
+      premiums for people under age 65, using CPS/CPS-ASEC records with
+      edits, imputations, and supplemental administrative/survey data.
+    scope: health insurance coverage
+    sources:
+      - label: CBO — HISIM2 used in July 2021 baseline projections
+        url: https://www.cbo.gov/publication/57205
+        kind: government
+      - label: CBO — Sources and Preparation of Data Used in HISIM2
+        url: https://www.cbo.gov/publication/55087
+        kind: government

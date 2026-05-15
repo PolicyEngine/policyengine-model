@@ -13,6 +13,7 @@ Source-of-truth YAML for the open microsimulation reference at `/comparison`.
 | `usage.yaml` | Usage signal per model. | `usage` |
 | `accuracy.yaml` | Accuracy benchmarks (model × metric). | `accuracy` |
 | `imputations.yaml` | Imputation and calibration approaches. | `imputations` |
+| `modeling.yaml` | Atomic modeling mechanics by model. | `modeling` |
 | `artifacts.yaml` | Concrete artifacts (code, data, papers). | `artifacts` |
 | `freshness.yaml` | Latest year encoded, forward coverage, update cadence. | `freshness` |
 
@@ -26,8 +27,11 @@ The loader is in [`src/data/comparisons.ts`](../../src/data/comparisons.ts).
 3. Add `coverage` rows for each program the model implements. For programs the
    model excludes, add a row with `status: not-implemented` and a citation.
 4. Add `imputations` rows for any non-trivial imputation or calibration.
-5. Add `accuracy` rows for any benchmarks the model documents.
-6. The loader will fail the build if any row references an unknown model or
+5. Add `modeling` rows for base data, simulation unit, aging/uprating,
+   behavioral response, macro feedback, dynamic lifecycle, health-insurance,
+   geography, validation, and other model mechanics that are publicly documented.
+6. Add `accuracy` rows for any benchmarks the model documents.
+7. The loader will fail the build if any row references an unknown model or
    program id, so referential integrity is enforced.
 
 ## Adding a new program

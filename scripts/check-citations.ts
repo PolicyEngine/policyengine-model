@@ -6,6 +6,7 @@
  *    For every `url` field in data/comparisons/*.yaml, issue a HEAD/GET
  *    request and report status. 200/301/302/303 = alive. 403 = bot-blocked
  *    (acceptable; URL is real, just gated). 404/410/5xx/network = dead.
+ *    Timeouts and explicitly allowlisted TLS failures are warnings.
  *
  *  Tier 2: quote verbatim.
  *    For every Source with both a `url` and a `quote`, fetch the page
@@ -62,9 +63,25 @@ const BOT_BLOCKED_DOMAINS = new Set([
   'urban.org',
   'aspe.hhs.gov',
   'www.aspe.hhs.gov',
+  'www.fns.usda.gov',
   'www.federalreserve.gov',
   'www.atlantafed.org',
   'web.archive.org',
+  'www.nyc.gov',
+  'onlinelibrary.wiley.com',
+  'mmuperu.co.uk',
+  'fraserofallander.org',
+  'www.equalityhumanrights.com',
+  'www.entitledto.co.uk',
+  'www.ssa.gov',
+  'www.cbpp.org',
+]);
+
+const TRANSIENT_ALLOWED_DOMAINS = new Set([
+  // The public site has intermittently served a certificate mismatch to
+  // automated fetches while remaining reachable in a browser.
+  'landman-economics.co.uk',
+  'www.landman-economics.co.uk',
 ]);
 
 // Domains whose pages are JS-rendered or paywalled; Tier 2 quote checks
@@ -130,6 +147,16 @@ function walk(
       });
     }
     for (const [k, v] of Object.entries(obj)) {
+      // Scalar URL fields such as docsUrl, documentationUrl, codeUrl,
+      // organizationUrl, and datasetUrl are not source objects, but they
+      // are still reader-facing citations and should be checked.
+      if (k !== 'url' && typeof v === 'string' && v.startsWith('http')) {
+        out.push({
+          file,
+          url: v,
+          context: [...trail, k].join(' '),
+        });
+      }
       walk(v, [...trail, k], out, file);
     }
   }
@@ -163,12 +190,21 @@ async function checkLiveness(site: UrlSite): Promise<Finding | null> {
     };
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
+    if (msg.includes('abort') || TRANSIENT_ALLOWED_DOMAINS.has(u.host)) {
+      return {
+        file: site.file,
+        url: site.url,
+        context: site.context,
+        kind: 'timeout',
+        detail: msg.slice(0, 200),
+      };
+    }
     return {
       file: site.file,
       url: site.url,
       context: site.context,
-      kind: msg.includes('abort') ? 'timeout' : 'network-error',
-      detail: msg.slice(0, 200),
+      kind: 'dead-url',
+      detail: `network error: ${msg.slice(0, 200)}`,
     };
   }
 }

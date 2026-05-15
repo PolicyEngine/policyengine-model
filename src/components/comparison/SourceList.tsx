@@ -33,7 +33,7 @@ function KindBadge({ kind }: { kind?: SourceKind }) {
         fontSize: 10,
         fontWeight: 700,
         textTransform: 'uppercase',
-        letterSpacing: '0.04em',
+        letterSpacing: 0,
         backgroundColor: `${KIND_COLOR[k]}15`,
         color: KIND_COLOR[k],
       }}

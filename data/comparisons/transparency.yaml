@@ -35,7 +35,7 @@ transparency:
         kind: self
         supports: [codePublic, issueTrackerPublic, testSuitePublic, codeLicense]
       - label: policyengine-us LICENSE file (AGPL-3.0-or-later)
-        url: https://github.com/PolicyEngine/policyengine-us/blob/master/LICENSE
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/LICENSE
         kind: self
         supports: [codeLicense]
       - label: PyPI policyengine-us package (declared license)
@@ -47,7 +47,7 @@ transparency:
         kind: self
         supports: [documentationPublic, reproducibleBuilds]
       - label: Parameter file with inline statutory references field (example)
-        url: https://github.com/PolicyEngine/policyengine-us/blob/master/policyengine_us/parameters/gov/irs/credits/ctc/refundable/individual_max_amount.yaml
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/parameters/gov/irs/credits/ctc/refundable/individual_max.yaml
         kind: self
         supports: [parameterSourcing]
       - label: PolicyEngine US Data (Enhanced CPS) repository
@@ -191,9 +191,9 @@ transparency:
         url: https://www.taxpolicycenter.org/model-estimates
         kind: self
         supports: [documentationPublic, codePublic]
-      - label: Burman, Geissler & Toder — How big are tax expenditures?
-          (academic description of TPC microsim, no source release)
-        url: https://www.taxpolicycenter.org/publications/how-big-are-individual-income-tax-expenditures
+      - label: Burman, Geissler & Toder — AER article on individual
+          income tax expenditures (model-based TPC analysis)
+        url: https://www.aeaweb.org/articles?id=10.1257/aer.98.2.79
         kind: academic
         supports: [codePublic, parameterSourcing]
 
@@ -249,11 +249,17 @@ transparency:
     datasetPublic: no
     reproducibleBuilds: no
     notes: >
-      CBO operates several microsim models (income, payroll, SNAP,
-      Medicaid). Model code is not public; methodology working papers
-      describe approach for each. CBO outputs (baseline projections,
-      distributional tables) are public.
+      This row covers CBO's internal tax microsimulation model for
+      federal individual income and payroll-tax analysis. Model code,
+      parameters, and prepared microdata are not public; methodology
+      working papers and distributional outputs are public. CBO's
+      health, long-term Social Security, SNAP, and Medicaid modeling
+      belong to separate model entries where documented.
     sources:
+      - label: CBO tax microsimulation model methodology
+        url: https://www.cbo.gov/publication/54096
+        kind: government
+        supports: [documentationPublic, parameterSourcing, datasetPublic]
       - label: CBO methodology working paper series (model docs, not code)
         url: https://www.cbo.gov/about/products/working-papers
         kind: government
@@ -548,7 +554,7 @@ transparency:
     contributorCount: unknown
     issueTrackerPublic: no
     documentationPublic: partial
-    documentationUrl: https://www.gov.uk/government/publications/supporting-documents-for-spring-statement-2025/impact-on-households-distributional-analysis-to-accompany-spring-statement-2025
+    documentationUrl: https://www.gov.uk/government/publications/supporting-documents-for-budget-2025
     parameterSourcing: separate-doc
     testSuitePublic: unknown
     testCount: unknown
@@ -557,28 +563,28 @@ transparency:
     notes: >
       IGOTM is shared across HM Treasury, HMRC, and DWP under
       restricted information-sharing arrangements. Source code,
-      parameters, and prepared FRS-based microdata are not public.
+      parameters, and prepared LCF-based microdata are not public.
       Treasury publishes outputs (the "Impact on Households" annex at
       each fiscal event) and a brief methodology description, but the
       model itself is internal to government.
     sources:
       - label: HM Treasury — Impact on households distributional
-          analysis (Autumn Budget 2024); names IGOTM as the model
-        url: https://www.gov.uk/government/publications/supporting-documents-for-spring-statement-2025/impact-on-households-distributional-analysis-to-accompany-spring-statement-2025
+          analysis (Budget 2025); names IGOTM as the model
+        url: https://www.gov.uk/government/publications/supporting-documents-for-budget-2025
         kind: government
         supports: [codePublic, codeLicense, documentationPublic, parameterSourcing]
-      - label: HM Treasury — Impact on households (Spring Budget 2024)
-        url: https://www.gov.uk/government/publications/supporting-documents-for-spring-statement-2025/impact-on-households-distributional-analysis-to-accompany-spring-statement-2025
+      - label: HM Treasury — Impact on households (Budget 2025)
+        url: https://www.gov.uk/government/publications/supporting-documents-for-budget-2025
         kind: government
         supports: [documentationPublic]
       - label: Office for Budget Responsibility — Welfare trends
           report (describes Treasury/DWP microsim toolchain)
-        url: https://obr.uk/welfare-trends-reports/
+        url: https://obr.uk/docs/dlm_uploads/Welfare-trends-report-October-2024.pdf
         kind: government
         supports: [codePublic, documentationPublic]
-      - label: UK Data Service — FRS licensing (underlying microdata
+      - label: UK Data Service — Living Costs and Food Survey licensing (underlying microdata
           not redistributable)
-        url: https://beta.ukdataservice.ac.uk/datacatalogue/series/series?id=200017
+        url: https://beta.ukdataservice.ac.uk/datacatalogue/series/series?id=2000028
         kind: government
         supports: [datasetPublic]
       - label: IFS Green Budget — methodological commentary on IGOTM
@@ -659,7 +665,7 @@ transparency:
         kind: self
         supports: [documentationPublic, datasetPublic]
       - label: USDA FNS — SNAP outreach partner program
-        url: https://www.fns.usda.gov/snap/outreach/partners
+        url: https://www.fns.usda.gov/snap/outreach
         kind: government
         supports: [codePublic]
       - label: Annie E. Casey Foundation — non-profit funder ecosystem
@@ -710,7 +716,7 @@ transparency:
     contributorCount: unknown
     issueTrackerPublic: no
     documentationPublic: partial
-    documentationUrl: https://benefitscliffs.com/
+    documentationUrl: https://foropportunity.org/benefitcliffs/
     parameterSourcing: unknown
     testSuitePublic: unknown
     testCount: unknown
@@ -723,20 +729,20 @@ transparency:
       released as open artifacts.
     sources:
       - label: BenefitsCliffs.com — homepage
-        url: https://benefitscliffs.com/
+        url: https://foropportunity.org/benefitcliffs/
         kind: self
         supports: [codePublic, codeLicense, documentationPublic, datasetPublic]
       - label: Georgia Center for Opportunity — benefits cliff initiative
-        url: https://georgiaopportunity.org/the-benefits-cliff/
+        url: https://foropportunity.org/benefitcliffs/
         kind: self
         supports: [documentationPublic]
       - label: Georgia Center for Opportunity — about
-        url: https://georgiaopportunity.org/about-us/
+        url: https://foropportunity.org/about-us/
         kind: self
         supports: [codeLicense]
       - label: Atlanta Fed — Advancing Careers initiative (acknowledges
           state-level benefit-cliff research by GCO)
-        url: https://www.atlantafed.org/economic-mobility-and-resilience/advancing-careers-for-low-income-families
+        url: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families
         kind: government
         supports: [documentationPublic]
 
@@ -803,7 +809,7 @@ transparency:
         kind: self
         supports: [documentationPublic, datasetPublic]
       - label: USDA FNS — SNAP outreach partner list
-        url: https://www.fns.usda.gov/snap/outreach/partners
+        url: https://www.fns.usda.gov/snap/outreach
         kind: government
         supports: [codePublic]
       - label: Robin Hood Foundation — civil society funder ecosystem
@@ -818,7 +824,7 @@ transparency:
     contributorCount: unknown
     issueTrackerPublic: yes
     documentationPublic: yes
-    documentationUrl: https://www.atlantafed.org/economic-mobility-and-resilience/advancing-careers-for-low-income-families/policy-rules-database
+    documentationUrl: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
     parameterSourcing: separate-doc
     testSuitePublic: unknown
     testCount: unknown
@@ -836,21 +842,21 @@ transparency:
         supports: [codePublic, codeLicense, issueTrackerPublic,
                    datasetPublic, reproducibleBuilds]
       - label: Atlanta Fed — Policy Rules Database project page
-        url: https://www.atlantafed.org/economic-mobility-and-resilience/advancing-careers-for-low-income-families/policy-rules-database
+        url: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
         kind: self
         supports: [documentationPublic, parameterSourcing]
       - label: Atlanta Fed — Advancing Careers for Low-Income Families
-        url: https://www.atlantafed.org/economic-mobility-and-resilience/advancing-careers-for-low-income-families
+        url: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families
         kind: self
         supports: [documentationPublic]
       - label: Atlanta Fed — CLIFF tool suite (Policy Rules Database
           powers these calculators)
-        url: https://www.atlantafed.org/economic-mobility-and-resilience/advancing-careers-for-low-income-families/cliff-tools
+        url: https://www.atlantafed.org/research-and-data/data/cliff-tool
         kind: self
         supports: [documentationPublic]
-      - label: Federal Reserve Board — community development research
-          referencing benefit-cliff and policy-rule databases
-        url: https://www.federalreserve.gov/publications/community-development.htm
+      - label: Atlanta Fed — What Are Benefits Cliffs? cites the PRD
+          dashboard
+        url: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/what-are-benefits-cliffs
         kind: government
         supports: [documentationPublic]
 

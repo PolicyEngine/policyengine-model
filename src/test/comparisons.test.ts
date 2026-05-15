@@ -4,11 +4,123 @@ import {
   modelById,
   programById,
   coverageByProgram,
+  programsWithCoverageForModels,
+  modelingByModel,
 } from '../data/comparisons';
 import { sourcesFor, sourceKinds } from '../types/comparison';
 
 describe('comparison data', () => {
   const data = loadComparisonData();
+  const TRISTATE_VALUES = new Set(['yes', 'no', 'partial', 'unknown']);
+  const SOURCE_KIND_VALUES = new Set([
+    'self',
+    'government',
+    'academic',
+    'press',
+    'civilsociety',
+    'other',
+  ]);
+  const MODEL_TYPE_VALUES = new Set([
+    'microsimulation',
+    'tax-calculator',
+    'rules-engine',
+    'reduced-form',
+  ]);
+  const MODEL_SECTOR_VALUES = new Set([
+    'government',
+    'non-profit',
+    'for-profit',
+    'academic',
+    'other',
+  ]);
+  const PROGRAM_TYPE_VALUES = new Set([
+    'income-tax',
+    'payroll-tax',
+    'property-tax',
+    'consumption-tax',
+    'refundable-tax-credit',
+    'nonrefundable-tax-credit',
+    'cash-transfer',
+    'in-kind-benefit',
+    'health-coverage',
+    'housing-assistance',
+    'child-care',
+    'energy-assistance',
+    'wealth-tax',
+    'tariff',
+    'other',
+  ]);
+  const PARAMETER_SOURCING_VALUES = new Set([
+    'inline-cite',
+    'separate-doc',
+    'none',
+    'unknown',
+  ]);
+  const IMPUTATION_METHOD_VALUES = new Set([
+    'logistic-regression',
+    'caseload-driven',
+    'l0-calibration',
+    'gradient-reweighting',
+    'statistical-matching',
+    'rule-based',
+    'survey-reported',
+    'census-research-file',
+    'machine-learning',
+    'other',
+    'unknown',
+  ]);
+  const ARTIFACT_TYPE_VALUES = new Set([
+    'dataset',
+    'parameter-database',
+    'codebase',
+    'web-application',
+    'api',
+    'documentation-site',
+    'paper',
+    'cli',
+  ]);
+  const MODELING_MECHANIC_CATEGORY_VALUES = new Set([
+    'architecture',
+    'simulation-unit',
+    'base-data',
+    'data-enhancement',
+    'aging-uprating',
+    'calibration',
+    'take-up',
+    'tax-modeling',
+    'benefit-modeling',
+    'behavioral-response',
+    'macro-feedback',
+    'health-insurance',
+    'dynamic-lifecycle',
+    'geography',
+    'time-horizon',
+    'validation',
+    'output',
+    'access',
+    'other',
+  ]);
+  const UPDATE_CADENCE_VALUES = new Set([
+    'continuous',
+    'quarterly',
+    'annual',
+    'as-funded',
+    'unknown',
+  ]);
+  const COVERAGE_STATUS_VALUES = new Set([
+    'implemented',
+    'partial',
+    'not-implemented',
+    'out-of-scope',
+    'unknown',
+  ]);
+  const TEST_COVERAGE_VALUES = new Set([
+    'high',
+    'medium',
+    'low',
+    'none',
+    'unknown',
+  ]);
 
   it('loads non-empty model and program registries', () => {
     expect(data.models.length).toBeGreaterThanOrEqual(4);
@@ -25,12 +137,96 @@ describe('comparison data', () => {
     expect(new Set(ids).size).toBe(ids.length);
   });
 
+  it('UI-rendered enum fields use schema-compatible string values', () => {
+    for (const m of data.models) {
+      expect(MODEL_TYPE_VALUES.has(m.type)).toBe(true);
+      expect(MODEL_SECTOR_VALUES.has(m.sector)).toBe(true);
+      expect(TRISTATE_VALUES.has(m.codePublic)).toBe(true);
+      for (const value of Object.values(m.capabilities)) {
+        expect(TRISTATE_VALUES.has(value)).toBe(true);
+      }
+      for (const source of m.sources) {
+        if (source.kind) expect(SOURCE_KIND_VALUES.has(source.kind)).toBe(true);
+      }
+    }
+    for (const p of data.programs) {
+      expect(PROGRAM_TYPE_VALUES.has(p.type)).toBe(true);
+    }
+    for (const c of data.coverage) {
+      expect(COVERAGE_STATUS_VALUES.has(c.status)).toBe(true);
+      expect(TRISTATE_VALUES.has(c.statuteTraceable)).toBe(true);
+      expect(TEST_COVERAGE_VALUES.has(c.testCoverage)).toBe(true);
+      for (const source of c.sources) {
+        if (source.kind) expect(SOURCE_KIND_VALUES.has(source.kind)).toBe(true);
+      }
+    }
+    for (const t of data.transparency) {
+      expect(TRISTATE_VALUES.has(t.codePublic)).toBe(true);
+      expect(TRISTATE_VALUES.has(t.issueTrackerPublic)).toBe(true);
+      expect(TRISTATE_VALUES.has(t.documentationPublic)).toBe(true);
+      expect(TRISTATE_VALUES.has(t.testSuitePublic)).toBe(true);
+      expect(TRISTATE_VALUES.has(t.datasetPublic)).toBe(true);
+      expect(TRISTATE_VALUES.has(t.reproducibleBuilds)).toBe(true);
+      expect(PARAMETER_SOURCING_VALUES.has(t.parameterSourcing)).toBe(true);
+      for (const source of t.sources) {
+        if (source.kind) expect(SOURCE_KIND_VALUES.has(source.kind)).toBe(true);
+      }
+    }
+    for (const u of data.usage) {
+      for (const source of u.sources) {
+        if (source.kind) expect(SOURCE_KIND_VALUES.has(source.kind)).toBe(true);
+      }
+    }
+    for (const a of data.accuracy) {
+      if (a.targetSource.kind) {
+        expect(SOURCE_KIND_VALUES.has(a.targetSource.kind)).toBe(true);
+      }
+      if (a.predictedSource?.kind) {
+        expect(SOURCE_KIND_VALUES.has(a.predictedSource.kind)).toBe(true);
+      }
+    }
+    for (const i of data.imputations) {
+      expect(IMPUTATION_METHOD_VALUES.has(i.method)).toBe(true);
+      expect(TRISTATE_VALUES.has(i.reproducible)).toBe(true);
+      for (const source of i.sources) {
+        if (source.kind) expect(SOURCE_KIND_VALUES.has(source.kind)).toBe(true);
+      }
+    }
+    for (const row of data.modeling) {
+      expect(MODELING_MECHANIC_CATEGORY_VALUES.has(row.category)).toBe(true);
+      for (const source of row.sources) {
+        if (source.kind) expect(SOURCE_KIND_VALUES.has(source.kind)).toBe(true);
+      }
+    }
+    for (const a of data.artifacts) {
+      expect(ARTIFACT_TYPE_VALUES.has(a.type)).toBe(true);
+      expect(TRISTATE_VALUES.has(a.public)).toBe(true);
+      for (const source of a.sources) {
+        if (source.kind) expect(SOURCE_KIND_VALUES.has(source.kind)).toBe(true);
+      }
+    }
+    for (const f of data.freshness) {
+      expect(TRISTATE_VALUES.has(f.handlesFutureDatedLegislation)).toBe(true);
+      expect(UPDATE_CADENCE_VALUES.has(f.updateCadence)).toBe(true);
+      for (const source of f.sources) {
+        if (source.kind) expect(SOURCE_KIND_VALUES.has(source.kind)).toBe(true);
+      }
+    }
+  });
+
   it('every coverage row resolves to a known model and program', () => {
     const modelIds = new Set(data.models.map((m) => m.id));
     const programIds = new Set(data.programs.map((p) => p.id));
     for (const row of data.coverage) {
       expect(modelIds.has(row.model)).toBe(true);
       expect(programIds.has(row.program)).toBe(true);
+    }
+  });
+
+  it('every modeling detail references a known model', () => {
+    const modelIds = new Set(data.models.map((m) => m.id));
+    for (const row of data.modeling) {
+      expect(modelIds.has(row.model)).toBe(true);
     }
   });
 
@@ -94,6 +290,49 @@ describe('comparison data', () => {
     expect(eitc?.get('policyengine-us')?.status).toBe('implemented');
   });
 
+  it('filters coverage programs to rows relevant to selected models', () => {
+    const nberOnly = {
+      ...data,
+      models: data.models.filter((m) => m.id === 'nber-taxsim'),
+    };
+    expect(programsWithCoverageForModels(nberOnly).map((p) => p.id)).toEqual([
+      'us-federal-income-tax',
+      'us-payroll-tax',
+      'us-eitc',
+      'us-ctc',
+      'us-cdcc',
+      'us-state-income-tax',
+    ]);
+
+    const ukOnly = {
+      ...data,
+      models: data.models.filter((m) => m.country === 'uk'),
+    };
+    expect(programsWithCoverageForModels(ukOnly).map((p) => p.id)).toContain(
+      'uk-income-tax',
+    );
+  });
+
+  it('every model has at least one modeling-mechanics row', () => {
+    const modeledIds = new Set(data.modeling.map((row) => row.model));
+    for (const m of data.models) {
+      expect(modeledIds.has(m.id)).toBe(true);
+    }
+  });
+
+  it('modelingByModel groups rows for selected models only', () => {
+    const selected = {
+      ...data,
+      models: data.models.filter((m) =>
+        ['nber-taxsim', 'pwbm'].includes(m.id),
+      ),
+    };
+    expect(modelingByModel(selected).map((group) => group.model.id)).toEqual([
+      'nber-taxsim',
+      'pwbm',
+    ]);
+  });
+
   it('every model has at least one artifact', () => {
     const artifactModels = new Set(data.artifacts.map((a) => a.model));
     for (const m of data.models) {
@@ -115,15 +354,8 @@ describe('comparison data', () => {
   });
 
   it('coverage status values are within the allowed set', () => {
-    const allowed = new Set([
-      'implemented',
-      'partial',
-      'not-implemented',
-      'out-of-scope',
-      'unknown',
-    ]);
     for (const row of data.coverage) {
-      expect(allowed.has(row.status)).toBe(true);
+      expect(COVERAGE_STATUS_VALUES.has(row.status)).toBe(true);
     }
   });
 
@@ -136,7 +368,14 @@ describe('comparison data', () => {
   });
 
   it('tax/tariff programs use annualRevenueUsd, not annualOutlaysUsd', () => {
-    const revenueOnlyTypes = new Set(['income-tax', 'payroll-tax', 'tariff', 'wealth-tax']);
+    const revenueOnlyTypes = new Set([
+      'income-tax',
+      'payroll-tax',
+      'property-tax',
+      'consumption-tax',
+      'tariff',
+      'wealth-tax',
+    ]);
     for (const p of data.programs) {
       if (revenueOnlyTypes.has(p.type)) {
         expect(p.annualOutlaysUsd).toBeUndefined();

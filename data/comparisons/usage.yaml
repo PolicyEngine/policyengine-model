@@ -231,7 +231,7 @@ usage:
     sources:
       - label: HM Treasury Budget archive (IGOTM-based Impact on
           Households annexes)
-        url: https://www.gov.uk/government/collections/budget
+        url: https://www.gov.uk/government/collections/budget-2025
         kind: government
 
   - model: columbia-cpsp
@@ -309,10 +309,10 @@ usage:
       its state policy briefs.
     sources:
       - label: BenefitsCliffs.com — homepage
-        url: https://benefitscliffs.com/
+        url: https://foropportunity.org/benefitcliffs/
         kind: self
       - label: Georgia Center for Opportunity — benefits cliff page
-        url: https://georgiaopportunity.org/the-benefits-cliff/
+        url: https://foropportunity.org/benefitcliffs/
         kind: civilsociety
 
   - model: snap-screener
@@ -365,10 +365,10 @@ usage:
       structured usage metrics are published.
     sources:
       - label: Atlanta Fed — Policy Rules Database project page
-        url: https://www.atlantafed.org/economic-mobility-and-resilience/advancing-careers-for-low-income-families/policy-rules-database
+        url: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
         kind: self
       - label: Atlanta Fed — CLIFF tool suite
-        url: https://www.atlantafed.org/economic-mobility-and-resilience/advancing-careers-for-low-income-families/cliff-tools
+        url: https://www.atlantafed.org/research-and-data/data/cliff-tool
         kind: self
 
   - model: nber-taxsim

@@ -16,7 +16,7 @@ models:
     jurisdictions: [us-federal, us-states, us-localities]
     inceptionYear: 2021
     license: AGPL-3.0-or-later
-    codePublic: true
+    codePublic: yes
     codeUrl: https://github.com/PolicyEngine/policyengine-us
     languages: [Python]
     primaryDataset: Enhanced CPS (PolicyEngine US Data)
@@ -62,7 +62,7 @@ models:
     jurisdictions: [us-federal, us-states]
     inceptionYear: 1973
     license: proprietary
-    codePublic: false
+    codePublic: no
     languages: [SAS, Fortran]
     primaryDataset: TRIM3 augmented CPS-ASEC
     documentationUrl: https://boreas.urban.org/T3IntroHistory.php
@@ -111,7 +111,7 @@ models:
     jurisdictions: [us-federal, us-states, us-substate]
     inceptionYear: 2015
     license: proprietary
-    codePublic: false
+    codePublic: no
     languages: [unknown]
     primaryDataset: American Community Survey (ACS)
     documentationUrl: https://www.urban.org/research-methods/attis-microsimulation-model
@@ -162,7 +162,7 @@ models:
     jurisdictions: [us-federal, us-states]
     inceptionYear: 2002
     license: proprietary
-    codePublic: false
+    codePublic: no
     languages: [SAS]
     primaryDataset: Statistics of Income (SOI) Public Use File + CPS-ASEC match
     documentationUrl: https://www.taxpolicycenter.org/resources/brief-description-tax-model
@@ -209,7 +209,7 @@ models:
     jurisdictions: [us-federal]
     inceptionYear: unknown
     license: proprietary
-    codePublic: false
+    codePublic: no
     languages: [unknown]
     primaryDataset: SOI Individual Tax File (restricted)
     documentationUrl: https://www.jct.gov/publications/2023/jcx-48-23/
@@ -244,7 +244,7 @@ models:
         kind: government
 
   - id: cbo-microsim
-    name: CBO microsimulation
+    name: CBO tax microsimulation
     organization: Congressional Budget Office
     organizationUrl: https://www.cbo.gov
     siblings: [cbolt, hisim2]
@@ -254,16 +254,17 @@ models:
     jurisdictions: [us-federal]
     inceptionYear: unknown
     license: proprietary
-    codePublic: false
+    codePublic: no
     languages: [unknown]
     primaryDataset: CPS + SOI matched microdata (restricted)
     documentationUrl: https://www.cbo.gov/publication/54096
     summary: >
-      CBO maintains internal microsimulation models for federal tax
-      revenue, payroll taxes, and major benefit programs (SNAP, Medicaid,
-      ACA). Models are not public; published outputs include baseline
-      projections and distributional tables. CBO's analyses are the
-      authoritative budget score for Congress.
+      CBO's microsimulation tax model estimates federal individual income
+      and payroll tax liabilities over the budget window. CBO also maintains
+      separate models for health insurance (HISIM2), long-term Social
+      Security and budget projections (CBOLT), tariffs, and transfer-program
+      adjustments; those are tracked as sibling models or explicit coverage
+      caveats rather than folded into the tax microsimulation row.
     capabilities:
       reformImpact: yes
       integratedMicrodata: partial
@@ -297,7 +298,7 @@ models:
     jurisdictions: [us-federal, us-states]
     inceptionYear: 1996
     license: proprietary
-    codePublic: false
+    codePublic: no
     languages: [unknown]
     primaryDataset: IRS Public Use File + ACS PUMS + multi-survey
       imputations (BLS CEX, SIPP, PSID, SCF); aged via CBO/IRS targets
@@ -349,7 +350,7 @@ models:
     jurisdictions: [us-federal]
     inceptionYear: 2014
     license: CC0-1.0
-    codePublic: true
+    codePublic: yes
     codeUrl: https://github.com/PSLmodels/Tax-Calculator
     languages: [Python]
     primaryDataset: >
@@ -406,15 +407,13 @@ models:
     leads:
       - John Ricco
     summary: >
-      Federal tax microsimulation model maintained by the Budget Lab at
-      Yale (founded 2024). Implementation is in R; source code is
-      publicly viewable across the Budget-Lab-Yale GitHub organization
-      (Tax-Simulator, Tax-Data, Macro-Projections, Estate-Tax-
-      Distribution, Safety-Net, Tariff-Model) but none of those repos
-      declare a license, and the model cannot be run end-to-end
-      externally because key inputs rely on restricted SOI PUF data.
-      Methodology documentation is published alongside revenue scoring
-      reports.
+      Federal Tax-Simulator entry for the Budget Lab at Yale. Implementation
+      is in R, with source publicly viewable in the Tax-Simulator and
+      Tax-Data repositories, but no open license is declared and the model
+      cannot be run end-to-end externally because key inputs rely on
+      restricted SOI PUF data. Separate Budget Lab repositories cover
+      estate tax, safety-net, tariff, and macro components, so coverage rows
+      distinguish the tax simulator from the broader Budget Lab suite.
     capabilities:
       reformImpact: yes
       integratedMicrodata: no
@@ -446,7 +445,7 @@ models:
     jurisdictions: [uk]
     inceptionYear: 2021
     license: AGPL-3.0-or-later
-    codePublic: true
+    codePublic: yes
     codeUrl: https://github.com/PolicyEngine/policyengine-uk
     languages: [Python]
     primaryDataset: Enhanced Family Resources Survey (PolicyEngine UK Data)
@@ -482,13 +481,9 @@ models:
       - label: Ghenis & Woodruff — PolicyEngine paper (J. Open Source Software)
         url: https://joss.theoj.org/papers/10.21105/joss.04494
         kind: academic
-        quote: >
-          PolicyEngine is an open-source software platform that
-          computes the impact of public policy on households and
-          populations in multiple countries.
       - label: Nuffield Foundation — Modelling the UK tax-benefit
           system with PolicyEngine
-        url: https://www.nuffieldfoundation.org/project/exploring-the-impact-of-uk-tax-benefit-policy-reforms
+        url: https://www.nuffieldfoundation.org/project/enhancing-localising-and-democratising-tax-benefit-policy-analysis
         kind: civilsociety
 
   - id: ukmod
@@ -501,7 +496,7 @@ models:
     jurisdictions: [uk]
     inceptionYear: 2020
     license: CC BY-NC-ND 4.0
-    codePublic: true
+    codePublic: yes
     codeUrl: https://github.com/centreformicrosimulation/UKMOD-PUBLIC
     languages: [EUROMOD DSL, Stata]
     primaryDataset: Family Resources Survey (FRS) under UK Data Service licence
@@ -554,7 +549,7 @@ models:
     jurisdictions: [uk]
     inceptionYear: 1983
     license: proprietary
-    codePublic: false
+    codePublic: no
     languages: [unknown]
     primaryDataset: Family Resources Survey (FRS) with IFS in-house imputations
     documentationUrl: https://ifs.org.uk/publications/taxben-ifs-tax-and-benefit-microsimulation-model
@@ -609,10 +604,10 @@ models:
     jurisdictions: [uk]
     inceptionYear: unknown
     license: proprietary
-    codePublic: false
+    codePublic: no
     languages: [unknown]
     primaryDataset: ONS Living Costs and Food Survey (with HMRC/DWP administrative uprating)
-    documentationUrl: https://www.gov.uk/government/publications/supporting-documents-for-spring-statement-2025/impact-on-households-distributional-analysis-to-accompany-spring-statement-2025
+    documentationUrl: https://www.gov.uk/government/publications/supporting-documents-for-budget-2025
     summary: >
       The Intra-Governmental Tax and Benefit Microsimulation Model is
       HM Treasury's official microsimulation tool for assessing the
@@ -632,12 +627,12 @@ models:
       apiAccess: no
     sources:
       - label: HM Treasury — Impact on households distributional
-          analysis (Spring Statement 2025)
-        url: https://www.gov.uk/government/publications/supporting-documents-for-spring-statement-2025/impact-on-households-distributional-analysis-to-accompany-spring-statement-2025
+          analysis (Budget 2025)
+        url: https://www.gov.uk/government/publications/supporting-documents-for-budget-2025
         kind: government
       - label: Office for Budget Responsibility — Welfare trends report
           (discusses HMT/DWP microsim toolchain)
-        url: https://obr.uk/welfare-trends-reports/
+        url: https://obr.uk/docs/dlm_uploads/Welfare-trends-report-October-2024.pdf
         kind: government
       - label: IFS Green Budget — discussion of IGOTM and TAXBEN
           divergences in distributional analysis
@@ -658,7 +653,7 @@ models:
     jurisdictions: [us-federal, us-states]
     inceptionYear: 2015
     license: proprietary
-    codePublic: false
+    codePublic: no
     languages: [Stata, R]
     primaryDataset: CPS-ASEC with CPSP-specific imputations
     documentationUrl: https://www.povertycenter.columbia.edu
@@ -712,7 +707,7 @@ models:
     jurisdictions: [us-federal, us-states]
     inceptionYear: 2005
     license: proprietary
-    codePublic: false
+    codePublic: no
     languages: [unknown]
     primaryDataset: applicant-supplied case data
     documentationUrl: https://web.archive.org/web/20240116222713/https://bdtrust.org/
@@ -746,7 +741,7 @@ models:
         kind: press
       - label: USDA FNS — historical Benefits Data Trust SNAP outreach
           partnerships
-        url: https://www.fns.usda.gov/snap/outreach/partners
+        url: https://www.fns.usda.gov/snap/outreach
         kind: government
       - label: Annie E. Casey Foundation — historical funder of BDT
         url: https://www.aecf.org/
@@ -762,7 +757,7 @@ models:
     jurisdictions: [us-federal, us-states]
     inceptionYear: unknown
     license: proprietary
-    codePublic: false
+    codePublic: no
     languages: [unknown]
     primaryDataset: applicant-supplied case data
     documentationUrl: https://benefitkitchen.com/
@@ -796,17 +791,17 @@ models:
   - id: benefits-cliffs
     name: BenefitsCliffs.com
     organization: Georgia Center for Opportunity
-    organizationUrl: https://georgiaopportunity.org/
+    organizationUrl: https://foropportunity.org/
     country: us
     sector: non-profit
     type: reduced-form
     jurisdictions: [us-states]
     inceptionYear: unknown
     license: proprietary
-    codePublic: false
+    codePublic: no
     languages: [unknown]
     primaryDataset: state benefit and tax parameter tables
-    documentationUrl: https://benefitscliffs.com/
+    documentationUrl: https://foropportunity.org/benefitcliffs/
     summary: >
       Benefit-cliff visualization and analysis tool from the Georgia
       Center for Opportunity. Computes net resources, marginal tax
@@ -822,18 +817,18 @@ models:
       apiAccess: unknown
     sources:
       - label: BenefitsCliffs.com — homepage
-        url: https://benefitscliffs.com/
+        url: https://foropportunity.org/benefitcliffs/
         kind: self
       - label: Georgia Center for Opportunity — benefits cliff initiative
-        url: https://georgiaopportunity.org/the-benefits-cliff/
+        url: https://foropportunity.org/benefitcliffs/
         kind: self
       - label: Georgia Center for Opportunity — about
-        url: https://georgiaopportunity.org/about-us/
+        url: https://foropportunity.org/about-us/
         kind: self
       - label: Atlanta Fed — Career Ladder Identifier and Financial
           Forecaster (CLIFF) project, references state-level benefit
           cliff work by GCO
-        url: https://www.atlantafed.org/economic-mobility-and-resilience/advancing-careers-for-low-income-families
+        url: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families
         kind: government
 
   - id: snap-screener
@@ -846,18 +841,18 @@ models:
     jurisdictions: [us-federal, us-states]
     inceptionYear: unknown
     license: proprietary
-    codePublic: false
+    codePublic: no
     languages: [unknown]
-    primaryDataset: state SNAP, WIC, and Medicaid parameter tables
+    primaryDataset: state SNAP and Medicaid screening rules, plus SNAP/WIC/Medicaid guide pages
     documentationUrl: https://www.snapscreener.com/
     leads:
       - Ben Molin
     summary: >
-      For-profit eligibility screeners for SNAP, WIC, and Medicaid.
-      Consumer-facing web tool walks applicants through eligibility
-      checks. Publishes a state-level parameter table for SNAP rules.
-      Paid API tier exists for partner organizations. Not a population
-      microsimulation.
+      For-profit SNAP and Medicaid eligibility screeners plus state guide
+      pages for SNAP, WIC, and Medicaid. Consumer-facing web tools walk
+      applicants through SNAP and Medicaid eligibility checks, and the site
+      publishes a state-level parameter table for SNAP rules. Paid API tier
+      exists for partner organizations. Not a population microsimulation.
     capabilities:
       reformImpact: no
       integratedMicrodata: no
@@ -888,7 +883,7 @@ models:
     jurisdictions: [us-federal, us-states]
     inceptionYear: 2014
     license: proprietary
-    codePublic: false
+    codePublic: no
     languages: [unknown]
     primaryDataset: applicant-supplied case data
     documentationUrl: https://www.mrelief.com/
@@ -912,7 +907,7 @@ models:
         url: https://www.mrelief.com/about
         kind: self
       - label: USDA FNS — SNAP outreach partner list
-        url: https://www.fns.usda.gov/snap/outreach/partners
+        url: https://www.fns.usda.gov/snap/outreach
         kind: government
       - label: Robin Hood Foundation — funder of mRelief and related
           benefits-access non-profits
@@ -929,11 +924,11 @@ models:
     jurisdictions: [us-federal, us-states]
     inceptionYear: 2020
     license: GPL-3.0
-    codePublic: true
+    codePublic: yes
     codeUrl: https://github.com/Research-Division/policy-rules-database
     languages: [Python]
     primaryDataset: state and federal benefit-program parameter tables
-    documentationUrl: https://www.atlantafed.org/economic-mobility-and-resilience/advancing-careers-for-low-income-families/policy-rules-database
+    documentationUrl: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
     summary: >
       Open-source (GPL-3.0) database of federal and state benefit-program
       rules maintained by the Atlanta Fed as part of the Advancing
@@ -950,21 +945,21 @@ models:
       apiAccess: unknown
     sources:
       - label: Atlanta Fed — Policy Rules Database project page
-        url: https://www.atlantafed.org/economic-mobility-and-resilience/advancing-careers-for-low-income-families/policy-rules-database
+        url: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
         kind: self
       - label: Policy Rules Database — public GitHub repository (GPL-3.0)
         url: https://github.com/Research-Division/policy-rules-database
         kind: self
       - label: Atlanta Fed — Advancing Careers for Low-Income Families
-        url: https://www.atlantafed.org/economic-mobility-and-resilience/advancing-careers-for-low-income-families
+        url: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families
         kind: self
       - label: Atlanta Fed — CLIFF tool suite (benefit-cliff calculators
           built on the Policy Rules Database)
-        url: https://www.atlantafed.org/economic-mobility-and-resilience/advancing-careers-for-low-income-families/cliff-tools
+        url: https://www.atlantafed.org/research-and-data/data/cliff-tool
         kind: self
-      - label: Federal Reserve Board — Community development research on
-          benefit cliffs cites the Atlanta Fed Policy Rules Database
-        url: https://www.federalreserve.gov/publications/community-development.htm
+      - label: Atlanta Fed — What Are Benefits Cliffs? cites the PRD
+          dashboard
+        url: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/what-are-benefits-cliffs
         kind: government
 
   - id: nber-taxsim
@@ -977,7 +972,7 @@ models:
     jurisdictions: [us-federal, us-states]
     inceptionYear: 1976
     license: proprietary
-    codePublic: false
+    codePublic: no
     languages: [Fortran]
     primaryDataset: User-supplied (CPS-ASEC, SCF, custom records)
     documentationUrl: https://taxsim.nber.org/
@@ -1037,7 +1032,7 @@ models:
     jurisdictions: [us-federal]
     inceptionYear: 2015
     license: proprietary
-    codePublic: false
+    codePublic: no
     languages: [unknown]
     primaryDataset: SOI Public Use File + supplementary IRS Statistics of Income tables
     documentationUrl: https://taxfoundation.org/research/all/federal/general-equilibrium-model/
@@ -1066,9 +1061,10 @@ models:
         url: https://taxfoundation.org/research/all/federal/general-equilibrium-model/
         kind: self
         quote: >-
-          The Tax Foundation uses and maintains a General
-          Equilibrium Model, known as our Taxes and Growth (TAG)
-          Model.
+          Foundation uses and maintains a General Equilibrium Model,
+          known as our Taxes and Growth (TAG) Model to simulate the
+          effects of government tax and spending policies on the
+          economy and on government revenues and budgets.
       - label: Tax Foundation — The Tax Foundation's Taxes and Growth
           Model (2018 overview)
         url: https://taxfoundation.org/research/all/federal/overview-tax-foundations-taxes-growth-model/
@@ -1094,17 +1090,17 @@ models:
     jurisdictions: [us-federal]
     inceptionYear: 2016
     license: proprietary
-    codePublic: false
+    codePublic: no
     languages: [unknown]
-    primaryDataset: ASEC + IRS Public Use File + administrative-record imputations
+    primaryDataset: CPS Annual Social and Economic Supplement (ASEC) + IRS Public Use File + administrative-record imputations
     documentationUrl: https://budgetmodel.wharton.upenn.edu/model/microsimulation/
     leads:
       - Kent Smetters
     summary: >
       Nonpartisan microsimulation platform at the Wharton School of
       the University of Pennsylvania. PWBM combines a stochastic
-      microsim (initialized from the American Community Survey
-      Economic Supplement and an anonymized representative sample
+      microsim (initialized from the CPS Annual Social and Economic
+      Supplement and an anonymized representative sample
       of tax returns) with a tax module, a Social Security module,
       and a dynamic OLG general-equilibrium core to score federal
       tax, entitlement, healthcare, immigration, and tariff
@@ -1125,7 +1121,7 @@ models:
         url: https://budgetmodel.wharton.upenn.edu/model/microsimulation/
         kind: self
         quote: >-
-          The Microsim integrates with PWBM's Tax Module, Social
+          The model integrates with PWBM's Tax Module, Social
           Security Module, and Dynamic OLG to assess government
           policy impacts.
       - label: Wharton School press release — launch of Penn Wharton
@@ -1151,7 +1147,7 @@ models:
     jurisdictions: [us-federal]
     inceptionYear: 2012
     license: proprietary
-    codePublic: false
+    codePublic: no
     languages: [unknown]
     primaryDataset: SOI Public Use File + IRS Statistics of Income tables
     documentationUrl: https://taxfoundation.org/tags/taxes-and-growth-tag-model-overview-methodology/
@@ -1182,9 +1178,10 @@ models:
         url: https://taxfoundation.org/research/all/federal/general-equilibrium-model/
         kind: self
         quote: >-
-          The Tax Foundation uses and maintains a General
-          Equilibrium Model, known as our Taxes and Growth (TAG)
-          Model.
+          Foundation uses and maintains a General Equilibrium Model,
+          known as our Taxes and Growth (TAG) Model to simulate the
+          effects of government tax and spending policies on the
+          economy and on government revenues and budgets.
       - label: Tax Foundation — The Taxes and Growth Model A Brief
           Overview (Fiscal Fact No. 429)
         url: https://files.taxfoundation.org/legacy/docs/FF429.pdf
@@ -1211,7 +1208,7 @@ models:
     jurisdictions: [uk]
     inceptionYear: unknown
     license: proprietary
-    codePublic: false
+    codePublic: no
     languages: [SAS]
     primaryDataset: Family Resources Survey (FRS) with DWP-internal cleaning, imputation, and CALMAR calibration
     documentationUrl: https://obr.uk/box/dwps-policy-simulation-model-and-the-family-resources-survey/
@@ -1236,17 +1233,14 @@ models:
           (UKMOD Fest 2023 presentation)
         url: https://www.microsimulation.ac.uk/wp-content/uploads/2023/07/UKMODFest2023_DWP.pdf
         kind: self
-        quote: >
-          The Policy Simulation Model (PSM) is DWP's premier policy
-          analysis tool. It's a static microsimulation underpinned by
-          the FRS.
       - label: Office for Budget Responsibility — DWP's policy simulation
           model and the Family Resources Survey
         url: https://obr.uk/box/dwps-policy-simulation-model-and-the-family-resources-survey/
         kind: government
         quote: >
-          The PSM is a static micro-simulation model that uses Family
-          Resources Survey (FRS) data to analyse policy changes.
+          The PSM is the main micro-simulation model used by DWP to
+          analyse policy changes. It is based on the annual Family
+          Resources Survey (FRS).
       - label: Universal Credit Programme — Full Business Case Summary
           (June 2018; PSM cited as the model behind UC costings)
         url: https://www.gov.uk/government/publications/universal-credit-programme-full-business-case-summary/universal-credit-programme-full-business-case-summary
@@ -1274,7 +1268,7 @@ models:
     jurisdictions: [uk]
     inceptionYear: unknown
     license: proprietary
-    codePublic: false
+    codePublic: no
     languages: [unknown]
     primaryDataset: Family Resources Survey (FRS) and Living Costs and Food Survey (LCF)
     documentationUrl: https://mmuperu.co.uk/blog/projects/modelling-the-effects-of-the-tax-and-benefit-system/
@@ -1335,7 +1329,7 @@ models:
     jurisdictions: [uk]
     inceptionYear: 2008
     license: proprietary
-    codePublic: false
+    codePublic: no
     languages: [unknown]
     primaryDataset: Family Resources Survey (FRS) and Living Costs and Food Survey (LCF)
     documentationUrl: https://www.gov.scot/publications/tackling-child-poverty-delivery-plan-forecasting-child-poverty-scotland/pages/8/
@@ -1365,11 +1359,10 @@ models:
         url: https://www.gov.scot/publications/tackling-child-poverty-delivery-plan-forecasting-child-poverty-scotland/pages/8/
         kind: government
         quote: >
-          a tax-benefit microsimulation model (the tax-transfer model,
-          or TTM) which was originally written by Landman Economics,
-          and which is maintained jointly by Landman Economics, the
-          Resolution Foundation and the Institute for Public Policy
-          Research.
+          The calculations of the distributional effects of tax and
+          transfer (benefit, tax credit and Universal Credit) policies
+          is in this report were made using a tax-benefit
+          microsimulation model.
       - label: Equality and Human Rights Commission — The cumulative
           impact of tax and welfare reforms (Landman Economics TTM)
         url: https://www.equalityhumanrights.com/sites/default/files/cumulative-impact-assessment-report.pdf
@@ -1380,7 +1373,7 @@ models:
         kind: academic
       - label: EHRC — Cumulative impact of tax, social security and
           public spending decisions in Scotland (Landman Economics-led)
-        url: https://www.equalityhumanrights.com/en/publication-download/cumulative-impact-tax-social-security-and-public-spending-decisions
+        url: https://www.equalityhumanrights.com/sites/default/files/2022/our-work-cumulative-impact-assessment-report-scotland-appendix.pdf
         kind: government
       - label: Reed (Northumbria PhD thesis) — Microsimulation of the
           impacts of tax, social security and public spending changes
@@ -1397,7 +1390,7 @@ models:
     jurisdictions: [uk]
     inceptionYear: 2000
     license: proprietary
-    codePublic: false
+    codePublic: no
     languages: [unknown]
     primaryDataset: n/a (per-claimant rules engine; no underlying microdata)
     documentationUrl: https://www.entitledto.co.uk/help/default.aspx
@@ -1436,11 +1429,7 @@ models:
         url: https://www.gov.uk/benefits-calculators
         kind: government
         quote: >
-          Use one of the following free benefits calculators to check
-          what you could get... entitledto for information on
-          income-related benefits, tax credits, contribution-based
-          benefits, Carer's Allowance, Universal Credit and how your
-          benefits will be affected if you start work.
+          entitledto benefits calculator
       - label: UK Government Digital Marketplace — EntitledTo Benefits
           Calculator (G-Cloud listing)
         url: https://www.applytosupply.digitalmarketplace.service.gov.uk/g-cloud/services/973658267289218
@@ -1454,7 +1443,7 @@ models:
         kind: civilsociety
 
   - id: dynasim
-    name: DYNASIM3
+    name: DYNASIM4
     organization: Urban Institute
     organizationUrl: https://www.urban.org
     siblings: [trim3, attis, hipsm]
@@ -1464,20 +1453,20 @@ models:
     jurisdictions: [us-federal]
     inceptionYear: 1976
     license: proprietary
-    codePublic: false
+    codePublic: no
     languages: [unknown]
-    primaryDataset: Survey of Income and Program Participation (SIPP) panels matched to administrative earnings
+    primaryDataset: 2006 synthetic sample built from SIPP, NLSY, PSID, SER, and ACS inputs
     documentationUrl: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/dynamic-simulation-income-model-dynasim
     leads:
       - Melissa Favreault
       - Karen Smith
       - Damir Cosic
     summary: >
-      The Dynamic Simulation of Income Model (DYNASIM3) is Urban
+      The Dynamic Simulation of Income Model (DYNASIM4) is Urban
       Institute's dynamic, lifecycle microsimulation of retirement
       income, aging, and intergenerational wealth. Unlike Urban's
-      annual cross-sectional models (TRIM3, ATTIS), DYNASIM3 ages
-      a representative starting sample year by year, simulating
+      annual cross-sectional models (TRIM3, ATTIS), DYNASIM4 ages
+      a 2006 starting sample year by year through 2100, simulating
       demographic events (births, deaths, marriages, divorces) and
       economic events (earnings, hours, disability onset,
       retirement) decades into the future. Used extensively under
@@ -1493,6 +1482,9 @@ models:
     sources:
       - label: DYNASIM model overview (Urban Institute)
         url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/dynamic-simulation-income-model-dynasim
+        kind: self
+      - label: Urban — Dynamic Simulation of Income Model 4 fact sheet
+        url: https://www.urban.org/sites/default/files/2024-09/Urban%E2%80%99s%20Dynamic%20Simulation%20of%20Income%20Model%204.pdf
         kind: self
       - label: Favreault, Smith & Johnson — A Primer on DYNASIM3
           (Urban Institute methodology report)
@@ -1528,7 +1520,7 @@ models:
     jurisdictions: [us-federal]
     inceptionYear: 2002
     license: proprietary
-    codePublic: false
+    codePublic: no
     languages: [unknown]
     primaryDataset: SSA Continuous Work History Sample + CPS-ASEC + administrative earnings records
     documentationUrl: https://www.cbo.gov/publication/53667
@@ -1587,7 +1579,7 @@ models:
     jurisdictions: [us-federal, us-states]
     inceptionYear: 2009
     license: proprietary
-    codePublic: false
+    codePublic: no
     languages: [unknown]
     primaryDataset: ACS + CPS-ASEC + MEPS-HC matched, calibrated to ACA marketplace and Medicaid administrative totals
     documentationUrl: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/health-insurance-policy-simulation-model-hipsm
@@ -1650,14 +1642,15 @@ models:
     jurisdictions: [us-federal]
     inceptionYear: 2019
     license: proprietary
-    codePublic: false
+    codePublic: no
     languages: [unknown]
-    primaryDataset: SIPP + American Community Survey + administrative tax and Medicaid records (restricted)
+    primaryDataset: CPS and CPS-ASEC foundation with edits, imputations, and supplemental administrative/survey data
     documentationUrl: https://www.cbo.gov/publication/57205
     summary: >
       CBO's second-generation Health Insurance Simulation Model,
-      replacing HISIM. Generates estimates of health insurance
-      coverage and premiums for the population under age 65, and
+      replacing HISIM. Built from CPS/CPS-ASEC records with edits,
+      imputations, and supplemental data, it generates estimates of
+      health insurance coverage and premiums for the population under age 65, and
       scores proposed changes to ACA marketplace subsidies,
       Medicaid, employer-sponsored insurance, and the individual
       mandate. The model underlies essentially every CBO score of

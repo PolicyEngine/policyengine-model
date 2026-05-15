@@ -20,11 +20,11 @@ artifacts:
     name: policyengine_us parameters (YAML)
     public: yes
     license: AGPL-3.0-or-later
-    url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/parameters
+    url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/parameters
     description: All policy parameters as inspectable YAML with inline statutory references.
     sources:
       - label: Parameters tree
-        url: https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/parameters
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/parameters
         kind: self
 
   - model: policyengine-us
@@ -261,13 +261,13 @@ artifacts:
   # =================================== CBO microsim ==========================
   - model: cbo-microsim
     type: codebase
-    name: CBO internal microsim models
+    name: CBO internal tax microsimulation model
     public: no
     license: proprietary
-    description: Multiple internal microsim models for tax revenue, payroll, SNAP, Medicaid.
+    description: Internal federal individual income and payroll-tax microsimulation model; health, long-term, and transfer models are tracked separately.
     sources:
-      - label: CBO working papers
-        url: https://www.cbo.gov/about/products/working-papers
+      - label: CBO tax microsimulation model methodology
+        url: https://www.cbo.gov/publication/54096
         kind: self
 
   - model: cbo-microsim
@@ -679,13 +679,13 @@ artifacts:
     name: BenefitsCliffs.com
     public: partial
     license: proprietary
-    url: https://benefitscliffs.com/
+    url: https://foropportunity.org/benefitcliffs/
     description: >
       Paywalled benefit-cliff visualization tool from the Georgia Center
       for Opportunity covering multiple US states.
     sources:
       - label: BenefitsCliffs.com — homepage
-        url: https://benefitscliffs.com/
+        url: https://foropportunity.org/benefitcliffs/
         kind: self
 
   # ============================ SNAPScreener ================================
@@ -763,13 +763,13 @@ artifacts:
     name: Policy Rules Database project page
     public: yes
     license: GPL-3.0
-    url: https://www.atlantafed.org/economic-mobility-and-resilience/advancing-careers-for-low-income-families/policy-rules-database
+    url: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
     description: >
       Project landing page describing federal and state
       benefit-program rules data and methodology.
     sources:
       - label: Atlanta Fed — Policy Rules Database project page
-        url: https://www.atlantafed.org/economic-mobility-and-resilience/advancing-careers-for-low-income-families/policy-rules-database
+        url: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
         kind: self
 
   - model: atlanta-fed-prd
@@ -777,13 +777,13 @@ artifacts:
     name: Atlanta Fed CLIFF tool suite
     public: yes
     license: proprietary
-    url: https://www.atlantafed.org/economic-mobility-and-resilience/advancing-careers-for-low-income-families/cliff-tools
+    url: https://www.atlantafed.org/research-and-data/data/cliff-tool
     description: >
       Career Ladder Identifier and Financial Forecaster (CLIFF)
       calculators built on top of the Policy Rules Database.
     sources:
       - label: Atlanta Fed — CLIFF tools
-        url: https://www.atlantafed.org/economic-mobility-and-resilience/advancing-careers-for-low-income-families/cliff-tools
+        url: https://www.atlantafed.org/research-and-data/data/cliff-tool
         kind: self
 
   # =================================== NBER TAXSIM ============================

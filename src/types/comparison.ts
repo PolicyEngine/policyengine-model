@@ -185,6 +185,8 @@ export interface Model {
 export type ProgramType =
   | 'income-tax'
   | 'payroll-tax'
+  | 'property-tax'
+  | 'consumption-tax'
   | 'refundable-tax-credit'
   | 'nonrefundable-tax-credit'
   | 'cash-transfer'
@@ -390,6 +392,48 @@ export interface Imputation {
 }
 
 /* -------------------------------------------------------------------------- */
+/*                            MODELING MECHANICS                              */
+/* -------------------------------------------------------------------------- */
+
+export type ModelingMechanicCategory =
+  | 'architecture'
+  | 'simulation-unit'
+  | 'base-data'
+  | 'data-enhancement'
+  | 'aging-uprating'
+  | 'calibration'
+  | 'take-up'
+  | 'tax-modeling'
+  | 'benefit-modeling'
+  | 'behavioral-response'
+  | 'macro-feedback'
+  | 'health-insurance'
+  | 'dynamic-lifecycle'
+  | 'geography'
+  | 'time-horizon'
+  | 'validation'
+  | 'output'
+  | 'access'
+  | 'other';
+
+/**
+ * Atomic public facts about a model's mechanics. This is deliberately more
+ * granular than `models.summary`: rows are meant to accumulate every modeling
+ * detail we can substantiate from methodology documents.
+ */
+export interface ModelingMechanic {
+  model: string;
+  category: ModelingMechanicCategory;
+  /** Short name for this modeling detail. */
+  label: string;
+  /** Exact methodological detail, written neutrally and with caveats. */
+  detail: string;
+  /** Optional program/domain scope, e.g. "federal tax", "SNAP", "health". */
+  scope?: string;
+  sources: Source[];
+}
+
+/* -------------------------------------------------------------------------- */
 /*                                 ARTIFACTS                                  */
 /* -------------------------------------------------------------------------- */
 
@@ -461,6 +505,7 @@ export interface ComparisonData {
   usage: UsageMetric[];
   accuracy: AccuracyCheck[];
   imputations: Imputation[];
+  modeling: ModelingMechanic[];
   artifacts: Artifact[];
   freshness: Freshness[];
 }

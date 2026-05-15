@@ -55,7 +55,7 @@ accuracy:
     units: persons
     targetSource:
       label: CMS Medicaid and CHIP enrollment data
-      url: https://www.medicaid.gov/medicaid/program-information/medicaid-and-chip-enrollment-data/index.html
+      url: https://www.medicaid.gov/medicaid/national-medicaid-chip-program-information/medicaid-chip-enrollment-data/monthly-medicaid-chip-application-eligibility-determination-and-enrollment-reports-data
       kind: government
 
   - model: trim3
