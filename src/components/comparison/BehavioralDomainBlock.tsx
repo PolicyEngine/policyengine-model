@@ -76,7 +76,7 @@ export function BehavioralDomainBlock({
               <thead>
                 <tr>
                   <th style={{ ...thStyle, minWidth: 180 }}>Model</th>
-                  <th style={thStyle}>Parameter</th>
+                  <th style={thStyle}>Assumption</th>
                   <th style={thStyle}>Value</th>
                   <th style={thStyle}>Population / scope</th>
                   <th style={thStyle}>Margin / horizon</th>
@@ -100,8 +100,7 @@ export function BehavioralDomainBlock({
                         <div style={{ fontWeight: 600, marginBottom: 4 }}>
                           {row.label}
                         </div>
-                        <code style={{ fontSize: 12 }}>{row.parameter}</code>
-                        <div style={{ ...subTextStyle, marginTop: 4 }}>
+                        <div style={subTextStyle}>
                           {row.kind} · {row.status}
                         </div>
                       </td>

@@ -10,58 +10,58 @@ behavioralParameters:
   - model: policyengine-us
     domain: labor-supply
     kind: elasticity
-    parameter: default_labor_income_elasticity
-    label: Default income elasticity of labor supply
+    parameter: labor_supply_income_effect_response
+    label: Income-effect labor supply response
     status: not-modeled
     value: 0
     unit: elasticity
     population: all earners
     margin: income effect
     horizon: static default
-    notes: PolicyEngine US does not pick a nonzero labor-supply elasticity by default; the production parameter defaults to zero. CBO values shown in this app are presets/explainer values, not the model default.
+    notes: PolicyEngine US is static by default on this margin; unless users explicitly change the labor-supply response settings, the income-effect response is zero. CBO values shown in this app are presets/explainer values, not model defaults.
     sources:
-      - label: policyengine-us income elasticity parameter
+      - label: policyengine-us labor-supply income-effect setting
         url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/parameters/gov/simulation/labor_supply_responses/elasticities/income.yaml
         kind: self
 
   - model: policyengine-us
     domain: labor-supply
     kind: elasticity
-    parameter: default_labor_substitution_elasticity
-    label: Default substitution elasticity of labor supply
+    parameter: labor_supply_substitution_effect_response
+    label: Substitution-effect labor supply response
     status: not-modeled
     value: 0
     unit: elasticity
     population: all earners and deciles
     margin: substitution effect
     horizon: static default
-    notes: The all-earner override and position/decile-specific substitution elasticities default to zero.
+    notes: PolicyEngine US is static by default on this margin; the all-earner substitution response and position/decile-specific fallback responses are zero unless explicitly changed.
     sources:
-      - label: policyengine-us substitution elasticity parameter
+      - label: policyengine-us labor-supply substitution-effect setting
         url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/parameters/gov/simulation/labor_supply_responses/elasticities/substitution.yaml
         kind: self
 
   - model: policyengine-us
     domain: capital-gains
     kind: elasticity
-    parameter: default_capital_gains_realization_elasticity
-    label: Default capital-gains realization elasticity
+    parameter: capital_gains_realization_response
+    label: Capital-gains realization response
     status: not-modeled
     value: 0
     unit: elasticity
     population: capital-gains realizers
     margin: realization timing and avoidance
     horizon: static default
-    notes: PolicyEngine US defaults to static capital-gains realizations unless the parameter is explicitly changed.
+    notes: PolicyEngine US is static by default on this margin; capital-gains realizations do not respond unless users explicitly change the response setting.
     sources:
-      - label: policyengine-us capital gains response parameter
+      - label: policyengine-us capital-gains response setting
         url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/parameters/gov/simulation/capital_gains_responses/elasticity.yaml
         kind: self
 
   - model: policyengine-us
     domain: take-up
     kind: take-up-model
-    parameter: enhanced_cps_takeup_priors
+    parameter: enhanced_cps_take_up_priors
     label: Enhanced CPS take-up and claiming priors
     status: qualitative
     value: unknown
@@ -715,8 +715,8 @@ behavioralParameters:
   - model: policyengine-uk
     domain: labor-supply
     kind: elasticity
-    parameter: default_labour_income_elasticity
-    label: Default income elasticity of labour supply
+    parameter: labour_supply_income_effect_response
+    label: Income-effect labour supply response
     status: not-modeled
     value: 0
     unit: elasticity
@@ -724,17 +724,17 @@ behavioralParameters:
     policyScope: UK tax-benefit reform simulation
     margin: income effect
     horizon: static default
-    notes: PolicyEngine UK defaults to static labour supply unless this parameter is explicitly changed.
+    notes: PolicyEngine UK is static by default on this margin; unless users explicitly change the labour-supply response settings, the income-effect response is zero.
     sources:
-      - label: policyengine-uk income elasticity parameter
+      - label: policyengine-uk labour-supply income-effect setting
         url: https://github.com/PolicyEngine/policyengine-uk/blob/main/policyengine_uk/parameters/gov/simulation/labour_supply_responses/income_elasticity.yaml
         kind: self
 
   - model: policyengine-uk
     domain: labor-supply
     kind: elasticity
-    parameter: default_labour_substitution_elasticity
-    label: Default substitution elasticity of labour supply
+    parameter: labour_supply_substitution_effect_response
+    label: Substitution-effect labour supply response
     status: not-modeled
     value: 0
     unit: elasticity
@@ -742,17 +742,17 @@ behavioralParameters:
     policyScope: UK tax-benefit reform simulation
     margin: substitution effect
     horizon: static default
-    notes: PolicyEngine UK defaults to static labour supply unless this parameter is explicitly changed.
+    notes: PolicyEngine UK is static by default on this margin; unless users explicitly change the labour-supply response settings, the substitution-effect response is zero.
     sources:
-      - label: policyengine-uk substitution elasticity parameter
+      - label: policyengine-uk labour-supply substitution-effect setting
         url: https://github.com/PolicyEngine/policyengine-uk/blob/main/policyengine_uk/parameters/gov/simulation/labour_supply_responses/substitution_elasticity.yaml
         kind: self
 
   - model: policyengine-uk
     domain: capital-gains
     kind: elasticity
-    parameter: default_capital_gains_realization_elasticity
-    label: Default capital-gains realization elasticity
+    parameter: capital_gains_realization_response
+    label: Capital-gains realization response
     status: not-modeled
     value: 0
     unit: elasticity
@@ -760,9 +760,9 @@ behavioralParameters:
     policyScope: UK capital gains tax reform simulation
     margin: realization timing
     horizon: static default
-    notes: PolicyEngine UK defaults to static capital-gains realizations unless this parameter is explicitly changed.
+    notes: PolicyEngine UK is static by default on this margin; capital-gains realizations do not respond unless users explicitly change the response setting.
     sources:
-      - label: policyengine-uk capital gains response parameter
+      - label: policyengine-uk capital-gains response setting
         url: https://github.com/PolicyEngine/policyengine-uk/blob/main/policyengine_uk/parameters/gov/simulation/capital_gains_responses/elasticity.yaml
         kind: self
 
