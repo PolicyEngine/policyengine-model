@@ -17,29 +17,29 @@ import type { ComparisonData, Model } from '../../types/comparison';
 
 export default function ComparisonOverview({
   data,
-  allModels,
+  countryModels,
 }: {
   data: ComparisonData;
-  allModels: Model[];
+  countryModels: Model[];
 }) {
   return (
     <div>
       <PageHeader
         category="Comparison"
         title="Open microsimulation reference"
-        description="A structured catalogue of tax and benefit microsimulation models across coverage, freshness, transparency, methodology, artifacts, and usage. The current index covers 32 US and UK models, from open-source rules engines and proprietary tax microsims to dynamic lifecycle and health-insurance market models. PolicyEngine maintains this reference; pull requests adding or correcting entries are welcome."
+        description="A structured catalogue of tax and benefit microsimulation models in the active country, across coverage, freshness, transparency, methodology, artifacts, and usage. Each row in data/comparisons/*.yaml is the source of truth for one fact. When a value is not publicly documented, the row reads unknown rather than a guess."
       />
 
-      <ModelSelector allModels={allModels} />
+      <ModelSelector countryModels={countryModels} />
 
       <section style={sectionStyle}>
         <h2 style={h2Style}>Scope</h2>
         <p style={proseStyle}>
-          The catalogue spans 32 US and UK tax and benefit microsimulation
-          models — open-source rules engines, proprietary tax microsims,
-          government scorekeeper models, dynamic lifecycle and long-term
-          projection models, health-insurance market models, and benefit-
-          eligibility calculators. Each row in{' '}
+          This page lists the tax and benefit microsimulation models active
+          in the current country — open-source rules engines, proprietary
+          tax microsims, government scorekeeper models, dynamic lifecycle
+          and long-term projection models, health-insurance market models,
+          and benefit-eligibility calculators. Each row in{' '}
           <code>data/comparisons/*.yaml</code> is the source of truth for
           one fact. When a value is not publicly documented, the row reads{' '}
           <em>unknown</em> rather than a guess.

@@ -1,7 +1,7 @@
 import MethodsView from '../../../src/components/comparison/MethodsView';
 import { loadComparisonData } from '../../../src/data/comparisons';
 import { filterSelectedModels } from '../../../src/components/comparison/filterModels';
-import { detectCountryFilter } from '../../../src/components/comparison/detectCountry';
+import { detectCountry } from '../../../src/components/comparison/detectCountry';
 import type { ModelingMechanicCategory } from '../../../src/types/comparison';
 
 const ALL_CATEGORIES: ModelingMechanicCategory[] = [
@@ -50,9 +50,9 @@ export default async function MethodsRoute({
 }) {
   const data = loadComparisonData();
   const sp = await searchParams;
-  const allModels = data.models;
-  const countryFilter = await detectCountryFilter(sp.country);
-  const selectedModels = filterSelectedModels(allModels, sp.models, countryFilter);
+  const country = await detectCountry(sp.country);
+  const countryModels = data.models.filter((m) => m.country === country);
+  const selectedModels = filterSelectedModels(data.models, sp.models, country);
   const selectedIds = new Set(selectedModels.map((m) => m.id));
   const selectedCategories = parseSelectedCategories(sp.categories);
   return (
@@ -63,8 +63,11 @@ export default async function MethodsRoute({
         imputations: data.imputations.filter((i) => selectedIds.has(i.model)),
         accuracy: data.accuracy.filter((a) => selectedIds.has(a.model)),
         modeling: data.modeling.filter((m) => selectedIds.has(m.model)),
+        behavioralParameters: data.behavioralParameters.filter((b) =>
+          selectedIds.has(b.model),
+        ),
       }}
-      allModels={allModels}
+      countryModels={countryModels}
       selectedCategories={selectedCategories}
     />
   );

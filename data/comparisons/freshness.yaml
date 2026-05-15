@@ -891,10 +891,10 @@ freshness:
         supports: [latestImplementedYear, forwardYearsThrough,
                    handlesFutureDatedLegislation, lastMajorRefresh,
                    notableRegimes]
-      - label: Tax Foundation update — Tax Foundation updates its
-          General Equilibrium Model with new data enhancements
-        url: https://thefederalnewswire.com/stories/670302216-tax-foundation-updates-its-general-equilibrium-model-with-new-data-enhancements
-        kind: press
+      - label: Tax Foundation — February 2025 General Equilibrium
+          Model update
+        url: https://taxfoundation.org/research/all/federal/general-equilibrium-model/
+        kind: self
         supports: [lastMajorRefresh, updateCadence]
       - label: Tax Foundation — Modeling the Economic Effects of Past
           Tax Bills (TAG forward-projection examples)
@@ -984,10 +984,10 @@ freshness:
         url: https://taxfoundation.org/research/all/federal/modeling-economic-effects-past-tax-bills/
         kind: self
         supports: [handlesFutureDatedLegislation, notableRegimes]
-      - label: Tax Foundation update — TF updates its General
-          Equilibrium Model with new data enhancements (press)
-        url: https://thefederalnewswire.com/stories/670302216-tax-foundation-updates-its-general-equilibrium-model-with-new-data-enhancements
-        kind: press
+      - label: Tax Foundation — February 2025 General Equilibrium
+          Model update
+        url: https://taxfoundation.org/research/all/federal/general-equilibrium-model/
+        kind: self
         supports: [lastMajorRefresh, updateCadence]
       - label: CBO Budget and Economic Outlook (baseline alignment)
         url: https://www.cbo.gov/topics/budget

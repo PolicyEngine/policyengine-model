@@ -27,10 +27,10 @@ const ARTIFACT_TYPE_LABELS: Record<ArtifactType, string> = {
 
 export default function ArtifactsTable({
   data,
-  allModels,
+  countryModels,
 }: {
   data: ComparisonData;
-  allModels: Model[];
+  countryModels: Model[];
 }) {
   return (
     <div>
@@ -40,7 +40,7 @@ export default function ArtifactsTable({
         description="Concrete deliverables produced by each model: source code, datasets, parameter databases, public APIs, web applications, documentation sites, and papers. An artifact is anything an outside reader can verify exists."
       />
 
-      <ModelSelector allModels={allModels} />
+      <ModelSelector countryModels={countryModels} />
 
       {data.models.map((model) => {
         const artifacts = data.artifacts.filter((a) => a.model === model.id);

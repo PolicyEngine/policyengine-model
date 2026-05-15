@@ -57,11 +57,21 @@ interface SidebarProps {
   onClose?: () => void;
 }
 
-/** Extract the base prefix when embedded (e.g. '/us/model' from '/us/model/data/pipeline'). */
+/**
+ * Extract the base prefix so sidebar links stay within the active
+ * country namespace.
+ *
+ *   /{country}/model/...  (embedded in policyengine-app-v2)  → '/{country}/model'
+ *   /{country}/...        (standalone preview via proxy.ts)  → '/{country}'
+ *   otherwise                                                → ''
+ */
 function useBasePrefix(): string {
   const pathname = usePathname();
-  const match = pathname.match(/^\/\w+\/model/);
-  return match ? match[0] : '';
+  const embedMatch = pathname.match(/^\/\w+\/model/);
+  if (embedMatch) return embedMatch[0];
+  const countryMatch = pathname.match(/^\/(us|uk)(\/|$)/);
+  if (countryMatch) return `/${countryMatch[1]}`;
+  return '';
 }
 
 export default function Sidebar({ country, onClose }: SidebarProps) {

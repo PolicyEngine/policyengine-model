@@ -1,34 +1,31 @@
+import type { Country } from './detectCountry';
+
 /**
- * Filter a model list to those selected by URL search params.
+ * Filter a model list to those selected by the URL `models` param,
+ * scoped to the active country.
  *
  * Semantics:
- *   - `?models=` undefined            → all models (subject to country filter).
- *   - `?models=` empty                → none.
- *   - `?models=id1,id2`               → those models, in input order.
- *
- * `?country=us|uk` filters the default-all set further. When `?models=`
- * is set explicitly, country is ignored — explicit selection wins.
+ *   - `?models=` undefined → every model whose country matches `country`.
+ *   - `?models=none`       → none.
+ *   - `?models=id1,id2`    → those models, restricted to the active
+ *                            country (cross-country ids are dropped so
+ *                            URL hacks can't escape the country scope).
  *
  * Pure utility — safe to import from server components (no 'use client').
  */
 export function filterSelectedModels<T extends { id: string; country?: string }>(
   models: T[],
   selectedRaw: string | string[] | undefined,
-  countryRaw?: string | string[] | undefined,
+  country: Country,
 ): T[] {
-  // Explicit selection wins over country default.
-  if (selectedRaw !== undefined) {
-    const param = Array.isArray(selectedRaw) ? selectedRaw[0] : selectedRaw;
-    const ids = new Set(param.split(',').map((s) => s.trim()).filter(Boolean));
-    if (ids.size === 0) return [];
-    return models.filter((m) => ids.has(m.id));
-  }
-  // Country default — single value, ignored if 'all' or missing.
-  if (countryRaw !== undefined) {
-    const country = (Array.isArray(countryRaw) ? countryRaw[0] : countryRaw).trim();
-    if (country && country !== 'all') {
-      return models.filter((m) => m.country === country);
-    }
-  }
-  return models;
+  const inCountry = models.filter((m) => m.country === country);
+
+  if (selectedRaw === undefined) return inCountry;
+
+  const param = Array.isArray(selectedRaw) ? selectedRaw[0] : selectedRaw;
+  if (param === 'none') return [];
+
+  const ids = new Set(param.split(',').map((s) => s.trim()).filter(Boolean));
+  if (ids.size === 0) return [];
+  return inCountry.filter((m) => ids.has(m.id));
 }

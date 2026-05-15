@@ -64,12 +64,12 @@ const STATE_COLOR: Record<string, string> = {
 
 export default function CoverageMatrix({
   data,
-  allModels,
+  countryModels,
   overlay,
   selectedYear,
 }: {
   data: ComparisonData;
-  allModels: Model[];
+  countryModels: Model[];
   overlay?: CoverageMatrixOverlay;
   selectedYear?: number;
 }) {
@@ -92,7 +92,7 @@ export default function CoverageMatrix({
         description="Which tax and transfer programs each model implements. Status reflects whether the program is computed end-to-end (implemented), simulated with simplifications (partial), or absent. Click any model name for its overview."
       />
 
-      <ModelSelector allModels={allModels} />
+      <ModelSelector countryModels={countryModels} />
 
       {overlay?.availableYears && overlay.availableYears.length > 0 && (
         <YearFilter years={overlay.availableYears} />

@@ -89,10 +89,10 @@ const ROWS: RowSpec[] = [
 
 export default function FreshnessTable({
   data,
-  allModels,
+  countryModels,
 }: {
   data: ComparisonData;
-  allModels: Model[];
+  countryModels: Model[];
 }) {
   return (
     <div>
@@ -102,7 +102,7 @@ export default function FreshnessTable({
         description="How current each model's policy parameters are, whether it implements legislation enacted but not yet in effect, and how quickly it absorbs new statute. Each cell carries its own corroborating sources."
       />
 
-      <ModelSelector allModels={allModels} />
+      <ModelSelector countryModels={countryModels} />
 
       <section style={sectionStyle}>
         <div style={tableWrapperStyle}>

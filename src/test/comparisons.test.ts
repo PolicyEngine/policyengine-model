@@ -5,6 +5,7 @@ import {
   programById,
   coverageByProgram,
   programsWithCoverageForModels,
+  behavioralParametersByDomain,
   modelingByModel,
 } from '../data/comparisons';
 import { sourcesFor, sourceKinds } from '../types/comparison';
@@ -67,6 +68,38 @@ describe('comparison data', () => {
     'census-research-file',
     'machine-learning',
     'other',
+    'unknown',
+  ]);
+  const BEHAVIORAL_PARAMETER_DOMAIN_VALUES = new Set([
+    'labor-supply',
+    'taxable-income',
+    'capital-gains',
+    'take-up',
+    'health-insurance',
+    'retirement',
+    'saving',
+    'tax-incidence',
+    'macro',
+    'tariff',
+    'financial-transactions',
+    'other',
+  ]);
+  const BEHAVIORAL_PARAMETER_KIND_VALUES = new Set([
+    'elasticity',
+    'semi-elasticity',
+    'participation-elasticity',
+    'incidence-assumption',
+    'choice-model',
+    'take-up-model',
+    'functional-form',
+    'calibration-target',
+    'other',
+  ]);
+  const BEHAVIORAL_PARAMETER_STATUS_VALUES = new Set([
+    'numeric',
+    'qualitative',
+    'documented-undisclosed',
+    'not-modeled',
     'unknown',
   ]);
   const ARTIFACT_TYPE_VALUES = new Set([
@@ -192,6 +225,14 @@ describe('comparison data', () => {
         if (source.kind) expect(SOURCE_KIND_VALUES.has(source.kind)).toBe(true);
       }
     }
+    for (const row of data.behavioralParameters) {
+      expect(BEHAVIORAL_PARAMETER_DOMAIN_VALUES.has(row.domain)).toBe(true);
+      expect(BEHAVIORAL_PARAMETER_KIND_VALUES.has(row.kind)).toBe(true);
+      expect(BEHAVIORAL_PARAMETER_STATUS_VALUES.has(row.status)).toBe(true);
+      for (const source of row.sources) {
+        if (source.kind) expect(SOURCE_KIND_VALUES.has(source.kind)).toBe(true);
+      }
+    }
     for (const row of data.modeling) {
       expect(MODELING_MECHANIC_CATEGORY_VALUES.has(row.category)).toBe(true);
       for (const source of row.sources) {
@@ -226,6 +267,13 @@ describe('comparison data', () => {
   it('every modeling detail references a known model', () => {
     const modelIds = new Set(data.models.map((m) => m.id));
     for (const row of data.modeling) {
+      expect(modelIds.has(row.model)).toBe(true);
+    }
+  });
+
+  it('every behavioral parameter references a known model', () => {
+    const modelIds = new Set(data.models.map((m) => m.id));
+    for (const row of data.behavioralParameters) {
       expect(modelIds.has(row.model)).toBe(true);
     }
   });
@@ -318,6 +366,27 @@ describe('comparison data', () => {
     for (const m of data.models) {
       expect(modeledIds.has(m.id)).toBe(true);
     }
+  });
+
+  it('every model has at least one behavioral-parameter row', () => {
+    const modeledIds = new Set(data.behavioralParameters.map((row) => row.model));
+    for (const m of data.models) {
+      expect(modeledIds.has(m.id)).toBe(true);
+    }
+  });
+
+  it('behavioralParametersByDomain groups selected model rows only', () => {
+    const selected = {
+      ...data,
+      models: data.models.filter((m) =>
+        ['policyengine-us', 'pwbm'].includes(m.id),
+      ),
+    };
+    const grouped = behavioralParametersByDomain(selected);
+    const modelIds = new Set(
+      grouped.flatMap((group) => group.rows.map((row) => row.model)),
+    );
+    expect(modelIds).toEqual(new Set(['policyengine-us', 'pwbm']));
   });
 
   it('modelingByModel groups rows for selected models only', () => {

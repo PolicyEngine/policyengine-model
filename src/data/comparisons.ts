@@ -11,6 +11,7 @@ import type {
   UsageMetric,
   AccuracyCheck,
   Imputation,
+  BehavioralParameter,
   ModelingMechanic,
   Artifact,
   Freshness,
@@ -89,6 +90,38 @@ const IMPUTATION_METHOD_VALUES = new Set([
   'census-research-file',
   'machine-learning',
   'other',
+  'unknown',
+]);
+const BEHAVIORAL_PARAMETER_DOMAIN_VALUES = new Set([
+  'labor-supply',
+  'taxable-income',
+  'capital-gains',
+  'take-up',
+  'health-insurance',
+  'retirement',
+  'saving',
+  'tax-incidence',
+  'macro',
+  'tariff',
+  'financial-transactions',
+  'other',
+]);
+const BEHAVIORAL_PARAMETER_KIND_VALUES = new Set([
+  'elasticity',
+  'semi-elasticity',
+  'participation-elasticity',
+  'incidence-assumption',
+  'choice-model',
+  'take-up-model',
+  'functional-form',
+  'calibration-target',
+  'other',
+]);
+const BEHAVIORAL_PARAMETER_STATUS_VALUES = new Set([
+  'numeric',
+  'qualitative',
+  'documented-undisclosed',
+  'not-modeled',
   'unknown',
 ]);
 const MODELING_MECHANIC_CATEGORY_VALUES = new Set([
@@ -232,6 +265,10 @@ export function loadComparisonData(): ComparisonData {
   const usage = loadYaml<UsageMetric[]>('usage.yaml', 'usage');
   const accuracy = loadYaml<AccuracyCheck[]>('accuracy.yaml', 'accuracy');
   const imputations = loadYaml<Imputation[]>('imputations.yaml', 'imputations');
+  const behavioralParameters = loadYaml<BehavioralParameter[]>(
+    'behavioral_parameters.yaml',
+    'behavioralParameters',
+  );
   const modeling = loadYaml<ModelingMechanic[]>('modeling.yaml', 'modeling');
   const artifacts = loadYaml<Artifact[]>('artifacts.yaml', 'artifacts');
   const freshness = loadYaml<Freshness[]>('freshness.yaml', 'freshness');
@@ -268,6 +305,19 @@ export function loadComparisonData(): ComparisonData {
     imputations,
     'imputations.yaml',
     (row) => `${row.model}.${row.concept}`,
+    errors,
+  );
+  validateUniqueRows(
+    behavioralParameters,
+    'behavioral_parameters.yaml',
+    (row) =>
+      [
+        row.model,
+        row.domain,
+        row.parameter,
+        row.population ?? '',
+        row.horizon ?? '',
+      ].join('.'),
     errors,
   );
   validateUniqueRows(
@@ -392,6 +442,34 @@ export function loadComparisonData(): ComparisonData {
     validateRequiredSources(
       row.sources,
       `imputations.yaml: ${row.model}.${row.concept}`,
+      errors,
+    );
+  }
+  for (const row of behavioralParameters) {
+    if (!modelIds.has(row.model)) {
+      errors.push(`behavioral_parameters.yaml: unknown model "${row.model}"`);
+    }
+    validateEnum(
+      row.domain,
+      BEHAVIORAL_PARAMETER_DOMAIN_VALUES,
+      `behavioral_parameters.yaml: ${row.model}.${row.parameter}.domain`,
+      errors,
+    );
+    validateEnum(
+      row.kind,
+      BEHAVIORAL_PARAMETER_KIND_VALUES,
+      `behavioral_parameters.yaml: ${row.model}.${row.parameter}.kind`,
+      errors,
+    );
+    validateEnum(
+      row.status,
+      BEHAVIORAL_PARAMETER_STATUS_VALUES,
+      `behavioral_parameters.yaml: ${row.model}.${row.parameter}.status`,
+      errors,
+    );
+    validateRequiredSources(
+      row.sources,
+      `behavioral_parameters.yaml: ${row.model}.${row.parameter}`,
       errors,
     );
   }
@@ -525,6 +603,7 @@ export function loadComparisonData(): ComparisonData {
     usage,
     accuracy,
     imputations,
+    behavioralParameters,
     modeling,
     artifacts,
     freshness,
@@ -536,6 +615,40 @@ export function conceptById(
   id: string,
 ): Concept | undefined {
   return data.concepts.find((c) => c.id === id);
+}
+
+/**
+ * Behavioral parameter rows grouped by domain for side-by-side comparison.
+ */
+export function behavioralParametersByDomain(
+  data: ComparisonData,
+): Array<{
+  domain: string;
+  rows: BehavioralParameter[];
+}> {
+  const modelIds = new Set(data.models.map((m) => m.id));
+  const orderedDomains = [
+    'labor-supply',
+    'taxable-income',
+    'capital-gains',
+    'take-up',
+    'health-insurance',
+    'retirement',
+    'saving',
+    'tax-incidence',
+    'macro',
+    'tariff',
+    'financial-transactions',
+    'other',
+  ];
+  return orderedDomains
+    .map((domain) => ({
+      domain,
+      rows: data.behavioralParameters.filter(
+        (row) => row.domain === domain && modelIds.has(row.model),
+      ),
+    }))
+    .filter((group) => group.rows.length > 0);
 }
 
 /**

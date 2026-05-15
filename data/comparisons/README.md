@@ -13,6 +13,7 @@ Source-of-truth YAML for the open microsimulation reference at `/comparison`.
 | `usage.yaml` | Usage signal per model. | `usage` |
 | `accuracy.yaml` | Accuracy benchmarks (model × metric). | `accuracy` |
 | `imputations.yaml` | Imputation and calibration approaches. | `imputations` |
+| `behavioral_parameters.yaml` | Elasticities, response parameters, incidence assumptions, and explicit not-modeled/undisclosed behavioral facts. | `behavioralParameters` |
 | `modeling.yaml` | Atomic modeling mechanics by model. | `modeling` |
 | `artifacts.yaml` | Concrete artifacts (code, data, papers). | `artifacts` |
 | `freshness.yaml` | Latest year encoded, forward coverage, update cadence. | `freshness` |
@@ -27,11 +28,14 @@ The loader is in [`src/data/comparisons.ts`](../../src/data/comparisons.ts).
 3. Add `coverage` rows for each program the model implements. For programs the
    model excludes, add a row with `status: not-implemented` and a citation.
 4. Add `imputations` rows for any non-trivial imputation or calibration.
-5. Add `modeling` rows for base data, simulation unit, aging/uprating,
+5. Add `behavioral_parameters` rows for elasticities, take-up response,
+   health-insurance choice, tax incidence, macro feedback, or explicit
+   `not-modeled` / `documented-undisclosed` behavior facts.
+6. Add `modeling` rows for base data, simulation unit, aging/uprating,
    behavioral response, macro feedback, dynamic lifecycle, health-insurance,
    geography, validation, and other model mechanics that are publicly documented.
-6. Add `accuracy` rows for any benchmarks the model documents.
-7. The loader will fail the build if any row references an unknown model or
+7. Add `accuracy` rows for any benchmarks the model documents.
+8. The loader will fail the build if any row references an unknown model or
    program id, so referential integrity is enforced.
 
 ## Adding a new program
@@ -62,6 +66,11 @@ The loader is in [`src/data/comparisons.ts`](../../src/data/comparisons.ts).
   corroboration.
 - **Prefer `unknown` over guesses.** A thin row with `unknown` is better than a
   confident fabrication. Reviewers can fill in `unknown` over time.
+- **Separate missing behavior from hidden behavior.** Use `not-modeled` when a
+  model is explicitly static or a calculator takes user-supplied inputs. Use
+  `documented-undisclosed` when the model documents behavioral response but
+  withholds coefficients. Use `unknown` when public docs do not resolve either
+  way.
 - **Neutral tone.** This is a reference, not a marketing surface. Describe what
   each model does and where its documentation lives; avoid value judgments
   about quality or quantity.

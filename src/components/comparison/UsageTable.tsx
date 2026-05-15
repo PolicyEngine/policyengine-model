@@ -33,10 +33,10 @@ const ROWS: Array<{ key: keyof UsageMetric; label: string; description: string }
 
 export default function UsageTable({
   data,
-  allModels,
+  countryModels,
 }: {
   data: ComparisonData;
-  allModels: Model[];
+  countryModels: Model[];
 }) {
   return (
     <div>
@@ -46,7 +46,7 @@ export default function UsageTable({
         description="How widely each model is used: academic citations, government reports, press mentions, and active users. Many cells are 'unknown' because incumbents do not publish usage metrics — we treat that absence as data, not noise."
       />
 
-      <ModelSelector allModels={allModels} />
+      <ModelSelector countryModels={countryModels} />
 
       <section style={sectionStyle}>
         <div style={tableWrapperStyle}>

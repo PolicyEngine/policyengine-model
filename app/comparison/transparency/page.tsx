@@ -1,7 +1,7 @@
 import TransparencyTable from '../../../src/components/comparison/TransparencyTable';
 import { loadComparisonData } from '../../../src/data/comparisons';
 import { filterSelectedModels } from '../../../src/components/comparison/filterModels';
-import { detectCountryFilter } from '../../../src/components/comparison/detectCountry';
+import { detectCountry } from '../../../src/components/comparison/detectCountry';
 
 export default async function TransparencyRoute({
   searchParams,
@@ -10,13 +10,13 @@ export default async function TransparencyRoute({
 }) {
   const data = loadComparisonData();
   const sp = await searchParams;
-  const allModels = data.models;
-  const countryFilter = await detectCountryFilter(sp.country);
-  const selectedModels = filterSelectedModels(allModels, sp.models, countryFilter);
+  const country = await detectCountry(sp.country);
+  const countryModels = data.models.filter((m) => m.country === country);
+  const selectedModels = filterSelectedModels(data.models, sp.models, country);
   return (
     <TransparencyTable
       data={{ ...data, models: selectedModels }}
-      allModels={allModels}
+      countryModels={countryModels}
     />
   );
 }

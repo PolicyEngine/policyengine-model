@@ -16,6 +16,7 @@ import {
   modelById,
   programById,
   imputationsByConcept,
+  behavioralParametersByDomain,
   modelingByModel,
 } from '../../data/comparisons';
 import ModelSelector from './ModelSelector';
@@ -23,6 +24,7 @@ import CategoryFilter from './CategoryFilter';
 import type {
   ComparisonData,
   Model,
+  BehavioralParameter,
   ModelingMechanicCategory,
 } from '../../types/comparison';
 
@@ -61,13 +63,41 @@ function fmtCount(n: number): string {
   return n.toLocaleString();
 }
 
+function domainLabel(domain: string): string {
+  return domain
+    .split('-')
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(' ');
+}
+
+function fmtBehavioralValue(row: BehavioralParameter): string {
+  if (row.status === 'documented-undisclosed') return 'Undisclosed';
+  if (row.status === 'not-modeled') return 'Not modeled';
+  if (row.status === 'unknown') return 'Unknown';
+  if (typeof row.value === 'number') return row.value.toString();
+  if (row.value === 'varies') return 'Varies';
+  if (
+    typeof row.central === 'number' ||
+    typeof row.lower === 'number' ||
+    typeof row.upper === 'number'
+  ) {
+    const parts = [
+      typeof row.lower === 'number' ? `low ${row.lower}` : null,
+      typeof row.central === 'number' ? `central ${row.central}` : null,
+      typeof row.upper === 'number' ? `high ${row.upper}` : null,
+    ].filter(Boolean);
+    return parts.join(' / ');
+  }
+  return '—';
+}
+
 export default function MethodsView({
   data,
-  allModels,
+  countryModels,
   selectedCategories,
 }: {
   data: ComparisonData;
-  allModels: Model[];
+  countryModels: Model[];
   /**
    * Optional filter — if provided, only renders modeling-mechanic rows
    * whose category id is in this set. Server pages read
@@ -77,6 +107,7 @@ export default function MethodsView({
   selectedCategories?: Set<ModelingMechanicCategory>;
 }) {
   const grouped = imputationsByConcept(data);
+  const behavioralGroups = behavioralParametersByDomain(data);
   const modelingGroups = modelingByModel(data);
 
   return (
@@ -84,10 +115,114 @@ export default function MethodsView({
       <PageHeader
         category="Comparison"
         title="Methods and accuracy"
-        description="How each model imputes missing variables, calibrates participation to administrative totals, and validates against benchmarks. Methodology is grouped by comparable concept (e.g. 'SNAP participation imputation') so each row sits next to its peers across models. Accuracy benchmarks follow."
+        description="How each model is structured — atomic modeling mechanics (architecture, base data, take-up, macro linkage, etc.), imputations and calibration grouped by comparable concept (e.g. SNAP participation), and accuracy benchmarks against administrative targets. Sections appear when the selected model set has content for them."
       />
 
-      <ModelSelector allModels={allModels} />
+      <ModelSelector countryModels={countryModels} />
+
+      {behavioralGroups.length > 0 && (
+      <section style={sectionStyle}>
+        <h2 style={h2Style}>Behavioral parameters and elasticities</h2>
+        <p style={proseStyle}>
+          Public elasticity values, behavioral choice models, incidence
+          assumptions, and explicit not-modeled or undisclosed cases. These
+          rows make behavioral assumptions comparable without implying that
+          proprietary models publish enough detail to reproduce every
+          coefficient.
+        </p>
+
+        {behavioralGroups.map(({ domain, rows }) => (
+          <div key={domain} style={{ marginTop: spacing['3xl'] }}>
+            <h3
+              style={{
+                fontSize: 18,
+                fontWeight: 700,
+                color: colors.primary[800],
+                margin: 0,
+                marginBottom: spacing.sm,
+              }}
+            >
+              {domainLabel(domain)}
+            </h3>
+            <div style={tableWrapperStyle}>
+              <table style={tableStyle}>
+                <thead>
+                  <tr>
+                    <th style={{ ...thStyle, minWidth: 180 }}>Model</th>
+                    <th style={thStyle}>Parameter</th>
+                    <th style={thStyle}>Value</th>
+                    <th style={thStyle}>Population / scope</th>
+                    <th style={thStyle}>Margin / horizon</th>
+                    <th style={thStyle}>Notes</th>
+                    <th style={thStyle}>Sources</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {rows.map((row) => {
+                    const model = modelById(data, row.model);
+                    return (
+                      <tr
+                        key={`${row.model}-${row.domain}-${row.parameter}-${row.population ?? ''}-${row.horizon ?? ''}`}
+                      >
+                        <td style={tdStyle}>
+                          <div style={{ fontWeight: 600 }}>
+                            {model?.name ?? row.model}
+                          </div>
+                        </td>
+                        <td style={{ ...tdStyle, maxWidth: 280 }}>
+                          <div style={{ fontWeight: 600, marginBottom: 4 }}>
+                            {row.label}
+                          </div>
+                          <code style={{ fontSize: 12 }}>{row.parameter}</code>
+                          <div style={{ ...subTextStyle, marginTop: 4 }}>
+                            {row.kind} · {row.status}
+                          </div>
+                        </td>
+                        <td style={tdStyle}>
+                          <strong>{fmtBehavioralValue(row)}</strong>
+                          {row.unit && (
+                            <div style={{ ...subTextStyle, marginTop: 4 }}>
+                              {row.unit}
+                            </div>
+                          )}
+                        </td>
+                        <td style={{ ...tdStyle, maxWidth: 260 }}>
+                          {row.population ?? '—'}
+                          {row.policyScope && (
+                            <div style={{ ...subTextStyle, marginTop: 4 }}>
+                              {row.policyScope}
+                            </div>
+                          )}
+                        </td>
+                        <td style={{ ...tdStyle, maxWidth: 220 }}>
+                          {row.margin ?? '—'}
+                          {row.horizon && (
+                            <div style={{ ...subTextStyle, marginTop: 4 }}>
+                              {row.horizon}
+                            </div>
+                          )}
+                        </td>
+                        <td style={{ ...tdStyle, maxWidth: 360, fontSize: 13 }}>
+                          {row.functionalForm && (
+                            <div style={{ marginBottom: spacing.xs }}>
+                              {row.functionalForm}
+                            </div>
+                          )}
+                          {row.notes ?? ''}
+                        </td>
+                        <td style={{ ...tdStyle, maxWidth: 260 }}>
+                          <SourceList sources={row.sources} compact />
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        ))}
+      </section>
+      )}
 
       {(() => {
         // Group modeling rows by category for comparable side-by-side view.
@@ -112,6 +247,8 @@ export default function MethodsView({
         const visibleCategories = orderedCategories.filter((c) =>
           visibleCategoryIds.has(c),
         );
+
+        if (orderedCategories.length === 0) return null;
 
         return (
           <section style={sectionStyle}>
@@ -185,16 +322,17 @@ export default function MethodsView({
         );
       })()}
 
-      <section style={sectionStyle}>
-        <h2 style={h2Style}>Imputations and calibration, by concept</h2>
-        <p style={proseStyle}>
-          Each block below covers one methodological concept — e.g. how a
-          model goes from CPS-eligible to CPS-participant in SNAP. The rows
-          are model implementations of that same concept, side by side. Hover
-          a source label to see the supporting quote.
-        </p>
+      {grouped.length > 0 && (
+        <section style={sectionStyle}>
+          <h2 style={h2Style}>Imputations and calibration, by concept</h2>
+          <p style={proseStyle}>
+            Each block below covers one methodological concept — e.g. how a
+            model goes from CPS-eligible to CPS-participant in SNAP. The
+            rows are model implementations of that same concept, side by
+            side. Hover a source label to see the supporting quote.
+          </p>
 
-        {grouped.map(({ concept, rows }) => (
+          {grouped.map(({ concept, rows }) => (
           <div key={concept.id} style={{ marginTop: spacing['3xl'] }}>
             <h3
               style={{
@@ -273,11 +411,13 @@ export default function MethodsView({
               </table>
             </div>
           </div>
-        ))}
-      </section>
+          ))}
+        </section>
+      )}
 
-      <section style={sectionStyle}>
-        <h2 style={h2Style}>Accuracy benchmarks</h2>
+      {data.accuracy.length > 0 && (
+        <section style={sectionStyle}>
+          <h2 style={h2Style}>Accuracy benchmarks</h2>
         <p style={proseStyle}>
           Each row pairs an administrative target with the model&apos;s
           predicted value (where documented). Some rows are calibration
@@ -335,7 +475,8 @@ export default function MethodsView({
             </tbody>
           </table>
         </div>
-      </section>
+        </section>
+      )}
     </div>
   );
 }

@@ -82,6 +82,10 @@ const TRANSIENT_ALLOWED_DOMAINS = new Set([
   // automated fetches while remaining reachable in a browser.
   'landman-economics.co.uk',
   'www.landman-economics.co.uk',
+  // Bun fetch intermittently reports a network failure for this WordPress
+  // host, while curl and browsers receive 200s for the same pages.
+  'benefitkitchen.com',
+  'www.benefitkitchen.com',
 ]);
 
 // Domains whose pages are JS-rendered or paywalled; Tier 2 quote checks

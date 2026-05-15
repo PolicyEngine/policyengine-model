@@ -1,0 +1,1155 @@
+# Behavioral parameters and reverse-engineering assumptions.
+#
+# Use one row per public behavioral parameter, choice model, incidence
+# assumption, or explicit "not modeled / undisclosed / unknown" fact. Numeric
+# rows are scalar or range-like; qualitative rows capture public model
+# mechanics that are not published as a single elasticity.
+
+behavioralParameters:
+  # ============================ PolicyEngine US ===============================
+  - model: policyengine-us
+    domain: labor-supply
+    kind: elasticity
+    parameter: labor_income_effect
+    label: Income elasticity of labor supply
+    status: numeric
+    value: -0.05
+    unit: percent hours per 1 percent net income
+    population: all earners
+    margin: income effect
+    horizon: reform simulation
+    functionalForm: Income effect plus substitution effect applied to top earners, then taxes and benefits are recomputed.
+    notes: Default CBO-style behavioral response; users can override or set zero.
+    sources:
+      - label: PolicyEngine US behavioral responses explainer
+        url: https://www.policyengine.org/us/research/us-behavioral-responses
+        kind: self
+      - label: policyengine-model elasticity defaults
+        url: https://github.com/PolicyEngine/policyengine-model/blob/add-model-comparison/src/data/elasticities.ts
+        kind: self
+
+  - model: policyengine-us
+    domain: labor-supply
+    kind: elasticity
+    parameter: labor_substitution_effect
+    label: Substitution elasticity of labor supply
+    status: numeric
+    lower: 0.15
+    central: 0.31
+    upper: 0.47
+    unit: percent hours per 1 percent net marginal wage
+    population: income decile 0-10%
+    margin: substitution effect
+    horizon: reform simulation
+    sources: &policyengine_us_labor_sources
+      - label: PolicyEngine US behavioral responses explainer
+        url: https://www.policyengine.org/us/research/us-behavioral-responses
+        kind: self
+      - label: policyengine-model elasticity defaults
+        url: https://github.com/PolicyEngine/policyengine-model/blob/add-model-comparison/src/data/elasticities.ts
+        kind: self
+
+  - model: policyengine-us
+    domain: labor-supply
+    kind: elasticity
+    parameter: labor_substitution_effect
+    label: Substitution elasticity of labor supply
+    status: numeric
+    lower: 0.15
+    central: 0.28
+    upper: 0.42
+    unit: percent hours per 1 percent net marginal wage
+    population: income decile 10-20%
+    margin: substitution effect
+    horizon: reform simulation
+    sources: *policyengine_us_labor_sources
+
+  - model: policyengine-us
+    domain: labor-supply
+    kind: elasticity
+    parameter: labor_substitution_effect
+    label: Substitution elasticity of labor supply
+    status: numeric
+    lower: 0.15
+    central: 0.28
+    upper: 0.42
+    unit: percent hours per 1 percent net marginal wage
+    population: income decile 20-30%
+    margin: substitution effect
+    horizon: reform simulation
+    sources: *policyengine_us_labor_sources
+
+  - model: policyengine-us
+    domain: labor-supply
+    kind: elasticity
+    parameter: labor_substitution_effect
+    label: Substitution elasticity of labor supply
+    status: numeric
+    lower: 0.15
+    central: 0.27
+    upper: 0.38
+    unit: percent hours per 1 percent net marginal wage
+    population: income decile 30-40%
+    margin: substitution effect
+    horizon: reform simulation
+    sources: *policyengine_us_labor_sources
+
+  - model: policyengine-us
+    domain: labor-supply
+    kind: elasticity
+    parameter: labor_substitution_effect
+    label: Substitution elasticity of labor supply
+    status: numeric
+    lower: 0.15
+    central: 0.27
+    upper: 0.38
+    unit: percent hours per 1 percent net marginal wage
+    population: income decile 40-50%
+    margin: substitution effect
+    horizon: reform simulation
+    sources: *policyengine_us_labor_sources
+
+  - model: policyengine-us
+    domain: labor-supply
+    kind: elasticity
+    parameter: labor_substitution_effect
+    label: Substitution elasticity of labor supply
+    status: numeric
+    lower: 0.15
+    central: 0.25
+    upper: 0.35
+    unit: percent hours per 1 percent net marginal wage
+    population: income decile 50-60%
+    margin: substitution effect
+    horizon: reform simulation
+    sources: *policyengine_us_labor_sources
+
+  - model: policyengine-us
+    domain: labor-supply
+    kind: elasticity
+    parameter: labor_substitution_effect
+    label: Substitution elasticity of labor supply
+    status: numeric
+    lower: 0.15
+    central: 0.25
+    upper: 0.35
+    unit: percent hours per 1 percent net marginal wage
+    population: income decile 60-70%
+    margin: substitution effect
+    horizon: reform simulation
+    sources: *policyengine_us_labor_sources
+
+  - model: policyengine-us
+    domain: labor-supply
+    kind: elasticity
+    parameter: labor_substitution_effect
+    label: Substitution elasticity of labor supply
+    status: numeric
+    lower: 0.15
+    central: 0.22
+    upper: 0.29
+    unit: percent hours per 1 percent net marginal wage
+    population: income decile 70-80%
+    margin: substitution effect
+    horizon: reform simulation
+    sources: *policyengine_us_labor_sources
+
+  - model: policyengine-us
+    domain: labor-supply
+    kind: elasticity
+    parameter: labor_substitution_effect
+    label: Substitution elasticity of labor supply
+    status: numeric
+    lower: 0.15
+    central: 0.22
+    upper: 0.29
+    unit: percent hours per 1 percent net marginal wage
+    population: income decile 80-90%
+    margin: substitution effect
+    horizon: reform simulation
+    sources: *policyengine_us_labor_sources
+
+  - model: policyengine-us
+    domain: labor-supply
+    kind: elasticity
+    parameter: labor_substitution_effect
+    label: Substitution elasticity of labor supply
+    status: numeric
+    lower: 0.15
+    central: 0.22
+    upper: 0.29
+    unit: percent hours per 1 percent net marginal wage
+    population: income decile 90-100%
+    margin: substitution effect
+    horizon: reform simulation
+    sources: *policyengine_us_labor_sources
+
+  - model: policyengine-us
+    domain: capital-gains
+    kind: elasticity
+    parameter: capital_gains_realization_persistent
+    label: Persistent capital-gains realization elasticity
+    status: numeric
+    value: -0.79
+    unit: percent realizations per 1 percent marginal tax rate
+    population: capital-gains realizers
+    margin: realization timing and avoidance
+    horizon: persistent
+    notes: Public model default in the behavioral explainer data source.
+    sources:
+      - label: policyengine-model elasticity defaults
+        url: https://github.com/PolicyEngine/policyengine-model/blob/add-model-comparison/src/data/elasticities.ts
+        kind: self
+
+  - model: policyengine-us
+    domain: capital-gains
+    kind: elasticity
+    parameter: capital_gains_realization_transitory
+    label: Transitory capital-gains realization elasticity
+    status: numeric
+    value: -1.2
+    unit: percent realizations per 1 percent marginal tax rate
+    population: capital-gains realizers
+    margin: short-run timing response
+    horizon: transitory
+    sources:
+      - label: policyengine-model elasticity defaults
+        url: https://github.com/PolicyEngine/policyengine-model/blob/add-model-comparison/src/data/elasticities.ts
+        kind: self
+
+  # ============================ TRIM3 / Urban ================================
+  - model: trim3
+    domain: take-up
+    kind: take-up-model
+    parameter: snap_participation_assignment
+    label: SNAP participation assignment
+    status: qualitative
+    value: unknown
+    population: SNAP-eligible units
+    policyScope: means-tested transfers
+    margin: program take-up
+    functionalForm: Eligible units are selected into participation so simulated caseloads align to administrative totals.
+    sources:
+      - label: TRIM3 SNAP methodology
+        url: https://boreas.urban.org/documentation/foodstamps/main.php
+        kind: self
+
+  - model: trim3
+    domain: take-up
+    kind: take-up-model
+    parameter: medicaid_enrollment_logit
+    label: Medicaid/CHIP alternative-run enrollment logit
+    status: qualitative
+    value: unknown
+    population: Medicaid/CHIP eligible people
+    policyScope: Medicaid and CHIP
+    margin: program take-up
+    functionalForm: Alternative runs use a logit equation to assign enrollment probabilities for people not eligible in baseline.
+    sources:
+      - label: TRIM3 Medicaid/SCHIP documentation
+        url: https://boreas.urban.org/documentation/Medicaid/Main.php
+        kind: self
+
+  - model: attis
+    domain: take-up
+    kind: take-up-model
+    parameter: safety_net_participation
+    label: ACS-based eligibility and participation modeling
+    status: qualitative
+    value: unknown
+    population: ACS households
+    policyScope: safety-net programs
+    margin: program eligibility and participation
+    notes: Public documentation describes participation modeling but not a reusable numeric elasticity table.
+    sources:
+      - label: ATTIS overview
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
+        kind: self
+
+  - model: hipsm
+    domain: health-insurance
+    kind: choice-model
+    parameter: coverage_choice_elasticity_expected_utility
+    label: Health insurance coverage choice
+    status: documented-undisclosed
+    value: unknown
+    population: nonelderly people, families, and employers
+    policyScope: health insurance coverage and premiums
+    margin: coverage enrollment and employer offer behavior
+    functionalForm: Expected-utility choice model with latent preference terms calibrated to elasticity targets from the literature.
+    notes: Urban documents the behavioral structure but not the full numeric elasticity target table.
+    sources:
+      - label: Urban Institute HIPSM overview
+        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/health-insurance-policy-simulation-model-hipsm
+        kind: self
+
+  - model: dynasim
+    domain: retirement
+    kind: choice-model
+    parameter: dynamic_transition_equations
+    label: Dynamic labor, retirement, family, and health transitions
+    status: qualitative
+    value: unknown
+    population: simulated US population over 75 years
+    policyScope: retirement, aging, taxes, health, and income supports
+    margin: demographic and economic transitions
+    functionalForm: Reduced-form transition equations simulate labor force participation, earnings, disability, retirement, family events, health, and wealth.
+    notes: Public overviews document equations and modules; this row does not assert a single transferable elasticity.
+    sources:
+      - label: Urban Institute DYNASIM overview
+        url: https://www.urban.org/research/publication/dynamic-simulation-income-model-dynasim-overview
+        kind: self
+
+  # ============================ Tax Policy Center / JCT / CBO ===============
+  - model: tpc-microsim
+    domain: taxable-income
+    kind: elasticity
+    parameter: eti_top_0_1_percent
+    label: ETI for top 0.1 percent
+    status: numeric
+    value: 0.25
+    unit: percent taxable income per 1 percent net-of-tax rate
+    population: top 0.1 percent of income distribution
+    policyScope: revenue estimates
+    margin: taxable income response
+    horizon: budget window
+    notes: TPC lowers this to 0.2 in TCJA-effect years because of base broadening.
+    sources:
+      - label: TPC microsimulation model FAQ
+        url: https://taxpolicycenter.org/resources/tax-model-resources/tpcs-microsimulation-model-faq
+        kind: self
+
+  - model: tpc-microsim
+    domain: taxable-income
+    kind: elasticity
+    parameter: eti_top_0_1_percent_tcja
+    label: ETI for top 0.1 percent under TCJA base broadening
+    status: numeric
+    value: 0.2
+    unit: percent taxable income per 1 percent net-of-tax rate
+    population: top 0.1 percent of income distribution
+    policyScope: revenue estimates in TCJA-effect years
+    margin: taxable income response
+    horizon: budget window
+    sources:
+      - label: TPC microsimulation model FAQ
+        url: https://taxpolicycenter.org/resources/tax-model-resources/tpcs-microsimulation-model-faq
+        kind: self
+
+  - model: tpc-microsim
+    domain: capital-gains
+    kind: elasticity
+    parameter: capital_gains_realization_long_run
+    label: Long-run capital-gains realization elasticity
+    status: numeric
+    value: -0.7
+    unit: percent realizations per 1 percent marginal tax rate
+    population: long-term capital-gains realizers
+    policyScope: revenue estimates
+    margin: realization timing and avoidance
+    horizon: long-run
+    notes: Approximate value at a 20 percent capital-gains tax rate.
+    sources:
+      - label: TPC microsimulation model FAQ
+        url: https://taxpolicycenter.org/resources/tax-model-resources/tpcs-microsimulation-model-faq
+        kind: self
+
+  - model: tpc-microsim
+    domain: capital-gains
+    kind: elasticity
+    parameter: capital_gains_realization_short_run
+    label: Short-run capital-gains realization elasticity
+    status: numeric
+    value: -1.1
+    unit: percent realizations per 1 percent marginal tax rate
+    population: long-term capital-gains realizers
+    policyScope: revenue estimates
+    margin: first two years after rate change
+    horizon: short-run
+    notes: Approximate value at a 20 percent capital-gains tax rate.
+    sources:
+      - label: TPC microsimulation model FAQ
+        url: https://taxpolicycenter.org/resources/tax-model-resources/tpcs-microsimulation-model-faq
+        kind: self
+
+  - model: jct-microsim
+    domain: taxable-income
+    kind: elasticity
+    parameter: conventional_revenue_behavioral_effects
+    label: Behavioral effects in conventional revenue estimates
+    status: documented-undisclosed
+    value: unknown
+    population: taxpayers affected by proposal
+    policyScope: conventional revenue estimates
+    margin: timing, entity-form, portfolio, consumption, labor supply, and tax planning responses
+    notes: JCT documents behavioral response categories but does not publish a current reusable elasticity table.
+    sources:
+      - label: JCT revenue estimating overview
+        url: https://www.jct.gov/operations/revenue-estimating/
+        kind: government
+      - label: TPC comparison to JCT behavioral assumptions
+        url: https://taxpolicycenter.org/resources/tax-model-resources/tpcs-microsimulation-model-faq
+        kind: self
+
+  - model: jct-microsim
+    domain: capital-gains
+    kind: elasticity
+    parameter: capital_gains_realization_current
+    label: Current capital-gains realization assumptions
+    status: documented-undisclosed
+    value: unknown
+    population: capital-gains realizers
+    policyScope: revenue estimates
+    margin: realization timing and avoidance
+    notes: TPC states JCT has not published the specific taxable-income or capital-gains elasticities it now uses.
+    sources:
+      - label: TPC microsimulation model FAQ
+        url: https://taxpolicycenter.org/resources/tax-model-resources/tpcs-microsimulation-model-faq
+        kind: self
+      - label: JCT revenue estimating overview
+        url: https://www.jct.gov/operations/revenue-estimating/
+        kind: government
+
+  - model: cbo-microsim
+    domain: labor-supply
+    kind: elasticity
+    parameter: frisch_labor_supply_lifecycle_growth
+    label: Frisch labor-supply elasticity in CBO life-cycle growth model
+    status: numeric
+    lower: 0.27
+    central: 0.4
+    upper: 0.53
+    unit: percent labor supply per 1 percent temporary after-tax compensation
+    population: aggregate labor supply
+    policyScope: CBO dynamic fiscal-policy analysis
+    margin: intertemporal substitution
+    horizon: life-cycle growth model
+    notes: This is CBO's life-cycle growth model parameter, not a public tax-microsim parameter file.
+    sources:
+      - label: CBO review of Frisch labor supply elasticity
+        url: https://ecommons.cornell.edu/entities/publication/dea875a9-9eed-4812-b6e7-43187ac59281
+        kind: government
+
+  - model: cbo-microsim
+    domain: taxable-income
+    kind: elasticity
+    parameter: tax_microsim_behavioral_elasticities
+    label: Tax microsimulation behavioral elasticities
+    status: documented-undisclosed
+    value: unknown
+    population: taxpayers affected by proposal
+    policyScope: tax revenue and distribution analysis
+    margin: taxpayer behavioral response
+    notes: Public CBO methodology describes model use and output, but not a reusable public elasticity table for the internal tax microsimulation model.
+    sources:
+      - label: CBO tax microsimulation model methodology
+        url: https://www.cbo.gov/publication/54096
+        kind: government
+
+  # ============================ Tax-Calculator / PSL =========================
+  - model: tax-calculator
+    domain: taxable-income
+    kind: elasticity
+    parameter: default_behavior_elasticities
+    label: Default behavioral elasticities
+    status: numeric
+    value: 0
+    unit: elasticity
+    population: all filing units
+    policyScope: federal individual income and payroll tax
+    margin: all Tax-Calculator behavior parameters
+    horizon: static default
+    notes: Tax-Calculator's default is no behavioral response; nonzero behavior is supplied through external Behavioral-Responses inputs.
+    sources:
+      - label: Tax-Calculator behavior parameters
+        url: https://taxcalc.pslmodels.org/guide/behavior_params.html
+        kind: self
+
+  - model: tax-calculator
+    domain: taxable-income
+    kind: functional-form
+    parameter: psl_behavioral_responses
+    label: Optional PSL Behavioral-Responses elasticities
+    status: qualitative
+    value: varies
+    population: filing units or subgroups
+    policyScope: federal individual income and payroll tax
+    margin: partial-equilibrium behavioral response
+    functionalForm: response function accepts user-specified elasticities; quantity_response can vary elasticities by subgroup.
+    sources:
+      - label: PSL Behavioral-Responses catalog
+        url: https://pslmodels.org/Catalog/Behavioral-Responses.html
+        kind: self
+      - label: Behavioral-Responses documentation
+        url: https://pslmodels.github.io/Behavioral-Responses/
+        kind: self
+
+  - model: nber-taxsim
+    domain: taxable-income
+    kind: elasticity
+    parameter: default_behavior_elasticities
+    label: Default behavioral elasticities
+    status: not-modeled
+    value: 0
+    unit: elasticity
+    population: input tax units
+    policyScope: federal and state tax calculation
+    margin: taxpayer behavioral response
+    horizon: static tax calculation
+    notes: TAXSIM calculates tax liabilities from user-supplied records; behavioral changes must be applied outside TAXSIM.
+    sources:
+      - label: NBER TAXSIM home page
+        url: https://taxsim.nber.org/
+        kind: self
+
+  # ============================ Budget Lab ===================================
+  - model: budgetlab-tax
+    domain: labor-supply
+    kind: participation-elasticity
+    parameter: employment_participation_elasticity
+    label: Employment participation elasticity
+    status: numeric
+    value: 0.4
+    unit: percent employment per 1 percent return-to-work change
+    population: EITC-range unmarried working mothers
+    policyScope: partial-equilibrium employment feedback
+    margin: extensive labor supply
+    horizon: policy-specific
+    sources: &budgetlab_employment_sources
+      - label: Budget Lab microeconomic employment effects
+        url: https://budgetlab.yale.edu/research/behavioral-responses-microeconomic-employment-effects
+        kind: self
+
+  - model: budgetlab-tax
+    domain: labor-supply
+    kind: participation-elasticity
+    parameter: employment_participation_elasticity
+    label: Employment participation elasticity
+    status: numeric
+    value: 0.2
+    unit: percent employment per 1 percent return-to-work change
+    population: other mothers with AGI below $80,000
+    policyScope: partial-equilibrium employment feedback
+    margin: extensive labor supply
+    horizon: policy-specific
+    sources: *budgetlab_employment_sources
+
+  - model: budgetlab-tax
+    domain: labor-supply
+    kind: participation-elasticity
+    parameter: employment_participation_elasticity
+    label: Employment participation elasticity
+    status: numeric
+    value: 0.05
+    unit: percent employment per 1 percent return-to-work change
+    population: all others with AGI below $80,000
+    policyScope: partial-equilibrium employment feedback
+    margin: extensive labor supply
+    horizon: policy-specific
+    sources: *budgetlab_employment_sources
+
+  - model: budgetlab-tax
+    domain: labor-supply
+    kind: participation-elasticity
+    parameter: employment_participation_elasticity
+    label: Employment participation elasticity
+    status: numeric
+    value: 0
+    unit: percent employment per 1 percent return-to-work change
+    population: AGI above $80,000
+    policyScope: partial-equilibrium employment feedback
+    margin: extensive labor supply
+    horizon: policy-specific
+    sources: *budgetlab_employment_sources
+
+  - model: budgetlab-tax
+    domain: capital-gains
+    kind: elasticity
+    parameter: capital_gains_realization_overall
+    label: Overall capital-gains realization elasticity
+    status: numeric
+    value: -0.72
+    unit: percent realizations per 1 percent tax-rate change
+    population: all capital-gains realizers
+    policyScope: capital-gains revenue scoring
+    margin: realization response
+    horizon: policy-specific
+    sources: &budgetlab_capgains_sources
+      - label: Budget Lab capital-gains behavioral response
+        url: https://budgetlab.yale.edu/research/behavioral-responses-capital-gains-realizations
+        kind: self
+
+  - model: budgetlab-tax
+    domain: capital-gains
+    kind: elasticity
+    parameter: capital_gains_realization_elastic_group
+    label: Capital-gains realization elasticity for elastic assets
+    status: numeric
+    value: -0.945
+    unit: percent realizations per 1 percent tax-rate change
+    population: elastic capital-gains asset holders
+    policyScope: capital-gains revenue scoring
+    margin: realization response
+    horizon: policy-specific
+    sources: *budgetlab_capgains_sources
+
+  - model: budgetlab-tax
+    domain: capital-gains
+    kind: elasticity
+    parameter: capital_gains_realization_inelastic_group
+    label: Capital-gains realization elasticity for inelastic assets
+    status: numeric
+    value: -0.473
+    unit: percent realizations per 1 percent tax-rate change
+    population: inelastic capital-gains asset holders
+    policyScope: capital-gains revenue scoring
+    margin: realization response
+    horizon: policy-specific
+    sources: *budgetlab_capgains_sources
+
+  - model: budgetlab-tax
+    domain: financial-transactions
+    kind: elasticity
+    parameter: financial_transaction_volume_elasticity
+    label: Financial transaction volume elasticity
+    status: numeric
+    value: -0.3
+    unit: percent transaction volume per 1 percent tax-rate change
+    population: financial transactions
+    policyScope: off-model financial transactions tax estimates
+    margin: transaction volume response
+    horizon: policy-specific
+    sources:
+      - label: Budget Lab off-model budget estimates
+        url: https://budgetlab.yale.edu/research/model-budget-estimates
+        kind: self
+
+  - model: budgetlab-tax
+    domain: taxable-income
+    kind: functional-form
+    parameter: user_written_behavior_modules
+    label: User-written behavioral feedback modules
+    status: qualitative
+    value: varies
+    population: tax units
+    policyScope: Tax-Simulator scenarios
+    margin: arbitrary input-variable response to policy
+    functionalForm: Scenario runscript can pass behavior modules that update tax-unit attributes before non-static tax calculation.
+    sources:
+      - label: Budget Lab tax microsimulation documentation
+        url: https://budgetlab.yale.edu/research/tax-microsimulation-budget-lab
+        kind: self
+
+  # ============================ PolicyEngine UK / UK models ==================
+  - model: policyengine-uk
+    domain: labor-supply
+    kind: elasticity
+    parameter: labor_income_effect
+    label: Income elasticity of labour supply
+    status: numeric
+    value: -0.05
+    unit: percent hours per 1 percent net income
+    population: all earners
+    policyScope: UK tax-benefit reform simulation
+    margin: income effect
+    horizon: reform simulation
+    sources: &policyengine_uk_behavior_sources
+      - label: PolicyEngine UK behavioural responses explainer
+        url: https://www.policyengine.org/uk/research/behavioural-responses
+        kind: self
+
+  - model: policyengine-uk
+    domain: labor-supply
+    kind: elasticity
+    parameter: labor_substitution_effect
+    label: Substitution elasticity of labour supply
+    status: numeric
+    value: 0.25
+    unit: percent hours per 1 percent net marginal wage
+    population: all earners
+    policyScope: UK tax-benefit reform simulation
+    margin: substitution effect
+    horizon: reform simulation
+    sources: *policyengine_uk_behavior_sources
+
+  - model: policyengine-uk
+    domain: capital-gains
+    kind: elasticity
+    parameter: capital_gains_realization
+    label: Capital-gains realization elasticity
+    status: numeric
+    value: -0.7
+    unit: percent gains per 1 percent marginal tax-rate change
+    population: capital-gains realizers
+    policyScope: UK capital gains tax reform simulation
+    margin: realization timing
+    horizon: reform simulation
+    sources: *policyengine_uk_behavior_sources
+
+  - model: ukmod
+    domain: labor-supply
+    kind: elasticity
+    parameter: default_behavioral_response
+    label: Default behavioral response
+    status: not-modeled
+    value: 0
+    unit: elasticity
+    population: input population
+    policyScope: UKMOD core tax-benefit simulation
+    margin: population behavior
+    horizon: static model
+    notes: UKMOD computes first-order arithmetic effects with fixed population and behavior; work-incentive outputs can feed separate labor-supply models.
+    sources:
+      - label: UKMOD reference paper
+        url: https://microsimulation.pub/articles/00231
+        kind: academic
+
+  - model: ifs-taxben
+    domain: labor-supply
+    kind: elasticity
+    parameter: default_behavioral_response
+    label: Default behavioral response
+    status: unknown
+    value: unknown
+    population: input population
+    policyScope: TAXBEN public summary
+    margin: labor supply and taxable income behavior
+    notes: Public high-level documentation describes tax-benefit calculations and limitations but does not expose a reusable elasticity table.
+    sources:
+      - label: IFS TAXBEN microsimulation model
+        url: https://ifs.org.uk/publications/taxben-ifs-tax-and-benefit-microsimulation-model
+        kind: self
+
+  - model: igotm
+    domain: labor-supply
+    kind: elasticity
+    parameter: distributional_analysis_behavior
+    label: Behavioral response assumptions in fiscal-event distributional analysis
+    status: documented-undisclosed
+    value: unknown
+    population: households in Treasury distributional analysis
+    policyScope: HM Treasury fiscal events
+    margin: tax-benefit response assumptions
+    notes: Public Budget documents expose outputs and methods at a high level, not the parameter table needed to reproduce behavioral assumptions.
+    sources:
+      - label: HM Treasury Budget 2025 supporting documents
+        url: https://www.gov.uk/government/publications/supporting-documents-for-budget-2025
+        kind: government
+
+  - model: dwp-psm
+    domain: take-up
+    kind: take-up-model
+    parameter: benefit_take_up_assumptions
+    label: Benefit take-up and caseload assumptions
+    status: documented-undisclosed
+    value: unknown
+    population: FRS households
+    policyScope: DWP benefit projections and impact analysis
+    margin: benefit take-up and caseload response
+    notes: PSM is documented as DWP's main microsimulation model, but public documents do not publish a parameterized take-up elasticity table.
+    sources:
+      - label: OBR description of DWP PSM and FRS
+        url: https://obr.uk/box/dwps-policy-simulation-model-and-the-family-resources-survey/
+        kind: government
+
+  - model: ippr-tax-benefit
+    domain: labor-supply
+    kind: elasticity
+    parameter: default_behavioral_response
+    label: Default behavioral response assumptions
+    status: unknown
+    value: unknown
+    population: FRS/LCF households
+    policyScope: IPPR tax-benefit model analyses
+    margin: tax and benefit behavioral response
+    notes: Public project descriptions document model lineage and data but not a numeric behavioral-response table.
+    sources:
+      - label: MMU PERU project description
+        url: https://mmuperu.co.uk/blog/projects/modelling-the-effects-of-the-tax-and-benefit-system/
+        kind: academic
+
+  - model: landman-economics
+    domain: labor-supply
+    kind: elasticity
+    parameter: default_behavioral_response
+    label: Default behavioral response assumptions
+    status: unknown
+    value: unknown
+    population: FRS/LCF households
+    policyScope: Landman/IPPR/Resolution Foundation tax-transfer model
+    margin: tax and transfer behavioral response
+    notes: Public appendices document the model's tax-transfer scope and data sources but not a numeric behavioral-response table.
+    sources:
+      - label: Scottish Government methodology appendix
+        url: https://www.gov.scot/publications/tackling-child-poverty-delivery-plan-forecasting-child-poverty-scotland/pages/8/
+        kind: government
+
+  - model: entitledto
+    domain: take-up
+    kind: functional-form
+    parameter: claimant_supplied_counterfactuals
+    label: Claimant-supplied entitlement scenarios
+    status: not-modeled
+    value: 0
+    unit: endogenous population behavioral response
+    population: individual claimant households
+    policyScope: benefits calculator
+    margin: population behavior
+    notes: EntitledTo computes entitlement for user-supplied circumstances; it does not publish a population behavioral-response or elasticity model.
+    sources:
+      - label: EntitledTo benefits calculator
+        url: https://www.entitledto.co.uk/
+        kind: self
+      - label: GOV.UK benefits calculators
+        url: https://www.gov.uk/benefits-calculators
+        kind: government
+
+  # ============================ Tax Foundation / PWBM ========================
+  - model: tf-microsim
+    domain: capital-gains
+    kind: elasticity
+    parameter: capital_gains_realization_short_run
+    label: Short-run capital-gains realization elasticity
+    status: numeric
+    value: -1.1
+    unit: percent realizations per 1 percent marginal-rate change
+    population: capital-gains realizers
+    policyScope: Tax Foundation tax return simulator
+    margin: capital-gains realization timing
+    horizon: short-run
+    sources: &taxfoundation_ge_pdf
+      - label: Tax Foundation GE model overview PDF
+        url: https://files.taxfoundation.org/20180419195810/TaxFoundaton_General-Equilibrium-Model-Overview1.pdf
+        kind: self
+
+  - model: tf-microsim
+    domain: capital-gains
+    kind: elasticity
+    parameter: capital_gains_realization_long_run
+    label: Long-run capital-gains realization elasticity
+    status: numeric
+    value: -0.7
+    unit: percent realizations per 1 percent marginal-rate change
+    population: capital-gains realizers
+    policyScope: Tax Foundation tax return simulator
+    margin: capital-gains realization timing
+    horizon: long-run
+    sources: *taxfoundation_ge_pdf
+
+  - model: tf-microsim
+    domain: labor-supply
+    kind: elasticity
+    parameter: labor_supply_elasticity
+    label: Labor supply elasticity in production model
+    status: numeric
+    value: 0.3
+    unit: percent labor supply per 1 percent after-tax wage
+    population: aggregate labor supply
+    policyScope: Tax Foundation production model
+    margin: labor supply response
+    horizon: long-run equilibrium
+    notes: Tax Foundation says its labor response is at the top end of CBO's 0.1 to 0.3 substitution-elasticity range.
+    sources:
+      - label: Tax Foundation key assumptions in dynamic scoring
+        url: https://taxfoundation.org/research/all/federal/key-assumptions-dynamic-scoring/
+        kind: self
+      - label: Tax Foundation GE model overview PDF
+        url: https://files.taxfoundation.org/20180419195810/TaxFoundaton_General-Equilibrium-Model-Overview1.pdf
+        kind: self
+
+  - model: tf-microsim
+    domain: tax-incidence
+    kind: incidence-assumption
+    parameter: vat_passback_to_factor_income
+    label: VAT incidence passed back to labor and capital
+    status: qualitative
+    value: unknown
+    population: labor and capital income recipients
+    policyScope: value-added tax distributional analysis
+    margin: incidence/pass-through
+    functionalForm: VAT reduces post-tax factor income through labor, corporate-capital, and noncorporate-capital income factors.
+    sources: *taxfoundation_ge_pdf
+
+  - model: tax-foundation-tg
+    domain: capital-gains
+    kind: elasticity
+    parameter: capital_gains_realization_short_run
+    label: Short-run capital-gains realization elasticity
+    status: numeric
+    value: -1.1
+    unit: percent realizations per 1 percent marginal-rate change
+    population: capital-gains realizers
+    policyScope: TAG/GE model
+    margin: capital-gains realization timing
+    horizon: short-run
+    notes: TAG is the Tax Foundation's branded name for the same GE model tracked as tf-microsim.
+    sources: *taxfoundation_ge_pdf
+
+  - model: tax-foundation-tg
+    domain: capital-gains
+    kind: elasticity
+    parameter: capital_gains_realization_long_run
+    label: Long-run capital-gains realization elasticity
+    status: numeric
+    value: -0.7
+    unit: percent realizations per 1 percent marginal-rate change
+    population: capital-gains realizers
+    policyScope: TAG/GE model
+    margin: capital-gains realization timing
+    horizon: long-run
+    notes: TAG is the Tax Foundation's branded name for the same GE model tracked as tf-microsim.
+    sources: *taxfoundation_ge_pdf
+
+  - model: tax-foundation-tg
+    domain: labor-supply
+    kind: elasticity
+    parameter: labor_supply_elasticity
+    label: Labor supply elasticity in production model
+    status: numeric
+    value: 0.3
+    unit: percent labor supply per 1 percent after-tax wage
+    population: aggregate labor supply
+    policyScope: TAG/GE model
+    margin: labor supply response
+    horizon: long-run equilibrium
+    notes: Same Tax Foundation GE model parameterization as tf-microsim.
+    sources:
+      - label: Tax Foundation key assumptions in dynamic scoring
+        url: https://taxfoundation.org/research/all/federal/key-assumptions-dynamic-scoring/
+        kind: self
+      - label: Tax Foundation GE model overview PDF
+        url: https://files.taxfoundation.org/20180419195810/TaxFoundaton_General-Equilibrium-Model-Overview1.pdf
+        kind: self
+
+  - model: tax-foundation-tg
+    domain: tax-incidence
+    kind: incidence-assumption
+    parameter: vat_passback_to_factor_income
+    label: VAT incidence passed back to labor and capital
+    status: qualitative
+    value: unknown
+    population: labor and capital income recipients
+    policyScope: TAG/GE model
+    margin: incidence/pass-through
+    functionalForm: Same VAT incidence assumption as tf-microsim.
+    sources: *taxfoundation_ge_pdf
+
+  - model: pwbm
+    domain: labor-supply
+    kind: elasticity
+    parameter: frisch_labor_supply_elasticity
+    label: Frisch labor supply elasticity
+    status: numeric
+    value: 0.5
+    unit: percent labor supply per 1 percent after-tax wage
+    population: all household incomes
+    policyScope: dynamic OLG and Social Security analyses
+    margin: intertemporal substitution
+    horizon: long-run dynamic simulation
+    sources:
+      - label: PWBM Social Security dynamic analysis
+        url: https://static1.squarespace.com/static/55693d60e4b06d83cf793431/t/5d94c3d3c9fa320443b3fe9e/1570030547343/Options%2Bto%2BReturn%2BSocial%2BSecurity%2Bto%2BFinancial%2BBalance%2BThe%2BImpact%2Bon%2BEconomic%2BGrowth.pdf
+        kind: self
+      - label: PWBM dynamic OLG overview
+        url: https://budgetmodel.wharton.upenn.edu/model/dynamic-olg/
+        kind: self
+
+  - model: pwbm
+    domain: saving
+    kind: choice-model
+    parameter: household_labor_consumption_saving_choice
+    label: Forward-looking household labor, consumption, and saving choice
+    status: qualitative
+    value: unknown
+    population: OLG household types
+    policyScope: dynamic OLG
+    margin: labor supply, consumption, and saving response
+    functionalForm: Overlapping-generations model with household types varying by income and demographics, uncertainty about income and longevity, and forward-looking choices.
+    sources:
+      - label: PWBM dynamic OLG overview
+        url: https://budgetmodel.wharton.upenn.edu/model/dynamic-olg/
+        kind: self
+
+  - model: pwbm
+    domain: macro
+    kind: incidence-assumption
+    parameter: foreign_purchase_share_new_debt
+    label: Share of new government debt purchased by foreigners
+    status: numeric
+    value: 0.4
+    unit: share
+    population: new government debt
+    policyScope: dynamic macro simulations
+    margin: open-economy debt financing
+    horizon: long-run dynamic simulation
+    sources:
+      - label: PWBM Social Security dynamic analysis
+        url: https://static1.squarespace.com/static/55693d60e4b06d83cf793431/t/5d94c3d3c9fa320443b3fe9e/1570030547343/Options%2Bto%2BReturn%2BSocial%2BSecurity%2Bto%2BFinancial%2BBalance%2BThe%2BImpact%2Bon%2BEconomic%2BGrowth.pdf
+        kind: self
+
+  # ============================ Health / CBO health ==========================
+  - model: hisim2
+    domain: health-insurance
+    kind: choice-model
+    parameter: consumer_employer_behavior
+    label: Consumer and employer insurance behavior
+    status: documented-undisclosed
+    value: unknown
+    population: US population under 65 and firms
+    policyScope: CBO health insurance baseline and policy estimates
+    margin: coverage enrollment and employer offer behavior
+    functionalForm: CBO revamped consumer and employer behavior modeling in HISIM2; public data-preparation papers do not publish a full numeric elasticity table.
+    sources:
+      - label: CBO HISIM2 data-preparation working paper
+        url: https://www.cbo.gov/system/files/2019-04/55087-HISIM2_WP.pdf
+        kind: government
+
+  # ============================ Benefits calculators / screeners =============
+  - model: columbia-cpsp
+    domain: labor-supply
+    kind: elasticity
+    parameter: poverty_projection_behavioral_response
+    label: Behavioral responses in poverty projections
+    status: unknown
+    value: unknown
+    population: CPS-ASEC households
+    policyScope: poverty and tax-transfer projections
+    margin: labor supply and take-up response
+    notes: Public CPSP materials rely on tax-benefit calculations and imputations, but do not expose a reusable behavioral-elasticity table.
+    sources:
+      - label: Columbia CPSP monthly poverty methodology
+        url: https://www.povertycenter.columbia.edu/forecasting-monthly-poverty
+        kind: academic
+
+  - model: benefits-data-trust
+    domain: take-up
+    kind: take-up-model
+    parameter: outreach_targeting_behavior
+    label: Outreach and enrollment targeting
+    status: qualitative
+    value: unknown
+    population: benefit-eligible households
+    policyScope: benefits access
+    margin: take-up response to outreach
+    notes: Public materials document screening and outreach, not a published microsimulation elasticity.
+    sources:
+      - label: Benefits Data Trust
+        url: https://web.archive.org/web/20240116222713/https://bdtrust.org/
+        kind: self
+
+  - model: benefit-kitchen
+    domain: take-up
+    kind: functional-form
+    parameter: claimant_supplied_entitlement_scenarios
+    label: Claimant-supplied entitlement scenarios
+    status: not-modeled
+    value: 0
+    unit: endogenous population behavioral response
+    population: individual claimant households
+    policyScope: benefits calculator
+    margin: population behavior
+    notes: Calculator computes eligibility from user-supplied circumstances; no public population behavioral response model is documented.
+    sources:
+      - label: Benefit Kitchen
+        url: https://www.benefitkitchen.com/
+        kind: self
+
+  - model: benefits-cliffs
+    domain: labor-supply
+    kind: functional-form
+    parameter: user_supplied_earnings_path
+    label: User-supplied earnings counterfactuals
+    status: not-modeled
+    value: 0
+    unit: endogenous behavioral response
+    population: calculator households
+    policyScope: benefit cliff analysis
+    margin: labor supply response
+    notes: Tool surfaces work incentives and cliffs but does not document endogenous elasticities.
+    sources:
+      - label: National Center for Children in Poverty Benefits Cliffs Calculator
+        url: https://www.nccp.org/frs/
+        kind: civilsociety
+
+  - model: snap-screener
+    domain: take-up
+    kind: functional-form
+    parameter: claimant_supplied_snap_screening
+    label: Claimant-supplied SNAP screening
+    status: not-modeled
+    value: 0
+    unit: endogenous population behavioral response
+    population: individual screening households
+    policyScope: SNAP screening
+    margin: population behavior
+    notes: Screener computes likely eligibility from user inputs; it does not publish a take-up elasticity model.
+    sources:
+      - label: SNAP Screener
+        url: https://www.snapscreener.com/
+        kind: self
+
+  - model: mrelief
+    domain: take-up
+    kind: functional-form
+    parameter: claimant_supplied_snap_screening
+    label: Claimant-supplied SNAP screening and enrollment support
+    status: not-modeled
+    value: 0
+    unit: endogenous population behavioral response
+    population: individual screening households
+    policyScope: SNAP screening and enrollment
+    margin: population behavior
+    notes: Public materials focus on eligibility screening and application assistance, not a population behavioral elasticity.
+    sources:
+      - label: mRelief
+        url: https://www.mrelief.com/
+        kind: self
+
+  - model: atlanta-fed-prd
+    domain: labor-supply
+    kind: functional-form
+    parameter: user_supplied_earnings_counterfactuals
+    label: User-supplied earnings counterfactuals
+    status: not-modeled
+    value: 0
+    unit: endogenous behavioral response
+    population: calculator households
+    policyScope: benefits cliffs and career pathways
+    margin: labor supply response
+    notes: The PRD lets users compare net resources across earnings or career pathways; behavior is exogenous to the calculator.
+    sources:
+      - label: Atlanta Fed Policy Rules Database
+        url: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
+        kind: self
+
+  - model: itep-microsim
+    domain: tax-incidence
+    kind: incidence-assumption
+    parameter: distributional_incidence_assumptions
+    label: Distributional incidence assumptions
+    status: documented-undisclosed
+    value: unknown
+    population: taxpayers and consumers
+    policyScope: state and local tax distribution
+    margin: tax incidence and behavioral response
+    notes: Who Pays methodology documents distributional incidence but does not publish a full reusable elasticity table.
+    sources:
+      - label: ITEP Who Pays methodology
+        url: https://itep.org/who-pays-7th-edition-methodology-and-discussion/
+        kind: self
+
+  - model: cbolt
+    domain: retirement
+    kind: choice-model
+    parameter: long_term_social_security_behavior
+    label: Long-term Social Security behavioral assumptions
+    status: documented-undisclosed
+    value: unknown
+    population: workers and Social Security beneficiaries
+    policyScope: long-term Social Security and budget projections
+    margin: labor supply, retirement, claiming, and saving behavior
+    notes: CBO long-term modeling documents outputs and uncertainty; public materials do not expose a complete behavioral parameter table for CBOLT.
+    sources:
+      - label: CBO long-term budget outlook topic page
+        url: https://www.cbo.gov/topics/budget/long-term-budget-outlook
+        kind: government

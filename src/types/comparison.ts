@@ -392,6 +392,79 @@ export interface Imputation {
 }
 
 /* -------------------------------------------------------------------------- */
+/*                       BEHAVIORAL / ELASTICITY ASSUMPTIONS                  */
+/* -------------------------------------------------------------------------- */
+
+export type BehavioralParameterDomain =
+  | 'labor-supply'
+  | 'taxable-income'
+  | 'capital-gains'
+  | 'take-up'
+  | 'health-insurance'
+  | 'retirement'
+  | 'saving'
+  | 'tax-incidence'
+  | 'macro'
+  | 'tariff'
+  | 'financial-transactions'
+  | 'other';
+
+export type BehavioralParameterKind =
+  | 'elasticity'
+  | 'semi-elasticity'
+  | 'participation-elasticity'
+  | 'incidence-assumption'
+  | 'choice-model'
+  | 'take-up-model'
+  | 'functional-form'
+  | 'calibration-target'
+  | 'other';
+
+export type BehavioralParameterStatus =
+  | 'numeric'
+  | 'qualitative'
+  | 'documented-undisclosed'
+  | 'not-modeled'
+  | 'unknown';
+
+/**
+ * Structured behavioral parameters and reverse-engineering assumptions:
+ * elasticities, choice models, pass-through/incidence assumptions, and explicit
+ * "not modeled" or "undisclosed" rows where public documentation supports that
+ * conclusion. Numeric fields are intentionally optional because many models
+ * document a response margin without publishing the parameter value.
+ */
+export interface BehavioralParameter {
+  model: string;
+  domain: BehavioralParameterDomain;
+  kind: BehavioralParameterKind;
+  /** Stable parameter id within the model/domain, e.g. "labor_income_effect". */
+  parameter: string;
+  /** Human-readable label shown in tables. */
+  label: string;
+  status: BehavioralParameterStatus;
+  /** Single value when public and scalar. */
+  value?: number | 'varies' | 'unknown';
+  /** Range or scenario values where public. */
+  lower?: number;
+  central?: number;
+  upper?: number;
+  unit?: string;
+  /** Population, income group, asset class, or entity this parameter applies to. */
+  population?: string;
+  /** Policy area or model scope. */
+  policyScope?: string;
+  /** Extensive, intensive, realization, pass-through, enrollment, etc. */
+  margin?: string;
+  /** Short-run, long-run, budget-window, static, etc. */
+  horizon?: string;
+  /** Formula, model class, or implementation detail when public. */
+  functionalForm?: string;
+  notes?: string;
+  sources: Source[];
+}
+
+/* -------------------------------------------------------------------------- */
 /*                            MODELING MECHANICS                              */
 /* -------------------------------------------------------------------------- */
 
@@ -505,6 +578,7 @@ export interface ComparisonData {
   usage: UsageMetric[];
   accuracy: AccuracyCheck[];
   imputations: Imputation[];
+  behavioralParameters: BehavioralParameter[];
   modeling: ModelingMechanic[];
   artifacts: Artifact[];
   freshness: Freshness[];

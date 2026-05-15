@@ -73,10 +73,10 @@ function CellWithSources({
 
 export default function TransparencyTable({
   data,
-  allModels,
+  countryModels,
 }: {
   data: ComparisonData;
-  allModels: Model[];
+  countryModels: Model[];
 }) {
   return (
     <div>
@@ -86,7 +86,7 @@ export default function TransparencyTable({
         description="How verifiable each model is by an outside party. Public code, public documentation, public data, and a reproducible build pipeline are the four legs of model transparency — they let a reader confirm that what the model says happens is what actually happens. Each cell carries its own corroborating sources."
       />
 
-      <ModelSelector allModels={allModels} />
+      <ModelSelector countryModels={countryModels} />
 
       <section style={sectionStyle}>
         <div style={tableWrapperStyle}>
