@@ -41,6 +41,7 @@ function getNavItems(country: Country) {
     { label: 'Research', href: `https://policyengine.org/${country}/research` },
     { label: 'Model', href: `https://policyengine.org/${country}/model` },
     { label: 'API', href: `https://policyengine.org/${country}/api` },
+    { label: 'Python', href: `https://policyengine.org/${country}/python` },
     {
       label: 'About',
       hasDropdown: true,
