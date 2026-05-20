@@ -12,6 +12,12 @@ const nextConfig: NextConfig = {
   // section with `?compare=all`, mirroring the new unified design
   // where comparison is a lens (drawer-controlled URL param) on the
   // existing pages rather than a separate hierarchy.
+  //
+  // Note: country-prefixed variants like `/us/comparison/coverage` are
+  // handled by `proxy.ts` (Next.js middleware runs before redirects(),
+  // so the country prefix has been stripped before this rule fires).
+  // Keep this list in sync with `LEGACY_COMPARISON_DESTINATIONS` in
+  // `proxy.ts`.
   async redirects() {
     return [
       {

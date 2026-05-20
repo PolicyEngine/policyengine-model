@@ -26,7 +26,11 @@ import { NextRequest, NextResponse } from 'next/server';
  * to redirect a country-prefixed path).
  */
 
-/** Old /comparison/* path → new model-section path with ?compare=all. */
+/**
+ * Old /comparison/* path → new model-section path with `?compare=all`.
+ * Keep in sync with the `redirects()` block in `next.config.ts`, which
+ * handles the same paths when no country prefix is present.
+ */
 const LEGACY_COMPARISON_DESTINATIONS: Record<string, string> = {
   '/comparison': '/?compare=all',
   '/comparison/coverage': '/rules/coverage?compare=all',
