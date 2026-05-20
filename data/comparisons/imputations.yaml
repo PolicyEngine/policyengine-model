@@ -532,6 +532,29 @@ imputations:
         kind: self
 
   # ============================ Child care subsidy ============================
+  - model: policyengine-us
+    concept: child-care-subsidy-participation
+    method: rule-based
+    description: >
+      CCDF eligibility and benefit rules implemented at the federal
+      level (age, income, asset, immigration, activity, and reason-for-
+      care tests; copay; subsidy) plus seven state-specific child care
+      subsidy programs (CalWORKs Childcare in CA, CCAP in CO and IL,
+      CCFA in MA, CCSP in DC, SCCA in NC, CCS in TX). The Enhanced CPS
+      pipeline does not seed CCDF take-up priors or calibrate
+      simulated receipt to administrative caseloads, so simulated CCDF
+      participation equals simulated CCDF eligibility — an
+      overstatement of actual receipt.
+    baseDataset: Enhanced CPS
+    reproducible: yes
+    sources:
+      - label: policyengine-us CCDF variables (federal)
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/hhs/ccdf
+        kind: self
+      - label: policyengine-us-data take-up parameters (CCDF absent)
+        url: https://github.com/PolicyEngine/policyengine-us-data/tree/main/policyengine_us_data/parameters/take_up
+        kind: self
+
   - model: trim3
     concept: child-care-subsidy-participation
     method: caseload-driven

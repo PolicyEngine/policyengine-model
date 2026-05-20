@@ -40,10 +40,13 @@ modeling:
     label: Seeded take-up priors before calibration
     detail: >
       Enhanced CPS construction assigns take-up and claiming gates for
-      SNAP, ACA/PTC, DC PTC, Head Start, Early Head Start, SSI,
-      Medicaid, TANF, EITC, WIC, WIC nutritional risk, and voluntary tax
-      filing. Priors are external-rate tables; SNAP, SSI, ACA, and
-      Medicaid preserve available reported-recipient or coverage anchors.
+      SNAP, ACA/PTC, DC PTC, Head Start, Early Head Start, housing
+      assistance, SSI, Medicaid, TANF, EITC, WIC, WIC nutritional
+      risk, and voluntary tax filing. Priors are external-rate tables;
+      SNAP, SSI, ACA, and Medicaid preserve available
+      reported-recipient or coverage anchors. CCDF is not currently
+      seeded — simulated CCDF receipt equals simulated CCDF
+      eligibility.
     scope: Enhanced CPS program participation and claiming inputs
     sources:
       - label: policyengine-us-data CPS take-up assignment
