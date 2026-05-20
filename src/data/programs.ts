@@ -972,9 +972,24 @@ export const programs: Program[] = [
     fullName: 'Head Start / Early Head Start',
     agency: 'HHS',
     status: 'partial',
-    coverage: 'US',
-    notes: 'Currently adding immigration rules',
+    coverage: 'US (federal); WA ECEAP as state pre-K equivalent',
+    notes: 'Federal Head Start / Early Head Start implemented; currently adding immigration rules. Washington ECEAP (Early Childhood Education and Assistance Program) is implemented separately as a state-funded pre-K program at gov/states/wa/dcyf/eceap.',
     variable: 'head_start',
+    stateImplementations: [
+      {
+        state: 'WA',
+        status: 'complete',
+        name: 'WA ECEAP',
+        fullName: 'Washington Early Childhood Education and Assistance Program',
+        notes: 'State-funded pre-K program (Head Start equivalent)',
+        variable: 'wa_eceap',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/wa/dcyf/eceap`,
+          variables: `${GITHUB_BASE}/variables/gov/states/wa/dcyf/eceap`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/wa/dcyf/eceap`,
+        }
+      },
+    ],
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/hhs/head_start`,
       variables: `${GITHUB_BASE}/variables/gov/hhs/head_start`,
@@ -987,7 +1002,7 @@ export const programs: Program[] = [
     fullName: 'Low Income Home Energy Assistance Program',
     agency: 'HHS',
     status: 'partial',
-    coverage: 'OR, DC, Riverside County, MA, IL',
+    coverage: 'DC, IL, MA, TX (state programs); OR in progress',
     stateImplementations: [
       {
         state: 'OR',
@@ -1032,6 +1047,19 @@ export const programs: Program[] = [
           tests: `${TESTS_BASE}/policy/baseline/gov/states/il/dceo/liheap`,
         }
       },
+      {
+        state: 'TX',
+        status: 'complete',
+        name: 'Texas CEAP',
+        fullName: 'Texas Comprehensive Energy Assistance Program',
+        notes: 'CEAP is Texas\'s LIHEAP-funded energy assistance program',
+        variable: 'tx_ceap',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/tx/tdhca/ceap`,
+          variables: `${GITHUB_BASE}/variables/gov/states/tx/tdhca/ceap`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/tx/tdhca/ceap`,
+        }
+      },
     ],
     githubLinks: {},
   },
@@ -1057,8 +1085,8 @@ export const programs: Program[] = [
     fullName: 'SSI State Supplement',
     agency: 'SSA',
     status: 'partial',
-    coverage: 'All states except AZ, AR, TN, MS, WV, ND',
-    notes: 'SSI State Supplement programs exist in 45 states plus DC',
+    coverage: '17 of 45+DC states with SSP programs implemented',
+    notes: 'SSI State Supplement programs exist in 45 states plus DC; 17 implemented in policyengine-us (AK, AL, CA, CO, CT, DE, GA, IL, IN, KY, MA, ME, MI, NM, SC, TX, WA)',
     stateImplementations: [
       {
         state: 'CA',
@@ -1138,17 +1166,27 @@ export const programs: Program[] = [
       },
       {
         state: 'CT',
-        status: 'notStarted',
+        status: 'complete',
         name: 'Connecticut SSP',
         fullName: 'Connecticut State Supplementary Payment',
-        githubLinks: {}
+        variable: 'ct_ssp',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/ct/dss/ssp`,
+          variables: `${GITHUB_BASE}/variables/gov/states/ct/dss/ssp`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/ct/dss/ssp`,
+        }
       },
       {
         state: 'MI',
-        status: 'notStarted',
+        status: 'complete',
         name: 'Michigan SSP',
         fullName: 'Michigan State Supplementary Payment',
-        githubLinks: {}
+        variable: 'mi_ssp',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/mi/mdhhs/ssp`,
+          variables: `${GITHUB_BASE}/variables/gov/states/mi/mdhhs/ssp`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/mi/mdhhs/ssp`,
+        }
       },
       {
         state: 'VT',
@@ -1166,10 +1204,15 @@ export const programs: Program[] = [
       },
       {
         state: 'DE',
-        status: 'notStarted',
+        status: 'complete',
         name: 'Delaware SSP',
         fullName: 'Delaware State Supplementary Payment',
-        githubLinks: {}
+        variable: 'de_ssp',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/de/dhss/ssp`,
+          variables: `${GITHUB_BASE}/variables/gov/states/de/dhss/ssp`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/de/dhss/ssp`,
+        }
       },
       {
         state: 'HI',
@@ -1180,17 +1223,27 @@ export const programs: Program[] = [
       },
       {
         state: 'AL',
-        status: 'notStarted',
+        status: 'complete',
         name: 'Alabama SSP',
         fullName: 'Alabama State Supplementary Payment',
-        githubLinks: {}
+        variable: 'al_ssp',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/al/dhr/ssp`,
+          variables: `${GITHUB_BASE}/variables/gov/states/al/dhr/ssp`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/al/dhr/ssp`,
+        }
       },
       {
         state: 'AK',
-        status: 'notStarted',
+        status: 'complete',
         name: 'Alaska SSP',
         fullName: 'Alaska State Supplementary Payment',
-        githubLinks: {}
+        variable: 'ak_ssp',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/ak/dpa/ssp`,
+          variables: `${GITHUB_BASE}/variables/gov/states/ak/dpa/ssp`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/ak/dpa/ssp`,
+        }
       },
       {
         state: 'DC',
@@ -1208,10 +1261,15 @@ export const programs: Program[] = [
       },
       {
         state: 'GA',
-        status: 'notStarted',
+        status: 'complete',
         name: 'Georgia SSP',
         fullName: 'Georgia State Supplementary Payment',
-        githubLinks: {}
+        variable: 'ga_ssp',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/ga/dhs/ssp`,
+          variables: `${GITHUB_BASE}/variables/gov/states/ga/dhs/ssp`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/ga/dhs/ssp`,
+        }
       },
       {
         state: 'ID',
@@ -1222,10 +1280,15 @@ export const programs: Program[] = [
       },
       {
         state: 'IN',
-        status: 'notStarted',
+        status: 'complete',
         name: 'Indiana SSP',
         fullName: 'Indiana State Supplementary Payment',
-        githubLinks: {}
+        variable: 'in_ssp',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/in/fssa/ssp`,
+          variables: `${GITHUB_BASE}/variables/gov/states/in/fssa/ssp`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/in/fssa/ssp`,
+        }
       },
       {
         state: 'IA',
@@ -1243,10 +1306,15 @@ export const programs: Program[] = [
       },
       {
         state: 'KY',
-        status: 'notStarted',
+        status: 'complete',
         name: 'Kentucky SSP',
         fullName: 'Kentucky State Supplementary Payment',
-        githubLinks: {}
+        variable: 'ky_ssp',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/ky/dcbs/ssp`,
+          variables: `${GITHUB_BASE}/variables/gov/states/ky/dcbs/ssp`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/ky/dcbs/ssp`,
+        }
       },
       {
         state: 'LA',
@@ -1257,10 +1325,15 @@ export const programs: Program[] = [
       },
       {
         state: 'ME',
-        status: 'notStarted',
+        status: 'complete',
         name: 'Maine SSP',
         fullName: 'Maine State Supplementary Payment',
-        githubLinks: {}
+        variable: 'me_ssp',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/me/dhhs/ssp`,
+          variables: `${GITHUB_BASE}/variables/gov/states/me/dhhs/ssp`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/me/dhhs/ssp`,
+        }
       },
       {
         state: 'MD',
@@ -1306,10 +1379,15 @@ export const programs: Program[] = [
       },
       {
         state: 'NM',
-        status: 'notStarted',
-        name: 'New Mexico SSP',
-        fullName: 'New Mexico State Supplementary Payment',
-        githubLinks: {}
+        status: 'complete',
+        name: 'New Mexico SSI Supplement',
+        fullName: 'New Mexico SSI State Supplement',
+        variable: 'nm_ssi_state_supplement',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/nm/hca/ssi_supplement`,
+          variables: `${GITHUB_BASE}/variables/gov/states/nm/hca/ssi_supplement`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/nm/hca/ssi_supplement`,
+        }
       },
       {
         state: 'NC',
@@ -1341,10 +1419,15 @@ export const programs: Program[] = [
       },
       {
         state: 'SC',
-        status: 'notStarted',
-        name: 'South Carolina SSP',
-        fullName: 'South Carolina State Supplementary Payment',
-        githubLinks: {}
+        status: 'complete',
+        name: 'South Carolina SSI Supplement',
+        fullName: 'South Carolina SSI State Supplement',
+        variable: 'sc_ssi_state_supplement',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/sc/scdhhs/ssi_state_supplement`,
+          variables: `${GITHUB_BASE}/variables/gov/states/sc/scdhhs/ssi_state_supplement`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/sc/scdhhs/ssi_state_supplement`,
+        }
       },
       {
         state: 'SD',
@@ -1355,10 +1438,15 @@ export const programs: Program[] = [
       },
       {
         state: 'TX',
-        status: 'notStarted',
-        name: 'Texas SSP',
-        fullName: 'Texas State Supplementary Payment',
-        githubLinks: {}
+        status: 'complete',
+        name: 'Texas SSI Supplement',
+        fullName: 'Texas SSI State Supplement',
+        variable: 'tx_ssi_state_supplement',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/tx/hhsc/ssi_state_supplement`,
+          variables: `${GITHUB_BASE}/variables/gov/states/tx/hhsc/ssi_state_supplement`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/tx/hhsc/ssi_state_supplement`,
+        }
       },
       {
         state: 'UT',
@@ -1376,10 +1464,15 @@ export const programs: Program[] = [
       },
       {
         state: 'WA',
-        status: 'notStarted',
+        status: 'complete',
         name: 'Washington SSP',
         fullName: 'Washington State Supplementary Payment',
-        githubLinks: {}
+        variable: 'wa_ssp_payment_category',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/wa/dshs/ssp`,
+          variables: `${GITHUB_BASE}/variables/gov/states/wa/dshs/ssp`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/wa/dshs/ssp`,
+        }
       },
       {
         state: 'WI',
