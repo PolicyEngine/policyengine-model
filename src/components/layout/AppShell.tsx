@@ -1,9 +1,10 @@
-import { useState, useEffect, type ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import Sidebar from './Sidebar';
 import MobileHeader from './MobileHeader';
 import Footer from './Footer';
 import PEHeader from './PEHeader';
 import type { Country } from '../../hooks/useCountry';
+import { useMediaQuery } from '../../hooks/useMediaQuery';
 
 interface AppShellProps {
   children: ReactNode;
@@ -12,17 +13,9 @@ interface AppShellProps {
 
 export default function AppShell({ children, country }: AppShellProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(() => {
-    if (typeof window === 'undefined') return false;
-    return window.matchMedia('(max-width: 768px)').matches;
-  });
-
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 768px)');
-    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
-    mq.addEventListener('change', handler);
-    return () => mq.removeEventListener('change', handler);
-  }, []);
+  // SSR-safe responsive flag: returns `false` on the server (matches
+  // the desktop layout) and snaps to the real viewport after mount.
+  const isMobile = useMediaQuery('(max-width: 768px)', false);
 
   if (isMobile) {
     return (
