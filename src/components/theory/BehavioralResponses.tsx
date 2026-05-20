@@ -95,14 +95,15 @@ export default function BehavioralResponses({ country = 'us' }: { country?: Coun
         </div>
       </div>
 
-      {/* CBO default parameters */}
+      {/* CBO preset parameters */}
       <div className="tw:mb-6">
         <h3 className="tw:text-2xl tw:font-bold tw:text-pe-primary-900 tw:mb-2">
-          Default elasticity parameters
+          CBO preset elasticity parameters
         </h3>
         <p className="tw:text-sm tw:text-[#5A5A5A] tw:leading-[1.6] tw:mb-6 tw:max-w-[720px]">
-          PolicyEngine uses CBO elasticity estimates by default, but all parameters are fully adjustable in the model. Users can set custom values or disable
-          {country === 'uk' ? ' behavioural' : ' behavioral'} responses entirely.
+          PolicyEngine simulations default to static behavior. These CBO
+          elasticity estimates are optional presets for sensitivity analysis,
+          and all parameters are fully adjustable.
         </p>
       </div>
 

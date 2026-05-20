@@ -1,0 +1,3351 @@
+# Coverage matrix: (model × program) -> status + metadata.
+#
+# When a model does not cover a program, prefer 'not-implemented' over 'unknown'
+# only when you have direct confirmation that it is excluded from scope. Default
+# to 'unknown' otherwise; a thin row with a citation is better than a guess.
+
+coverage:
+  # ============================ PolicyEngine US ===============================
+  - model: policyengine-us
+    program: us-federal-income-tax
+    status: implemented
+    parametersModeled: unknown
+    statuteTraceable: yes
+    testCoverage: high
+    docsUrl: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/parameters/gov/irs
+    asOfYear: 2026
+    sources:
+      - label: policyengine_us IRS parameters
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/parameters/gov/irs
+
+  - model: policyengine-us
+    program: us-payroll-tax
+    status: implemented
+    statuteTraceable: yes
+    testCoverage: high
+    docsUrl: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/irs/tax/payroll
+    asOfYear: 2026
+    sources:
+      - label: policyengine_us payroll variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/irs/tax/payroll
+
+  - model: policyengine-us
+    program: us-eitc
+    status: implemented
+    statuteTraceable: yes
+    testCoverage: high
+    docsUrl: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/irs/credits/earned_income
+    asOfYear: 2026
+    sources:
+      - label: EITC variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/irs/credits/earned_income
+
+  - model: policyengine-us
+    program: us-ctc
+    status: implemented
+    statuteTraceable: yes
+    testCoverage: high
+    docsUrl: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/irs/credits/ctc
+    asOfYear: 2026
+    notes: OBBBA-era $2,200 CTC implemented.
+    sources:
+      - label: CTC variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/irs/credits/ctc
+
+  - model: policyengine-us
+    program: us-cdcc
+    status: implemented
+    statuteTraceable: yes
+    testCoverage: high
+    asOfYear: 2025
+    sources:
+      - label: CDCC variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/irs/credits/cdcc
+
+  - model: policyengine-us
+    program: us-premium-tax-credit
+    status: implemented
+    statuteTraceable: yes
+    testCoverage: high
+    asOfYear: 2025
+    sources:
+      - label: PTC variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/aca/ptc
+
+  - model: policyengine-us
+    program: us-estate-tax
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    asOfYear: unknown
+    notes: Not covered. PolicyEngine focuses on annual income tax + transfers.
+    sources:
+      - label: Repository search (no estate-tax variables)
+        url: https://github.com/PolicyEngine/policyengine-us/search?q=estate+tax
+
+  - model: policyengine-us
+    program: us-tariffs
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    asOfYear: unknown
+    notes: >
+      No public tariff/customs-duty variable or tariff-incidence reform is
+      present in the policyengine-us tree; prior citation pointed to USDA
+      variables rather than a tariff implementation.
+    sources:
+      - label: Repository search for tariff implementation
+        url: https://github.com/PolicyEngine/policyengine-us/search?q=tariff
+        kind: self
+
+  - model: policyengine-us
+    program: us-snap
+    status: implemented
+    statuteTraceable: yes
+    testCoverage: high
+    asOfYear: 2025
+    sources:
+      - label: SNAP variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/usda/snap
+
+  - model: policyengine-us
+    program: us-tanf
+    status: implemented
+    statuteTraceable: yes
+    testCoverage: medium
+    asOfYear: 2024
+    notes: State-level TANF rules implemented for selected states; eligibility rules vary by state.
+    sources:
+      - label: TANF variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/hhs/tanf
+
+  - model: policyengine-us
+    program: us-ssi
+    status: implemented
+    statuteTraceable: yes
+    testCoverage: high
+    asOfYear: 2025
+    sources:
+      - label: SSI variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/ssa/ssi
+
+  - model: policyengine-us
+    program: us-medicaid
+    status: implemented
+    statuteTraceable: yes
+    testCoverage: medium
+    asOfYear: 2025
+    notes: MAGI Medicaid eligibility modeled; long-term care Medicaid not modeled.
+    sources:
+      - label: Medicaid variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/hhs/medicaid
+
+  - model: policyengine-us
+    program: us-chip
+    status: implemented
+    statuteTraceable: yes
+    testCoverage: medium
+    asOfYear: 2025
+    sources:
+      - label: CHIP variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/hhs/chip
+
+  - model: policyengine-us
+    program: us-wic
+    status: implemented
+    statuteTraceable: yes
+    testCoverage: medium
+    asOfYear: 2025
+    sources:
+      - label: WIC variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/usda/wic
+
+  - model: policyengine-us
+    program: us-section-8
+    status: implemented
+    statuteTraceable: yes
+    testCoverage: medium
+    asOfYear: 2025
+    sources:
+      - label: Section 8 variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/hud
+
+  - model: policyengine-us
+    program: us-ssdi
+    status: partial
+    statuteTraceable: partial
+    testCoverage: low
+    asOfYear: 2024
+    notes: SSDI benefits treated as exogenous income; benefit determination not modeled.
+    sources:
+      - label: Repository search for SSDI
+        url: https://github.com/PolicyEngine/policyengine-us/search?q=ssdi
+
+  - model: policyengine-us
+    program: us-oasi
+    status: partial
+    statuteTraceable: partial
+    testCoverage: low
+    asOfYear: 2024
+    notes: OASI benefits treated as exogenous income; PIA/AIME computation not modeled in detail.
+    sources:
+      - label: Social Security variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/ssa
+
+  - model: policyengine-us
+    program: us-ui
+    status: partial
+    statuteTraceable: partial
+    testCoverage: low
+    asOfYear: 2024
+    notes: UI benefits treated as exogenous income; eligibility not modeled.
+    sources:
+      - label: UI variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/states/unemployment_compensation.py
+
+  - model: policyengine-us
+    program: us-liheap
+    status: implemented
+    statuteTraceable: yes
+    testCoverage: medium
+    asOfYear: 2025
+    sources:
+      - label: LIHEAP variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/parameters/gov/hhs/liheap
+
+  - model: policyengine-us
+    program: us-ccdf
+    status: implemented
+    statuteTraceable: yes
+    testCoverage: medium
+    asOfYear: 2025
+    notes: >
+      Federal CCDF eligibility, copay, and subsidy formulas
+      implemented at gov/hhs/ccdf. Twelve states have detailed
+      state-specific implementations: AK CCAP, CA CalWORKs
+      Childcare, CO CCAP, CT C4K, DE POC, DC CCSP, IL CCAP
+      (eligibility only), MA CCFA, ME CCAP, NC SCCA, NE Child
+      Care Subsidy, PA CCW, and TX CCS. States without a
+      state-specific implementation fall back to federal defaults
+      plus the state SMI parameters. Take-up is not currently
+      calibrated to administrative caseloads (see imputations.yaml)
+      — simulated CCDF receipt equals simulated CCDF eligibility,
+      which overstates actual enrolment.
+    sources:
+      - label: CCDF variables (federal)
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/hhs/ccdf
+      - label: CA CalWORKs child care
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/parameters/gov/states/ca/cdss/tanf/child_care
+      - label: CO CCAP
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/parameters/gov/states/co/ccap
+      - label: IL CCAP
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/parameters/gov/states/il/dhs/ccap
+      - label: DC CCSP
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/parameters/gov/states/dc
+
+  - model: policyengine-us
+    program: us-state-income-tax
+    status: implemented
+    statuteTraceable: yes
+    testCoverage: high
+    asOfYear: 2025
+    notes: All 41 income-taxing states + DC implemented.
+    sources:
+      - label: State tax parameters
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/parameters/gov/states
+
+  - model: policyengine-us
+    program: us-state-eitc
+    status: implemented
+    statuteTraceable: yes
+    testCoverage: high
+    asOfYear: 2025
+    notes: 31 state EITCs + DC.
+    sources:
+      - label: State EITC variables
+        url: https://github.com/PolicyEngine/policyengine-us/search?q=state+eitc
+
+  - model: policyengine-us
+    program: us-state-ctc
+    status: implemented
+    statuteTraceable: yes
+    testCoverage: medium
+    asOfYear: 2025
+    notes: 15 state CTCs + DC.
+    sources:
+      - label: State CTC search
+        url: https://github.com/PolicyEngine/policyengine-us/search?q=state+ctc
+
+  # ============================ PolicyEngine UK ===============================
+  - model: policyengine-uk
+    program: uk-income-tax
+    status: implemented
+    statuteTraceable: yes
+    testCoverage: high
+    asOfYear: 2026
+    sources:
+      - label: policyengine-uk income tax variables
+        url: https://github.com/PolicyEngine/policyengine-uk/tree/master/policyengine_uk/variables/gov/hmrc/income_tax
+        kind: self
+      - label: policyengine-uk income tax parameters
+        url: https://github.com/PolicyEngine/policyengine-uk/tree/master/policyengine_uk/parameters/gov/hmrc/income_tax
+        kind: self
+
+  - model: policyengine-uk
+    program: uk-national-insurance
+    status: implemented
+    statuteTraceable: yes
+    testCoverage: high
+    asOfYear: 2026
+    sources:
+      - label: policyengine-uk National Insurance variables
+        url: https://github.com/PolicyEngine/policyengine-uk/tree/master/policyengine_uk/variables/gov/hmrc/national_insurance
+        kind: self
+      - label: policyengine-uk National Insurance parameters
+        url: https://github.com/PolicyEngine/policyengine-uk/tree/master/policyengine_uk/parameters/gov/hmrc/national_insurance
+        kind: self
+
+  - model: policyengine-uk
+    program: uk-council-tax
+    status: partial
+    statuteTraceable: partial
+    testCoverage: medium
+    asOfYear: 2026
+    notes: Council Tax enters household tax and net-resource calculations, but local bill details are partly input/imputed.
+    sources:
+      - label: policyengine-uk council tax input variable
+        url: https://github.com/PolicyEngine/policyengine-uk/blob/master/policyengine_uk/variables/input/consumption/property/council_tax.py
+        kind: self
+      - label: policyengine-uk council tax in government tax aggregate
+        url: https://github.com/PolicyEngine/policyengine-uk/blob/master/policyengine_uk/variables/gov/gov_tax.py
+        kind: self
+      - label: policyengine-uk council tax parameters
+        url: https://github.com/PolicyEngine/policyengine-uk/tree/master/policyengine_uk/parameters/gov/hmrc/council_tax
+        kind: self
+
+  - model: policyengine-uk
+    program: uk-vat
+    status: partial
+    statuteTraceable: partial
+    testCoverage: medium
+    asOfYear: 2026
+    notes: VAT incidence is modeled through household consumption variables, including full-rate and reduced-rate VAT consumption.
+    sources:
+      - label: policyengine-uk VAT consumption variables
+        url: https://github.com/PolicyEngine/policyengine-uk/tree/master/policyengine_uk/variables/household/consumption
+        kind: self
+      - label: policyengine-uk indirect tax parameters
+        url: https://github.com/PolicyEngine/policyengine-uk/tree/master/policyengine_uk/parameters/gov/hmrc/vat
+        kind: self
+
+  - model: policyengine-uk
+    program: uk-universal-credit
+    status: implemented
+    statuteTraceable: yes
+    testCoverage: high
+    asOfYear: 2026
+    sources:
+      - label: policyengine-uk Universal Credit variables
+        url: https://github.com/PolicyEngine/policyengine-uk/tree/master/policyengine_uk/variables/gov/dwp/universal_credit
+        kind: self
+      - label: policyengine-uk Universal Credit parameters
+        url: https://github.com/PolicyEngine/policyengine-uk/tree/master/policyengine_uk/parameters/gov/dwp/universal_credit
+        kind: self
+
+  - model: policyengine-uk
+    program: uk-housing-benefit
+    status: implemented
+    statuteTraceable: yes
+    testCoverage: high
+    asOfYear: 2026
+    sources:
+      - label: policyengine-uk Housing Benefit variables
+        url: https://github.com/PolicyEngine/policyengine-uk/tree/master/policyengine_uk/variables/gov/dwp/housing_benefit
+        kind: self
+      - label: policyengine-uk Housing Benefit parameters
+        url: https://github.com/PolicyEngine/policyengine-uk/tree/master/policyengine_uk/parameters/gov/dwp/housing_benefit
+        kind: self
+
+  - model: policyengine-uk
+    program: uk-pension-credit
+    status: implemented
+    statuteTraceable: yes
+    testCoverage: high
+    asOfYear: 2026
+    sources:
+      - label: policyengine-uk Pension Credit variables
+        url: https://github.com/PolicyEngine/policyengine-uk/tree/master/policyengine_uk/variables/gov/dwp/pension_credit
+        kind: self
+      - label: policyengine-uk Pension Credit parameters
+        url: https://github.com/PolicyEngine/policyengine-uk/tree/master/policyengine_uk/parameters/gov/dwp/pension_credit
+        kind: self
+
+  - model: policyengine-uk
+    program: uk-tax-credits
+    status: implemented
+    statuteTraceable: partial
+    testCoverage: medium
+    asOfYear: 2026
+    notes: Legacy Child Tax Credit and Working Tax Credit formulas remain for households still on tax credits.
+    sources:
+      - label: policyengine-uk tax credit variables
+        url: https://github.com/PolicyEngine/policyengine-uk/tree/master/policyengine_uk/variables/gov/dwp
+        kind: self
+      - label: policyengine-uk tax credit parameters
+        url: https://github.com/PolicyEngine/policyengine-uk/tree/master/policyengine_uk/parameters/gov/dwp/tax_credits
+        kind: self
+
+  - model: policyengine-uk
+    program: uk-child-benefit
+    status: implemented
+    statuteTraceable: yes
+    testCoverage: high
+    asOfYear: 2026
+    sources:
+      - label: policyengine-uk Child Benefit variables
+        url: https://github.com/PolicyEngine/policyengine-uk/blob/master/policyengine_uk/variables/gov/hmrc/child_benefit.py
+        kind: self
+      - label: policyengine-uk Child Benefit parameters
+        url: https://github.com/PolicyEngine/policyengine-uk/tree/master/policyengine_uk/parameters/gov/hmrc/child_benefit
+        kind: self
+
+  - model: policyengine-uk
+    program: uk-scottish-child-payment
+    status: implemented
+    statuteTraceable: yes
+    testCoverage: medium
+    asOfYear: 2026
+    sources:
+      - label: policyengine-uk Scottish Child Payment variables
+        url: https://github.com/PolicyEngine/policyengine-uk/tree/master/policyengine_uk/variables/gov/social_security_scotland
+        kind: self
+      - label: policyengine-uk Scottish Child Payment parameters
+        url: https://github.com/PolicyEngine/policyengine-uk/tree/master/policyengine_uk/parameters/gov/social_security_scotland/scottish_child_payment
+        kind: self
+
+  # ============================ UKMOD ========================================
+  - model: ukmod
+    program: uk-income-tax
+    status: implemented
+    statuteTraceable: partial
+    testCoverage: unknown
+    asOfYear: 2026
+    sources:
+      - label: UKMOD country reports
+        url: https://www.microsimulation.ac.uk/ukmod/country-reports
+        kind: self
+      - label: UKMOD reference paper
+        url: https://microsimulation.pub/articles/00231
+        kind: academic
+
+  - model: ukmod
+    program: uk-national-insurance
+    status: implemented
+    statuteTraceable: partial
+    testCoverage: unknown
+    asOfYear: 2026
+    sources:
+      - label: UKMOD country reports
+        url: https://www.microsimulation.ac.uk/ukmod/country-reports
+        kind: self
+
+  - model: ukmod
+    program: uk-universal-credit
+    status: implemented
+    statuteTraceable: partial
+    testCoverage: unknown
+    asOfYear: 2026
+    sources:
+      - label: UKMOD country reports
+        url: https://www.microsimulation.ac.uk/ukmod/country-reports
+        kind: self
+
+  - model: ukmod
+    program: uk-housing-benefit
+    status: implemented
+    statuteTraceable: partial
+    testCoverage: unknown
+    asOfYear: 2026
+    sources:
+      - label: UKMOD country reports
+        url: https://www.microsimulation.ac.uk/ukmod/country-reports
+        kind: self
+
+  - model: ukmod
+    program: uk-pension-credit
+    status: implemented
+    statuteTraceable: partial
+    testCoverage: unknown
+    asOfYear: 2026
+    sources:
+      - label: UKMOD country reports
+        url: https://www.microsimulation.ac.uk/ukmod/country-reports
+        kind: self
+
+  - model: ukmod
+    program: uk-tax-credits
+    status: implemented
+    statuteTraceable: partial
+    testCoverage: unknown
+    asOfYear: 2026
+    notes: Legacy tax-credit rules retained for transition and historical systems.
+    sources:
+      - label: UKMOD country reports
+        url: https://www.microsimulation.ac.uk/ukmod/country-reports
+        kind: self
+
+  - model: ukmod
+    program: uk-child-benefit
+    status: implemented
+    statuteTraceable: partial
+    testCoverage: unknown
+    asOfYear: 2026
+    sources:
+      - label: UKMOD country reports
+        url: https://www.microsimulation.ac.uk/ukmod/country-reports
+        kind: self
+
+  - model: ukmod
+    program: uk-council-tax
+    status: partial
+    statuteTraceable: partial
+    testCoverage: unknown
+    asOfYear: 2026
+    notes: >
+      UKMOD is a tax-benefit model; public documentation identifies
+      Council Tax and Council Tax Reduction interactions, but local
+      Council Tax rules and support schemes are less transparent than
+      national tax-benefit parameters.
+    sources:
+      - label: UKMOD reference paper
+        url: https://microsimulation.pub/articles/00231
+        kind: academic
+      - label: UKMOD country reports
+        url: https://www.microsimulation.ac.uk/ukmod/country-reports
+        kind: self
+
+  - model: ukmod
+    program: uk-vat
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    asOfYear: 2026
+    notes: >
+      UKMOD's public model description covers direct taxes, social
+      contributions, and benefits; indirect taxes such as VAT are not
+      documented as part of the UKMOD model.
+    sources:
+      - label: UKMOD reference paper
+        url: https://microsimulation.pub/articles/00231
+        kind: academic
+
+  - model: ukmod
+    program: uk-scottish-child-payment
+    status: implemented
+    statuteTraceable: partial
+    testCoverage: unknown
+    asOfYear: 2026
+    notes: >
+      UKMOD country-policy systems include devolved-benefit parameters;
+      the public country reports are the traceable source for the
+      Scottish Child Payment implementation.
+    sources:
+      - label: UKMOD country reports
+        url: https://www.microsimulation.ac.uk/ukmod/country-reports
+        kind: self
+
+  # ============================ IFS TAXBEN ===================================
+  - model: ifs-taxben
+    program: uk-income-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    sources:
+      - label: IFS — TAXBEN microsimulation model
+        url: https://ifs.org.uk/publications/taxben-ifs-tax-and-benefit-microsimulation-model
+        kind: self
+
+  - model: ifs-taxben
+    program: uk-national-insurance
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    sources:
+      - label: IFS — TAXBEN microsimulation model
+        url: https://ifs.org.uk/publications/taxben-ifs-tax-and-benefit-microsimulation-model
+        kind: self
+
+  - model: ifs-taxben
+    program: uk-universal-credit
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    sources:
+      - label: IFS — TAXBEN microsimulation model
+        url: https://ifs.org.uk/publications/taxben-ifs-tax-and-benefit-microsimulation-model
+        kind: self
+
+  - model: ifs-taxben
+    program: uk-housing-benefit
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    sources:
+      - label: IFS — TAXBEN microsimulation model
+        url: https://ifs.org.uk/publications/taxben-ifs-tax-and-benefit-microsimulation-model
+        kind: self
+
+  - model: ifs-taxben
+    program: uk-pension-credit
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    sources:
+      - label: IFS — TAXBEN microsimulation model
+        url: https://ifs.org.uk/publications/taxben-ifs-tax-and-benefit-microsimulation-model
+        kind: self
+
+  - model: ifs-taxben
+    program: uk-tax-credits
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    sources:
+      - label: IFS — TAXBEN microsimulation model
+        url: https://ifs.org.uk/publications/taxben-ifs-tax-and-benefit-microsimulation-model
+        kind: self
+
+  - model: ifs-taxben
+    program: uk-child-benefit
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    sources:
+      - label: IFS — TAXBEN microsimulation model
+        url: https://ifs.org.uk/publications/taxben-ifs-tax-and-benefit-microsimulation-model
+        kind: self
+
+  # ============================ IGOTM ========================================
+  - model: igotm
+    program: uk-income-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: >
+      IGOTM underpins HM Treasury's Budget distributional analysis of
+      tax and benefit reforms, including personal-tax measures.
+    sources:
+      - label: HM Treasury — Impact on households distributional analysis (Budget 2025)
+        url: https://www.gov.uk/government/publications/supporting-documents-for-budget-2025
+        kind: government
+
+  - model: igotm
+    program: uk-national-insurance
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: >
+      National Insurance is part of the direct-tax side of Treasury's
+      distributional tax-benefit analysis, but public implementation
+      detail is limited.
+    sources:
+      - label: HM Treasury — Impact on households distributional analysis (Budget 2025)
+        url: https://www.gov.uk/government/publications/supporting-documents-for-budget-2025
+        kind: government
+
+  - model: igotm
+    program: uk-council-tax
+    status: partial
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: >
+      Council Tax can enter household distributional analysis, but
+      local tax rules and Council Tax Reduction schemes are not exposed
+      in public IGOTM documentation.
+    sources:
+      - label: HM Treasury — Impact on households distributional analysis (Budget 2025)
+        url: https://www.gov.uk/government/publications/supporting-documents-for-budget-2025
+        kind: government
+
+  - model: igotm
+    program: uk-vat
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: >
+      IGOTM is LCF-based and used for fiscal-event distributional
+      analysis that includes indirect tax measures such as VAT.
+    sources:
+      - label: HM Treasury — Impact on households distributional analysis (Budget 2025)
+        url: https://www.gov.uk/government/publications/supporting-documents-for-budget-2025
+        kind: government
+
+  - model: igotm
+    program: uk-universal-credit
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: >
+      Welfare measures are included in Treasury distributional analysis;
+      detailed Universal Credit rules are shared across the
+      HMT-DWP-HMRC modeling toolchain rather than published as IGOTM
+      source code.
+    sources:
+      - label: Office for Budget Responsibility — Welfare trends report (HMT/DWP microsimulation toolchain)
+        url: https://obr.uk/docs/dlm_uploads/Welfare-trends-report-October-2024.pdf
+        kind: government
+
+  - model: igotm
+    program: uk-housing-benefit
+    status: partial
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: >
+      Housing Benefit enters household-income analysis, but legacy
+      caseload and local-rent details are not separately documented in
+      public IGOTM materials.
+    sources:
+      - label: Office for Budget Responsibility — Welfare trends report (HMT/DWP microsimulation toolchain)
+        url: https://obr.uk/docs/dlm_uploads/Welfare-trends-report-October-2024.pdf
+        kind: government
+
+  - model: igotm
+    program: uk-pension-credit
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    sources:
+      - label: Office for Budget Responsibility — Welfare trends report (HMT/DWP microsimulation toolchain)
+        url: https://obr.uk/docs/dlm_uploads/Welfare-trends-report-October-2024.pdf
+        kind: government
+
+  - model: igotm
+    program: uk-tax-credits
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: Legacy tax credits are part of distributional household-income analysis.
+    sources:
+      - label: Office for Budget Responsibility — Welfare trends report (HMT/DWP microsimulation toolchain)
+        url: https://obr.uk/docs/dlm_uploads/Welfare-trends-report-October-2024.pdf
+        kind: government
+
+  - model: igotm
+    program: uk-child-benefit
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    sources:
+      - label: HM Treasury — Impact on households distributional analysis (Budget 2025)
+        url: https://www.gov.uk/government/publications/supporting-documents-for-budget-2025
+        kind: government
+
+  - model: igotm
+    program: uk-scottish-child-payment
+    status: unknown
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: unknown
+    notes: >
+      Public IGOTM documentation does not state whether the Scottish
+      Child Payment is modeled inside the Treasury fiscal-event system.
+    sources:
+      - label: HM Treasury — Impact on households distributional analysis (Budget 2025)
+        url: https://www.gov.uk/government/publications/supporting-documents-for-budget-2025
+        kind: government
+
+  # ============================ DWP PSM ======================================
+  - model: dwp-psm
+    program: uk-income-tax
+    status: out-of-scope
+    statuteTraceable: no
+    testCoverage: none
+    asOfYear: unknown
+    notes: >
+      DWP's PSM is the department's benefit-policy simulation model;
+      Treasury and HMRC models handle tax-policy simulation.
+    sources:
+      - label: OBR — DWP's policy simulation model and the Family Resources Survey
+        url: https://obr.uk/box/dwps-policy-simulation-model-and-the-family-resources-survey/
+        kind: government
+
+  - model: dwp-psm
+    program: uk-national-insurance
+    status: out-of-scope
+    statuteTraceable: no
+    testCoverage: none
+    asOfYear: unknown
+    notes: National Insurance policy simulation is outside DWP PSM's documented benefit-model scope.
+    sources:
+      - label: OBR — DWP's policy simulation model and the Family Resources Survey
+        url: https://obr.uk/box/dwps-policy-simulation-model-and-the-family-resources-survey/
+        kind: government
+
+  - model: dwp-psm
+    program: uk-council-tax
+    status: partial
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2024
+    notes: >
+      Council Tax Reduction and housing-cost interactions are benefit
+      calculations, but local Council Tax liability modeling is not
+      documented as a PSM tax module.
+    sources:
+      - label: DWP — Introduction to the DWP Policy Simulation Model
+        url: https://www.microsimulation.ac.uk/wp-content/uploads/2023/07/UKMODFest2023_DWP.pdf
+        kind: government
+
+  - model: dwp-psm
+    program: uk-vat
+    status: out-of-scope
+    statuteTraceable: no
+    testCoverage: none
+    asOfYear: unknown
+    notes: Indirect tax simulation is outside DWP PSM's documented benefit-model scope.
+    sources:
+      - label: OBR — DWP's policy simulation model and the Family Resources Survey
+        url: https://obr.uk/box/dwps-policy-simulation-model-and-the-family-resources-survey/
+        kind: government
+
+  - model: dwp-psm
+    program: uk-universal-credit
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2024
+    notes: >
+      Universal Credit policy costing and managed-migration analysis are
+      core documented PSM uses.
+    sources:
+      - label: Universal Credit Programme — Full Business Case Summary
+        url: https://www.gov.uk/government/publications/universal-credit-programme-full-business-case-summary/universal-credit-programme-full-business-case-summary
+        kind: government
+      - label: OBR — DWP's policy simulation model and the Family Resources Survey
+        url: https://obr.uk/box/dwps-policy-simulation-model-and-the-family-resources-survey/
+        kind: government
+
+  - model: dwp-psm
+    program: uk-housing-benefit
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2024
+    sources:
+      - label: DWP — Income-related benefits estimates of take-up
+        url: https://www.gov.uk/government/statistics/income-related-benefits-estimates-of-take-up-financial-year-ending-2024
+        kind: government
+
+  - model: dwp-psm
+    program: uk-pension-credit
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2024
+    sources:
+      - label: DWP — Income-related benefits estimates of take-up
+        url: https://www.gov.uk/government/statistics/income-related-benefits-estimates-of-take-up-financial-year-ending-2024
+        kind: government
+
+  - model: dwp-psm
+    program: uk-tax-credits
+    status: partial
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2024
+    notes: >
+      Legacy tax credits enter household benefit income and Universal
+      Credit migration analysis, but HMRC owns the tax-credit system.
+    sources:
+      - label: Universal Credit Programme — Full Business Case Summary
+        url: https://www.gov.uk/government/publications/universal-credit-programme-full-business-case-summary/universal-credit-programme-full-business-case-summary
+        kind: government
+
+  - model: dwp-psm
+    program: uk-child-benefit
+    status: partial
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2024
+    notes: >
+      Child Benefit is included in household resources and distributional
+      outputs, but policy ownership sits with HMRC rather than DWP.
+    sources:
+      - label: OBR — DWP's policy simulation model and the Family Resources Survey
+        url: https://obr.uk/box/dwps-policy-simulation-model-and-the-family-resources-survey/
+        kind: government
+
+  - model: dwp-psm
+    program: uk-scottish-child-payment
+    status: unknown
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: unknown
+    notes: >
+      Public PSM documentation does not state whether Scottish Child
+      Payment is modeled as a separate devolved-benefit rule.
+    sources:
+      - label: DWP — Introduction to the DWP Policy Simulation Model
+        url: https://www.microsimulation.ac.uk/wp-content/uploads/2023/07/UKMODFest2023_DWP.pdf
+        kind: government
+
+  # ============================ IPPR Tax-Benefit Model =======================
+  - model: ippr-tax-benefit
+    program: uk-income-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    sources:
+      - label: MMU PERU — IPPR Tax-Benefit Model project description
+        url: https://mmuperu.co.uk/blog/projects/modelling-the-effects-of-the-tax-and-benefit-system/
+        kind: academic
+
+  - model: ippr-tax-benefit
+    program: uk-national-insurance
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    sources:
+      - label: MMU PERU — IPPR Tax-Benefit Model project description
+        url: https://mmuperu.co.uk/blog/projects/modelling-the-effects-of-the-tax-and-benefit-system/
+        kind: academic
+
+  - model: ippr-tax-benefit
+    program: uk-council-tax
+    status: partial
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: >
+      The model covers tax and benefit reforms, but public project
+      descriptions do not expose local Council Tax or Council Tax
+      Reduction implementation details.
+    sources:
+      - label: MMU PERU — IPPR Tax-Benefit Model project description
+        url: https://mmuperu.co.uk/blog/projects/modelling-the-effects-of-the-tax-and-benefit-system/
+        kind: academic
+
+  - model: ippr-tax-benefit
+    program: uk-vat
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: >
+      The IPPR/Landman lineage uses the Living Costs and Food Survey
+      for indirect taxes, including VAT incidence analysis.
+    sources:
+      - label: Scottish Government — IPPR/Resolution Foundation/Landman tax-transfer model appendix
+        url: https://www.gov.scot/publications/tackling-child-poverty-delivery-plan-forecasting-child-poverty-scotland/pages/8/
+        kind: government
+
+  - model: ippr-tax-benefit
+    program: uk-universal-credit
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    sources:
+      - label: Scottish Government — IPPR/Resolution Foundation/Landman tax-transfer model appendix
+        url: https://www.gov.scot/publications/tackling-child-poverty-delivery-plan-forecasting-child-poverty-scotland/pages/8/
+        kind: government
+
+  - model: ippr-tax-benefit
+    program: uk-housing-benefit
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    sources:
+      - label: Scottish Government — IPPR/Resolution Foundation/Landman tax-transfer model appendix
+        url: https://www.gov.scot/publications/tackling-child-poverty-delivery-plan-forecasting-child-poverty-scotland/pages/8/
+        kind: government
+
+  - model: ippr-tax-benefit
+    program: uk-pension-credit
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    sources:
+      - label: MMU PERU — IPPR Tax-Benefit Model project description
+        url: https://mmuperu.co.uk/blog/projects/modelling-the-effects-of-the-tax-and-benefit-system/
+        kind: academic
+
+  - model: ippr-tax-benefit
+    program: uk-tax-credits
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    sources:
+      - label: Scottish Government — IPPR/Resolution Foundation/Landman tax-transfer model appendix
+        url: https://www.gov.scot/publications/tackling-child-poverty-delivery-plan-forecasting-child-poverty-scotland/pages/8/
+        kind: government
+
+  - model: ippr-tax-benefit
+    program: uk-child-benefit
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    sources:
+      - label: Scottish Government — IPPR/Resolution Foundation/Landman tax-transfer model appendix
+        url: https://www.gov.scot/publications/tackling-child-poverty-delivery-plan-forecasting-child-poverty-scotland/pages/8/
+        kind: government
+
+  - model: ippr-tax-benefit
+    program: uk-scottish-child-payment
+    status: partial
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: >
+      Scottish Government child-poverty forecasts use the sibling
+      IPPR/Resolution Foundation/Landman model lineage; public
+      documentation does not expose the exact Scottish Child Payment
+      rule implementation.
+    sources:
+      - label: Scottish Government — child poverty forecasting methodology
+        url: https://www.gov.scot/publications/tackling-child-poverty-delivery-plan-forecasting-child-poverty-scotland/pages/8/
+        kind: government
+
+  # ============================ Landman Economics ============================
+  - model: landman-economics
+    program: uk-income-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    sources:
+      - label: Scottish Government — Landman tax-transfer model appendix
+        url: https://www.gov.scot/publications/tackling-child-poverty-delivery-plan-forecasting-child-poverty-scotland/pages/8/
+        kind: government
+
+  - model: landman-economics
+    program: uk-national-insurance
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    sources:
+      - label: Scottish Government — Landman tax-transfer model appendix
+        url: https://www.gov.scot/publications/tackling-child-poverty-delivery-plan-forecasting-child-poverty-scotland/pages/8/
+        kind: government
+
+  - model: landman-economics
+    program: uk-council-tax
+    status: partial
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: >
+      The model covers tax-transfer reforms, but public documentation
+      does not expose local Council Tax scheme details.
+    sources:
+      - label: Scottish Government — Landman tax-transfer model appendix
+        url: https://www.gov.scot/publications/tackling-child-poverty-delivery-plan-forecasting-child-poverty-scotland/pages/8/
+        kind: government
+
+  - model: landman-economics
+    program: uk-vat
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: >
+      Landman TTM uses the Living Costs and Food Survey for indirect
+      taxes, including VAT incidence analysis.
+    sources:
+      - label: Scottish Government — Landman tax-transfer model appendix
+        url: https://www.gov.scot/publications/tackling-child-poverty-delivery-plan-forecasting-child-poverty-scotland/pages/8/
+        kind: government
+
+  - model: landman-economics
+    program: uk-universal-credit
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    sources:
+      - label: Scottish Government — Landman tax-transfer model appendix
+        url: https://www.gov.scot/publications/tackling-child-poverty-delivery-plan-forecasting-child-poverty-scotland/pages/8/
+        kind: government
+
+  - model: landman-economics
+    program: uk-housing-benefit
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    sources:
+      - label: Scottish Government — Landman tax-transfer model appendix
+        url: https://www.gov.scot/publications/tackling-child-poverty-delivery-plan-forecasting-child-poverty-scotland/pages/8/
+        kind: government
+
+  - model: landman-economics
+    program: uk-pension-credit
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    sources:
+      - label: EHRC — cumulative impact model report
+        url: https://www.equalityhumanrights.com/sites/default/files/cumulative-impact-assessment-report.pdf
+        kind: government
+
+  - model: landman-economics
+    program: uk-tax-credits
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    sources:
+      - label: Scottish Government — Landman tax-transfer model appendix
+        url: https://www.gov.scot/publications/tackling-child-poverty-delivery-plan-forecasting-child-poverty-scotland/pages/8/
+        kind: government
+
+  - model: landman-economics
+    program: uk-child-benefit
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    sources:
+      - label: Scottish Government — Landman tax-transfer model appendix
+        url: https://www.gov.scot/publications/tackling-child-poverty-delivery-plan-forecasting-child-poverty-scotland/pages/8/
+        kind: government
+
+  - model: landman-economics
+    program: uk-scottish-child-payment
+    status: partial
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: >
+      Scottish child-poverty forecasting uses the Landman-linked model
+      lineage, but public documentation does not expose the exact
+      Scottish Child Payment rule implementation.
+    sources:
+      - label: Scottish Government — child poverty forecasting methodology
+        url: https://www.gov.scot/publications/tackling-child-poverty-delivery-plan-forecasting-child-poverty-scotland/pages/8/
+        kind: government
+
+  # ============================ EntitledTo ===================================
+  - model: entitledto
+    program: uk-income-tax
+    status: partial
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2026
+    notes: >
+      EntitledTo calculates household income and work incentives for
+      benefit entitlement rather than serving as a tax-policy model.
+    sources:
+      - label: EntitledTo for organisations
+        url: https://www.entitledto.co.uk/organisations
+        kind: self
+
+  - model: entitledto
+    program: uk-national-insurance
+    status: partial
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2026
+    notes: >
+      National Insurance enters better-off and earnings calculations,
+      but EntitledTo is not documented as a tax-reform simulator.
+    sources:
+      - label: EntitledTo for organisations
+        url: https://www.entitledto.co.uk/organisations
+        kind: self
+
+  - model: entitledto
+    program: uk-council-tax
+    status: partial
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2026
+    notes: >
+      EntitledTo covers Council Tax Reduction/Support entitlement, not a
+      full population-level Council Tax liability model.
+    sources:
+      - label: GOV.UK — Benefits calculators
+        url: https://www.gov.uk/benefits-calculators
+        kind: government
+
+  - model: entitledto
+    program: uk-vat
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    asOfYear: unknown
+    notes: VAT is outside the scope of EntitledTo's benefits calculator.
+    sources:
+      - label: GOV.UK — Benefits calculators
+        url: https://www.gov.uk/benefits-calculators
+        kind: government
+
+  - model: entitledto
+    program: uk-universal-credit
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2026
+    sources:
+      - label: GOV.UK — Benefits calculators
+        url: https://www.gov.uk/benefits-calculators
+        kind: government
+
+  - model: entitledto
+    program: uk-housing-benefit
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2026
+    sources:
+      - label: GOV.UK — Benefits calculators
+        url: https://www.gov.uk/benefits-calculators
+        kind: government
+
+  - model: entitledto
+    program: uk-pension-credit
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2026
+    sources:
+      - label: GOV.UK — Benefits calculators
+        url: https://www.gov.uk/benefits-calculators
+        kind: government
+
+  - model: entitledto
+    program: uk-tax-credits
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2026
+    sources:
+      - label: EntitledTo benefits calculator
+        url: https://www.entitledto.co.uk/
+        kind: self
+
+  - model: entitledto
+    program: uk-child-benefit
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2026
+    sources:
+      - label: EntitledTo benefits calculator
+        url: https://www.entitledto.co.uk/
+        kind: self
+
+  - model: entitledto
+    program: uk-scottish-child-payment
+    status: unknown
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: unknown
+    notes: >
+      Public EntitledTo and GOV.UK calculator pages do not clearly state
+      whether Scottish Child Payment is handled as a separate rule.
+    sources:
+      - label: EntitledTo benefits calculator
+        url: https://www.entitledto.co.uk/
+        kind: self
+
+  # ================================== TRIM3 ===================================
+  - model: trim3
+    program: us-federal-income-tax
+    status: implemented
+    parametersModeled: unknown
+    statuteTraceable: unknown
+    testCoverage: unknown
+    docsUrl: https://boreas.urban.org/documentation/federaltax/main.php
+    asOfYear: unknown
+    notes: Federal income tax simulated.
+    sources:
+      - label: TRIM3 federal tax module
+        url: https://boreas.urban.org/documentation/federaltax/main.php
+
+  - model: trim3
+    program: us-payroll-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: unknown
+    sources:
+      - label: TRIM3 payroll tax module
+        url: https://boreas.urban.org/documentation/PayrollTax/main.php
+
+  - model: trim3
+    program: us-eitc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: unknown
+    sources:
+      - label: TRIM3 federal tax module
+        url: https://boreas.urban.org/documentation/federaltax/main.php
+
+  - model: trim3
+    program: us-ctc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: unknown
+    sources:
+      - label: TRIM3 federal tax module
+        url: https://boreas.urban.org/documentation/federaltax/main.php
+
+  - model: trim3
+    program: us-cdcc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: unknown
+    sources:
+      - label: TRIM3 federal tax module
+        url: https://boreas.urban.org/documentation/federaltax/main.php
+
+  - model: trim3
+    program: us-premium-tax-credit
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    notes: >
+      TRIM3's official Programs Simulated list at
+      boreas.urban.org/T3IntroPrograms.php does not include an ACA
+      Premium Tax Credit or marketplace-subsidy module. Adjacent
+      health-coverage modules (Medicaid/SCHIP, Medicare,
+      Employer-Sponsored Health Insurance) are listed; PTC is not.
+      The federal-tax module may implicitly affect post-PTC AGI but
+      the marketplace-subsidy reconciliation (Form 8962, IRC 36B) is
+      not separately simulated.
+    sources:
+      - label: TRIM3 Programs Simulated (no ACA/PTC module listed)
+        url: https://boreas.urban.org/T3IntroPrograms.php
+        kind: self
+
+  - model: trim3
+    program: us-estate-tax
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    sources:
+      - label: TRIM3 program scope (no estate tax module)
+        url: https://boreas.urban.org/T3IntroPrograms.php
+
+  - model: trim3
+    program: us-tariffs
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    sources:
+      - label: TRIM3 program scope
+        url: https://boreas.urban.org/T3IntroHistory.php
+
+  - model: trim3
+    program: us-snap
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    docsUrl: https://boreas.urban.org/documentation/foodstamps/main.php
+    asOfYear: unknown
+    notes: One of TRIM3's flagship modules; widely cited for SNAP take-up analysis.
+    sources:
+      - label: TRIM3 SNAP module
+        url: https://boreas.urban.org/documentation/foodstamps/main.php
+
+  - model: trim3
+    program: us-tanf
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    docsUrl: https://boreas.urban.org/documentation/TANF/Main.php
+    asOfYear: unknown
+    sources:
+      - label: TRIM3 TANF module
+        url: https://boreas.urban.org/documentation/TANF/Main.php
+
+  - model: trim3
+    program: us-ssi
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    docsUrl: https://boreas.urban.org/documentation/SSI/Main.php
+    asOfYear: unknown
+    sources:
+      - label: TRIM3 SSI module
+        url: https://boreas.urban.org/documentation/SSI/Main.php
+
+  - model: trim3
+    program: us-medicaid
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    docsUrl: https://boreas.urban.org/documentation/Medicaid/Main.php
+    asOfYear: unknown
+    sources:
+      - label: TRIM3 Medicaid module
+        url: https://boreas.urban.org/documentation/Medicaid/Main.php
+
+  - model: trim3
+    program: us-chip
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    docsUrl: https://boreas.urban.org/documentation/Medicaid/Main.php
+    asOfYear: unknown
+    notes: Modeled as part of Medicaid module.
+    sources:
+      - label: TRIM3 Medicaid/CHIP module
+        url: https://boreas.urban.org/documentation/Medicaid/Main.php
+
+  - model: trim3
+    program: us-wic
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    docsUrl: https://boreas.urban.org/documentation/wic/main.php
+    notes: >
+      TRIM3 documents a WIC module that simulates eligibility,
+      participation, and the value of supplemental food packages. Public
+      documentation says it models supplemental food receipt/value, not
+      WIC nutrition education or breastfeeding promotion services.
+    sources:
+      - label: TRIM3 WIC module
+        url: https://boreas.urban.org/documentation/wic/main.php
+        kind: self
+
+  - model: trim3
+    program: us-section-8
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    docsUrl: https://boreas.urban.org/documentation/PubOrSubsidizedHousing/Main.php
+    asOfYear: unknown
+    notes: Documented as "Public and Subsidized Housing" in TRIM3.
+    sources:
+      - label: TRIM3 Programs Simulated — Public and Subsidized Housing
+        url: https://boreas.urban.org/T3IntroPrograms.php
+        kind: self
+
+  - model: trim3
+    program: us-ssdi
+    status: partial
+    statuteTraceable: no
+    testCoverage: none
+    notes: >
+      TRIM3's official Programs Simulated list does not include an
+      OASDI module — TRIM3 simulates SSI but not Social Security
+      Disability Insurance benefit determination. SSDI income enters
+      the federal-tax module as exogenous CPS-reported income.
+    sources:
+      - label: TRIM3 Programs Simulated (no OASDI module)
+        url: https://boreas.urban.org/T3IntroPrograms.php
+        kind: self
+
+  - model: trim3
+    program: us-oasi
+    status: partial
+    statuteTraceable: no
+    testCoverage: none
+    notes: >
+      TRIM3 does not simulate OASI benefit determination per its
+      Programs Simulated list. OASI income enters the federal-tax
+      module as exogenous CPS-reported income.
+    sources:
+      - label: TRIM3 Programs Simulated (no OASDI module)
+        url: https://boreas.urban.org/T3IntroPrograms.php
+        kind: self
+
+  - model: trim3
+    program: us-ui
+    status: partial
+    statuteTraceable: no
+    testCoverage: none
+    notes: >
+      TRIM3's official Programs Simulated list does not include a UI
+      module. UI benefits enter the federal-tax module as exogenous
+      CPS-reported income.
+    sources:
+      - label: TRIM3 Programs Simulated (no UI module listed)
+        url: https://boreas.urban.org/T3IntroPrograms.php
+        kind: self
+
+  - model: trim3
+    program: us-liheap
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    notes: >
+      No LIHEAP module in TRIM3's official Programs Simulated list at
+      boreas.urban.org/T3IntroPrograms.php.
+    sources:
+      - label: TRIM3 Programs Simulated (no LIHEAP module)
+        url: https://boreas.urban.org/T3IntroPrograms.php
+        kind: self
+
+  - model: trim3
+    program: us-ccdf
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    docsUrl: https://boreas.urban.org/documentation/ChildCareExp/Main.php
+    asOfYear: unknown
+    sources:
+      - label: TRIM3 child care module
+        url: https://boreas.urban.org/documentation/ChildCareExp/Main.php
+
+  - model: trim3
+    program: us-state-income-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: unknown
+    notes: State income taxes simulated.
+    sources:
+      - label: TRIM3 state tax module
+        url: https://boreas.urban.org/documentation/StateTax/main.php
+
+  - model: trim3
+    program: us-state-eitc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: unknown
+    sources:
+      - label: TRIM3 state tax module
+        url: https://boreas.urban.org/documentation/StateTax/main.php
+
+  - model: trim3
+    program: us-state-ctc
+    status: unknown
+    statuteTraceable: unknown
+    testCoverage: unknown
+    sources:
+      - label: TRIM3 module documentation
+        url: https://boreas.urban.org/T3IntroHistory.php
+
+  # ================================== ATTIS ===================================
+  - model: attis
+    program: us-federal-income-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: unknown
+    sources:
+      - label: ATTIS model overview
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
+
+  - model: attis
+    program: us-payroll-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: unknown
+    sources:
+      - label: ATTIS overview
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
+
+  - model: attis
+    program: us-eitc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: unknown
+    sources:
+      - label: ATTIS overview
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
+
+  - model: attis
+    program: us-ctc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: unknown
+    sources:
+      - label: ATTIS overview
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
+
+  - model: attis
+    program: us-snap
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: unknown
+    notes: SNAP is a primary use case for ATTIS sub-state analyses.
+    sources:
+      - label: ATTIS overview
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
+
+  - model: attis
+    program: us-tanf
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: unknown
+    sources:
+      - label: ATTIS overview
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
+
+  - model: attis
+    program: us-ssi
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: unknown
+    sources:
+      - label: ATTIS overview
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
+
+  - model: attis
+    program: us-medicaid
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    notes: >
+      Medicaid is not in ATTIS scope. Urban maintains separate models for
+      Medicaid (Medicaid/CHIP Eligibility Simulation Model and HIPSM).
+    sources:
+      - label: ATTIS canonical page (no Medicaid in scope)
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
+
+  - model: attis
+    program: us-section-8
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: unknown
+    sources:
+      - label: ATTIS overview
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
+
+  - model: attis
+    program: us-ccdf
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: unknown
+    sources:
+      - label: ATTIS overview
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
+
+  - model: attis
+    program: us-wic
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: unknown
+    sources:
+      - label: ATTIS overview
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
+
+  - model: attis
+    program: us-estate-tax
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    sources:
+      - label: ATTIS overview (no estate tax)
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
+
+  - model: attis
+    program: us-tariffs
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    sources:
+      - label: ATTIS overview
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
+
+  - model: attis
+    program: us-state-income-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: unknown
+    sources:
+      - label: ATTIS overview
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
+
+  - model: attis
+    program: us-state-eitc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: unknown
+    sources:
+      - label: ATTIS overview
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
+
+  - model: attis
+    program: us-liheap
+    status: implemented
+    statuteTraceable: no
+    testCoverage: unknown
+    asOfYear: 2023
+    notes: LIHEAP is listed on Urban's canonical ATTIS scope document.
+    sources:
+      - label: ATTIS canonical page
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
+
+  - model: attis
+    program: us-ui
+    status: implemented
+    statuteTraceable: no
+    testCoverage: unknown
+    asOfYear: 2023
+    notes: >
+      ATTIS calculates what families receive in unemployment compensation
+      per Urban's canonical ATTIS page.
+    sources:
+      - label: ATTIS canonical page
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
+
+  - model: attis
+    program: us-cdcc
+    status: implemented
+    statuteTraceable: no
+    testCoverage: unknown
+    asOfYear: 2023
+    notes: >
+      Child and Dependent Care Tax Credit listed in ATTIS's tax credit
+      scope alongside EITC and CTC.
+    sources:
+      - label: ATTIS canonical page
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
+
+  - model: attis
+    program: us-premium-tax-credit
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    notes: >
+      Not in ATTIS scope. Urban uses HIPSM (separate model) for ACA
+      marketplace and premium tax credit modeling.
+    sources:
+      - label: ATTIS canonical page (no PTC in scope)
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
+
+  - model: attis
+    program: us-chip
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    notes: >
+      Not in ATTIS scope. Urban maintains separate Medicaid/CHIP
+      Eligibility Simulation Model.
+    sources:
+      - label: ATTIS canonical page (no CHIP in scope)
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
+
+  # ============================ TPC microsim =================================
+  - model: tpc-microsim
+    program: us-federal-income-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    sources:
+      - label: TPC Brief Description of the Tax Model
+        url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
+
+  - model: tpc-microsim
+    program: us-payroll-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    sources:
+      - label: TPC Brief Description
+        url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
+
+  - model: tpc-microsim
+    program: us-eitc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    sources:
+      - label: TPC Brief Description
+        url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
+
+  - model: tpc-microsim
+    program: us-ctc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    sources:
+      - label: TPC Brief Description
+        url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
+
+  - model: tpc-microsim
+    program: us-cdcc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    sources:
+      - label: TPC Brief Description
+        url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
+
+  - model: tpc-microsim
+    program: us-premium-tax-credit
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    sources:
+      - label: TPC Brief Description
+        url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
+
+  - model: tpc-microsim
+    program: us-estate-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2022
+    notes: TPC has a separate estate-tax module driving its estate distributional tables.
+    sources:
+      - label: TPC Brief Description of the Tax Model (Estate Tax Calculator section)
+        url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
+
+  - model: tpc-microsim
+    program: us-tariffs
+    status: partial
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: >
+      TPC now publishes separate tariff models and distributes tariff
+      burdens through its baseline/distributional modeling workflow; this is
+      separate from the core federal income-tax microsimulation.
+    sources:
+      - label: TPC — Description of TPC's Tariff Models
+        url: https://taxpolicycenter.org/projects/resources/description-tax-policy-centers-tariff-models
+        kind: self
+      - label: TPC — Baseline Definitions
+        url: https://taxpolicycenter.org/resources/tax-model-resources/tpc-baseline-definitions
+        kind: self
+
+  - model: tpc-microsim
+    program: us-snap
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    notes: TPC microsim is tax-only; transfer programs are out of scope.
+    sources:
+      - label: TPC Brief Description (scope)
+        url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
+
+  - model: tpc-microsim
+    program: us-tanf
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    sources:
+      - label: TPC Brief Description (scope)
+        url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
+
+  - model: tpc-microsim
+    program: us-ssi
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    sources:
+      - label: TPC Brief Description (scope)
+        url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
+
+  - model: tpc-microsim
+    program: us-medicaid
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    sources:
+      - label: TPC Brief Description (scope)
+        url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
+
+  - model: tpc-microsim
+    program: us-section-8
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    sources:
+      - label: TPC Brief Description (scope)
+        url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
+
+  - model: tpc-microsim
+    program: us-oasi
+    status: partial
+    statuteTraceable: unknown
+    testCoverage: unknown
+    notes: OASI taxability of benefits modeled within income tax; benefit determination not modeled.
+    sources:
+      - label: TPC Brief Description
+        url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
+
+  - model: tpc-microsim
+    program: us-state-income-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2022
+    notes: >
+      TPC has separately developed income tax calculators for DC and
+      the 43 states with income taxes; per TPC's Brief Description,
+      "Those state calculators rely on the same database used in TPC's
+      federal model."
+    sources:
+      - label: TPC Brief Description of the Tax Model (state calculators)
+        url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
+
+  - model: tpc-microsim
+    program: us-state-eitc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2022
+    notes: >
+      State EITCs implemented within TPC's state income tax calculators
+      (most state EITCs are defined as a percentage of federal EITC).
+    sources:
+      - label: TPC Brief Description (state income tax calculators)
+        url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
+
+  # ============================ JCT microsim =================================
+  - model: jct-microsim
+    program: us-federal-income-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: >
+      JCT's Individual Tax Model uses an SOI sample of approximately
+      360,000 individual income tax returns to score federal income tax
+      legislation.
+    sources:
+      - label: JCT — Description of the Individual Tax Model for 2023 (JCX-48-23)
+        url: https://www.jct.gov/publications/2023/jcx-48-23/
+        kind: government
+        quote: >-
+          The largest microsimulation model employed by the Joint
+          Committee staff is the individual income tax model.
+      - label: JCT — Revenue Estimating (operations page)
+        url: https://www.jct.gov/operations/revenue-estimating/
+        kind: government
+      - label: CRS — Dynamic Scoring for Tax Legislation A Review of Models (R43381)
+        url: https://www.congress.gov/crs-product/R43381
+        kind: government
+
+  - model: jct-microsim
+    program: us-payroll-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: >
+      JCT staff routinely score payroll tax proposals; an income and
+      payroll tax offset is built into the revenue-estimating process.
+    sources:
+      - label: JCT — Revenue Estimating (describes payroll tax offset)
+        url: https://www.jct.gov/operations/revenue-estimating/
+        kind: government
+        quote: >-
+          The Joint Committee staff incorporates an income and payroll
+          tax offset when estimating the effects of changes in payroll
+          taxes.
+      - label: JCT — Overview of Work of the Staff
+        url: https://www.jct.gov/getattachment/745c1c31-9111-420d-8294-e3c02cd6a96e/x-105-03-1691.pdf
+        kind: government
+
+  - model: jct-microsim
+    program: us-eitc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: EITC is included in JCT's annual tax expenditure estimates.
+    sources:
+      - label: JCT — Estimates of Federal Tax Expenditures FY 2024-2028 (JCX-48-24)
+        url: https://www.jct.gov/publications/2024/jcx-48-24/
+        kind: government
+      - label: JCT — Revenue Estimating (operations)
+        url: https://www.jct.gov/operations/revenue-estimating/
+        kind: government
+
+  - model: jct-microsim
+    program: us-ctc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2026
+    notes: CTC modeled in JCT's Individual Tax Model; OBBBA changes scored in 2025.
+    sources:
+      - label: JCT — Macroeconomic Analysis of a Permanent Child Tax Credit Expansion
+        url: https://www.jct.gov/getattachment/655c151f-fa6a-4660-a961-05d028c2d000/Child-Tax-Credit-Expansion.pdf
+        kind: government
+      - label: JCT — Estimates of Federal Tax Expenditures (JCX-48-24)
+        url: https://www.jct.gov/publications/2024/jcx-48-24/
+        kind: government
+
+  - model: jct-microsim
+    program: us-cdcc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: CDCC covered in JCT background papers; scored in 2025 reconciliation.
+    sources:
+      - label: JCT — Background on Various Family-Related Tax Provisions (JCX-33-23)
+        url: https://www.jct.gov/publications/2023/jcx-33-23/
+        kind: government
+      - label: JCT — Estimates of Federal Tax Expenditures (JCX-48-24)
+        url: https://www.jct.gov/publications/2024/jcx-48-24/
+        kind: government
+
+  - model: jct-microsim
+    program: us-premium-tax-credit
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: >
+      Premium Tax Credit included in annual tax expenditure estimates;
+      JCT staff augment CBO's HISIM2 with PTC revenue estimates.
+    sources:
+      - label: JCT — Estimates of Federal Tax Expenditures (JCX-48-24, includes PTC)
+        url: https://www.jct.gov/publications/2024/jcx-48-24/
+        kind: government
+      - label: CRS — Enhanced Premium Tax Credit and 2026 Exchange Premiums
+        url: https://www.congress.gov/crs-product/R48290
+        kind: government
+
+  - model: jct-microsim
+    program: us-estate-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: >
+      JCT maintains a separate Estate and Gift Model built on a 2008 SOI
+      estate-tax-return sample (~11,700 records, ~38,400 decedents).
+    sources:
+      - label: JCT — Modeling the Federal Revenue Effects of Changes in
+          Estate and Gift Taxation
+        url: https://www.jct.gov/getattachment/4912f291-c70b-47df-9e59-0c6a9c9494af/x-76-12-4492.pdf
+        kind: government
+        quote: >-
+          The Joint Committee staff begins with a sample of estate tax
+          returns filed in 2008 ... contains 11,726 records representing
+          the estates of 38,373 decedents.
+      - label: JCT — Revenue Estimating (lists Estate and Gift Model)
+        url: https://www.jct.gov/operations/revenue-estimating/
+        kind: government
+
+  - model: jct-microsim
+    program: us-snap
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    notes: JCT models federal taxation only; transfer programs are out of scope.
+    sources:
+      - label: JCT — Overview of Work of the Staff (lists models, all tax)
+        url: https://www.jct.gov/getattachment/745c1c31-9111-420d-8294-e3c02cd6a96e/x-105-03-1691.pdf
+        kind: government
+
+  - model: jct-microsim
+    program: us-medicaid
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    notes: JCT scope is federal taxation; healthcare coverage modeling is at CBO.
+    sources:
+      - label: JCT — Overview of Work of the Staff
+        url: https://www.jct.gov/getattachment/745c1c31-9111-420d-8294-e3c02cd6a96e/x-105-03-1691.pdf
+        kind: government
+
+  - model: jct-microsim
+    program: us-ssi
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    notes: JCT scope is federal taxation.
+    sources:
+      - label: JCT — Overview of Work of the Staff
+        url: https://www.jct.gov/getattachment/745c1c31-9111-420d-8294-e3c02cd6a96e/x-105-03-1691.pdf
+        kind: government
+
+  - model: jct-microsim
+    program: us-state-income-tax
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    notes: JCT scope is federal only.
+    sources:
+      - label: JCT — Revenue Estimating (federal scope)
+        url: https://www.jct.gov/operations/revenue-estimating/
+        kind: government
+
+  # ============================ CBO microsim =================================
+  - model: cbo-microsim
+    program: us-federal-income-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: >
+      CBO's microsimulation tax model covers regular income tax, AMT, and
+      preferential rates on long-term capital gains and qualified dividends.
+    sources:
+      - label: CBO — An Overview of CBO's Microsimulation Tax Model (2018)
+        url: https://www.cbo.gov/publication/54096
+        kind: government
+        quote: >-
+          CBO uses its microsimulation tax model to simulate the effects
+          of tax rules for a representative sample of tax filers in each
+          year of the budget window.
+      - label: CBO — Advanced Models and Details
+        url: https://www.cbo.gov/models/details
+        kind: government
+
+  - model: cbo-microsim
+    program: us-payroll-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: FICA and SECA modeled in CBO's microsimulation tax model.
+    sources:
+      - label: CBO — An Overview of CBO's Microsimulation Tax Model
+        url: https://www.cbo.gov/publication/54096
+        kind: government
+      - label: CBO — Advanced Models and Details
+        url: https://www.cbo.gov/models/details
+        kind: government
+
+  - model: cbo-microsim
+    program: us-eitc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    sources:
+      - label: CBO — An Overview of CBO's Microsimulation Tax Model
+          (lists EITC among credits modeled)
+        url: https://www.cbo.gov/publication/54096
+        kind: government
+      - label: CBO — Distribution of Household Income
+        url: https://www.cbo.gov/topic/income-distribution
+        kind: government
+
+  - model: cbo-microsim
+    program: us-ctc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2026
+    sources:
+      - label: CBO — An Overview of CBO's Microsimulation Tax Model
+          (lists CTC among credits modeled)
+        url: https://www.cbo.gov/publication/54096
+        kind: government
+      - label: CBO — How H.R. 1 (OBBBA) Would Affect Distribution of
+          Resources (uses CTC modeling)
+        url: https://www.cbo.gov/publication/61469
+        kind: government
+
+  - model: cbo-microsim
+    program: us-cdcc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    sources:
+      - label: CBO — An Overview of CBO's Microsimulation Tax Model
+          (lists CDCTC among credits)
+        url: https://www.cbo.gov/publication/54096
+        kind: government
+
+  - model: hisim2
+    program: us-premium-tax-credit
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: >
+      Premium Tax Credit effects on coverage and premiums are modeled through
+      CBO's HISIM2 health-insurance simulation model, not the microsimulation
+      tax model directly.
+    sources:
+      - label: CBO — Health Insurance Coverage Projections 2023-2033 (HISIM2)
+        url: https://www.cbo.gov/publication/59132
+        kind: government
+      - label: CRS — Enhanced Premium Tax Credit and 2026 Exchange Premiums
+        url: https://www.congress.gov/crs-product/R48290
+        kind: government
+
+  - model: cbo-microsim
+    program: us-snap
+    status: out-of-scope
+    statuteTraceable: no
+    testCoverage: none
+    asOfYear: 2025
+    notes: >
+      CBO scores SNAP in baselines and cost estimates using program-specific
+      models outside the microsimulation tax model.
+    sources:
+      - label: CBO — Dynamic Analysis of Changes to SNAP in H.R. 1 (2025)
+        url: https://www.cbo.gov/publication/61505
+        kind: government
+      - label: CBO — Work Requirements and Work Supports for Recipients
+          of Means-Tested Benefits
+        url: https://www.cbo.gov/system/files/2022-06/57702-Work-Requirements.pdf
+        kind: government
+
+  - model: hisim2
+    program: us-medicaid
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: >
+      Medicaid enrollment projections are produced by CBO's HISIM2 model,
+      augmented by a separate Medicaid model and T-MSIS data.
+    sources:
+      - label: CBO — Health Insurance Coverage Projections 2023-2033 (HISIM2)
+        url: https://www.cbo.gov/publication/59132
+        kind: government
+      - label: CBO — Advanced Models (lists T-MSIS Person Summary File)
+        url: https://www.cbo.gov/models/details
+        kind: government
+
+  - model: hisim2
+    program: us-chip
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: >
+      CHIP coverage is modeled as part of CBO's health-insurance coverage
+      projection workflow rather than the microsimulation tax model.
+    sources:
+      - label: CBO — Health Insurance Coverage Projections 2023-2033 (HISIM2)
+        url: https://www.cbo.gov/publication/59132
+        kind: government
+      - label: CBO — Methods for Analyzing Health Insurance Coverage
+        url: https://www.cbo.gov/topics/health-care/methods-analyzing-health-insurance-coverage
+        kind: government
+
+  - model: cbo-microsim
+    program: us-ssi
+    status: out-of-scope
+    statuteTraceable: no
+    testCoverage: none
+    asOfYear: 2025
+    notes: >
+      SSI outlays appear in CBO baselines and options, but benefit simulation
+      is outside the microsimulation tax model's stated tax scope.
+    sources:
+      - label: CBO — Budget and Economic Outlook 2025-2035
+        url: https://www.cbo.gov/publication/61172
+        kind: government
+      - label: CBO — Model to Adjust for Survey Underreporting of Receipt
+          from Means-Tested Transfer Programs
+        url: https://www.cbo.gov/models/details
+        kind: government
+
+  - model: cbolt
+    program: us-oasi
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2026
+    notes: >
+      OASI projections produced by CBOLT (long-term model) and the Social
+      Security Trust Funds Model.
+    sources:
+      - label: CBO — Long-Term Projections for Social Security, 2026 to 2099
+        url: https://www.cbo.gov/publication/61882
+        kind: government
+      - label: CBO — Advanced Models (lists Social Security Trust Funds Model)
+        url: https://www.cbo.gov/models/details
+        kind: government
+
+  - model: cbolt
+    program: us-ssdi
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2026
+    notes: SSDI projected in CBOLT alongside OASI.
+    sources:
+      - label: CBO — Long-Term Projections for Social Security, 2026 to 2099
+        url: https://www.cbo.gov/publication/61882
+        kind: government
+      - label: CBO — Advanced Models (Social Security Trust Funds Model)
+        url: https://www.cbo.gov/models/details
+        kind: government
+
+  - model: cbo-microsim
+    program: us-state-income-tax
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    notes: CBO scope is federal only.
+    sources:
+      - label: CBO — Advanced Models and Details (federal scope)
+        url: https://www.cbo.gov/models/details
+        kind: government
+
+  - model: cbo-microsim
+    program: us-tariffs
+    status: out-of-scope
+    statuteTraceable: no
+    testCoverage: none
+    asOfYear: 2025
+    notes: >
+      CBO maintains a separate Conventional Tariff Analysis Model with public
+      code; it is not part of the microsimulation tax model.
+    sources:
+      - label: CBO — Advanced Models (Conventional Tariff Analysis Model)
+        url: https://www.cbo.gov/models/details
+        kind: government
+
+  # ============================ ITEP microsim =================================
+  - model: itep-microsim
+    program: us-federal-income-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2024
+    notes: >
+      Federal income tax modeled alongside state and local taxes for
+      incidence and revenue analyses.
+    sources:
+      - label: ITEP — Tax Microsimulation Model Overview
+        url: https://itep.org/itep-tax-model/
+        kind: self
+        quote: >-
+          The Personal Income Tax Module analyzes the revenue and
+          incidence of current federal, state, and local personal
+          income taxes and policy options.
+      - label: Gardner (ITEP) — Who Pays and the ITEP Microsimulation Model
+          (presentation to state tax administrators)
+        url: https://taxadmin.org/wp-content/uploads/resources/10rev_est/gardner.pdf
+        kind: other
+      - label: Treasury (Cilke) — Re-weighting to Produce State-Level Tax
+          Microsimulation Estimates (cites ITEP methodology)
+        url: https://home.treasury.gov/system/files/131/TP-6.pdf
+        kind: government
+
+  - model: itep-microsim
+    program: us-payroll-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2024
+    notes: >
+      Payroll taxes included in incidence analyses; ITEP follows the
+      research consensus that employer-side FICA is shifted to workers.
+    sources:
+      - label: ITEP — Who Pays Taxes in America in 2024
+        url: https://itep.org/who-pays-taxes-in-america-in-2024/
+        kind: self
+      - label: ITEP — Why Does Tax Incidence Matter and How Do We Measure It?
+        url: https://itep.org/why-does-tax-incidence-matter-and-how-do-we-measure-it/
+        kind: self
+
+  - model: itep-microsim
+    program: us-eitc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: EITC reforms regularly scored at federal and state level.
+    sources:
+      - label: ITEP — Federal EITC Enhancements Help More Than One in Three
+          Young Workers (uses ITEP microsim)
+        url: https://itep.org/federal-eitc-enhancements-help-more-than-one-in-three-young-workers/
+        kind: self
+      - label: ITEP — Analysis of OBBBA tax provisions, national and state
+          estimates (May 2025)
+        url: https://itep.org/analysis-of-tax-provisions-in-house-reconciliation-bill/
+        kind: self
+
+  - model: itep-microsim
+    program: us-ctc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2026
+    notes: CTC reforms scored at federal and state level (e.g. OBBBA $2,200 CTC).
+    sources:
+      - label: ITEP — Analysis of OBBBA Tax Provisions (May 2025)
+        url: https://itep.org/analysis-of-tax-provisions-in-house-reconciliation-bill/
+        kind: self
+      - label: ITEP — OBBBA topic page
+        url: https://itep.org/one-big-beautiful-bill-act/
+        kind: self
+
+  - model: itep-microsim
+    program: us-state-income-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2024
+    notes: >
+      Personal income tax modeled for all 50 states + DC; Who Pays?
+      7th edition published 2024 covers 2024 tax law at 2023 income.
+    sources:
+      - label: ITEP — Who Pays? 7th Edition methodology
+        url: https://itep.org/who-pays-7th-edition-methodology-and-discussion/
+        kind: self
+        quote: >-
+          The report shows the amount of income, consumption, and
+          property taxes that would have been paid by residents in 2023
+          with the January 1, 2024 law in place.
+      - label: ITEP — Tax Microsimulation Model Overview
+        url: https://itep.org/itep-tax-model/
+        kind: self
+
+  - model: itep-microsim
+    program: us-state-eitc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2024
+    notes: >
+      State EITCs (31 states + DC) modeled within state personal income
+      tax modules; Who Pays? 7th edition tables report state-EITC
+      distributional impacts.
+    sources:
+      - label: ITEP — Who Pays? 7th Edition methodology (state EITC
+          treatment within personal income tax)
+        url: https://itep.org/who-pays-7th-edition-methodology-and-discussion/
+        kind: self
+      - label: ITEP — Tax Microsimulation Model Overview
+        url: https://itep.org/itep-tax-model/
+        kind: self
+
+  - model: itep-microsim
+    program: us-state-ctc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2024
+    notes: State CTC analyses published using ITEP microsim.
+    sources:
+      - label: ITEP — Analysis of Tax Provisions in House Reconciliation
+          Bill (state-level CTC estimates)
+        url: https://itep.org/analysis-of-tax-provisions-in-house-reconciliation-bill/
+        kind: self
+      - label: ITEP — Tax Microsimulation Model Overview
+        url: https://itep.org/itep-tax-model/
+        kind: self
+
+  - model: itep-microsim
+    program: us-snap
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    notes: ITEP scope is taxes; transfer programs not modeled.
+    sources:
+      - label: ITEP — Tax Microsimulation Model Overview (tax-only scope)
+        url: https://itep.org/itep-tax-model/
+        kind: self
+
+  - model: itep-microsim
+    program: us-medicaid
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    notes: ITEP scope is taxes.
+    sources:
+      - label: ITEP — Tax Microsimulation Model Overview
+        url: https://itep.org/itep-tax-model/
+        kind: self
+
+  - model: itep-microsim
+    program: us-tariffs
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: >
+      Tariff incidence included in 2025 distributional analyses (e.g.
+      Who Pays Taxes in America 2024 update, OBBBA + tariffs analysis).
+    sources:
+      - label: ITEP — Who Pays Taxes in America in 2024 (includes tariff effects)
+        url: https://itep.org/who-pays-taxes-in-america-in-2024/
+        kind: self
+
+  - model: itep-microsim
+    program: us-estate-tax
+    status: partial
+    statuteTraceable: no
+    testCoverage: none
+    asOfYear: 2024
+    notes: >
+      Federal estate and gift tax incidence is included in ITEP's
+      distributional totals but produced off-model; ITEP approximates
+      estate-tax burden from the share of capital income flowing to each
+      income group, rather than modeling 26 USC subtitle B rules. State
+      estate/inheritance taxes are included in Who Pays? state tables.
+    sources:
+      - label: ITEP — Who Pays Taxes in America in 2024 (off-model
+          treatment of federal estate/gift, excise, customs)
+        url: https://itep.org/who-pays-taxes-in-america-in-2024/
+        kind: self
+        quote: >-
+          It also includes federal excise taxes and customs duties and
+          estate and gift taxes which are estimated off-model.
+      - label: ITEP — Estate tax topic page (microsim-based distributional
+          analyses of estate-tax cuts)
+        url: https://itep.org/estate-tax/
+        kind: self
+
+  # ============================ Tax-Calculator (PSL) =========================
+  - model: tax-calculator
+    program: us-federal-income-tax
+    status: implemented
+    statuteTraceable: partial
+    testCoverage: high
+    docsUrl: https://taxcalc.pslmodels.org
+    asOfYear: 2026
+    notes: >
+      Full federal individual income tax including AMT, NIIT, and OBBBA
+      provisions (overtime, tip, and senior deductions). Validated
+      against NBER TAXSIM-35 with cent-level agreement.
+    sources:
+      - label: Tax-Calculator documentation (scope)
+        url: https://taxcalc.pslmodels.org
+        kind: self
+        quote: >-
+          Tax-Calculator is an open-source microsimulation model for
+          analysis of USA federal income and payroll taxes.
+      - label: Tax-Calculator vs TAXSIM-35 validation README
+        url: https://github.com/PSLmodels/Tax-Calculator/blob/master/taxcalc/validation/taxsim35/README.md
+        kind: self
+        quote: >-
+          federal individual income tax liabilities and payroll tax
+          liabilities being compared have differences of no larger than
+          one cent.
+      - label: Tax-Calculator releases page (OBBBA implementation through 6.5.x)
+        url: https://github.com/PSLmodels/Tax-Calculator/releases
+        kind: self
+
+  - model: tax-calculator
+    program: us-payroll-tax
+    status: implemented
+    statuteTraceable: partial
+    testCoverage: high
+    asOfYear: 2026
+    notes: FICA and SECA modeled; validated against TAXSIM-35.
+    sources:
+      - label: Tax-Calculator README (federal income and payroll scope)
+        url: https://github.com/PSLmodels/Tax-Calculator
+        kind: self
+      - label: Tax-Calculator policy_current_law.json (FICA_ss_trt, FICA_mc_trt,
+          SS_Earnings_c parameters)
+        url: https://github.com/PSLmodels/Tax-Calculator/blob/master/taxcalc/policy_current_law.json
+        kind: self
+
+  - model: tax-calculator
+    program: us-eitc
+    status: implemented
+    statuteTraceable: partial
+    testCoverage: high
+    asOfYear: 2026
+    notes: EITC parameters configurable; eitc_claim_thd added in release 6.4.1.
+    sources:
+      - label: Tax-Calculator policy_current_law.json (EITC_c, EITC_rt,
+          EITC_ps, EITC_prt parameters)
+        url: https://github.com/PSLmodels/Tax-Calculator/blob/master/taxcalc/policy_current_law.json
+        kind: self
+      - label: Tax-Calculator 6.4.1 release notes (EITC claim threshold)
+        url: https://github.com/PSLmodels/Tax-Calculator/blob/master/docs/about/releases.md
+        kind: self
+
+  - model: tax-calculator
+    program: us-ctc
+    status: implemented
+    statuteTraceable: partial
+    testCoverage: high
+    asOfYear: 2026
+    notes: >
+      CTC and ACTC modeled with refundability switches; OBBBA $2,200 CTC
+      reflected in policy_current_law.json after release 5.2.
+    sources:
+      - label: Tax-Calculator policy_current_law.json (CTC_c, ACTC_c,
+          CTC_is_refundable parameters)
+        url: https://github.com/PSLmodels/Tax-Calculator/blob/master/taxcalc/policy_current_law.json
+        kind: self
+      - label: Tax-Calculator OBBBA implementation tracking issue #2926
+        url: https://github.com/PSLmodels/Tax-Calculator/issues/2926
+        kind: self
+
+  - model: tax-calculator
+    program: us-cdcc
+    status: implemented
+    statuteTraceable: partial
+    testCoverage: high
+    asOfYear: 2026
+    notes: CDCC modeled with refundability switch; OBBBA CDCC params added July 2025.
+    sources:
+      - label: Tax-Calculator policy_current_law.json (CDCC_c, CDCC_ps1,
+          CDCC_po1_rate_max parameters)
+        url: https://github.com/PSLmodels/Tax-Calculator/blob/master/taxcalc/policy_current_law.json
+        kind: self
+      - label: Tax-Calculator PR #2928 (new and renamed CDCC parameters for OBBBA)
+        url: https://github.com/PSLmodels/Tax-Calculator/pull/2928
+        kind: self
+
+  - model: tax-calculator
+    program: us-premium-tax-credit
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    notes: >
+      ACA Premium Tax Credit (IRC § 36B) not modeled. No PTC or APTC
+      parameters in policy_current_law.json; only RPTC parameters for a
+      proposed non-ACA refundable payroll credit.
+    sources:
+      - label: Tax-Calculator policy_current_law.json (no PTC or 36B parameters)
+        url: https://github.com/PSLmodels/Tax-Calculator/blob/master/taxcalc/policy_current_law.json
+        kind: self
+      - label: Tax-Calculator README (scope is federal individual income
+          and payroll taxes)
+        url: https://github.com/PSLmodels/Tax-Calculator
+        kind: self
+
+  - model: tax-calculator
+    program: us-estate-tax
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    notes: >
+      Federal estate and gift tax not modeled. No estate-tax parameters
+      in policy_current_law.json.
+    sources:
+      - label: Tax-Calculator policy_current_law.json (no estate-tax parameters)
+        url: https://github.com/PSLmodels/Tax-Calculator/blob/master/taxcalc/policy_current_law.json
+        kind: self
+
+  - model: tax-calculator
+    program: us-state-income-tax
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    notes: State taxes are out of scope. The Tax-Brain (PSL) model uses
+      Tax-Calculator outputs but state taxes themselves are not modeled.
+    sources:
+      - label: Tax-Calculator README (federal scope)
+        url: https://github.com/PSLmodels/Tax-Calculator
+        kind: self
+
+  - model: tax-calculator
+    program: us-snap
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    notes: Transfer programs are out of scope.
+    sources:
+      - label: Tax-Calculator README (taxes only)
+        url: https://github.com/PSLmodels/Tax-Calculator
+        kind: self
+
+  - model: tax-calculator
+    program: us-medicaid
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    notes: Health-coverage programs are out of scope.
+    sources:
+      - label: Tax-Calculator README (taxes only)
+        url: https://github.com/PSLmodels/Tax-Calculator
+        kind: self
+
+  - model: tax-calculator
+    program: us-tariffs
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    notes: Tariffs are out of scope.
+    sources:
+      - label: Tax-Calculator README (federal income and payroll taxes)
+        url: https://github.com/PSLmodels/Tax-Calculator
+        kind: self
+
+  # ============================ Budget Lab Tax Model =========================
+  - model: budgetlab-tax
+    program: us-federal-income-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: medium
+    docsUrl: https://github.com/Budget-Lab-Yale/Tax-Simulator
+    asOfYear: 2026
+    notes: >
+      Federal individual income tax with ordinary rates, preferred rates
+      (qualified dividends/long-term capital gains), AMT, and NIIT.
+      Implementation in R with YAML parameter files.
+    sources:
+      - label: Budget Lab Tax-Simulator README (federal individual income tax scope)
+        url: https://github.com/Budget-Lab-Yale/Tax-Simulator/blob/main/README.md
+        kind: self
+        quote: >-
+          Tax-Simulator calculates individual income tax liability for a
+          representative sample of U.S. tax units under current law and
+          hypothetical policy reforms.
+      - label: Budget Lab — Tax Microsimulation at The Budget Lab (methodology)
+        url: https://budgetlab.yale.edu/research/tax-microsimulation-budget-lab
+        kind: self
+      - label: Yale Daily News coverage of Budget Lab (Sept 2025)
+        url: https://yaledailynews.com/blog/2025/09/04/yales-budget-lab-gains-traction-for-forecasting-impacts-of-trump-policies/
+        kind: press
+
+  - model: budgetlab-tax
+    program: us-payroll-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: medium
+    asOfYear: 2026
+    notes: >
+      Payroll tax module (pr.yaml). Earnings split for joint returns
+      imputed by drawing from distributions of wage and self-employment
+      earnings by percentile.
+    sources:
+      - label: Budget Lab Tax-Simulator baseline payroll parameters (pr.yaml)
+        url: https://github.com/Budget-Lab-Yale/Tax-Simulator/tree/main/config/scenarios/tax_law/baseline
+        kind: self
+      - label: Budget Lab — Tax Microsimulation methodology (payroll tax handling)
+        url: https://budgetlab.yale.edu/research/tax-microsimulation-budget-lab
+        kind: self
+
+  - model: budgetlab-tax
+    program: us-eitc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: medium
+    asOfYear: 2026
+    notes: EITC module (eitc.yaml) in baseline configuration.
+    sources:
+      - label: Budget Lab Tax-Simulator baseline EITC parameters (eitc.yaml)
+        url: https://github.com/Budget-Lab-Yale/Tax-Simulator/blob/main/config/scenarios/tax_law/baseline/eitc.yaml
+        kind: self
+      - label: Budget Lab — Tax Microsimulation methodology
+        url: https://budgetlab.yale.edu/research/tax-microsimulation-budget-lab
+        kind: self
+
+  - model: budgetlab-tax
+    program: us-ctc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: medium
+    asOfYear: 2026
+    notes: >
+      CTC module (ctc.yaml) supports young-vs-older differential, SSN
+      requirements, baby bonus phase-out variants. CTC reform analyses
+      published 2024.
+    sources:
+      - label: Budget Lab Tax-Simulator baseline CTC parameters (ctc.yaml)
+        url: https://github.com/Budget-Lab-Yale/Tax-Simulator/blob/main/config/scenarios/tax_law/baseline/ctc.yaml
+        kind: self
+      - label: Budget Lab — Child Tax Credit Options for Reform (2024 report)
+        url: https://budgetlab.yale.edu/sites/default/files/2024-04/The%20Budget%20Lab%20CTC%20Report%202024.pdf
+        kind: self
+
+  - model: budgetlab-tax
+    program: us-cdcc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: medium
+    asOfYear: 2026
+    notes: CDCTC module (cdctc.yaml) with tests in scenarios/tax_law/tests.
+    sources:
+      - label: Budget Lab Tax-Simulator baseline CDCTC parameters (cdctc.yaml)
+        url: https://github.com/Budget-Lab-Yale/Tax-Simulator/blob/main/config/scenarios/tax_law/baseline/cdctc.yaml
+        kind: self
+
+  - model: budgetlab-tax
+    program: us-premium-tax-credit
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    notes: >
+      ACA Premium Tax Credit not modeled in Tax-Simulator. Budget Lab's
+      methodology page describes scope as the federal individual income
+      tax system.
+    sources:
+      - label: Budget Lab Tax-Simulator baseline parameter files (no PTC module)
+        url: https://github.com/Budget-Lab-Yale/Tax-Simulator/tree/main/config/scenarios/tax_law/baseline
+        kind: self
+
+  - model: budgetlab-tax
+    program: us-estate-tax
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    notes: >
+      Tax-Simulator does not include estate tax. A separate
+      Estate-Tax-Distribution repo models inheritances for the estate
+      tax distribution but is not integrated with the tax microsim.
+    sources:
+      - label: Budget Lab — Estate-Tax-Distribution repo (separate model)
+        url: https://github.com/Budget-Lab-Yale/Estate-Tax-Distribution
+        kind: self
+
+  - model: budgetlab-tax
+    program: us-state-income-tax
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    notes: Federal scope only.
+    sources:
+      - label: Budget Lab Tax-Simulator README (US federal tax system)
+        url: https://github.com/Budget-Lab-Yale/Tax-Simulator/blob/main/README.md
+        kind: self
+
+  - model: budgetlab-tax
+    program: us-snap
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    notes: >
+      SNAP and other safety-net programs are modeled in a separate
+      Budget Lab repo (Safety-Net), not the Tax-Simulator.
+    sources:
+      - label: Budget Lab — Safety-Net repo (separate microsim)
+        url: https://github.com/Budget-Lab-Yale/Safety-Net
+        kind: self
+
+  - model: budgetlab-tax
+    program: us-tariffs
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    notes: >
+      Tariffs handled by separate Budget Lab repos (Tariff-Model,
+      Household-Tariff-Distribution, Tariff-ETRs), not the Tax-Simulator.
+    sources:
+      - label: Budget Lab — Tariff-Model repo
+        url: https://github.com/Budget-Lab-Yale/Tariff-Model
+        kind: self
+
+  # =================== Tax Foundation General Equilibrium Model ==============
+  - model: tf-microsim
+    program: us-federal-income-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: >
+      The Tax Foundation model includes a static tax microsimulation
+      component for federal individual-income tax policy and
+      distributional tables.
+    sources:
+      - label: Tax Foundation — Overview of the General Equilibrium Model
+        url: https://taxfoundation.org/research/all/federal/general-equilibrium-model/
+        kind: self
+
+  - model: tf-microsim
+    program: us-payroll-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    sources:
+      - label: Tax Foundation — Overview of the General Equilibrium Model
+        url: https://taxfoundation.org/research/all/federal/general-equilibrium-model/
+        kind: self
+
+  - model: tf-microsim
+    program: us-estate-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: >
+      Tax Foundation distributional documentation includes estate and
+      gift taxes in after-tax income; older methodology describes
+      estate-tax estimation as a side model integrated into outputs.
+    sources:
+      - label: Tax Foundation — Overview of the General Equilibrium Model
+        url: https://taxfoundation.org/research/all/federal/general-equilibrium-model/
+        kind: self
+
+  - model: tf-microsim
+    program: us-tariffs
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: >
+      Tax Foundation distributional outputs include custom duties, and
+      2025 model documentation treats tariffs/customs duties as part of
+      after-tax income.
+    sources:
+      - label: Tax Foundation — Overview of the General Equilibrium Model
+        url: https://taxfoundation.org/research/all/federal/general-equilibrium-model/
+        kind: self
+
+  - model: tf-microsim
+    program: us-state-income-tax
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    asOfYear: unknown
+    notes: Tax Foundation documents this model as federal-scope; state income taxes are outside the public model scope.
+    sources:
+      - label: Tax Foundation — Overview of the General Equilibrium Model
+        url: https://taxfoundation.org/research/all/federal/general-equilibrium-model/
+        kind: self
+
+  - model: tf-microsim
+    program: us-snap
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    asOfYear: unknown
+    notes: SNAP eligibility and benefits are outside this federal tax model's documented scope.
+    sources:
+      - label: Tax Foundation — Overview of the General Equilibrium Model
+        url: https://taxfoundation.org/research/all/federal/general-equilibrium-model/
+        kind: self
+
+  - model: tf-microsim
+    program: us-medicaid
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    asOfYear: unknown
+    notes: Medicaid eligibility and benefits are outside this federal tax model's documented scope.
+    sources:
+      - label: Tax Foundation — Overview of the General Equilibrium Model
+        url: https://taxfoundation.org/research/all/federal/general-equilibrium-model/
+        kind: self
+
+  # ============================ Penn Wharton Budget Model ====================
+  - model: pwbm
+    program: us-federal-income-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2026
+    notes: PWBM's Tax Module includes detailed individual-income tax calculators.
+    sources:
+      - label: PWBM — Tax Module
+        url: https://budgetmodel.wharton.upenn.edu/model/tax-module/
+        kind: self
+
+  - model: pwbm
+    program: us-payroll-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2026
+    notes: PWBM's Tax Module and Social Security Module both document payroll-tax modeling.
+    sources:
+      - label: PWBM — Tax Module
+        url: https://budgetmodel.wharton.upenn.edu/model/tax-module/
+        kind: self
+      - label: PWBM — Social Security Module
+        url: https://budgetmodel.wharton.upenn.edu/model/social-security/
+        kind: self
+
+  - model: pwbm
+    program: us-estate-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2026
+    notes: PWBM's Tax Module documents detailed estate-tax calculators.
+    sources:
+      - label: PWBM — Tax Module
+        url: https://budgetmodel.wharton.upenn.edu/model/tax-module/
+        kind: self
+
+  - model: pwbm
+    program: us-tariffs
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2026
+    notes: >
+      PWBM publishes a tariff simulator and tariff revenue/effective-rate
+      updates using its trade model.
+    sources:
+      - label: PWBM — Tariff Simulator
+        url: https://budgetmodel.wharton.upenn.edu/data-interactives/tariff-simulator.md
+        kind: self
+      - label: PWBM — Effective Tariff Rates and Revenues
+        url: https://budgetmodel.wharton.upenn.edu/p/2026-04-15-effective-tariff-rates-and-revenues-updated-april-15-2026/
+        kind: self
+
+  - model: pwbm
+    program: us-state-income-tax
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    asOfYear: unknown
+    notes: >
+      PWBM's public tax module documentation identifies federal tax
+      calculators and does not document state income-tax policy rules.
+    sources:
+      - label: PWBM — Tax Module
+        url: https://budgetmodel.wharton.upenn.edu/model/tax-module/
+        kind: self
+
+  - model: pwbm
+    program: us-premium-tax-credit
+    status: partial
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2026
+    notes: >
+      PWBM expenditure modules include marketplace insurance subsidies
+      as federal mandatory spending, but public documentation does not
+      expose an ACA tax-credit eligibility calculator.
+    sources:
+      - label: PWBM — Expenditure Modules
+        url: https://budgetmodel.wharton.upenn.edu/expenditure-modules
+        kind: self
+
+  - model: pwbm
+    program: us-snap
+    status: partial
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2026
+    notes: >
+      PWBM expenditure modules include SNAP as a mandatory-spending
+      category; public documentation does not show a household
+      eligibility-and-benefit rules engine.
+    sources:
+      - label: PWBM — Expenditure Modules
+        url: https://budgetmodel.wharton.upenn.edu/expenditure-modules
+        kind: self
+
+  - model: pwbm
+    program: us-tanf
+    status: partial
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2026
+    notes: >
+      PWBM expenditure modules include family support and foster-care
+      spending; public documentation does not expose TANF eligibility
+      rules.
+    sources:
+      - label: PWBM — Expenditure Modules
+        url: https://budgetmodel.wharton.upenn.edu/expenditure-modules
+        kind: self
+
+  - model: pwbm
+    program: us-ssi
+    status: partial
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2026
+    notes: >
+      PWBM expenditure modules include Supplemental Security Income as a
+      mandatory-spending category, but public documentation does not
+      expose household SSI eligibility rules.
+    sources:
+      - label: PWBM — Expenditure Modules
+        url: https://budgetmodel.wharton.upenn.edu/expenditure-modules
+        kind: self
+
+  - model: pwbm
+    program: us-medicaid
+    status: partial
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2026
+    notes: >
+      PWBM expenditure modules include Medicaid; public documentation
+      presents it as a spending module rather than a detailed public
+      Medicaid eligibility engine.
+    sources:
+      - label: PWBM — Expenditure Modules
+        url: https://budgetmodel.wharton.upenn.edu/expenditure-modules
+        kind: self
+
+  - model: pwbm
+    program: us-chip
+    status: partial
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2026
+    notes: PWBM expenditure modules include CHIP as a mandatory-spending category.
+    sources:
+      - label: PWBM — Expenditure Modules
+        url: https://budgetmodel.wharton.upenn.edu/expenditure-modules
+        kind: self
+
+  - model: pwbm
+    program: us-wic
+    status: partial
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2026
+    notes: PWBM expenditure modules include child nutrition spending, which includes WIC.
+    sources:
+      - label: PWBM — Expenditure Modules
+        url: https://budgetmodel.wharton.upenn.edu/expenditure-modules
+        kind: self
+
+  - model: pwbm
+    program: us-oasi
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2026
+    notes: PWBM has a dedicated Social Security Module for old-age benefit projections.
+    sources:
+      - label: PWBM — Social Security Module
+        url: https://budgetmodel.wharton.upenn.edu/model/social-security/
+        kind: self
+
+  - model: pwbm
+    program: us-ssdi
+    status: partial
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2026
+    notes: >
+      PWBM models Social Security and mandatory spending, but public
+      documentation does not expose a separate SSDI benefit-calculation
+      engine.
+    sources:
+      - label: PWBM — Social Security Module
+        url: https://budgetmodel.wharton.upenn.edu/model/social-security/
+        kind: self
+      - label: PWBM — Expenditure Modules
+        url: https://budgetmodel.wharton.upenn.edu/expenditure-modules
+        kind: self
+
+  - model: pwbm
+    program: us-ui
+    status: partial
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2026
+    notes: PWBM expenditure modules include unemployment compensation as a mandatory-spending category.
+    sources:
+      - label: PWBM — Expenditure Modules
+        url: https://budgetmodel.wharton.upenn.edu/expenditure-modules
+        kind: self
+
+  # ============================ Tax Foundation TAG ===========================
+  - model: tax-foundation-tg
+    program: us-federal-income-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: >
+      TAG is the Tax Foundation's branded name for the same General
+      Equilibrium Tax Model tracked as tf-microsim.
+    sources:
+      - label: Tax Foundation — Overview of the General Equilibrium Model
+        url: https://taxfoundation.org/research/all/federal/general-equilibrium-model/
+        kind: self
+
+  - model: tax-foundation-tg
+    program: us-payroll-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: Same model coverage as tf-microsim.
+    sources:
+      - label: Tax Foundation — Overview of the General Equilibrium Model
+        url: https://taxfoundation.org/research/all/federal/general-equilibrium-model/
+        kind: self
+
+  - model: tax-foundation-tg
+    program: us-estate-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: Same model coverage as tf-microsim.
+    sources:
+      - label: Tax Foundation — Overview of the General Equilibrium Model
+        url: https://taxfoundation.org/research/all/federal/general-equilibrium-model/
+        kind: self
+
+  - model: tax-foundation-tg
+    program: us-tariffs
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2025
+    notes: Same model coverage as tf-microsim.
+    sources:
+      - label: Tax Foundation — Overview of the General Equilibrium Model
+        url: https://taxfoundation.org/research/all/federal/general-equilibrium-model/
+        kind: self
+
+  - model: tax-foundation-tg
+    program: us-state-income-tax
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    asOfYear: unknown
+    notes: Same federal-only scope as tf-microsim.
+    sources:
+      - label: Tax Foundation — Overview of the General Equilibrium Model
+        url: https://taxfoundation.org/research/all/federal/general-equilibrium-model/
+        kind: self
+
+  - model: tax-foundation-tg
+    program: us-snap
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    asOfYear: unknown
+    notes: SNAP eligibility and benefits are outside TAG's documented federal tax model scope.
+    sources:
+      - label: Tax Foundation — Overview of the General Equilibrium Model
+        url: https://taxfoundation.org/research/all/federal/general-equilibrium-model/
+        kind: self
+
+  - model: tax-foundation-tg
+    program: us-medicaid
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    asOfYear: unknown
+    notes: Medicaid eligibility and benefits are outside TAG's documented federal tax model scope.
+    sources:
+      - label: Tax Foundation — Overview of the General Equilibrium Model
+        url: https://taxfoundation.org/research/all/federal/general-equilibrium-model/
+        kind: self
+
+  - model: nber-taxsim
+    program: us-federal-income-tax
+    status: implemented
+    parametersModeled: unknown
+    statuteTraceable: partial
+    testCoverage: unknown
+    docsUrl: https://taxsim.nber.org/
+    asOfYear: 2024
+    notes: >
+      Internet TAXSIM calculates federal income tax liabilities from
+      user-supplied records. The stable TAXSIM35 interface covers federal
+      law through 2023; NBER links an open beta coded through 2024 law.
+    sources:
+      - label: NBER TAXSIM home page
+        url: https://taxsim.nber.org/
+        kind: self
+        quote: >-
+          An open beta of a test version of an update to Taxsim with many
+          improvements (and coded through 2024 law) is now available.
+
+  - model: nber-taxsim
+    program: us-payroll-tax
+    status: implemented
+    parametersModeled: unknown
+    statuteTraceable: partial
+    testCoverage: unknown
+    docsUrl: https://taxsim.nber.org/taxsim35/stata-remote.html
+    asOfYear: 2024
+    notes: >
+      TAXSIM outputs FICA/payroll tax liabilities alongside federal and
+      state income tax outputs.
+    sources:
+      - label: NBER TAXSIM Stata remote documentation
+        url: https://taxsim.nber.org/taxsim35/stata-remote.html
+        kind: self
+
+  - model: nber-taxsim
+    program: us-eitc
+    status: implemented
+    parametersModeled: unknown
+    statuteTraceable: partial
+    testCoverage: unknown
+    docsUrl: https://taxsim.nber.org/taxsim35/stata-remote.html
+    asOfYear: 2024
+    notes: >
+      TAXSIM's federal tax calculation includes refundable credits such
+      as the Earned Income Tax Credit.
+    sources:
+      - label: NBER TAXSIM Stata remote documentation
+        url: https://taxsim.nber.org/taxsim35/stata-remote.html
+        kind: self
+
+  - model: nber-taxsim
+    program: us-ctc
+    status: implemented
+    parametersModeled: unknown
+    statuteTraceable: partial
+    testCoverage: unknown
+    docsUrl: https://taxsim.nber.org/taxsim35/stata-remote.html
+    asOfYear: 2024
+    notes: >
+      TAXSIM inputs include dependent children under 17 and the federal
+      tax calculation includes the Child Tax Credit.
+    sources:
+      - label: NBER TAXSIM Stata remote documentation
+        url: https://taxsim.nber.org/taxsim35/stata-remote.html
+        kind: self
+
+  - model: nber-taxsim
+    program: us-cdcc
+    status: implemented
+    parametersModeled: unknown
+    statuteTraceable: partial
+    testCoverage: unknown
+    docsUrl: https://taxsim.nber.org/taxsim35/stata-remote.html
+    asOfYear: 2024
+    notes: >
+      TAXSIM inputs include child-care expenses for the federal Child
+      and Dependent Care Credit calculation.
+    sources:
+      - label: NBER TAXSIM Stata remote documentation
+        url: https://taxsim.nber.org/taxsim35/stata-remote.html
+        kind: self
+
+  - model: nber-taxsim
+    program: us-state-income-tax
+    status: partial
+    parametersModeled: unknown
+    statuteTraceable: partial
+    testCoverage: unknown
+    docsUrl: https://taxsim.nber.org/
+    asOfYear: 2020
+    notes: >
+      TAXSIM includes state income tax calculations, but state law coverage
+      is incomplete for recent years: the public page says state laws from
+      2021-2023 are not coded yet and an inflated 2020 law is used as an
+      estimate.
+    sources:
+      - label: NBER TAXSIM data product page
+        url: https://www.nber.org/research/data/taxsim
+        kind: self
+        quote: >-
+          State laws from 2021-2023 are not coded yet, but an inflated
+          2020 law is used as an estimate.

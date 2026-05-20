@@ -1,0 +1,550 @@
+# Canonical list of policies / programs compared across models.
+#
+# Each program is a discrete tax or benefit rule-set. Statutes use bluebook
+# citation style.
+#
+# Fiscal scale is split by direction of money flow:
+#   annualOutlaysUsd: government spending (benefit programs, refundable
+#                     tax credits paid out as refunds)
+#   annualRevenueUsd: government receipts (income tax, payroll tax,
+#                     tariffs, estate/gift tax)
+# Values are rough order-of-magnitude latest-available-year figures and
+# are for context only. Every program row carries `sources` citing the
+# statute and the fiscal figure.
+
+programs:
+  # ----------------------------- US federal taxes -----------------------------
+  - id: us-federal-income-tax
+    name: Federal individual income tax
+    fullName: Federal individual income tax
+    jurisdiction: us-federal
+    agency: IRS
+    type: income-tax
+    statute: 26 USC §§ 1-59B
+    annualRevenueUsd: 2_200_000_000_000
+    affectedUnits: ~155M tax units
+    asOfYear: 2025
+    sources:
+      - label: 26 USC subtitle A — Income Taxes
+        url: https://uscode.house.gov/browse/prelim@title26/subtitleA&edition=prelim
+        kind: government
+      - label: CBO Monthly Budget Review — individual income tax receipts
+        url: https://www.cbo.gov/topics/budget/monthly-budget-review
+        kind: government
+
+  - id: us-payroll-tax
+    name: Federal payroll taxes
+    fullName: FICA, SECA, FUTA
+    jurisdiction: us-federal
+    agency: IRS / SSA
+    type: payroll-tax
+    statute: 26 USC §§ 3101-3128, 3301-3311
+    annualRevenueUsd: 1_700_000_000_000
+    affectedUnits: ~170M workers
+    asOfYear: 2025
+    sources:
+      - label: 26 USC chapter 21 (FICA), chapter 23 (FUTA)
+        url: https://uscode.house.gov/browse/prelim@title26/subtitleC&edition=prelim
+        kind: government
+      - label: SSA — Contribution and Benefit Base
+        url: https://www.ssa.gov/oact/cola/cbb.html
+        kind: government
+
+  - id: us-eitc
+    name: Earned Income Tax Credit
+    jurisdiction: us-federal
+    agency: IRS
+    type: refundable-tax-credit
+    statute: 26 USC § 32
+    annualOutlaysUsd: 70_000_000_000
+    affectedUnits: ~23M tax units
+    asOfYear: 2025
+    sources:
+      - label: 26 USC § 32 — Earned Income
+        url: https://www.law.cornell.edu/uscode/text/26/32
+        kind: government
+      - label: IRS SOI — EITC statistics
+        url: https://www.irs.gov/statistics/soi-tax-stats-individual-statistical-tables-by-size-of-adjusted-gross-income
+        kind: government
+
+  - id: us-ctc
+    name: Child Tax Credit
+    jurisdiction: us-federal
+    agency: IRS
+    type: refundable-tax-credit
+    statute: 26 USC § 24
+    annualOutlaysUsd: 110_000_000_000
+    affectedUnits: ~40M children
+    asOfYear: 2026
+    sources:
+      - label: 26 USC § 24 — Child Tax Credit
+        url: https://www.law.cornell.edu/uscode/text/26/24
+        kind: government
+      - label: JCT — Tax expenditure for CTC
+        url: https://www.jct.gov/publications/
+        kind: government
+
+  - id: us-cdcc
+    name: Child and Dependent Care Credit
+    jurisdiction: us-federal
+    agency: IRS
+    type: nonrefundable-tax-credit
+    statute: 26 USC § 21
+    affectedUnits: ~6M tax units
+    asOfYear: 2025
+    sources:
+      - label: 26 USC § 21 — Expenses for household and dependent care services
+        url: https://www.law.cornell.edu/uscode/text/26/21
+        kind: government
+
+  - id: us-premium-tax-credit
+    name: Premium Tax Credit (ACA)
+    jurisdiction: us-federal
+    agency: IRS / HHS
+    type: refundable-tax-credit
+    statute: 26 USC § 36B
+    annualOutlaysUsd: 100_000_000_000
+    affectedUnits: ~21M enrollees
+    asOfYear: 2025
+    sources:
+      - label: 26 USC § 36B — Refundable credit for coverage under a qualified health plan
+        url: https://www.law.cornell.edu/uscode/text/26/36B
+        kind: government
+      - label: CMS — Marketplace enrollment data
+        url: https://www.cms.gov/marketplace
+        kind: government
+
+  - id: us-estate-tax
+    name: Federal estate and gift tax
+    jurisdiction: us-federal
+    agency: IRS
+    type: wealth-tax
+    statute: 26 USC §§ 2001-2801
+    annualRevenueUsd: 30_000_000_000
+    affectedUnits: ~6K estates
+    asOfYear: 2025
+    sources:
+      - label: 26 USC subtitle B — Estate and Gift Taxes
+        url: https://uscode.house.gov/browse/prelim@title26/subtitleB&edition=prelim
+        kind: government
+
+  - id: us-tariffs
+    name: US tariffs
+    jurisdiction: us-federal
+    agency: USTR / CBP
+    type: tariff
+    statute: 19 USC § 1202
+    annualRevenueUsd: 90_000_000_000
+    asOfYear: 2025
+    sources:
+      - label: 19 USC § 1202 — Harmonized Tariff Schedule
+        url: https://www.law.cornell.edu/uscode/text/19/1202
+        kind: government
+      - label: CBP — Trade statistics
+        url: https://www.cbp.gov/trade
+        kind: government
+
+  # --------------------------- US federal benefits ----------------------------
+  - id: us-snap
+    name: SNAP
+    fullName: Supplemental Nutrition Assistance Program
+    jurisdiction: us-federal
+    agency: USDA-FNS
+    type: in-kind-benefit
+    statute: 7 USC §§ 2011-2036c
+    annualOutlaysUsd: 113_000_000_000
+    affectedUnits: ~42M individuals
+    asOfYear: 2024
+    sources:
+      - label: 7 USC chapter 51 — SNAP
+        url: https://www.law.cornell.edu/uscode/text/7/chapter-51
+        kind: government
+      - label: USDA FNS — SNAP program data
+        url: https://www.fns.usda.gov/pd/supplemental-nutrition-assistance-program-snap
+        kind: government
+
+  - id: us-tanf
+    name: TANF
+    fullName: Temporary Assistance for Needy Families
+    jurisdiction: us-federal
+    agency: HHS-ACF
+    type: cash-transfer
+    statute: 42 USC §§ 601-619
+    annualOutlaysUsd: 31_000_000_000
+    affectedUnits: ~1M families
+    asOfYear: 2024
+    sources:
+      - label: 42 USC chapter 7 subchapter IV-A — TANF
+        url: https://www.law.cornell.edu/uscode/text/42/chapter-7/subchapter-IV/part-A
+        kind: government
+      - label: HHS ACF — TANF financial data
+        url: https://acf.gov/ofa/data/tanf-financial-data-fy-2023
+        kind: government
+
+  - id: us-ssi
+    name: SSI
+    fullName: Supplemental Security Income
+    jurisdiction: us-federal
+    agency: SSA
+    type: cash-transfer
+    statute: 42 USC §§ 1381-1383f
+    annualOutlaysUsd: 65_000_000_000
+    affectedUnits: ~7.5M recipients
+    asOfYear: 2024
+    sources:
+      - label: 42 USC chapter 7 subchapter XVI — SSI
+        url: https://www.law.cornell.edu/uscode/text/42/chapter-7/subchapter-XVI
+        kind: government
+      - label: SSA — Annual Statistical Supplement (SSI)
+        url: https://www.ssa.gov/policy/docs/statcomps/supplement/
+        kind: government
+
+  - id: us-medicaid
+    name: Medicaid
+    jurisdiction: us-federal
+    agency: HHS-CMS
+    type: health-coverage
+    statute: 42 USC §§ 1396-1396w
+    annualOutlaysUsd: 880_000_000_000
+    affectedUnits: ~88M enrollees
+    asOfYear: 2024
+    sources:
+      - label: 42 USC chapter 7 subchapter XIX — Medicaid
+        url: https://www.law.cornell.edu/uscode/text/42/chapter-7/subchapter-XIX
+        kind: government
+      - label: CMS — Medicaid program data
+        url: https://www.medicaid.gov/medicaid/index.html
+        kind: government
+
+  - id: us-chip
+    name: CHIP
+    fullName: Children's Health Insurance Program
+    jurisdiction: us-federal
+    agency: HHS-CMS
+    type: health-coverage
+    statute: 42 USC §§ 1397aa-1397mm
+    annualOutlaysUsd: 24_000_000_000
+    affectedUnits: ~7M children
+    asOfYear: 2024
+    sources:
+      - label: 42 USC chapter 7 subchapter XXI — CHIP
+        url: https://www.law.cornell.edu/uscode/text/42/chapter-7/subchapter-XXI
+        kind: government
+      - label: CMS — CHIP program data
+        url: https://www.medicaid.gov/chip/index.html
+        kind: government
+
+  - id: us-wic
+    name: WIC
+    fullName: Special Supplemental Nutrition Program for Women, Infants and Children
+    jurisdiction: us-federal
+    agency: USDA-FNS
+    type: in-kind-benefit
+    statute: 42 USC § 1786
+    annualOutlaysUsd: 7_000_000_000
+    affectedUnits: ~6.6M participants
+    asOfYear: 2024
+    sources:
+      - label: 42 USC § 1786 — WIC
+        url: https://www.law.cornell.edu/uscode/text/42/1786
+        kind: government
+      - label: USDA FNS — WIC program data
+        url: https://www.fns.usda.gov/pd/wic-program
+        kind: government
+
+  - id: us-section-8
+    name: Housing Choice Voucher (Section 8)
+    jurisdiction: us-federal
+    agency: HUD
+    type: housing-assistance
+    statute: 42 USC § 1437f
+    annualOutlaysUsd: 32_000_000_000
+    affectedUnits: ~2.3M households
+    asOfYear: 2024
+    sources:
+      - label: 42 USC § 1437f — Section 8 Housing Choice Voucher
+        url: https://www.law.cornell.edu/uscode/text/42/1437f
+        kind: government
+      - label: HUD — Housing Choice Voucher Program
+        url: https://www.hud.gov/topics/housing_choice_voucher_program_section_8
+        kind: government
+
+  - id: us-ssdi
+    name: Social Security Disability Insurance
+    jurisdiction: us-federal
+    agency: SSA
+    type: cash-transfer
+    statute: 42 USC §§ 401-434
+    annualOutlaysUsd: 150_000_000_000
+    affectedUnits: ~8.6M workers
+    asOfYear: 2024
+    sources:
+      - label: 42 USC chapter 7 subchapter II — OASDI
+        url: https://www.law.cornell.edu/uscode/text/42/chapter-7/subchapter-II
+        kind: government
+      - label: SSA — Disability Insurance Trust Fund
+        url: https://www.ssa.gov/oact/STATS/dibStat.html
+        kind: government
+
+  - id: us-oasi
+    name: Social Security retirement and survivors (OASI)
+    jurisdiction: us-federal
+    agency: SSA
+    type: cash-transfer
+    statute: 42 USC §§ 401-434
+    annualOutlaysUsd: 1_350_000_000_000
+    affectedUnits: ~57M beneficiaries
+    asOfYear: 2024
+    sources:
+      - label: 42 USC chapter 7 subchapter II — OASDI
+        url: https://www.law.cornell.edu/uscode/text/42/chapter-7/subchapter-II
+        kind: government
+      - label: SSA — Trust Fund Data
+        url: https://www.ssa.gov/oact/STATS/table4a1.html
+        kind: government
+
+  - id: us-ui
+    name: Unemployment Insurance
+    jurisdiction: us-federal
+    agency: DOL
+    type: cash-transfer
+    statute: 26 USC §§ 3301-3311
+    annualOutlaysUsd: 28_000_000_000
+    affectedUnits: state-administered
+    asOfYear: 2024
+    sources:
+      - label: 26 USC chapter 23 — FUTA
+        url: https://www.law.cornell.edu/uscode/text/26/subtitle-C/chapter-23
+        kind: government
+      - label: DOL — Unemployment Insurance program statistics
+        url: https://oui.doleta.gov/unemploy/
+        kind: government
+
+  - id: us-liheap
+    name: LIHEAP
+    fullName: Low Income Home Energy Assistance Program
+    jurisdiction: us-federal
+    agency: HHS-ACF
+    type: energy-assistance
+    statute: 42 USC §§ 8621-8629
+    annualOutlaysUsd: 4_100_000_000
+    affectedUnits: ~5.9M households
+    asOfYear: 2024
+    sources:
+      - label: 42 USC chapter 94 — LIHEAP
+        url: https://www.law.cornell.edu/uscode/text/42/chapter-94
+        kind: government
+      - label: HHS ACF — LIHEAP data
+        url: https://www.acf.hhs.gov/ocs/programs/liheap
+        kind: government
+
+  - id: us-ccdf
+    name: CCDF
+    fullName: Child Care and Development Fund
+    jurisdiction: us-federal
+    agency: HHS-ACF
+    type: child-care
+    statute: 42 USC §§ 9858-9858q
+    annualOutlaysUsd: 8_000_000_000
+    affectedUnits: ~1.3M children
+    asOfYear: 2024
+    sources:
+      - label: 42 USC chapter 105 subchapter II-B — CCDBG / CCDF
+        url: https://www.law.cornell.edu/uscode/text/42/chapter-105/subchapter-II-B
+        kind: government
+      - label: HHS ACF — CCDF program data
+        url: https://www.acf.hhs.gov/occ/data
+        kind: government
+
+  # --------------------------- US state income taxes --------------------------
+  - id: us-state-income-tax
+    name: State individual income taxes (all 50 + DC)
+    jurisdiction: us-states
+    agency: state DORs
+    type: income-tax
+    annualRevenueUsd: 480_000_000_000
+    affectedUnits: 41 states tax wage income
+    asOfYear: 2025
+    sources:
+      - label: Tax Foundation — State individual income tax structures
+        url: https://taxfoundation.org/data/all/state/state-income-tax-rates/
+        kind: civilsociety
+      - label: NASBO — State Expenditure Report
+        url: https://www.nasbo.org/reports-data/state-expenditure-report
+        kind: civilsociety
+
+  - id: us-state-eitc
+    name: State Earned Income Tax Credits
+    jurisdiction: us-states
+    agency: state DORs
+    type: refundable-tax-credit
+    affectedUnits: 31 states + DC
+    asOfYear: 2025
+    sources:
+      - label: CBPP — State EITC overview
+        url: https://www.cbpp.org/research/state-budget-and-tax/state-earned-income-tax-credits
+        kind: civilsociety
+
+  - id: us-state-ctc
+    name: State Child Tax Credits
+    jurisdiction: us-states
+    agency: state DORs
+    type: refundable-tax-credit
+    affectedUnits: 15 states + DC
+    asOfYear: 2025
+    sources:
+      - label: NCCP — State CTC enactments
+        url: https://www.nccp.org/
+        kind: civilsociety
+
+  # ----------------------------- UK taxes ------------------------------------
+  - id: uk-income-tax
+    name: UK income tax
+    jurisdiction: uk
+    agency: HMRC
+    type: income-tax
+    statute: Income Tax Act 2007
+    asOfYear: 2026
+    sources:
+      - label: Income Tax Act 2007
+        url: https://www.legislation.gov.uk/ukpga/2007/3/contents
+        kind: government
+      - label: HMRC — Income Tax rates and Personal Allowances
+        url: https://www.gov.uk/income-tax-rates
+        kind: government
+
+  - id: uk-national-insurance
+    name: National Insurance contributions
+    jurisdiction: uk
+    agency: HMRC
+    type: payroll-tax
+    statute: Social Security Contributions and Benefits Act 1992
+    asOfYear: 2026
+    sources:
+      - label: Social Security Contributions and Benefits Act 1992
+        url: https://www.legislation.gov.uk/ukpga/1992/4/contents
+        kind: government
+      - label: HMRC — National Insurance rates and categories
+        url: https://www.gov.uk/national-insurance-rates-letters
+        kind: government
+
+  - id: uk-council-tax
+    name: Council Tax
+    jurisdiction: uk
+    agency: local authorities
+    type: property-tax
+    statute: Local Government Finance Act 1992
+    asOfYear: 2026
+    sources:
+      - label: Local Government Finance Act 1992
+        url: https://www.legislation.gov.uk/ukpga/1992/14/contents
+        kind: government
+      - label: GOV.UK — Council Tax
+        url: https://www.gov.uk/council-tax
+        kind: government
+
+  - id: uk-vat
+    name: Value Added Tax
+    jurisdiction: uk
+    agency: HMRC
+    type: consumption-tax
+    statute: Value Added Tax Act 1994
+    asOfYear: 2026
+    sources:
+      - label: Value Added Tax Act 1994
+        url: https://www.legislation.gov.uk/ukpga/1994/23/contents
+        kind: government
+      - label: HMRC — VAT rates
+        url: https://www.gov.uk/vat-rates
+        kind: government
+
+  # ----------------------------- UK benefits ---------------------------------
+  - id: uk-universal-credit
+    name: Universal Credit
+    jurisdiction: uk
+    agency: DWP
+    type: cash-transfer
+    statute: Welfare Reform Act 2012
+    asOfYear: 2026
+    sources:
+      - label: Welfare Reform Act 2012
+        url: https://www.legislation.gov.uk/ukpga/2012/5/contents
+        kind: government
+      - label: GOV.UK — Universal Credit
+        url: https://www.gov.uk/universal-credit
+        kind: government
+
+  - id: uk-housing-benefit
+    name: Housing Benefit
+    jurisdiction: uk
+    agency: DWP / local authorities
+    type: housing-assistance
+    statute: Social Security Contributions and Benefits Act 1992
+    asOfYear: 2026
+    sources:
+      - label: Social Security Contributions and Benefits Act 1992
+        url: https://www.legislation.gov.uk/ukpga/1992/4/contents
+        kind: government
+      - label: GOV.UK — Housing Benefit
+        url: https://www.gov.uk/housing-benefit
+        kind: government
+
+  - id: uk-pension-credit
+    name: Pension Credit
+    jurisdiction: uk
+    agency: DWP
+    type: cash-transfer
+    statute: State Pension Credit Act 2002
+    asOfYear: 2026
+    sources:
+      - label: State Pension Credit Act 2002
+        url: https://www.legislation.gov.uk/ukpga/2002/16/contents
+        kind: government
+      - label: GOV.UK — Pension Credit
+        url: https://www.gov.uk/pension-credit
+        kind: government
+
+  - id: uk-tax-credits
+    name: Child Tax Credit and Working Tax Credit
+    jurisdiction: uk
+    agency: HMRC
+    type: refundable-tax-credit
+    statute: Tax Credits Act 2002
+    asOfYear: 2026
+    sources:
+      - label: Tax Credits Act 2002
+        url: https://www.legislation.gov.uk/ukpga/2002/21/contents
+        kind: government
+      - label: GOV.UK — Tax credits
+        url: https://www.gov.uk/browse/benefits/tax-credits
+        kind: government
+
+  - id: uk-child-benefit
+    name: Child Benefit
+    jurisdiction: uk
+    agency: HMRC
+    type: cash-transfer
+    statute: Social Security Contributions and Benefits Act 1992
+    asOfYear: 2026
+    sources:
+      - label: Social Security Contributions and Benefits Act 1992
+        url: https://www.legislation.gov.uk/ukpga/1992/4/contents
+        kind: government
+      - label: GOV.UK — Child Benefit
+        url: https://www.gov.uk/child-benefit
+        kind: government
+
+  - id: uk-scottish-child-payment
+    name: Scottish Child Payment
+    jurisdiction: uk-scotland
+    agency: Social Security Scotland
+    type: cash-transfer
+    statute: Social Security (Scotland) Act 2018
+    asOfYear: 2026
+    sources:
+      - label: Social Security (Scotland) Act 2018
+        url: https://www.legislation.gov.uk/asp/2018/9/contents
+        kind: government
+      - label: mygov.scot — Scottish Child Payment
+        url: https://www.mygov.scot/scottish-child-payment
+        kind: government

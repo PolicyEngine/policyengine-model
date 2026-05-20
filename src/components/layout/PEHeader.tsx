@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { useMediaQuery } from '../../hooks/useMediaQuery';
 import { IconMenu2, IconChevronDown, IconWorld, IconX } from '@tabler/icons-react';
 import { colors, spacing, typography } from '@policyengine/ui-kit/legacy/tokens';
 import type { Country } from '../../hooks/useCountry';
@@ -173,22 +174,14 @@ export default function PEHeader({ country }: PEHeaderProps) {
   const [aboutOpen, setAboutOpen] = useState(false);
   const [countryOpen, setCountryOpen] = useState(false);
   const [mobileSheetOpen, setMobileSheetOpen] = useState(false);
-  const [isDesktop, setIsDesktop] = useState(() => {
-    if (typeof window === 'undefined') return true;
-    return window.matchMedia('(min-width: 1024px)').matches;
-  });
+  // SSR-safe responsive flag: returns `true` on the server (matches the
+  // initial server-rendered desktop layout) and snaps to the real
+  // viewport after mount via `useSyncExternalStore`.
+  const isDesktop = useMediaQuery('(min-width: 1024px)', true);
   const aboutRef = useRef<HTMLDivElement>(null);
   const countryRef = useRef<HTMLDivElement>(null);
 
   const NAV_ITEMS = getNavItems(country);
-
-  // Media query for responsive behavior
-  useEffect(() => {
-    const mq = window.matchMedia('(min-width: 1024px)');
-    const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
-    mq.addEventListener('change', handler);
-    return () => mq.removeEventListener('change', handler);
-  }, []);
 
   // Close dropdowns on outside click
   useEffect(() => {

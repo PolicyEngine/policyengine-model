@@ -1,0 +1,89 @@
+# Accuracy checks: model-predicted values against administrative or published
+# benchmarks. Each row has a target (the truth) and optionally a predicted
+# value from the model. Cite the source of both.
+#
+# The point is to make validation auditable: a reader can see what we measured,
+# what the target was, and where the predicted number came from.
+
+accuracy:
+  - model: policyengine-us
+    metric: snap-outlays
+    program: us-snap
+    year: 2023
+    targetValue: 112_800_000_000
+    predictedValue: unknown
+    units: usd
+    targetSource:
+      label: USDA SNAP FY2023 program data
+      url: https://www.fns.usda.gov/pd/supplemental-nutrition-assistance-program-snap
+      kind: government
+    notes: >
+      Calibration target for the enhanced CPS dataset. Predicted value from
+      model run pending.
+
+  - model: policyengine-us
+    metric: eitc-outlays
+    program: us-eitc
+    year: 2023
+    targetValue: 64_000_000_000
+    predictedValue: unknown
+    units: usd
+    targetSource:
+      label: IRS SOI EITC statistics 2023
+      url: https://www.irs.gov/statistics/soi-tax-stats-individual-income-tax-returns
+      kind: government
+    notes: Refundable portion of EITC outlays.
+
+  - model: policyengine-us
+    metric: ssi-recipients
+    program: us-ssi
+    year: 2023
+    targetValue: 7_400_000
+    predictedValue: unknown
+    units: persons
+    targetSource:
+      label: SSA Annual Statistical Supplement
+      url: https://www.ssa.gov/policy/docs/statcomps/supplement/
+      kind: government
+
+  - model: policyengine-us
+    metric: medicaid-enrollees
+    program: us-medicaid
+    year: 2023
+    targetValue: 87_000_000
+    predictedValue: unknown
+    units: persons
+    targetSource:
+      label: CMS Medicaid and CHIP enrollment data
+      url: https://www.medicaid.gov/medicaid/national-medicaid-chip-program-information/medicaid-chip-enrollment-data/monthly-medicaid-chip-application-eligibility-determination-and-enrollment-reports-data
+      kind: government
+
+  - model: trim3
+    metric: snap-outlays
+    program: us-snap
+    year: 2023
+    targetValue: 112_800_000_000
+    predictedValue: unknown
+    units: usd
+    targetSource:
+      label: USDA SNAP FY2023
+      url: https://www.fns.usda.gov/pd/supplemental-nutrition-assistance-program-snap
+      kind: government
+    notes: TRIM3 explicitly aligns simulated SNAP to administrative totals.
+    predictedSource:
+      label: TRIM3 SNAP module
+      url: https://boreas.urban.org/documentation/foodstamps/main.php
+      kind: self
+
+  - model: tpc-microsim
+    metric: individual-income-tax-revenue
+    program: us-federal-income-tax
+    year: 2024
+    targetValue: 2_200_000_000_000
+    predictedValue: unknown
+    units: usd
+    targetSource:
+      label: CBO Monthly Budget Review
+      url: https://www.cbo.gov/topics/budget
+      kind: government
+    notes: TPC reports calibrate to CBO/Treasury baseline revenue.

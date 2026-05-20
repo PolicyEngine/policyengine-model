@@ -1,0 +1,1362 @@
+# Transparency dimensions for each model.
+#
+# Sources are tagged with:
+#   supports: [...] — which claims in the row the source corroborates
+#                     (omit to apply to the whole row)
+#   kind: ...       — source independence: self / government / academic /
+#                     press / civilsociety / other
+#
+# A claim is well-corroborated when it has 2+ sources of distinct kinds
+# (e.g. a self source plus an independent academic or government source).
+
+transparency:
+  - model: policyengine-us
+    codePublic: yes
+    codeLicense: AGPL-3.0-or-later
+    codeUrl: https://github.com/PolicyEngine/policyengine-us
+    contributorCount: unknown
+    issueTrackerPublic: yes
+    documentationPublic: yes
+    documentationUrl: https://policyengine.github.io/policyengine-us/
+    parameterSourcing: inline-cite
+    testSuitePublic: yes
+    testCount: unknown
+    datasetPublic: yes
+    datasetUrl: https://huggingface.co/policyengine
+    reproducibleBuilds: yes
+    notes: >
+      All parameters are YAML files with inline references field pointing to
+      statute, regulation, or administrative source. Tests are YAML files
+      executed via the rules engine. Dataset is published on Hugging Face
+      with pinned versions.
+    sources:
+      - label: policyengine-us repository (browse code, license file, tests directory)
+        url: https://github.com/PolicyEngine/policyengine-us
+        kind: self
+        supports: [codePublic, issueTrackerPublic, testSuitePublic, codeLicense]
+      - label: policyengine-us LICENSE file (AGPL-3.0-or-later)
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/LICENSE
+        kind: self
+        supports: [codeLicense]
+      - label: PyPI policyengine-us package (declared license)
+        url: https://pypi.org/project/policyengine-us/
+        kind: other
+        supports: [codeLicense, codePublic]
+      - label: policyengine-us documentation site
+        url: https://policyengine.github.io/policyengine-us/
+        kind: self
+        supports: [documentationPublic, reproducibleBuilds]
+      - label: Parameter file with inline statutory references field (example)
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/parameters/gov/irs/credits/ctc/refundable/individual_max.yaml
+        kind: self
+        supports: [parameterSourcing]
+      - label: PolicyEngine US Data (Enhanced CPS) repository
+        url: https://github.com/PolicyEngine/policyengine-us-data
+        kind: self
+        supports: [datasetPublic, reproducibleBuilds]
+      - label: PolicyEngine data on Hugging Face (pinned dataset versions)
+        url: https://huggingface.co/policyengine
+        kind: self
+        supports: [datasetPublic]
+      - label: Issues tab (public bug tracker)
+        url: https://github.com/PolicyEngine/policyengine-us/issues
+        kind: self
+        supports: [issueTrackerPublic]
+      - label: Ghenis & Woodruff — PolicyEngine open-source paper (JOSS)
+        url: https://joss.theoj.org/papers/10.21105/joss.04494
+        kind: academic
+        supports: [codePublic, codeLicense, documentationPublic, reproducibleBuilds]
+      - label: OpenFisca community — list of country models (PolicyEngine ancestry)
+        url: https://openfisca.org/en/about
+        kind: civilsociety
+        supports: [codePublic, codeLicense]
+
+  - model: trim3
+    codePublic: no
+    codeLicense: proprietary
+    contributorCount: unknown
+    issueTrackerPublic: no
+    documentationPublic: partial
+    documentationUrl: https://boreas.urban.org/T3IntroHistory.php
+    parameterSourcing: separate-doc
+    testSuitePublic: unknown
+    testCount: unknown
+    datasetPublic: no
+    reproducibleBuilds: unknown
+    notes: >
+      Source code, parameter files, and the augmented microdata are not
+      public. The boreas.urban.org site provides program-level descriptions
+      and outputs but not the underlying implementation. Federal staff with
+      ASPE access can view internal documentation; external researchers
+      cannot. ASPE holds the copyright.
+    sources:
+      - label: Zedlewski (Urban) — TRIM, A Tool for Social Policy Analysis
+          (access policy and architecture)
+        url: https://www.urban.org/sites/default/files/publication/82921/2000878-TRIM-A-Tool-for-Social-Policy-Analysis.pdf
+        kind: self
+        supports: [codePublic, issueTrackerPublic, testSuitePublic, datasetPublic]
+      - label: TRIM3 introduction and history (no source-code links published)
+        url: https://boreas.urban.org/T3IntroHistory.php
+        kind: self
+        supports: [codePublic, documentationPublic]
+      - label: TRIM3 Programs Simulated (lists modules; restricted microdata)
+        url: https://boreas.urban.org/T3IntroPrograms.php
+        kind: self
+        supports: [datasetPublic]
+      - label: ASPE TRIM3 contract 75P00120F37006 (ASPE holds copyright)
+        url: https://www.usaspending.gov/award/CONT_AWD_75P00120F37006
+        kind: government
+        supports: [codeLicense, codePublic]
+      - label: ASPE TRIM3 follow-on 75P00125F80090 (continued ASPE control)
+        url: https://www.usaspending.gov/award/CONT_AWD_75P00125F80090
+        kind: government
+        supports: [codeLicense]
+      - label: Zedlewski (Urban) — TRIM, A Tool for Social Policy Analysis
+          (describes model architecture without releasing source)
+        url: https://www.urban.org/sites/default/files/publication/82921/2000878-TRIM-A-Tool-for-Social-Policy-Analysis.pdf
+        kind: self
+        supports: [codePublic, documentationPublic, parameterSourcing]
+      - label: ASPE Welfare Indicators Annual Report (uses TRIM3 outputs, not code)
+        url: https://aspe.hhs.gov/reports/welfare-indicators-risk-factors-24th-report-congress
+        kind: government
+        supports: [documentationPublic]
+
+  - model: attis
+    codePublic: no
+    codeLicense: proprietary
+    contributorCount: unknown
+    issueTrackerPublic: no
+    documentationPublic: partial
+    documentationUrl: https://www.urban.org/research-methods/attis-microsimulation-model
+    parameterSourcing: unknown
+    testSuitePublic: unknown
+    testCount: unknown
+    datasetPublic: no
+    reproducibleBuilds: unknown
+    notes: >
+      No public source code, parameter files, or microdata. Urban publishes
+      summary briefs from ATTIS analyses but not the model implementation.
+    sources:
+      - label: ATTIS canonical page (no source-code, dataset, or issue-tracker links)
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
+        kind: self
+        supports: [codePublic, codeLicense, documentationPublic, datasetPublic, issueTrackerPublic]
+      - label: State of the Safety Net initiative (ATTIS-derived briefs only)
+        url: https://www.urban.org/projects/state-safety-net
+        kind: self
+        supports: [documentationPublic]
+      - label: Methods for Estimating SNAP Policy Impacts with an ACS-Based Simulation Model
+          (Wheaton, Giannarelli, Morton, 2018) — partial methodology document; source code not released
+        url: https://www.urban.org/sites/default/files/publication/98454/methods_for_estimating_snap_policy_impacts_with_an_acs-based_simulation_model_1.pdf
+        kind: self
+        supports: [documentationPublic, codePublic]
+      - label: From Safety Net to Solid Ground (RWJF-funded initiative tag page at Urban)
+        url: https://www.urban.org/tags/safety-net-solid-ground
+        kind: civilsociety
+        supports: [codePublic, documentationPublic]
+
+  - model: tpc-microsim
+    codePublic: no
+    codeLicense: proprietary
+    contributorCount: unknown
+    issueTrackerPublic: no
+    documentationPublic: partial
+    documentationUrl: https://www.taxpolicycenter.org/resources/brief-description-tax-model
+    parameterSourcing: separate-doc
+    testSuitePublic: unknown
+    testCount: unknown
+    datasetPublic: no
+    reproducibleBuilds: unknown
+    notes: >
+      The Brief Description page summarizes the model architecture;
+      underlying SAS source code, parameter files, and the SOI-CPS extended
+      microdata are not public. TPC publishes distributional tables from
+      the model but not the implementation. The IRS Public Use File base
+      data is sold by IRS under terms that restrict redistribution.
+    sources:
+      - label: TPC Brief Description of the Tax Model
+          (architecture only; no source code link)
+        url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
+        kind: self
+        supports: [codePublic, documentationPublic, parameterSourcing]
+      - label: TPC funding principles (institutional posture; no code release)
+        url: https://taxpolicycenter.org/support/funding-principles
+        kind: self
+        supports: [codePublic, codeLicense]
+      - label: IRS SOI Public Use File (restricted-purchase base data)
+        url: https://www.irs.gov/statistics/soi-tax-stats-individual-public-use-microdata-files
+        kind: government
+        supports: [datasetPublic]
+      - label: TPC Model Estimates page (output catalogue, not code)
+        url: https://www.taxpolicycenter.org/model-estimates
+        kind: self
+        supports: [documentationPublic, codePublic]
+      - label: Burman, Geissler & Toder — AER article on individual
+          income tax expenditures (model-based TPC analysis)
+        url: https://www.aeaweb.org/articles?id=10.1257/aer.98.2.79
+        kind: academic
+        supports: [codePublic, parameterSourcing]
+
+  - model: jct-microsim
+    codePublic: no
+    codeLicense: proprietary
+    contributorCount: unknown
+    issueTrackerPublic: no
+    documentationPublic: partial
+    documentationUrl: https://www.jct.gov/publications/
+    parameterSourcing: separate-doc
+    testSuitePublic: unknown
+    testCount: unknown
+    datasetPublic: no
+    reproducibleBuilds: no
+    notes: >
+      JCT's microsim runs on SOI tax-return microdata under formal
+      restricted-access agreements. Model implementation is not public;
+      revenue-estimate methodology papers describe the analytical
+      framework but not the code.
+    sources:
+      - label: JCT — Description of the Individual Tax Model for 2023 (JCX-48-23)
+        url: https://www.jct.gov/publications/2023/jcx-48-23/
+        kind: government
+        supports: [codePublic, codeLicense, documentationPublic, parameterSourcing]
+      - label: JCT publications archive (output catalogue, not code)
+        url: https://www.jct.gov/publications/
+        kind: government
+        supports: [codePublic, documentationPublic]
+      - label: CRS — Dynamic Scoring for Tax Legislation A Review of Models (R43381)
+        url: https://www.congress.gov/crs-product/R43381
+        kind: government
+        supports: [codePublic, parameterSourcing]
+      - label: IRS SOI microdata restricted access (base data)
+        url: https://www.irs.gov/statistics/soi-tax-stats-individual-public-use-microdata-files
+        kind: government
+        supports: [datasetPublic]
+      - label: Auerbach — Dynamic Scoring An Introduction to the Issues (academic review)
+        url: https://eml.berkeley.edu/~auerbach/dynamscor.pdf
+        kind: academic
+        supports: [codePublic, documentationPublic, parameterSourcing]
+
+  - model: cbo-microsim
+    codePublic: no
+    codeLicense: proprietary
+    contributorCount: unknown
+    issueTrackerPublic: no
+    documentationPublic: partial
+    documentationUrl: https://www.cbo.gov/publication/54096
+    parameterSourcing: separate-doc
+    testSuitePublic: unknown
+    testCount: unknown
+    datasetPublic: no
+    reproducibleBuilds: no
+    notes: >
+      This row covers CBO's internal tax microsimulation model for
+      federal individual income and payroll-tax analysis. Model code,
+      parameters, and prepared microdata are not public; methodology
+      working papers and distributional outputs are public. CBO's
+      health, long-term Social Security, SNAP, and Medicaid modeling
+      belong to separate model entries where documented.
+    sources:
+      - label: CBO tax microsimulation model methodology
+        url: https://www.cbo.gov/publication/54096
+        kind: government
+        supports: [documentationPublic, parameterSourcing, datasetPublic]
+      - label: CBO methodology working paper series (model docs, not code)
+        url: https://www.cbo.gov/about/products/working-papers
+        kind: government
+        supports: [codePublic, codeLicense, documentationPublic, parameterSourcing, datasetPublic]
+      - label: CBO Budget and Economic Outlook (baseline outputs)
+        url: https://www.cbo.gov/topics/budget
+        kind: government
+        supports: [documentationPublic]
+      - label: CBO Income distribution publications
+        url: https://www.cbo.gov/topic/income-distribution
+        kind: government
+        supports: [documentationPublic]
+      - label: US-CBO GitHub organization (verifies which CBO models have public source; tax microsim is absent)
+        url: https://github.com/US-CBO
+        kind: government
+        supports: [codePublic, codeLicense]
+      - label: CRFB — A Short Primer on the Congressional Budget Office
+        url: https://www.crfb.org/blogs/short-primer-congressional-budget-office
+        kind: civilsociety
+        supports: [codePublic, documentationPublic]
+
+  - model: itep-microsim
+    codePublic: no
+    codeLicense: proprietary
+    contributorCount: unknown
+    issueTrackerPublic: no
+    documentationPublic: partial
+    documentationUrl: https://itep.org/who-pays-7th-edition-methodology-and-discussion/
+    parameterSourcing: separate-doc
+    testSuitePublic: unknown
+    testCount: unknown
+    datasetPublic: no
+    reproducibleBuilds: no
+    notes: >
+      ITEP's microsim is a closed proprietary model. The methodology page
+      describes data sources and aging assumptions; the source code,
+      parameter files, and the SOI-derived microdata are not public.
+    sources:
+      - label: ITEP Microsimulation Tax Model methodology
+        url: https://itep.org/who-pays-7th-edition-methodology-and-discussion/
+        kind: self
+        supports: [codePublic, codeLicense, documentationPublic, parameterSourcing, datasetPublic]
+      - label: ITEP Who Pays? state reports (output catalogue)
+        url: https://itep.org/whopays/
+        kind: self
+        supports: [documentationPublic]
+      - label: CRS — State income tax incidence analyses cite ITEP
+        url: https://crsreports.congress.gov/product/pdf/R/R47299
+        kind: government
+        supports: [codePublic]
+
+  - model: tax-calculator
+    codePublic: yes
+    codeLicense: CC0-1.0
+    codeUrl: https://github.com/PSLmodels/Tax-Calculator
+    contributorCount: unknown
+    issueTrackerPublic: yes
+    documentationPublic: yes
+    documentationUrl: https://taxcalc.pslmodels.org
+    parameterSourcing: inline-cite
+    testSuitePublic: yes
+    testCount: unknown
+    datasetPublic: partial
+    datasetUrl: https://github.com/PSLmodels/taxdata
+    reproducibleBuilds: yes
+    notes: >
+      Fully open source. CPS-only build is fully reproducible without
+      restricted data. PUF-based build requires purchasing the SOI Public
+      Use File from IRS; the matching code is open but the input data is
+      not redistributable.
+    sources:
+      - label: Tax-Calculator repository (LICENSE, tests, parameters)
+        url: https://github.com/PSLmodels/Tax-Calculator
+        kind: self
+        supports: [codePublic, codeLicense, issueTrackerPublic, testSuitePublic]
+      - label: Tax-Calculator documentation (parameter sourcing)
+        url: https://taxcalc.pslmodels.org
+        kind: self
+        supports: [documentationPublic, parameterSourcing, reproducibleBuilds]
+      - label: taxdata repository (data prep code, dataset partially open)
+        url: https://github.com/PSLmodels/taxdata
+        kind: self
+        supports: [datasetPublic, reproducibleBuilds]
+      - label: PSL — open-source modeling consortium
+        url: https://www.pslmodels.org
+        kind: civilsociety
+        supports: [codePublic, codeLicense]
+
+  - model: budgetlab-tax
+    codePublic: partial
+    codeLicense: no-license-declared
+    codeUrl: https://github.com/Budget-Lab-Yale
+    contributorCount: unknown
+    issueTrackerPublic: partial
+    documentationPublic: yes
+    documentationUrl: https://budgetlab.yale.edu/topic/methodology
+    parameterSourcing: separate-doc
+    testSuitePublic: unknown
+    testCount: unknown
+    datasetPublic: no
+    reproducibleBuilds: no
+    notes: >
+      Source code is publicly viewable across the Budget-Lab-Yale
+      GitHub organization (Tax-Simulator, Tax-Data, Macro-Projections,
+      Estate-Tax-Distribution, Safety-Net, Tariff-Model). Verified via
+      GitHub API on 2026-05-14: NONE of those repos declare a license,
+      so although the code is readable, redistribution and
+      modification rights are not explicitly granted. End-to-end
+      external reproduction is also blocked by reliance on restricted
+      SOI PUF data. Treat as source-available rather than open-source.
+    sources:
+      - label: Budget Lab at Yale (organization page)
+        url: https://budgetlab.yale.edu
+        kind: self
+        supports: [documentationPublic]
+      - label: Budget Lab methodology page
+        url: https://budgetlab.yale.edu/topic/methodology
+        kind: self
+        supports: [documentationPublic, parameterSourcing, datasetPublic]
+      - label: Yale Budget Lab GitHub organization (public repos)
+        url: https://github.com/Budget-Lab-Yale
+        kind: self
+        supports: [codePublic, codeLicense, issueTrackerPublic]
+      - label: Yale Daily News coverage of Budget Lab's policy forecasting (Sept 2025)
+        url: https://yaledailynews.com/blog/2025/09/04/yales-budget-lab-gains-traction-for-forecasting-impacts-of-trump-policies/
+        kind: press
+        supports: [codePublic, documentationPublic]
+
+  - model: policyengine-uk
+    codePublic: yes
+    codeLicense: AGPL-3.0-or-later
+    codeUrl: https://github.com/PolicyEngine/policyengine-uk
+    contributorCount: unknown
+    issueTrackerPublic: yes
+    documentationPublic: yes
+    documentationUrl: https://policyengine.github.io/policyengine-uk/
+    parameterSourcing: inline-cite
+    testSuitePublic: yes
+    testCount: unknown
+    datasetPublic: partial
+    datasetUrl: https://github.com/PolicyEngine/policyengine-uk-data
+    reproducibleBuilds: yes
+    notes: >
+      Source code and parameter YAML are fully public under AGPL-3.0.
+      The Enhanced Family Resources Survey requires a base FRS licence
+      from the UK Data Service before redistribution; PolicyEngine
+      publishes the public-domain calibration components (weights,
+      imputations) on Hugging Face while the underlying microdata
+      flows through licensed channels.
+    sources:
+      - label: policyengine-uk repository (browse code, license, tests)
+        url: https://github.com/PolicyEngine/policyengine-uk
+        kind: self
+        supports: [codePublic, codeLicense, issueTrackerPublic, testSuitePublic]
+      - label: policyengine-uk LICENSE file (AGPL-3.0-or-later)
+        url: https://github.com/PolicyEngine/policyengine-uk/blob/master/LICENSE
+        kind: self
+        supports: [codeLicense]
+      - label: policyengine-uk on PyPI (declared license)
+        url: https://pypi.org/project/policyengine-uk/
+        kind: other
+        supports: [codeLicense, codePublic]
+      - label: policyengine-uk documentation site
+        url: https://policyengine.github.io/policyengine-uk/
+        kind: self
+        supports: [documentationPublic, reproducibleBuilds]
+      - label: policyengine-uk-data repository (calibration code)
+        url: https://github.com/PolicyEngine/policyengine-uk-data
+        kind: self
+        supports: [datasetPublic, reproducibleBuilds]
+      - label: UK Data Service — FRS licensing (underlying microdata
+          requires registered licence)
+        url: https://beta.ukdataservice.ac.uk/datacatalogue/series/series?id=200017
+        kind: government
+        supports: [datasetPublic]
+      - label: Ghenis & Woodruff — PolicyEngine open-source paper (JOSS)
+        url: https://joss.theoj.org/papers/10.21105/joss.04494
+        kind: academic
+        supports: [codePublic, codeLicense, documentationPublic, reproducibleBuilds]
+      - label: OpenFisca community — PolicyEngine listed as country model
+        url: https://openfisca.org/en/about
+        kind: civilsociety
+        supports: [codePublic]
+
+  - model: ukmod
+    codePublic: yes
+    codeLicense: CC BY-NC-ND 4.0
+    codeUrl: https://github.com/centreformicrosimulation/UKMOD-PUBLIC
+    contributorCount: unknown
+    issueTrackerPublic: yes
+    documentationPublic: yes
+    documentationUrl: https://www.microsimulation.ac.uk/ukmod
+    parameterSourcing: separate-doc
+    testSuitePublic: no
+    testCount: unknown
+    datasetPublic: partial
+    datasetUrl: https://datacatalogue.ukdataservice.ac.uk/series/series/200017
+    reproducibleBuilds: yes
+    notes: >
+      UKMOD source files (EUROMOD-DSL policy rules in XMLParam/ and
+      Stata data-prep scripts) are distributed on GitHub at
+      centreformicrosimulation/UKMOD-PUBLIC under CC BY-NC-ND 4.0:
+      attribution required, non-commercial use only, no derivatives.
+      The repository has GitHub issues enabled but support is primarily
+      handled via the CeMPA helpdesk and user forum (registration
+      required for the forum, not for the code download). The
+      underlying FRS microdata is not open — researchers must obtain a
+      UK Data Service end-user licence separately. Documentation and
+      country reports are published openly via CeMPA and bundled in the
+      repo's Documentation/ folder.
+    sources:
+      - label: UKMOD home page (model description and documentation)
+        url: https://www.microsimulation.ac.uk/ukmod
+        kind: self
+        supports: [codePublic, documentationPublic, parameterSourcing]
+      - label: UKMOD access page (CC BY-NC-ND 4.0 terms, GitHub link)
+        url: https://www.microsimulation.ac.uk/ukmod/access
+        kind: self
+        supports: [codePublic, codeLicense, issueTrackerPublic]
+      - label: UKMOD-PUBLIC GitHub repository
+        url: https://github.com/centreformicrosimulation/UKMOD-PUBLIC
+        kind: self
+        supports: [codePublic, codeLicense, issueTrackerPublic, reproducibleBuilds]
+      - label: Richiardi, Collado & Popova (2021) — UKMOD reference paper
+          (IJM 14(1):92-101)
+        url: https://microsimulation.pub/articles/00231
+        kind: academic
+        supports: [codePublic, documentationPublic, parameterSourcing]
+      - label: UK Data Service — Family Resources Survey series
+          (underlying microdata licensing)
+        url: https://datacatalogue.ukdataservice.ac.uk/series/series/200017
+        kind: government
+        supports: [datasetPublic]
+      - label: JRC EUROMOD (parent platform; EUPL-1.2 software, CC BY 4.0 rules)
+        url: https://euromod-web.jrc.ec.europa.eu/
+        kind: government
+        supports: [codeLicense, codePublic]
+
+  - model: ifs-taxben
+    codePublic: no
+    codeLicense: proprietary
+    contributorCount: unknown
+    issueTrackerPublic: no
+    documentationPublic: partial
+    documentationUrl: https://ifs.org.uk/publications/taxben-ifs-tax-and-benefit-microsimulation-model
+    parameterSourcing: separate-doc
+    testSuitePublic: unknown
+    testCount: unknown
+    datasetPublic: no
+    reproducibleBuilds: unknown
+    notes: >
+      TAXBEN's implementation, parameter files, and prepared FRS
+      microdata are not public. IFS publishes high-level descriptions
+      of what TAXBEN covers (income tax, NICs, means-tested benefits,
+      Universal Credit, council tax) and uses it as the engine behind
+      most of its distributional and Budget-response work, but does
+      not release the model itself.
+    sources:
+      - label: IFS TAXBEN guide (Waters; 2017 page, 2021 PDF update)
+        url: https://ifs.org.uk/publications/taxben-ifs-tax-and-benefit-microsimulation-model
+        kind: self
+        supports: [codePublic, codeLicense, documentationPublic, parameterSourcing]
+      - label: IFS Green Budget archive (annual TAXBEN-based
+          distributional analyses)
+        url: https://ifs.org.uk/ifs-green-budget
+        kind: self
+        supports: [documentationPublic]
+      - label: Pope & Waters — A survey of the UK tax system (IFS
+          Briefing Note BN09; methodology context)
+        url: https://ifs.org.uk/publications/survey-uk-tax-system
+        kind: self
+        supports: [documentationPublic, parameterSourcing]
+      - label: Adam — Universal credit and work incentives
+          (IFS presentation drawing on TAXBEN)
+        url: https://ifs.org.uk/publications/universal-credit-and-work-incentives
+        kind: self
+        supports: [codePublic, documentationPublic]
+      - label: HM Treasury Spring Statement 2025 — Impact on households
+          (IGOTM-based; comparable UK distributional methodology)
+        url: https://www.gov.uk/government/publications/supporting-documents-for-spring-statement-2025/impact-on-households-distributional-analysis-to-accompany-spring-statement-2025
+        kind: government
+        supports: [codePublic, documentationPublic]
+      - label: UK Data Service — FRS licensing (TAXBEN base data
+          requires registered licence, not redistributable)
+        url: https://datacatalogue.ukdataservice.ac.uk/series/series/200017
+        kind: government
+        supports: [datasetPublic]
+
+  - model: igotm
+    codePublic: no
+    codeLicense: proprietary
+    contributorCount: unknown
+    issueTrackerPublic: no
+    documentationPublic: partial
+    documentationUrl: https://www.gov.uk/government/publications/supporting-documents-for-budget-2025
+    parameterSourcing: separate-doc
+    testSuitePublic: unknown
+    testCount: unknown
+    datasetPublic: no
+    reproducibleBuilds: no
+    notes: >
+      IGOTM is shared across HM Treasury, HMRC, and DWP under
+      restricted information-sharing arrangements. Source code,
+      parameters, and prepared LCF-based microdata are not public.
+      Treasury publishes outputs (the "Impact on Households" annex at
+      each fiscal event) and a brief methodology description, but the
+      model itself is internal to government.
+    sources:
+      - label: HM Treasury — Impact on households distributional
+          analysis (Budget 2025); names IGOTM as the model
+        url: https://www.gov.uk/government/publications/supporting-documents-for-budget-2025
+        kind: government
+        supports: [codePublic, codeLicense, documentationPublic, parameterSourcing]
+      - label: HM Treasury — Impact on households (Budget 2025)
+        url: https://www.gov.uk/government/publications/supporting-documents-for-budget-2025
+        kind: government
+        supports: [documentationPublic]
+      - label: Office for Budget Responsibility — Welfare trends
+          report (describes Treasury/DWP microsim toolchain)
+        url: https://obr.uk/docs/dlm_uploads/Welfare-trends-report-October-2024.pdf
+        kind: government
+        supports: [codePublic, documentationPublic]
+      - label: UK Data Service — Living Costs and Food Survey licensing (underlying microdata
+          not redistributable)
+        url: https://beta.ukdataservice.ac.uk/datacatalogue/series/series?id=2000028
+        kind: government
+        supports: [datasetPublic]
+      - label: IFS Green Budget — methodological commentary on IGOTM
+          versus TAXBEN distributional results
+        url: https://ifs.org.uk/green-budget
+        kind: academic
+        supports: [codePublic, documentationPublic]
+      - label: Resolution Foundation — distributional analysis
+          methodology critiques
+        url: https://www.resolutionfoundation.org/publications/
+        kind: civilsociety
+        supports: [codePublic, documentationPublic]
+
+  - model: columbia-cpsp
+    codePublic: no
+    codeLicense: proprietary
+    contributorCount: unknown
+    issueTrackerPublic: no
+    documentationPublic: partial
+    documentationUrl: https://www.povertycenter.columbia.edu
+    parameterSourcing: separate-doc
+    testSuitePublic: unknown
+    testCount: unknown
+    datasetPublic: no
+    reproducibleBuilds: no
+    notes: >
+      Source code, parameter files, and CPS-derived microdata are not
+      public. Methodology for each analysis is documented in the
+      working paper that publishes results — typically a technical
+      appendix or methods section, but not a unified codebase. Tax
+      simulation is delegated to NBER's TAXSIM (separately closed
+      from CPSP, with a public web/API interface).
+    sources:
+      - label: Hamilton, Wimer, Collyer et al. — Monthly cash payments
+          methodology section
+        url: https://povertycenter.columbia.edu/sites/povertycenter.columbia.edu/files/content/Publications/Monthly-Cash-Payments-Reduce-Spells-of-Poverty-CPSP-2022.pdf
+        kind: academic
+        supports: [codePublic, codeLicense, documentationPublic, parameterSourcing]
+      - label: National Academies child poverty report (CPSP simulations
+          cited but code not released)
+        url: https://nap.nationalacademies.org/catalog/25246
+        kind: academic
+        supports: [codePublic, documentationPublic]
+      - label: NBER TAXSIM (CPSP's tax dependency)
+        url: https://taxsim.nber.org/
+        kind: academic
+        supports: [codePublic, datasetPublic]
+      - label: Annie E. Casey Foundation (cites CPSP without code release)
+        url: https://www.aecf.org/work/kids-count
+        kind: civilsociety
+        supports: [codePublic, documentationPublic]
+
+  - model: benefit-kitchen
+    codePublic: no
+    codeLicense: proprietary
+    contributorCount: unknown
+    issueTrackerPublic: no
+    documentationPublic: partial
+    documentationUrl: https://benefitkitchen.com/
+    parameterSourcing: unknown
+    testSuitePublic: unknown
+    testCount: unknown
+    datasetPublic: no
+    reproducibleBuilds: no
+    notes: >
+      BenefitKitchen is a for-profit eligibility-screener product. The
+      consumer-facing app is free; the API is sold to partner
+      organizations. Source code, parameter files, and test suite are
+      not public. About page summarizes scope but not implementation
+      details.
+    sources:
+      - label: BenefitKitchen — homepage
+        url: https://benefitkitchen.com/
+        kind: self
+        supports: [codePublic, codeLicense, documentationPublic]
+      - label: BenefitKitchen — about page
+        url: https://benefitkitchen.com/#about
+        kind: self
+        supports: [documentationPublic]
+      - label: BenefitKitchen — API / partners page
+        url: https://benefitkitchen.com/api
+        kind: self
+        supports: [codePublic, codeLicense, datasetPublic]
+      - label: NYC Mayor's Office for Economic Opportunity — ACCESS NYC
+          ecosystem of public eligibility screeners
+        url: https://www.nyc.gov/site/opportunity/portfolio/access-nyc.page
+        kind: government
+        supports: [codePublic]
+
+  - model: benefits-cliffs
+    codePublic: no
+    codeLicense: proprietary
+    contributorCount: unknown
+    issueTrackerPublic: no
+    documentationPublic: partial
+    documentationUrl: https://foropportunity.org/benefitcliffs/
+    parameterSourcing: unknown
+    testSuitePublic: unknown
+    testCount: unknown
+    datasetPublic: no
+    reproducibleBuilds: no
+    notes: >
+      BenefitsCliffs.com is paywalled. Methodology summaries and policy
+      briefs are published by the Georgia Center for Opportunity, but
+      the rules engine, parameter tables, and underlying data are not
+      released as open artifacts.
+    sources:
+      - label: BenefitsCliffs.com — homepage
+        url: https://foropportunity.org/benefitcliffs/
+        kind: self
+        supports: [codePublic, codeLicense, documentationPublic, datasetPublic]
+      - label: Georgia Center for Opportunity — benefits cliff initiative
+        url: https://foropportunity.org/benefitcliffs/
+        kind: self
+        supports: [documentationPublic]
+      - label: Georgia Center for Opportunity — about
+        url: https://foropportunity.org/about-us/
+        kind: self
+        supports: [codeLicense]
+      - label: Atlanta Fed — Advancing Careers initiative (acknowledges
+          state-level benefit-cliff research by GCO)
+        url: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families
+        kind: government
+        supports: [documentationPublic]
+
+  - model: snap-screener
+    codePublic: no
+    codeLicense: proprietary
+    contributorCount: unknown
+    issueTrackerPublic: no
+    documentationPublic: partial
+    documentationUrl: https://www.snapscreener.com/
+    parameterSourcing: separate-doc
+    testSuitePublic: unknown
+    testCount: unknown
+    datasetPublic: partial
+    reproducibleBuilds: no
+    notes: >
+      Closed-source eligibility screener. A state-by-state SNAP rules
+      table is published on the SNAP Screener site as a reference for
+      partners; the screener code, broader Medicaid/WIC rules, and
+      backend test suite are not public.
+    sources:
+      - label: SNAP Screener — homepage
+        url: https://www.snapscreener.com/
+        kind: self
+        supports: [codePublic, codeLicense, documentationPublic]
+      - label: SNAP Screener — state rules reference
+        url: https://www.snapscreener.com/screener
+        kind: self
+        supports: [documentationPublic, parameterSourcing, datasetPublic]
+      - label: Medicaid Screener — homepage
+        url: https://www.medicaidscreener.com/
+        kind: self
+        supports: [codePublic, documentationPublic]
+      - label: USDA FNS — SNAP eligibility rules (the federal source the
+          screener implements)
+        url: https://www.fns.usda.gov/snap/recipient/eligibility
+        kind: government
+        supports: [parameterSourcing]
+
+  - model: mrelief
+    codePublic: no
+    codeLicense: proprietary
+    contributorCount: unknown
+    issueTrackerPublic: no
+    documentationPublic: partial
+    documentationUrl: https://www.mrelief.com/
+    parameterSourcing: unknown
+    testSuitePublic: unknown
+    testCount: unknown
+    datasetPublic: no
+    reproducibleBuilds: no
+    notes: >
+      mRelief is a non-profit benefits-access service, not a published
+      microsimulation. The SMS, web, and phone-based SNAP screeners are
+      consumer-facing; rules logic, parameter tables, and case data are
+      internal.
+    sources:
+      - label: mRelief — homepage
+        url: https://www.mrelief.com/
+        kind: self
+        supports: [codePublic, codeLicense, documentationPublic]
+      - label: mRelief — about
+        url: https://www.mrelief.com/about
+        kind: self
+        supports: [documentationPublic, datasetPublic]
+      - label: USDA FNS — SNAP outreach partner list
+        url: https://www.fns.usda.gov/snap/outreach
+        kind: government
+        supports: [codePublic]
+      - label: Robin Hood Foundation — civil society funder ecosystem
+        url: https://www.robinhood.org/
+        kind: civilsociety
+        supports: [codePublic, codeLicense]
+
+  - model: atlanta-fed-prd
+    codePublic: yes
+    codeLicense: GPL-3.0
+    codeUrl: https://github.com/Research-Division/policy-rules-database
+    contributorCount: unknown
+    issueTrackerPublic: yes
+    documentationPublic: yes
+    documentationUrl: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
+    parameterSourcing: separate-doc
+    testSuitePublic: unknown
+    testCount: unknown
+    datasetPublic: yes
+    reproducibleBuilds: partial
+    notes: >
+      Open-source under GPL-3.0 at
+      github.com/Research-Division/policy-rules-database with active
+      2026 commits. Project page and CLIFF tool suite document the
+      rules and policy applications.
+    sources:
+      - label: Policy Rules Database — public GitHub repo (GPL-3.0)
+        url: https://github.com/Research-Division/policy-rules-database
+        kind: self
+        supports: [codePublic, codeLicense, issueTrackerPublic,
+                   datasetPublic, reproducibleBuilds]
+      - label: Atlanta Fed — Policy Rules Database project page
+        url: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
+        kind: self
+        supports: [documentationPublic, parameterSourcing]
+      - label: Atlanta Fed — Advancing Careers for Low-Income Families
+        url: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families
+        kind: self
+        supports: [documentationPublic]
+      - label: Atlanta Fed — CLIFF tool suite (Policy Rules Database
+          powers these calculators)
+        url: https://www.atlantafed.org/research-and-data/data/cliff-tool
+        kind: self
+        supports: [documentationPublic]
+      - label: Atlanta Fed — What Are Benefits Cliffs? cites the PRD
+          dashboard
+        url: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/what-are-benefits-cliffs
+        kind: government
+        supports: [documentationPublic]
+
+  - model: nber-taxsim
+    codePublic: no
+    codeLicense: proprietary
+    contributorCount: unknown
+    issueTrackerPublic: no
+    documentationPublic: yes
+    documentationUrl: https://taxsim.nber.org/
+    parameterSourcing: separate-doc
+    testSuitePublic: unknown
+    testCount: unknown
+    datasetPublic: yes
+    reproducibleBuilds: partial
+    notes: >
+      The Fortran engine is not distributed in source form. Client
+      wrappers (Stata, R, SAS, Python, Julia, WASM) and example
+      datasets are public. Users supply their own input records; TAXSIM
+      does not bundle a microdataset. Outputs are deterministic and
+      have been independently replicated by open-source models (e.g.,
+      Tax-Calculator validation against TAXSIM-35), but the engine
+      itself cannot be rebuilt by users. Coverage is documented in the
+      web interface and the Feenberg-Coutts reference paper rather than
+      in inline parameter citations.
+    sources:
+      - label: NBER TAXSIM home page (web interface and documentation)
+        url: https://taxsim.nber.org/
+        kind: self
+        supports: [codePublic, codeLicense, documentationPublic,
+                   parameterSourcing, datasetPublic]
+      - label: NBER TAXSIM data product page (lists client wrappers)
+        url: https://www.nber.org/research/data/taxsim
+        kind: self
+        supports: [codePublic, codeLicense, documentationPublic, datasetPublic]
+        quote: >-
+          It is easily accessible from Stata, SAS, R or Python.
+      - label: Feenberg & Coutts (1993) — An Introduction to the TAXSIM
+          Model (academic reference describing the model)
+        url: https://onlinelibrary.wiley.com/doi/10.2307/3325474
+        kind: academic
+        supports: [documentationPublic, parameterSourcing, codePublic]
+      - label: PolicyEngine-NBER MoU on TAXSIM emulator (third-party
+          confirmation that engine is closed-source)
+        url: https://www.policyengine.org/us/research/policyengine-nber-mou-taxsim
+        kind: other
+        supports: [codePublic, codeLicense]
+      - label: Tax-Calculator validation against TAXSIM-35 (independent
+          implementation reference)
+        url: https://github.com/PSLmodels/Tax-Calculator/blob/master/taxcalc/validation/taxsim35/README.md
+        kind: civilsociety
+        supports: [documentationPublic, reproducibleBuilds]
+
+  - model: tf-microsim
+    codePublic: no
+    codeLicense: proprietary
+    contributorCount: unknown
+    issueTrackerPublic: no
+    documentationPublic: partial
+    documentationUrl: https://taxfoundation.org/research/all/federal/general-equilibrium-model/
+    parameterSourcing: separate-doc
+    testSuitePublic: unknown
+    testCount: unknown
+    datasetPublic: no
+    reproducibleBuilds: no
+    notes: >
+      The General Equilibrium / TAG model architecture is described
+      in Tax Foundation white papers; source code, parameter files,
+      and the SOI-derived microdata are not public. Distributional
+      and revenue tables are published; the implementation is not.
+    sources:
+      - label: Tax Foundation — Overview of the General Equilibrium Model
+        url: https://taxfoundation.org/research/all/federal/general-equilibrium-model/
+        kind: self
+        supports: [codePublic, codeLicense, documentationPublic,
+                   parameterSourcing, datasetPublic]
+      - label: Tax Foundation — The Taxes and Growth Model A Brief
+          Overview (Fiscal Fact No. 429)
+        url: https://files.taxfoundation.org/legacy/docs/FF429.pdf
+        kind: self
+        supports: [documentationPublic, parameterSourcing]
+      - label: Tax Foundation — The Tax Foundation's Taxes and Growth
+          Model (2018 article)
+        url: https://taxfoundation.org/research/all/federal/overview-tax-foundations-taxes-growth-model/
+        kind: self
+        supports: [documentationPublic, codePublic]
+      - label: IRS SOI Public Use File documentation (underlying
+          microdata is restricted-purchase)
+        url: https://www.irs.gov/statistics/soi-tax-stats-individual-public-use-microdata-files
+        kind: government
+        supports: [datasetPublic]
+      - label: PolitiFact profile of Tax Foundation (third-party press
+          reference; no code release noted)
+        url: https://www.politifact.com/personalities/tax-foundation/
+        kind: press
+        supports: [codePublic, documentationPublic]
+
+  - model: pwbm
+    codePublic: no
+    codeLicense: proprietary
+    contributorCount: unknown
+    issueTrackerPublic: no
+    documentationPublic: yes
+    documentationUrl: https://budgetmodel.wharton.upenn.edu/model/microsimulation/
+    parameterSourcing: separate-doc
+    testSuitePublic: unknown
+    testCount: unknown
+    datasetPublic: partial
+    reproducibleBuilds: no
+    notes: >
+      Source code is not public, but PWBM publishes module-level
+      documentation pages for the microsim, tax module, Social
+      Security module, and dynamic OLG core. A Public Use File of
+      projected microsim populations is released for research use,
+      which makes the dataset partially public while the production
+      pipeline itself remains closed.
+    sources:
+      - label: PWBM Microsimulation methodology page
+        url: https://budgetmodel.wharton.upenn.edu/model/microsimulation/
+        kind: self
+        supports: [codePublic, codeLicense, documentationPublic,
+                   parameterSourcing]
+      - label: PWBM Documentation index
+        url: https://budgetmodel.wharton.upenn.edu/microsim/documentation
+        kind: self
+        supports: [documentationPublic, parameterSourcing]
+      - label: PWBM home page (Public Use File and DataView are public
+          surfaces; production code is not)
+        url: https://budgetmodel.wharton.upenn.edu/
+        kind: self
+        supports: [datasetPublic, codePublic]
+      - label: Gokhale — Introduction to PWBM Microsimulation with
+          Application to Social Security (independent academic
+          presentation describing closed-source approach)
+        url: https://s3-us-gov-west-1.amazonaws.com/cg-778536a2-e58c-44f1-9173-29749804ec54/uploads/2021/03/7-SLIDES-Gokhale-Penn-Wharton-Budget-Model.pdf
+        kind: academic
+        supports: [codePublic, documentationPublic, parameterSourcing]
+      - label: Philadelphia Inquirer — coverage of PWBM (press
+          coverage; no code release noted)
+        url: https://www.inquirer.com/business/penn-wharton-budget-model-biden-build-back-better-infrastructure-bill-20211123.html
+        kind: press
+        supports: [codePublic]
+
+  - model: tax-foundation-tg
+    codePublic: no
+    codeLicense: proprietary
+    contributorCount: unknown
+    issueTrackerPublic: no
+    documentationPublic: partial
+    documentationUrl: https://taxfoundation.org/tags/taxes-and-growth-tag-model-overview-methodology/
+    parameterSourcing: separate-doc
+    testSuitePublic: unknown
+    testCount: unknown
+    datasetPublic: no
+    reproducibleBuilds: no
+    notes: >
+      Per Tax Foundation documentation, the Taxes and Growth (TAG)
+      model and the General Equilibrium Tax Model (tf-microsim) are
+      the same model. Transparency facts mirror tf-microsim. A
+      separate row is retained here for traceability to Tax
+      Foundation publications that cite the model by the TAG label.
+    sources:
+      - label: Tax Foundation — Overview of the General Equilibrium
+          Model (TAG and General Equilibrium are the same model)
+        url: https://taxfoundation.org/research/all/federal/general-equilibrium-model/
+        kind: self
+        supports: [codePublic, codeLicense, documentationPublic,
+                   parameterSourcing, datasetPublic]
+      - label: Tax Foundation — The Taxes and Growth Model A Brief
+          Overview (Fiscal Fact No. 429)
+        url: https://files.taxfoundation.org/legacy/docs/FF429.pdf
+        kind: self
+        supports: [documentationPublic, parameterSourcing]
+      - label: Tax Foundation TAG topic archive
+        url: https://taxfoundation.org/tags/taxes-and-growth-tag-model-overview-methodology/
+        kind: self
+        supports: [documentationPublic, codePublic]
+      - label: IRS SOI Public Use File documentation (underlying
+          microdata is restricted-purchase)
+        url: https://www.irs.gov/statistics/soi-tax-stats-individual-public-use-microdata-files
+        kind: government
+        supports: [datasetPublic]
+      - label: PolitiFact profile of Tax Foundation (third-party press
+          reference; no code release noted)
+        url: https://www.politifact.com/personalities/tax-foundation/
+        kind: press
+        supports: [codePublic, documentationPublic]
+
+  - model: dwp-psm
+    codePublic: no
+    codeLicense: proprietary
+    contributorCount: unknown
+    issueTrackerPublic: no
+    documentationPublic: partial
+    documentationUrl: https://obr.uk/box/dwps-policy-simulation-model-and-the-family-resources-survey/
+    parameterSourcing: separate-doc
+    testSuitePublic: unknown
+    testCount: unknown
+    datasetPublic: no
+    reproducibleBuilds: no
+    notes: >
+      PSM source code (written in SAS), parameters, and prepared
+      FRS-based microdata are not public. DWP publishes outputs and
+      occasional methodology slides (UKMOD Fest 2023 introduction) but
+      not the model. Calibration uses CALMAR with hundreds of control
+      totals; underlying FRS requires UK Data Service licence.
+    sources:
+      - label: DWP — Introduction to the DWP Policy Simulation Model
+          (UKMOD Fest 2023; SAS-based static microsimulation)
+        url: https://www.microsimulation.ac.uk/wp-content/uploads/2023/07/UKMODFest2023_DWP.pdf
+        kind: self
+        supports: [codePublic, codeLicense, documentationPublic, parameterSourcing]
+      - label: Office for Budget Responsibility — DWP's policy
+          simulation model and the Family Resources Survey
+        url: https://obr.uk/box/dwps-policy-simulation-model-and-the-family-resources-survey/
+        kind: government
+        supports: [codePublic, documentationPublic, parameterSourcing]
+      - label: DWP — Universal Credit business case (PSM-based
+          analysis; model itself not released)
+        url: https://www.gov.uk/government/publications/universal-credit-programme-full-business-case-summary/universal-credit-programme-full-business-case-summary
+        kind: government
+        supports: [codePublic, documentationPublic]
+      - label: UK Data Service — Family Resources Survey series
+          (underlying microdata not redistributable)
+        url: https://beta.ukdataservice.ac.uk/datacatalogue/series/series?id=200017
+        kind: government
+        supports: [datasetPublic]
+      - label: Wikipedia — Policy Simulation Model (third-party
+          summary; notes SAS implementation)
+        url: https://en.wikipedia.org/wiki/Policy_Simulation_Model
+        kind: other
+        supports: [codePublic, codeLicense]
+
+  - model: ippr-tax-benefit
+    codePublic: no
+    codeLicense: proprietary
+    contributorCount: unknown
+    issueTrackerPublic: no
+    documentationPublic: partial
+    documentationUrl: https://mmuperu.co.uk/blog/projects/modelling-the-effects-of-the-tax-and-benefit-system/
+    parameterSourcing: separate-doc
+    testSuitePublic: unknown
+    testCount: unknown
+    datasetPublic: no
+    reproducibleBuilds: unknown
+    notes: >
+      Implementation, parameter files, and prepared microdata are not
+      public. The PERU project page describes scope and partner
+      organisations but no source code is published. The model is
+      licensed to partner think-tanks for a fee and structural reforms
+      generally require commissioning PERU. Underlying FRS and LCF
+      microdata require UK Data Service licences.
+    sources:
+      - label: MMU PERU — IPPR Tax-Benefit Model project page
+          (describes scope; no code release)
+        url: https://mmuperu.co.uk/blog/projects/modelling-the-effects-of-the-tax-and-benefit-system/
+        kind: academic
+        supports: [codePublic, codeLicense, documentationPublic, parameterSourcing]
+      - label: Manchester Metropolitan University — PERU research group
+        url: https://www.mmu.ac.uk/research/groups/policy-evaluation-research-unit
+        kind: academic
+        supports: [documentationPublic]
+      - label: IPPR — Wealth tax analysis (model-based publication; no
+          code release)
+        url: https://www.ippr.org/media-office/slug-1306b49118532fe333771b8f2c1b31d3
+        kind: self
+        supports: [codePublic, documentationPublic]
+      - label: UK Data Service — Family Resources Survey series
+        url: https://beta.ukdataservice.ac.uk/datacatalogue/series/series?id=200017
+        kind: government
+        supports: [datasetPublic]
+      - label: Fraser of Allander Institute — IPPR tax-benefit
+          microsimulation results
+        url: https://fraserofallander.org/wp-content/uploads/2022/11/IPPR-microsimulation-results-and-policy-analysis.pdf
+        kind: academic
+        supports: [documentationPublic]
+
+  - model: landman-economics
+    codePublic: no
+    codeLicense: proprietary
+    contributorCount: unknown
+    issueTrackerPublic: no
+    documentationPublic: partial
+    documentationUrl: https://www.gov.scot/publications/tackling-child-poverty-delivery-plan-forecasting-child-poverty-scotland/pages/8/
+    parameterSourcing: separate-doc
+    testSuitePublic: unknown
+    testCount: unknown
+    datasetPublic: no
+    reproducibleBuilds: unknown
+    notes: >
+      Source code and prepared microdata are not public. Methodology is
+      described in technical appendices and methodology annexes of
+      commissioned reports (Scottish Government child poverty delivery
+      plan, EHRC cumulative impact assessments, Women's Budget Group
+      analyses). Underlying FRS and LCF microdata require UK Data
+      Service licences.
+    sources:
+      - label: Scottish Government — Tax-transfer model methodology
+          appendix (Landman-led description)
+        url: https://www.gov.scot/publications/tackling-child-poverty-delivery-plan-forecasting-child-poverty-scotland/pages/8/
+        kind: government
+        supports: [codePublic, codeLicense, documentationPublic, parameterSourcing]
+      - label: EHRC — Cumulative impact of tax and welfare reforms
+          (Landman Economics TTM methodology annex)
+        url: https://www.equalityhumanrights.com/sites/default/files/cumulative-impact-assessment-report.pdf
+        kind: government
+        supports: [documentationPublic, parameterSourcing]
+      - label: Northumbria University — Howard Reed profile (model
+          author and director of Landman Economics)
+        url: https://www.northumbria.ac.uk/about-us/our-staff/r/howard-reed/
+        kind: academic
+        supports: [codePublic, documentationPublic]
+      - label: UK Data Service — Family Resources Survey series
+        url: https://beta.ukdataservice.ac.uk/datacatalogue/series/series?id=200017
+        kind: government
+        supports: [datasetPublic]
+      - label: Reed (Northumbria PhD thesis) — methodological advances
+          in tax-benefit microsimulation
+        url: https://researchportal.northumbria.ac.uk/en/studentTheses/microsimulation-of-the-impacts-of-tax-social-security-and-public-
+        kind: academic
+        supports: [documentationPublic]
+
+  - model: entitledto
+    codePublic: no
+    codeLicense: proprietary
+    contributorCount: unknown
+    issueTrackerPublic: no
+    documentationPublic: partial
+    documentationUrl: https://www.entitledto.co.uk/help/default.aspx
+    parameterSourcing: none
+    testSuitePublic: unknown
+    testCount: unknown
+    datasetPublic: unknown
+    reproducibleBuilds: unknown
+    notes: >
+      EntitledTo is a closed-source commercial rules engine. The public
+      calculator is accessible without login under a fair-use limit;
+      paid tiers add adviser features, API access, and unlimited use.
+      Help pages explain how each benefit is calculated at a user level
+      but do not link parameter values to specific statutory references
+      inline. There is no underlying microdata: the system answers
+      eligibility for whoever enters their circumstances.
+    sources:
+      - label: EntitledTo home page (free public calculator; no code
+          release)
+        url: https://www.entitledto.co.uk/
+        kind: self
+        supports: [codePublic, codeLicense, documentationPublic]
+      - label: EntitledTo for organisations (paid licensing, API
+          integration product)
+        url: https://www.entitledto.co.uk/organisations
+        kind: self
+        supports: [codePublic, codeLicense]
+      - label: GOV.UK — Benefits calculators (recognises EntitledTo as
+          a recommended calculator)
+        url: https://www.gov.uk/benefits-calculators
+        kind: government
+        supports: [documentationPublic]
+      - label: UK Digital Marketplace — EntitledTo Benefits Calculator
+          G-Cloud listing (proprietary commercial service)
+        url: https://www.applytosupply.digitalmarketplace.service.gov.uk/g-cloud/services/973658267289218
+        kind: government
+        supports: [codePublic, codeLicense]
+      - label: ERSA — EntitledTo Better Off Calculator description
+          (third-party adviser-network reference)
+        url: https://ersa.org.uk/entitledto/
+        kind: civilsociety
+        supports: [documentationPublic]
+
+  - model: dynasim
+    codePublic: no
+    codeLicense: proprietary
+    contributorCount: unknown
+    issueTrackerPublic: no
+    documentationPublic: partial
+    documentationUrl: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/dynamic-simulation-income-model-dynasim
+    parameterSourcing: separate-doc
+    testSuitePublic: unknown
+    testCount: unknown
+    datasetPublic: no
+    reproducibleBuilds: no
+    notes: >
+      Source code, parameter files, and the SIPP-linked
+      administrative microdata are not public. Urban publishes
+      methodology primers and project briefs but not the
+      implementation. The SSA-linked Continuous Work History
+      Sample used to anchor lifetime earnings is restricted-access.
+    sources:
+      - label: DYNASIM overview page (no source-code or dataset links)
+        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/dynamic-simulation-income-model-dynasim
+        kind: self
+        supports: [codePublic, codeLicense, documentationPublic, datasetPublic, issueTrackerPublic]
+      - label: Favreault, Smith & Johnson — A Primer on DYNASIM3
+          (methodology document, no code release)
+        url: https://www.urban.org/sites/default/files/publication/71226/410961-A-Primer-on-the-Dynamic-Simulation-of-Income-Model-DYNASIM-.PDF
+        kind: self
+        supports: [codePublic, documentationPublic, parameterSourcing]
+      - label: ASPE — DYNASIM-based LTSS analysis (uses outputs,
+          not code; ASPE Contract HHSP23320095654WC)
+        url: https://aspe.hhs.gov/reports/risk-needing-ltss-dynasim-projections
+        kind: government
+        supports: [codeLicense, datasetPublic, documentationPublic]
+      - label: Semantic Scholar — Favreault & Smith DYNASIM
+          working paper (academic description without source)
+        url: https://www.semanticscholar.org/paper/The-Dynamic-Simulation-of-Income-Model-(DYNASIM)-Favreault-Smith/c51b608d278a59c16be0f38369ebf0ae0f200f14
+        kind: academic
+        supports: [codePublic, documentationPublic]
+
+  - model: cbolt
+    codePublic: no
+    codeLicense: proprietary
+    contributorCount: unknown
+    issueTrackerPublic: no
+    documentationPublic: partial
+    documentationUrl: https://www.cbo.gov/publication/53667
+    parameterSourcing: separate-doc
+    testSuitePublic: unknown
+    testCount: unknown
+    datasetPublic: no
+    reproducibleBuilds: no
+    notes: >
+      Source code, parameter files, and the SSA-linked earnings
+      microdata are not public. CBO publishes the 2018 model
+      overview (publication 53667) and recurring Social Security
+      and Long-Term Budget Outlook reports describing CBOLT-based
+      results. CBO has begun open-sourcing select adjacent models
+      on its GitHub but CBOLT itself remains closed.
+    sources:
+      - label: CBO — An Overview of CBOLT (April 2018; methodology
+          document, no source release)
+        url: https://www.cbo.gov/publication/53667
+        kind: government
+        supports: [codePublic, codeLicense, documentationPublic, parameterSourcing]
+      - label: CBO — Long-Term Budget Analysis topic page
+          (outputs only, no code)
+        url: https://www.cbo.gov/topics/budget/long-term-budget-analysis
+        kind: government
+        supports: [documentationPublic]
+      - label: CBO — Advanced Models page (CBOLT not in open
+          GitHub list)
+        url: https://www.cbo.gov/models/details
+        kind: government
+        supports: [codePublic, datasetPublic]
+      - label: CRFB — Analysis of CBO's 2025 Long-Term Budget
+          Outlook (third-party output review, no code)
+        url: https://www.crfb.org/papers/analysis-cbos-march-2025-long-term-budget-outlook
+        kind: civilsociety
+        supports: [documentationPublic, codePublic]
+
+  - model: hipsm
+    codePublic: no
+    codeLicense: proprietary
+    contributorCount: unknown
+    issueTrackerPublic: no
+    documentationPublic: partial
+    documentationUrl: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/health-insurance-policy-simulation-model-hipsm
+    parameterSourcing: separate-doc
+    testSuitePublic: unknown
+    testCount: unknown
+    datasetPublic: no
+    reproducibleBuilds: no
+    notes: >
+      Source code, parameter files, and the ACS/CPS/MEPS-matched
+      microdata are not public. Urban publishes annual methodology
+      updates (e.g. 'HIPSM for 2020') describing data sources,
+      calibration targets, and the marketplace-Medicaid behavioral
+      equations. Implementation and reproducible builds are not
+      released.
+    sources:
+      - label: HIPSM overview page (Urban; no source-code or
+          dataset link)
+        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/health-insurance-policy-simulation-model-hipsm
+        kind: self
+        supports: [codePublic, codeLicense, documentationPublic, datasetPublic, issueTrackerPublic]
+      - label: Urban — HIPSM for 2020 methodology report
+          (architecture without code)
+        url: https://www.urban.org/sites/default/files/publication/103412/the-health-insurance-policy-simulation-model-for-2020.pdf
+        kind: self
+        supports: [documentationPublic, parameterSourcing, codePublic]
+      - label: Garrett — HIPSM briefing to NCVHS
+          (HHS subcommittee; outputs not code)
+        url: https://www.ncvhs.hhs.gov/wp-content/uploads/2014/05/090227p4.pdf
+        kind: government
+        supports: [codePublic, documentationPublic]
+      - label: Buettgens et al. — America Under the Affordable
+          Care Act (academic HIPSM analysis, no source release)
+        url: https://www.urban.org/sites/default/files/publication/29396/412267-America-Under-the-Affordable-Care-Act.PDF
+        kind: academic
+        supports: [codePublic, parameterSourcing]
+
+  - model: hisim2
+    codePublic: no
+    codeLicense: proprietary
+    contributorCount: unknown
+    issueTrackerPublic: no
+    documentationPublic: partial
+    documentationUrl: https://www.cbo.gov/publication/57205
+    parameterSourcing: separate-doc
+    testSuitePublic: unknown
+    testCount: unknown
+    datasetPublic: no
+    reproducibleBuilds: no
+    notes: >
+      Source code is not public. CBO has released several
+      methodology working papers (2019-04 on data preparation,
+      2021-15 on synthetic firms) and a baseline-build report
+      (publication 57205). Underlying SIPP-tax-Medicaid linked
+      microdata is restricted-access.
+    sources:
+      - label: CBO — HISIM2 Used in Preparing July 2021 Baseline
+          (methodology, no code release)
+        url: https://www.cbo.gov/publication/57205
+        kind: government
+        supports: [codePublic, codeLicense, documentationPublic, parameterSourcing]
+      - label: CBO Working Paper 2019-04 — Sources and Preparation
+          of Data Used in HISIM2
+        url: https://www.cbo.gov/publication/55087
+        kind: government
+        supports: [documentationPublic, parameterSourcing, datasetPublic]
+      - label: CBO — HISIM2 introduction (publication 55390)
+        url: https://www.cbo.gov/publication/55390
+        kind: government
+        supports: [documentationPublic, codePublic]
+      - label: CBO — Methods for Analyzing Health Insurance
+          Coverage (catalogue without code)
+        url: https://www.cbo.gov/topics/health-care/methods-analyzing-health-insurance-coverage
+        kind: government
+        supports: [documentationPublic, codePublic]
+      - label: CBO — Advanced Models page (HISIM2 not in open
+          GitHub list)
+        url: https://www.cbo.gov/models/details
+        kind: government
+        supports: [codePublic, datasetPublic]
+      - label: Urban Institute HIPSM project page (cross-references
+          HISIM2 as CBO peer; independent confirmation of closed-
+          source status)
+        url: https://www.urban.org/policy-centers/health-policy-center/projects/health-insurance-policy-simulation-model-hipsm
+        kind: civilsociety
+        supports: [codePublic, documentationPublic]
