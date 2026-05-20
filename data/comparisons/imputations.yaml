@@ -538,13 +538,15 @@ imputations:
     description: >
       CCDF eligibility and benefit rules implemented at the federal
       level (age, income, asset, immigration, activity, and reason-for-
-      care tests; copay; subsidy) plus seven state-specific child care
-      subsidy programs (CalWORKs Childcare in CA, CCAP in CO and IL,
-      CCFA in MA, CCSP in DC, SCCA in NC, CCS in TX). The Enhanced CPS
-      pipeline does not seed CCDF take-up priors or calibrate
-      simulated receipt to administrative caseloads, so simulated CCDF
-      participation equals simulated CCDF eligibility — an
-      overstatement of actual receipt.
+      care tests; copay; subsidy) plus twelve state-specific child
+      care subsidy programs: AK CCAP, CalWORKs Childcare (CA), CCAP
+      (CO), Care 4 Kids (CT), Purchase of Care (DE), CCSP (DC), CCAP
+      (IL — eligibility only), CCFA (MA), CCAP (ME), SCCA (NC),
+      Nebraska Child Care Subsidy, Pennsylvania CCW, and CCS (TX).
+      The Enhanced CPS pipeline does not seed CCDF take-up priors or
+      calibrate simulated receipt to administrative caseloads, so
+      simulated CCDF participation equals simulated CCDF eligibility
+      — an overstatement of actual receipt.
     baseDataset: Enhanced CPS
     reproducible: yes
     sources:

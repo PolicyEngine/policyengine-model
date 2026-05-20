@@ -221,15 +221,16 @@ coverage:
     asOfYear: 2025
     notes: >
       Federal CCDF eligibility, copay, and subsidy formulas
-      implemented at gov/hhs/ccdf. Seven state programs have
-      detailed implementations: CalWORKs Childcare (CA), CCAP (CO),
-      CCAP (IL — eligibility only), CCFA (MA), CCSP (DC), SCCA (NC),
-      and CCS (TX); states without a state-specific implementation
-      fall back to federal defaults plus the state SMI parameters.
-      Take-up is not currently calibrated to administrative
-      caseloads (see imputations.yaml) — simulated CCDF receipt
-      equals simulated CCDF eligibility, which overstates actual
-      enrolment.
+      implemented at gov/hhs/ccdf. Twelve states have detailed
+      state-specific implementations: AK CCAP, CA CalWORKs
+      Childcare, CO CCAP, CT C4K, DE POC, DC CCSP, IL CCAP
+      (eligibility only), MA CCFA, ME CCAP, NC SCCA, NE Child
+      Care Subsidy, PA CCW, and TX CCS. States without a
+      state-specific implementation fall back to federal defaults
+      plus the state SMI parameters. Take-up is not currently
+      calibrated to administrative caseloads (see imputations.yaml)
+      — simulated CCDF receipt equals simulated CCDF eligibility,
+      which overstates actual enrolment.
     sources:
       - label: CCDF variables (federal)
         url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/hhs/ccdf

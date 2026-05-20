@@ -808,8 +808,20 @@ export const programs: Program[] = [
     fullName: 'Child Care and Development Fund',
     agency: 'HHS',
     status: 'partial',
-    coverage: 'CA, CO, IL, MA, DC, NC, TX',
+    coverage: 'AK, CA, CO, CT, DE, DC, IL, MA, ME, NC, NE, PA, TX',
     stateImplementations: [
+      {
+        state: 'AK',
+        status: 'complete',
+        name: 'Alaska CCAP',
+        fullName: 'Alaska Child Care Assistance Program',
+        variable: 'ak_ccap',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/ak/dpa/ccap`,
+          variables: `${GITHUB_BASE}/variables/gov/states/ak/dpa/ccap`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/ak/dpa/ccap`,
+        }
+      },
       {
         state: 'CA',
         status: 'complete',
@@ -836,6 +848,30 @@ export const programs: Program[] = [
         }
       },
       {
+        state: 'CT',
+        status: 'complete',
+        name: 'Care 4 Kids',
+        fullName: 'Connecticut Care 4 Kids (C4K)',
+        variable: 'ct_c4k',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/ct/oec/c4k`,
+          variables: `${GITHUB_BASE}/variables/gov/states/ct/oec/c4k`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/ct/oec/c4k`,
+        }
+      },
+      {
+        state: 'DE',
+        status: 'complete',
+        name: 'Purchase of Care',
+        fullName: 'Delaware Purchase of Care (POC)',
+        variable: 'de_poc',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/de/dss/poc`,
+          variables: `${GITHUB_BASE}/variables/gov/states/de/dss/poc`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/de/dss/poc`,
+        }
+      },
+      {
         state: 'IL',
         status: 'complete',
         name: 'CCAP',
@@ -854,6 +890,18 @@ export const programs: Program[] = [
         name: 'Massachusetts CCFA',
         fullName: 'Massachusetts Child Care Financial Assistance',
         githubLinks: {},
+      },
+      {
+        state: 'ME',
+        status: 'complete',
+        name: 'Maine CCAP',
+        fullName: 'Maine Child Care Assistance Program',
+        variable: 'me_ccap',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/me/dhhs/ccap`,
+          variables: `${GITHUB_BASE}/variables/gov/states/me/dhhs/ccap`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/me/dhhs/ccap`,
+        }
       },
       {
         state: 'DC',
@@ -877,6 +925,30 @@ export const programs: Program[] = [
           parameters: `${GITHUB_BASE}/parameters/gov/states/nc/ncdhhs/scca`,
           variables: `${GITHUB_BASE}/variables/gov/states/nc/ncdhhs/scca`,
           tests: `${TESTS_BASE}/policy/baseline/gov/states/nc/ncdhhs/scca`,
+        }
+      },
+      {
+        state: 'NE',
+        status: 'complete',
+        name: 'Nebraska Child Care Subsidy',
+        fullName: 'Nebraska Child Care Subsidy',
+        variable: 'ne_child_care_subsidy',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/ne/dhhs/child_care_subsidy`,
+          variables: `${GITHUB_BASE}/variables/gov/states/ne/dhhs/child_care_subsidy`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/ne/dhhs/child_care_subsidy`,
+        }
+      },
+      {
+        state: 'PA',
+        status: 'complete',
+        name: 'Child Care Works',
+        fullName: 'Pennsylvania Child Care Works (CCW)',
+        variable: 'pa_ccw',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/pa/dhs/ccw`,
+          variables: `${GITHUB_BASE}/variables/gov/states/pa/dhs/ccw`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/pa/dhs/ccw`,
         }
       },
       {
@@ -1745,20 +1817,6 @@ export const programs: Program[] = [
       parameters: `${GITHUB_BASE}/parameters/gov/states/il/rta/cta`,
       variables: `${GITHUB_BASE}/variables/gov/states/il/rta/cta`,
       tests: `${TESTS_BASE}/policy/baseline/gov/states/il/rta/cta`,
-    },
-  },
-  {
-    id: 'ne_childcare',
-    name: 'Nebraska Child Care Subsidy',
-    fullName: '',
-    agency: 'State',
-    status: 'complete',
-    coverage: 'NE',
-    variable: 'ne_child_care_subsidy',
-    githubLinks: {
-      parameters: `${GITHUB_BASE}/parameters/gov/states/ne/dhhs/child_care_subsidy`,
-      variables: `${GITHUB_BASE}/variables/gov/states/ne/dhhs/child_care_subsidy`,
-      tests: `${TESTS_BASE}/policy/baseline/gov/states/ne/dhhs/child_care_subsidy`,
     },
   },
   {
