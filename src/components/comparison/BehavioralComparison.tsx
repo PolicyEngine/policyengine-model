@@ -8,10 +8,11 @@ import { h2Style, proseStyle, sectionStyle } from './comparisonStyles';
 import type { ComparisonData } from '../../types/comparison';
 
 /**
- * Compare-mode body for `/behavioral`. Renders the same two sub-sections
- * as MethodsView's behavioral blocks — Elasticities and Other behavioral
- * assumptions — but scoped to the active model set (host PE + selected
- * peers). The column shape is shared with Methods via `BehavioralDomainBlock`.
+ * Compare-mode body for `/behavioral`. Renders two sub-sections —
+ * Elasticities (numeric response parameters) and Other behavioral
+ * assumptions — scoped to the active model set (host PE + selected
+ * peers). Both sections share `BehavioralDomainBlock` for a consistent
+ * column shape.
  *
  * `data` should already be filtered so `data.models` is the active set in
  * host-first order; `activeModelIds` is the same set as a fast lookup for

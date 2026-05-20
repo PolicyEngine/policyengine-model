@@ -85,38 +85,6 @@ const panelDescriptionStyle: CSSProperties = {
   lineHeight: 1.5,
 };
 
-const stripStyle: CSSProperties = {
-  display: 'flex',
-  flexWrap: 'wrap',
-  gap: spacing.lg,
-  alignItems: 'stretch',
-};
-
-const statItemStyle: CSSProperties = {
-  display: 'flex',
-  flexDirection: 'column',
-  minWidth: 140,
-  padding: `${spacing.sm} ${spacing.md}`,
-  backgroundColor: colors.background.tertiary,
-  borderRadius: 8,
-  border: `1px solid ${colors.border.light}`,
-};
-
-const statLabelStyle: CSSProperties = {
-  fontSize: 11,
-  fontWeight: 600,
-  color: colors.text.tertiary,
-  textTransform: 'uppercase',
-  letterSpacing: '0.04em',
-  marginBottom: 4,
-};
-
-const statValueStyle: CSSProperties = {
-  fontSize: 14,
-  fontWeight: 600,
-  color: colors.text.primary,
-};
-
 const linkStyle: CSSProperties = {
   color: colors.primary[600],
   textDecoration: 'none',
@@ -183,15 +151,6 @@ function fmtCount(v: number | 'unknown' | undefined): string {
   if (v >= 1_000_000) return `${(v / 1_000_000).toFixed(1)}M`;
   if (v >= 1_000) return `${(v / 1_000).toFixed(0)}K`;
   return v.toLocaleString();
-}
-
-function StatItem({ label, value }: { label: string; value: ReactNode }) {
-  return (
-    <div style={statItemStyle}>
-      <div style={statLabelStyle}>{label}</div>
-      <div style={statValueStyle}>{value}</div>
-    </div>
-  );
 }
 
 function CellWithSources({
@@ -262,20 +221,6 @@ function renderTransparencyValue(
     return <ExternalLink url={value as string | undefined} />;
   }
   return value == null || value === '' ? '—' : String(value);
-}
-
-function TransparencyStrip({ row }: { row: Transparency }) {
-  return (
-    <div style={stripStyle}>
-      {TRANSPARENCY_FIELDS.map((f) => (
-        <StatItem
-          key={String(f.key)}
-          label={f.label}
-          value={renderTransparencyValue(f.format, row[f.key])}
-        />
-      ))}
-    </div>
-  );
 }
 
 function TransparencyCompareTable({
@@ -366,16 +311,6 @@ const FRESHNESS_FIELDS: Array<{
   },
 ];
 
-function FreshnessStrip({ row }: { row: Freshness }) {
-  return (
-    <div style={stripStyle}>
-      {FRESHNESS_FIELDS.map((f) => (
-        <StatItem key={String(f.key)} label={f.label} value={f.render(row)} />
-      ))}
-    </div>
-  );
-}
-
 function FreshnessCompareTable({
   models,
   rows,
@@ -431,69 +366,6 @@ function FreshnessCompareTable({
 /* -------------------------------------------------------------------------- */
 /*                              PANEL: ARTIFACTS                              */
 /* -------------------------------------------------------------------------- */
-
-function ArtifactsInventory({ artifacts }: { artifacts: Artifact[] }) {
-  // Single-model "inventory" view: list grouped by type, each item shows
-  // name + link. Compact, scannable.
-  const groups = ARTIFACT_TYPE_ORDER.map((type) => ({
-    type,
-    items: artifacts.filter((a) => a.type === type),
-  })).filter((g) => g.items.length > 0);
-
-  if (groups.length === 0) {
-    return <div style={{ color: colors.text.tertiary }}>—</div>;
-  }
-
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: spacing.md }}>
-      {groups.map((g) => (
-        <div
-          key={g.type}
-          style={{ display: 'flex', gap: spacing.md, flexWrap: 'wrap' }}
-        >
-          <div
-            style={{
-              minWidth: 180,
-              fontSize: 12,
-              fontWeight: 600,
-              color: colors.text.tertiary,
-              textTransform: 'uppercase',
-              letterSpacing: '0.04em',
-              paddingTop: 2,
-            }}
-          >
-            {ARTIFACT_TYPE_LABELS[g.type]}
-          </div>
-          <div
-            style={{
-              flex: 1,
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 4,
-            }}
-          >
-            {g.items.map((a, i) => (
-              <div key={i} style={{ fontSize: 14 }}>
-                <span style={{ fontWeight: 600, color: colors.text.primary }}>
-                  {a.name}
-                </span>
-                {a.url && (
-                  <>
-                    {' '}
-                    <ExternalLink url={a.url} />
-                  </>
-                )}
-                {a.description && (
-                  <div style={subTextStyle}>{a.description}</div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
 
 function ArtifactsCompareTables({
   models,
@@ -609,40 +481,6 @@ const USAGE_FIELDS: Array<{ key: keyof UsageMetric; label: string }> = [
   { key: 'organizationUsers', label: 'Organization users' },
 ];
 
-function UsageStrip({ row }: { row: UsageMetric }) {
-  return (
-    <div>
-      <div style={stripStyle}>
-        {USAGE_FIELDS.map((f) => (
-          <StatItem
-            key={String(f.key)}
-            label={f.label}
-            value={fmtCount(row[f.key] as number | 'unknown' | undefined)}
-          />
-        ))}
-      </div>
-      {row.notes && (
-        <div
-          style={{
-            marginTop: spacing.md,
-            fontSize: 13,
-            color: colors.text.secondary,
-            lineHeight: 1.5,
-            maxWidth: 760,
-          }}
-        >
-          {row.notes}
-        </div>
-      )}
-      {row.sources && row.sources.length > 0 && (
-        <div style={{ marginTop: spacing.sm }}>
-          <SourceList sources={row.sources} compact />
-        </div>
-      )}
-    </div>
-  );
-}
-
 function UsageCompareTable({
   models,
   rows,
@@ -731,15 +569,12 @@ export default function AboutThisModel({ activeModelIds }: AboutThisModelProps) 
     .map((id) => modelLookup.get(id))
     .filter((m): m is Model => Boolean(m));
 
-  if (activeModels.length === 0) return null;
+  // Caller (app/page.tsx) gates this block on `parsed.compareMode`, so
+  // activeModels always contains the host PE row plus at least one peer
+  // when rendered. We guard against the empty case for safety only.
+  if (activeModels.length < 2) return null;
 
-  const compareMode = activeModels.length > 1;
   const host = activeModels[0];
-  const hostTransparency = data.transparency.find((r) => r.model === host.id);
-  const hostFreshness = data.freshness.find((r) => r.model === host.id);
-  const hostUsage = data.usage.find((r) => r.model === host.id);
-  const hostArtifacts = data.artifacts.filter((a) => a.model === host.id);
-
   const activeIdSet = new Set(activeModelIds);
   const activeTransparency = data.transparency.filter((r) =>
     activeIdSet.has(r.model),
@@ -757,9 +592,9 @@ export default function AboutThisModel({ activeModelIds }: AboutThisModelProps) 
   }
 
   const peerCount = activeModels.length - 1;
-  const title = compareMode
-    ? `${host.name} compared to ${peerCount} peer${peerCount === 1 ? '' : 's'}`
-    : host.name;
+  const title = `${host.name} compared to ${peerCount} peer${
+    peerCount === 1 ? '' : 's'
+  }`;
 
   return (
     <section style={blockStyle}>
@@ -774,16 +609,10 @@ export default function AboutThisModel({ activeModelIds }: AboutThisModelProps) 
           Code, license, documentation, tests, dataset, and reproducible
           builds — the legs of model verifiability.
         </p>
-        {compareMode ? (
-          <TransparencyCompareTable
-            models={activeModels}
-            rows={activeTransparency}
-          />
-        ) : hostTransparency ? (
-          <TransparencyStrip row={hostTransparency} />
-        ) : (
-          <div style={{ color: colors.text.tertiary }}>—</div>
-        )}
+        <TransparencyCompareTable
+          models={activeModels}
+          rows={activeTransparency}
+        />
       </div>
 
       {/* -------------------------- Freshness -------------------------- */}
@@ -794,16 +623,7 @@ export default function AboutThisModel({ activeModelIds }: AboutThisModelProps) 
           enacted-but-not-yet-effective legislation, and how often it
           refreshes.
         </p>
-        {compareMode ? (
-          <FreshnessCompareTable
-            models={activeModels}
-            rows={activeFreshness}
-          />
-        ) : hostFreshness ? (
-          <FreshnessStrip row={hostFreshness} />
-        ) : (
-          <div style={{ color: colors.text.tertiary }}>—</div>
-        )}
+        <FreshnessCompareTable models={activeModels} rows={activeFreshness} />
       </div>
 
       {/* -------------------------- Artifacts -------------------------- */}
@@ -813,14 +633,10 @@ export default function AboutThisModel({ activeModelIds }: AboutThisModelProps) 
           Concrete deliverables an outside reader can verify exist:
           codebases, datasets, APIs, web apps, documentation, and papers.
         </p>
-        {compareMode ? (
-          <ArtifactsCompareTables
-            models={activeModels}
-            artifactsByModel={artifactsByModel}
-          />
-        ) : (
-          <ArtifactsInventory artifacts={hostArtifacts} />
-        )}
+        <ArtifactsCompareTables
+          models={activeModels}
+          artifactsByModel={artifactsByModel}
+        />
       </div>
 
       {/* ---------------------------- Usage ---------------------------- */}
@@ -831,13 +647,7 @@ export default function AboutThisModel({ activeModelIds }: AboutThisModelProps) 
           active users. Many cells read &quot;—&quot; because incumbents
           do not publish usage metrics.
         </p>
-        {compareMode ? (
-          <UsageCompareTable models={activeModels} rows={activeUsage} />
-        ) : hostUsage ? (
-          <UsageStrip row={hostUsage} />
-        ) : (
-          <div style={{ color: colors.text.tertiary }}>—</div>
-        )}
+        <UsageCompareTable models={activeModels} rows={activeUsage} />
       </div>
     </section>
   );

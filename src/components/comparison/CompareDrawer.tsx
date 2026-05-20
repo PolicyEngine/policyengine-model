@@ -60,12 +60,10 @@ export default function CompareDrawer({ peers, hostName }: CompareDrawerProps) {
   }
 
   function togglePeer(id: string) {
+    // `selected` is already the expanded peer list when `parsed.isAll`
+    // is true (parseComparePeers materialises `'all'` into every peer
+    // id), so no extra expansion step is needed before mutating.
     const next = new Set(selected);
-    if (parsed.isAll) {
-      // 'all' is an opaque value — expand it before mutating so the user
-      // can deselect a single peer from the all-selected baseline.
-      for (const p of peerIds) next.add(p);
-    }
     if (next.has(id)) next.delete(id);
     else next.add(id);
     setQuery((p) => {

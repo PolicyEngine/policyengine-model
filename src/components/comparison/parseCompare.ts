@@ -32,7 +32,15 @@ export function parseComparePeers(
     return { peers: [], compareMode: false, isAll: false };
   }
   if (value === 'all') {
-    return { peers: [...countryPeerIds], compareMode: true, isAll: true };
+    const peers = [...countryPeerIds];
+    return {
+      peers,
+      // If the country has no peers, `?compare=all` collapses to PE-only
+      // mode — same as if `?compare=` were absent — so sections don't
+      // render an empty compare view.
+      compareMode: peers.length > 0,
+      isAll: true,
+    };
   }
   const set = new Set(countryPeerIds);
   const peers = value

@@ -16,11 +16,9 @@ import type { ComparisonData } from '../../types/comparison';
 
 /**
  * Compare-mode view for `/data/calibration`. Renders one sub-table per
- * methodological concept (from `concepts.yaml`), with one row per active
- * model's imputation method for that concept. Mirrors the
- * "Imputations and calibration, by concept" block in `MethodsView`,
- * trimmed to just the concept tables and ordered so the host PE model
- * appears first within each concept.
+ * methodological concept (from `concepts.yaml`), with one row per
+ * active model's imputation method for that concept. Rows are ordered
+ * so the host PE model appears first within each concept.
  */
 export default function CalibrationComparison({
   data,
@@ -40,7 +38,7 @@ export default function CalibrationComparison({
 
   return (
     <div>
-      <PageHeader category="Data" title="Calibration" />
+      <PageHeader category="Data" title="Calibration targets" />
 
       <p style={proseStyle}>
         Each block below covers one methodological concept used to impute or
