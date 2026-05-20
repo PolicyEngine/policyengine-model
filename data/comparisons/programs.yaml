@@ -199,6 +199,23 @@ programs:
         url: https://www.ssa.gov/policy/docs/statcomps/supplement/
         kind: government
 
+  - id: us-ssi-state-supplement
+    name: SSI State Supplement
+    fullName: SSI State Supplementary Payment (SSP) programs
+    jurisdiction: us-states
+    agency: state
+    type: cash-transfer
+    statute: 42 USC § 1382e
+    affectedUnits: ~2.5M recipients in 45 states + DC
+    asOfYear: 2024
+    sources:
+      - label: 42 USC § 1382e — Optional state supplementation
+        url: https://www.law.cornell.edu/uscode/text/42/1382e
+        kind: government
+      - label: SSA — State supplementation of SSI
+        url: https://www.ssa.gov/policy/docs/statcomps/supplement/2023/7c.html
+        kind: government
+
   - id: us-medicaid
     name: Medicaid
     jurisdiction: us-federal

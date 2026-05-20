@@ -110,11 +110,17 @@ coverage:
 
   - model: policyengine-us
     program: us-tanf
-    status: implemented
+    status: partial
     statuteTraceable: yes
     testCoverage: medium
-    asOfYear: 2024
-    notes: State-level TANF rules implemented for selected states; eligibility rules vary by state.
+    asOfYear: 2025
+    notes: >
+      Federal TANF block-grant rules implemented; state-specific
+      eligibility, payment standards, and work requirements
+      implemented for selected states. TANF is fundamentally
+      state-administered with substantial variation, so coverage
+      is partial by construction even though every modeled state
+      uses the actual state ruleset (no averaging or simplification).
     sources:
       - label: TANF variables
         url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/hhs/tanf
@@ -124,10 +130,37 @@ coverage:
     status: implemented
     statuteTraceable: yes
     testCoverage: high
-    asOfYear: 2025
+    asOfYear: 2026
     sources:
       - label: SSI variables
         url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/ssa/ssi
+
+  - model: policyengine-us
+    program: us-ssi-state-supplement
+    status: partial
+    statuteTraceable: yes
+    testCoverage: medium
+    asOfYear: 2025
+    notes: >
+      State Supplementary Payment (SSP) programs implemented for 17
+      of the 45 states + DC that operate one: AK, AL, CA (incl. CAPI
+      for certain immigrants), CO, CT, DE, GA, IL (AABD), IN, KY,
+      MA, ME, MI, NM, SC, TX, and WA. Each implementation uses the
+      full state ruleset — including category-specific (aged vs
+      blind vs disabled) and living-arrangement-specific payment
+      standards where the state actually varies them — rather than
+      averaging across eligibility categories.
+    sources:
+      - label: CA State Supplement
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/states/ca/cdss/state_supplement
+      - label: CT SSP
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/states/ct/dss/ssp
+      - label: MA SSP
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/states/ma/dta/ssp
+      - label: KY SSP
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/states/ky/dcbs/ssp
+      - label: TX SSI State Supplement
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/states/tx/hhsc/ssi_state_supplement
 
   - model: policyengine-us
     program: us-medicaid
@@ -1405,6 +1438,29 @@ coverage:
     sources:
       - label: TRIM3 SSI module
         url: https://boreas.urban.org/documentation/SSI/Main.php
+
+  - model: trim3
+    program: us-ssi-state-supplement
+    status: partial
+    statuteTraceable: unknown
+    testCoverage: unknown
+    docsUrl: https://boreas.urban.org/documentation/SSI/Main.php
+    asOfYear: unknown
+    notes: >
+      TRIM3's SSI module computes federally-administered state
+      supplements and selected state-administered programs, but
+      simplifies category-specific variation. Per the TRIM3 SSI
+      documentation: "Although some states vary their supplements
+      by whether a unit is aged or disabled, TRIM3 does not yet
+      incorporate this detail; when a state's supplements differ
+      by reason for eligibility, an average figure for aged and
+      disabled units is used for all units." PolicyEngine US, by
+      contrast, implements the full category-specific ruleset for
+      each modeled state.
+    sources:
+      - label: TRIM3 SSI module documentation
+        url: https://boreas.urban.org/documentation/SSI/Main.php
+        kind: self
 
   - model: trim3
     program: us-medicaid
