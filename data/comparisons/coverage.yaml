@@ -205,32 +205,40 @@ coverage:
 
   - model: policyengine-us
     program: us-liheap
-    status: implemented
+    status: partial
     statuteTraceable: yes
     testCoverage: medium
     asOfYear: 2025
+    notes: >
+      Federal LIHEAP block-grant rules implemented at gov/hhs/liheap;
+      four states have detailed state-specific implementations (DC,
+      IL, MA, TX) and Oregon is in progress. States without a
+      state-specific module fall back to federal defaults, which
+      understates the variation across actual state LIHEAP programs.
     sources:
       - label: LIHEAP variables
         url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/parameters/gov/hhs/liheap
 
   - model: policyengine-us
     program: us-ccdf
-    status: implemented
+    status: partial
     statuteTraceable: yes
     testCoverage: medium
     asOfYear: 2025
     notes: >
       Federal CCDF eligibility, copay, and subsidy formulas
-      implemented at gov/hhs/ccdf. Twelve states have detailed
-      state-specific implementations: AK CCAP, CA CalWORKs
+      implemented at gov/hhs/ccdf, but CCDF is fundamentally
+      state-administered with substantial state variation that
+      isn't captured in the federal defaults. Thirteen states have
+      detailed state-specific implementations: AK CCAP, CA CalWORKs
       Childcare, CO CCAP, CT C4K, DE POC, DC CCSP, IL CCAP
-      (eligibility only), MA CCFA, ME CCAP, NC SCCA, NE Child
-      Care Subsidy, PA CCW, and TX CCS. States without a
-      state-specific implementation fall back to federal defaults
-      plus the state SMI parameters. Take-up is not currently
-      calibrated to administrative caseloads (see imputations.yaml)
-      — simulated CCDF receipt equals simulated CCDF eligibility,
-      which overstates actual enrolment.
+      (eligibility only), MA CCFA, ME CCAP, NC SCCA, NE Child Care
+      Subsidy, PA CCW, and TX CCS. The other ~37 states fall back
+      to federal defaults plus state SMI parameters, which is a
+      coarse approximation of their actual programs. Take-up is
+      not currently calibrated to administrative caseloads (see
+      imputations.yaml) — simulated CCDF receipt equals simulated
+      CCDF eligibility, which overstates actual enrolment.
     sources:
       - label: CCDF variables (federal)
         url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/hhs/ccdf
