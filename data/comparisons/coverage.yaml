@@ -259,19 +259,23 @@ coverage:
     testCoverage: medium
     asOfYear: 2025
     notes: >
-      Federal CCDF eligibility, copay, and subsidy formulas
-      implemented at gov/hhs/ccdf, but CCDF is fundamentally
-      state-administered with substantial state variation that
-      isn't captured in the federal defaults. Thirteen states have
-      detailed state-specific implementations: AK CCAP, CA CalWORKs
-      Childcare, CO CCAP, CT C4K, DE POC, DC CCSP, IL CCAP
+      CCDF is a federal block grant — every state and DC operates a
+      CCDF-funded child-care subsidy program. Federal eligibility,
+      copay, and subsidy formulas are implemented at gov/hhs/ccdf,
+      but the actual programs are state-administered with
+      substantial variation. 18 state programs are implemented
+      end-to-end with the state agency's own ruleset: AK CCAP, CA
+      CalWORKs Childcare, CO CCAP, CT C4K, DC CCSP, DE POC, IL CCAP
       (eligibility only), MA CCFA, ME CCAP, NC SCCA, NE Child Care
-      Subsidy, PA CCW, and TX CCS. The other ~37 states fall back
-      to federal defaults plus state SMI parameters, which is a
-      coarse approximation of their actual programs. Take-up is
-      not currently calibrated to administrative caseloads (see
-      imputations.yaml) — simulated CCDF receipt equals simulated
-      CCDF eligibility, which overstates actual enrolment.
+      Subsidy, NH CCAP, NJ CCAP, PA CCW, RI CCAP, SC CCAP, TX CCS,
+      VA CCSP. Seven more are in open PRs and expected to land
+      shortly: AL CCSP, AR SRA, AZ CCAP, GA CAPS, MD CCS, WA WCCC,
+      WV CCAP. Remaining states fall back to federal defaults plus
+      state SMI parameters, which is a coarse approximation of
+      their actual programs. Take-up is not currently calibrated to
+      administrative caseloads (see imputations.yaml) — simulated
+      CCDF receipt equals simulated CCDF eligibility, which
+      overstates actual enrolment.
     sources:
       - label: CCDF variables (federal)
         url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/hhs/ccdf

@@ -808,7 +808,8 @@ export const programs: Program[] = [
     fullName: 'Child Care and Development Fund',
     agency: 'HHS',
     status: 'partial',
-    coverage: 'AK, CA, CO, CT, DE, DC, IL, MA, ME, NC, NE, PA, TX',
+    notes: 'CCDF is a federal block grant — every state and DC operate a CCDF-funded child-care subsidy program. The state list below tracks how many of those state programs are implemented end-to-end in policyengine-us (with the state agency\'s actual eligibility, copay, and payment-rate rules), not which states have CCDF at all.',
+    coverage: '18 state programs implemented + 7 in open PRs',
     stateImplementations: [
       {
         state: 'AK',
@@ -952,6 +953,54 @@ export const programs: Program[] = [
         }
       },
       {
+        state: 'NH',
+        status: 'complete',
+        name: 'New Hampshire CCAP',
+        fullName: 'New Hampshire Child Care Assistance Program',
+        variable: 'nh_ccap',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/nh/dhhs/ccap`,
+          variables: `${GITHUB_BASE}/variables/gov/states/nh/dhhs/ccap`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/nh/dhhs/ccap`,
+        }
+      },
+      {
+        state: 'NJ',
+        status: 'complete',
+        name: 'New Jersey CCAP',
+        fullName: 'New Jersey Child Care Assistance Program',
+        variable: 'nj_ccap',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/nj/njdhs/ccap`,
+          variables: `${GITHUB_BASE}/variables/gov/states/nj/njdhs/ccap`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/nj/njdhs/ccap`,
+        }
+      },
+      {
+        state: 'RI',
+        status: 'complete',
+        name: 'Rhode Island CCAP',
+        fullName: 'Rhode Island Child Care Assistance Program',
+        variable: 'ri_ccap',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/ri/dhs/ccap`,
+          variables: `${GITHUB_BASE}/variables/gov/states/ri/dhs/ccap`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/ri/dhs/ccap`,
+        }
+      },
+      {
+        state: 'SC',
+        status: 'complete',
+        name: 'South Carolina CCAP',
+        fullName: 'South Carolina Child Care Assistance Program',
+        variable: 'sc_ccap',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/sc/dss/ccap`,
+          variables: `${GITHUB_BASE}/variables/gov/states/sc/dss/ccap`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/sc/dss/ccap`,
+        }
+      },
+      {
         state: 'TX',
         status: 'complete',
         name: 'Texas CCS',
@@ -961,6 +1010,89 @@ export const programs: Program[] = [
           parameters: `${GITHUB_BASE}/parameters/gov/states/tx/twc/ccs`,
           variables: `${GITHUB_BASE}/variables/gov/states/tx/twc/ccs`,
           tests: `${TESTS_BASE}/policy/baseline/gov/states/tx/twc/ccs`,
+        }
+      },
+      {
+        state: 'VA',
+        status: 'complete',
+        name: 'Virginia CCSP',
+        fullName: 'Virginia Child Care Subsidy Program',
+        variable: 'va_ccsp',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/va/dss/ccsp`,
+          variables: `${GITHUB_BASE}/variables/gov/states/va/dss/ccsp`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/va/dss/ccsp`,
+        }
+      },
+      // Open PRs in policyengine-us — implementation work in flight.
+      {
+        state: 'AL',
+        status: 'inProgress',
+        name: 'Alabama CCSP',
+        fullName: 'Alabama Child Care Subsidy Program',
+        notes: 'Open PR #8322',
+        githubLinks: {
+          variables: `https://github.com/PolicyEngine/policyengine-us/pull/8322`,
+        }
+      },
+      {
+        state: 'AR',
+        status: 'inProgress',
+        name: 'Arkansas SRA',
+        fullName: 'Arkansas School Readiness Assistance (formerly CCAP)',
+        notes: 'Open PR #8324',
+        githubLinks: {
+          variables: `https://github.com/PolicyEngine/policyengine-us/pull/8324`,
+        }
+      },
+      {
+        state: 'AZ',
+        status: 'inProgress',
+        name: 'Arizona CCAP',
+        fullName: 'Arizona Child Care Assistance Program',
+        notes: 'Open PR #8373',
+        githubLinks: {
+          variables: `https://github.com/PolicyEngine/policyengine-us/pull/8373`,
+        }
+      },
+      {
+        state: 'GA',
+        status: 'inProgress',
+        name: 'Georgia CAPS',
+        fullName: 'Georgia Childcare and Parent Services',
+        notes: 'Open PR #7958',
+        githubLinks: {
+          variables: `https://github.com/PolicyEngine/policyengine-us/pull/7958`,
+        }
+      },
+      {
+        state: 'MD',
+        status: 'inProgress',
+        name: 'Maryland CCS',
+        fullName: 'Maryland Child Care Scholarship',
+        notes: 'Open PR #7889',
+        githubLinks: {
+          variables: `https://github.com/PolicyEngine/policyengine-us/pull/7889`,
+        }
+      },
+      {
+        state: 'WA',
+        status: 'inProgress',
+        name: 'Washington WCCC',
+        fullName: 'Washington Working Connections Child Care',
+        notes: 'Open PR #8208',
+        githubLinks: {
+          variables: `https://github.com/PolicyEngine/policyengine-us/pull/8208`,
+        }
+      },
+      {
+        state: 'WV',
+        status: 'inProgress',
+        name: 'West Virginia CCAP',
+        fullName: 'West Virginia Child Care Assistance Program',
+        notes: 'Open PR #7948',
+        githubLinks: {
+          variables: `https://github.com/PolicyEngine/policyengine-us/pull/7948`,
         }
       },
     ],
