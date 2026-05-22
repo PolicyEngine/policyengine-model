@@ -364,14 +364,17 @@ export interface Concept {
 
 export type ImputationMethod =
   | 'logistic-regression'
+  | 'baseline-import-and-logit'
   | 'caseload-driven'
   | 'l0-calibration'
   | 'gradient-reweighting'
   | 'statistical-matching'
+  | 'parameterized-take-up'
   | 'rule-based'
   | 'survey-reported'
   | 'census-research-file'
   | 'machine-learning'
+  | 'not-modeled'
   | 'other'
   | 'unknown';
 

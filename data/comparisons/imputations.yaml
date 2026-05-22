@@ -234,16 +234,21 @@ imputations:
     concept: medicaid-participation
     method: l0-calibration
     description: >
-      Medicaid eligibility is computed rule-by-rule by state. The
-      Enhanced CPS assigns `takes_up_medicaid_if_eligible` with
-      state-specific KFF / MACPAC-derived priors and preserves reported
-      Medicaid coverage at interview as an enrollment anchor. Calibration
-      rerandomizes the Medicaid gate for take-up-affected targets and L0
-      reweighting governs final Medicaid enrollment counts and spending.
+      PolicyEngine computes annual Medicaid eligibility through category
+      and state rules. Enhanced CPS construction assigns Medicaid take-up
+      with state-specific KFF / MACPAC-derived priors and preserves
+      reported Medicaid coverage at interview as an enrollment anchor.
+      Calibration rerandomizes the Medicaid gate for take-up-affected
+      targets, and L0 reweighting determines final state and national
+      Medicaid enrollment counts. Because PolicyEngine values enrolled
+      people with state and eligibility-group per-capita spending rather
+      than service-level claims or a rule-computed medical benefit,
+      Medicaid spending mostly follows enrollment times the per-capita
+      cost table.
     baseDataset: Enhanced CPS
     calibrationTargets:
       - state and national Medicaid enrollment counts
-      - national Medicaid spending
+      - national Medicaid spending implied by enrollment and per-capita costs
     documentationUrl: https://github.com/PolicyEngine/policyengine-us-data
     reproducible: yes
     sources:
@@ -265,23 +270,113 @@ imputations:
 
   - model: trim3
     concept: medicaid-participation
-    method: logistic-regression
+    method: baseline-import-and-logit
     description: >
-      TRIM3's Medicaid/CHIP module simulates monthly eligibility by
+      TRIM3's MedicaidCHIP module simulates monthly eligibility by
       pathway and distinguishes eligibility from enrollment. Baseline
-      enrollment is produced outside the module and imported as an
-      enrollment decision file. In alternative simulations, baseline-
-      eligible people keep their baseline enrollment decision, while
-      newly eligible people receive documented logit enrollment
-      probabilities that are combined to a family-level decision.
-      Continuous-enrollment settings then extend coverage under state
-      and category-specific program rules.
+      enrollment comes from an out-of-model SAS enrollment decision file.
+      Alternative simulations keep baseline enrollment decisions for
+      people eligible in the same month in the baseline; newly eligible
+      people receive logit enrollment probabilities that TRIM3 combines
+      into a family-level decision. Continuous-enrollment settings then
+      extend coverage under state and category-specific program rules.
     baseDataset: CPS-ASEC
-    documentationUrl: https://boreas.urban.org/documentation/Medicaid/Main.php
+    documentationUrl: https://boreas.urban.org/documentation/MedicaidCHIP/Main.php
     reproducible: no
     sources:
-      - label: TRIM3 Medicaid/SCHIP methodology
-        url: https://boreas.urban.org/documentation/Medicaid/Main.php
+      - label: TRIM3 Medicaid and CHIP module
+        url: https://boreas.urban.org/documentation/MedicaidCHIP/Main.php
+        kind: self
+
+  - model: attis
+    concept: medicaid-participation
+    method: not-modeled
+    description: >
+      ATTIS does not model Medicaid participation. Urban's separate
+      Medicaid/CHIP Eligibility Simulation Model approximates Medicaid
+      and CHIP eligibility, and HIPSM simulates Medicaid/CHIP enrollment,
+      costs, and broader health coverage choices.
+    baseDataset: ACS for separate Urban health models; not ATTIS
+    documentationUrl: https://www.urban.org/research-methods/attis-microsimulation-model
+    reproducible: no
+    sources:
+      - label: ATTIS canonical page
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
+        kind: self
+      - label: Urban Medicaid/CHIP Eligibility Simulation Model
+        url: https://www.urban.org/research/publication/urban-institute-health-policy-centers-medicaidchip-eligibility-simulation-model
+        kind: self
+      - label: Urban HIPSM overview
+        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/health-insurance-policy-simulation-model-hipsm
+        kind: self
+
+  - model: policyengine-us
+    concept: chip-participation
+    method: parameterized-take-up
+    description: >
+      PolicyEngine computes annual CHIP eligibility through child and
+      pregnant-person pathways, then applies a CHIP take-up gate and
+      state per-capita CHIP payment. Upstream PolicyEngine-US defaults
+      the eligible-person CHIP enrollment gate to true unless data or a
+      reform overrides it. Current Enhanced CPS take-up construction does
+      not seed a separate external CHIP prior or calibrate a separate CHIP
+      enrollment target in the shared Medicaid rerandomization target list.
+    baseDataset: Enhanced CPS
+    documentationUrl: https://github.com/PolicyEngine/policyengine-us
+    reproducible: yes
+    sources:
+      - label: PolicyEngine US CHIP eligibility formula
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/hhs/chip/is_chip_eligible.py
+        kind: self
+      - label: PolicyEngine US CHIP take-up formula
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/hhs/chip/takes_up_chip_if_eligible.py
+        kind: self
+      - label: policyengine-us-data CPS take-up assignment
+        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/datasets/cps/cps.py
+        kind: self
+      - label: policyengine-us-data take-up target mapping
+        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/utils/takeup.py
+        kind: self
+
+  - model: trim3
+    concept: chip-participation
+    method: baseline-import-and-logit
+    description: >
+      TRIM3 handles CHIP participation inside the same MedicaidCHIP
+      enrollment system as Medicaid. The module treats Medicaid and CHIP
+      survey reporters as an undifferentiated reporter group, assigns
+      monthly baseline enrollment through an out-of-model file, and uses
+      the alternative-run logit for newly eligible people. Public
+      documentation reports CHIP child enrollment probabilities from 26%
+      to 93% by age and family income, plus 58% for adult CHIP.
+    baseDataset: CPS-ASEC
+    documentationUrl: https://boreas.urban.org/documentation/MedicaidCHIP/Main.php
+    reproducible: no
+    sources:
+      - label: TRIM3 Medicaid and CHIP module
+        url: https://boreas.urban.org/documentation/MedicaidCHIP/Main.php
+        kind: self
+
+  - model: attis
+    concept: chip-participation
+    method: not-modeled
+    description: >
+      ATTIS does not model CHIP participation. Urban's separate
+      Medicaid/CHIP Eligibility Simulation Model approximates Medicaid
+      and CHIP eligibility, and HIPSM simulates Medicaid/CHIP enrollment
+      and broader health coverage choices.
+    baseDataset: ACS for separate Urban health models; not ATTIS
+    documentationUrl: https://www.urban.org/research-methods/attis-microsimulation-model
+    reproducible: no
+    sources:
+      - label: ATTIS canonical page
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
+        kind: self
+      - label: Urban Medicaid/CHIP Eligibility Simulation Model
+        url: https://www.urban.org/research/publication/urban-institute-health-policy-centers-medicaidchip-eligibility-simulation-model
+        kind: self
+      - label: Urban HIPSM overview
+        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/health-insurance-policy-simulation-model-hipsm
         kind: self
 
   # ============================ ACA / PTC participation =======================
