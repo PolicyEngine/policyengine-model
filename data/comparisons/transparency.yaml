@@ -785,7 +785,7 @@ transparency:
     codePublic: yes
     codeLicense: GPL-3.0
     codeUrl: https://github.com/Research-Division/policy-rules-database
-    contributorCount: unknown
+    contributorCount: 9
     issueTrackerPublic: yes
     documentationPublic: yes
     documentationUrl: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
@@ -804,7 +804,7 @@ transparency:
         url: https://github.com/Research-Division/policy-rules-database
         kind: self
         supports: [codePublic, codeLicense, issueTrackerPublic,
-                   datasetPublic, reproducibleBuilds]
+                   contributorCount, datasetPublic, reproducibleBuilds]
       - label: Atlanta Fed — Policy Rules Database project page
         url: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
         kind: self

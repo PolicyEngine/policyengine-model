@@ -3505,6 +3505,392 @@ coverage:
         url: https://taxfoundation.org/research/all/federal/general-equilibrium-model/
         kind: self
 
+  # ============================ Atlanta Fed PRD ==============================
+  - model: atlanta-fed-prd
+    program: us-federal-income-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    docsUrl: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
+    asOfYear: 2026
+    notes: >
+      PRD includes federal personal income tax and its v5.0.0 release
+      added rule year 2026 for federal taxes and tax credits.
+    sources:
+      - label: Atlanta Fed — Policy Rules Database
+        url: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
+        kind: self
+      - label: Research-Division/policy-rules-database GitHub releases
+        url: https://github.com/Research-Division/policy-rules-database/releases
+        kind: self
+
+  - model: atlanta-fed-prd
+    program: us-payroll-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    docsUrl: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
+    asOfYear: 2026
+    notes: PRD includes FICA payroll tax rules.
+    sources:
+      - label: Atlanta Fed — Policy Rules Database
+        url: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
+        kind: self
+      - label: Research-Division/policy-rules-database GitHub releases
+        url: https://github.com/Research-Division/policy-rules-database/releases
+        kind: self
+
+  - model: atlanta-fed-prd
+    program: us-eitc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    docsUrl: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
+    asOfYear: 2026
+    notes: PRD includes the federal Earned Income Tax Credit.
+    sources:
+      - label: Atlanta Fed — Policy Rules Database
+        url: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
+        kind: self
+      - label: Research-Division/policy-rules-database GitHub releases
+        url: https://github.com/Research-Division/policy-rules-database/releases
+        kind: self
+
+  - model: atlanta-fed-prd
+    program: us-ctc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    docsUrl: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
+    asOfYear: 2026
+    notes: PRD includes the federal Child Tax Credit.
+    sources:
+      - label: Atlanta Fed — Policy Rules Database
+        url: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
+        kind: self
+      - label: Research-Division/policy-rules-database GitHub releases
+        url: https://github.com/Research-Division/policy-rules-database/releases
+        kind: self
+
+  - model: atlanta-fed-prd
+    program: us-cdcc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    docsUrl: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
+    asOfYear: 2026
+    notes: PRD includes the federal Child and Dependent Care Tax Credit.
+    sources:
+      - label: Atlanta Fed — Policy Rules Database
+        url: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
+        kind: self
+      - label: Research-Division/policy-rules-database GitHub releases
+        url: https://github.com/Research-Division/policy-rules-database/releases
+        kind: self
+
+  - model: atlanta-fed-prd
+    program: us-premium-tax-credit
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    docsUrl: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
+    asOfYear: 2026
+    notes: >
+      PRD includes Health Insurance Marketplace subsidies and release
+      notes document 2026 ACA subsidy updates.
+    sources:
+      - label: Atlanta Fed — Policy Rules Database
+        url: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
+        kind: self
+      - label: Research-Division/policy-rules-database GitHub releases
+        url: https://github.com/Research-Division/policy-rules-database/releases
+        kind: self
+
+  - model: atlanta-fed-prd
+    program: us-estate-tax
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    asOfYear: unknown
+    notes: Estate and gift taxes are outside PRD's documented program list.
+    sources:
+      - label: Atlanta Fed — Policy Rules Database
+        url: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
+        kind: self
+
+  - model: atlanta-fed-prd
+    program: us-tariffs
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    asOfYear: unknown
+    notes: Tariffs are outside PRD's documented program list.
+    sources:
+      - label: Atlanta Fed — Policy Rules Database
+        url: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
+        kind: self
+
+  - model: atlanta-fed-prd
+    program: us-snap
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    docsUrl: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
+    asOfYear: 2026
+    notes: >
+      PRD includes SNAP; release notes document 2026 SNAP rule updates
+      and a later 2026 SNAP inclusion fix.
+    sources:
+      - label: Atlanta Fed — Policy Rules Database
+        url: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
+        kind: self
+      - label: Research-Division/policy-rules-database GitHub releases
+        url: https://github.com/Research-Division/policy-rules-database/releases
+        kind: self
+
+  - model: atlanta-fed-prd
+    program: us-tanf
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    docsUrl: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
+    asOfYear: 2026
+    notes: PRD includes TANF and release notes document 2026 TANF updates.
+    sources:
+      - label: Atlanta Fed — Policy Rules Database
+        url: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
+        kind: self
+      - label: Research-Division/policy-rules-database GitHub releases
+        url: https://github.com/Research-Division/policy-rules-database/releases
+        kind: self
+
+  - model: atlanta-fed-prd
+    program: us-ssi
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    docsUrl: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
+    asOfYear: 2026
+    notes: PRD includes SSI and release notes document 2026 SSI updates.
+    sources:
+      - label: Atlanta Fed — Policy Rules Database
+        url: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
+        kind: self
+      - label: Research-Division/policy-rules-database GitHub releases
+        url: https://github.com/Research-Division/policy-rules-database/releases
+        kind: self
+
+  - model: atlanta-fed-prd
+    program: us-ssi-state-supplement
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    asOfYear: unknown
+    notes: >
+      PRD lists SSI, but public PRD documentation does not identify
+      optional state supplementary payments as a separate rule set.
+    sources:
+      - label: Atlanta Fed — Policy Rules Database
+        url: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
+        kind: self
+
+  - model: atlanta-fed-prd
+    program: us-medicaid
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    docsUrl: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
+    asOfYear: 2025
+    notes: >
+      PRD includes Medicaid/CHIP. GitHub release notes document 2025
+      Medicaid/CHIP updates; the Atlanta Fed page notes that program-rule
+      availability varies by state and year.
+    sources:
+      - label: Atlanta Fed — Policy Rules Database
+        url: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
+        kind: self
+      - label: Research-Division/policy-rules-database GitHub releases
+        url: https://github.com/Research-Division/policy-rules-database/releases
+        kind: self
+
+  - model: atlanta-fed-prd
+    program: us-chip
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    docsUrl: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
+    asOfYear: 2025
+    notes: >
+      PRD documents Medicaid and CHIP together. Public release notes show
+      2025 Medicaid/CHIP updates.
+    sources:
+      - label: Atlanta Fed — Policy Rules Database
+        url: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
+        kind: self
+      - label: Research-Division/policy-rules-database GitHub releases
+        url: https://github.com/Research-Division/policy-rules-database/releases
+        kind: self
+
+  - model: atlanta-fed-prd
+    program: us-wic
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    docsUrl: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
+    asOfYear: 2026
+    notes: PRD includes WIC and release notes document 2026 WIC updates.
+    sources:
+      - label: Atlanta Fed — Policy Rules Database
+        url: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
+        kind: self
+      - label: Research-Division/policy-rules-database GitHub releases
+        url: https://github.com/Research-Division/policy-rules-database/releases
+        kind: self
+
+  - model: atlanta-fed-prd
+    program: us-section-8
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    docsUrl: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
+    asOfYear: 2025
+    notes: >
+      PRD includes Housing Choice Voucher Program rules; release notes
+      document a 2025 Section 8 update.
+    sources:
+      - label: Atlanta Fed — Policy Rules Database
+        url: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
+        kind: self
+      - label: Research-Division/policy-rules-database GitHub releases
+        url: https://github.com/Research-Division/policy-rules-database/releases
+        kind: self
+
+  - model: atlanta-fed-prd
+    program: us-ssdi
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    docsUrl: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
+    asOfYear: 2026
+    notes: PRD includes SSDI and release notes document 2026 SSDI updates.
+    sources:
+      - label: Atlanta Fed — Policy Rules Database
+        url: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
+        kind: self
+      - label: Research-Division/policy-rules-database GitHub releases
+        url: https://github.com/Research-Division/policy-rules-database/releases
+        kind: self
+
+  - model: atlanta-fed-prd
+    program: us-oasi
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    asOfYear: unknown
+    notes: PRD lists SSDI but not Social Security retirement or survivors benefits.
+    sources:
+      - label: Atlanta Fed — Policy Rules Database
+        url: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
+        kind: self
+
+  - model: atlanta-fed-prd
+    program: us-ui
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    asOfYear: unknown
+    notes: Unemployment Insurance is outside PRD's documented program list.
+    sources:
+      - label: Atlanta Fed — Policy Rules Database
+        url: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
+        kind: self
+
+  - model: atlanta-fed-prd
+    program: us-liheap
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    asOfYear: unknown
+    notes: >
+      PRD v5.1.0 release notes say maintainers discontinued LIHEAP
+      maintenance and removed LIHEAP files.
+    sources:
+      - label: Research-Division/policy-rules-database GitHub releases
+        url: https://github.com/Research-Division/policy-rules-database/releases
+        kind: self
+
+  - model: atlanta-fed-prd
+    program: us-ccdf
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    docsUrl: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
+    asOfYear: 2026
+    notes: >
+      PRD includes CCDF. Release notes document 2026 CCDF updates and a
+      later Kentucky CCDF copay adjustment.
+    sources:
+      - label: Atlanta Fed — Policy Rules Database
+        url: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
+        kind: self
+      - label: Research-Division/policy-rules-database GitHub releases
+        url: https://github.com/Research-Division/policy-rules-database/releases
+        kind: self
+
+  - model: atlanta-fed-prd
+    program: us-state-income-tax
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    docsUrl: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
+    asOfYear: 2026
+    notes: >
+      PRD includes state personal income tax and release notes document
+      2026 state income tax information.
+    sources:
+      - label: Atlanta Fed — Policy Rules Database
+        url: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
+        kind: self
+      - label: Research-Division/policy-rules-database GitHub releases
+        url: https://github.com/Research-Division/policy-rules-database/releases
+        kind: self
+
+  - model: atlanta-fed-prd
+    program: us-state-eitc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    docsUrl: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
+    asOfYear: 2025
+    notes: >
+      PRD includes state EITCs; release notes document 2025 state EITC
+      updates.
+    sources:
+      - label: Atlanta Fed — Policy Rules Database
+        url: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
+        kind: self
+      - label: Research-Division/policy-rules-database GitHub releases
+        url: https://github.com/Research-Division/policy-rules-database/releases
+        kind: self
+
+  - model: atlanta-fed-prd
+    program: us-state-ctc
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    docsUrl: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
+    asOfYear: 2025
+    notes: >
+      PRD includes state Child Tax Credits; release notes document 2025
+      state CTC updates.
+    sources:
+      - label: Atlanta Fed — Policy Rules Database
+        url: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
+        kind: self
+      - label: Research-Division/policy-rules-database GitHub releases
+        url: https://github.com/Research-Division/policy-rules-database/releases
+        kind: self
+
   - model: nber-taxsim
     program: us-federal-income-tax
     status: implemented

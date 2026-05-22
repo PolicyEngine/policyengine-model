@@ -876,8 +876,8 @@ models:
     license: GPL-3.0
     codePublic: yes
     codeUrl: https://github.com/Research-Division/policy-rules-database
-    languages: [Python]
-    primaryDataset: state and federal benefit-program parameter tables
+    languages: [R]
+    primaryDataset: PRD RData parameter tables for public assistance programs and tax policies
     documentationUrl: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
     summary: >
       Open-source (GPL-3.0) database of federal and state benefit-program
@@ -892,7 +892,7 @@ models:
       integratedMicrodata: no
       localAreas: yes
       publicInterface: partial
-      apiAccess: unknown
+      apiAccess: no
     sources:
       - label: Atlanta Fed — Policy Rules Database project page
         url: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
