@@ -252,13 +252,22 @@ imputations:
       Medicaid eligibility is computed rule-by-rule by state. The
       Enhanced CPS assigns `takes_up_medicaid_if_eligible` with
       state-specific KFF / MACPAC-derived priors and preserves reported
-      Medicaid coverage at interview as an enrollment anchor. Calibration
-      rerandomizes the Medicaid gate for take-up-affected targets and L0
-      reweighting governs final Medicaid enrollment counts and spending.
+      Medicaid coverage at interview as an enrollment anchor.
+      Calibration rerandomizes the Medicaid gate for take-up-affected
+      targets and L0 reweighting governs final Medicaid enrollment
+      counts. Important methodological caveat: unlike SNAP / TANF /
+      SSI where the per-unit benefit is a rule-computed dollar
+      amount (a function of income, household size, deductions),
+      Medicaid has no per-individual benefit formula in the model —
+      spending is assigned as a per-capita constant from CMS
+      administrative data. So "Medicaid spending" effectively falls
+      out as (enrolled people × per-capita spend) and a separate
+      L0 dollar target adds little information beyond the enrollment
+      count target.
     baseDataset: Enhanced CPS
     calibrationTargets:
-      - state and national Medicaid enrollment counts
-      - national Medicaid spending
+      - state and national Medicaid enrollment counts (primary)
+      - national Medicaid spending (derivative — = enrolled × per-capita constant)
     documentationUrl: https://github.com/PolicyEngine/policyengine-us-data
     reproducible: yes
     sources:
