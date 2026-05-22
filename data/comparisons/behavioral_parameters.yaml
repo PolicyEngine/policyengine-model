@@ -69,7 +69,7 @@ behavioralParameters:
     policyScope: SNAP, ACA/PTC, Medicaid, TANF, SSI, EITC, WIC, Head Start, DC PTC, voluntary filing
     margin: program take-up and claiming gates
     functionalForm: Seeded random draws from external take-up or claiming-rate tables; selected programs preserve reported-recipient anchors.
-    notes: These are input-data priors, not endogenous behavioral elasticities. Final population-level take-up-sensitive totals are governed by calibration and reweighting where targets are available.
+    notes: These are input-data priors, not endogenous behavioral elasticities. Medicaid uses state-specific priors; the current shared take-up construction does not include a separate external CHIP prior. Calibration and reweighting determine final population-level take-up-sensitive totals where targets are available.
     sources:
       - label: policyengine-us-data CPS take-up assignment
         url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/datasets/cps/cps.py
@@ -79,6 +79,27 @@ behavioralParameters:
         kind: self
       - label: policyengine-us-data take-up target mapping
         url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/utils/takeup.py
+        kind: self
+
+  - model: policyengine-us
+    domain: take-up
+    kind: take-up-model
+    parameter: chip_take_up_gate_default
+    label: CHIP default enrollment gate
+    status: numeric
+    value: 1
+    unit: default enrollment probability
+    population: CHIP-eligible people
+    policyScope: CHIP
+    margin: program take-up
+    functionalForm: Boolean enrollment gate defaults to true unless data or a reform overrides it.
+    notes: PolicyEngine US Data currently does not seed a separate external CHIP prior in the shared CPS take-up assignment.
+    sources:
+      - label: PolicyEngine US CHIP take-up formula
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/hhs/chip/takes_up_chip_if_eligible.py
+        kind: self
+      - label: policyengine-us-data CPS take-up assignment
+        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/datasets/cps/cps.py
         kind: self
 
   # ============================ TRIM3 / Urban ================================
@@ -108,10 +129,11 @@ behavioralParameters:
     population: Medicaid/CHIP eligible people
     policyScope: Medicaid and CHIP
     margin: program take-up
-    functionalForm: Alternative runs use a logit equation to assign enrollment probabilities for people not eligible in baseline.
+    functionalForm: Alternative runs use a logit equation for people not eligible in baseline, then combine person probabilities into a family probability by a max/min/average rule.
+    notes: Public documentation reports alternative-run probabilities of 39-96% for Medicaid children, 26-93% for CHIP children, 74% for adult Medicaid, 58% for adult CHIP, 77-81% for disabled adults, and 74-79% for elderly people.
     sources:
-      - label: TRIM3 Medicaid/SCHIP documentation
-        url: https://boreas.urban.org/documentation/Medicaid/Main.php
+      - label: TRIM3 Medicaid and CHIP documentation
+        url: https://boreas.urban.org/documentation/MedicaidCHIP/Main.php
         kind: self
 
   - model: attis

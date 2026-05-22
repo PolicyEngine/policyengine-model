@@ -75,6 +75,8 @@ const BOT_BLOCKED_DOMAINS = new Set([
   'www.entitledto.co.uk',
   'www.ssa.gov',
   'www.cbpp.org',
+  'itep.org',
+  'www.itep.org',
 ]);
 
 const TRANSIENT_ALLOWED_DOMAINS = new Set([
@@ -86,6 +88,7 @@ const TRANSIENT_ALLOWED_DOMAINS = new Set([
   // host, while curl and browsers receive 200s for the same pages.
   'benefitkitchen.com',
   'www.benefitkitchen.com',
+  'otda.ny.gov',
 ]);
 
 // Domains whose pages are JS-rendered or paywalled; Tier 2 quote checks

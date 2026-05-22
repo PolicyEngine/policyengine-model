@@ -45,6 +45,15 @@ concepts:
     category: imputation
     program: us-medicaid
 
+  - id: chip-participation
+    name: CHIP participation imputation
+    description: >
+      Assigning CHIP coverage to eligible children or pregnant people,
+      including cases where Medicaid and CHIP eligibility interact and
+      survey respondents may not distinguish Medicaid from CHIP coverage.
+    category: imputation
+    program: us-chip
+
   - id: aca-ptc-participation
     name: ACA marketplace / PTC take-up imputation
     description: >

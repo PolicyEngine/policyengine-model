@@ -168,10 +168,24 @@ coverage:
     statuteTraceable: yes
     testCoverage: medium
     asOfYear: 2025
-    notes: MAGI Medicaid eligibility modeled; long-term care Medicaid not modeled.
+    notes: >
+      PolicyEngine models person-level annual Medicaid eligibility through
+      a category formula graph. It checks mandatory and optional
+      categories, including SSI recipients, infants, young children, older
+      children, pregnant people, parents/caretaker relatives, young
+      adults, expansion adults, and optional senior or disabled pathways,
+      then applies immigration, work-requirement, and selected
+      state-funded coverage rules. It values coverage with state and
+      eligibility-group per-capita spending rather than service-level
+      claims. It does not model long-term care Medicaid eligibility or
+      claims separately.
     sources:
       - label: Medicaid variables
         url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/hhs/medicaid
+      - label: PolicyEngine US Medicaid eligibility category formula
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/hhs/medicaid/eligibility/categories/medicaid_category.py
+      - label: PolicyEngine US Medicaid cost group formula
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/hhs/medicaid/costs/medicaid_group.py
 
   - model: policyengine-us
     program: us-chip
@@ -179,9 +193,22 @@ coverage:
     statuteTraceable: yes
     testCoverage: medium
     asOfYear: 2025
+    notes: >
+      PolicyEngine models CHIP separately from Medicaid. It checks child,
+      standard pregnant-person, and FCEP pregnant-person pathways with
+      state income limits; child eligibility also checks state CHIP
+      availability, immigration status, Medicaid ineligibility, and
+      employer-sponsored insurance. It applies a CHIP take-up gate and
+      values enrolled people with state per-capita CHIP spending.
     sources:
       - label: CHIP variables
         url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/hhs/chip
+      - label: PolicyEngine US CHIP category formula
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/hhs/chip/chip_category.py
+      - label: PolicyEngine US CHIP child eligibility formula
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/hhs/chip/is_chip_eligible_child.py
+      - label: PolicyEngine US per-capita CHIP formula
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/hhs/chip/per_capita_chip.py
 
   - model: policyengine-us
     program: us-wic
@@ -1479,23 +1506,38 @@ coverage:
     status: implemented
     statuteTraceable: unknown
     testCoverage: unknown
-    docsUrl: https://boreas.urban.org/documentation/Medicaid/Main.php
+    docsUrl: https://boreas.urban.org/documentation/MedicaidCHIP/Main.php
     asOfYear: unknown
+    notes: >
+      TRIM3's MedicaidCHIP module evaluates person-level monthly
+      eligibility and enrollment. It applies eligibility pathways in order
+      and stops at the first pathway that qualifies a person in a month.
+      Documented pathways cover noncitizen rules, elderly and disabled
+      SSI-related and poverty-related routes, MAGI-based child, pregnant,
+      parent, and adult routes, medically needy eligibility, Medicare
+      Savings Programs, and CHIP. The module also derives annual
+      eligibility and enrollment with an ever-on hierarchy.
     sources:
-      - label: TRIM3 Medicaid module
-        url: https://boreas.urban.org/documentation/Medicaid/Main.php
+      - label: TRIM3 Medicaid and CHIP module
+        url: https://boreas.urban.org/documentation/MedicaidCHIP/Main.php
 
   - model: trim3
     program: us-chip
     status: implemented
     statuteTraceable: unknown
     testCoverage: unknown
-    docsUrl: https://boreas.urban.org/documentation/Medicaid/Main.php
+    docsUrl: https://boreas.urban.org/documentation/MedicaidCHIP/Main.php
     asOfYear: unknown
-    notes: Modeled as part of Medicaid module.
+    notes: >
+      TRIM3 models CHIP inside the MedicaidCHIP module rather than as a
+      separate transfer module. It distinguishes CHIP, regular Medicaid,
+      and medically needy annual types, applies a no-other-coverage
+      restriction for CHIP, and maintains separate continuous-enrollment
+      rules for CHIP-funded Medicaid expansions and separate-state CHIP
+      programs.
     sources:
-      - label: TRIM3 Medicaid/CHIP module
-        url: https://boreas.urban.org/documentation/Medicaid/Main.php
+      - label: TRIM3 Medicaid and CHIP module
+        url: https://boreas.urban.org/documentation/MedicaidCHIP/Main.php
 
   - model: trim3
     program: us-wic
@@ -1719,11 +1761,17 @@ coverage:
     statuteTraceable: no
     testCoverage: none
     notes: >
-      Medicaid is not in ATTIS scope. Urban maintains separate models for
-      Medicaid (Medicaid/CHIP Eligibility Simulation Model and HIPSM).
+      ATTIS does not list Medicaid in its public program scope. Urban
+      maintains separate health models for Medicaid and CHIP: the
+      Medicaid/CHIP Eligibility Simulation Model for eligibility and
+      HIPSM for coverage, costs, and policy responses.
     sources:
       - label: ATTIS canonical page (no Medicaid in scope)
         url: https://www.urban.org/research-methods/attis-microsimulation-model
+      - label: Urban Medicaid/CHIP Eligibility Simulation Model
+        url: https://www.urban.org/research/publication/urban-institute-health-policy-centers-medicaidchip-eligibility-simulation-model
+      - label: Urban HIPSM overview
+        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/health-insurance-policy-simulation-model-hipsm
 
   - model: attis
     program: us-section-8
@@ -1861,11 +1909,18 @@ coverage:
     statuteTraceable: no
     testCoverage: none
     notes: >
-      Not in ATTIS scope. Urban maintains separate Medicaid/CHIP
-      Eligibility Simulation Model.
+      ATTIS does not list CHIP in its public program scope. Urban's
+      separate Medicaid/CHIP Eligibility Simulation Model approximates
+      adults' and children's Medicaid and CHIP eligibility with ACS and
+      Puerto Rico Community Survey data, and HIPSM handles health
+      coverage and cost simulations.
     sources:
       - label: ATTIS canonical page (no CHIP in scope)
         url: https://www.urban.org/research-methods/attis-microsimulation-model
+      - label: Urban Medicaid/CHIP Eligibility Simulation Model
+        url: https://www.urban.org/research/publication/urban-institute-health-policy-centers-medicaidchip-eligibility-simulation-model
+      - label: Urban HIPSM overview
+        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/health-insurance-policy-simulation-model-hipsm
 
   # ============================ TPC microsim =================================
   - model: tpc-microsim

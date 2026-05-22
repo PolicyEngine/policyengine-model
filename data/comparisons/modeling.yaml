@@ -105,6 +105,35 @@ modeling:
         url: https://policyengine.github.io/policyengine-us/validation/taxsim.html
         kind: self
 
+  - model: policyengine-us
+    category: health-insurance
+    label: Annual Medicaid and CHIP formula graph
+    detail: >
+      PolicyEngine models Medicaid and CHIP as person-level annual
+      formula graphs. Medicaid assigns one category by precedence, tests
+      immigration status, work requirements, selected state-funded
+      coverage, and take-up, and values enrolled people with
+      state-by-group per-capita costs. CHIP runs separate child and
+      pregnant-person pathways, excludes Medicaid-eligible children and
+      child applicants with employer-sponsored insurance, applies a CHIP
+      take-up gate, and values enrolled people with state per-capita CHIP
+      spending. PolicyEngine does not model month-by-month Medicaid/CHIP
+      eligibility spells or continuous enrollment.
+    scope: Medicaid and CHIP eligibility, enrollment, and per-capita costs
+    sources:
+      - label: PolicyEngine US Medicaid eligibility category formula
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/hhs/medicaid/eligibility/categories/medicaid_category.py
+        kind: self
+      - label: PolicyEngine US Medicaid enrollment formula
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/hhs/medicaid/medicaid_enrolled.py
+        kind: self
+      - label: PolicyEngine US CHIP category formula
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/hhs/chip/chip_category.py
+        kind: self
+      - label: PolicyEngine US CHIP take-up formula
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/hhs/chip/takes_up_chip_if_eligible.py
+        kind: self
+
   - model: trim3
     category: architecture
     label: Program modules on CPS-ASEC
@@ -184,15 +213,43 @@ modeling:
     category: take-up
     label: Medicaid alternative-run enrollment logit
     detail: >
-      TRIM3's Medicaid/CHIP baseline enrollment decisions are produced
-      outside the module and imported. Alternative simulations keep
-      baseline decisions for baseline-eligible people, while newly
-      eligible people receive documented logit enrollment probabilities
-      that are aggregated to family-level decisions.
+      TRIM3's MedicaidCHIP baseline enrollment process runs outside the
+      module and imports monthly enrollment decisions as out-of-model
+      results. Alternative simulations keep baseline decisions for people
+      eligible in the same month in the baseline. For newly eligible
+      people, TRIM3 applies a documented logit equation, combines
+      person-level probabilities into a family-level probability by a
+      max/min/average rule, and compares that probability with a random
+      number. Public documentation reports resulting probabilities such
+      as 39-96% for Medicaid children, 26-93% for CHIP children, 74% for
+      adult Medicaid, 58% for adult CHIP, 77-81% for disabled adults, and
+      74-79% for elderly people.
     scope: Medicaid and CHIP
     sources:
-      - label: TRIM3 Medicaid/SCHIP methodology
-        url: https://boreas.urban.org/documentation/Medicaid/Main.php
+      - label: TRIM3 Medicaid and CHIP enrollment methodology
+        url: https://boreas.urban.org/documentation/MedicaidCHIP/Main.php
+        kind: self
+
+  - model: trim3
+    category: health-insurance
+    label: Monthly MedicaidCHIP eligibility and enrollment module
+    detail: >
+      TRIM3's MedicaidCHIP module evaluates each person in each month.
+      The first eligibility pathway that qualifies a person becomes that
+      month's eligibility type, so one person can qualify through
+      different pathways across the year and family members can qualify
+      through different pathways. The module covers noncitizen tests,
+      elderly and disabled SSI-linked and poverty-linked routes,
+      MAGI-based routes, medically needy eligibility, Medicare Savings
+      Programs, CHIP other-coverage restrictions, annual ever-on
+      eligibility/enrollment types, reporter status, pregnancy imputation,
+      and continuous enrollment. It also reads inputs from AlienPrep,
+      FederalTax or FedTaxImp, SSI, TANF, child support, unemployment,
+      employer-sponsored insurance, and Medicare simulations.
+    scope: Medicaid and CHIP eligibility, enrollment, and reporting status
+    sources:
+      - label: TRIM3 Medicaid and CHIP module
+        url: https://boreas.urban.org/documentation/MedicaidCHIP/Main.php
         kind: self
 
   - model: trim3
@@ -246,6 +303,30 @@ modeling:
         kind: self
       - label: New York child poverty baseline technical memorandum
         url: https://otda.ny.gov/news/meetings/cprac/2023-09-14/attachments/CPRAC-Urban-Institute-Baseline-Technical-Memorandum.pdf
+        kind: self
+
+  - model: attis
+    category: health-insurance
+    label: No Medicaid/CHIP module in ATTIS
+    detail: >
+      Public ATTIS materials list SNAP, TANF, CCDF, housing, LIHEAP, WIC,
+      SSI, payroll taxes, income taxes, tax credits, child support, and
+      unemployment compensation, but not Medicaid or CHIP. Urban handles
+      Medicaid/CHIP through separate health models: the Medicaid/CHIP
+      Eligibility Simulation Model approximates eligibility with ACS and
+      Puerto Rico Community Survey records, while HIPSM simulates health
+      coverage, Medicaid/CHIP enrollment, costs, marketplace coverage,
+      and premiums.
+    scope: Medicaid and CHIP excluded from ATTIS; separate Urban health models
+    sources:
+      - label: ATTIS canonical page
+        url: https://www.urban.org/research-methods/attis-microsimulation-model
+        kind: self
+      - label: Urban Medicaid/CHIP Eligibility Simulation Model
+        url: https://www.urban.org/research/publication/urban-institute-health-policy-centers-medicaidchip-eligibility-simulation-model
+        kind: self
+      - label: Urban HIPSM overview
+        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/health-insurance-policy-simulation-model-hipsm
         kind: self
 
   - model: tpc-microsim
