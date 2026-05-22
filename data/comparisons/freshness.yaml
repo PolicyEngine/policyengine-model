@@ -763,8 +763,8 @@ freshness:
         supports: [updateCadence, notableRegimes]
 
   - model: atlanta-fed-prd
-    latestImplementedYear: unknown
-    forwardYearsThrough: unknown
+    latestImplementedYear: 2026
+    forwardYearsThrough: 2026
     handlesFutureDatedLegislation: no
     updateCadence: continuous
     updateLag: >
@@ -776,8 +776,10 @@ freshness:
       CLIFF tool suite. No reform scenarios.
     notes: >
       Atlanta Fed publishes a PRD_Update_Schedule.md in the public repo
-      and tags releases on GitHub (latest April 2026). The codebase is
-      GPL-3.0 and openly readable.
+      and tags releases on GitHub. PRD v5.0.0 added rule year 2026 for
+      SNAP, ACA subsidies, federal taxes and credits, school meals,
+      TANF, CCDF, WIC, SSI, and SSDI; v5.1.0 added 2026 state income
+      tax information. The codebase is GPL-3.0 and openly readable.
     sources:
       - label: Atlanta Fed — Policy Rules Database project page
         url: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
@@ -787,7 +789,8 @@ freshness:
       - label: Research-Division/policy-rules-database GitHub releases
         url: https://github.com/Research-Division/policy-rules-database/releases
         kind: self
-        supports: [updateCadence, lastMajorRefresh, updateLag]
+        supports: [latestImplementedYear, forwardYearsThrough,
+                   updateCadence, lastMajorRefresh, updateLag]
       - label: PRD_Update_Schedule.md (in-repo release calendar)
         url: https://github.com/Research-Division/policy-rules-database/blob/main/PRD_Update_Schedule.md
         kind: self

@@ -735,8 +735,8 @@ artifacts:
     license: GPL-3.0
     url: https://github.com/Research-Division/policy-rules-database
     description: >
-      Public source repository for the Policy Rules Database, GPL-3.0,
-      with active 2026 commit history.
+      Public R source repository for the Policy Rules Database,
+      GPL-3.0, with active 2026 commit history.
     sources:
       - label: GitHub repository
         url: https://github.com/Research-Division/policy-rules-database

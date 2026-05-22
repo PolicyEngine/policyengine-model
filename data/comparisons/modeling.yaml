@@ -702,6 +702,42 @@ modeling:
         url: https://github.com/Research-Division/policy-rules-database
         kind: self
 
+  - model: atlanta-fed-prd
+    category: tax-modeling
+    label: Federal and state tax-credit rules
+    detail: >
+      PRD includes federal personal income tax, state personal income tax,
+      FICA, federal and state EITCs, federal and state Child Tax Credits,
+      and federal and state Child and Dependent Care Tax Credits. GitHub
+      releases document 2026 updates for federal taxes and credits and
+      state income taxes.
+    scope: federal and state taxes and credits
+    sources:
+      - label: Atlanta Fed Policy Rules Database
+        url: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
+        kind: self
+      - label: Research-Division/policy-rules-database GitHub releases
+        url: https://github.com/Research-Division/policy-rules-database/releases
+        kind: self
+
+  - model: atlanta-fed-prd
+    category: benefit-modeling
+    label: Benefit-cliff program rules
+    detail: >
+      PRD includes rules for CCDF, Head Start, Marketplace subsidies,
+      Section 8 housing vouchers, Medicaid/CHIP, school meals, SSDI,
+      state pre-kindergarten, SNAP, SSI, TANF, and WIC. It standardizes
+      eligibility and benefit parameters for status-quo benefit-cliff
+      calculations; coverage varies by state and year.
+    scope: federal and state benefit programs
+    sources:
+      - label: Atlanta Fed Policy Rules Database
+        url: https://www.atlantafed.org/what-we-study/workforce-development/advancing-careers-for-low-income-families/policy-rules-database
+        kind: self
+      - label: Policy Rules Database GitHub repository
+        url: https://github.com/Research-Division/policy-rules-database
+        kind: self
+
   - model: nber-taxsim
     category: tax-modeling
     label: Input-record federal and state tax calculator
