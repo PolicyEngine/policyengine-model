@@ -2,12 +2,13 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { colors, typography, spacing } from '../../designTokens';
 import { pipelineStages } from '../../data/pipelineStages';
 import { ukPipelineStages } from '../../data/ukPipelineStages';
 import type { PipelineStage } from '../../data/pipelineStages';
 import type { Country } from '../../hooks/useCountry';
+import { usePublicBasePrefix } from '../../hooks/usePublicBasePrefix';
 import {
   IconChartBar, IconSettings, IconBuildingBank, IconLink, IconScale,
   IconMap, IconMapPin, IconCoin, IconShoppingCart, IconHeartbeat,
@@ -102,8 +103,7 @@ export default function DataPipeline({ country = 'us' }: { country?: Country }) 
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
   const stage = allStages[activeStage];
 
-  const fullPath = usePathname();
-  const basePrefix = fullPath.match(/^\/\w+\/model/)?.[0] ?? '';
+  const basePrefix = usePublicBasePrefix();
   const searchParams = useSearchParams();
   const search = searchParams.toString();
   const buildHref = (path: string) => {

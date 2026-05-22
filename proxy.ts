@@ -13,7 +13,9 @@ import { NextRequest, NextResponse } from 'next/server';
  *
  *   2. Standalone preview at `/us/{path}` or `/uk/{path}`: this proxy
  *      rewrites to `/{path}` and injects `x-pe-country` so the same
- *      server code path works.
+ *      server code path works. It also accepts the production public
+ *      mount shape `/us/model/{path}` so shareable URLs work when this
+ *      app is run outside policyengine-app-v2.
  *
  * Country is never "all" — every comparison page is scoped to one
  * country, matching the rules-coverage tab. Default is `us` when no
@@ -34,6 +36,7 @@ import { NextRequest, NextResponse } from 'next/server';
 const LEGACY_COMPARISON_DESTINATIONS: Record<string, string> = {
   '/comparison': '/?compare=all',
   '/comparison/coverage': '/rules/coverage?compare=all',
+  '/comparison/modeling': '/?compare=all',
   '/comparison/methods': '/data/calibration?compare=all',
   '/comparison/transparency': '/?compare=all',
   '/comparison/freshness': '/?compare=all',
@@ -51,7 +54,13 @@ export function proxy(req: NextRequest) {
   if (!match) return NextResponse.next();
 
   const country = match[1];
-  const rest = match[2] ?? '/';
+  const rawRest = match[2] ?? '/';
+  const hasModelMount =
+    rawRest === '/model' || rawRest.startsWith('/model/');
+  const rest = hasModelMount
+    ? rawRest.slice('/model'.length) || '/'
+    : rawRest;
+  const publicBase = hasModelMount ? `/${country}/model` : `/${country}`;
 
   // 2. Country-prefixed legacy `/{country}/comparison/*` paths: emit
   //    a 308 to the country-preserved new path. (next.config redirects
@@ -59,7 +68,7 @@ export function proxy(req: NextRequest) {
   //    have already stripped the prefix below.)
   if (LEGACY_COMPARISON_DESTINATIONS[rest]) {
     const dest = LEGACY_COMPARISON_DESTINATIONS[rest];
-    const target = `/${country}${dest}`;
+    const target = `${publicBase}${dest}`;
     const url = req.nextUrl.clone();
     const [path, query] = target.split('?');
     url.pathname = path;
@@ -72,10 +81,10 @@ export function proxy(req: NextRequest) {
     return NextResponse.redirect(url, 308);
   }
 
-  // 3. Default: rewrite /us/foo/bar -> /foo/bar (preserving search
-  //    params) and inject the country header. The browser URL still
-  //    shows the /us/ prefix, which `useCountryFromUrl` reads
-  //    client-side after hydration.
+  // 3. Default: rewrite /us/foo/bar or /us/model/foo/bar -> /foo/bar
+  //    (preserving search params) and inject the country header. The
+  //    browser URL still shows the public prefix, which client-side
+  //    routing preserves after hydration.
   const url = req.nextUrl.clone();
   url.pathname = rest;
 

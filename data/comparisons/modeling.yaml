@@ -82,6 +82,29 @@ modeling:
         url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/calibration/target_config.yaml
         kind: self
 
+  - model: policyengine-us
+    category: tax-modeling
+    label: Open state income tax formula graph
+    detail: >
+      PolicyEngine computes state individual income tax inside the same
+      household tax-benefit simulation as federal taxes and transfers. The
+      public rule set covers income-taxing states and DC with
+      state-specific filing treatment, income-base definitions,
+      deductions, exemptions, rate schedules, and refundable and
+      nonrefundable credits where PolicyEngine implements them;
+      PolicyEngine uses comparable TAXSIM-style outputs for validation.
+    scope: state individual income tax
+    sources:
+      - label: PolicyEngine US modeled policies metadata
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/programs.yaml
+        kind: self
+      - label: PolicyEngine US state tax parameters
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/parameters/gov/states
+        kind: self
+      - label: PolicyEngine US validation against TAXSIM
+        url: https://policyengine.github.io/policyengine-us/validation/taxsim.html
+        kind: self
+
   - model: trim3
     category: architecture
     label: Program modules on CPS-ASEC
@@ -96,6 +119,32 @@ modeling:
         kind: self
       - label: Zedlewski (Urban) — TRIM, A Tool for Social Policy Analysis
         url: https://www.urban.org/sites/default/files/publication/82921/2000878-TRIM-A-Tool-for-Social-Policy-Analysis.pdf
+        kind: self
+
+  - model: trim3
+    category: tax-modeling
+    label: Rule-table StateTax module after federal tax simulation
+    detail: >
+      TRIM3's StateTax module simulates state income tax liability only,
+      not other state taxes. It starts from potential tax units and
+      federal tax outputs that the Federal Tax module creates, then runs a
+      common calculation sequence that program rules control. The module
+      uses some national rules and mostly state-specific settings for
+      filing status, income base, deductions, exemptions, rates and
+      brackets, and credits. TRIM3 encodes those categories as common rule
+      dimensions.
+      When those dimensions cannot capture a state law, the module invokes
+      named special-processing options for particular states or rule
+      groups. Credits include EITCs, child care credits, low-income
+      credits, property tax credits, and selected other credits, with
+      refundable credits able to produce negative final liability.
+    scope: state individual income tax on TRIM3 CPS-ASEC tax units
+    sources:
+      - label: TRIM3 StateTax module overview
+        url: https://boreas.urban.org/documentation/StateTax/main.php
+        kind: self
+      - label: TRIM3 technical documentation index
+        url: https://boreas.urban.org/T3Technical.php
         kind: self
 
   - model: trim3
@@ -176,6 +225,29 @@ modeling:
         url: https://www.urban.org/sites/default/files/publication/98454/methods_for_estimating_snap_policy_impacts_with_an_acs-based_simulation_model_1.pdf
         kind: self
 
+  - model: attis
+    category: tax-modeling
+    label: Detailed state tax rules with undisclosed architecture
+    detail: >
+      ATTIS documents detailed state income tax rules for filing status,
+      taxable income, deductions, exemptions, tax rates, brackets, and
+      credits; Jon Bakija compiled the state rules. ATTIS uses inputs from
+      the federal tax simulation when state income taxes depend on federal
+      return concepts. Public sources establish the rule dimensions and
+      federal-linkage mechanics, but do not disclose whether ATTIS
+      implements those rules as a TRIM-like shared rule-table system, as
+      bespoke per-state formulas, or as a hybrid.
+      A New York baseline memo documents state, New York City, and Yonkers
+      tax rates/brackets and major credits.
+    scope: state individual income tax on ACS tax units
+    sources:
+      - label: Urban/TPC — Expanding the EITC for workers without resident children
+        url: https://taxpolicycenter.org/sites/default/files/publication/157236/expanding_the_eitc_for_workers_without_resident_children_6.pdf
+        kind: self
+      - label: New York child poverty baseline technical memorandum
+        url: https://otda.ny.gov/news/meetings/cprac/2023-09-14/attachments/CPRAC-Urban-Institute-Baseline-Technical-Memorandum.pdf
+        kind: self
+
   - model: tpc-microsim
     category: base-data
     label: SOI PUF plus CPS match
@@ -197,6 +269,24 @@ modeling:
       baseline projections and tax-return tabulations before applying
       current-law or reform policy parameters.
     scope: federal tax
+    sources:
+      - label: TPC brief description of the tax model
+        url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
+        kind: self
+
+  - model: tpc-microsim
+    category: tax-modeling
+    label: State calculators with undisclosed internal structure
+    detail: >
+      TPC documents separate income tax calculators for DC and the 43
+      states with income taxes. These calculators rely on the same
+      database as its federal model and separate state weights. Public
+      documentation does not say whether TPC implements the state
+      calculators as a common rule-table system, bespoke per-state
+      formulas, or a hybrid, so public materials let readers
+      reverse-engineer less state-law mechanics than TRIM3's StateTax
+      module or PolicyEngine's public state formula graph.
+    scope: state individual income tax
     sources:
       - label: TPC brief description of the tax model
         url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
@@ -485,13 +575,22 @@ modeling:
     category: tax-modeling
     label: Input-record federal and state tax calculator
     detail: >
-      Calculates federal and state income tax liabilities from
-      user-supplied records; it does not provide a representative
-      population file or transfer-program simulation.
+      TAXSIM calculates federal and state income tax liabilities from
+      user-supplied survey-style tax-unit records. The state code selects
+      the state calculation, which returns final state liability after
+      credits, marginal state rate, and optional intermediate state
+      components such as state AGI, exemptions, deductions, taxable
+      income, property tax credit, child care credit, EITC, and total
+      credits. TAXSIM supplies the calculator, not a representative
+      population file, transfer-program simulation, or SPM resource
+      construction.
     scope: individual income tax
     sources:
       - label: NBER TAXSIM homepage
         url: https://taxsim.nber.org/
+        kind: self
+      - label: Internet TAXSIM35 documentation
+        url: https://taxsim.nber.org/taxsim35/
         kind: self
       - label: NBER TAXSIM data product page
         url: https://www.nber.org/research/data/taxsim

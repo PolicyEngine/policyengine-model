@@ -294,10 +294,18 @@ coverage:
     statuteTraceable: yes
     testCoverage: high
     asOfYear: 2025
-    notes: All 41 income-taxing states + DC implemented.
+    notes: >
+      PolicyEngine models state income taxes, including credits, with
+      state variation. The public rule graph covers state-specific filing
+      treatment, income bases, deductions, exemptions, rates, and
+      refundable and nonrefundable credits where PolicyEngine implements
+      them; documented metadata says validation compares the state income
+      tax program against TAXSIM for 2021+.
     sources:
       - label: State tax parameters
         url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/parameters/gov/states
+      - label: PolicyEngine US modeled policies metadata
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/programs.yaml
 
   - model: policyengine-us
     program: us-state-eitc
@@ -1591,7 +1599,17 @@ coverage:
     statuteTraceable: unknown
     testCoverage: unknown
     asOfYear: unknown
-    notes: State income taxes simulated.
+    notes: >
+      TRIM3 documents a dedicated StateTax module for state income tax
+      liability only. It starts from Federal Tax module tax units and
+      federal outputs, then runs a common calculation sequence that
+      program rules control. The module uses some national rules and many
+      state-specific rule settings for filing status, income base,
+      deductions, exemptions, brackets/rates, and credits. TRIM3 invokes
+      state-specific special-processing options when common rule
+      dimensions cannot capture a law. Public documentation gives detail,
+      but these sources do not establish public rule/code downloads or
+      validation coverage.
     sources:
       - label: TRIM3 state tax module
         url: https://boreas.urban.org/documentation/StateTax/main.php
@@ -1602,18 +1620,26 @@ coverage:
     statuteTraceable: unknown
     testCoverage: unknown
     asOfYear: unknown
+    notes: >
+      The TRIM3 StateTax module documents state EITCs as one credit
+      category.
     sources:
       - label: TRIM3 state tax module
         url: https://boreas.urban.org/documentation/StateTax/main.php
 
   - model: trim3
     program: us-state-ctc
-    status: unknown
+    status: partial
     statuteTraceable: unknown
     testCoverage: unknown
+    asOfYear: unknown
+    notes: >
+      TRIM3 StateTax documents selected state child-related credits,
+      including several child credits under "other tax credits", but the
+      public page does not establish comprehensive state CTC coverage.
     sources:
-      - label: TRIM3 module documentation
-        url: https://boreas.urban.org/T3IntroHistory.php
+      - label: TRIM3 state tax module
+        url: https://boreas.urban.org/documentation/StateTax/main.php
 
   # ================================== ATTIS ===================================
   - model: attis
@@ -1753,9 +1779,22 @@ coverage:
     statuteTraceable: unknown
     testCoverage: unknown
     asOfYear: unknown
+    notes: >
+      ATTIS documents state income tax rules for filing status, taxable
+      income, deductions, exemptions, tax rates, brackets, and credits,
+      with rules Jon Bakija compiled. ATTIS uses federal tax simulation
+      inputs when state calculations depend on federal return concepts.
+      Public sources do not disclose whether ATTIS implements these rules
+      as a common rule-table system, bespoke state formulas, or a hybrid.
+      A New York baseline memo documents ATTIS modeling of New York State,
+      New York City, and Yonkers income taxes and major state/city credits.
     sources:
       - label: ATTIS overview
         url: https://www.urban.org/research-methods/attis-microsimulation-model
+      - label: Urban/TPC — Expanding the EITC for workers without resident children
+        url: https://taxpolicycenter.org/sites/default/files/publication/157236/expanding_the_eitc_for_workers_without_resident_children_6.pdf
+      - label: New York child poverty baseline technical memorandum
+        url: https://otda.ny.gov/news/meetings/cprac/2023-09-14/attachments/CPRAC-Urban-Institute-Baseline-Technical-Memorandum.pdf
 
   - model: attis
     program: us-state-eitc
@@ -3404,16 +3443,25 @@ coverage:
     statuteTraceable: partial
     testCoverage: unknown
     docsUrl: https://taxsim.nber.org/
-    asOfYear: 2020
+    asOfYear: 2024
     notes: >
-      TAXSIM includes state income tax calculations, but state law coverage
-      is incomplete for recent years: the public page says state laws from
-      2021-2023 are not coded yet and an inflated 2020 law is used as an
-      estimate.
+      TAXSIM includes state income tax calculations and returns state
+      liability after credits plus optional intermediate state components.
+      The "partial" status is about public version/freshness uncertainty,
+      not absence of state tax calculation: NBER's home/data pages say
+      stable state-law coverage lags recent years, TAXSIM35 says state
+      tax code covers years through 2021 with 2022+ inflated from 2021
+      law, and NBER also links an open beta that covers 2024 law.
     sources:
+      - label: NBER TAXSIM home page
+        url: https://taxsim.nber.org/
+        kind: self
+      - label: Internet TAXSIM35 documentation
+        url: https://taxsim.nber.org/taxsim35/
+        kind: self
+      - label: Internet TAXSIM test version
+        url: https://taxsim.nber.org/taxsimtest/
+        kind: self
       - label: NBER TAXSIM data product page
         url: https://www.nber.org/research/data/taxsim
         kind: self
-        quote: >-
-          State laws from 2021-2023 are not coded yet, but an inflated
-          2020 law is used as an estimate.
