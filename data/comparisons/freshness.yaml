@@ -1211,6 +1211,41 @@ freshness:
         kind: government
         supports: [updateCadence, updateLag]
 
+  - model: mcesm
+    latestImplementedYear: 2020
+    forwardYearsThrough: unknown
+    handlesFutureDatedLegislation: partial
+    updateCadence: as-funded
+    updateLag: >
+      Public materials do not document a standing update cycle. Urban
+      applies the model to funded, point-in-time Medicaid/CHIP eligibility
+      studies; a 2021 Commonwealth Fund analysis used 2020 eligibility
+      policies and a hypothetical 12-month postpartum extension.
+    lastMajorRefresh: 2021-01
+    notableRegimes: >
+      Public documentation covers pre-ACA eligibility for 2008-2012,
+      ACA-era 2014 Medicaid and CHIP rules, Puerto Rico 2011 eligibility,
+      and later 2020 Medicaid/CHIP eligibility policies for postpartum
+      extension analysis.
+    notes: >
+      The public record shows that Urban updates MCESM for specific
+      analyses, but it does not expose a current rule catalogue, code
+      history, or forward-year parameter schedule comparable to
+      PolicyEngine's date-indexed parameters.
+    sources:
+      - label: Urban Medicaid/CHIP Eligibility Simulation Model
+        url: https://www.urban.org/research/publication/urban-institute-health-policy-centers-medicaidchip-eligibility-simulation-model
+        kind: self
+        supports: [latestImplementedYear, notableRegimes]
+      - label: Commonwealth Fund — Postpartum Medicaid/CHIP extension analysis
+        url: https://www.commonwealthfund.org/publications/issue-briefs/2021/jan/closing-gaps-maternal-health-postpartum-medicaid-chip
+        kind: civilsociety
+        supports: [latestImplementedYear, handlesFutureDatedLegislation, updateCadence, lastMajorRefresh, notableRegimes]
+      - label: Urban — The Overlap in SNAP and Medicaid/CHIP Eligibility, 2013
+        url: https://www.urban.org/sites/default/files/publication/86971/overlap_in_snap_and_medicaidchip_eligibility.pdf
+        kind: self
+        supports: [notableRegimes, updateCadence]
+
   - model: hipsm
     latestImplementedYear: 2025
     forwardYearsThrough: 2034

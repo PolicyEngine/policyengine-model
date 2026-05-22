@@ -134,6 +134,38 @@ modeling:
         url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/hhs/chip/takes_up_chip_if_eligible.py
         kind: self
 
+  - model: policyengine-us
+    category: health-insurance
+    label: Medicaid/CHIP eligibility pathways covered
+    detail: >
+      PolicyEngine's Medicaid pathway inventory covers SSI recipients,
+      infants, young children, older children, pregnant people,
+      parents/caretaker relatives, optional young adults ages 19-20,
+      ACA expansion adults, and optional senior or disabled people. The
+      overall eligibility gate then checks immigration status, optional
+      work requirements, and selected state-funded coverage outside the
+      federal categorical graph. CHIP covers child eligibility, standard
+      pregnant-person eligibility, and FCEP pregnant-person eligibility;
+      child CHIP also checks state CHIP availability, Medicaid
+      ineligibility, immigration status, family income, and employer
+      coverage. PolicyEngine does not separately model Title IV-E foster
+      care, medically needy spenddown, Medicare Savings Programs, or
+      month-by-month continuous enrollment pathways.
+    scope: Medicaid and CHIP eligibility categories
+    sources:
+      - label: PolicyEngine US Medicaid category formula
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/hhs/medicaid/eligibility/categories/medicaid_category.py
+        kind: self
+      - label: PolicyEngine US overall Medicaid eligibility formula
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/hhs/medicaid/eligibility/is_medicaid_eligible.py
+        kind: self
+      - label: PolicyEngine US CHIP category formula
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/hhs/chip/chip_category.py
+        kind: self
+      - label: PolicyEngine US CHIP child eligibility formula
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/hhs/chip/is_chip_eligible_child.py
+        kind: self
+
   - model: trim3
     category: architecture
     label: Program modules on CPS-ASEC
@@ -253,6 +285,24 @@ modeling:
         kind: self
 
   - model: trim3
+    category: health-insurance
+    label: Medicaid/CHIP eligibility pathways covered
+    detail: >
+      TRIM3's MedicaidCHIP module covers noncitizen eligibility tests,
+      elderly and disabled SSI-related and poverty-related routes,
+      MAGI-based child, pregnant, parent, and adult routes, medically
+      needy eligibility, Medicare Savings Programs, CHIP, and separate
+      CHIP other-coverage restrictions. It evaluates those pathways each
+      month and assigns the first qualifying pathway as that month's
+      eligibility type, then derives annual ever-on eligibility and
+      enrollment indicators.
+    scope: Medicaid and CHIP monthly eligibility pathways
+    sources:
+      - label: TRIM3 Medicaid and CHIP module
+        url: https://boreas.urban.org/documentation/MedicaidCHIP/Main.php
+        kind: self
+
+  - model: trim3
     category: take-up
     label: WIC family-level participation
     detail: >
@@ -307,16 +357,16 @@ modeling:
 
   - model: attis
     category: health-insurance
-    label: No Medicaid/CHIP module in ATTIS
+    label: No Medicaid/CHIP eligibility pathways in ATTIS
     detail: >
       Public ATTIS materials list SNAP, TANF, CCDF, housing, LIHEAP, WIC,
       SSI, payroll taxes, income taxes, tax credits, child support, and
-      unemployment compensation, but not Medicaid or CHIP. Urban handles
-      Medicaid/CHIP through separate health models: the Medicaid/CHIP
-      Eligibility Simulation Model approximates eligibility with ACS and
-      Puerto Rico Community Survey records, while HIPSM simulates health
-      coverage, Medicaid/CHIP enrollment, costs, marketplace coverage,
-      and premiums.
+      unemployment compensation, but not Medicaid or CHIP. ATTIS therefore
+      has no Medicaid/CHIP pathway inventory to compare directly.
+      Urban handles Medicaid/CHIP through separate health models: MCESM
+      approximates eligibility with ACS and Puerto Rico Community Survey
+      records, while HIPSM simulates health coverage, Medicaid/CHIP
+      enrollment, costs, marketplace coverage, and premiums.
     scope: Medicaid and CHIP excluded from ATTIS; separate Urban health models
     sources:
       - label: ATTIS canonical page
@@ -829,6 +879,50 @@ modeling:
         url: https://www.urban.org/sites/default/files/publication/103412/the-health-insurance-policy-simulation-model-for-2020.pdf
         kind: self
 
+  - model: mcesm
+    category: health-insurance
+    label: Medicaid/CHIP eligibility pathways covered
+    detail: >
+      MCESM covers child pathways for Title IV-E/foster care,
+      SSI-linked eligibility, Social Security Act section 1931, CHIP, and
+      imputed categorical eligibility for some reported Medicaid children
+      who fail ACS-observable requirements. It covers adult pathways for
+      aged-out foster youth, SSI, section 1931, aged/blind/disabled,
+      section 1115 waivers, medically needy eligibility without medical
+      expense spenddown, relative caretakers, and imputed categorical
+      eligibility for some reported Medicaid adults. It also applies
+      state-specific income thresholds, family size, asset tests,
+      parent/family status, income disregards, and noncitizen residency
+      rules. Urban documents ACS data limits for pregnancy status, medical
+      expense spenddown, and detailed relative-caretaker relationships.
+    scope: Medicaid and CHIP eligibility pathways
+    sources:
+      - label: Urban Medicaid/CHIP Eligibility Simulation Model
+        url: https://www.urban.org/research/publication/urban-institute-health-policy-centers-medicaidchip-eligibility-simulation-model
+        kind: self
+      - label: Urban — The Overlap in SNAP and Medicaid/CHIP Eligibility, 2013
+        url: https://www.urban.org/sites/default/files/publication/86971/overlap_in_snap_and_medicaidchip_eligibility.pdf
+        kind: self
+
+  - model: hipsm
+    category: health-insurance
+    label: Medicaid/CHIP and marketplace eligibility pathways covered
+    detail: >
+      HIPSM models eligibility for Medicaid, CHIP, Basic Health Program
+      coverage, Marketplace premium tax credits, cost-sharing reductions,
+      and individual-mandate exemptions. Its output categories distinguish
+      Medicaid for children, children with disabilities, nonparents,
+      parents, and adults with disabilities; CHIP; other public coverage;
+      Marketplace coverage with PTCs and CSRs, with PTCs only, or full
+      pay; employer coverage; nongroup coverage; and uninsurance. HIPSM
+      then uses health insurance choice and employer decision mechanics to
+      turn eligibility options into coverage outcomes.
+    scope: Medicaid, CHIP, Marketplace, BHP, and other health coverage choices
+    sources:
+      - label: Urban HIPSM 2020 methodology report
+        url: https://www.urban.org/sites/default/files/publication/103412/the-health-insurance-policy-simulation-model-for-2020.pdf
+        kind: self
+
   - model: hisim2
     category: health-insurance
     label: CBO health insurance simulation
@@ -843,4 +937,28 @@ modeling:
         kind: government
       - label: CBO — Sources and Preparation of Data Used in HISIM2
         url: https://www.cbo.gov/publication/55087
+        kind: government
+
+  - model: hisim2
+    category: health-insurance
+    label: Subsidized coverage eligibility pathways covered
+    detail: >
+      HISIM2 calculates individual eligibility for public coverage such as
+      Medicaid and CHIP, Marketplace premium tax credits, employment-based
+      coverage offers and net premiums after tax subsidies and employer
+      contributions, and the self-employed health-insurance deduction. In
+      uninsured analyses, CBO groups available or unavailable subsidized
+      coverage into ACA expansion Medicaid, other Medicaid or CHIP,
+      Marketplace subsidies, subsidized employment-based coverage, lack of
+      lawful presence, income below the poverty line in a non-expansion
+      state, and income above the Marketplace subsidy range. Public CBO
+      materials do not publish a child and adult Medicaid category
+      inventory comparable to TRIM3 or MCESM.
+    scope: Medicaid, CHIP, Marketplace, employer coverage, and uninsured pathways
+    sources:
+      - label: CBO — Who Went Without Health Insurance in 2019, and Why?
+        url: https://www.cbo.gov/system/files/2020-09/56504-Health-Insurance.pdf
+        kind: government
+      - label: CBO HISIM2 slide deck
+        url: https://www.cbo.gov/system/files/2019-04/55097-HISIM2_SlideDeck.pdf
         kind: government

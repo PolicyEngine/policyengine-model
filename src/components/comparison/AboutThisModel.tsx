@@ -751,8 +751,8 @@ export default function AboutThisModel({ activeModelIds }: AboutThisModelProps) 
         <h3 style={panelTitleStyle}>Rule Mechanics</h3>
         <p style={panelDescriptionStyle}>
           Publicly documented architecture and policy-rule mechanics, including
-          tax and benefit engines, simulation units, geographic coverage, and
-          model horizons.
+          tax and benefit engines, healthcare eligibility pathways, simulation
+          units, geographic coverage, and model horizons.
         </p>
         <RuleMechanicsTable models={activeModels} rows={activeMechanics} />
       </div>

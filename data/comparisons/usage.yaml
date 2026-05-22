@@ -592,6 +592,30 @@ usage:
         url: https://www.crfb.org/papers/analysis-cbos-march-2025-long-term-budget-outlook
         kind: civilsociety
 
+  - model: mcesm
+    academicCitations: unknown
+    governmentReports: unknown
+    pressMentions: unknown
+    monthlyActiveUsers: unknown
+    monthlyComputations: unknown
+    organizationUsers: unknown
+    notes: >
+      Urban and partner organizations have used MCESM for Medicaid/CHIP
+      eligibility studies, ACA implementation analyses, SNAP-Medicaid
+      overlap estimates, Puerto Rico statehood scenarios, and postpartum
+      Medicaid/CHIP extension analyses. Urban does not publish usage
+      counts.
+    sources:
+      - label: Urban Medicaid/CHIP Eligibility Simulation Model
+        url: https://www.urban.org/research/publication/urban-institute-health-policy-centers-medicaidchip-eligibility-simulation-model
+        kind: self
+      - label: Urban — The Overlap in SNAP and Medicaid/CHIP Eligibility, 2013
+        url: https://www.urban.org/sites/default/files/publication/86971/overlap_in_snap_and_medicaidchip_eligibility.pdf
+        kind: self
+      - label: Commonwealth Fund — Postpartum Medicaid/CHIP extension analysis
+        url: https://www.commonwealthfund.org/publications/issue-briefs/2021/jan/closing-gaps-maternal-health-postpartum-medicaid-chip
+        kind: civilsociety
+
   - model: hipsm
     academicCitations: unknown
     governmentReports: unknown

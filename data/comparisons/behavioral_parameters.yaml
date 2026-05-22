@@ -169,6 +169,26 @@ behavioralParameters:
         url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/health-insurance-policy-simulation-model-hipsm
         kind: self
 
+  - model: mcesm
+    domain: health-insurance
+    kind: choice-model
+    parameter: medicaid_chip_enrollment_choice
+    label: No Medicaid/CHIP enrollment choice model
+    status: not-modeled
+    value: unknown
+    population: ACS and Puerto Rico Community Survey records
+    policyScope: Medicaid and CHIP
+    margin: enrollment and coverage choice
+    functionalForm: Eligibility simulation only; no documented enrollment choice, premium response, or health insurance market response equation.
+    notes: MCESM approximates eligibility pathways. Urban uses HIPSM, not MCESM, for Medicaid/CHIP enrollment and broader health coverage choice.
+    sources:
+      - label: Urban Medicaid/CHIP Eligibility Simulation Model
+        url: https://www.urban.org/research/publication/urban-institute-health-policy-centers-medicaidchip-eligibility-simulation-model
+        kind: self
+      - label: Urban HIPSM overview
+        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/health-insurance-policy-simulation-model-hipsm
+        kind: self
+
   - model: dynasim
     domain: retirement
     kind: choice-model

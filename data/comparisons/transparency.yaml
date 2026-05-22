@@ -1270,6 +1270,46 @@ transparency:
         kind: civilsociety
         supports: [documentationPublic, codePublic]
 
+  - model: mcesm
+    codePublic: no
+    codeLicense: proprietary
+    contributorCount: unknown
+    issueTrackerPublic: no
+    documentationPublic: partial
+    documentationUrl: https://www.urban.org/research/publication/urban-institute-health-policy-centers-medicaidchip-eligibility-simulation-model
+    parameterSourcing: separate-doc
+    testSuitePublic: unknown
+    testCount: unknown
+    datasetPublic: partial
+    reproducibleBuilds: no
+    notes: >
+      Urban publishes methodology papers and selected pathway details, but
+      not source code, machine-readable rule files, tests, or a reproducible
+      build. The model uses public ACS and Puerto Rico Community Survey data,
+      but Urban does not publish the processed simulation inputs or imputed
+      eligibility flags.
+    sources:
+      - label: Urban Medicaid/CHIP Eligibility Simulation Model
+        url: https://www.urban.org/research/publication/urban-institute-health-policy-centers-medicaidchip-eligibility-simulation-model
+        kind: self
+        supports: [documentationPublic, codePublic, codeLicense, issueTrackerPublic, parameterSourcing]
+      - label: Urban — The Overlap in SNAP and Medicaid/CHIP Eligibility, 2013
+        url: https://www.urban.org/sites/default/files/publication/86971/overlap_in_snap_and_medicaidchip_eligibility.pdf
+        kind: self
+        supports: [documentationPublic, parameterSourcing, datasetPublic]
+      - label: Census ACS PUMS documentation
+        url: https://www.census.gov/programs-surveys/acs/microdata.html
+        kind: government
+        supports: [datasetPublic]
+      - label: Commonwealth Fund — Postpartum Medicaid/CHIP extension analysis
+        url: https://www.commonwealthfund.org/publications/issue-briefs/2021/jan/closing-gaps-maternal-health-postpartum-medicaid-chip
+        kind: civilsociety
+        supports: [documentationPublic]
+      - label: KFF — State and local coverage changes under full ACA implementation
+        url: https://www.kff.org/medicaid/state-and-local-coverage-changes-under-full-implementation-of-the-affordable-care-act/
+        kind: civilsociety
+        supports: [documentationPublic]
+
   - model: hipsm
     codePublic: no
     codeLicense: proprietary

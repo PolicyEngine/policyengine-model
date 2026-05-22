@@ -1517,12 +1517,62 @@ models:
         url: https://www.crfb.org/papers/analysis-cbos-march-2025-long-term-budget-outlook
         kind: civilsociety
 
+  - id: mcesm
+    name: Urban Medicaid/CHIP Eligibility Simulation Model
+    fullName: Urban Institute Health Policy Center Medicaid/CHIP Eligibility Simulation Model
+    organization: Urban Institute
+    organizationUrl: https://www.urban.org
+    siblings: [hipsm]
+    country: us
+    sector: non-profit
+    type: microsimulation
+    jurisdictions: [us-federal, us-states, us-territories]
+    inceptionYear: unknown
+    license: proprietary
+    codePublic: no
+    languages: [unknown]
+    primaryDataset: American Community Survey and Puerto Rico Community Survey
+    documentationUrl: https://www.urban.org/research/publication/urban-institute-health-policy-centers-medicaidchip-eligibility-simulation-model
+    leads:
+      - Victoria Lynch
+      - Jennifer Haley
+      - Genevieve Kenney
+    summary: >
+      Urban Institute Health Policy Center microsimulation model that
+      applies Medicaid and CHIP eligibility rules to ACS and Puerto Rico
+      Community Survey records. Public methodology describes eligibility
+      simulation for adults and children, including pre-ACA rules, ACA
+      Medicaid and CHIP rules, Puerto Rico eligibility, and scenario
+      analyses such as postpartum Medicaid/CHIP extensions. The model
+      approximates eligibility; it does not publish source code, rule
+      files, enrollment choice equations, or service-cost simulation.
+    capabilities:
+      reformImpact: yes
+      integratedMicrodata: partial
+      localAreas: partial
+      publicInterface: no
+      apiAccess: no
+      healthInsuranceMarket: no
+    sources:
+      - label: Urban Medicaid/CHIP Eligibility Simulation Model
+        url: https://www.urban.org/research/publication/urban-institute-health-policy-centers-medicaidchip-eligibility-simulation-model
+        kind: self
+      - label: Urban — The Overlap in SNAP and Medicaid/CHIP Eligibility, 2013
+        url: https://www.urban.org/sites/default/files/publication/86971/overlap_in_snap_and_medicaidchip_eligibility.pdf
+        kind: self
+      - label: Commonwealth Fund — Postpartum Medicaid/CHIP extension analysis
+        url: https://www.commonwealthfund.org/publications/issue-briefs/2021/jan/closing-gaps-maternal-health-postpartum-medicaid-chip
+        kind: civilsociety
+      - label: KFF — State and local coverage changes under full ACA implementation
+        url: https://www.kff.org/medicaid/state-and-local-coverage-changes-under-full-implementation-of-the-affordable-care-act/
+        kind: civilsociety
+
   - id: hipsm
     name: HIPSM
     fullName: Health Insurance Policy Simulation Model
     organization: Urban Institute
     organizationUrl: https://www.urban.org
-    siblings: [trim3, attis, dynasim]
+    siblings: [trim3, attis, dynasim, mcesm]
     country: us
     sector: non-profit
     type: microsimulation
