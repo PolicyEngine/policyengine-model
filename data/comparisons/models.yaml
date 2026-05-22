@@ -814,7 +814,7 @@ models:
         url: https://www.snapscreener.com/
         kind: self
       - label: SNAP Screener — state-level rules table
-        url: https://www.snapscreener.com/screener
+        url: https://www.snapscreener.com/data
         kind: self
       - label: Medicaid Screener — homepage
         url: https://www.medicaidscreener.com/

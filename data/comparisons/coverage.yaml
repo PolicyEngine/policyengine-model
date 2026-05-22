@@ -1922,6 +1922,633 @@ coverage:
       - label: Urban HIPSM overview
         url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/health-insurance-policy-simulation-model-hipsm
 
+  # ============================ Columbia CPSP ================================
+  - model: columbia-cpsp
+    program: us-federal-income-tax
+    status: partial
+    statuteTraceable: no
+    testCoverage: none
+    notes: >
+      CPSP poverty analyses use Census ASEC tax variables in routine
+      CPS-ASEC work and NBER TAXSIM in selected SIPP or historical
+      applications. CPSP does not publish a standalone federal tax rules
+      engine.
+    sources:
+      - label: CPSP monthly cash payments paper
+        url: https://povertycenter.columbia.edu/sites/povertycenter.columbia.edu/files/content/Publications/Monthly-Cash-Payments-Reduce-Spells-of-Poverty-CPSP-2022.pdf
+        kind: academic
+      - label: NBER TAXSIM
+        url: https://taxsim.nber.org/
+        kind: academic
+
+  - model: columbia-cpsp
+    program: us-eitc
+    status: partial
+    statuteTraceable: no
+    testCoverage: none
+    notes: >
+      CPSP includes EITC values in poverty resources and simulates some
+      EITC policy options, but public sources point to Census ASEC
+      variables or TAXSIM rather than a CPSP-maintained EITC rules engine.
+    sources:
+      - label: CPSP youth poverty policy factsheet
+        url: https://povertycenter.columbia.edu/sites/default/files/content/Publications/Youth-poverty-policy-national-factsheet-CPSP-2021.pdf
+        kind: academic
+
+  - model: columbia-cpsp
+    program: us-ctc
+    status: implemented
+    statuteTraceable: partial
+    testCoverage: none
+    notes: >
+      CPSP has repeatedly simulated federal Child Tax Credit schedules,
+      including ARPA-era and proposal-specific CTC scenarios, to estimate
+      poverty impacts.
+    sources:
+      - label: CPSP Child Tax Credit publications
+        url: https://povertycenter.columbia.edu/child-tax-credit
+        kind: self
+      - label: CPSP monthly cash payments paper
+        url: https://povertycenter.columbia.edu/sites/povertycenter.columbia.edu/files/content/Publications/Monthly-Cash-Payments-Reduce-Spells-of-Poverty-CPSP-2022.pdf
+        kind: academic
+
+  - model: columbia-cpsp
+    program: us-snap
+    status: partial
+    statuteTraceable: no
+    testCoverage: none
+    notes: >
+      CPSP includes SNAP in SPM resource accounting and simulates selected
+      SNAP policy packages, but baseline SNAP values often come from
+      Census SPM files rather than a reusable public SNAP rules engine.
+    sources:
+      - label: CPSP youth poverty policy factsheet
+        url: https://povertycenter.columbia.edu/sites/default/files/content/Publications/Youth-poverty-policy-national-factsheet-CPSP-2021.pdf
+        kind: academic
+      - label: CPSP child poverty gap brief
+        url: https://povertycenter.columbia.edu/sites/default/files/content/Publications/Child-poverty-gap-Black-Latino-White-CPSP-ICYFP-2024.pdf
+        kind: academic
+
+  - model: columbia-cpsp
+    program: us-tanf
+    status: partial
+    statuteTraceable: no
+    testCoverage: none
+    notes: >
+      CPSP includes TANF in SPM transfer accounting and has produced
+      TANF-related policy analyses, but public documentation does not
+      expose a full TANF eligibility-and-benefit rules module.
+    sources:
+      - label: CPSP public charge comment
+        url: https://povertycenter.columbia.edu/sites/povertycenter.columbia.edu/files/content/Publications/Testimony/CPSP_Public-Charge-Fed-Reg-Comment_12-19-25_final.pdf
+        kind: academic
+      - label: CPSP child poverty gap brief
+        url: https://povertycenter.columbia.edu/sites/default/files/content/Publications/Child-poverty-gap-Black-Latino-White-CPSP-ICYFP-2024.pdf
+        kind: academic
+
+  - model: columbia-cpsp
+    program: us-ssi
+    status: partial
+    statuteTraceable: no
+    testCoverage: none
+    notes: >
+      CPSP includes SSI in SPM transfer accounting. Public sources do not
+      show a CPSP SSI eligibility calculator comparable to TRIM3 or
+      PolicyEngine US.
+    sources:
+      - label: CPSP child poverty gap brief
+        url: https://povertycenter.columbia.edu/sites/default/files/content/Publications/Child-poverty-gap-Black-Latino-White-CPSP-ICYFP-2024.pdf
+        kind: academic
+
+  - model: columbia-cpsp
+    program: us-wic
+    status: partial
+    statuteTraceable: no
+    testCoverage: none
+    notes: >
+      CPSP includes WIC in SPM transfer accounting, but public sources do
+      not document a CPSP WIC eligibility or food-package rules module.
+    sources:
+      - label: CPSP child poverty gap brief
+        url: https://povertycenter.columbia.edu/sites/default/files/content/Publications/Child-poverty-gap-Black-Latino-White-CPSP-ICYFP-2024.pdf
+        kind: academic
+
+  - model: columbia-cpsp
+    program: us-section-8
+    status: partial
+    statuteTraceable: no
+    testCoverage: none
+    notes: >
+      CPSP includes housing subsidies in SPM transfer accounting and
+      models selected voucher expansions, but public sources do not show a
+      general-purpose Section 8 eligibility and benefit rules engine.
+    sources:
+      - label: CPSP housing vouchers and tax credits brief
+        url: https://povertycenter.columbia.edu/sites/default/files/content/Publications/Housing-Vouchers-and-Tax-Credits-CPSP-08-03-2023.pdf
+        kind: academic
+
+  - model: columbia-cpsp
+    program: us-ui
+    status: partial
+    statuteTraceable: no
+    testCoverage: none
+    notes: >
+      CPSP includes unemployment insurance in SPM resource accounting, but
+      public documentation does not show a state UI eligibility and
+      benefit rules module.
+    sources:
+      - label: CPSP child poverty gap brief
+        url: https://povertycenter.columbia.edu/sites/default/files/content/Publications/Child-poverty-gap-Black-Latino-White-CPSP-ICYFP-2024.pdf
+        kind: academic
+
+  - model: columbia-cpsp
+    program: us-liheap
+    status: partial
+    statuteTraceable: no
+    testCoverage: none
+    notes: >
+      CPSP includes LIHEAP in SPM transfer accounting, but public sources
+      do not document a LIHEAP rules engine.
+    sources:
+      - label: CPSP child poverty gap brief
+        url: https://povertycenter.columbia.edu/sites/default/files/content/Publications/Child-poverty-gap-Black-Latino-White-CPSP-ICYFP-2024.pdf
+        kind: academic
+
+  - model: columbia-cpsp
+    program: us-state-income-tax
+    status: partial
+    statuteTraceable: no
+    testCoverage: none
+    notes: >
+      CPSP uses Census ASEC tax variables, NBER TAXSIM, or TRIM3-derived
+      adjustments for state tax components depending on the analysis; it
+      does not publish its own state income-tax rules engine.
+    sources:
+      - label: CPSP monthly cash payments paper
+        url: https://povertycenter.columbia.edu/sites/povertycenter.columbia.edu/files/content/Publications/Monthly-Cash-Payments-Reduce-Spells-of-Poverty-CPSP-2022.pdf
+        kind: academic
+      - label: NBER TAXSIM
+        url: https://taxsim.nber.org/
+        kind: academic
+
+  - model: columbia-cpsp
+    program: us-state-ctc
+    status: partial
+    statuteTraceable: no
+    testCoverage: none
+    notes: >
+      CPSP models selected state child tax credit and child allowance
+      proposals, such as New York child poverty scenarios, but public
+      documentation does not show comprehensive state CTC coverage.
+    sources:
+      - label: CPSP long-term New York child poverty policy brief
+        url: https://povertycenter.columbia.edu/sites/povertycenter.columbia.edu/files/content/Publications/Long-Term-Benefits-of-Child-Poverty-Reduction-Policies-NY-CPSP-2025.pdf
+        kind: academic
+
+  # ============================ Benefit screeners ============================
+  - model: benefit-kitchen
+    program: us-snap
+    status: implemented
+    statuteTraceable: no
+    testCoverage: unknown
+    notes: >
+      BenefitKitchen screens applicant-supplied households for SNAP
+      eligibility and dollar estimates; it does not publish the rules or
+      validation suite.
+    sources:
+      - label: BenefitKitchen homepage
+        url: https://benefitkitchen.com/
+        kind: self
+
+  - model: benefit-kitchen
+    program: us-medicaid
+    status: implemented
+    statuteTraceable: no
+    testCoverage: unknown
+    notes: >
+      BenefitKitchen lists Medicaid among the benefits its platform
+      screens across 50 states.
+    sources:
+      - label: BenefitKitchen homepage
+        url: https://benefitkitchen.com/
+        kind: self
+
+  - model: benefit-kitchen
+    program: us-premium-tax-credit
+    status: partial
+    statuteTraceable: no
+    testCoverage: unknown
+    notes: >
+      BenefitKitchen lists health plans and tax credits among screened
+      benefits; public materials do not separately document Form 8962 or
+      ACA marketplace reconciliation mechanics.
+    sources:
+      - label: BenefitKitchen homepage
+        url: https://benefitkitchen.com/
+        kind: self
+
+  - model: benefit-kitchen
+    program: us-eitc
+    status: partial
+    statuteTraceable: no
+    testCoverage: unknown
+    notes: >
+      BenefitKitchen lists tax credits among screened benefits, but public
+      materials do not itemize EITC parameters.
+    sources:
+      - label: BenefitKitchen homepage
+        url: https://benefitkitchen.com/
+        kind: self
+
+  - model: benefit-kitchen
+    program: us-ctc
+    status: partial
+    statuteTraceable: no
+    testCoverage: unknown
+    notes: >
+      BenefitKitchen lists tax credits among screened benefits, but public
+      materials do not itemize Child Tax Credit parameters.
+    sources:
+      - label: BenefitKitchen homepage
+        url: https://benefitkitchen.com/
+        kind: self
+
+  - model: benefit-kitchen
+    program: us-ccdf
+    status: implemented
+    statuteTraceable: no
+    testCoverage: unknown
+    notes: >
+      BenefitKitchen lists childcare benefits among the federal, state,
+      and local work-support programs its platform screens.
+    sources:
+      - label: BenefitKitchen homepage
+        url: https://benefitkitchen.com/
+        kind: self
+
+  - model: benefit-kitchen
+    program: us-liheap
+    status: partial
+    statuteTraceable: no
+    testCoverage: unknown
+    notes: >
+      BenefitKitchen public materials cite utility assistance in example
+      screenings, but they do not identify LIHEAP-specific rule coverage
+      for every state.
+    sources:
+      - label: BenefitKitchen ICF screener page
+        url: https://benefitkitchen.com/icfs
+        kind: self
+
+  - model: benefits-cliffs
+    program: us-eitc
+    status: implemented
+    statuteTraceable: no
+    testCoverage: unknown
+    notes: BenefitsCliffs materials list EITC among modeled refundable tax credits.
+    sources:
+      - label: Georgia Center for Opportunity presentation to Georgia House Rural Development Council
+        url: https://www.house.ga.gov/Documents/CommitteeDocuments/2021/Rural_Development_Council/Georgia%20Center%20for%20Opportunity.pdf
+        kind: government
+
+  - model: benefits-cliffs
+    program: us-ctc
+    status: implemented
+    statuteTraceable: no
+    testCoverage: unknown
+    notes: BenefitsCliffs materials list the Additional Child Tax Credit among modeled refundable tax credits.
+    sources:
+      - label: Georgia Center for Opportunity presentation to Georgia House Rural Development Council
+        url: https://www.house.ga.gov/Documents/CommitteeDocuments/2021/Rural_Development_Council/Georgia%20Center%20for%20Opportunity.pdf
+        kind: government
+
+  - model: benefits-cliffs
+    program: us-premium-tax-credit
+    status: implemented
+    statuteTraceable: no
+    testCoverage: unknown
+    notes: BenefitsCliffs lists Health Insurance Exchange Premium Tax Credit coverage.
+    sources:
+      - label: Georgia Center for Opportunity presentation to Georgia House Rural Development Council
+        url: https://www.house.ga.gov/Documents/CommitteeDocuments/2021/Rural_Development_Council/Georgia%20Center%20for%20Opportunity.pdf
+        kind: government
+
+  - model: benefits-cliffs
+    program: us-snap
+    status: implemented
+    statuteTraceable: no
+    testCoverage: unknown
+    notes: BenefitsCliffs materials list SNAP among modeled means-tested programs.
+    sources:
+      - label: Georgia Center for Opportunity presentation to Georgia House Rural Development Council
+        url: https://www.house.ga.gov/Documents/CommitteeDocuments/2021/Rural_Development_Council/Georgia%20Center%20for%20Opportunity.pdf
+        kind: government
+
+  - model: benefits-cliffs
+    program: us-tanf
+    status: implemented
+    statuteTraceable: no
+    testCoverage: unknown
+    notes: BenefitsCliffs materials list TANF cash assistance among modeled programs.
+    sources:
+      - label: Georgia Center for Opportunity presentation to Georgia House Rural Development Council
+        url: https://www.house.ga.gov/Documents/CommitteeDocuments/2021/Rural_Development_Council/Georgia%20Center%20for%20Opportunity.pdf
+        kind: government
+
+  - model: benefits-cliffs
+    program: us-ssi
+    status: implemented
+    statuteTraceable: no
+    testCoverage: unknown
+    notes: BenefitsCliffs materials list SSI among modeled programs.
+    sources:
+      - label: Georgia Center for Opportunity presentation to Georgia House Rural Development Council
+        url: https://www.house.ga.gov/Documents/CommitteeDocuments/2021/Rural_Development_Council/Georgia%20Center%20for%20Opportunity.pdf
+        kind: government
+
+  - model: benefits-cliffs
+    program: us-medicaid
+    status: implemented
+    statuteTraceable: no
+    testCoverage: unknown
+    notes: BenefitsCliffs lists medical assistance, including Medicaid, among modeled benefits.
+    sources:
+      - label: Georgia Center for Opportunity presentation to Georgia House Rural Development Council
+        url: https://www.house.ga.gov/Documents/CommitteeDocuments/2021/Rural_Development_Council/Georgia%20Center%20for%20Opportunity.pdf
+        kind: government
+
+  - model: benefits-cliffs
+    program: us-chip
+    status: implemented
+    statuteTraceable: no
+    testCoverage: unknown
+    notes: BenefitsCliffs materials list Children's Health Insurance Program coverage.
+    sources:
+      - label: Georgia Center for Opportunity presentation to Georgia House Rural Development Council
+        url: https://www.house.ga.gov/Documents/CommitteeDocuments/2021/Rural_Development_Council/Georgia%20Center%20for%20Opportunity.pdf
+        kind: government
+
+  - model: benefits-cliffs
+    program: us-wic
+    status: implemented
+    statuteTraceable: no
+    testCoverage: unknown
+    notes: BenefitsCliffs materials list WIC food packages among modeled programs.
+    sources:
+      - label: Georgia Center for Opportunity presentation to Georgia House Rural Development Council
+        url: https://www.house.ga.gov/Documents/CommitteeDocuments/2021/Rural_Development_Council/Georgia%20Center%20for%20Opportunity.pdf
+        kind: government
+
+  - model: benefits-cliffs
+    program: us-section-8
+    status: implemented
+    statuteTraceable: no
+    testCoverage: unknown
+    notes: BenefitsCliffs lists Section 8 Housing Choice Voucher coverage.
+    sources:
+      - label: Georgia Center for Opportunity presentation to Georgia House Rural Development Council
+        url: https://www.house.ga.gov/Documents/CommitteeDocuments/2021/Rural_Development_Council/Georgia%20Center%20for%20Opportunity.pdf
+        kind: government
+
+  - model: benefits-cliffs
+    program: us-ccdf
+    status: implemented
+    statuteTraceable: no
+    testCoverage: unknown
+    notes: BenefitsCliffs lists child care subsidies among modeled programs.
+    sources:
+      - label: Georgia Center for Opportunity presentation to Georgia House Rural Development Council
+        url: https://www.house.ga.gov/Documents/CommitteeDocuments/2021/Rural_Development_Council/Georgia%20Center%20for%20Opportunity.pdf
+        kind: government
+
+  - model: snap-screener
+    program: us-snap
+    status: implemented
+    statuteTraceable: no
+    testCoverage: unknown
+    asOfYear: 2026
+    notes: >
+      SNAP Screener provides a 50-state SNAP eligibility calculator and a
+      public SNAP rules database.
+    sources:
+      - label: SNAP Screener homepage
+        url: https://www.snapscreener.com/
+        kind: self
+      - label: SNAP Screener state-level rules table
+        url: https://www.snapscreener.com/data
+        kind: self
+
+  - model: snap-screener
+    program: us-medicaid
+    status: implemented
+    statuteTraceable: no
+    testCoverage: unknown
+    asOfYear: 2026
+    notes: MedicaidScreener provides Medicaid eligibility screening pages.
+    sources:
+      - label: Medicaid Screener Georgia calculator
+        url: https://www.snapscreener.com/medicaid/screener/georgia
+        kind: self
+
+  - model: snap-screener
+    program: us-chip
+    status: implemented
+    statuteTraceable: no
+    testCoverage: unknown
+    asOfYear: 2026
+    notes: MedicaidScreener screens for Medicaid, CHIP, and PTC eligibility.
+    sources:
+      - label: Medicaid Screener Georgia calculator
+        url: https://www.snapscreener.com/medicaid/screener/georgia
+        kind: self
+
+  - model: snap-screener
+    program: us-premium-tax-credit
+    status: implemented
+    statuteTraceable: no
+    testCoverage: unknown
+    asOfYear: 2026
+    notes: MedicaidScreener screens for Premium Tax Credit eligibility alongside Medicaid and CHIP.
+    sources:
+      - label: Medicaid Screener Georgia calculator
+        url: https://www.snapscreener.com/medicaid/screener/georgia
+        kind: self
+
+  - model: snap-screener
+    program: us-eitc
+    status: partial
+    statuteTraceable: no
+    testCoverage: unknown
+    asOfYear: 2026
+    notes: >
+      SNAP Screener lists EITC among benefit-program guide surfaces, but
+      public materials do not document a full EITC calculator comparable
+      to its SNAP calculator.
+    sources:
+      - label: SNAP Screener homepage
+        url: https://www.snapscreener.com/
+        kind: self
+
+  - model: snap-screener
+    program: us-ctc
+    status: partial
+    statuteTraceable: no
+    testCoverage: unknown
+    asOfYear: 2026
+    notes: >
+      SNAP Screener lists CTC among benefit-program guide surfaces, but
+      public materials do not document a full Child Tax Credit calculator
+      comparable to its SNAP calculator.
+    sources:
+      - label: SNAP Screener homepage
+        url: https://www.snapscreener.com/
+        kind: self
+
+  - model: snap-screener
+    program: us-wic
+    status: implemented
+    statuteTraceable: no
+    testCoverage: unknown
+    asOfYear: 2026
+    notes: >
+      SNAP Screener publishes state WIC eligibility guides and advertises
+      a WIC eligibility calculator.
+    sources:
+      - label: SNAP Screener homepage
+        url: https://www.snapscreener.com/
+        kind: self
+      - label: SNAP Screener state SNAP, WIC, and Medicaid guides
+        url: https://www.snapscreener.com/guides
+        kind: self
+
+  - model: snap-screener
+    program: us-liheap
+    status: partial
+    statuteTraceable: no
+    testCoverage: unknown
+    notes: >
+      SNAP Screener's homepage advertises LIHEAP among benefit guide
+      surfaces, but public materials do not document a full LIHEAP
+      calculator comparable to its SNAP calculator.
+    sources:
+      - label: SNAP Screener homepage
+        url: https://www.snapscreener.com/
+        kind: self
+
+  - model: mrelief
+    program: us-snap
+    status: implemented
+    statuteTraceable: no
+    testCoverage: unknown
+    asOfYear: 2026
+    notes: >
+      mRelief screens households for likely SNAP eligibility and directs
+      eligible users to apply through state portals or assisted workflows.
+      It is SNAP-specific and not a general tax-benefit model.
+    sources:
+      - label: mRelief homepage
+        url: https://www.mrelief.com/
+        kind: self
+      - label: mRelief help center — Am I eligible for SNAP?
+        url: https://intercom.help/mrelief/en/articles/11391323-am-i-eligible-for-snap
+        kind: self
+
+  # ============================ Urban DYNASIM ================================
+  - model: dynasim
+    program: us-federal-income-tax
+    status: partial
+    statuteTraceable: no
+    testCoverage: unknown
+    asOfYear: 2024
+    notes: >
+      DYNASIM includes individual tax calculations in retirement and aging
+      projections, but its public documentation does not expose a current
+      federal income-tax reform calculator.
+    sources:
+      - label: Urban — A Methodology for Integrated Distributional Analysis of Taxes and Transfers
+        url: https://www.urban.org/sites/default/files/publication/93626/a_methodology_for_integrated_distributional_analysis_of_taxes_and_transfers_1.pdf
+        kind: self
+      - label: Urban DYNASIM overview
+        url: https://www.urban.org/research/publication/dynamic-simulation-income-model-dynasim-overview
+        kind: self
+
+  - model: dynasim
+    program: us-payroll-tax
+    status: partial
+    statuteTraceable: no
+    testCoverage: unknown
+    asOfYear: 2024
+    notes: >
+      DYNASIM projects payroll taxes in Social Security and retirement
+      income analyses; public documentation does not show full FICA, SECA,
+      and FUTA policy-rule coverage.
+    sources:
+      - label: Urban — DYNASIM Projecting Older Americans' Future Well-Being
+        url: https://www.urban.org/sites/default/files/publication/65826/2000370-DYNASIM-Projecting-Older-Americans-Future-Well-Being.pdf
+        kind: self
+
+  - model: dynasim
+    program: us-ssi
+    status: partial
+    statuteTraceable: no
+    testCoverage: unknown
+    asOfYear: 2024
+    notes: >
+      DYNASIM projects SSI in retirement income analyses, but public
+      documentation does not expose a current SSI eligibility and state
+      supplement rules engine.
+    sources:
+      - label: Urban — The Dynamic Simulation of Income Model summary
+        url: https://www.urban.org/sites/default/files/2022-04/dynasim_summary_march_23_2015_0.pdf
+        kind: self
+
+  - model: dynasim
+    program: us-medicaid
+    status: partial
+    statuteTraceable: no
+    testCoverage: unknown
+    asOfYear: 2024
+    notes: >
+      DYNASIM projects Medicaid spending for older adults and long-term
+      services and supports, but it does not publish a full annual
+      Medicaid eligibility model comparable to Urban MCESM or HIPSM.
+    sources:
+      - label: Urban — A Methodology for Integrated Distributional Analysis of Taxes and Transfers
+        url: https://www.urban.org/sites/default/files/publication/93626/a_methodology_for_integrated_distributional_analysis_of_taxes_and_transfers_1.pdf
+        kind: self
+      - label: ASPE — The Risk of Needing LTSS
+        url: https://aspe.hhs.gov/reports/risk-needing-ltss-dynasim-projections
+        kind: government
+
+  - model: dynasim
+    program: us-ssdi
+    status: implemented
+    statuteTraceable: no
+    testCoverage: unknown
+    asOfYear: 2024
+    notes: DYNASIM simulates disability onset and Social Security disability insurance benefits.
+    sources:
+      - label: Urban — Dynamic Simulation of Income Model 4 fact sheet
+        url: https://www.urban.org/sites/default/files/2024-09/Urban%E2%80%99s%20Dynamic%20Simulation%20of%20Income%20Model%204.pdf
+        kind: self
+
+  - model: dynasim
+    program: us-oasi
+    status: implemented
+    statuteTraceable: no
+    testCoverage: unknown
+    asOfYear: 2024
+    notes: >
+      DYNASIM simulates Social Security retirement benefits and related
+      policy options in long-run retirement income projections.
+    sources:
+      - label: Urban — DYNASIM detailed projections of the older population
+        url: https://www.urban.org/projects/dynasim-projecting-older-americans-future-well-being/detailed-projections-older-population-through-2065
+        kind: self
+      - label: Urban — Dynamic Simulation of Income Model 4 fact sheet
+        url: https://www.urban.org/sites/default/files/2024-09/Urban%E2%80%99s%20Dynamic%20Simulation%20of%20Income%20Model%204.pdf
+        kind: self
+
   # ============================ Urban health models ==========================
   - model: mcesm
     program: us-medicaid

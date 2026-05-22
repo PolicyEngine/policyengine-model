@@ -306,6 +306,13 @@ describe('comparison data', () => {
     }
   });
 
+  it('every model has at least one explicit coverage row', () => {
+    const coverageModels = new Set(data.coverage.map((c) => c.model));
+    for (const m of data.models) {
+      expect(coverageModels.has(m.id)).toBe(true);
+    }
+  });
+
   it('every model has a transparency row', () => {
     const tModels = new Set(data.transparency.map((t) => t.model));
     for (const m of data.models) {
