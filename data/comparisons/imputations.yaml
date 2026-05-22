@@ -15,12 +15,18 @@ imputations:
       Enhanced CPS first assigns `takes_up_snap_if_eligible` using a
       USDA take-up-rate prior while preserving CPS-reported SNAP
       recipients as take-up anchors. Calibration/local-area builds then
-      rerandomize the SNAP gate with block-level seeded draws and L0
-      reweighting governs final state and national SNAP totals.
+      rerandomize the SNAP gate with block-level seeded draws, and L0
+      reweighting solves a single constrained optimization that
+      simultaneously matches state and national SNAP outlay dollars
+      AND state-level SNAP recipient-household counts (so total
+      dollars and caseloads are both pinned to administrative targets
+      in the same pass, rather than benefits emerging from caseload
+      alignment).
     baseDataset: Enhanced CPS
     calibrationTargets:
-      - state-level SNAP dollars
-      - national SNAP outlays
+      - state-level SNAP outlay dollars
+      - national SNAP outlay dollars
+      - state-level SNAP recipient-household counts
     documentationUrl: https://github.com/PolicyEngine/policyengine-us-data
     reproducible: yes
     sources:
@@ -46,7 +52,12 @@ imputations:
       selects other eligible units by comparing participation
       probabilities to program-specific random numbers. Probabilities
       vary by unit type, benefit level, state, and citizenship; the
-      baseline is aligned to administrative caseload targets.
+      baseline is aligned to administrative caseload counts and
+      composition. Total benefit outlay dollars are an emergent
+      property (participation × rule-computed benefit) rather than an
+      explicit calibration target — they're approximated through the
+      benefit-band composition target, not solved for directly. See
+      Wheaton & Tran (Urban) on SNAP anti-poverty effects.
     baseDataset: CPS-ASEC
     calibrationTargets:
       - administrative caseload by state
@@ -160,6 +171,10 @@ imputations:
       employment, disability, and state-status predictors; baseline
       probabilities and random numbers are adjusted so true reporters
       are included and the caseload matches administrative targets.
+      Total TANF outlays are not an explicit calibration constraint —
+      they emerge from (caseload × rule-computed benefit). PE-US, by
+      contrast, includes TANF outlay dollars (state + national) and
+      TANF-recipient unit counts as simultaneous L0 targets.
     baseDataset: CPS-ASEC
     calibrationTargets:
       - administrative TANF caseload size
