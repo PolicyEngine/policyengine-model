@@ -691,13 +691,13 @@ artifacts:
     name: SNAP Screener state-rules reference table
     public: yes
     license: proprietary
-    url: https://www.snapscreener.com/screener
+    url: https://www.snapscreener.com/data
     description: >
       State-by-state SNAP rules reference table published on
       snapscreener.com.
     sources:
       - label: SNAP Screener — state rules
-        url: https://www.snapscreener.com/screener
+        url: https://www.snapscreener.com/data
         kind: self
 
   - model: snap-screener

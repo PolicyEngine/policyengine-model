@@ -733,7 +733,7 @@ transparency:
         kind: self
         supports: [codePublic, codeLicense, documentationPublic]
       - label: SNAP Screener — state rules reference
-        url: https://www.snapscreener.com/screener
+        url: https://www.snapscreener.com/data
         kind: self
         supports: [documentationPublic, parameterSourcing, datasetPublic]
       - label: Medicaid Screener — homepage
