@@ -1922,6 +1922,104 @@ coverage:
       - label: Urban HIPSM overview
         url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/health-insurance-policy-simulation-model-hipsm
 
+  # ============================ Urban health models ==========================
+  - model: mcesm
+    program: us-medicaid
+    status: partial
+    statuteTraceable: unknown
+    testCoverage: unknown
+    docsUrl: https://www.urban.org/research/publication/urban-institute-health-policy-centers-medicaidchip-eligibility-simulation-model
+    asOfYear: 2020
+    notes: >
+      MCESM models Medicaid eligibility pathways, including ACA-era and
+      state-specific eligibility rules, but it does not model enrollment
+      choice, service-level claims, or Medicaid costs.
+    sources:
+      - label: Urban Medicaid/CHIP Eligibility Simulation Model
+        url: https://www.urban.org/research/publication/urban-institute-health-policy-centers-medicaidchip-eligibility-simulation-model
+        kind: self
+      - label: Commonwealth Fund — Postpartum Medicaid/CHIP extension analysis
+        url: https://www.commonwealthfund.org/publications/issue-briefs/2021/jan/closing-gaps-maternal-health-postpartum-medicaid-chip
+        kind: civilsociety
+
+  - model: mcesm
+    program: us-chip
+    status: partial
+    statuteTraceable: unknown
+    testCoverage: unknown
+    docsUrl: https://www.urban.org/research/publication/urban-institute-health-policy-centers-medicaidchip-eligibility-simulation-model
+    asOfYear: 2020
+    notes: >
+      MCESM models CHIP eligibility for children and selected pregnant or
+      postpartum scenarios, including interactions with Medicaid
+      eligibility. It does not model CHIP enrollment choice, premiums,
+      service claims, or market response.
+    sources:
+      - label: Urban Medicaid/CHIP Eligibility Simulation Model
+        url: https://www.urban.org/research/publication/urban-institute-health-policy-centers-medicaidchip-eligibility-simulation-model
+        kind: self
+      - label: Commonwealth Fund — Postpartum Medicaid/CHIP extension analysis
+        url: https://www.commonwealthfund.org/publications/issue-briefs/2021/jan/closing-gaps-maternal-health-postpartum-medicaid-chip
+        kind: civilsociety
+
+  - model: hipsm
+    program: us-premium-tax-credit
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    docsUrl: https://www.urban.org/sites/default/files/publication/103412/the-health-insurance-policy-simulation-model-for-2020.pdf
+    asOfYear: 2025
+    notes: >
+      HIPSM models Marketplace eligibility, PTCs, CSRs, premiums, and
+      enrollment choices as part of its broader health insurance market
+      simulation.
+    sources:
+      - label: Urban HIPSM 2020 methodology report
+        url: https://www.urban.org/sites/default/files/publication/103412/the-health-insurance-policy-simulation-model-for-2020.pdf
+        kind: self
+      - label: Urban HIPSM overview
+        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/health-insurance-policy-simulation-model-hipsm
+        kind: self
+
+  - model: hipsm
+    program: us-medicaid
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    docsUrl: https://www.urban.org/sites/default/files/publication/103412/the-health-insurance-policy-simulation-model-for-2020.pdf
+    asOfYear: 2025
+    notes: >
+      HIPSM models Medicaid eligibility, enrollment, spending, and
+      interactions with other health coverage options. It calibrates each
+      year's baseline to the latest available Medicaid enrollment and costs
+      in each state.
+    sources:
+      - label: Urban HIPSM 2020 methodology report
+        url: https://www.urban.org/sites/default/files/publication/103412/the-health-insurance-policy-simulation-model-for-2020.pdf
+        kind: self
+      - label: Urban HIPSM overview
+        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/health-insurance-policy-simulation-model-hipsm
+        kind: self
+
+  - model: hipsm
+    program: us-chip
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    docsUrl: https://www.urban.org/sites/default/files/publication/103412/the-health-insurance-policy-simulation-model-for-2020.pdf
+    asOfYear: 2025
+    notes: >
+      HIPSM models CHIP eligibility, enrollment, spending, and coverage
+      transitions alongside Medicaid, Marketplace, employer, nongroup, and
+      uninsured choices.
+    sources:
+      - label: Urban HIPSM 2020 methodology report
+        url: https://www.urban.org/sites/default/files/publication/103412/the-health-insurance-policy-simulation-model-for-2020.pdf
+        kind: self
+      - label: Urban HIPSM overview
+        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/health-insurance-policy-simulation-model-hipsm
+        kind: self
+
   # ============================ TPC microsim =================================
   - model: tpc-microsim
     program: us-federal-income-tax

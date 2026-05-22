@@ -1254,6 +1254,30 @@ artifacts:
         url: https://www.cbo.gov/publication/61187
         kind: government
 
+  # =================================== MCESM =================================
+  - model: mcesm
+    type: codebase
+    name: Urban Medicaid/CHIP Eligibility Simulation Model
+    public: no
+    license: proprietary
+    description: Urban Institute Health Policy Center maintains this Medicaid and CHIP eligibility microsimulation and does not publish source code or machine-readable rule files.
+    sources:
+      - label: Urban Medicaid/CHIP Eligibility Simulation Model
+        url: https://www.urban.org/research/publication/urban-institute-health-policy-centers-medicaidchip-eligibility-simulation-model
+        kind: self
+
+  - model: mcesm
+    type: paper
+    name: The Urban Institute Health Policy Center's Medicaid/CHIP Eligibility Simulation Model
+    public: yes
+    license: Urban editorial
+    url: https://www.urban.org/research/publication/urban-institute-health-policy-centers-medicaidchip-eligibility-simulation-model
+    description: Public technical paper describing the ACS and Puerto Rico Community Survey Medicaid/CHIP eligibility model.
+    sources:
+      - label: Urban Medicaid/CHIP Eligibility Simulation Model
+        url: https://www.urban.org/research/publication/urban-institute-health-policy-centers-medicaidchip-eligibility-simulation-model
+        kind: self
+
   # =================================== HIPSM =================================
   - model: hipsm
     type: codebase
