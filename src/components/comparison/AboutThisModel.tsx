@@ -18,6 +18,8 @@ import {
   type ComparisonData,
   type Freshness,
   type Model,
+  type ModelingMechanic,
+  type ModelingMechanicCategory,
   type Source,
   type Transparency,
   type Tristate,
@@ -131,6 +133,36 @@ const ARTIFACT_TYPE_ORDER: ArtifactType[] = [
   'cli',
   'paper',
 ];
+
+const ABOUT_MECHANIC_CATEGORIES = [
+  'architecture',
+  'simulation-unit',
+  'tax-modeling',
+  'benefit-modeling',
+  'health-insurance',
+  'geography',
+  'time-horizon',
+  'dynamic-lifecycle',
+  'macro-feedback',
+  'output',
+  'access',
+] as const satisfies readonly ModelingMechanicCategory[];
+
+type AboutMechanicCategory = (typeof ABOUT_MECHANIC_CATEGORIES)[number];
+
+const ABOUT_MECHANIC_CATEGORY_LABELS: Record<AboutMechanicCategory, string> = {
+  architecture: 'Architecture',
+  'simulation-unit': 'Simulation unit',
+  'tax-modeling': 'Tax modeling',
+  'benefit-modeling': 'Benefit modeling',
+  'health-insurance': 'Health insurance',
+  geography: 'Geography',
+  'time-horizon': 'Time horizon',
+  'dynamic-lifecycle': 'Dynamic lifecycle',
+  'macro-feedback': 'Macro feedback',
+  output: 'Output',
+  access: 'Access',
+};
 
 function tryHost(url: string | undefined): string | undefined {
   if (!url) return undefined;
@@ -364,6 +396,88 @@ function FreshnessCompareTable({
 }
 
 /* -------------------------------------------------------------------------- */
+/*                           PANEL: RULE MECHANICS                            */
+/* -------------------------------------------------------------------------- */
+
+function RuleMechanicsTable({
+  models,
+  rows,
+}: {
+  models: Model[];
+  rows: ModelingMechanic[];
+}) {
+  if (rows.length === 0) {
+    return <div style={{ color: colors.text.tertiary }}>—</div>;
+  }
+
+  const modelOrder = new Map(models.map((m, i) => [m.id, i]));
+  const categoryOrder = new Map(
+    ABOUT_MECHANIC_CATEGORIES.map((category, i) => [category, i]),
+  );
+  const sortedRows = [...rows].sort((a, b) => {
+    const categoryDiff =
+      (categoryOrder.get(a.category as AboutMechanicCategory) ?? Infinity) -
+      (categoryOrder.get(b.category as AboutMechanicCategory) ?? Infinity);
+    if (categoryDiff !== 0) return categoryDiff;
+    return (
+      (modelOrder.get(a.model) ?? Infinity) -
+      (modelOrder.get(b.model) ?? Infinity)
+    );
+  });
+  const modelById = new Map(models.map((m) => [m.id, m]));
+
+  return (
+    <div style={tableWrapperStyle}>
+      <table style={tableStyle}>
+        <thead>
+          <tr>
+            <th style={{ ...thStyle, minWidth: 180 }}>Model</th>
+            <th style={thStyle}>Category</th>
+            <th style={thStyle}>Mechanic</th>
+            <th style={thStyle}>Scope</th>
+            <th style={thStyle}>Sources</th>
+          </tr>
+        </thead>
+        <tbody>
+          {sortedRows.map((row, i) => (
+            <tr key={`${row.model}-${row.category}-${row.label}-${i}`}>
+              <td style={tdStyle}>
+                <div style={{ fontWeight: 600 }}>
+                  {modelById.get(row.model)?.name ?? row.model}
+                </div>
+              </td>
+              <td style={tdStyle}>
+                {ABOUT_MECHANIC_CATEGORY_LABELS[
+                  row.category as AboutMechanicCategory
+                ] ?? row.category}
+              </td>
+              <td style={{ ...tdStyle, maxWidth: 520 }}>
+                <div style={{ fontWeight: 600, marginBottom: 4 }}>
+                  {row.label}
+                </div>
+                <div
+                  style={{
+                    fontSize: 13,
+                    color: colors.text.secondary,
+                    lineHeight: 1.55,
+                  }}
+                >
+                  {row.detail}
+                </div>
+              </td>
+              <td style={tdStyle}>{row.scope ?? '—'}</td>
+              <td style={{ ...tdStyle, maxWidth: 240 }}>
+                <SourceList sources={row.sources} compact />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
 /*                              PANEL: ARTIFACTS                              */
 /* -------------------------------------------------------------------------- */
 
@@ -582,6 +696,12 @@ export default function AboutThisModel({ activeModelIds }: AboutThisModelProps) 
   const activeFreshness = data.freshness.filter((r) =>
     activeIdSet.has(r.model),
   );
+  const aboutMechanicCategorySet = new Set<ModelingMechanicCategory>(
+    ABOUT_MECHANIC_CATEGORIES,
+  );
+  const activeMechanics = data.modeling.filter(
+    (r) => activeIdSet.has(r.model) && aboutMechanicCategorySet.has(r.category),
+  );
   const activeUsage = data.usage.filter((r) => activeIdSet.has(r.model));
   const artifactsByModel = new Map<string, Artifact[]>();
   for (const id of activeModelIds) {
@@ -624,6 +744,17 @@ export default function AboutThisModel({ activeModelIds }: AboutThisModelProps) 
           refreshes.
         </p>
         <FreshnessCompareTable models={activeModels} rows={activeFreshness} />
+      </div>
+
+      {/* ----------------------- Rule mechanics ------------------------ */}
+      <div style={panelStyle}>
+        <h3 style={panelTitleStyle}>Rule Mechanics</h3>
+        <p style={panelDescriptionStyle}>
+          Publicly documented architecture and policy-rule mechanics, including
+          tax and benefit engines, simulation units, geographic coverage, and
+          model horizons.
+        </p>
+        <RuleMechanicsTable models={activeModels} rows={activeMechanics} />
       </div>
 
       {/* -------------------------- Artifacts -------------------------- */}

@@ -26,6 +26,11 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: '/comparison/modeling',
+        destination: '/?compare=all',
+        permanent: true,
+      },
+      {
         source: '/comparison/methods',
         destination: '/data/calibration?compare=all',
         permanent: true,

@@ -4,6 +4,10 @@ import { usePathname, useSearchParams } from 'next/navigation';
 import { colors, typography, spacing } from '../../designTokens';
 import { IconChevronDown, IconChevronRight } from '@tabler/icons-react';
 import type { Country } from '../../hooks/useCountry';
+import {
+  appPathFromPublicPath,
+  usePublicBasePrefix,
+} from '../../hooks/usePublicBasePrefix';
 
 interface NavItem {
   path: string;
@@ -44,27 +48,10 @@ interface SidebarProps {
   onClose?: () => void;
 }
 
-/**
- * Extract the base prefix so sidebar links stay within the active
- * country namespace.
- *
- *   /{country}/model/...  (embedded in policyengine-app-v2)  → '/{country}/model'
- *   /{country}/...        (standalone preview via proxy.ts)  → '/{country}'
- *   otherwise                                                → ''
- */
-function useBasePrefix(): string {
-  const pathname = usePathname();
-  const embedMatch = pathname.match(/^\/\w+\/model/);
-  if (embedMatch) return embedMatch[0];
-  const countryMatch = pathname.match(/^\/(us|uk)(\/|$)/);
-  if (countryMatch) return `/${countryMatch[1]}`;
-  return '';
-}
-
 export default function Sidebar({ country, onClose }: SidebarProps) {
   const fullPath = usePathname();
-  const basePrefix = useBasePrefix();
-  const currentPath = basePrefix ? fullPath.slice(basePrefix.length) || '/' : fullPath;
+  const basePrefix = usePublicBasePrefix();
+  const currentPath = appPathFromPublicPath(fullPath);
   const searchParams = useSearchParams();
   const search = searchParams.toString();
   const href = (path: string) => {
