@@ -488,6 +488,7 @@ export type ModelingMechanicCategory =
   | 'geography'
   | 'time-horizon'
   | 'validation'
+  | 'documentation'
   | 'output'
   | 'access'
   | 'other';

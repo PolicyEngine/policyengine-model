@@ -144,6 +144,7 @@ const MODELING_MECHANIC_CATEGORY_VALUES = new Set([
   'geography',
   'time-horizon',
   'validation',
+  'documentation',
   'output',
   'access',
   'other',

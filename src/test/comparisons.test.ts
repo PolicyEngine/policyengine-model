@@ -132,6 +132,7 @@ describe('comparison data', () => {
     'geography',
     'time-horizon',
     'validation',
+    'documentation',
     'output',
     'access',
     'other',
@@ -375,6 +376,17 @@ describe('comparison data', () => {
     const modeledIds = new Set(data.modeling.map((row) => row.model));
     for (const m of data.models) {
       expect(modeledIds.has(m.id)).toBe(true);
+    }
+  });
+
+  it('every model has a documentation modeling-mechanics row', () => {
+    const documentedIds = new Set(
+      data.modeling
+        .filter((row) => row.category === 'documentation')
+        .map((row) => row.model),
+    );
+    for (const m of data.models) {
+      expect(documentedIds.has(m.id)).toBe(true);
     }
   });
 
