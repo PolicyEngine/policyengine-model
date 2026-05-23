@@ -144,6 +144,7 @@ const ABOUT_MECHANIC_CATEGORIES = [
   'time-horizon',
   'dynamic-lifecycle',
   'macro-feedback',
+  'documentation',
   'output',
   'access',
 ] as const satisfies readonly ModelingMechanicCategory[];
@@ -160,6 +161,7 @@ const ABOUT_MECHANIC_CATEGORY_LABELS: Record<AboutMechanicCategory, string> = {
   'time-horizon': 'Time horizon',
   'dynamic-lifecycle': 'Dynamic lifecycle',
   'macro-feedback': 'Macro feedback',
+  documentation: 'Documentation',
   output: 'Output',
   access: 'Access',
 };

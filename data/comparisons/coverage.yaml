@@ -3657,7 +3657,7 @@ coverage:
       published 2024.
     sources:
       - label: Budget Lab Tax-Simulator baseline CTC parameters (ctc.yaml)
-        url: https://github.com/Budget-Lab-Yale/Tax-Simulator/blob/main/config/scenarios/tax_law/baseline/ctc.yaml
+        url: https://raw.githubusercontent.com/Budget-Lab-Yale/Tax-Simulator/main/config/scenarios/tax_law/baseline/ctc.yaml
         kind: self
       - label: Budget Lab — Child Tax Credit Options for Reform (2024 report)
         url: https://budgetlab.yale.edu/sites/default/files/2024-04/The%20Budget%20Lab%20CTC%20Report%202024.pdf
@@ -3699,8 +3699,8 @@ coverage:
       Estate-Tax-Distribution repo models inheritances for the estate
       tax distribution but is not integrated with the tax microsim.
     sources:
-      - label: Budget Lab — Estate-Tax-Distribution repo (separate model)
-        url: https://github.com/Budget-Lab-Yale/Estate-Tax-Distribution
+      - label: Budget Lab — Estate-Tax-Distribution repo metadata (separate model)
+        url: https://api.github.com/repos/Budget-Lab-Yale/Estate-Tax-Distribution
         kind: self
 
   - model: budgetlab-tax
@@ -3736,8 +3736,8 @@ coverage:
       Tariffs handled by separate Budget Lab repos (Tariff-Model,
       Household-Tariff-Distribution, Tariff-ETRs), not the Tax-Simulator.
     sources:
-      - label: Budget Lab — Tariff-Model repo
-        url: https://github.com/Budget-Lab-Yale/Tariff-Model
+      - label: Budget Lab — Tariff-Model repo metadata
+        url: https://api.github.com/repos/Budget-Lab-Yale/Tariff-Model
         kind: self
 
   # =================== Tax Foundation General Equilibrium Model ==============
