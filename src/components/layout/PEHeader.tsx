@@ -50,6 +50,7 @@ function getNavItems(country: Country) {
         { label: 'Team', href: `https://policyengine.org/${country}/team` },
         { label: 'Supporters', href: `https://policyengine.org/${country}/supporters` },
         { label: 'Citations', href: `https://policyengine.org/${country}/citations` },
+        { label: 'Events', href: `https://policyengine.org/${country}/events` },
       ],
     },
     { label: 'Donate', href: `https://policyengine.org/${country}/donate` },
