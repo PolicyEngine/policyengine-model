@@ -14,10 +14,19 @@ coverage:
     testCoverage: high
     docsUrl: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/parameters/gov/irs
     asOfYear: 2026
+    notes: >
+      Complete federal income tax chain: ordinary and capital-gains rate
+      schedules, AMT, net investment income tax, additional Medicare tax,
+      Social Security benefit taxation, itemized and standard deductions,
+      and OBBBA-era provisions, with credits computed in the same graph.
+      Validated against NBER TAXSIM-35.
     sources:
       - label: policyengine_us IRS parameters
         url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/parameters/gov/irs
-
+        kind: self
+      - label: PolicyEngine US validation against TAXSIM
+        url: https://policyengine.github.io/policyengine-us/validation/taxsim.html
+        kind: self
   - model: policyengine-us
     program: us-payroll-tax
     status: implemented
@@ -74,15 +83,34 @@ coverage:
 
   - model: policyengine-us
     program: us-estate-tax
-    status: not-implemented
-    statuteTraceable: no
-    testCoverage: none
-    asOfYear: unknown
-    notes: Not covered. PolicyEngine focuses on annual income tax + transfers.
+    status: partial
+    statuteTraceable: yes
+    testCoverage: low
+    docsUrl: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/irs/tax/estate
+    asOfYear: 2026
+    notes: >
+      PolicyEngine implements the federal estate tax rate schedule and
+      unified credit: estate_tax_before_credits applies the IRC 2001(c)
+      graduated 18-40% schedule to taxable_estate_value, and
+      estate_tax_credit returns the IRC 2010 basic exclusion amount
+      (parameterized 1977-2026, including the OBBBA $15M 2026 value).
+      Coverage is partial because taxable_estate_value is an exogenous
+      input with no formula (estate composition, deductions, and
+      portability are not modeled) and estate_tax is computed per
+      deceased person rather than entering the household tax aggregate.
     sources:
-      - label: Repository search (no estate-tax variables)
-        url: https://github.com/PolicyEngine/policyengine-us/search?q=estate+tax
-
+      - label: PolicyEngine US estate_tax variable
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/irs/tax/estate/estate_tax.py
+        kind: self
+      - label: PolicyEngine US estate tax rate schedule (IRC 2001(c))
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/parameters/gov/irs/tax/estate/rate.yaml
+        kind: self
+      - label: PolicyEngine US estate unified credit / exclusion amount (IRC 2010)
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/parameters/gov/irs/credits/estate
+        kind: self
+      - label: 26 USC 2001 — Imposition and rate of tax
+        url: https://www.law.cornell.edu/uscode/text/26/2001
+        kind: government
   - model: policyengine-us
     program: us-tariffs
     status: not-implemented
@@ -103,28 +131,46 @@ coverage:
     status: implemented
     statuteTraceable: yes
     testCoverage: high
-    asOfYear: 2025
+    asOfYear: 2026
+    notes: >
+      Full SNAP benefit determination: gross and net income tests,
+      earned-income, dependent-care, child-support, medical, and excess
+      shelter deductions, broad-based categorical eligibility by state,
+      and state heating-and-cooling standard utility allowances, with 315
+      test cases. Take-up is assigned from USDA participation-rate priors
+      and calibrated to state and national administrative totals in the
+      enhanced CPS.
     sources:
       - label: SNAP variables
         url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/usda/snap
-
+        kind: self
+      - label: policyengine-us-data SNAP calibration
+        url: https://github.com/PolicyEngine/policyengine-us-data
+        kind: self
   - model: policyengine-us
     program: us-tanf
     status: partial
     statuteTraceable: yes
     testCoverage: medium
-    asOfYear: 2025
+    asOfYear: 2026
     notes: >
-      Federal TANF block-grant rules implemented; state-specific
-      eligibility, payment standards, and work requirements
-      implemented for selected states. TANF is fundamentally
-      state-administered with substantial variation, so coverage
-      is partial by construction even though every modeled state
-      uses the actual state ruleset (no averaging or simplification).
+      Federal TANF block-grant structure is implemented at gov/hhs/tanf,
+      and 28 states plus DC have state-specific eligibility, payment
+      standards, and income rules from the actual state ruleset (no
+      averaging), several of them deep (the CA, MT, TX, IL, and DC
+      rulesets each exceed 20 variables). TANF is fundamentally
+      state-administered with wide variation, so coverage is partial:
+      roughly 22 states are not yet modeled with a state ruleset.
     sources:
-      - label: TANF variables
+      - label: TANF variables (federal)
         url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/hhs/tanf
-
+        kind: self
+      - label: PolicyEngine US California CalWORKs (example state ruleset)
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/states/ca/cdss/tanf
+        kind: self
+      - label: PolicyEngine US modeled policies metadata
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/programs.yaml
+        kind: self
   - model: policyengine-us
     program: us-ssi
     status: implemented
@@ -140,28 +186,30 @@ coverage:
     status: partial
     statuteTraceable: yes
     testCoverage: medium
-    asOfYear: 2025
+    asOfYear: 2026
     notes: >
-      State Supplementary Payment (SSP) programs implemented for 17
-      of the 45 states + DC that operate one: AK, AL, CA (incl. CAPI
-      for certain immigrants), CO, CT, DE, GA, IL (AABD), IN, KY,
-      MA, ME, MI, NM, SC, TX, and WA. Each implementation uses the
-      full state ruleset — including category-specific (aged vs
-      blind vs disabled) and living-arrangement-specific payment
-      standards where the state actually varies them — rather than
-      averaging across eligibility categories.
+      State Supplementary Payment programs are implemented for 20 states:
+      AK, AL, CA (including CAPI for certain immigrants), CO (including
+      OAP), CT, DE, GA, ID, IL, IN, KY, MA, ME, MI, MO, NE, NM, SC, TX,
+      and WA. Programs appear under varied agency paths (ssp,
+      state_supplement, capi, oap, aabd, ssi_state_supplement), each
+      using the full state ruleset, including category-specific
+      (aged/blind/disabled) and living-arrangement-specific payment
+      standards where the state varies them. Coverage is partial because
+      most states that operate an SSP are not yet modeled.
     sources:
       - label: CA State Supplement
         url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/states/ca/cdss/state_supplement
-      - label: CT SSP
-        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/states/ct/dss/ssp
-      - label: MA SSP
-        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/states/ma/dta/ssp
-      - label: KY SSP
-        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/states/ky/dcbs/ssp
+        kind: self
       - label: TX SSI State Supplement
         url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/states/tx/hhsc/ssi_state_supplement
-
+        kind: self
+      - label: ID Aid to the Aged, Blind, and Disabled
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/states/id/dhw/aabd
+        kind: self
+      - label: NE Aid to the Aged, Blind, and Disabled
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/states/ne/dhhs/aabd
+        kind: self
   - model: policyengine-us
     program: us-medicaid
     status: implemented
@@ -222,99 +270,155 @@ coverage:
 
   - model: policyengine-us
     program: us-section-8
-    status: implemented
+    status: partial
     statuteTraceable: yes
     testCoverage: medium
-    asOfYear: 2025
+    asOfYear: 2026
+    notes: >
+      The HUD rules engine computes housing assistance payments end to
+      end (HUD annual/adjusted income, income limits, total tenant
+      payment, payment standards, fair market rents, utility allowance)
+      with 88 test cases. The model's own metadata marks Section 8 as in
+      progress because Area Median Income inputs currently cover only
+      selected geographies (Los Angeles County and Colorado), so national
+      microsimulation results rely on reported housing assistance.
     sources:
-      - label: Section 8 variables
+      - label: Section 8 variables (HUD rules engine)
         url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/hud
-
+        kind: self
+      - label: PolicyEngine US modeled policies metadata (section_8 in progress)
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/programs.yaml
+        kind: self
   - model: policyengine-us
     program: us-ssdi
     status: partial
-    statuteTraceable: partial
+    statuteTraceable: no
     testCoverage: low
-    asOfYear: 2024
-    notes: SSDI benefits treated as exogenous income; benefit determination not modeled.
+    asOfYear: 2026
+    notes: >
+      SSDI benefits are treated as exogenous, uprated income
+      (social_security_disability); disability determination and the
+      benefit formula are not modeled. The SGA thresholds under gov/ssa
+      serve SSI eligibility rather than SSDI benefit computation.
     sources:
-      - label: Repository search for SSDI
-        url: https://github.com/PolicyEngine/policyengine-us/search?q=ssdi
-
+      - label: PolicyEngine US reported SSDI variable
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/ssa/ss/social_security_disability.py
+        kind: self
   - model: policyengine-us
     program: us-oasi
     status: partial
-    statuteTraceable: partial
-    testCoverage: low
-    asOfYear: 2024
-    notes: OASI benefits treated as exogenous income; PIA/AIME computation not modeled in detail.
+    statuteTraceable: yes
+    testCoverage: medium
+    asOfYear: 2026
+    notes: >
+      PolicyEngine implements a full Social Security retirement benefit
+      engine under gov/ssa/social_security: ss_pia applies the bend-point
+      PIA formula, ss_aime computes Average Indexed Monthly Earnings by
+      wage-indexing up to 35 years of covered earnings, and the model
+      applies full-retirement-age, early/delayed-claiming adjustment, and
+      the earnings test. This engine is not wired into the population
+      microsimulation: the reported social_security_retirement variable
+      is an exogenous, uprated input, and a baseline test confirms the
+      computed-engine internals deliberately do not flow into reported
+      benefits. Status is partial because benefit determination exists
+      but the microsimulation uses survey-reported, uprated benefits.
     sources:
-      - label: Social Security variables
-        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/ssa
-
+      - label: PolicyEngine US PIA formula (42 USC 415(a))
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/ssa/social_security/ss_pia.py
+        kind: self
+      - label: PolicyEngine US AIME formula (42 USC 415(b))
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/ssa/social_security/ss_aime.py
+        kind: self
+      - label: PolicyEngine US reported retirement benefit (exogenous input)
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/ssa/ss/social_security_retirement.py
+        kind: self
+      - label: Test — SSA calculation internals do not flow into reported benefits
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/tests/policy/baseline/gov/ssa/social_security/social_security_retirement.yaml
+        kind: self
   - model: policyengine-us
     program: us-ui
     status: partial
     statuteTraceable: partial
-    testCoverage: low
-    asOfYear: 2024
-    notes: UI benefits treated as exogenous income; eligibility not modeled.
+    testCoverage: medium
+    asOfYear: 2026
+    notes: >
+      For most of the population UI is an exogenous, uprated input
+      (unemployment_compensation), and the taxable-UI inclusion in AGI is
+      modeled. Two states have full UI benefit-determination engines from
+      the state ruleset: New Jersey (base-period wages, weekly benefit
+      rate, dependency allowance, eligibility; 59 test cases) and
+      Pennsylvania (pa_uc). Status is partial because benefit
+      determination is modeled only for these states while the national
+      microsimulation uses reported benefits.
     sources:
-      - label: UI variables
-        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/states/unemployment_compensation.py
-
+      - label: PolicyEngine US reported UI input variable
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/states/unemployment_compensation.py
+        kind: self
+      - label: PolicyEngine US New Jersey UI weekly benefit rate
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/states/nj/dol/unemployment_insurance/nj_unemployment_insurance_weekly_benefit_rate.py
+        kind: self
+      - label: PolicyEngine US modeled policies metadata (NJ UI and PA UC complete)
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/programs.yaml
+        kind: self
   - model: policyengine-us
     program: us-liheap
     status: partial
     statuteTraceable: yes
     testCoverage: medium
-    asOfYear: 2025
+    asOfYear: 2026
     notes: >
-      Federal LIHEAP block-grant rules implemented at gov/hhs/liheap;
-      four states have detailed state-specific implementations (DC,
-      IL, MA, TX) and Oregon is in progress. States without a
-      state-specific module fall back to federal defaults, which
-      understates the variation across actual state LIHEAP programs.
+      There is no federal LIHEAP benefit module; PolicyEngine models
+      LIHEAP only where a state or local program is implemented from that
+      program's ruleset. Detailed implementations exist for DC, Illinois,
+      Massachusetts, and Texas (the LIHEAP-funded CEAP), plus Riverside
+      County, California. The shared gov/hhs/liheap parameter set holds
+      only a state-median-income limit consumed by the state modules;
+      households in unmodeled states receive no LIHEAP, which understates
+      national LIHEAP coverage.
     sources:
-      - label: LIHEAP variables
-        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/parameters/gov/hhs/liheap
-
+      - label: PolicyEngine US Massachusetts LIHEAP
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/states/ma/doer/liheap
+        kind: self
+      - label: PolicyEngine US DC LIHEAP
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/states/dc/doee/liheap
+        kind: self
+      - label: PolicyEngine US Illinois LIHEAP
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/states/il/dceo/liheap
+        kind: self
+      - label: PolicyEngine US Texas CEAP (LIHEAP-funded)
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/states/tx/tdhca/ceap
+        kind: self
   - model: policyengine-us
     program: us-ccdf
     status: partial
     statuteTraceable: yes
     testCoverage: medium
-    asOfYear: 2025
+    asOfYear: 2026
     notes: >
-      CCDF is a federal block grant — every state and DC operates a
-      CCDF-funded child-care subsidy program. Federal eligibility,
-      copay, and subsidy formulas are implemented at gov/hhs/ccdf,
-      but the actual programs are state-administered with
-      substantial variation. 18 state programs are implemented
-      end-to-end with the state agency's own ruleset: AK CCAP, CA
-      CalWORKs Childcare, CO CCAP, CT C4K, DC CCSP, DE POC, IL CCAP
-      (eligibility only), MA CCFA, ME CCAP, NC SCCA, NE Child Care
-      Subsidy, NH CCAP, NJ CCAP, PA CCW, RI CCAP, SC CCAP, TX CCS,
-      VA CCSP. Seven more are in open PRs and expected to land
-      shortly: AL CCSP, AR SRA, AZ CCAP, GA CAPS, MD CCS, WA WCCC,
-      WV CCAP. Remaining states fall back to federal defaults plus
-      state SMI parameters, which is a coarse approximation of
-      their actual programs. Take-up is not currently calibrated to
-      administrative caseloads (see imputations.yaml) — simulated
-      CCDF receipt equals simulated CCDF eligibility, which
-      overstates actual enrolment.
+      CCDF is a federal block grant; every state operates a CCDF-funded
+      child-care subsidy with substantial variation, so coverage is
+      partial by construction. Federal eligibility, copay, and subsidy
+      parameters are implemented at gov/hhs/ccdf, and roughly 21 states
+      implement their own subsidy program end-to-end with the state
+      agency ruleset (AK, AL, CO, CT, DC, DE, MA, ME, NC, NE, NH, NJ, PA,
+      RI, SC, TX, VA, VT, WA, WV; Illinois is eligibility-only).
+      Remaining states fall back to federal defaults plus state
+      median-income parameters. Take-up is not calibrated to
+      administrative caseloads, so simulated CCDF receipt equals
+      simulated eligibility and overstates enrollment.
     sources:
       - label: CCDF variables (federal)
         url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/hhs/ccdf
-      - label: CA CalWORKs child care
-        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/parameters/gov/states/ca/cdss/tanf/child_care
-      - label: CO CCAP
-        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/parameters/gov/states/co/ccap
-      - label: IL CCAP
-        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/parameters/gov/states/il/dhs/ccap
-      - label: DC CCSP
-        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/parameters/gov/states/dc
-
+        kind: self
+      - label: PolicyEngine US Washington Working Connections Child Care
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/states/wa/dcyf/wccc/wa_wccc.py
+        kind: self
+      - label: PolicyEngine US Connecticut Care 4 Kids
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/states/ct/oec/c4k/ct_c4k.py
+        kind: self
+      - label: PolicyEngine US modeled policies metadata (ccdf partial)
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/programs.yaml
+        kind: self
   - model: policyengine-us
     program: us-state-income-tax
     status: implemented
@@ -339,22 +443,158 @@ coverage:
     status: implemented
     statuteTraceable: yes
     testCoverage: high
-    asOfYear: 2025
-    notes: 31 state EITCs + DC.
+    asOfYear: 2026
+    notes: >
+      Dedicated state EITC variables for 28 states plus DC, computed
+      inside the same household simulation as the federal EITC they
+      typically piggyback on.
     sources:
-      - label: State EITC variables
-        url: https://github.com/PolicyEngine/policyengine-us/search?q=state+eitc
-
+      - label: State EITC variables (per-state trees under gov/states)
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/states
+        kind: self
   - model: policyengine-us
     program: us-state-ctc
     status: implemented
     statuteTraceable: yes
     testCoverage: medium
-    asOfYear: 2025
-    notes: 15 state CTCs + DC.
+    asOfYear: 2026
+    notes: >
+      Dedicated state child tax credit variables for 17 states plus DC,
+      including refundable credits such as the Minnesota and New Mexico
+      CTCs.
     sources:
-      - label: State CTC search
-        url: https://github.com/PolicyEngine/policyengine-us/search?q=state+ctc
+      - label: State CTC variables (per-state trees under gov/states)
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/states
+        kind: self
+  - model: policyengine-us
+    program: us-amt
+    status: implemented
+    statuteTraceable: yes
+    testCoverage: high
+    asOfYear: 2026
+    notes: >
+      Computes the AMT end to end (AMTI, exemption and phase-out,
+      two-rate schedule, capital-gains handling) and feeds it into
+      income_tax_before_credits, with 80 test cases.
+    sources:
+      - label: AMT variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/irs/tax/federal_income/alternative_minimum_tax
+        kind: self
+
+  - model: policyengine-us
+    program: us-niit
+    status: implemented
+    statuteTraceable: yes
+    testCoverage: low
+    asOfYear: 2026
+    notes: >
+      Computes the 3.8% NIIT on the lesser of net investment income and
+      MAGI over the filing-status threshold (IRC 1411) and includes it in
+      income_tax_before_refundable_credits.
+    sources:
+      - label: NIIT variable
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/irs/tax/federal_income/net_investment_income_tax.py
+        kind: self
+
+  - model: policyengine-us
+    program: us-school-meals
+    status: implemented
+    statuteTraceable: yes
+    testCoverage: high
+    asOfYear: 2026
+    notes: >
+      Models free, reduced-price, and paid school-meal tiers from
+      federal-poverty-ratio thresholds and categorical eligibility
+      (SNAP/TANF receipt), values the per-meal federal subsidy, and
+      reflects state universal-free-meal policies, with 82 test cases.
+    sources:
+      - label: School meals variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/usda/school_meals
+        kind: self
+
+  - model: policyengine-us
+    program: us-pell-grant
+    status: implemented
+    statuteTraceable: yes
+    testCoverage: high
+    asOfYear: 2026
+    notes: >
+      Computes the Pell award via an Expected Family Contribution need
+      analysis (head/dependent allowances, countable assets,
+      simplified-formula test), cost of attendance, and months in school,
+      with 72 test cases.
+    sources:
+      - label: Pell Grant variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/ed/pell_grant
+        kind: self
+
+  - model: policyengine-us
+    program: us-head-start
+    status: partial
+    statuteTraceable: yes
+    testCoverage: high
+    asOfYear: 2026
+    notes: >
+      Models federal Head Start and Early Head Start eligibility and
+      valuation at gov/hhs/head_start (103 test cases); Washington
+      additionally has the state ECEAP program. Partial because slots are
+      constrained in practice and enrollment is gated by take-up priors
+      rather than full caseload calibration.
+    sources:
+      - label: Head Start variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/hhs/head_start
+        kind: self
+
+  - model: policyengine-us
+    program: us-lifeline
+    status: implemented
+    statuteTraceable: yes
+    testCoverage: high
+    asOfYear: 2026
+    notes: >
+      Models Lifeline income and categorical eligibility and the monthly
+      discount, with state Lifeline supplements for Kansas and Texas (31
+      test cases).
+    sources:
+      - label: Lifeline variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/fcc/lifeline
+        kind: self
+
+  - model: policyengine-us
+    program: us-acp
+    status: implemented
+    statuteTraceable: yes
+    testCoverage: medium
+    asOfYear: 2024
+    notes: >
+      Models Affordable Connectivity Program eligibility and the monthly
+      broadband discount under gov/fcc/acp; the program stopped accepting
+      claims in 2024 when appropriations lapsed, and the rules remain for
+      historical and reform analysis.
+    sources:
+      - label: ACP variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/fcc/acp
+        kind: self
+
+  - model: policyengine-us
+    program: us-local-income-tax
+    status: partial
+    statuteTraceable: yes
+    testCoverage: high
+    asOfYear: 2026
+    notes: >
+      Models the New York City personal income tax end to end (taxable
+      income, rate schedule, NYC EITC, household and child-care credits;
+      74 test cases), plus the Philadelphia wage tax and the Montgomery
+      County (MD) EITC. Partial because only selected localities are
+      modeled.
+    sources:
+      - label: NYC income tax variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/local/ny/nyc/tax/income
+        kind: self
+      - label: Philadelphia wage tax variable
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/local/pa/philadelphia/tax/income/pa_philadelphia_wage_tax.py
+        kind: self
 
   # ============================ PolicyEngine UK ===============================
   - model: policyengine-uk
@@ -1341,18 +1581,23 @@ coverage:
 
   - model: entitledto
     program: uk-scottish-child-payment
-    status: unknown
+    status: implemented
     statuteTraceable: unknown
     testCoverage: unknown
-    asOfYear: unknown
+    asOfYear: 2026
     notes: >
-      Public EntitledTo and GOV.UK calculator pages do not clearly state
-      whether Scottish Child Payment is handled as a separate rule.
+      EntitledTo's "Benefits included in the calculator" help page lists
+      the Scottish Child Payment (and Carer's Allowance Supplement) among
+      the Scotland-specific benefits the calculator estimates.
     sources:
-      - label: EntitledTo benefits calculator
-        url: https://www.entitledto.co.uk/
+      - label: EntitledTo — Benefits included in the calculator
+        url: https://www.entitledto.co.uk/help/benefits-included
         kind: self
-
+        supports: [status]
+      - label: EntitledTo — Scottish Child Payment help page
+        url: https://www.entitledto.co.uk/help/scottish_child_payment
+        kind: self
+        supports: [status]
   # ================================== TRIM3 ===================================
   - model: trim3
     program: us-federal-income-tax
@@ -1413,18 +1658,23 @@ coverage:
     statuteTraceable: no
     testCoverage: none
     notes: >
-      TRIM3's official Programs Simulated list at
-      boreas.urban.org/T3IntroPrograms.php does not include an ACA
-      Premium Tax Credit or marketplace-subsidy module. Adjacent
-      health-coverage modules (Medicaid/SCHIP, Medicare,
-      Employer-Sponsored Health Insurance) are listed; PTC is not.
-      The federal-tax module may implicitly affect post-PTC AGI but
-      the marketplace-subsidy reconciliation (Form 8962, IRC 36B) is
-      not separately simulated.
+      TRIM3's documented health-insurance scope is Medicaid/SCHIP,
+      Medicare, and Employer-Sponsored Health Insurance; it does not
+      include an ACA Premium Tax Credit or marketplace-subsidy module.
+      At the Urban Institute, ACA marketplace premium subsidies are
+      modeled by a separate sibling model — the Health Insurance Policy
+      Simulation Model (HIPSM) — not by TRIM3, so the Form 8962 /
+      IRC 36B premium-tax-credit reconciliation is not simulated within
+      TRIM3 itself.
     sources:
-      - label: TRIM3 Programs Simulated (no ACA/PTC module listed)
+      - label: TRIM3 Programs Simulated — Health Insurance Programs are Medicare, Medicaid/SCHIP, and Employer-Sponsored Insurance (no ACA/PTC module)
         url: https://boreas.urban.org/T3IntroPrograms.php
         kind: self
+        supports: [status]
+      - label: Urban Institute — Health Insurance Policy Simulation Model (HIPSM), Urban's model for ACA marketplace premium subsidies
+        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/health-insurance-policy-simulation-model-hipsm
+        kind: self
+        supports: [status]
 
   - model: trim3
     program: us-estate-tax
@@ -1613,17 +1863,28 @@ coverage:
 
   - model: trim3
     program: us-liheap
-    status: not-implemented
-    statuteTraceable: no
-    testCoverage: none
+    status: implemented
+    statuteTraceable: unknown
+    testCoverage: unknown
+    asOfYear: 2018
     notes: >
-      No LIHEAP module in TRIM3's official Programs Simulated list at
-      boreas.urban.org/T3IntroPrograms.php.
+      TRIM3 simulates LIHEAP. The Urban Institute's current TRIM3 program
+      description lists the Low Income Home Energy Assistance Program
+      among the cash-transfer programs the model simulates, and ASPE's
+      TRIM3-based program-eligibility-and-participation brief reports
+      simulated LIHEAP eligibility (72.2M eligible people) and a 20%
+      participation rate for 2018. (The older "Programs Simulated" intro
+      page at boreas.urban.org omits LIHEAP, but it likewise omits WIC —
+      which TRIM3 also models — so that page's list is not exhaustive.)
     sources:
-      - label: TRIM3 Programs Simulated (no LIHEAP module)
-        url: https://boreas.urban.org/T3IntroPrograms.php
+      - label: Urban Institute — The Transfer Income Model (TRIM); program list includes the Low Income Home Energy Assistance Program
+        url: https://www.urban.org/research/data-methods/data-analysis/quantitative-data-analysis/microsimulation/transfer-income-model-trim
         kind: self
-
+        supports: [status]
+      - label: ASPE — Participation in the U.S. Social Safety Net (Nov 2021), Table 1 (TRIM3; LIHEAP 72.2M eligible, 20% participation, 2018)
+        url: https://aspe.hhs.gov/sites/default/files/documents/d4b6a618b8158673fe75ef839a395a9d/Program_Eligibility_and_Participation_Brief_November_2021.pdf
+        kind: government
+        supports: [status, asOfYear]
   - model: trim3
     program: us-ccdf
     status: implemented
@@ -2742,29 +3003,53 @@ coverage:
     status: not-implemented
     statuteTraceable: no
     testCoverage: none
-    notes: TPC microsim is tax-only; transfer programs are out of scope.
+    asOfYear: 2025
+    notes: >
+      TPC does not simulate SNAP as a program. Its calculators cover the
+      individual income tax, payroll taxes, the corporate income tax
+      (burden), excise taxes (burden), and the estate tax. TPC uses TRIM3
+      tabulations only to adjust the reported dollar amounts and
+      recipient counts of non-taxable transfers (SNAP, TANF, SSI) in its
+      CPS-matched database, not to model SNAP eligibility or benefits.
     sources:
-      - label: TPC Brief Description (scope)
-        url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
-
+      - label: TPC — Brief Description of the Tax Model
+        url: https://taxpolicycenter.org/resources/brief-description-tax-model
+        kind: self
+        quote: >-
+          we use tabulations from the TRIM3 microsimulation model to
+          adjust the reported values of certain non-taxable transfer
+          payments ... food stamps (SNAP), TANF, and SSI
+        supports: [status]
   - model: tpc-microsim
     program: us-tanf
     status: not-implemented
     statuteTraceable: no
     testCoverage: none
+    asOfYear: 2025
+    notes: >
+      TANF is not simulated as a program. TPC uses TRIM3 tabulations to
+      adjust reported TANF income amounts in its microdata; it does not
+      model TANF eligibility or benefits.
     sources:
-      - label: TPC Brief Description (scope)
-        url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
-
+      - label: TPC — Brief Description of the Tax Model (TRIM3-based adjustment of SNAP/TANF/SSI reported amounts)
+        url: https://taxpolicycenter.org/resources/brief-description-tax-model
+        kind: self
+        supports: [status]
   - model: tpc-microsim
     program: us-ssi
     status: not-implemented
     statuteTraceable: no
     testCoverage: none
+    asOfYear: 2025
+    notes: >
+      SSI is not simulated as a program. TPC uses TRIM3 tabulations to
+      adjust reported SSI income amounts in its CPS-matched database; it
+      does not model SSI eligibility or benefits.
     sources:
-      - label: TPC Brief Description (scope)
-        url: https://www.taxpolicycenter.org/resources/brief-description-tax-model
-
+      - label: TPC — Brief Description of the Tax Model (TRIM3-based adjustment of SNAP/TANF/SSI reported amounts)
+        url: https://taxpolicycenter.org/resources/brief-description-tax-model
+        kind: self
+        supports: [status]
   - model: tpc-microsim
     program: us-medicaid
     status: not-implemented
@@ -3584,6 +3869,36 @@ coverage:
       - label: Tax-Calculator README (federal income and payroll taxes)
         url: https://github.com/PSLmodels/Tax-Calculator
         kind: self
+
+  - model: tax-calculator
+    program: us-state-eitc
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    asOfYear: 2026
+    notes: >
+      Federal-only model; state EITCs are out of scope.
+      policy_current_law.json contains no state parameters. (Tax-Brain
+      wraps Tax-Calculator and inherits the same federal-only scope.)
+    sources:
+      - label: Tax-Calculator README (federal income and payroll tax scope)
+        url: https://github.com/PSLmodels/Tax-Calculator
+        kind: self
+        supports: [status]
+
+  - model: tax-calculator
+    program: us-state-ctc
+    status: not-implemented
+    statuteTraceable: no
+    testCoverage: none
+    asOfYear: 2026
+    notes: >
+      Federal-only model; state child tax credits are out of scope.
+    sources:
+      - label: Tax-Calculator README (federal income and payroll tax scope)
+        url: https://github.com/PSLmodels/Tax-Calculator
+        kind: self
+        supports: [status]
 
   # ============================ Budget Lab Tax Model =========================
   - model: budgetlab-tax
