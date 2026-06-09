@@ -14,15 +14,49 @@ usage:
     monthlyComputations: unknown
     organizationUsers: unknown
     notes: >
-      Tracked via policyengine.org analytics and api.policyengine.org logs;
-      public dashboards not yet published. Major US press cites include
-      coverage of OBBBA, the 2024 election analyses, and CTC reform impact
-      tables. Pending: aggregate numbers from internal analytics.
+      Open-source signals (retrieved 2026-06-09): 132 named GitHub
+      contributors and roughly 69,000 PyPI downloads in the trailing 30
+      days. No published academic paper yet (the JOSS submission is under
+      review), so a citation count cannot be derived. Documented
+      government and institutional uses include a US House press release
+      citing PolicyEngine poverty estimates for the Young Adult Tax
+      Credit Act (2024), a Niskanen Center child tax credit report built
+      on PolicyEngine, and API integrations powering MyFriendBen and
+      Imagine LA's Benefit Navigator. NBER signed an MoU with
+      PolicyEngine to build the open-source TAXSIM emulator (2025).
+      Aggregate active-user and computation counts are not published.
     sources:
-      - label: PolicyEngine in the news
+      - label: GitHub API — policyengine-us contributors (132 named, retrieved 2026-06-09)
+        url: https://api.github.com/repos/PolicyEngine/policyengine-us/contributors
+        kind: other
+      - label: PyPIStats — policyengine-us recent downloads
+        url: https://pypistats.org/api/packages/policyengine-us/recent
+        kind: other
+      - label: JOSS — PolicyEngine submission (under review)
+        url: https://joss.theoj.org/papers/34b9f72df98e586d7e6a2448922407e7
+        kind: academic
+        supports: [academicCitations]
+      - label: Rep. Morgan McGarvey — Young Adult Tax Credit Act press release (cites PolicyEngine)
+        url: https://mcgarvey.house.gov/media/press-releases/congressman-morgan-mcgarvey-introduces-young-adult-tax-credit-act
+        kind: government
+        supports: [governmentReports]
+      - label: Niskanen Center — child tax credit reform options (uses PolicyEngine)
+        url: https://www.niskanencenter.org/building-a-stronger-foundation-for-american-families-options-for-child-tax-credit-reform/
+        kind: civilsociety
+      - label: MyFriendBen (PolicyEngine API integration)
+        url: https://www.myfriendben.org/
+        kind: civilsociety
+        supports: [organizationUsers]
+      - label: Benefit Navigator, Imagine LA (PolicyEngine API integration)
+        url: https://www.imaginela.org/benefit-navigator
+        kind: civilsociety
+        supports: [organizationUsers]
+      - label: PolicyEngine — NBER MoU to build open TAXSIM emulator (2025)
+        url: https://www.policyengine.org/us/research/policyengine-nber-mou-taxsim
+        kind: self
+      - label: PolicyEngine — US research catalogue
         url: https://www.policyengine.org/us/research
         kind: self
-
   - model: trim3
     academicCitations: unknown
     governmentReports: unknown
@@ -160,15 +194,44 @@ usage:
     monthlyComputations: unknown
     organizationUsers: unknown
     notes: >
-      Tracked via policyengine.org analytics and api.policyengine.org
-      logs; public dashboards not yet published. UK press cites include
-      coverage around Autumn Budget 2024 (Universal Credit, Income Tax
-      threshold freeze) and Nuffield Foundation-funded analyses.
+      Open-source signals (retrieved 2026-06-09): 23 named GitHub
+      contributors and roughly 52,000 PyPI downloads in the trailing 30
+      days. HM Treasury published an Algorithmic Transparency Record
+      (2024-12-17) documenting a beta/pilot evaluation of PolicyEngine UK
+      as a possible supplement to its internal IGOTM model; the record
+      states HMT does not currently use PolicyEngine. The Times covered
+      the pilot (December 2024). The Nuffield Foundation funds
+      PolicyEngine UK's enhancement programme (£251,296, 2024-2025).
+      PolicyEngine independently costed Liberal Democrat and Reform UK
+      proposals in 2024-2025. Aggregate active-user and computation
+      counts are not published.
     sources:
-      - label: PolicyEngine UK research catalogue
+      - label: GOV.UK — HM Treasury Algorithmic Transparency Record on PolicyEngine UK (2024-12-17)
+        url: https://www.gov.uk/algorithmic-transparency-records/hmt-modelling-policy-engine
+        kind: government
+        supports: [governmentReports]
+      - label: GitHub API — policyengine-uk contributors (23 named, retrieved 2026-06-09)
+        url: https://api.github.com/repos/PolicyEngine/policyengine-uk/contributors
+        kind: other
+      - label: PyPIStats — policyengine-uk recent downloads
+        url: https://pypistats.org/api/packages/policyengine-uk/recent
+        kind: other
+      - label: The Times — How civil servants really use AI (covers the HMT PolicyEngine pilot, December 2024)
+        url: https://www.thetimes.co.uk/uk/politics/article/how-civil-servants-really-use-ai-from-lesson-plans-to-recruitment-k8nzghbn8
+        kind: press
+        supports: [pressMentions]
+      - label: Nuffield Foundation — Enhancing, localising and democratising tax-benefit policy analysis (grant to PolicyEngine)
+        url: https://www.nuffieldfoundation.org/project/enhancing-localising-and-democratising-tax-benefit-policy-analysis
+        kind: civilsociety
+      - label: PolicyEngine — HM Treasury pilot writeup
+        url: https://www.policyengine.org/uk/research/hmt-policyengine-pilot
+        kind: self
+      - label: PolicyEngine — Liberal Democrats 2024 manifesto analysis
+        url: https://www.policyengine.org/uk/research/lib-dem-2024-manifesto
+        kind: self
+      - label: PolicyEngine — UK research catalogue
         url: https://www.policyengine.org/uk/research
         kind: self
-
   - model: ukmod
     academicCitations: unknown
     governmentReports: unknown

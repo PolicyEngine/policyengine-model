@@ -48,8 +48,8 @@ models:
       - label: PolicyEngine on PyPI
         url: https://pypi.org/project/policyengine-us/
         kind: other
-      - label: Ghenis & Woodruff — PolicyEngine paper (J. Open Source Software)
-        url: https://joss.theoj.org/papers/10.21105/joss.04494
+      - label: JOSS — PolicyEngine submission (under review)
+        url: https://joss.theoj.org/papers/34b9f72df98e586d7e6a2448922407e7
         kind: academic
 
   - id: trim3
@@ -478,8 +478,8 @@ models:
       - label: PolicyEngine UK on PyPI
         url: https://pypi.org/project/policyengine-uk/
         kind: other
-      - label: Ghenis & Woodruff — PolicyEngine paper (J. Open Source Software)
-        url: https://joss.theoj.org/papers/10.21105/joss.04494
+      - label: JOSS — PolicyEngine submission (under review)
+        url: https://joss.theoj.org/papers/34b9f72df98e586d7e6a2448922407e7
         kind: academic
       - label: Nuffield Foundation — Modelling the UK tax-benefit
           system with PolicyEngine

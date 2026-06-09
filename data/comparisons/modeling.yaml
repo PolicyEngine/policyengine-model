@@ -186,6 +186,40 @@ modeling:
         url: https://policyengine.github.io/policyengine-us/validation/taxsim.html
         kind: self
 
+  - model: policyengine-uk
+    category: geography
+    label: Local authority and parliamentary constituency weights
+    detail: >
+      PolicyEngine UK Data publishes calibrated household weights for
+      local authorities and Westminster parliamentary constituencies,
+      produced by the same gradient-based reweighting pipeline as the
+      national weights, enabling constituency-level analysis of budgets
+      and reforms.
+    scope: sub-national analysis
+    sources:
+      - label: PolicyEngine UK Data repository (local-area calibration)
+        url: https://github.com/PolicyEngine/policyengine-uk-data
+        kind: self
+      - label: PolicyEngine UK Data documentation
+        url: https://policyengine.github.io/policyengine-uk-data/
+        kind: self
+
+  - model: policyengine-uk
+    category: validation
+    label: Public test suite and aggregate validation
+    detail: >
+      A public YAML test suite of 1,084 named cases runs on every merged
+      change, and documentation compares simulated tax and benefit
+      aggregates against HMRC, DWP, and OBR statistics.
+    scope: rules engine outputs
+    sources:
+      - label: policyengine-uk test tree
+        url: https://github.com/PolicyEngine/policyengine-uk/tree/master/policyengine_uk/tests
+        kind: self
+      - label: PolicyEngine UK documentation
+        url: https://policyengine.github.io/policyengine-uk/
+        kind: self
+
   - model: trim3
     category: architecture
     label: Program modules on CPS-ASEC
@@ -700,6 +734,62 @@ modeling:
         kind: self
       - label: Budget Lab Tax-Simulator repository
         url: https://github.com/Budget-Lab-Yale/Tax-Simulator
+        kind: self
+
+  - model: policyengine-us
+    category: geography
+    label: State and congressional-district calibrated weights
+    detail: >
+      PolicyEngine US Data publishes calibrated household weights for all
+      50 states plus DC and for congressional districts, produced by the
+      same L0 reweighting pipeline as the national weights, enabling
+      state- and district-level reform analysis from the shared enhanced
+      CPS.
+    scope: sub-national analysis
+    sources:
+      - label: PolicyEngine US Data repository (local-area calibration)
+        url: https://github.com/PolicyEngine/policyengine-us-data
+        kind: self
+      - label: PolicyEngine US Data documentation
+        url: https://policyengine.github.io/policyengine-us-data/
+        kind: self
+
+  - model: policyengine-us
+    category: behavioral-response
+    label: Optional elasticity-based responses, off by default
+    detail: >
+      The engine ships user-configurable labor-supply (income and
+      substitution) and capital-gains realization elasticities. Defaults
+      are zero, so headline results are static; the web app's
+      behavioral-responses option applies CBO-derived preset values.
+    scope: labor supply, capital gains
+    sources:
+      - label: policyengine-us simulation response parameters
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/parameters/gov/simulation
+        kind: self
+      - label: PolicyEngine — behavioral responses methodology
+        url: https://policyengine.org/us/research/us-behavioral-responses
+        kind: self
+
+  - model: policyengine-us
+    category: validation
+    label: Continuous test suite and TAXSIM cross-validation
+    detail: >
+      Every merged change runs a public YAML test suite of 21,697 named
+      cases (3,859 files at v1.722.5). Federal and state income tax
+      outputs are additionally cross-validated against NBER TAXSIM-35,
+      and PolicyEngine maintains a TAXSIM-compatible emulator under a
+      memorandum of understanding with NBER.
+    scope: rules engine outputs
+    sources:
+      - label: policyengine-us test tree
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/tests
+        kind: self
+      - label: PolicyEngine US validation against TAXSIM
+        url: https://policyengine.github.io/policyengine-us/validation/taxsim.html
+        kind: self
+      - label: PolicyEngine–NBER MoU on TAXSIM emulator
+        url: https://www.policyengine.org/us/research/policyengine-nber-mou-taxsim
         kind: self
 
   - model: policyengine-uk
