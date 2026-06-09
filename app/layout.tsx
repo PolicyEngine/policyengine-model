@@ -29,13 +29,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   // YAML on every page. Split per-country here; ClientLayout picks the
   // right list once it knows the active country.
   const data = loadComparisonData();
+  const toPeerStub = (m: (typeof data.models)[number]) => ({
+    id: m.id,
+    name: m.name,
+    organization: m.organization,
+    sector: m.sector,
+    type: m.type,
+  });
   const peersByCountry = {
     us: data.models
       .filter((m) => m.country === 'us' && m.id !== hostModelId('us'))
-      .map((m) => ({ id: m.id, name: m.name, organization: m.organization })),
+      .map(toPeerStub),
     uk: data.models
       .filter((m) => m.country === 'uk' && m.id !== hostModelId('uk'))
-      .map((m) => ({ id: m.id, name: m.name, organization: m.organization })),
+      .map(toPeerStub),
   };
   const hostNames = {
     us: data.models.find((m) => m.id === hostModelId('us'))?.name ?? 'PolicyEngine US',

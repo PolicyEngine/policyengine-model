@@ -15,6 +15,8 @@ interface PeerStub {
   id: string;
   name: string;
   organization: string;
+  sector: 'government' | 'non-profit' | 'for-profit' | 'academic' | 'other';
+  type: 'microsimulation' | 'tax-calculator' | 'rules-engine' | 'reduced-form';
 }
 
 interface ClientLayoutProps {
