@@ -6,57 +6,156 @@
 # what the target was, and where the predicted number came from.
 
 accuracy:
+  # --- PolicyEngine US vs administrative totals, CY2024 ---
+  # Predicted values are local runs of the released model on the enhanced
+  # CPS (versions noted per row), paired with official administrative
+  # targets for the same year. Definitional caveats (fiscal vs calendar
+  # year, point-in-time vs annual) are noted per row.
+
   - model: policyengine-us
     metric: snap-outlays
     program: us-snap
-    year: 2023
-    targetValue: 112_800_000_000
-    predictedValue: unknown
+    year: 2024
+    targetValue: 99_800_000_000
+    predictedValue: 102_093_433_239
     units: usd
     targetSource:
-      label: USDA SNAP FY2023 program data
-      url: https://www.fns.usda.gov/pd/supplemental-nutrition-assistance-program-snap
+      label: USDA ERS SNAP key statistics, FY2024 federal spending
+      url: https://www.ers.usda.gov/topics/food-nutrition-assistance/supplemental-nutrition-assistance-program-snap/key-statistics-and-research
       kind: government
+    predictedSource:
+      label: PolicyEngine US microsimulation run, 2026-06-09 (sum of SPM-unit snap)
+      url: https://policyengine.github.io/policyengine-us/usage/microsimulation.html
+      kind: self
     notes: >
-      Calibration target for the enhanced CPS dataset. Predicted value from
-      model run pending.
+      Predicted is the sum of the SPM-unit snap variable (final SNAP
+      allotment) over the enhanced CPS, run 2026-06-09 with
+      policyengine-us 1.722.5 and policyengine-us-data 1.115.2
+      (enhanced_cps_2024), 2.3% above the USDA figure. The target is
+      federal fiscal year (October-September) spending while the model
+      simulates calendar year 2024, so a FY-vs-CY mismatch applies. SNAP
+      totals are also calibration targets for the enhanced CPS, so close
+      agreement partly reflects calibration by construction.
 
   - model: policyengine-us
     metric: eitc-outlays
     program: us-eitc
-    year: 2023
-    targetValue: 64_000_000_000
-    predictedValue: unknown
+    year: 2024
+    targetValue: 69_600_000_000
+    predictedValue: 67_342_098_840
     units: usd
     targetSource:
-      label: IRS SOI EITC statistics 2023
-      url: https://www.irs.gov/statistics/soi-tax-stats-individual-income-tax-returns
+      label: IRS EITC Central — statistics for tax returns with the EITC, tax year 2024
+      url: https://www.irs.gov/tax-professionals/eitc-central/statistics-for-tax-returns-with-the-earned-income-tax-credit-eitc
       kind: government
-    notes: Refundable portion of EITC outlays.
+    predictedSource:
+      label: PolicyEngine US microsimulation run, 2026-06-09 (sum of tax-unit eitc)
+      url: https://policyengine.github.io/policyengine-us/usage/microsimulation.html
+      kind: self
+    notes: >
+      Predicted is the sum of the tax-unit eitc variable (total federal
+      earned income credit; the EITC is effectively fully refundable, so
+      this approximates the refundable outlay). Run 2026-06-09 with
+      policyengine-us 1.722.5 and policyengine-us-data 1.115.2, 3.2%
+      below the IRS tax-year-2024 total of $69.6B across roughly 24
+      million claims.
+
+  - model: policyengine-us
+    metric: ssi-outlays
+    program: us-ssi
+    year: 2024
+    targetValue: 59_600_000_000
+    predictedValue: 51_630_718_057
+    units: usd
+    targetSource:
+      label: SSA SSI Annual Statistical Report 2024 (federal SSI payments; federally administered total including state supplementation is about $63B)
+      url: https://www.ssa.gov/policy/docs/statcomps/ssi_asr/2024/
+      kind: government
+    predictedSource:
+      label: PolicyEngine US microsimulation run, 2026-06-09 (sum of person-level ssi)
+      url: https://policyengine.github.io/policyengine-us/usage/microsimulation.html
+      kind: self
+    notes: >
+      Predicted is the sum of the person-level federal ssi variable. Run
+      2026-06-09 with policyengine-us-data 1.115.4 (its pinned
+      policyengine-us 1.693.5), about 13% below SSA's federal payments
+      figure, reflecting a documented SSI take-up and eligibility
+      modeling gap that PolicyEngine tracks in public issues. The
+      policyengine-us-data 1.115.2 build paired with the latest model
+      release had a more severe SSI take-up seeding regression and is not
+      representative.
 
   - model: policyengine-us
     metric: ssi-recipients
     program: us-ssi
-    year: 2023
+    year: 2024
     targetValue: 7_400_000
-    predictedValue: unknown
+    predictedValue: 5_802_076
     units: persons
     targetSource:
-      label: SSA Annual Statistical Supplement
-      url: https://www.ssa.gov/policy/docs/statcomps/supplement/
+      label: SSA SSI Annual Statistical Report 2024 (recipients, December 2024)
+      url: https://www.ssa.gov/policy/docs/statcomps/ssi_asr/2024/
       kind: government
+    predictedSource:
+      label: PolicyEngine US microsimulation run, 2026-06-09 (weighted persons with ssi > 0)
+      url: https://policyengine.github.io/policyengine-us/usage/microsimulation.html
+      kind: self
+    notes: >
+      Predicted is the weighted count of persons with positive simulated
+      federal SSI during 2024, run 2026-06-09 with policyengine-us-data
+      1.115.4. About 22% below SSA's December 2024 point-in-time count;
+      the model counts annual recipients while the target is a monthly
+      caseload, and the SSI take-up gap noted in the outlays row also
+      applies.
 
   - model: policyengine-us
     metric: medicaid-enrollees
     program: us-medicaid
-    year: 2023
-    targetValue: 87_000_000
-    predictedValue: unknown
+    year: 2024
+    targetValue: 71_500_000
+    predictedValue: 75_411_574
     units: persons
     targetSource:
-      label: CMS Medicaid and CHIP enrollment data
-      url: https://www.medicaid.gov/medicaid/national-medicaid-chip-program-information/medicaid-chip-enrollment-data/monthly-medicaid-chip-application-eligibility-determination-and-enrollment-reports-data
+      label: CMS Medicaid and CHIP Eligibility Operations and Enrollment Snapshot, December 2024 (Medicaid only)
+      url: https://www.medicaid.gov/resources-for-states/downloads/eligib-oper-and-enrol-snap-december2024.pdf
       kind: government
+    predictedSource:
+      label: PolicyEngine US microsimulation run, 2026-06-09 (weighted persons with medicaid_enrolled)
+      url: https://policyengine.github.io/policyengine-us/usage/microsimulation.html
+      kind: self
+    notes: >
+      Predicted is the weighted count of persons with medicaid_enrolled
+      true, run 2026-06-09 with policyengine-us 1.722.5 and
+      policyengine-us-data 1.115.2. The target is CMS Medicaid-only
+      enrollment for December 2024 (71.5M; CHIP adds about 7.3M), a
+      point-in-time count after most pandemic-era unwinding
+      disenrollments, while the model counts people enrolled at any point
+      in the simulated year (about 5% higher). December 2024 enrollment
+      is also the calibration target for this dataset.
+
+  - model: policyengine-us
+    metric: ctc-outlays
+    program: us-ctc
+    year: 2024
+    targetValue: 110_400_000_000
+    predictedValue: 123_127_561_643
+    units: usd
+    targetSource:
+      label: IRS SOI individual income tax returns, tax year 2022 (total child tax credit, latest complete year)
+      url: https://www.irs.gov/statistics/soi-tax-stats-individual-income-tax-returns
+      kind: government
+    predictedSource:
+      label: PolicyEngine US microsimulation run, 2026-06-09 (sum of tax-unit ctc)
+      url: https://policyengine.github.io/policyengine-us/usage/microsimulation.html
+      kind: self
+    notes: >
+      Predicted is the sum of the tax-unit ctc variable (non-refundable
+      plus refundable CTC; the model splits this into about $91.5B
+      non-refundable and $31.6B refundable). Run 2026-06-09 with
+      policyengine-us 1.722.5 and policyengine-us-data 1.115.2. The
+      latest complete IRS SOI total is tax year 2022 ($110.4B), when the
+      same $2,000-per-child TCJA credit applied, so a CY2024-vs-TY2022
+      mismatch applies alongside population growth.
 
   - model: trim3
     metric: snap-outlays
@@ -87,3 +186,259 @@ accuracy:
       url: https://www.cbo.gov/topics/budget
       kind: government
     notes: TPC reports calibrate to CBO/Treasury baseline revenue.
+
+  # --- TRIM3 and NBER TAXSIM vs IRS SOI administrative targets, TY2012 ---
+  # Independent Census Bureau evaluation (Wheaton & Stevens 2016) compared
+  # each model's output to IRS SOI targets; predicted values apply the
+  # report's percent-of-target to the stated target.
+
+  - model: trim3
+    metric: federal-income-tax-aggregate
+    program: us-federal-income-tax
+    year: 2012
+    targetValue: 1_097_200_000_000
+    predictedValue: 954_600_000_000
+    units: usd
+    targetSource:
+      label: IRS SOI Tax Year 2012 Complete Report
+      url: https://www.irs.gov/pub/irs-soi/12inalcr.pdf
+      kind: government
+    predictedSource:
+      label: Wheaton & Stevens (Census Bureau) — The Effect of Different Tax Calculators on the SPM, Table 2A (TRIM3 = 87% of target, all returns)
+      url: https://www.census.gov/content/dam/Census/library/working-papers/2016/demo/Effect-of-Different-Tax-Calculators-on-the-SPM.pdf
+      kind: government
+    notes: >
+      Independent Census Bureau evaluation. TRIM3 captured 87% of the IRS
+      SOI target for total federal income tax across all returns in
+      TY2012 (95% of AGI, 91% of taxable income). The shortfall is
+      concentrated among very high-income tax units that the CPS ASEC
+      underrepresents.
+
+  - model: trim3
+    metric: eitc-aggregate
+    program: us-eitc
+    year: 2012
+    targetValue: 64_100_000_000
+    predictedValue: 46_800_000_000
+    units: usd
+    targetSource:
+      label: IRS SOI Tax Year 2012 Complete Report
+      url: https://www.irs.gov/pub/irs-soi/12inalcr.pdf
+      kind: government
+    predictedSource:
+      label: Wheaton & Stevens (Census Bureau) — Table 2C (TRIM3 = 73% of $64.1B EITC target)
+      url: https://www.census.gov/content/dam/Census/library/working-papers/2016/demo/Effect-of-Different-Tax-Calculators-on-the-SPM.pdf
+      kind: government
+    notes: >
+      TRIM3 captured 73% of the IRS administrative total for EITC dollars
+      in TY2012 (83% of EITC returns). All evaluated models understate
+      the EITC, reflecting CPS misreporting of claims.
+
+  - model: trim3
+    metric: ctc-aggregate
+    program: us-ctc
+    year: 2012
+    targetValue: 27_700_000_000
+    predictedValue: 28_000_000_000
+    units: usd
+    targetSource:
+      label: IRS SOI Tax Year 2012 Complete Report
+      url: https://www.irs.gov/pub/irs-soi/12inalcr.pdf
+      kind: government
+    predictedSource:
+      label: Wheaton & Stevens (Census Bureau) — Table 2C (TRIM3 = 101% of $27.7B CTC target)
+      url: https://www.census.gov/content/dam/Census/library/working-papers/2016/demo/Effect-of-Different-Tax-Calculators-on-the-SPM.pdf
+      kind: government
+    notes: >
+      TRIM3 matched the non-refundable CTC target closely (101%) but,
+      like all evaluated models, fell short on the refundable ACTC (67%);
+      combined CTC+ACTC dollars were 84% of the IRS target.
+
+  - model: nber-taxsim
+    metric: federal-income-tax-aggregate
+    program: us-federal-income-tax
+    year: 2012
+    targetValue: 1_097_200_000_000
+    predictedValue: 965_500_000_000
+    units: usd
+    targetSource:
+      label: IRS SOI Tax Year 2012 Complete Report
+      url: https://www.irs.gov/pub/irs-soi/12inalcr.pdf
+      kind: government
+    predictedSource:
+      label: Wheaton & Stevens (Census Bureau) — Table 2A (TAXSIM with TRIM3 inputs = 88% of target, all returns)
+      url: https://www.census.gov/content/dam/Census/library/working-papers/2016/demo/Effect-of-Different-Tax-Calculators-on-the-SPM.pdf
+      kind: government
+    notes: >
+      Independent Census Bureau evaluation. TAXSIM, given identical
+      TRIM3-prepared inputs, captured 88% of the IRS SOI total federal
+      income tax in TY2012 — within about one percentage point of TRIM3,
+      indicating the remaining gap is driven by input data (CPS
+      underrepresentation of top incomes), not the tax calculator.
+
+  - model: nber-taxsim
+    metric: eitc-aggregate
+    program: us-eitc
+    year: 2012
+    targetValue: 64_100_000_000
+    predictedValue: 46_800_000_000
+    units: usd
+    targetSource:
+      label: IRS SOI Tax Year 2012 Complete Report
+      url: https://www.irs.gov/pub/irs-soi/12inalcr.pdf
+      kind: government
+    predictedSource:
+      label: Wheaton & Stevens (Census Bureau) — Table 2C (TAXSIM with TRIM3 inputs = 73% of EITC target)
+      url: https://www.census.gov/content/dam/Census/library/working-papers/2016/demo/Effect-of-Different-Tax-Calculators-on-the-SPM.pdf
+      kind: government
+    notes: >
+      With TRIM3-prepared inputs, TAXSIM reproduced the same 73% of the
+      IRS EITC dollar target as TRIM3, demonstrating calculator-level
+      agreement on credits.
+
+  # --- Tax-Calculator vs NBER TAXSIM-35 (model-vs-model logic benchmark) ---
+  - model: tax-calculator
+    metric: income-tax-liability-difference-vs-taxsim35
+    program: us-federal-income-tax
+    year: 2018
+    targetValue: 0
+    predictedValue: 0
+    units: usd
+    targetSource:
+      label: NBER Internet TAXSIM-35 (reference calculator; target is exact agreement)
+      url: https://taxsim.nber.org/taxsim35/
+      kind: academic
+    predictedSource:
+      label: Tax-Calculator vs TAXSIM-35 validation (no differences greater than $1 for assumption set "a", 2017-2018)
+      url: https://github.com/PSLmodels/Tax-Calculator/blob/master/taxcalc/validation/taxsim35/Differences_Explained.md
+      kind: self
+    notes: >
+      Cross-model logic validation rather than an administrative
+      benchmark. Across 100,000 randomly generated filing units per year,
+      Tax-Calculator and TAXSIM-35 agree on federal individual income tax
+      liability with no differences greater than $1 for assumption set
+      "a" in 2017 and 2018; documented residual differences in later
+      years trace to TAXSIM-35 errors or output-variable definitions.
+      Values encode the dollar difference (target = exact agreement).
+
+  # --- UKMOD simulated vs official estimates, policy year 2023 ---
+  # Source: CeMPA WP 8/26, UKMOD Country Report 2023-2030, Tables 4.5-4.6.
+
+  - model: ukmod
+    metric: child-benefit-expenditure
+    program: uk-child-benefit
+    year: 2023
+    targetValue: 12_099_000_000
+    predictedValue: 12_094_000_000
+    units: gbp
+    targetSource:
+      label: HMRC Child Benefit statistics (UKMOD Country Report Table 4.6, official estimates column)
+      url: https://www.iser.essex.ac.uk/wp-content/uploads/files/working-papers/cempa/cempa8-26.pdf
+      kind: government
+    predictedSource:
+      label: CeMPA WP 8/26 — UKMOD Country Report 2023-2030, Table 4.6
+      url: https://www.iser.essex.ac.uk/wp-content/uploads/files/working-papers/cempa/cempa8-26.pdf
+      kind: academic
+    notes: >
+      UKMOD-simulated Child Benefit expenditure was within 0.1% of the
+      HMRC administrative figure (£12,094m vs £12,099m).
+
+  - model: ukmod
+    metric: universal-credit-expenditure
+    program: uk-universal-credit
+    year: 2023
+    targetValue: 52_119_000_000
+    predictedValue: 52_504_000_000
+    units: gbp
+    targetSource:
+      label: DWP benefit expenditure tables (UKMOD Country Report Table 4.6, official estimates column)
+      url: https://www.iser.essex.ac.uk/wp-content/uploads/files/working-papers/cempa/cempa8-26.pdf
+      kind: government
+    predictedSource:
+      label: CeMPA WP 8/26 — UKMOD Country Report 2023-2030, Table 4.6
+      url: https://www.iser.essex.ac.uk/wp-content/uploads/files/working-papers/cempa/cempa8-26.pdf
+      kind: academic
+    notes: >
+      UKMOD-simulated Universal Credit expenditure (£52,504m) was 0.7%
+      above the official figure (£52,119m).
+
+  - model: ukmod
+    metric: national-insurance-revenue
+    program: uk-national-insurance
+    year: 2023
+    targetValue: 174_251_000_000
+    predictedValue: 182_453_000_000
+    units: gbp
+    targetSource:
+      label: HMRC/OBR National Insurance receipts (UKMOD Country Report Table 4.6, official estimates column)
+      url: https://www.iser.essex.ac.uk/wp-content/uploads/files/working-papers/cempa/cempa8-26.pdf
+      kind: government
+    predictedSource:
+      label: CeMPA WP 8/26 — UKMOD Country Report 2023-2030, Table 4.6
+      url: https://www.iser.essex.ac.uk/wp-content/uploads/files/working-papers/cempa/cempa8-26.pdf
+      kind: academic
+    notes: >
+      UKMOD-simulated total National Insurance contributions (£182,453m)
+      exceeded the official figure (£174,251m) by 4.7%.
+
+  - model: ukmod
+    metric: pension-credit-expenditure
+    program: uk-pension-credit
+    year: 2023
+    targetValue: 5_467_000_000
+    predictedValue: 5_350_000_000
+    units: gbp
+    targetSource:
+      label: DWP benefit expenditure tables (UKMOD Country Report Table 4.6, official estimates column)
+      url: https://www.iser.essex.ac.uk/wp-content/uploads/files/working-papers/cempa/cempa8-26.pdf
+      kind: government
+    predictedSource:
+      label: CeMPA WP 8/26 — UKMOD Country Report 2023-2030, Table 4.6
+      url: https://www.iser.essex.ac.uk/wp-content/uploads/files/working-papers/cempa/cempa8-26.pdf
+      kind: academic
+    notes: >
+      UKMOD-simulated Pension Credit expenditure (£5,350m) was 2.1% below
+      the official figure (£5,467m).
+
+  - model: ukmod
+    metric: housing-benefit-expenditure
+    program: uk-housing-benefit
+    year: 2023
+    targetValue: 15_773_000_000
+    predictedValue: 10_005_000_000
+    units: gbp
+    targetSource:
+      label: DWP benefit expenditure tables (UKMOD Country Report Table 4.6, official estimates column)
+      url: https://www.iser.essex.ac.uk/wp-content/uploads/files/working-papers/cempa/cempa8-26.pdf
+      kind: government
+    predictedSource:
+      label: CeMPA WP 8/26 — UKMOD Country Report 2023-2030, Table 4.6
+      url: https://www.iser.essex.ac.uk/wp-content/uploads/files/working-papers/cempa/cempa8-26.pdf
+      kind: academic
+    notes: >
+      UKMOD substantially understates Housing Benefit: simulated
+      expenditure (£10,005m) was about £5.8bn below the official figure
+      (£15,773m), a 37% shortfall the report attributes to FRS
+      under-representation of Housing Benefit recipients. Included as a
+      documented case where a model diverges materially from
+      administrative data.
+
+  - model: ukmod
+    metric: income-tax-revenue-non-devolved
+    program: uk-income-tax
+    year: 2023
+    targetValue: 277_419_000_000
+    predictedValue: 239_662_000_000
+    units: gbp
+    targetSource:
+      label: HMRC income tax liabilities statistics (UKMOD Country Report Table 4.6, official estimates column)
+      url: https://www.iser.essex.ac.uk/wp-content/uploads/files/working-papers/cempa/cempa8-26.pdf
+      kind: government
+    predictedSource:
+      label: CeMPA WP 8/26 — UKMOD Country Report 2023-2030, Table 4.6
+      url: https://www.iser.essex.ac.uk/wp-content/uploads/files/working-papers/cempa/cempa8-26.pdf
+      kind: academic
+    notes: >
+      UKMOD-simulated non-devolved income tax revenue (£239,662m) was
+      13.6% below the HMRC figure (£277,419m); the report attributes the
+      gap to FRS under-capture of top incomes.
