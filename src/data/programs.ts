@@ -809,7 +809,7 @@ export const programs: Program[] = [
     agency: 'HHS',
     status: 'partial',
     notes: 'CCDF is a federal block grant — every state and DC operate a CCDF-funded child-care subsidy program. The state list below tracks how many of those state programs are implemented end-to-end in policyengine-us (with the state agency\'s actual eligibility, copay, and payment-rate rules), not which states have CCDF at all.',
-    coverage: '18 state programs implemented + 7 in open PRs',
+    coverage: '27 state programs implemented + 3 in open PRs',
     stateImplementations: [
       {
         state: 'AK',
@@ -1024,27 +1024,115 @@ export const programs: Program[] = [
           tests: `${TESTS_BASE}/policy/baseline/gov/states/va/dss/ccsp`,
         }
       },
-      // Open PRs in policyengine-us — implementation work in flight.
       {
         state: 'AL',
-        status: 'inProgress',
+        status: 'complete',
         name: 'Alabama CCSP',
         fullName: 'Alabama Child Care Subsidy Program',
-        notes: 'Open PR #8322',
+        variable: 'al_ccsp',
         githubLinks: {
-          variables: `https://github.com/PolicyEngine/policyengine-us/pull/8322`,
+          parameters: `${GITHUB_BASE}/parameters/gov/states/al/dhr/ccsp`,
+          variables: `${GITHUB_BASE}/variables/gov/states/al/dhr/ccsp`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/al/dhr/ccsp`,
         }
       },
       {
         state: 'AR',
-        status: 'inProgress',
+        status: 'complete',
         name: 'Arkansas SRA',
         fullName: 'Arkansas School Readiness Assistance (formerly CCAP)',
-        notes: 'Open PR #8324',
+        variable: 'ar_sra',
         githubLinks: {
-          variables: `https://github.com/PolicyEngine/policyengine-us/pull/8324`,
+          parameters: `${GITHUB_BASE}/parameters/gov/states/ar/ade/oec/sra`,
+          variables: `${GITHUB_BASE}/variables/gov/states/ar/ade/oec/sra`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/ar/ade/oec/sra`,
         }
       },
+      {
+        state: 'HI',
+        status: 'complete',
+        name: 'Hawaii CCAP',
+        fullName: 'Hawaii Child Care Assistance Program',
+        variable: 'hi_ccap',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/hi/bessd/ccap`,
+          variables: `${GITHUB_BASE}/variables/gov/states/hi/bessd/ccap`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/hi/bessd/ccap`,
+        }
+      },
+      {
+        state: 'IN',
+        status: 'complete',
+        name: 'Indiana CCDF',
+        fullName: 'Indiana Child Care and Development Fund Voucher',
+        variable: 'in_ccdf',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/in/fssa/ccdf`,
+          variables: `${GITHUB_BASE}/variables/gov/states/in/fssa/ccdf`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/in/fssa/ccdf`,
+        }
+      },
+      {
+        state: 'KS',
+        status: 'complete',
+        name: 'Kansas CCAP',
+        fullName: 'Kansas Child Care Assistance Program',
+        variable: 'ks_ccap',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/ks/dcf/ccap`,
+          variables: `${GITHUB_BASE}/variables/gov/states/ks/dcf/ccap`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/ks/dcf/ccap`,
+        }
+      },
+      {
+        state: 'KY',
+        status: 'complete',
+        name: 'Kentucky CCAP',
+        fullName: 'Kentucky Child Care Assistance Program',
+        variable: 'ky_ccap',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/ky/dcbs/ccap`,
+          variables: `${GITHUB_BASE}/variables/gov/states/ky/dcbs/ccap`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/ky/dcbs/ccap`,
+        }
+      },
+      {
+        state: 'VT',
+        status: 'complete',
+        name: 'Vermont CCFAP',
+        fullName: 'Vermont Child Care Financial Assistance Program',
+        variable: 'vt_ccfap',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/vt/dcf/ccfap`,
+          variables: `${GITHUB_BASE}/variables/gov/states/vt/dcf/ccfap`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/vt/dcf/ccfap`,
+        }
+      },
+      {
+        state: 'WA',
+        status: 'complete',
+        name: 'Washington WCCC',
+        fullName: 'Washington Working Connections Child Care',
+        variable: 'wa_wccc',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/wa/dcyf/wccc`,
+          variables: `${GITHUB_BASE}/variables/gov/states/wa/dcyf/wccc`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/wa/dcyf/wccc`,
+        }
+      },
+      {
+        state: 'WV',
+        status: 'complete',
+        name: 'West Virginia CCAP',
+        fullName: 'West Virginia Child Care Assistance Program',
+        variable: 'wv_ccap',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/wv/dhhr/ccap`,
+          variables: `${GITHUB_BASE}/variables/gov/states/wv/dhhr/ccap`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/wv/dhhr/ccap`,
+        }
+      },
+      // Open PRs in policyengine-us — implementation work in flight.
       {
         state: 'AZ',
         status: 'inProgress',
@@ -1073,26 +1161,6 @@ export const programs: Program[] = [
         notes: 'Open PR #7889',
         githubLinks: {
           variables: `https://github.com/PolicyEngine/policyengine-us/pull/7889`,
-        }
-      },
-      {
-        state: 'WA',
-        status: 'inProgress',
-        name: 'Washington WCCC',
-        fullName: 'Washington Working Connections Child Care',
-        notes: 'Open PR #8208',
-        githubLinks: {
-          variables: `https://github.com/PolicyEngine/policyengine-us/pull/8208`,
-        }
-      },
-      {
-        state: 'WV',
-        status: 'inProgress',
-        name: 'West Virginia CCAP',
-        fullName: 'West Virginia Child Care Assistance Program',
-        notes: 'Open PR #7948',
-        githubLinks: {
-          variables: `https://github.com/PolicyEngine/policyengine-us/pull/7948`,
         }
       },
     ],
