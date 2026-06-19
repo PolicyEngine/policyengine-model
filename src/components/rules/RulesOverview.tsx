@@ -406,7 +406,7 @@ function computeStatusCount(programList: Program[]) {
 
 export default function RulesOverview({ country = 'us' }: { country?: Country }) {
   const [viewMode, setViewMode] = useState<ViewMode>('programs');
-  const [selectedProgram, setSelectedProgram] = useState<Program | null>(null);
+  const [selectedProgramId, setSelectedProgramId] = useState<string | null>(null);
   const [selectedState, setSelectedState] = useState<string | null>(null);
   const [search, setSearch] = useState('');
   const [yearFilter, setYearFilter] = useState<number | null>(null);
@@ -415,6 +415,11 @@ export default function RulesOverview({ country = 'us' }: { country?: Country })
   useEffect(() => {
     fetchPrograms(country).then(setPrograms);
   }, [country]);
+
+  const selectedProgram = useMemo(
+    () => programs.find(program => program.id === selectedProgramId) ?? null,
+    [programs, selectedProgramId],
+  );
 
   const availableYears = useMemo(() => collectAllYears(programs), [programs]);
 
@@ -506,7 +511,7 @@ export default function RulesOverview({ country = 'us' }: { country?: Country })
           {(['programs', 'states'] as ViewMode[]).map(mode => (
             <button
               key={mode}
-              onClick={() => { setViewMode(mode); setSelectedProgram(null); setSelectedState(null); }}
+              onClick={() => { setViewMode(mode); setSelectedProgramId(null); setSelectedState(null); }}
               className="tw:cursor-pointer"
               style={{
                 padding: `${spacing.sm} ${spacing.xl}`,
@@ -582,7 +587,7 @@ export default function RulesOverview({ country = 'us' }: { country?: Country })
             {/* Selected program detail */}
             {selectedProgram && (
               <div style={{ marginBottom: spacing['2xl'] }}>
-                <ProgramDetailPanel program={selectedProgram} onClose={() => setSelectedProgram(null)} allPrograms={programs} />
+                <ProgramDetailPanel program={selectedProgram} onClose={() => setSelectedProgramId(null)} allPrograms={programs} />
               </div>
             )}
 
@@ -596,13 +601,13 @@ export default function RulesOverview({ country = 'us' }: { country?: Country })
                   {filteredFederal.map(program => (
                     <button
                       key={program.id}
-                      onClick={() => setSelectedProgram(selectedProgram?.id === program.id ? null : program)}
+                      onClick={() => setSelectedProgramId(selectedProgramId === program.id ? null : program.id)}
                       className="tw:cursor-pointer tw:text-left"
                       style={{
                         padding: spacing.lg,
                         borderRadius: spacing.radius.lg,
-                        border: `1px solid ${selectedProgram?.id === program.id ? colors.primary[400] : colors.border.light}`,
-                        backgroundColor: selectedProgram?.id === program.id ? colors.primary[50] : colors.white,
+                        border: `1px solid ${selectedProgramId === program.id ? colors.primary[400] : colors.border.light}`,
+                        backgroundColor: selectedProgramId === program.id ? colors.primary[50] : colors.white,
                         fontFamily: typography.fontFamily.primary,
                         transition: 'all 0.15s ease',
                       }}
@@ -663,13 +668,13 @@ export default function RulesOverview({ country = 'us' }: { country?: Country })
                   {filteredState.map(program => (
                     <button
                       key={program.id}
-                      onClick={() => setSelectedProgram(selectedProgram?.id === program.id ? null : program)}
+                      onClick={() => setSelectedProgramId(selectedProgramId === program.id ? null : program.id)}
                       className="tw:cursor-pointer tw:text-left"
                       style={{
                         padding: spacing.lg,
                         borderRadius: spacing.radius.lg,
-                        border: `1px solid ${selectedProgram?.id === program.id ? colors.primary[400] : colors.border.light}`,
-                        backgroundColor: selectedProgram?.id === program.id ? colors.primary[50] : colors.white,
+                        border: `1px solid ${selectedProgramId === program.id ? colors.primary[400] : colors.border.light}`,
+                        backgroundColor: selectedProgramId === program.id ? colors.primary[50] : colors.white,
                         fontFamily: typography.fontFamily.primary,
                       }}
                     >
@@ -696,13 +701,13 @@ export default function RulesOverview({ country = 'us' }: { country?: Country })
                   {filteredLocal.map(program => (
                     <button
                       key={program.id}
-                      onClick={() => setSelectedProgram(selectedProgram?.id === program.id ? null : program)}
+                      onClick={() => setSelectedProgramId(selectedProgramId === program.id ? null : program.id)}
                       className="tw:cursor-pointer tw:text-left"
                       style={{
                         padding: spacing.lg,
                         borderRadius: spacing.radius.lg,
-                        border: `1px solid ${selectedProgram?.id === program.id ? colors.primary[400] : colors.border.light}`,
-                        backgroundColor: selectedProgram?.id === program.id ? colors.primary[50] : colors.white,
+                        border: `1px solid ${selectedProgramId === program.id ? colors.primary[400] : colors.border.light}`,
+                        backgroundColor: selectedProgramId === program.id ? colors.primary[50] : colors.white,
                         fontFamily: typography.fontFamily.primary,
                       }}
                     >
