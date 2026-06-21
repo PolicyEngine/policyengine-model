@@ -14,21 +14,23 @@ transparency:
     codePublic: yes
     codeLicense: AGPL-3.0-or-later
     codeUrl: https://github.com/PolicyEngine/policyengine-us
-    contributorCount: unknown
+    contributorCount: 132
     issueTrackerPublic: yes
     documentationPublic: yes
     documentationUrl: https://policyengine.github.io/policyengine-us/
     parameterSourcing: inline-cite
     testSuitePublic: yes
-    testCount: unknown
+    testCount: 21697
     datasetPublic: yes
     datasetUrl: https://huggingface.co/policyengine
     reproducibleBuilds: yes
     notes: >
-      All parameters are YAML files with inline references field pointing to
-      statute, regulation, or administrative source. Tests are YAML files
-      executed via the rules engine. Dataset is published on Hugging Face
-      with pinned versions.
+      All parameters are YAML files with an inline references field
+      pointing to statute, regulation, or administrative source. The
+      public test suite has 21,697 named test cases across 3,859 YAML
+      files, plus 5,090 variable formulas and 4,847 parameter files
+      (counted at v1.722.5, 2026-06-09). The enhanced CPS dataset is
+      published on Hugging Face with pinned versions.
     sources:
       - label: policyengine-us repository (browse code, license file, tests directory)
         url: https://github.com/PolicyEngine/policyengine-us
@@ -62,8 +64,16 @@ transparency:
         url: https://github.com/PolicyEngine/policyengine-us/issues
         kind: self
         supports: [issueTrackerPublic]
-      - label: Ghenis & Woodruff — PolicyEngine open-source paper (JOSS)
-        url: https://joss.theoj.org/papers/10.21105/joss.04494
+      - label: GitHub API — policyengine-us contributors (132 named, retrieved 2026-06-09)
+        url: https://api.github.com/repos/PolicyEngine/policyengine-us/contributors
+        kind: other
+        supports: [contributorCount]
+      - label: policyengine-us test tree (21,697 named cases in 3,859 YAML files at v1.722.5)
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/tests
+        kind: self
+        supports: [testCount]
+      - label: JOSS — PolicyEngine submission (under review)
+        url: https://joss.theoj.org/papers/34b9f72df98e586d7e6a2448922407e7
         kind: academic
         supports: [codePublic, codeLicense, documentationPublic, reproducibleBuilds]
       - label: OpenFisca community — list of country models (PolicyEngine ancestry)
@@ -392,13 +402,13 @@ transparency:
     codePublic: yes
     codeLicense: AGPL-3.0-or-later
     codeUrl: https://github.com/PolicyEngine/policyengine-uk
-    contributorCount: unknown
+    contributorCount: 23
     issueTrackerPublic: yes
     documentationPublic: yes
     documentationUrl: https://policyengine.github.io/policyengine-uk/
     parameterSourcing: inline-cite
     testSuitePublic: yes
-    testCount: unknown
+    testCount: 1084
     datasetPublic: partial
     datasetUrl: https://github.com/PolicyEngine/policyengine-uk-data
     reproducibleBuilds: yes
@@ -430,13 +440,21 @@ transparency:
         url: https://github.com/PolicyEngine/policyengine-uk-data
         kind: self
         supports: [datasetPublic, reproducibleBuilds]
+      - label: GitHub API — policyengine-uk contributors (23 named, retrieved 2026-06-09)
+        url: https://api.github.com/repos/PolicyEngine/policyengine-uk/contributors
+        kind: other
+        supports: [contributorCount]
+      - label: policyengine-uk test tree (1,084 named cases in 213 YAML files, 2026-06)
+        url: https://github.com/PolicyEngine/policyengine-uk/tree/master/policyengine_uk/tests
+        kind: self
+        supports: [testCount]
       - label: UK Data Service — FRS licensing (underlying microdata
           requires registered licence)
         url: https://beta.ukdataservice.ac.uk/datacatalogue/series/series?id=200017
         kind: government
         supports: [datasetPublic]
-      - label: Ghenis & Woodruff — PolicyEngine open-source paper (JOSS)
-        url: https://joss.theoj.org/papers/10.21105/joss.04494
+      - label: JOSS — PolicyEngine submission (under review)
+        url: https://joss.theoj.org/papers/34b9f72df98e586d7e6a2448922407e7
         kind: academic
         supports: [codePublic, codeLicense, documentationPublic, reproducibleBuilds]
       - label: OpenFisca community — PolicyEngine listed as country model

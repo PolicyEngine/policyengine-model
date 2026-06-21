@@ -16,7 +16,7 @@ freshness:
     handlesFutureDatedLegislation: yes
     updateCadence: continuous
     updateLag: Days to weeks for major legislation; same-day for many parameter updates via merged PRs.
-    lastMajorRefresh: 2026-05
+    lastMajorRefresh: 2026-06
     notableRegimes: >
       Pre-TCJA, TCJA (2018-2025), OBBBA (One Big Beautiful Bill Act, signed
       2025 — CTC $2,200 in 2026, TCJA extensions, expanded standard
