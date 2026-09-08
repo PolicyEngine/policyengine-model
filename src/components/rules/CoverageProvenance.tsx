@@ -8,7 +8,7 @@ export default function CoverageProvenance({ source }: { source: ProgramsSource 
     const date = source.fetchedAt.slice(0, 10);
     text = `Coverage reflects ${model} ${source.version} (${source.branch} @ ${source.commit.slice(0, 7)}, fetched ${date}).`;
     if (source.apiVersion) {
-      text += ` The production API currently serves ${source.apiVersion}.`;
+      text += ` The production API served ${source.apiVersion} when the snapshot was fetched.`;
     }
   } else if (source.kind === 'api') {
     const model = source.repo.split('/').pop();

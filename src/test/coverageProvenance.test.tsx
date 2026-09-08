@@ -18,7 +18,7 @@ const snapshotSource: Extract<ProgramsSource, { kind: 'snapshot' }> = {
   apiVersion: '1.764.6',
 };
 
-const snapshotText = 'Coverage reflects policyengine-us 1.823.0 (main @ abcdef1, fetched 2026-09-08). The production API currently serves 1.764.6.';
+const snapshotText = 'Coverage reflects policyengine-us 1.823.0 (main @ abcdef1, fetched 2026-09-08). The production API served 1.764.6 when the snapshot was fetched.';
 
 describe('Coverage provenance', () => {
   beforeEach(() => {
@@ -28,6 +28,12 @@ describe('Coverage provenance', () => {
   it('shows the snapshot version, branch, short commit, fetch date, and API version', () => {
     render(<CoverageProvenance source={snapshotSource} />);
     expect(screen.getByText(snapshotText)).toBeInTheDocument();
+  });
+
+  it('dates the API version to the fetch time for an older snapshot instead of claiming it is current', () => {
+    render(<CoverageProvenance source={{ ...snapshotSource, fetchedAt: '2026-06-01T08:00:00.000Z', apiVersion: '1.700.0' }} />);
+    expect(screen.getByText('Coverage reflects policyengine-us 1.823.0 (main @ abcdef1, fetched 2026-06-01). The production API served 1.700.0 when the snapshot was fetched.')).toBeInTheDocument();
+    expect(screen.queryByText(/currently/)).not.toBeInTheDocument();
   });
 
   it('omits the API version sentence when it was unavailable at snapshot time', () => {
