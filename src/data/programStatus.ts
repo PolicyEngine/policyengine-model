@@ -9,14 +9,66 @@ export const ALL_STATES = [
 
 const US_STATE_CODES = new Set(ALL_STATES);
 
-/** Local programs keyed by the coverage string the registry uses, mapped to their state. */
-export const LOCAL_TO_STATE: Record<string, string> = {
-  'Chicago': 'IL', 'Dallas County': 'TX', 'Dallas County, TX': 'TX',
-  'Harris County': 'TX', 'Harris County, TX': 'TX',
-  'Los Angeles County': 'CA', 'Riverside County': 'CA',
-  'Alameda County': 'CA', 'San Francisco': 'CA',
-  'New York City': 'NY', 'Montgomery County': 'MD', 'Montgomery County, MD': 'MD',
+export const STATE_NAMES: Record<string, string> = {
+  AL:'Alabama',AK:'Alaska',AZ:'Arizona',AR:'Arkansas',CA:'California',CO:'Colorado',
+  CT:'Connecticut',DE:'Delaware',DC:'District of Columbia',FL:'Florida',GA:'Georgia',
+  HI:'Hawaii',ID:'Idaho',IL:'Illinois',IN:'Indiana',IA:'Iowa',KS:'Kansas',KY:'Kentucky',
+  LA:'Louisiana',ME:'Maine',MD:'Maryland',MA:'Massachusetts',MI:'Michigan',MN:'Minnesota',
+  MS:'Mississippi',MO:'Missouri',MT:'Montana',NE:'Nebraska',NV:'Nevada',NH:'New Hampshire',
+  NJ:'New Jersey',NM:'New Mexico',NY:'New York',NC:'North Carolina',ND:'North Dakota',
+  OH:'Ohio',OK:'Oklahoma',OR:'Oregon',PA:'Pennsylvania',RI:'Rhode Island',SC:'South Carolina',
+  SD:'South Dakota',TN:'Tennessee',TX:'Texas',UT:'Utah',VT:'Vermont',VA:'Virginia',
+  WA:'Washington',WV:'West Virginia',WI:'Wisconsin',WY:'Wyoming',
 };
+
+const STATE_CODE_BY_NAME = new Map(
+  Object.entries(STATE_NAMES)
+    .map(([code, name]) => [name, code] as const)
+    .sort((a, b) => b[0].length - a[0].length)
+);
+
+/** Agencies the registry uses for federal programs. */
+const FEDERAL_AGENCIES = new Set(['USDA', 'HHS', 'SSA', 'IRS', 'HUD', 'DOE', 'ED', 'DOL', 'FCC', 'ACA']);
+
+/**
+ * Local coverage strings that name a place without its state. Strings that end
+ * in ", XX" or contain a state name resolve without an entry here.
+ */
+export const LOCAL_TO_STATE: Record<string, string> = {
+  'Chicago': 'IL',
+  'New York City': 'NY',
+  'Dallas County': 'TX',
+  'Harris County': 'TX',
+  'Montgomery County': 'MD',
+  'Los Angeles County': 'CA',
+  'Marin County': 'CA',
+  'Orange County': 'CA',
+  'Riverside County': 'CA',
+  'San Bernardino County': 'CA',
+  'Alameda County': 'CA',
+  'San Mateo County': 'CA',
+  'Santa Clara County': 'CA',
+  'Contra Costa County': 'CA',
+  'San Francisco County': 'CA',
+  'San Francisco': 'CA',
+};
+
+/**
+ * The state a local program's coverage string belongs to, or null when it
+ * cannot be resolved. Accepts the explicit map, a trailing ", XX" state code,
+ * and a state name anywhere in the string ("All 92 Indiana counties").
+ */
+export function localCoverageState(coverage?: string): string | null {
+  const text = (coverage || '').trim();
+  if (!text) return null;
+  if (LOCAL_TO_STATE[text]) return LOCAL_TO_STATE[text];
+  const suffix = text.match(/,\s*([A-Z]{2})$/);
+  if (suffix && US_STATE_CODES.has(suffix[1])) return suffix[1];
+  for (const [name, code] of STATE_CODE_BY_NAME) {
+    if (text.includes(name)) return code;
+  }
+  return null;
+}
 
 /** Federal programs that apply in every state even when the registry lists no state entries. */
 export const UNIVERSAL_STATE_PROGRAMS = new Set([
@@ -37,7 +89,10 @@ export function getJurisdiction(program: Program): Jurisdiction {
   if (program.agency === 'Local') return 'local';
   const coverage = (program.coverage || '').trim();
   if (US_STATE_CODES.has(coverage)) return 'state';
-  if (LOCAL_TO_STATE[coverage]) return 'local';
+  if (!program.agency || FEDERAL_AGENCIES.has(program.agency) || coverage === 'US' || coverage.startsWith('US,')) {
+    return 'federal';
+  }
+  if (localCoverageState(coverage)) return 'local';
   return 'federal';
 }
 
@@ -48,7 +103,7 @@ export function getStateStatusForProgram(program: Program, stateCode: string): C
     return (program.coverage || '').trim() === stateCode ? program.status : null;
   }
   if (jurisdiction === 'local') {
-    return LOCAL_TO_STATE[(program.coverage || '').trim()] === stateCode ? program.status : null;
+    return localCoverageState(program.coverage) === stateCode ? program.status : null;
   }
   if (program.stateImplementations) {
     const impl = program.stateImplementations.find((s) => s.state === stateCode);

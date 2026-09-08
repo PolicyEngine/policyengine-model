@@ -5,6 +5,7 @@ import {
   deriveStatusFromStates,
   getJurisdiction,
   getStateStatusForProgram,
+  localCoverageState,
 } from '../data/programStatus';
 import type { CoverageStatus, Program, StateImplementation } from '../types/Program';
 
@@ -127,5 +128,39 @@ describe('getStateStatusForProgram', () => {
     expect(getStateStatusForProgram(liheap, 'NY')).toBeNull();
     expect(getStateStatusForProgram(program({ id: 'eitc', status: 'complete', hasStateVariation: true }), 'TX')).toBe('complete');
     expect(getStateStatusForProgram(program({ id: 'medicare_part_d', status: 'complete' }), 'TX')).toBeNull();
+  });
+});
+
+describe('localCoverageState', () => {
+  it('resolves explicit places, trailing state codes, and embedded state names', () => {
+    expect(localCoverageState('Marin County')).toBe('CA');
+    expect(localCoverageState('San Francisco')).toBe('CA');
+    expect(localCoverageState('Philadelphia, PA')).toBe('PA');
+    expect(localCoverageState('Louisville/Jefferson County, KY')).toBe('KY');
+    expect(localCoverageState('Maryland')).toBe('MD');
+    expect(localCoverageState('All 92 Indiana counties')).toBe('IN');
+    expect(localCoverageState('Somewhere in West Virginia')).toBe('WV');
+  });
+
+  it('returns null for unknown or empty coverage', () => {
+    expect(localCoverageState('')).toBeNull();
+    expect(localCoverageState(undefined)).toBeNull();
+    expect(localCoverageState('Atlantis')).toBeNull();
+  });
+});
+
+describe('getJurisdiction with local and multi-state coverage', () => {
+  it('keeps federal programs with multi-state or US-prefixed coverage federal', () => {
+    expect(getJurisdiction(program({ id: 'head_start', agency: 'HHS', coverage: 'US, WA' }))).toBe('federal');
+    expect(getJurisdiction(program({ id: 'liheap', agency: 'HHS', coverage: 'OR, DC, Riverside County, MA, IL, TX' }))).toBe('federal');
+    expect(getJurisdiction(program({ id: 'section_8', agency: 'HUD', coverage: undefined }))).toBe('federal');
+  });
+
+  it('resolves a local program by its coverage in every state lookup', () => {
+    const philly = program({ id: 'philadelphia_wage_tax', agency: 'Local', coverage: 'Philadelphia, PA', status: 'complete' });
+    expect(getStateStatusForProgram(philly, 'PA')).toBe('complete');
+    expect(getStateStatusForProgram(philly, 'NJ')).toBeNull();
+    const mdLocal = program({ id: 'md_local_income_tax', agency: 'Local', coverage: 'Maryland', status: 'complete' });
+    expect(getStateStatusForProgram(mdLocal, 'MD')).toBe('complete');
   });
 });

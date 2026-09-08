@@ -8,6 +8,7 @@ import { fetchProgramsWithSource, type ProgramsWithSource } from '../../data/fet
 import CoverageProvenance from './CoverageProvenance';
 import {
   ALL_STATES,
+  STATE_NAMES,
   computeStatusCount,
   deriveProgramStatus,
   getJurisdiction,
@@ -18,17 +19,6 @@ import { IconX, IconCalendar } from '@tabler/icons-react';
 import type { Country } from '../../hooks/useCountry';
 
 
-const STATE_NAMES: Record<string, string> = {
-  AL:'Alabama',AK:'Alaska',AZ:'Arizona',AR:'Arkansas',CA:'California',CO:'Colorado',
-  CT:'Connecticut',DE:'Delaware',DC:'District of Columbia',FL:'Florida',GA:'Georgia',
-  HI:'Hawaii',ID:'Idaho',IL:'Illinois',IN:'Indiana',IA:'Iowa',KS:'Kansas',KY:'Kentucky',
-  LA:'Louisiana',ME:'Maine',MD:'Maryland',MA:'Massachusetts',MI:'Michigan',MN:'Minnesota',
-  MS:'Mississippi',MO:'Missouri',MT:'Montana',NE:'Nebraska',NV:'Nevada',NH:'New Hampshire',
-  NJ:'New Jersey',NM:'New Mexico',NY:'New York',NC:'North Carolina',ND:'North Dakota',
-  OH:'Ohio',OK:'Oklahoma',OR:'Oregon',PA:'Pennsylvania',RI:'Rhode Island',SC:'South Carolina',
-  SD:'South Dakota',TN:'Tennessee',TX:'Texas',UT:'Utah',VT:'Vermont',VA:'Virginia',
-  WA:'Washington',WV:'West Virginia',WI:'Wisconsin',WY:'Wyoming',
-};
 
 
 const MAX_FORWARD_YEAR = new Date().getFullYear() + 5;
@@ -387,7 +377,7 @@ export default function RulesOverview({ country = 'us' }: { country?: Country })
   const total = yearFilteredPrograms.length;
 
   const federalPrograms = useMemo(() =>
-    yearFilteredPrograms.filter(p => p.agency !== 'State' && p.agency !== 'Local'),
+    yearFilteredPrograms.filter(p => getJurisdiction(p) === 'federal'),
   [yearFilteredPrograms]);
   const stateOnlyPrograms = useMemo(() =>
     yearFilteredPrograms.filter(p => getJurisdiction(p) === 'state'),
