@@ -20,10 +20,14 @@ This lane is offline: no fetches, dependency installs, build, push, or PR creati
   UI tests; removed a hardcoded TANF Partial count so summaries use the registry.
 - Enabled prefixed registry JSON paths in the proxy matcher and tested both
   matching and rewriting; isolated page smoke tests from live data requests.
+- Added build-time registry snapshots and parameter-tree refreshes using each
+  repository's resolved default branch and commit. GitHub HTTP removes the `gh`
+  dependency; optional API versions and failures are handled without failing builds.
+- Added mocked script tests for branch resolution, parsing, pinned contents,
+  optional API versions, missing UK registry, and stale snapshot cleanup.
 
 ## Next
 
-- Add default-branch registry snapshots and repair metadata branch resolution.
 - Run only `bun run lint` and `bun run test` with existing `node_modules`.
 - Commit each coherent step and write the final file-by-file report and verbatim
   check results to `out.md`; leave all commits locally for the dispatcher.
