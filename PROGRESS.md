@@ -10,13 +10,14 @@ This lane is offline: no fetches, dependency installs, build, push, or PR creati
 
 - Confirmed a clean starting worktree and matching `master` / `origin/master` HEADs.
 - Created the requested branch and recorded the implementation and validation plan.
+- Added the daily/manual deployment-hook refresh workflow, README setup
+  instructions, and ignores for generated registry snapshots.
 
 ## Next
 
 - Add default-branch registry snapshots and repair metadata branch resolution.
 - Load snapshots before API metadata and hardcoded programs, retaining provenance.
 - Display coverage provenance and add offline regression tests.
-- Add a daily/manual deployment-hook refresh workflow and README documentation.
 - Run only `bun run lint` and `bun run test` with existing `node_modules`.
 - Commit each coherent step and write the final file-by-file report and verbatim
   check results to `out.md`; leave all commits locally for the dispatcher.
