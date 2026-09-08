@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { NextRequest } from 'next/server';
-import { proxy } from '../../proxy';
+import { unstable_doesMiddlewareMatch } from 'next/experimental/testing/server';
+import { config, proxy } from '../../proxy';
 
 const ORIGIN = 'https://model.test';
 
@@ -15,6 +16,32 @@ function headerUrl(response: Response, header: string) {
 }
 
 describe('country proxy', () => {
+  it.each([
+    ['/us/programs-us.json', '/programs-us.json'],
+    ['/us/programs-uk.json', '/programs-uk.json'],
+    ['/uk/programs-us.json', '/programs-us.json'],
+    ['/uk/programs-uk.json', '/programs-uk.json'],
+    ['/us/model/programs-us.json', '/programs-us.json'],
+    ['/us/model/programs-uk.json', '/programs-uk.json'],
+    ['/uk/model/programs-us.json', '/programs-us.json'],
+    ['/uk/model/programs-uk.json', '/programs-uk.json'],
+  ])('matches and rewrites the registry snapshot at %s', (path, expected) => {
+    expect(unstable_doesMiddlewareMatch({ config, url: `${ORIGIN}${path}` })).toBe(true);
+
+    const response = runProxy(path);
+    const rewrite = headerUrl(response, 'x-middleware-rewrite');
+    expect(rewrite.pathname).toBe(expected);
+  });
+
+  it.each([
+    '/programs-us.json',
+    '/us/model/logo.svg',
+    '/us/model/programs-ca.json',
+    '/_next/static/chunks/main.js',
+  ])('keeps unrelated static paths outside the proxy: %s', (path) => {
+    expect(unstable_doesMiddlewareMatch({ config, url: `${ORIGIN}${path}` })).toBe(false);
+  });
+
   it('rewrites /us/model routes to internal app paths', () => {
     const response = runProxy('/us/model/rules/coverage?compare=all');
     const rewrite = headerUrl(response, 'x-middleware-rewrite');

@@ -18,6 +18,8 @@ This lane is offline: no fetches, dependency installs, build, push, or PR creati
 - Added loader/transform regression tests and an offline fetch guard for tests.
 - Added the coverage provenance line with snapshot/API/fallback attribution and
   UI tests; removed a hardcoded TANF Partial count so summaries use the registry.
+- Enabled prefixed registry JSON paths in the proxy matcher and tested both
+  matching and rewriting; isolated page smoke tests from live data requests.
 
 ## Next
 

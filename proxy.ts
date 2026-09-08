@@ -95,6 +95,10 @@ export function proxy(req: NextRequest) {
 }
 
 export const config = {
-  // Match all paths except Next.js internals and static assets.
-  matcher: ['/((?!_next|.*\\..*).*)'],
+  // Registry snapshots need country-prefix rewrites even though they are assets.
+  matcher: [
+    '/((?!_next|.*\\..*).*)',
+    '/:country(us|uk)/programs-:registry(us|uk).json',
+    '/:country(us|uk)/model/programs-:registry(us|uk).json',
+  ],
 };
