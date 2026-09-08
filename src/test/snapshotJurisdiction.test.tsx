@@ -5,7 +5,9 @@ import { resolve } from 'node:path';
 import CoverageTrackerPage from '../views/rules/CoverageTrackerPage';
 import { ALL_STATES, getJurisdiction, getStateStatusForProgram } from '../data/programStatus';
 
-const usSnapshot = JSON.parse(readFileSync(resolve(__dirname, '../../public/programs-us.json'), 'utf8'));
+// A pinned copy of the registry snapshot (public/programs-us.json is generated at build time and not committed).
+// Refresh with: cp public/programs-us.json src/test/fixtures/programs-us.snapshot.json
+const usSnapshot = JSON.parse(readFileSync(resolve(__dirname, 'fixtures/programs-us.snapshot.json'), 'utf8'));
 
 function response(data: unknown, status = 200) {
   return { ok: status >= 200 && status < 300, status, json: async () => data } as Response;
