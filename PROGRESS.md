@@ -2,7 +2,7 @@
 
 ## State
 
-In progress on `coverage-source-master`, created from `origin/master` at
+Implementation and offline validation complete on `coverage-source-master`, created from `origin/master` at
 `b10d328daaa2890a936adec008434ba7b95320c8` (also local `master`).
 This lane is offline: no fetches, dependency installs, build, push, or PR creation.
 
@@ -25,9 +25,14 @@ This lane is offline: no fetches, dependency installs, build, push, or PR creati
   dependency; optional API versions and failures are handled without failing builds.
 - Added mocked script tests for branch resolution, parsing, pinned contents,
   optional API versions, missing UK registry, and stale snapshot cleanup.
+- `bun run lint` passed (exit 0).
+- `bun run test` passed (exit 0): 10 test files, 113 tests.
+- Wrote the file-by-file final report and verbatim check output to `out.md`.
+- Left the hardcoded fallback registry and dependency manifests unchanged.
 
 ## Next
 
-- Run only `bun run lint` and `bun run test` with existing `node_modules`.
-- Commit each coherent step and write the final file-by-file report and verbatim
-  check results to `out.md`; leave all commits locally for the dispatcher.
+- Dispatcher: run the fetch script and production build with network access,
+  verify live snapshot contents and deploy-hook behavior, then push this branch
+  and open the PR to `master` with the requested title.
+- No local implementation work remains; all commits are local and no PR exists.
