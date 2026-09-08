@@ -12,11 +12,14 @@ This lane is offline: no fetches, dependency installs, build, push, or PR creati
 - Created the requested branch and recorded the implementation and validation plan.
 - Added the daily/manual deployment-hook refresh workflow, README setup
   instructions, and ignores for generated registry snapshots.
+- Added snapshot → API → bundled fallback loading with provenance, mounted
+  asset paths, commit-specific snapshot source links, and the unchanged
+  programs-only public interface.
+- Added loader/transform regression tests and an offline fetch guard for tests.
 
 ## Next
 
 - Add default-branch registry snapshots and repair metadata branch resolution.
-- Load snapshots before API metadata and hardcoded programs, retaining provenance.
 - Display coverage provenance and add offline regression tests.
 - Run only `bun run lint` and `bun run test` with existing `node_modules`.
 - Commit each coherent step and write the final file-by-file report and verbatim

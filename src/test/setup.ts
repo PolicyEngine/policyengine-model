@@ -1,4 +1,10 @@
 import '@testing-library/jest-dom/vitest';
+import { beforeEach, vi } from 'vitest';
+
+// Tests must explicitly mock their responses; never contact production services.
+beforeEach(() => {
+  vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('Unmocked fetch in offline test')));
+});
 
 // Mock IntersectionObserver for jsdom
 class MockIntersectionObserver {
