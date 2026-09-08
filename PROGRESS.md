@@ -16,11 +16,12 @@ This lane is offline: no fetches, dependency installs, build, push, or PR creati
   asset paths, commit-specific snapshot source links, and the unchanged
   programs-only public interface.
 - Added loader/transform regression tests and an offline fetch guard for tests.
+- Added the coverage provenance line with snapshot/API/fallback attribution and
+  UI tests; removed a hardcoded TANF Partial count so summaries use the registry.
 
 ## Next
 
 - Add default-branch registry snapshots and repair metadata branch resolution.
-- Display coverage provenance and add offline regression tests.
 - Run only `bun run lint` and `bun run test` with existing `node_modules`.
 - Commit each coherent step and write the final file-by-file report and verbatim
   check results to `out.md`; leave all commits locally for the dispatcher.

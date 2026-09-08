@@ -4,7 +4,8 @@ import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { colors, typography, spacing, statusColors } from '../../designTokens';
 import { programs as fallbackPrograms } from '../../data/programs';
-import { fetchPrograms } from '../../data/fetchPrograms';
+import { fetchProgramsWithSource, type ProgramsWithSource } from '../../data/fetchPrograms';
+import CoverageProvenance from './CoverageProvenance';
 import type { CoverageStatus, Program } from '../../types/Program';
 import { IconX, IconCalendar } from '@tabler/icons-react';
 import type { Country } from '../../hooks/useCountry';
@@ -388,9 +389,7 @@ function computeStatusCount(programList: Program[]) {
       counts[program.status]++;
       return;
     }
-    if (program.id === 'tanf') {
-      counts.partial++;
-    } else if (program.stateImplementations && program.stateImplementations.length > 0) {
+    if (program.stateImplementations && program.stateImplementations.length > 0) {
       const statuses = new Set<string>();
       program.stateImplementations.forEach((impl) => statuses.add(impl.status));
       if (statuses.has('inProgress')) counts.inProgress++;
@@ -410,10 +409,20 @@ export default function RulesOverview({ country = 'us' }: { country?: Country })
   const [selectedState, setSelectedState] = useState<string | null>(null);
   const [search, setSearch] = useState('');
   const [yearFilter, setYearFilter] = useState<number | null>(null);
-  const [programs, setPrograms] = useState<Program[]>(fallbackPrograms);
+  const [loadedPrograms, setLoadedPrograms] = useState<ProgramsWithSource>({
+    programs: fallbackPrograms,
+    source: { kind: 'fallback' },
+  });
+  const { programs, source } = loadedPrograms;
 
   useEffect(() => {
-    fetchPrograms(country).then(setPrograms);
+    // The UK view currently displays a static introduction, not registry data.
+    if (country === 'uk') return;
+    let active = true;
+    fetchProgramsWithSource(country).then(result => {
+      if (active) setLoadedPrograms(result);
+    });
+    return () => { active = false; };
   }, [country]);
 
   const availableYears = useMemo(() => collectAllYears(programs), [programs]);
@@ -492,6 +501,7 @@ export default function RulesOverview({ country = 'us' }: { country?: Country })
 
   return (
     <div>
+      <CoverageProvenance source={source} />
       {/* Summary stats */}
       <div className="tw:flex tw:flex-wrap" style={{ gap: spacing.md, marginBottom: spacing['3xl'] }}>
         <StatCard label="Total programs" count={total} color={colors.primary[900]} delay={0} />
