@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { computeStatusCount, deriveProgramStatus, deriveStatusFromStates } from '../data/programStatus';
+import {
+  computeStatusCount,
+  deriveProgramStatus,
+  deriveStatusFromStates,
+  getJurisdiction,
+  getStateStatusForProgram,
+} from '../data/programStatus';
 import type { CoverageStatus, Program, StateImplementation } from '../types/Program';
 
 function impl(state: string, status: CoverageStatus): StateImplementation {
@@ -72,5 +78,54 @@ describe('computeStatusCount', () => {
       program({ id: 'eitc', status: 'complete' }),
     ]);
     expect(counts).toEqual({ complete: 2, partial: 1, inProgress: 1, notStarted: 1 });
+  });
+});
+
+describe('getJurisdiction', () => {
+  it('reads State and Local agencies directly', () => {
+    expect(getJurisdiction(program({ agency: 'State', coverage: 'CO' }))).toBe('state');
+    expect(getJurisdiction(program({ agency: 'Local', coverage: 'Chicago' }))).toBe('local');
+  });
+
+  it('falls back to coverage when the agency is a named state or local body', () => {
+    const neAabd = program({ id: 'ne_aabd', agency: 'DHHS' as Program['agency'], coverage: 'NE' });
+    const nyUi = program({ id: 'ny_ui', agency: 'New York State Department of Labor' as Program['agency'], coverage: 'NY' });
+    const local = program({ id: 'la_dcfs', agency: 'DCFS' as Program['agency'], coverage: 'Los Angeles County' });
+    expect(getJurisdiction(neAabd)).toBe('state');
+    expect(getJurisdiction(nyUi)).toBe('state');
+    expect(getJurisdiction(local)).toBe('local');
+  });
+
+  it('treats everything else as federal', () => {
+    expect(getJurisdiction(program({ agency: 'USDA', coverage: 'US' }))).toBe('federal');
+    expect(getJurisdiction(program({ id: 'chapter_7_bankruptcy', agency: undefined, coverage: 'US' }))).toBe('federal');
+    expect(getJurisdiction(program({ agency: 'HHS', coverage: 'US, WA' }))).toBe('federal');
+  });
+});
+
+describe('getStateStatusForProgram', () => {
+  it('places a state program with a named agency in its state only', () => {
+    const neAabd = program({ id: 'ne_aabd', agency: 'DHHS' as Program['agency'], coverage: 'NE', status: 'partial' });
+    expect(getStateStatusForProgram(neAabd, 'NE')).toBe('partial');
+    expect(getStateStatusForProgram(neAabd, 'CA')).toBeNull();
+    expect(deriveProgramStatus(neAabd)).toBe('partial');
+    expect(computeStatusCount([neAabd])).toEqual({ complete: 0, partial: 1, inProgress: 0, notStarted: 0 });
+  });
+
+  it('maps local programs to their state', () => {
+    const chicago = program({ id: 'chicago_x', agency: 'Local', coverage: 'Chicago', status: 'complete' });
+    expect(getStateStatusForProgram(chicago, 'IL')).toBe('complete');
+    expect(getStateStatusForProgram(chicago, 'NY')).toBeNull();
+  });
+
+  it('uses state entries, universal fallbacks, and state variation for federal programs', () => {
+    const tanf = program({ id: 'tanf', status: 'complete', stateImplementations: [impl('CA', 'partial')] });
+    expect(getStateStatusForProgram(tanf, 'CA')).toBe('partial');
+    expect(getStateStatusForProgram(tanf, 'NY')).toBe('complete');
+    const liheap = program({ id: 'liheap', status: 'partial', stateImplementations: [impl('OR', 'complete')] });
+    expect(getStateStatusForProgram(liheap, 'OR')).toBe('complete');
+    expect(getStateStatusForProgram(liheap, 'NY')).toBeNull();
+    expect(getStateStatusForProgram(program({ id: 'eitc', status: 'complete', hasStateVariation: true }), 'TX')).toBe('complete');
+    expect(getStateStatusForProgram(program({ id: 'medicare_part_d', status: 'complete' }), 'TX')).toBeNull();
   });
 });

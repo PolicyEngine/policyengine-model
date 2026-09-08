@@ -6,17 +6,17 @@ import { colors, typography, spacing, statusColors } from '../../designTokens';
 import { programs as fallbackPrograms } from '../../data/programs';
 import { fetchProgramsWithSource, type ProgramsWithSource } from '../../data/fetchPrograms';
 import CoverageProvenance from './CoverageProvenance';
-import { computeStatusCount, deriveProgramStatus } from '../../data/programStatus';
+import {
+  ALL_STATES,
+  computeStatusCount,
+  deriveProgramStatus,
+  getJurisdiction,
+  getStateStatusForProgram,
+} from '../../data/programStatus';
 import type { CoverageStatus, Program } from '../../types/Program';
 import { IconX, IconCalendar } from '@tabler/icons-react';
 import type { Country } from '../../hooks/useCountry';
 
-const ALL_STATES = [
-  'AL','AK','AZ','AR','CA','CO','CT','DE','DC','FL','GA','HI','ID','IL','IN','IA',
-  'KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM',
-  'NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA',
-  'WV','WI','WY',
-];
 
 const STATE_NAMES: Record<string, string> = {
   AL:'Alabama',AK:'Alaska',AZ:'Arizona',AR:'Arkansas',CA:'California',CO:'Colorado',
@@ -30,10 +30,6 @@ const STATE_NAMES: Record<string, string> = {
   WA:'Washington',WV:'West Virginia',WI:'Wisconsin',WY:'Wyoming',
 };
 
-const UNIVERSAL_STATE_PROGRAMS = new Set([
-  'snap','tanf','medicaid','wic','state_income_tax','medicare',
-  'aca_subsidies','payroll_taxes','school_meals','csfp','chip',
-]);
 
 const MAX_FORWARD_YEAR = new Date().getFullYear() + 5;
 
@@ -132,32 +128,6 @@ function StatCard({ label, count, color, delay }: { label: string; count: number
   );
 }
 
-function getStateStatusForProgram(program: Program, stateCode: string): CoverageStatus | null {
-  if (program.agency === 'State') {
-    return program.coverage === stateCode ? program.status : null;
-  }
-  if (program.agency === 'Local') {
-    const localToState: Record<string, string> = {
-      'Chicago': 'IL', 'Dallas County': 'TX', 'Dallas County, TX': 'TX',
-      'Harris County': 'TX', 'Harris County, TX': 'TX',
-      'Los Angeles County': 'CA', 'Riverside County': 'CA',
-      'Alameda County': 'CA', 'San Francisco': 'CA',
-      'New York City': 'NY', 'Montgomery County': 'MD', 'Montgomery County, MD': 'MD',
-    };
-    return localToState[program.coverage || ''] === stateCode ? program.status : null;
-  }
-  if (program.stateImplementations) {
-    const impl = program.stateImplementations.find(s => s.state === stateCode);
-    if (impl) return impl.status;
-    if (UNIVERSAL_STATE_PROGRAMS.has(program.id)) return program.status;
-    return null;
-  }
-  if (program.hasStateVariation || UNIVERSAL_STATE_PROGRAMS.has(program.id)) {
-    return program.status;
-  }
-  return null;
-}
-
 type ViewMode = 'programs' | 'states';
 
 function ProgramDetailPanel({ program, onClose, allPrograms }: { program: Program; onClose: () => void; allPrograms: Program[] }) {
@@ -174,7 +144,7 @@ function ProgramDetailPanel({ program, onClose, allPrograms }: { program: Progra
   }, [program]);
 
   const statePrograms = allPrograms.filter(
-    p => (p.agency === 'State' || p.agency === 'Local') && p.id !== program.id
+    p => getJurisdiction(p) !== 'federal' && p.id !== program.id
   );
   const relatedStatePrograms = statePrograms.filter(p => {
     for (const st of ALL_STATES) {
@@ -420,10 +390,10 @@ export default function RulesOverview({ country = 'us' }: { country?: Country })
     yearFilteredPrograms.filter(p => p.agency !== 'State' && p.agency !== 'Local'),
   [yearFilteredPrograms]);
   const stateOnlyPrograms = useMemo(() =>
-    yearFilteredPrograms.filter(p => p.agency === 'State'),
+    yearFilteredPrograms.filter(p => getJurisdiction(p) === 'state'),
   [yearFilteredPrograms]);
   const localPrograms = useMemo(() =>
-    yearFilteredPrograms.filter(p => p.agency === 'Local'),
+    yearFilteredPrograms.filter(p => getJurisdiction(p) === 'local'),
   [yearFilteredPrograms]);
 
   const filteredFederal = useMemo(() => {

@@ -159,6 +159,29 @@ describe('program source loading', () => {
     expect(deriveProgramStatus(programs[1])).toBe('partial');
   });
 
+  it('keeps state programs with named agencies in their state', async () => {
+    const neAabd = {
+      ...registryProgram,
+      id: 'ne_aabd',
+      name: 'Nebraska AABD',
+      agency: 'DHHS',
+      status: 'complete',
+      coverage: 'NE',
+      has_state_variation: false,
+      state_implementations: undefined,
+    };
+    const nyUi = { ...neAabd, id: 'ny_ui', name: 'New York UI', agency: 'New York State Department of Labor', coverage: 'NY' };
+    vi.mocked(fetch).mockResolvedValueOnce(response({ ...snapshot(), programs: [neAabd, nyUi] }));
+    const { fetchProgramsWithSource } = await import('../data/fetchPrograms');
+    const { getJurisdiction, getStateStatusForProgram, computeStatusCount } = await import('../data/programStatus');
+    const { programs } = await fetchProgramsWithSource();
+    expect(programs.map(getJurisdiction)).toEqual(['state', 'state']);
+    expect(getStateStatusForProgram(programs[0], 'NE')).toBe('complete');
+    expect(getStateStatusForProgram(programs[0], 'NY')).toBeNull();
+    expect(getStateStatusForProgram(programs[1], 'NY')).toBe('complete');
+    expect(computeStatusCount(programs)).toEqual({ complete: 2, partial: 0, inProgress: 0, notStarted: 0 });
+  });
+
   it('accepts API metadata without an envelope or optional version', async () => {
     vi.mocked(fetch)
       .mockRejectedValueOnce(new Error('Snapshot unavailable'))
