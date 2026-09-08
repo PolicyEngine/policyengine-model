@@ -27,6 +27,7 @@ node_modules
 # Cloned repos used for research
 policyengine-uk-data
 
-# Pre-built metadata (generated at build time, ~58MB each)
+# Metadata and registry snapshots generated at build time
 public/metadata-*.json
 public/param-tree-*.json
+public/programs-*.json

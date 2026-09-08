@@ -1,8 +1,6 @@
 import type { Program, CoverageStatus, StateImplementation } from '../types/Program';
 import type { Country } from '../hooks/useCountry';
-
-const GITHUB_BASE = 'https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us';
-const TESTS_BASE = 'https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/tests';
+import { publicBasePrefixFromPath } from '../hooks/usePublicBasePrefix';
 
 interface ApiProgram {
   id: string;
@@ -21,7 +19,7 @@ interface ApiProgram {
   notes?: string;
   state_implementations?: Array<{
     state: string;
-    status: string;
+    status?: string;
     name?: string;
     full_name?: string;
     variable?: string;
@@ -29,23 +27,41 @@ interface ApiProgram {
   }>;
 }
 
-function mapStatus(status: string): CoverageStatus {
+export type ProgramsSource =
+  | {
+      kind: 'snapshot';
+      repo: string;
+      branch: string;
+      commit: string;
+      fetchedAt: string;
+      version: string;
+      apiVersion?: string;
+    }
+  | { kind: 'api'; repo: string; apiVersion?: string }
+  | { kind: 'fallback' };
+
+export interface ProgramsWithSource {
+  programs: Program[];
+  source: ProgramsSource;
+}
+
+function mapStatus(status?: string): CoverageStatus {
   const statusMap: Record<string, CoverageStatus> = {
     complete: 'complete',
     partial: 'partial',
     in_progress: 'inProgress',
     not_started: 'notStarted',
   };
-  return statusMap[status] || 'notStarted';
+  return (status && statusMap[status]) || 'notStarted';
 }
 
-function buildGithubLinks(paramPrefix?: string): Program['githubLinks'] {
+function buildGithubLinks(base: string, paramPrefix?: string): Program['githubLinks'] {
   if (!paramPrefix) return {};
   const path = paramPrefix.replace(/\./g, '/');
   return {
-    parameters: `${GITHUB_BASE}/parameters/${path}`,
-    variables: `${GITHUB_BASE}/variables/${path}`,
-    tests: `${TESTS_BASE}/policy/baseline/${path}`,
+    parameters: `${base}/parameters/${path}`,
+    variables: `${base}/variables/${path}`,
+    tests: `${base}/tests/policy/baseline/${path}`,
   };
 }
 
@@ -61,17 +77,21 @@ function buildVerifiedYears(p: ApiProgram): string | undefined {
   return p.verified_years;
 }
 
-function transformProgram(p: ApiProgram): Program {
+function transformProgram(p: ApiProgram, githubBase: string): Program {
+  // A state entry without its own status inherits the program's registry status;
+  // only an explicit not_started means not started.
+  const programStatus = mapStatus(p.status);
   const stateImplementations: StateImplementation[] | undefined =
     p.state_implementations?.map(si => ({
       state: si.state,
-      status: mapStatus(si.status),
+      status: si.status ? mapStatus(si.status) : programStatus,
       name: si.name,
       fullName: si.full_name,
       variable: si.variable,
       notes: si.notes,
       githubLinks: si.variable
         ? buildGithubLinks(
+            githubBase,
             `gov.states.${si.state.toLowerCase()}`
           )
         : {},
@@ -85,7 +105,7 @@ function transformProgram(p: ApiProgram): Program {
     fullName: p.full_name || p.name,
     agency: p.agency as Program['agency'],
     category: p.category,
-    status: mapStatus(p.status),
+    status: programStatus,
     coverage: p.coverage,
     hasStateVariation: p.has_state_variation,
     variable: p.variable,
@@ -94,30 +114,87 @@ function transformProgram(p: ApiProgram): Program {
       : (verifiedYears ? `Years: ${verifiedYears}` : undefined),
     verifiedYears,
     stateImplementations,
-    githubLinks: buildGithubLinks(p.parameter_prefix),
+    githubLinks: buildGithubLinks(githubBase, p.parameter_prefix),
   };
 }
 
-const cache = new Map<string, Program[]>();
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return value !== null && typeof value === 'object' && !Array.isArray(value);
+}
 
-export async function fetchPrograms(country: Country = 'us'): Promise<Program[]> {
-  if (cache.has(country)) return cache.get(country)!;
+function transformPrograms(value: unknown, githubBase: string): Program[] {
+  if (!Array.isArray(value) || !value.every(p =>
+    isRecord(p) && typeof p.id === 'string' && typeof p.name === 'string'
+  )) {
+    throw new Error('No valid programs array in response');
+  }
+  return value.map(p => transformProgram(p as ApiProgram, githubBase));
+}
+
+const cache = new Map<string, ProgramsWithSource>();
+
+export async function fetchProgramsWithSource(country: Country = 'us'): Promise<ProgramsWithSource> {
+  const prefix = typeof window === 'undefined'
+    ? ''
+    : publicBasePrefixFromPath(window.location.pathname);
+  const cacheKey = `${prefix}:${country}`;
+  if (cache.has(cacheKey)) return cache.get(cacheKey)!;
+
+  const repo = `PolicyEngine/policyengine-${country}`;
+  const githubBase = (ref: string) =>
+    `https://github.com/${repo}/tree/${ref}/policyengine_${country}`;
+
+  try {
+    const response = await fetch(`${prefix}/programs-${country}.json`);
+    if (!response.ok) throw new Error(`Snapshot returned ${response.status}`);
+    const snapshot: unknown = await response.json();
+    if (!isRecord(snapshot) || !isRecord(snapshot.source)) {
+      throw new Error('Snapshot has no source');
+    }
+    const { source, version } = snapshot;
+    if (source.repo !== repo ||
+      typeof source.branch !== 'string' || !source.branch ||
+      typeof source.commit !== 'string' || !source.commit ||
+      typeof source.fetchedAt !== 'string' || !Number.isFinite(Date.parse(source.fetchedAt)) ||
+      typeof version !== 'string' || !version) {
+      throw new Error('Snapshot has invalid provenance');
+    }
+    const result: ProgramsWithSource = {
+      programs: transformPrograms(snapshot.programs, githubBase(source.commit)),
+      source: {
+        kind: 'snapshot', repo, branch: source.branch, commit: source.commit,
+        fetchedAt: source.fetchedAt, version,
+        apiVersion: typeof snapshot.apiVersion === 'string' ? snapshot.apiVersion : undefined,
+      },
+    };
+    cache.set(cacheKey, result);
+    return result;
+  } catch (err) {
+    console.warn(`Failed to load ${country} program snapshot, trying API:`, err);
+  }
 
   try {
     // Use the shared metadata fetch to avoid duplicate API calls
     const { fetchMetadataRaw } = await import('./fetchMetadata');
     const data = await fetchMetadataRaw(country);
-    const apiPrograms: ApiProgram[] = data.modelled_policies?.programs;
-    if (!apiPrograms || !Array.isArray(apiPrograms)) {
-      throw new Error('No programs array in API response');
-    }
-    const result = apiPrograms.map(transformProgram);
-    cache.set(country, result);
+    const result: ProgramsWithSource = {
+      programs: transformPrograms(data.modelled_policies?.programs, githubBase('HEAD')),
+      source: {
+        kind: 'api', repo,
+        apiVersion: typeof data.version === 'string' ? data.version : undefined,
+      },
+    };
+    cache.set(cacheKey, result);
     return result;
   } catch (err) {
     console.warn('Failed to fetch programs from API, using fallback:', err);
     // Fall back to hardcoded data
     const { programs } = await import('./programs');
-    return programs;
+    return { programs, source: { kind: 'fallback' } };
   }
+}
+
+/** Retain the programs-only interface used by the parameter and variable lists. */
+export async function fetchPrograms(country: Country = 'us'): Promise<Program[]> {
+  return (await fetchProgramsWithSource(country)).programs;
 }

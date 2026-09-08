@@ -8,6 +8,14 @@ vi.mock('next/navigation', () => ({
   useRouter: () => ({ push: vi.fn(), replace: vi.fn(), back: vi.fn() }),
 }));
 
+// These smoke tests check the initial page layout while data is loading.
+vi.mock('../data/fetchMetadata', () => ({
+  fetchMetadata: () => new Promise(() => {}),
+}));
+vi.mock('../data/fetchPrograms', () => ({
+  fetchProgramsWithSource: () => new Promise(() => {}),
+}));
+
 import OverviewPage from '../views/OverviewPage';
 import CoverageTrackerPage from '../views/rules/CoverageTrackerPage';
 import ParametersPage from '../views/rules/ParametersPage';

@@ -1,73 +1,57 @@
-# React + TypeScript + Vite
+# PolicyEngine model
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+The PolicyEngine model explorer is a Next.js app for exploring model coverage,
+parameters, and rules. Its public deployment is mounted at `/us/model`.
 
-Currently, two official plugins are available:
+## Development
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+With dependencies installed, run:
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```sh
+bun run dev
+bun run lint
+bun run test
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+`bun run build` runs `scripts/fetch-metadata.js` before building the app. The
+fetch script needs network access and can be run independently with
+`bun run fetch-metadata`.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Coverage registry snapshots
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+At build time, the fetch script resolves the default branch of each model
+repository (`PolicyEngine/policyengine-us` and `PolicyEngine/policyengine-uk`)
+and reads its `policyengine_<country>/programs.yaml` registry at that branch's
+resolved commit. It writes generated
+snapshots to `public/programs-us.json` and `public/programs-uk.json` when a registry
+is available. A repository without a registry is skipped; fetch failures warn
+without failing the build.
+
+Each snapshot records the raw program registry, package version from
+`pyproject.toml`, repository, branch, commit, and fetch time. The production API's
+version is included when its metadata endpoint responds. The coverage page uses
+this provenance to show which model version the coverage reflects and, when
+available, the version served by the production API.
+
+The program loader tries the static snapshot first, then production API metadata,
+then the bundled hardcoded programs. Snapshot URLs use the public base prefix so
+they work both locally and under `/us/model`.
+
+## Daily registry refresh
+
+The `Refresh registry` GitHub Actions workflow runs daily at 06:17 UTC and can
+also be started manually with **Run workflow**. It triggers a Vercel rebuild so
+new registry changes appear without a commit to this repository.
+
+To enable it:
+
+1. In the Vercel project's Git settings, create a deploy hook for the production
+   branch (`master`).
+2. In this GitHub repository's **Settings → Secrets and variables → Actions**,
+   add a repository secret named `VERCEL_DEPLOY_HOOK` with the hook URL.
+3. Run **Actions → Refresh registry → Run workflow** to request a rebuild.
+
+The workflow sends a POST request to the hook. If the secret is absent, it logs a
+notice and exits successfully. The workflow must be on the default branch for
+scheduled runs to apply. The Vercel build must run `bun run build` so each
+deployment fetches a fresh snapshot.
