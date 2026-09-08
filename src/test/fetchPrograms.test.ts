@@ -70,7 +70,7 @@ describe('program source loading', () => {
       stateImplementations: [
         { state: 'CA', status: 'complete', name: 'CalWORKs', fullName: 'California Work Opportunity', variable: 'ca_tanf', notes: 'State notes' },
         { state: 'NY', status: 'inProgress' },
-        { state: 'MA', status: 'notStarted', name: 'Missing status' },
+        { state: 'MA', status: 'inProgress', name: 'Missing status' },
         { state: 'TX', status: 'notStarted' },
         { state: 'WA', status: 'partial' },
       ],
@@ -126,6 +126,37 @@ describe('program source loading', () => {
     expect(fetch).toHaveBeenCalledTimes(2);
     expect(result.programs[0].status).toBe('partial');
     expect(result.source).toEqual({ kind: 'api', repo: 'PolicyEngine/policyengine-us', apiVersion: '1.764.6' });
+  });
+
+  it('lets state entries without a status inherit the program status', async () => {
+    const schoolMeals = {
+      ...registryProgram,
+      id: 'school_meals',
+      name: 'Free and reduced school meals',
+      status: 'complete',
+      state_implementations: [
+        { state: 'CA', name: 'California universal meals' },
+        { state: 'VT', name: 'Vermont Universal School Meals' },
+      ],
+    };
+    const mixed = {
+      ...registryProgram,
+      id: 'mixed',
+      name: 'Mixed',
+      status: 'complete',
+      state_implementations: [
+        { state: 'CA', name: 'California' },
+        { state: 'NY', name: 'New York', status: 'not_started' },
+      ],
+    };
+    vi.mocked(fetch).mockResolvedValueOnce(response({ ...snapshot(), programs: [schoolMeals, mixed] }));
+    const { fetchProgramsWithSource } = await import('../data/fetchPrograms');
+    const { deriveProgramStatus } = await import('../data/programStatus');
+    const { programs } = await fetchProgramsWithSource();
+    expect(programs[0].stateImplementations?.map((impl) => impl.status)).toEqual(['complete', 'complete']);
+    expect(deriveProgramStatus(programs[0])).toBe('complete');
+    expect(programs[1].stateImplementations?.map((impl) => impl.status)).toEqual(['complete', 'notStarted']);
+    expect(deriveProgramStatus(programs[1])).toBe('partial');
   });
 
   it('accepts API metadata without an envelope or optional version', async () => {

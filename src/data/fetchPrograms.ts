@@ -78,10 +78,13 @@ function buildVerifiedYears(p: ApiProgram): string | undefined {
 }
 
 function transformProgram(p: ApiProgram, githubBase: string): Program {
+  // A state entry without its own status inherits the program's registry status;
+  // only an explicit not_started means not started.
+  const programStatus = mapStatus(p.status);
   const stateImplementations: StateImplementation[] | undefined =
     p.state_implementations?.map(si => ({
       state: si.state,
-      status: mapStatus(si.status),
+      status: si.status ? mapStatus(si.status) : programStatus,
       name: si.name,
       fullName: si.full_name,
       variable: si.variable,
@@ -102,7 +105,7 @@ function transformProgram(p: ApiProgram, githubBase: string): Program {
     fullName: p.full_name || p.name,
     agency: p.agency as Program['agency'],
     category: p.category,
-    status: mapStatus(p.status),
+    status: programStatus,
     coverage: p.coverage,
     hasStateVariation: p.has_state_variation,
     variable: p.variable,
