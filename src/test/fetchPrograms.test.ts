@@ -114,7 +114,7 @@ describe('program source loading', () => {
     ['invalid source', response({ ...snapshot(), source: { ...snapshot().source, fetchedAt: 'invalid' } })],
     ['wrong country', response(snapshot('uk'))],
     ['invalid programs', response({ ...snapshot(), programs: [null] })],
-    ['invalid JSON', { ok: true, json: async () => { throw new SyntaxError('Invalid JSON'); } } as Response],
+    ['invalid JSON', new Response('{not json', { status: 200, headers: { 'Content-Type': 'application/json' } })],
   ])('falls back to API metadata after %s', async (_label, snapshotResponse) => {
     vi.mocked(fetch)
       .mockResolvedValueOnce(snapshotResponse)

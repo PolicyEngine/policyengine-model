@@ -6,6 +6,7 @@ import { colors, typography, spacing, statusColors } from '../../designTokens';
 import { programs as fallbackPrograms } from '../../data/programs';
 import { fetchProgramsWithSource, type ProgramsWithSource } from '../../data/fetchPrograms';
 import CoverageProvenance from './CoverageProvenance';
+import { computeStatusCount, deriveProgramStatus } from '../../data/programStatus';
 import type { CoverageStatus, Program } from '../../types/Program';
 import { IconX, IconCalendar } from '@tabler/icons-react';
 import type { Country } from '../../hooks/useCountry';
@@ -212,9 +213,9 @@ function ProgramDetailPanel({ program, onClose, allPrograms }: { program: Progra
 
       <div className="tw:flex tw:flex-wrap" style={{ gap: spacing.lg, marginBottom: spacing.xl }}>
         <div className="tw:flex tw:items-center" style={{ gap: spacing.sm }}>
-          <StatusDot status={program.status} size={14} />
-          <span style={{ fontSize: typography.fontSize.sm, color: statusColors[program.status], fontWeight: typography.fontWeight.semibold }}>
-            {statusLabels[program.status]}
+          <StatusDot status={deriveProgramStatus(program)} size={14} />
+          <span style={{ fontSize: typography.fontSize.sm, color: statusColors[deriveProgramStatus(program)], fontWeight: typography.fontWeight.semibold }}>
+            {statusLabels[deriveProgramStatus(program)]}
           </span>
         </div>
         {program.agency && (
@@ -382,26 +383,6 @@ function StateDetailPanel({ stateCode, onClose, allPrograms }: { stateCode: stri
   );
 }
 
-function computeStatusCount(programList: Program[]) {
-  const counts = { complete: 0, partial: 0, inProgress: 0, notStarted: 0 };
-  programList.forEach((program) => {
-    if (program.agency === 'State' || program.agency === 'Local') {
-      counts[program.status]++;
-      return;
-    }
-    if (program.stateImplementations && program.stateImplementations.length > 0) {
-      const statuses = new Set<string>();
-      program.stateImplementations.forEach((impl) => statuses.add(impl.status));
-      if (statuses.has('inProgress')) counts.inProgress++;
-      else if (statuses.has('partial')) counts.partial++;
-      else if (statuses.has('complete')) counts.complete++;
-      else if (statuses.has('notStarted')) counts.notStarted++;
-    } else {
-      counts[program.status]++;
-    }
-  });
-  return counts;
-}
 
 export default function RulesOverview({ country = 'us' }: { country?: Country }) {
   const [viewMode, setViewMode] = useState<ViewMode>('programs');
@@ -618,7 +599,7 @@ export default function RulesOverview({ country = 'us' }: { country?: Country })
                       }}
                     >
                       <div className="tw:flex tw:items-start" style={{ gap: spacing.md }}>
-                        <div style={{ paddingTop: '3px' }}><StatusDot status={program.status} /></div>
+                        <div style={{ paddingTop: '3px' }}><StatusDot status={deriveProgramStatus(program)} /></div>
                         <div className="tw:flex-1">
                           <div style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>
                             {program.name}
@@ -653,8 +634,8 @@ export default function RulesOverview({ country = 'us' }: { country?: Country })
                             <div style={{ fontSize: typography.fontSize.xs, color: colors.primary[500], marginTop: spacing.xs }}>All states</div>
                           )}
                         </div>
-                        <div className="tw:whitespace-nowrap" style={{ fontSize: typography.fontSize.xs, color: statusColors[program.status], fontWeight: typography.fontWeight.medium }}>
-                          {statusLabels[program.status]}
+                        <div className="tw:whitespace-nowrap" style={{ fontSize: typography.fontSize.xs, color: statusColors[deriveProgramStatus(program)], fontWeight: typography.fontWeight.medium }}>
+                          {statusLabels[deriveProgramStatus(program)]}
                         </div>
                       </div>
                     </button>
@@ -684,7 +665,7 @@ export default function RulesOverview({ country = 'us' }: { country?: Country })
                       }}
                     >
                       <div className="tw:flex tw:items-start" style={{ gap: spacing.md }}>
-                        <div style={{ paddingTop: '3px' }}><StatusDot status={program.status} /></div>
+                        <div style={{ paddingTop: '3px' }}><StatusDot status={deriveProgramStatus(program)} /></div>
                         <div className="tw:flex-1">
                           <div style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>{program.name}</div>
                           {program.coverage && <div style={{ fontSize: typography.fontSize.xs, color: colors.text.tertiary, marginTop: '2px' }}>{program.coverage}</div>}
@@ -717,7 +698,7 @@ export default function RulesOverview({ country = 'us' }: { country?: Country })
                       }}
                     >
                       <div className="tw:flex tw:items-start" style={{ gap: spacing.md }}>
-                        <div style={{ paddingTop: '3px' }}><StatusDot status={program.status} /></div>
+                        <div style={{ paddingTop: '3px' }}><StatusDot status={deriveProgramStatus(program)} /></div>
                         <div className="tw:flex-1">
                           <div style={{ fontSize: typography.fontSize.sm, fontWeight: typography.fontWeight.semibold, color: colors.text.primary }}>{program.name}</div>
                           {program.coverage && <div style={{ fontSize: typography.fontSize.xs, color: colors.text.tertiary, marginTop: '2px' }}>{program.coverage}</div>}
