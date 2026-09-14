@@ -8,6 +8,11 @@ import {
   subTextStyle,
 } from './comparisonStyles';
 import { modelById } from '../../data/comparisons';
+import {
+  isPolicyEngineModel,
+  hostCellStyle,
+  ThisModelChip,
+} from './hostHighlight';
 import type {
   ComparisonData,
   BehavioralParameter,
@@ -87,16 +92,29 @@ export function BehavioralDomainBlock({
               <tbody>
                 {rows.map((row, idx) => {
                   const model = modelById(data, row.model);
+                  const isHost = isPolicyEngineModel(row.model);
+                  const cellStyle = isHost
+                    ? { ...tdStyle, ...hostCellStyle }
+                    : tdStyle;
                   return (
                     <tr
                       key={`${row.model}-${row.domain}-${row.parameter}-${idx}`}
                     >
-                      <td style={tdStyle}>
-                        <div style={{ fontWeight: 600 }}>
+                      <td style={cellStyle}>
+                        <div
+                          style={{
+                            fontWeight: 600,
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: spacing.sm,
+                            flexWrap: 'wrap',
+                          }}
+                        >
                           {model?.name ?? row.model}
+                          {isHost && <ThisModelChip />}
                         </div>
                       </td>
-                      <td style={{ ...tdStyle, maxWidth: 280 }}>
+                      <td style={{ ...cellStyle, maxWidth: 280 }}>
                         <div style={{ fontWeight: 600, marginBottom: 4 }}>
                           {row.label}
                         </div>
@@ -104,7 +122,7 @@ export function BehavioralDomainBlock({
                           {row.kind} · {row.status}
                         </div>
                       </td>
-                      <td style={tdStyle}>
+                      <td style={cellStyle}>
                         <strong>{fmtBehavioralValue(row)}</strong>
                         {row.unit && (
                           <div style={{ ...subTextStyle, marginTop: 4 }}>
@@ -112,7 +130,7 @@ export function BehavioralDomainBlock({
                           </div>
                         )}
                       </td>
-                      <td style={{ ...tdStyle, maxWidth: 260 }}>
+                      <td style={{ ...cellStyle, maxWidth: 260 }}>
                         {row.population ?? '—'}
                         {row.policyScope && (
                           <div style={{ ...subTextStyle, marginTop: 4 }}>
@@ -120,7 +138,7 @@ export function BehavioralDomainBlock({
                           </div>
                         )}
                       </td>
-                      <td style={{ ...tdStyle, maxWidth: 220 }}>
+                      <td style={{ ...cellStyle, maxWidth: 220 }}>
                         {row.margin ?? '—'}
                         {row.horizon && (
                           <div style={{ ...subTextStyle, marginTop: 4 }}>
@@ -128,7 +146,7 @@ export function BehavioralDomainBlock({
                           </div>
                         )}
                       </td>
-                      <td style={{ ...tdStyle, maxWidth: 360, fontSize: 13 }}>
+                      <td style={{ ...cellStyle, maxWidth: 360, fontSize: 13 }}>
                         {row.functionalForm && (
                           <div style={{ marginBottom: spacing.xs }}>
                             {row.functionalForm}
@@ -136,7 +154,7 @@ export function BehavioralDomainBlock({
                         )}
                         {row.notes ?? ''}
                       </td>
-                      <td style={{ ...tdStyle, maxWidth: 260 }}>
+                      <td style={{ ...cellStyle, maxWidth: 260 }}>
                         <SourceList sources={row.sources} compact />
                       </td>
                     </tr>

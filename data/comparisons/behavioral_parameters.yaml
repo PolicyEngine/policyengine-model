@@ -754,6 +754,95 @@ behavioralParameters:
         kind: self
 
   # ============================ PolicyEngine UK / UK models ==================
+  - model: policyengine-us
+    domain: labor-supply
+    kind: elasticity
+    parameter: labor_supply_income_elasticity_preset
+    label: Income elasticity of labor supply (optional CBO-derived preset)
+    status: numeric
+    lower: -0.10
+    central: -0.05
+    upper: 0.00
+    unit: elasticity
+    population: all earners
+    margin: income effect
+    horizon: optional setting; off by default (0)
+    functionalForm: Scalar elasticity applied to employment income via the labor-supply response module.
+    notes: >
+      The engine exposes user-configurable labor-supply elasticities; the
+      PolicyEngine web app's behavioral-responses option applies
+      CBO-derived values (central -0.05, range -0.10 to 0.00). The model
+      default remains 0 (static), so these presets only apply when a user
+      turns responses on.
+    sources:
+      - label: CBO — How the Supply of Labor Responds to Changes in Fiscal Policy (2012)
+        url: https://www.cbo.gov/publication/43674
+        kind: government
+      - label: policyengine-us labor-supply income elasticity parameter
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/parameters/gov/simulation/labor_supply_responses/elasticities/income.yaml
+        kind: self
+      - label: PolicyEngine — behavioral responses methodology
+        url: https://policyengine.org/us/research/us-behavioral-responses
+        kind: self
+
+  - model: policyengine-us
+    domain: labor-supply
+    kind: elasticity
+    parameter: labor_supply_substitution_elasticity_preset
+    label: Substitution elasticity of labor supply (optional CBO-derived preset, by earnings decile)
+    status: numeric
+    value: varies
+    unit: elasticity
+    population: earners by earnings decile
+    margin: substitution effect (compensated)
+    horizon: optional setting; off by default (0)
+    functionalForm: Decile-specific elasticities applied to earnings; central values 0.31 (bottom decile) declining to 0.22 (top decile), range 0.15-0.47.
+    notes: >
+      The engine exposes decile-specific substitution elasticities; the
+      PolicyEngine web app's behavioral-responses option applies
+      CBO-derived central values from 0.31 for the bottom earnings decile
+      down to 0.22 for the top, with low/high scenario bounds of 0.15 and
+      0.47. The model default remains 0 (static).
+    sources:
+      - label: CBO — A Review of Recent Research on Labor Supply Elasticities (WP 2012-12)
+        url: https://www.cbo.gov/publication/43675
+        kind: government
+      - label: policyengine-us labor-supply substitution elasticity parameters
+        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/parameters/gov/simulation/labor_supply_responses/elasticities/substitution
+        kind: self
+      - label: PolicyEngine — behavioral responses methodology
+        url: https://policyengine.org/us/research/us-behavioral-responses
+        kind: self
+
+  - model: policyengine-us
+    domain: capital-gains
+    kind: elasticity
+    parameter: capital_gains_elasticity_preset
+    label: Capital gains realization elasticity (optional CBO-derived preset)
+    status: numeric
+    central: -0.79
+    unit: elasticity
+    population: capital-gains realizers
+    margin: realization
+    horizon: optional setting; off by default (0); persistent elasticity (transitory -1.20 documented)
+    functionalForm: Semi-log realization response applied to long-term capital gains.
+    notes: >
+      The engine exposes a user-configurable capital-gains realization
+      elasticity; the PolicyEngine web app's behavioral-responses option
+      applies the CBO-estimated persistent elasticity of -0.79 (the
+      companion transitory elasticity is -1.20). The model default
+      remains 0 (static).
+    sources:
+      - label: CBO — New Evidence on the Tax Elasticity of Capital Gains (WP 2012-09)
+        url: https://www.cbo.gov/publication/43334
+        kind: government
+      - label: policyengine-us capital-gains response parameter
+        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/parameters/gov/simulation/capital_gains_responses/elasticity.yaml
+        kind: self
+      - label: PolicyEngine — behavioral responses methodology
+        url: https://policyengine.org/us/research/us-behavioral-responses
+        kind: self
+
   - model: policyengine-uk
     domain: labor-supply
     kind: elasticity

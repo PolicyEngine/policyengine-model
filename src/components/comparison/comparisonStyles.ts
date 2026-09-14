@@ -42,6 +42,26 @@ export const subTextStyle: CSSProperties = {
   marginTop: 2,
 };
 
+/**
+ * Sticky first column for wide comparison tables. Backgrounds must stay
+ * opaque so peer columns scrolling beneath don't show through; the inset
+ * shadow keeps a visible edge once the table scrolls horizontally.
+ */
+export const stickyFirstColThStyle: CSSProperties = {
+  position: 'sticky',
+  left: 0,
+  zIndex: 3,
+  boxShadow: `inset -1px 0 0 ${colors.border.light}`,
+};
+
+export const stickyFirstColTdStyle: CSSProperties = {
+  position: 'sticky',
+  left: 0,
+  zIndex: 2,
+  backgroundColor: colors.white,
+  boxShadow: `inset -1px 0 0 ${colors.border.light}`,
+};
+
 export const sectionStyle: CSSProperties = {
   marginBottom: spacing['4xl'],
 };

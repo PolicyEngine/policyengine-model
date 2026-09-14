@@ -12,6 +12,11 @@ import {
   proseStyle,
 } from './comparisonStyles';
 import { modelById, imputationsByConcept } from '../../data/comparisons';
+import {
+  isPolicyEngineModel,
+  hostCellStyle,
+  ThisModelChip,
+} from './hostHighlight';
 import type { ComparisonData } from '../../types/comparison';
 
 /**
@@ -91,22 +96,35 @@ export default function CalibrationComparison({
                 <tbody>
                   {rows.map((imp, i) => {
                     const model = modelById(data, imp.model);
+                    const isHost = isPolicyEngineModel(imp.model);
+                    const cellStyle = isHost
+                      ? { ...tdStyle, ...hostCellStyle }
+                      : tdStyle;
                     return (
                       <tr key={`${imp.model}-${imp.concept}-${i}`}>
-                        <td style={tdStyle}>
-                          <div style={{ fontWeight: 600 }}>
+                        <td style={cellStyle}>
+                          <div
+                            style={{
+                              fontWeight: 600,
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: spacing.sm,
+                              flexWrap: 'wrap',
+                            }}
+                          >
                             {model?.name ?? imp.model}
+                            {isHost && <ThisModelChip />}
                           </div>
                         </td>
-                        <td style={tdStyle}>
+                        <td style={cellStyle}>
                           <code style={{ fontSize: 12 }}>{imp.method}</code>
                         </td>
-                        <td style={tdStyle}>{imp.baseDataset}</td>
-                        <td style={tdStyle}>
+                        <td style={cellStyle}>{imp.baseDataset}</td>
+                        <td style={cellStyle}>
                           <TristateBadge value={imp.reproducible} />
                         </td>
                         <td
-                          style={{ ...tdStyle, maxWidth: 360, fontSize: 13 }}
+                          style={{ ...cellStyle, maxWidth: 360, fontSize: 13 }}
                         >
                           {imp.description}
                           {imp.calibrationTargets &&
@@ -137,7 +155,7 @@ export default function CalibrationComparison({
                             </div>
                           )}
                         </td>
-                        <td style={{ ...tdStyle, maxWidth: 280 }}>
+                        <td style={{ ...cellStyle, maxWidth: 280 }}>
                           <SourceList sources={imp.sources} compact />
                         </td>
                       </tr>

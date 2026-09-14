@@ -11,17 +11,27 @@ import {
   sectionStyle,
 } from './comparisonStyles';
 import { modelById, programById } from '../../data/comparisons';
+import {
+  isPolicyEngineModel,
+  hostCellStyle,
+  ThisModelChip,
+  formatDeviation,
+} from './hostHighlight';
 import type {
   AccuracyCheck,
   ComparisonData,
   Program,
 } from '../../types/comparison';
 
-function fmtUsd(n: number): string {
-  if (n >= 1_000_000_000_000) return `$${(n / 1_000_000_000_000).toFixed(1)}T`;
-  if (n >= 1_000_000_000) return `$${(n / 1_000_000_000).toFixed(0)}B`;
-  if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(0)}M`;
-  return `$${n.toLocaleString()}`;
+function fmtCurrency(n: number, symbol: string): string {
+  if (n >= 1_000_000_000_000)
+    return `${symbol}${(n / 1_000_000_000_000).toFixed(1)}T`;
+  if (n >= 1_000_000_000) {
+    const b = n / 1_000_000_000;
+    return `${symbol}${b >= 100 ? b.toFixed(0) : b.toFixed(1)}B`;
+  }
+  if (n >= 1_000_000) return `${symbol}${(n / 1_000_000).toFixed(0)}M`;
+  return `${symbol}${n.toLocaleString()}`;
 }
 
 function fmtCount(n: number): string {
@@ -31,7 +41,9 @@ function fmtCount(n: number): string {
 }
 
 function fmtValue(value: number, units: string): string {
-  return units === 'usd' ? fmtUsd(value) : fmtCount(value);
+  if (units === 'usd') return fmtCurrency(value, '$');
+  if (units === 'gbp') return fmtCurrency(value, '£');
+  return fmtCount(value);
 }
 
 interface BenchmarkGroup {
@@ -182,32 +194,54 @@ export default function ValidationComparison({
                   <tbody>
                     {group.rows.map((row, idx) => {
                       const model = modelById(data, row.model);
+                      const isHost = isPolicyEngineModel(row.model);
+                      const cellStyle = isHost
+                        ? { ...tdStyle, ...hostCellStyle }
+                        : tdStyle;
                       const predictedDisplay =
                         row.predictedValue === 'unknown' ||
                         row.predictedValue == null
                           ? '—'
                           : fmtValue(row.predictedValue, row.units);
+                      const deviation = formatDeviation(
+                        row.predictedValue,
+                        group.targetValue,
+                      );
                       return (
                         <tr key={`${row.model}-${idx}`}>
-                          <td style={tdStyle}>
-                            <div style={{ fontWeight: 600 }}>
+                          <td style={cellStyle}>
+                            <div
+                              style={{
+                                fontWeight: 600,
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: spacing.sm,
+                                flexWrap: 'wrap',
+                              }}
+                            >
                               {model?.name ?? row.model}
+                              {isHost && <ThisModelChip />}
                             </div>
                           </td>
-                          <td style={tdStyle}>
+                          <td style={cellStyle}>
                             <strong>{predictedDisplay}</strong>
+                            {deviation && (
+                              <div style={{ ...subTextStyle, marginTop: 4 }}>
+                                {deviation}
+                              </div>
+                            )}
                           </td>
-                          <td style={tdStyle}>{row.units}</td>
+                          <td style={cellStyle}>{row.units}</td>
                           <td
                             style={{
-                              ...tdStyle,
+                              ...cellStyle,
                               maxWidth: 360,
                               fontSize: 13,
                             }}
                           >
                             {row.notes ?? ''}
                           </td>
-                          <td style={{ ...tdStyle, maxWidth: 260 }}>
+                          <td style={{ ...cellStyle, maxWidth: 260 }}>
                             {row.predictedSource ? (
                               <SourceList
                                 sources={[row.predictedSource]}

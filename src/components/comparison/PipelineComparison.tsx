@@ -9,6 +9,11 @@ import {
   sectionStyle,
 } from './comparisonStyles';
 import { modelById } from '../../data/comparisons';
+import {
+  isPolicyEngineModel,
+  hostCellStyle,
+  ThisModelChip,
+} from './hostHighlight';
 import type {
   ComparisonData,
   ModelingMechanic,
@@ -113,14 +118,27 @@ export default function PipelineComparison({
                 <tbody>
                   {entries.map(({ row }, i) => {
                     const model = modelById(data, row.model);
+                    const isHost = isPolicyEngineModel(row.model);
+                    const cellStyle = isHost
+                      ? { ...tdStyle, ...hostCellStyle }
+                      : tdStyle;
                     return (
                       <tr key={`${row.model}-${row.label}-${i}`}>
-                        <td style={tdStyle}>
-                          <div style={{ fontWeight: 600 }}>
+                        <td style={cellStyle}>
+                          <div
+                            style={{
+                              fontWeight: 600,
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: spacing.sm,
+                              flexWrap: 'wrap',
+                            }}
+                          >
                             {model?.name ?? row.model}
+                            {isHost && <ThisModelChip />}
                           </div>
                         </td>
-                        <td style={{ ...tdStyle, maxWidth: 460 }}>
+                        <td style={{ ...cellStyle, maxWidth: 460 }}>
                           <div style={{ fontWeight: 600, marginBottom: 4 }}>
                             {row.label}
                           </div>
@@ -133,8 +151,8 @@ export default function PipelineComparison({
                             {row.detail}
                           </div>
                         </td>
-                        <td style={tdStyle}>{row.scope ?? '—'}</td>
-                        <td style={{ ...tdStyle, maxWidth: 240 }}>
+                        <td style={cellStyle}>{row.scope ?? '—'}</td>
+                        <td style={{ ...cellStyle, maxWidth: 240 }}>
                           <SourceList sources={row.sources} compact />
                         </td>
                       </tr>

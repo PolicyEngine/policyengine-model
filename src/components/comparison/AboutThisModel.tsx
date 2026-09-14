@@ -12,6 +12,12 @@ import {
 } from './comparisonStyles';
 import { loadComparisonData } from '../../data/comparisons';
 import {
+  isPolicyEngineModel,
+  hostCellStyle,
+  hostHeaderBackground,
+  ThisModelChip,
+} from './hostHighlight';
+import {
   sourcesFor,
   type Artifact,
   type ArtifactType,
@@ -270,11 +276,26 @@ function TransparencyCompareTable({
         <thead>
           <tr>
             <th style={{ ...thStyle, minWidth: 200 }}>Dimension</th>
-            {models.map((m) => (
-              <th key={m.id} style={thStyle}>
-                {m.name}
-              </th>
-            ))}
+            {models.map((m) => {
+              const isHost = isPolicyEngineModel(m.id);
+              return (
+                <th
+                  key={m.id}
+                  style={
+                    isHost
+                      ? { ...thStyle, backgroundColor: hostHeaderBackground }
+                      : thStyle
+                  }
+                >
+                  {m.name}
+                  {isHost && (
+                    <div style={{ marginTop: 4 }}>
+                      <ThisModelChip />
+                    </div>
+                  )}
+                </th>
+              );
+            })}
           </tr>
         </thead>
         <tbody>
@@ -287,14 +308,28 @@ function TransparencyCompareTable({
                 const row = rows.find((r) => r.model === m.id);
                 if (!row) {
                   return (
-                    <td key={m.id} style={tdStyle}>
+                    <td
+                      key={m.id}
+                      style={
+                        isPolicyEngineModel(m.id)
+                          ? { ...tdStyle, ...hostCellStyle }
+                          : tdStyle
+                      }
+                    >
                       —
                     </td>
                   );
                 }
                 const cellSources = sourcesFor(row.sources, String(f.key));
                 return (
-                  <td key={m.id} style={tdStyle}>
+                  <td
+                    key={m.id}
+                    style={
+                      isPolicyEngineModel(m.id)
+                        ? { ...tdStyle, ...hostCellStyle }
+                        : tdStyle
+                    }
+                  >
                     <CellWithSources sources={cellSources}>
                       {renderTransparencyValue(f.format, row[f.key])}
                     </CellWithSources>
@@ -358,11 +393,26 @@ function FreshnessCompareTable({
         <thead>
           <tr>
             <th style={{ ...thStyle, minWidth: 200 }}>Signal</th>
-            {models.map((m) => (
-              <th key={m.id} style={thStyle}>
-                {m.name}
-              </th>
-            ))}
+            {models.map((m) => {
+              const isHost = isPolicyEngineModel(m.id);
+              return (
+                <th
+                  key={m.id}
+                  style={
+                    isHost
+                      ? { ...thStyle, backgroundColor: hostHeaderBackground }
+                      : thStyle
+                  }
+                >
+                  {m.name}
+                  {isHost && (
+                    <div style={{ marginTop: 4 }}>
+                      <ThisModelChip />
+                    </div>
+                  )}
+                </th>
+              );
+            })}
           </tr>
         </thead>
         <tbody>
@@ -375,14 +425,28 @@ function FreshnessCompareTable({
                 const row = rows.find((r) => r.model === m.id);
                 if (!row) {
                   return (
-                    <td key={m.id} style={tdStyle}>
+                    <td
+                      key={m.id}
+                      style={
+                        isPolicyEngineModel(m.id)
+                          ? { ...tdStyle, ...hostCellStyle }
+                          : tdStyle
+                      }
+                    >
                       —
                     </td>
                   );
                 }
                 const cellSources = sourcesFor(row.sources, String(f.key));
                 return (
-                  <td key={m.id} style={tdStyle}>
+                  <td
+                    key={m.id}
+                    style={
+                      isPolicyEngineModel(m.id)
+                        ? { ...tdStyle, ...hostCellStyle }
+                        : tdStyle
+                    }
+                  >
                     <CellWithSources sources={cellSources}>
                       {f.render(row)}
                     </CellWithSources>
@@ -441,19 +505,31 @@ function RuleMechanicsTable({
           </tr>
         </thead>
         <tbody>
-          {sortedRows.map((row, i) => (
+          {sortedRows.map((row, i) => {
+            const isHost = isPolicyEngineModel(row.model);
+            const cellStyle = isHost ? { ...tdStyle, ...hostCellStyle } : tdStyle;
+            return (
             <tr key={`${row.model}-${row.category}-${row.label}-${i}`}>
-              <td style={tdStyle}>
-                <div style={{ fontWeight: 600 }}>
+              <td style={cellStyle}>
+                <div
+                  style={{
+                    fontWeight: 600,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: spacing.sm,
+                    flexWrap: 'wrap',
+                  }}
+                >
                   {modelById.get(row.model)?.name ?? row.model}
+                  {isHost && <ThisModelChip />}
                 </div>
               </td>
-              <td style={tdStyle}>
+              <td style={cellStyle}>
                 {ABOUT_MECHANIC_CATEGORY_LABELS[
                   row.category as AboutMechanicCategory
                 ] ?? row.category}
               </td>
-              <td style={{ ...tdStyle, maxWidth: 520 }}>
+              <td style={{ ...cellStyle, maxWidth: 520 }}>
                 <div style={{ fontWeight: 600, marginBottom: 4 }}>
                   {row.label}
                 </div>
@@ -467,12 +543,13 @@ function RuleMechanicsTable({
                   {row.detail}
                 </div>
               </td>
-              <td style={tdStyle}>{row.scope ?? '—'}</td>
-              <td style={{ ...tdStyle, maxWidth: 240 }}>
+              <td style={cellStyle}>{row.scope ?? '—'}</td>
+              <td style={{ ...cellStyle, maxWidth: 240 }}>
                 <SourceList sources={row.sources} compact />
               </td>
             </tr>
-          ))}
+            );
+          })}
         </tbody>
       </table>
     </div>
@@ -538,7 +615,13 @@ function ArtifactsCompareTables({
                   if (items.length === 0) {
                     return [
                       <tr key={`${m.id}-empty`}>
-                        <td style={tdStyle}>
+                        <td
+                          style={
+                            isPolicyEngineModel(m.id)
+                              ? { ...tdStyle, ...hostCellStyle }
+                              : tdStyle
+                          }
+                        >
                           <div style={{ fontWeight: 600 }}>{m.name}</div>
                         </td>
                         <td
@@ -552,9 +635,26 @@ function ArtifactsCompareTables({
                   }
                   return items.map((a, i) => (
                     <tr key={`${m.id}-${i}`}>
-                      <td style={tdStyle}>
+                      <td
+                        style={
+                          isPolicyEngineModel(m.id)
+                            ? { ...tdStyle, ...hostCellStyle }
+                            : tdStyle
+                        }
+                      >
                         {i === 0 ? (
-                          <div style={{ fontWeight: 600 }}>{m.name}</div>
+                          <div
+                            style={{
+                              fontWeight: 600,
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: spacing.sm,
+                              flexWrap: 'wrap',
+                            }}
+                          >
+                            {m.name}
+                            {isPolicyEngineModel(m.id) && <ThisModelChip />}
+                          </div>
                         ) : (
                           <div style={{ color: colors.text.tertiary }}>↳</div>
                         )}
@@ -610,11 +710,26 @@ function UsageCompareTable({
         <thead>
           <tr>
             <th style={{ ...thStyle, minWidth: 200 }}>Signal</th>
-            {models.map((m) => (
-              <th key={m.id} style={thStyle}>
-                {m.name}
-              </th>
-            ))}
+            {models.map((m) => {
+              const isHost = isPolicyEngineModel(m.id);
+              return (
+                <th
+                  key={m.id}
+                  style={
+                    isHost
+                      ? { ...thStyle, backgroundColor: hostHeaderBackground }
+                      : thStyle
+                  }
+                >
+                  {m.name}
+                  {isHost && (
+                    <div style={{ marginTop: 4 }}>
+                      <ThisModelChip />
+                    </div>
+                  )}
+                </th>
+              );
+            })}
           </tr>
         </thead>
         <tbody>
@@ -626,7 +741,14 @@ function UsageCompareTable({
               {models.map((m) => {
                 const row = rows.find((r) => r.model === m.id);
                 return (
-                  <td key={m.id} style={tdStyle}>
+                  <td
+                    key={m.id}
+                    style={
+                      isPolicyEngineModel(m.id)
+                        ? { ...tdStyle, ...hostCellStyle }
+                        : tdStyle
+                    }
+                  >
                     {row
                       ? fmtCount(
                           row[f.key] as number | 'unknown' | undefined,
@@ -648,6 +770,7 @@ function UsageCompareTable({
                   key={m.id}
                   style={{
                     ...tdStyle,
+                    ...(isPolicyEngineModel(m.id) ? hostCellStyle : null),
                     fontSize: 12,
                     color: colors.text.secondary,
                     maxWidth: 280,

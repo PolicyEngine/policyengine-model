@@ -144,6 +144,31 @@ programs:
         url: https://www.cbp.gov/trade
         kind: government
 
+  - id: us-amt
+    name: Alternative Minimum Tax
+    fullName: Federal individual alternative minimum tax
+    jurisdiction: us-federal
+    agency: IRS
+    type: income-tax
+    statute: 26 USC §§ 55-59
+    asOfYear: 2026
+    sources:
+      - label: 26 USC § 55 — Alternative minimum tax imposed
+        url: https://www.law.cornell.edu/uscode/text/26/55
+        kind: government
+
+  - id: us-niit
+    name: Net Investment Income Tax
+    jurisdiction: us-federal
+    agency: IRS
+    type: income-tax
+    statute: 26 USC § 1411
+    asOfYear: 2026
+    sources:
+      - label: 26 USC § 1411 — Imposition of tax (net investment income)
+        url: https://www.law.cornell.edu/uscode/text/26/1411
+        kind: government
+
   # --------------------------- US federal benefits ----------------------------
   - id: us-snap
     name: SNAP
@@ -373,6 +398,69 @@ programs:
         url: https://www.acf.hhs.gov/occ/data
         kind: government
 
+  - id: us-school-meals
+    name: Free and reduced-price school meals
+    fullName: National School Lunch and School Breakfast Programs
+    jurisdiction: us-federal
+    agency: USDA-FNS
+    type: in-kind-benefit
+    statute: 42 USC §§ 1751-1769j; 42 USC § 1773
+    asOfYear: 2026
+    sources:
+      - label: 42 USC chapter 13 — School Lunch Programs
+        url: https://www.law.cornell.edu/uscode/text/42/chapter-13
+        kind: government
+
+  - id: us-pell-grant
+    name: Federal Pell Grant
+    jurisdiction: us-federal
+    agency: ED
+    type: cash-transfer
+    statute: 20 USC § 1070a
+    asOfYear: 2026
+    sources:
+      - label: 20 USC § 1070a — Federal Pell Grants
+        url: https://www.law.cornell.edu/uscode/text/20/1070a
+        kind: government
+
+  - id: us-head-start
+    name: Head Start
+    fullName: Head Start and Early Head Start
+    jurisdiction: us-federal
+    agency: HHS-ACF
+    type: in-kind-benefit
+    statute: 42 USC §§ 9831-9852c
+    asOfYear: 2026
+    sources:
+      - label: 42 USC chapter 105 subchapter II — Head Start Programs
+        url: https://www.law.cornell.edu/uscode/text/42/chapter-105/subchapter-II
+        kind: government
+
+  - id: us-lifeline
+    name: Lifeline
+    fullName: FCC Lifeline Program
+    jurisdiction: us-federal
+    agency: FCC
+    type: in-kind-benefit
+    statute: 47 USC § 254; 47 CFR Part 54 Subpart E
+    asOfYear: 2026
+    sources:
+      - label: 47 USC § 254 — Universal service
+        url: https://www.law.cornell.edu/uscode/text/47/254
+        kind: government
+
+  - id: us-acp
+    name: Affordable Connectivity Program
+    jurisdiction: us-federal
+    agency: FCC
+    type: in-kind-benefit
+    statute: 47 USC § 1752 (Infrastructure Investment and Jobs Act)
+    asOfYear: 2024
+    sources:
+      - label: 47 USC § 1752 — Affordable Connectivity Program
+        url: https://www.law.cornell.edu/uscode/text/47/1752
+        kind: government
+
   # --------------------------- US state income taxes --------------------------
   - id: us-state-income-tax
     name: State individual income taxes (all 50 + DC)
@@ -413,6 +501,18 @@ programs:
       - label: NCCP — State CTC enactments
         url: https://www.nccp.org/
         kind: civilsociety
+
+  - id: us-local-income-tax
+    name: Local income taxes
+    fullName: Municipal and county income taxes (NYC, Philadelphia, Maryland counties)
+    jurisdiction: us-local
+    type: income-tax
+    statute: e.g. NY Tax Law Art. 30; Philadelphia Code Title 19
+    asOfYear: 2026
+    sources:
+      - label: NYC Department of Finance — Personal income tax
+        url: https://www.nyc.gov/site/finance/taxes/personal-income-tax.page
+        kind: government
 
   # ----------------------------- UK taxes ------------------------------------
   - id: uk-income-tax

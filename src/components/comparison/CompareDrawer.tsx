@@ -7,7 +7,30 @@ import { colors, spacing, typography } from '../../designTokens';
 import type { Model } from '../../types/comparison';
 import { parseComparePeers } from './parseCompare';
 
-type PeerStub = Pick<Model, 'id' | 'name' | 'organization'>;
+type PeerStub = Pick<Model, 'id' | 'name' | 'organization' | 'sector' | 'type'>;
+
+const SECTOR_ORDER: Array<Model['sector']> = [
+  'government',
+  'non-profit',
+  'academic',
+  'for-profit',
+  'other',
+];
+
+const SECTOR_LABEL: Record<Model['sector'], string> = {
+  government: 'Government',
+  'non-profit': 'Non-profit',
+  academic: 'Academic',
+  'for-profit': 'For-profit',
+  other: 'Other',
+};
+
+const TYPE_LABEL: Record<Model['type'], string> = {
+  microsimulation: 'microsimulation',
+  'tax-calculator': 'tax calculator',
+  'rules-engine': 'rules engine',
+  'reduced-form': 'reduced form',
+};
 
 export interface CompareDrawerProps {
   /**
@@ -246,59 +269,107 @@ export default function CompareDrawer({ peers, hostName }: CompareDrawerProps) {
           </button>
         </div>
 
-        <ul
+        <div
           style={{
-            margin: 0,
             padding: spacing.lg,
-            listStyle: 'none',
             overflowY: 'auto',
             flex: 1,
-            display: 'flex',
-            flexDirection: 'column',
-            gap: spacing.xs,
           }}
         >
-          {peers.map((p) => {
-            const isOn = parsed.isAll || selected.has(p.id);
-            return (
-              <li key={p.id}>
-                <button
-                  type="button"
-                  onClick={() => togglePeer(p.id)}
-                  style={{
-                    width: '100%',
-                    display: 'flex',
-                    alignItems: 'baseline',
-                    justifyContent: 'space-between',
-                    gap: spacing.sm,
-                    padding: `${spacing.sm} ${spacing.md}`,
-                    borderRadius: 6,
-                    border: isOn
-                      ? `1px solid ${colors.primary[500]}`
-                      : `1px solid ${colors.border.medium}`,
-                    backgroundColor: isOn ? colors.primary[50] : colors.white,
-                    color: isOn ? colors.primary[800] : colors.text.primary,
-                    cursor: 'pointer',
-                    textAlign: 'left',
-                    fontSize: 13,
-                    fontWeight: isOn ? 600 : 500,
-                  }}
-                >
-                  <span>{p.name}</span>
-                  <span
-                    style={{
-                      fontSize: 11,
-                      color: isOn ? colors.primary[700] : colors.text.tertiary,
-                      fontWeight: 500,
-                    }}
-                  >
-                    {p.organization}
-                  </span>
-                </button>
-              </li>
-            );
-          })}
-        </ul>
+          {SECTOR_ORDER.filter((sector) =>
+            peers.some((p) => p.sector === sector),
+          ).map((sector) => (
+            <div key={sector} style={{ marginBottom: spacing.lg }}>
+              <div
+                style={{
+                  fontSize: 11,
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                  letterSpacing: 0.5,
+                  color: colors.text.tertiary,
+                  marginBottom: spacing.xs,
+                }}
+              >
+                {SECTOR_LABEL[sector]}
+              </div>
+              <ul
+                style={{
+                  margin: 0,
+                  padding: 0,
+                  listStyle: 'none',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: spacing.xs,
+                }}
+              >
+                {peers
+                  .filter((p) => p.sector === sector)
+                  .map((p) => {
+                    const isOn = parsed.isAll || selected.has(p.id);
+                    return (
+                      <li key={p.id}>
+                        <button
+                          type="button"
+                          onClick={() => togglePeer(p.id)}
+                          style={{
+                            width: '100%',
+                            display: 'flex',
+                            alignItems: 'baseline',
+                            justifyContent: 'space-between',
+                            gap: spacing.sm,
+                            padding: `${spacing.sm} ${spacing.md}`,
+                            borderRadius: 6,
+                            border: isOn
+                              ? `1px solid ${colors.primary[500]}`
+                              : `1px solid ${colors.border.medium}`,
+                            backgroundColor: isOn
+                              ? colors.primary[50]
+                              : colors.white,
+                            color: isOn
+                              ? colors.primary[800]
+                              : colors.text.primary,
+                            cursor: 'pointer',
+                            textAlign: 'left',
+                            fontSize: 13,
+                            fontWeight: isOn ? 600 : 500,
+                          }}
+                        >
+                          <span>
+                            {p.name}
+                            <span
+                              style={{
+                                display: 'block',
+                                fontSize: 11,
+                                color: isOn
+                                  ? colors.primary[700]
+                                  : colors.text.tertiary,
+                                fontWeight: 400,
+                              }}
+                            >
+                              {TYPE_LABEL[p.type]}
+                            </span>
+                          </span>
+                          <span
+                            style={{
+                              fontSize: 11,
+                              color: isOn
+                                ? colors.primary[700]
+                                : colors.text.tertiary,
+                              fontWeight: 500,
+                              textAlign: 'right',
+                              maxWidth: 140,
+                            }}
+                          >
+                            {p.organization}
+                          </span>
+                        </button>
+                      </li>
+                    );
+                  })}
+              </ul>
+            </div>
+          ))}
+        </div>
       </aside>
     </>
   );

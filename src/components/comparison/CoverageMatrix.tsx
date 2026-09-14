@@ -15,7 +15,15 @@ import {
   h2Style,
   proseStyle,
   sectionStyle,
+  stickyFirstColThStyle,
+  stickyFirstColTdStyle,
 } from './comparisonStyles';
+import {
+  isPolicyEngineModel,
+  hostCellStyle,
+  hostHeaderBackground,
+  ThisModelChip,
+} from './hostHighlight';
 import type { ComparisonData } from '../../types/comparison';
 import type { StateImplementation } from '../../types/Program';
 
@@ -97,13 +105,30 @@ export default function CoverageMatrix({
           <table style={tableStyle}>
             <thead>
               <tr>
-                <th style={{ ...thStyle, minWidth: 220 }}>Program</th>
+                <th style={{ ...thStyle, ...stickyFirstColThStyle, minWidth: 220 }}>
+                  Program
+                </th>
                 <th style={thStyle}>Jurisdiction</th>
-                {data.models.map((m) => (
-                  <th key={m.id} style={thStyle}>
-                    {m.name}
-                  </th>
-                ))}
+                {data.models.map((m) => {
+                  const isHost = isPolicyEngineModel(m.id);
+                  return (
+                    <th
+                      key={m.id}
+                      style={
+                        isHost
+                          ? { ...thStyle, backgroundColor: hostHeaderBackground }
+                          : thStyle
+                      }
+                    >
+                      {m.name}
+                      {isHost && (
+                        <div style={{ marginTop: 4 }}>
+                          <ThisModelChip />
+                        </div>
+                      )}
+                    </th>
+                  );
+                })}
               </tr>
             </thead>
             <tbody>
@@ -112,7 +137,7 @@ export default function CoverageMatrix({
                 const verifiedYears = overlay?.verifiedYears?.get(p.id);
                 return (
                   <tr key={p.id}>
-                    <td style={tdStyle}>
+                    <td style={{ ...tdStyle, ...stickyFirstColTdStyle }}>
                       <div style={{ fontWeight: 600 }}>{p.name}</div>
                       {p.statute && <div style={subTextStyle}>{p.statute}</div>}
                       {verifiedYears && (
@@ -169,15 +194,18 @@ export default function CoverageMatrix({
                     </td>
                     {data.models.map((m) => {
                       const cell = matrix.get(p.id)?.get(m.id);
+                      const cellStyle = isPolicyEngineModel(m.id)
+                        ? { ...tdStyle, ...hostCellStyle }
+                        : tdStyle;
                       if (!cell) {
                         return (
-                          <td key={m.id} style={tdStyle}>
+                          <td key={m.id} style={cellStyle}>
                             <CoverageBadge status="unknown" />
                           </td>
                         );
                       }
                       return (
-                        <td key={m.id} style={tdStyle}>
+                        <td key={m.id} style={cellStyle}>
                           <CoverageBadge status={cell.status} />
                           {cell.asOfYear && cell.asOfYear !== 'unknown' && (
                             <div style={subTextStyle}>as of {cell.asOfYear}</div>
