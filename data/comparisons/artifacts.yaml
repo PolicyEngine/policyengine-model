@@ -701,15 +701,17 @@ artifacts:
         kind: self
 
   - model: snap-screener
-    type: api
-    name: SNAP Screener API
+    type: web-application
+    name: SNAP Screener embeddable widget
     public: partial
     license: proprietary
-    url: https://www.snapscreener.com/
-    description: Paid API tier for partner organizations.
+    url: https://www.snapscreener.com/nonprofits
+    description: >
+      Free iframe widget that nonprofits can place on their own sites for
+      their state's SNAP calculator, set up by emailing SNAP Screener.
     sources:
-      - label: SNAP Screener — homepage
-        url: https://www.snapscreener.com/
+      - label: SNAP Screener — for nonprofits
+        url: https://www.snapscreener.com/nonprofits
         kind: self
 
   # ============================ mRelief =====================================
