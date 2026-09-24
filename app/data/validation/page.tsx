@@ -2,6 +2,7 @@ import ValidationPage from '../../../src/views/data/ValidationPage';
 import ValidationComparison from '../../../src/components/comparison/ValidationComparison';
 import { loadComparisonData } from '../../../src/data/comparisons';
 import { detectComparePeers } from '../../../src/components/comparison/detectComparePeers';
+import { fetchTaxsimValidation } from '../../../src/data/fetchTaxsimValidation';
 
 export default async function ValidationRoute({
   searchParams,
@@ -18,7 +19,8 @@ export default async function ValidationRoute({
   );
 
   if (!parsed.compareMode) {
-    return <ValidationPage country={country} />;
+    const taxsim = country === 'us' ? await fetchTaxsimValidation() : null;
+    return <ValidationPage country={country} taxsim={taxsim} />;
   }
 
   const data = loadComparisonData();
