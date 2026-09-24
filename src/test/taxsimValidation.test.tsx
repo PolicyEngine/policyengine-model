@@ -8,7 +8,11 @@ import {
   TAXSIM_VALIDATION_YEARS,
   type TaxsimValidation,
 } from '../data/fetchTaxsimValidation';
-import ValidationPage, { fallbackNotes, provenanceText } from '../views/data/ValidationPage';
+import ValidationPage, {
+  fallbackNotes,
+  provenanceText,
+  TaxsimResultsLoading,
+} from '../views/data/ValidationPage';
 
 // Hand-written test fixture shaped like policyengine-taxsim's
 // dashboard/public/data/{year}/summary_{year}.json. Values are made up.
@@ -62,7 +66,7 @@ describe('parseTaxsimSummary', () => {
       stateWithin1PctNetOfRebates: 96.5,
       policyengineUsVersion: '9.9.9',
       generatedAt: '2030-01-02T03:04:05+00:00',
-      taxsimFallbackStates: [],
+      taxsimFallbackStates: null,
     });
   });
 
@@ -71,6 +75,11 @@ describe('parseTaxsimSummary', () => {
     expect(parseTaxsimSummary(2030, summaryFixture({}, fallback))?.taxsimFallbackStates).toEqual(['GA', 'MD']);
     expect(
       parseTaxsimSummary(2028, summaryFixture({}, { ...fallback, appliesToThisYear: false }))
+        ?.taxsimFallbackStates,
+    ).toBeNull();
+    // A fallback without readable state codes is still a fallback.
+    expect(
+      parseTaxsimSummary(2030, summaryFixture({}, { states: ['ga'], appliesToThisYear: true }))
         ?.taxsimFallbackStates,
     ).toEqual([]);
     // The dashboard also accepts a single `state`.
@@ -131,6 +140,18 @@ describe('fetchTaxsimValidation', () => {
     expect(result.failedYears).toEqual([2022, 2023, 2024, 2025]);
   });
 
+  it('gives up on a year whose request hangs past the timeout', async () => {
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const hang = vi.fn(
+      (_input: RequestInfo | URL, init?: RequestInit) =>
+        new Promise<Response>((_resolve, reject) => {
+          init?.signal?.addEventListener('abort', () => reject(init.signal?.reason));
+        }),
+    ) as unknown as typeof fetch;
+    const result = await fetchTaxsimValidation(hang, { timeoutMs: 20 });
+    expect(result.results).toEqual([]);
+    expect(result.failedYears).toEqual([...TAXSIM_VALIDATION_YEARS]);
+  });
 });
 
 describe('fallbackNotes', () => {
@@ -139,12 +160,19 @@ describe('fallbackNotes', () => {
     const results = [2021, 2022, 2023, 2024, 2025].map((year) => ({
       ...base,
       year,
-      taxsimFallbackStates: year >= 2024 ? ['GA', 'MD'] : [],
+      taxsimFallbackStates: year >= 2024 ? ['GA', 'MD'] : null,
     }));
     expect(fallbackNotes(results)).toEqual([
       'For 2024–2025, the TAXSIM results for Georgia and Maryland come from the previous TAXSIM build; other states use the updated build.',
     ]);
     expect(fallbackNotes(results.slice(0, 3))).toEqual([]);
+  });
+
+  it('still discloses a fallback whose states it cannot read', () => {
+    const r = { ...parseTaxsimSummary(2025, summaryFixture())!, taxsimFallbackStates: [] };
+    expect(fallbackNotes([r])).toEqual([
+      'For 2025, the TAXSIM results for some states come from the previous TAXSIM build; other states use the updated build.',
+    ]);
   });
 });
 
@@ -186,7 +214,7 @@ describe('ValidationPage', () => {
       '70.2%',
     ]);
     expect(screen.getByText(/tax years 2021–2025/)).toBeInTheDocument();
-    expect(screen.getByText(/Each year compares 1,000 household records/)).toBeInTheDocument();
+    expect(screen.getByText(/Each year compares 1,000 records, one per household/)).toBeInTheDocument();
     expect(
       screen.getByText('Results computed with policyengine-us 9.9.9, generated 2030-01-02.'),
     ).toBeInTheDocument();
@@ -198,6 +226,8 @@ describe('ValidationPage', () => {
     expect(screen.getByText(/85% of Social Security benefits/)).toBeInTheDocument();
     expect(screen.getByText(/zero or negative gross\s+income use the \$15 test/)).toBeInTheDocument();
     expect(screen.getByText(/differ by \$15 or less/)).toBeInTheDocument();
+    expect(screen.getByText(/It is not exact, because\s+TAXSIM also reports some rebates/)).toBeInTheDocument();
+    expect(screen.queryByText(/produces the published results/)).not.toBeInTheDocument();
     expect(screen.getByRole('link', { name: /Open the TAXSIM dashboard/ })).toHaveAttribute(
       'href',
       TAXSIM_DASHBOARD_URL,
@@ -232,7 +262,8 @@ describe('ValidationPage', () => {
         taxsim={{ ...full, results: full.results.filter((r) => r.year !== 2023), failedYears: [2023] }}
       />,
     );
-    expect(screen.getByText(/Results for 2023 could not be loaded/)).toBeInTheDocument();
+    expect(screen.getByText(/Results for 2023 could not be loaded here/)).toBeInTheDocument();
+    expect(screen.queryByText(/has every year/)).not.toBeInTheDocument();
     expect(screen.getByText(/tax years 2021, 2022, 2024, 2025/)).toBeInTheDocument();
   });
 
@@ -258,8 +289,18 @@ describe('ValidationPage', () => {
     expect(screen.queryByText(/Each year compares/)).not.toBeInTheDocument();
   });
 
-  it('keeps the UK page on the UK validation book', () => {
-    render(<ValidationPage country="uk" />);
+  it('renders a streamed results slot in place of loaded results', () => {
+    render(<ValidationPage country="us" results={<TaxsimResultsLoading />} />);
+    expect(screen.getByRole('status')).toHaveTextContent('Loading the latest results');
+    expect(screen.queryByRole('table')).not.toBeInTheDocument();
+    expect(screen.getByText('How agreement is measured')).toBeInTheDocument();
+  });
+
+  it('keeps the UK page on the UK validation book and never renders the US results slot', () => {
+    const slot = vi.fn(() => null);
+    const Slot = () => slot();
+    render(<ValidationPage country="uk" results={<Slot />} />);
+    expect(slot).not.toHaveBeenCalled();
     expect(screen.getByRole('link', { name: /View full validation/ })).toHaveAttribute(
       'href',
       'https://policyengine.github.io/policyengine-uk',

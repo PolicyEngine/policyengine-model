@@ -1,8 +1,9 @@
-import ValidationPage from '../../../src/views/data/ValidationPage';
+import { Suspense } from 'react';
+import ValidationPage, { TaxsimResultsLoading } from '../../../src/views/data/ValidationPage';
+import TaxsimResultsLoader from '../../../src/views/data/TaxsimResultsLoader';
 import ValidationComparison from '../../../src/components/comparison/ValidationComparison';
 import { loadComparisonData } from '../../../src/data/comparisons';
 import { detectComparePeers } from '../../../src/components/comparison/detectComparePeers';
-import { fetchTaxsimValidation } from '../../../src/data/fetchTaxsimValidation';
 
 export default async function ValidationRoute({
   searchParams,
@@ -19,8 +20,16 @@ export default async function ValidationRoute({
   );
 
   if (!parsed.compareMode) {
-    const taxsim = country === 'us' ? await fetchTaxsimValidation() : null;
-    return <ValidationPage country={country} taxsim={taxsim} />;
+    return (
+      <ValidationPage
+        country={country}
+        results={
+          <Suspense fallback={<TaxsimResultsLoading />}>
+            <TaxsimResultsLoader />
+          </Suspense>
+        }
+      />
+    );
   }
 
   const data = loadComparisonData();

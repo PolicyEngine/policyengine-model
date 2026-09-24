@@ -71,13 +71,13 @@ function listStates(codes: string[]): string {
 export function fallbackNotes(results: TaxsimYearResult[]): string[] {
   const yearsByStates = new Map<string, number[]>();
   for (const r of results) {
-    if (r.taxsimFallbackStates.length === 0) continue;
+    if (r.taxsimFallbackStates === null) continue;
     const key = r.taxsimFallbackStates.join(',');
     yearsByStates.set(key, [...(yearsByStates.get(key) ?? []), r.year]);
   }
   return [...yearsByStates].map(
     ([key, years]) =>
-      `For ${yearRange(years)}, the TAXSIM results for ${listStates(key.split(','))} come from the previous TAXSIM build; other states use the updated build.`,
+      `For ${yearRange(years)}, the TAXSIM results for ${key ? listStates(key.split(',')) : 'some states'} come from the previous TAXSIM build; other states use the updated build.`,
   );
 }
 
@@ -294,10 +294,11 @@ function MatchDefinitions() {
         </li>
         <li style={item}>
           <strong>Within 1%, net of rebates</strong>{' '}
-          (state only): the same test applied to state
-          income tax plus one-time state rebates on both sides. TAXSIM counts a rebate in the year
-          it is paid and PolicyEngine in the tax year it relates to; netting rebates out removes
-          that timing difference.
+          (state only): the same test applied to state income tax plus one-time state rebates on
+          both sides. It is meant to remove a timing difference: TAXSIM counts a rebate in the year
+          it is paid and PolicyEngine in the tax year it relates to. It is not exact, because
+          TAXSIM also reports some rebates that its state tax does not reflect (Virginia&apos;s in
+          2022 and 2025, for example), so this column can be lower than the plain 1% column.
         </li>
         <li style={item}>
           <strong>Within $15</strong>: the two amounts differ by $15 or less.
@@ -305,59 +306,73 @@ function MatchDefinitions() {
       </ul>
       <p style={{ ...bodyText, fontSize: typography.fontSize.sm }}>
         These rules are implemented in <code>match_flags</code> in{' '}
-        <ExternalLink href={TAXSIM_MATCH_RULES_URL}>scripts/refresh_dashboard.py</ExternalLink>,
-        which produces the published results.
+        <ExternalLink href={TAXSIM_MATCH_RULES_URL}>scripts/refresh_dashboard.py</ExternalLink>.
+        Each year&apos;s published summary records the commit and script hash that produced it.
       </p>
     </section>
   );
 }
 
-function UsValidation({ taxsim }: { taxsim: TaxsimValidation | null }) {
+/** The results block: table, provenance, notices, or a failure message. */
+export function TaxsimResults({ taxsim }: { taxsim: TaxsimValidation | null }) {
   const results = taxsim?.results ?? [];
-  const years = results.map((r) => r.year);
+  if (results.length === 0) {
+    return (
+      <p style={{ ...bodyText, marginBottom: spacing.lg }}>
+        The latest results could not be loaded here. See the TAXSIM dashboard below.
+      </p>
+    );
+  }
   const records = unique(results.map((r) => r.records));
   const provenance = provenanceText(results);
+  return (
+    <>
+      <p style={{ ...bodyText, marginBottom: spacing.lg }}>
+        Share of records where the two models agree, for tax years{' '}
+        {yearRange(results.map((r) => r.year))}.
+        {records.length === 1 &&
+          ` Each year compares ${records[0].toLocaleString('en-US')} records, one per household.`}
+      </p>
+      <ResultsTable results={results} />
+      {provenance && (
+        <p style={{ ...bodyText, fontSize: typography.fontSize.sm, marginTop: spacing.md }}>
+          {provenance}
+        </p>
+      )}
+      {fallbackNotes(results).map((note) => (
+        <Note key={note}>{note}</Note>
+      ))}
+      {taxsim && taxsim.failedYears.length > 0 && (
+        <Note tone="warning">
+          Results for {yearRange(taxsim.failedYears)} could not be loaded here. See the TAXSIM
+          dashboard below.
+        </Note>
+      )}
+    </>
+  );
+}
 
+export function TaxsimResultsLoading() {
+  return (
+    <p role="status" style={{ ...bodyText, marginBottom: spacing.lg }}>
+      Loading the latest results from the TAXSIM dashboard…
+    </p>
+  );
+}
+
+function UsValidation({ results }: { results: ReactNode }) {
   return (
     <div>
       <PageHeader
         category="Data"
         title="Validation"
-        description="PolicyEngine runs the same Enhanced CPS households through its own model and through NBER's TAXSIM, and compares the federal and state income tax each one calculates."
+        description="PolicyEngine compares the federal and state income tax that its model and NBER's TAXSIM calculate for the same Enhanced CPS households. Each household contributes one record: the tax unit that contains the household head."
       />
 
       <div style={{ maxWidth: '880px' }}>
         <section style={{ marginBottom: spacing['3xl'] }}>
           <h2 style={sectionHeading}>TAXSIM comparison results</h2>
-          {results.length > 0 ? (
-            <>
-              <p style={{ ...bodyText, marginBottom: spacing.lg }}>
-                Share of records where the two models agree, for tax years {yearRange(years)}.
-                {records.length === 1 &&
-                  ` Each year compares ${records[0].toLocaleString('en-US')} household records.`}
-              </p>
-              <ResultsTable results={results} />
-              {provenance && (
-                <p style={{ ...bodyText, fontSize: typography.fontSize.sm, marginTop: spacing.md }}>
-                  {provenance}
-                </p>
-              )}
-              {fallbackNotes(results).map((note) => (
-                <Note key={note}>{note}</Note>
-              ))}
-              {taxsim && taxsim.failedYears.length > 0 && (
-                <Note tone="warning">
-                  Results for {yearRange(taxsim.failedYears)} could not be loaded. The dashboard
-                  has every year.
-                </Note>
-              )}
-            </>
-          ) : (
-            <p style={{ ...bodyText, marginBottom: spacing.lg }}>
-              The latest results could not be loaded right now. The dashboard below has the full
-              comparison.
-            </p>
-          )}
+          {results}
         </section>
 
         <DashboardCard />
@@ -445,9 +460,14 @@ function UkValidation() {
 export default function ValidationPage({
   country,
   taxsim = null,
+  results,
 }: {
   country: Country;
+  /** Loaded results, rendered in place when `results` is not given. */
   taxsim?: TaxsimValidation | null;
+  /** The results block to render instead, e.g. a streamed Suspense boundary. */
+  results?: ReactNode;
 }) {
-  return country === 'uk' ? <UkValidation /> : <UsValidation taxsim={taxsim} />;
+  if (country === 'uk') return <UkValidation />;
+  return <UsValidation results={results ?? <TaxsimResults taxsim={taxsim} />} />;
 }

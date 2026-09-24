@@ -2,10 +2,11 @@ import 'server-only';
 
 /**
  * Loads the TAXSIM comparison summaries published by the policyengine-taxsim
- * dashboard (https://www.policyengine.org/us/taxsim/dashboard). Those JSON
- * files are written by `scripts/refresh_dashboard.py` in
- * PolicyEngine/policyengine-taxsim and are the same files the dashboard reads,
- * so this page and the dashboard always show the same numbers.
+ * dashboard (https://www.policyengine.org/us/taxsim/dashboard). These are the
+ * JSON files the dashboard itself reads, written by a version of
+ * `scripts/refresh_dashboard.py` in PolicyEngine/policyengine-taxsim (each
+ * summary's metadata records which), so this page shows the dashboard's
+ * numbers, up to an hour behind a refresh because of the cache below.
  */
 
 // Keep in sync with AVAILABLE_YEARS in policyengine-taxsim
@@ -20,7 +21,9 @@ export const TAXSIM_MATCH_RULES_URL =
 // The summaries change only when the comparison is re-run, so an hour of
 // caching keeps the page fast while picking up a refresh the same day.
 const REVALIDATE_SECONDS = 3600;
-const FETCH_TIMEOUT_MS = 8000;
+// The results stream in behind a Suspense boundary, so a slow host delays
+// only the table; the timeout bounds how long it can hold the request open.
+const FETCH_TIMEOUT_MS = 5000;
 
 export function taxsimSummaryUrl(year: number): string {
   return `https://www.policyengine.org/us/taxsim/data/${year}/summary_${year}.json`;
@@ -41,10 +44,11 @@ export interface TaxsimYearResult {
   policyengineUsVersion: string | null;
   generatedAt: string | null;
   /**
-   * States whose TAXSIM reference results come from an earlier TAXSIM build
-   * this year (`metadata.taxsimFallback`), in the order the summary lists them.
+   * States whose TAXSIM results come from an earlier TAXSIM build this year
+   * (`metadata.taxsimFallback`), in the summary's order. Null when the summary
+   * records no fallback; empty when it records one without readable states.
    */
-  taxsimFallbackStates: string[];
+  taxsimFallbackStates: string[] | null;
 }
 
 export interface TaxsimValidation {
@@ -70,8 +74,8 @@ function text(value: unknown): string | null {
  * Mirrors the dashboard's fallback notice (DashboardContent.jsx): a summary
  * may record that some states' TAXSIM results used an earlier TAXSIM build.
  */
-function fallbackStates(raw: unknown): string[] {
-  if (!isRecord(raw) || raw.appliesToThisYear !== true) return [];
+function fallbackStates(raw: unknown): string[] | null {
+  if (!isRecord(raw) || raw.appliesToThisYear !== true) return null;
   const states = Array.isArray(raw.states) ? raw.states : [raw.state];
   return states.filter((s): s is string => typeof s === 'string' && /^[A-Z]{2}$/.test(s));
 }
@@ -118,11 +122,15 @@ export function parseTaxsimSummary(year: number, raw: unknown): TaxsimYearResult
   };
 }
 
-async function fetchYear(year: number, fetchImpl: typeof fetch): Promise<TaxsimYearResult | null> {
+async function fetchYear(
+  year: number,
+  fetchImpl: typeof fetch,
+  timeoutMs: number,
+): Promise<TaxsimYearResult | null> {
   try {
     const response = await fetchImpl(taxsimSummaryUrl(year), {
       next: { revalidate: REVALIDATE_SECONDS },
-      signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
+      signal: AbortSignal.timeout(timeoutMs),
     } as RequestInit);
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const result = parseTaxsimSummary(year, await response.json());
@@ -136,9 +144,10 @@ async function fetchYear(year: number, fetchImpl: typeof fetch): Promise<TaxsimY
 
 export async function fetchTaxsimValidation(
   fetchImpl: typeof fetch = fetch,
+  { timeoutMs = FETCH_TIMEOUT_MS }: { timeoutMs?: number } = {},
 ): Promise<TaxsimValidation> {
   const loaded = await Promise.all(
-    TAXSIM_VALIDATION_YEARS.map((year) => fetchYear(year, fetchImpl)),
+    TAXSIM_VALIDATION_YEARS.map((year) => fetchYear(year, fetchImpl, timeoutMs)),
   );
   const results = loaded.filter((r): r is TaxsimYearResult => r !== null);
   return {
