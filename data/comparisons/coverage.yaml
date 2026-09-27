@@ -1413,16 +1413,14 @@ coverage:
     statuteTraceable: no
     testCoverage: none
     notes: >
-      TRIM3's documented health-insurance scope is Medicaid/SCHIP,
-      Medicare, and Employer-Sponsored Health Insurance; it does not
-      include an ACA Premium Tax Credit or marketplace-subsidy module.
-      At the Urban Institute, ACA marketplace premium subsidies are
-      modeled by a separate sibling model — the Health Insurance Policy
-      Simulation Model (HIPSM) — not by TRIM3, so the Form 8962 /
-      IRC 36B premium-tax-credit reconciliation is not simulated within
-      TRIM3 itself.
+      TRIM3's Programs Simulated list gives its health-insurance programs
+      as Medicaid/SCHIP, Medicare, and Employer-Sponsored Health
+      Insurance; no ACA Premium Tax Credit or marketplace-subsidy module
+      is listed. The Urban Institute estimates marketplace premium tax
+      credits with a separate model, the Health Insurance Policy
+      Simulation Model (HIPSM).
     sources:
-      - label: TRIM3 Programs Simulated — Health Insurance Programs are Medicare, Medicaid/SCHIP, and Employer-Sponsored Insurance (no ACA/PTC module)
+      - label: TRIM3 Programs Simulated — Health Insurance Programs are Medicare, Medicaid/SCHIP, and Employer-Sponsored Insurance (no ACA/PTC module listed)
         url: https://boreas.urban.org/T3IntroPrograms.php
         kind: self
       - label: Urban Institute — Health Insurance Policy Simulation Model (HIPSM), Urban's model for ACA marketplace premium subsidies
