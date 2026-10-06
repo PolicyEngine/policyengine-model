@@ -628,10 +628,10 @@ artifacts:
         url: https://nap.nationalacademies.org/catalog/25246
         kind: academic
 
-  # ============================ BenefitKitchen ===============================
+  # ============================ Benefit Kitchen ===============================
   - model: benefit-kitchen
     type: web-application
-    name: BenefitKitchen eligibility app
+    name: Benefit Kitchen eligibility app
     public: yes
     license: proprietary
     url: https://benefitkitchen.com/
@@ -639,7 +639,7 @@ artifacts:
       Free consumer-facing benefits eligibility screener spanning federal
       and state programs.
     sources:
-      - label: BenefitKitchen — homepage
+      - label: Benefit Kitchen — homepage
         url: https://benefitkitchen.com/
         kind: self
 

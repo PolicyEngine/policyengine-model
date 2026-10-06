@@ -698,8 +698,8 @@ models:
         kind: civilsociety
 
   - id: benefit-kitchen
-    name: BenefitKitchen
-    organization: BenefitKitchen
+    name: Benefit Kitchen
+    organization: Benefit Kitchen
     organizationUrl: https://benefitkitchen.com/
     country: us
     sector: for-profit
@@ -726,10 +726,10 @@ models:
       publicInterface: yes
       apiAccess: yes
     sources:
-      - label: BenefitKitchen — homepage
+      - label: Benefit Kitchen — homepage
         url: https://benefitkitchen.com/
         kind: self
-      - label: BenefitKitchen — about
+      - label: Benefit Kitchen — about
         url: https://benefitkitchen.com/#about
         kind: self
       - label: Benefit Kitchen — homepage, products (API)

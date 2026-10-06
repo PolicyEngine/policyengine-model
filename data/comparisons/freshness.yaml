@@ -675,16 +675,16 @@ freshness:
       Current-law eligibility rules across a range of federal and
       state benefits. No reform modeling.
     notes: >
-      BenefitKitchen publishes neither a release log nor explicit
+      Benefit Kitchen publishes neither a release log nor explicit
       coverage years; cadence is inferred to be annual after federal
       and state rule updates.
     sources:
-      - label: BenefitKitchen — homepage
+      - label: Benefit Kitchen — homepage
         url: https://benefitkitchen.com/
         kind: self
         supports: [updateCadence, notableRegimes,
                    handlesFutureDatedLegislation]
-      - label: BenefitKitchen — about
+      - label: Benefit Kitchen — about
         url: https://benefitkitchen.com/#about
         kind: self
         supports: [updateCadence, notableRegimes]

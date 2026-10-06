@@ -2113,11 +2113,11 @@ coverage:
     statuteTraceable: no
     testCoverage: unknown
     notes: >
-      BenefitKitchen screens applicant-supplied households for SNAP
+      Benefit Kitchen screens applicant-supplied households for SNAP
       eligibility and dollar estimates; it does not publish the rules or
       validation suite.
     sources:
-      - label: BenefitKitchen homepage
+      - label: Benefit Kitchen homepage
         url: https://benefitkitchen.com/
         kind: self
 
@@ -2127,10 +2127,10 @@ coverage:
     statuteTraceable: no
     testCoverage: unknown
     notes: >
-      BenefitKitchen lists Medicaid among the benefits its platform
+      Benefit Kitchen lists Medicaid among the benefits its platform
       screens across 50 states.
     sources:
-      - label: BenefitKitchen homepage
+      - label: Benefit Kitchen homepage
         url: https://benefitkitchen.com/
         kind: self
 
@@ -2140,11 +2140,11 @@ coverage:
     statuteTraceable: no
     testCoverage: unknown
     notes: >
-      BenefitKitchen lists health plans and tax credits among screened
+      Benefit Kitchen lists health plans and tax credits among screened
       benefits; public materials do not separately document Form 8962 or
       ACA marketplace reconciliation mechanics.
     sources:
-      - label: BenefitKitchen homepage
+      - label: Benefit Kitchen homepage
         url: https://benefitkitchen.com/
         kind: self
 
@@ -2154,10 +2154,10 @@ coverage:
     statuteTraceable: no
     testCoverage: unknown
     notes: >
-      BenefitKitchen lists tax credits among screened benefits, but public
+      Benefit Kitchen lists tax credits among screened benefits, but public
       materials do not itemize EITC parameters.
     sources:
-      - label: BenefitKitchen homepage
+      - label: Benefit Kitchen homepage
         url: https://benefitkitchen.com/
         kind: self
 
@@ -2167,10 +2167,10 @@ coverage:
     statuteTraceable: no
     testCoverage: unknown
     notes: >
-      BenefitKitchen lists tax credits among screened benefits, but public
+      Benefit Kitchen lists tax credits among screened benefits, but public
       materials do not itemize Child Tax Credit parameters.
     sources:
-      - label: BenefitKitchen homepage
+      - label: Benefit Kitchen homepage
         url: https://benefitkitchen.com/
         kind: self
 
@@ -2180,10 +2180,10 @@ coverage:
     statuteTraceable: no
     testCoverage: unknown
     notes: >
-      BenefitKitchen lists childcare benefits among the federal, state,
+      Benefit Kitchen lists childcare benefits among the federal, state,
       and local work-support programs its platform screens.
     sources:
-      - label: BenefitKitchen homepage
+      - label: Benefit Kitchen homepage
         url: https://benefitkitchen.com/
         kind: self
 
@@ -2193,11 +2193,11 @@ coverage:
     statuteTraceable: no
     testCoverage: unknown
     notes: >
-      BenefitKitchen public materials cite utility assistance in example
+      Benefit Kitchen public materials cite utility assistance in example
       screenings, but they do not identify LIHEAP-specific rule coverage
       for every state.
     sources:
-      - label: BenefitKitchen ICF screener page
+      - label: Benefit Kitchen ICF screener page
         url: https://benefitkitchen.com/icfs
         kind: self
 
