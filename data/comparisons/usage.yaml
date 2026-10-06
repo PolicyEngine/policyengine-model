@@ -266,16 +266,23 @@ usage:
     monthlyComputations: unknown
     organizationUsers: unknown
     notes: >
-      BenefitKitchen does not publish usage metrics. The product is
-      consumed both directly by households via the free app and by
-      partner organizations through a paid API tier.
+      Benefit Kitchen does not publish usage metrics. Individuals can
+      self-screen with the free app, and other systems can run its
+      screenings and referrals through an API whose keys are requested by
+      email.
     sources:
-      - label: BenefitKitchen — homepage
+      - label: Benefit Kitchen — homepage
         url: https://benefitkitchen.com/
         kind: self
-      - label: BenefitKitchen — about
+      - label: Benefit Kitchen — about
         url: https://benefitkitchen.com/#about
         kind: self
+      - label: Benefit Kitchen — currently serving (API key requests)
+        url: https://benefitkitchen.com/currently-serving
+        kind: self
+        quote: >-
+          Contact us today at info@benefitkitchen.com to ask for a quote to
+          develop your state or to acquire an API key.
 
   - model: benefits-cliffs
     academicCitations: unknown
@@ -304,9 +311,8 @@ usage:
     monthlyComputations: unknown
     organizationUsers: unknown
     notes: >
-      Usage metrics are not published. The free consumer-facing
-      screener and the paid API tier are both in active use; no
-      external dashboard.
+      Usage metrics are not published, and there is no external
+      dashboard.
     sources:
       - label: SNAP Screener — homepage
         url: https://www.snapscreener.com/
