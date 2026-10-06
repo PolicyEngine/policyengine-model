@@ -801,14 +801,16 @@ models:
       For-profit SNAP and Medicaid eligibility screeners plus state guide
       pages for SNAP, WIC, and Medicaid. Consumer-facing web tools walk
       applicants through SNAP and Medicaid eligibility checks, and the site
-      publishes a state-level parameter table for SNAP rules. Paid API tier
-      exists for partner organizations. Not a population microsimulation.
+      publishes a state-level parameter table for SNAP rules. Nonprofits can
+      embed the screeners on their own sites as a free iframe widget; no public
+      API documentation was found (checked 2026-09-23). Not a population
+      microsimulation.
     capabilities:
       reformImpact: no
       integratedMicrodata: no
       localAreas: yes
       publicInterface: yes
-      apiAccess: yes
+      apiAccess: no
     sources:
       - label: SNAP Screener — homepage
         url: https://www.snapscreener.com/
@@ -818,6 +820,9 @@ models:
         kind: self
       - label: Medicaid Screener — homepage
         url: https://www.medicaidscreener.com/
+        kind: self
+      - label: SNAP Screener — for nonprofits (embeddable widget)
+        url: https://www.snapscreener.com/nonprofits
         kind: self
       - label: USDA FNS — SNAP eligibility (authoritative federal rules)
         url: https://www.fns.usda.gov/snap/recipient/eligibility
