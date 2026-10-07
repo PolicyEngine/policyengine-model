@@ -321,8 +321,8 @@ usage:
     monthlyComputations: unknown
     organizationUsers: unknown
     notes: >
-      Usage metrics are not published, and there is no external
-      dashboard.
+      No usage metrics or public dashboard were found on its sites
+      (checked 2026-10-07).
     sources:
       - label: SNAP Screener — homepage
         url: https://www.snapscreener.com/

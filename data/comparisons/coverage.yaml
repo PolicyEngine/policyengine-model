@@ -2114,9 +2114,9 @@ coverage:
     testCoverage: unknown
     notes: >
       Benefit Kitchen screens applicant-supplied households for SNAP
-      eligibility and dollar estimates; its service status sheet marks food
-      stamps as served in all 50 states and DC through its API. It does not
-      publish the rules or validation suite.
+      eligibility and dollar estimates; its undated, self-reported service
+      status sheet marks food stamps as served in all 50 states and DC
+      through its API. It does not publish the rules or validation suite.
     sources:
       - label: Benefit Kitchen homepage
         url: https://benefitkitchen.com/
@@ -2133,9 +2133,9 @@ coverage:
     testCoverage: unknown
     notes: >
       Benefit Kitchen lists Medicaid among the benefits its platform
-      screens, and its service status sheet marks adult, child and
-      older-adult health care as served in all 50 states and DC through its
-      API.
+      screens, and its undated, self-reported service status sheet marks
+      adult, child and older-adult health care as served in all 50 states
+      and DC through its API.
     sources:
       - label: Benefit Kitchen homepage
         url: https://benefitkitchen.com/
@@ -2153,7 +2153,8 @@ coverage:
     notes: >
       Benefit Kitchen lists health plans among screened benefits, but no
       public source says whether it computes premium tax credits, and its
-      service status sheet has no premium tax credit column.
+      undated, self-reported service status sheet has no premium tax credit
+      column.
     sources:
       - label: Benefit Kitchen homepage
         url: https://benefitkitchen.com/
@@ -2169,9 +2170,10 @@ coverage:
     statuteTraceable: no
     testCoverage: unknown
     notes: >
-      Benefit Kitchen's service status sheet marks the EITC as served in all
-      50 states and DC through its API and in all 20 states its screener app
-      covers. Public materials do not itemize EITC parameters.
+      Benefit Kitchen's undated, self-reported service status sheet marks
+      the EITC as served in all 50 states and DC through its API and in all
+      20 states its screener app covers. Public materials do not itemize
+      EITC parameters.
     sources:
       - label: Benefit Kitchen homepage
         url: https://benefitkitchen.com/
@@ -2187,9 +2189,10 @@ coverage:
     statuteTraceable: no
     testCoverage: unknown
     notes: >
-      Benefit Kitchen's service status sheet marks the CTC as served in all
-      50 states and DC through its API and in all 20 states its screener app
-      covers. Public materials do not itemize Child Tax Credit parameters.
+      Benefit Kitchen's undated, self-reported service status sheet marks
+      the CTC as served in all 50 states and DC through its API and in all
+      20 states its screener app covers. Public materials do not itemize
+      Child Tax Credit parameters.
     sources:
       - label: Benefit Kitchen homepage
         url: https://benefitkitchen.com/
@@ -2206,8 +2209,9 @@ coverage:
     testCoverage: unknown
     notes: >
       Benefit Kitchen lists childcare among the work-support programs its
-      platform screens, and its service status sheet marks child care
-      assistance as served in all 50 states and DC through its API.
+      platform screens, and its undated, self-reported service status sheet
+      marks child care assistance as served in all 50 states and DC through
+      its API.
     sources:
       - label: Benefit Kitchen homepage
         url: https://benefitkitchen.com/
@@ -2223,8 +2227,9 @@ coverage:
     statuteTraceable: no
     testCoverage: unknown
     notes: >
-      Benefit Kitchen's service status sheet marks "HEAP" as served in all
-      50 states and DC through its API, and a 2023 NCOA report prepared with Benefit Kitchen lists LIHEAP among the
+      Benefit Kitchen's undated, self-reported service status sheet marks
+      "HEAP" as served in all 50 states and DC through its API, and a 2023
+      NCOA report prepared with Benefit Kitchen lists LIHEAP among the
       benefits its API screens. Public materials do not itemize LIHEAP
       parameters.
     sources:

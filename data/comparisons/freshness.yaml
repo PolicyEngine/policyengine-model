@@ -667,7 +667,7 @@ freshness:
   - model: benefit-kitchen
     latestImplementedYear: unknown
     forwardYearsThrough: unknown
-    handlesFutureDatedLegislation: no
+    handlesFutureDatedLegislation: unknown
     updateCadence: continuous
     updateLag: unknown
     lastMajorRefresh: unknown
@@ -678,13 +678,14 @@ freshness:
       Benefit Kitchen publishes neither a release log nor explicit
       coverage years. It says its eligibility data is continuously
       updated, and a 2023 NCOA report prepared with Benefit Kitchen says
-      policy changes are maintained at least twice a year or as they are
-      legislated.
+      updating its algorithms requires continuous attention throughout
+      the year and that policy changes must be maintained at least twice a
+      year or as they are legislated.
     sources:
       - label: Benefit Kitchen — homepage
         url: https://benefitkitchen.com/
         kind: self
-        supports: [notableRegimes, handlesFutureDatedLegislation]
+        supports: [notableRegimes]
       - label: Benefit Kitchen — about
         url: https://benefitkitchen.com/#about
         kind: self
@@ -701,8 +702,10 @@ freshness:
         kind: civilsociety
         supports: [updateCadence]
         quote: >-
-          changes in policy must be maintained at least twice annually or as
-          changes are legislated
+          one that requires continuous attention throughout the year, which
+          results in significant use of resources. In addition, changes in
+          policy must be maintained at least twice annually or as changes are
+          legislated
 
   - model: benefits-cliffs
     latestImplementedYear: unknown
