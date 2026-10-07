@@ -268,8 +268,8 @@ usage:
     notes: >
       Benefit Kitchen does not publish usage metrics. Individuals can
       self-screen with the free app, and other systems can run its
-      screenings and referrals through an API whose keys are requested by
-      email.
+      screenings and referrals through a subscription-based API whose keys
+      are requested by email.
     sources:
       - label: Benefit Kitchen — homepage
         url: https://benefitkitchen.com/
@@ -283,6 +283,16 @@ usage:
         quote: >-
           Contact us today at info@benefitkitchen.com to ask for a quote to
           develop your state or to acquire an API key.
+      - label: NCOA — Feasibility Study to Determine the Capability to
+          Streamline and Automate Processes for Key Public Benefits
+          Enrollment, final report (April 2023; prepared by L&M Policy
+          Research in partnership with Benefit Kitchen), p. 36
+        url: https://assets.ncoa.org/ffacfe7d-10b6-0083-2632-604077fd4eca/edbd8375-dcef-4557-9afa-9d4b9e0f103d/2024_MIPPA_Fesasibility_Study_Report.pdf
+        kind: civilsociety
+        quote: >-
+          Benefit Kitchen is a for-profit organization that charges
+          subscription fees for the use of its API, which vary based on the
+          scope of its use.
 
   - model: benefits-cliffs
     academicCitations: unknown

@@ -652,9 +652,11 @@ artifacts:
     description: >
       Screening API for running Benefit Kitchen screenings and referrals
       from another system, which Benefit Kitchen says is live in all 50
-      states. API keys are requested by emailing Benefit Kitchen; no
-      published pricing, API documentation or API terms were found
-      (checked 2026-10-06).
+      states. A 2023 NCOA report prepared with Benefit Kitchen says it
+      charges subscription fees for API use that vary with the scope of
+      use. API keys are requested by emailing Benefit Kitchen; no public fee
+      schedule, screening-API documentation or separate API terms were
+      found (checked 2026-10-06).
     sources:
       - label: Benefit Kitchen — currently serving (API key requests)
         url: https://benefitkitchen.com/currently-serving
@@ -669,6 +671,16 @@ artifacts:
           Do screenings and make referrals in your own system with our
           Application Programming Interface for all benefits. Our APIs are
           live in all 50 states.
+      - label: NCOA — Feasibility Study to Determine the Capability to
+          Streamline and Automate Processes for Key Public Benefits
+          Enrollment, final report (April 2023; prepared by L&M Policy
+          Research in partnership with Benefit Kitchen), p. 36
+        url: https://assets.ncoa.org/ffacfe7d-10b6-0083-2632-604077fd4eca/edbd8375-dcef-4557-9afa-9d4b9e0f103d/2024_MIPPA_Fesasibility_Study_Report.pdf
+        kind: civilsociety
+        quote: >-
+          Benefit Kitchen is a for-profit organization that charges
+          subscription fees for the use of its API, which vary based on the
+          scope of its use.
 
   # ============================ BenefitsCliffs.com ===========================
   - model: benefits-cliffs

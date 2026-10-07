@@ -668,7 +668,7 @@ freshness:
     latestImplementedYear: unknown
     forwardYearsThrough: unknown
     handlesFutureDatedLegislation: no
-    updateCadence: annual
+    updateCadence: continuous
     updateLag: unknown
     lastMajorRefresh: unknown
     notableRegimes: >
@@ -676,18 +676,33 @@ freshness:
       state benefits. No reform modeling.
     notes: >
       Benefit Kitchen publishes neither a release log nor explicit
-      coverage years; cadence is inferred to be annual after federal
-      and state rule updates.
+      coverage years. It says its eligibility data is continuously
+      updated, and a 2023 NCOA report prepared with Benefit Kitchen says
+      policy changes are maintained at least twice a year or as they are
+      legislated.
     sources:
       - label: Benefit Kitchen — homepage
         url: https://benefitkitchen.com/
         kind: self
-        supports: [updateCadence, notableRegimes,
-                   handlesFutureDatedLegislation]
+        supports: [notableRegimes, handlesFutureDatedLegislation]
       - label: Benefit Kitchen — about
         url: https://benefitkitchen.com/#about
         kind: self
         supports: [updateCadence, notableRegimes]
+        quote: >-
+          Our ongoing research and development process is built on decades
+          of policy expertise, so eligibility data is continuously updated
+          and accurate.
+      - label: NCOA — Feasibility Study to Determine the Capability to
+          Streamline and Automate Processes for Key Public Benefits
+          Enrollment, final report (April 2023; prepared by L&M Policy
+          Research in partnership with Benefit Kitchen), p. 36
+        url: https://assets.ncoa.org/ffacfe7d-10b6-0083-2632-604077fd4eca/edbd8375-dcef-4557-9afa-9d4b9e0f103d/2024_MIPPA_Fesasibility_Study_Report.pdf
+        kind: civilsociety
+        supports: [updateCadence]
+        quote: >-
+          changes in policy must be maintained at least twice annually or as
+          changes are legislated
 
   - model: benefits-cliffs
     latestImplementedYear: unknown

@@ -2114,11 +2114,16 @@ coverage:
     testCoverage: unknown
     notes: >
       Benefit Kitchen screens applicant-supplied households for SNAP
-      eligibility and dollar estimates; it does not publish the rules or
-      validation suite.
+      eligibility and dollar estimates; its service status sheet marks food
+      stamps as served in all 50 states and DC through its API. It does not
+      publish the rules or validation suite.
     sources:
       - label: Benefit Kitchen homepage
         url: https://benefitkitchen.com/
+        kind: self
+      - label: Benefit Kitchen — service status sheet (embedded on its
+          Currently Serving page)
+        url: https://docs.google.com/spreadsheets/d/e/2PACX-1vT2wgvqeHQHErQpR7yWH4ECm3CZlT-upcrXspOvbnaQFEauP_zAmri7nHHA_3ZKYSYRI1OCi6jrSgAa/pubhtml?gid=0
         kind: self
 
   - model: benefit-kitchen
@@ -2128,50 +2133,70 @@ coverage:
     testCoverage: unknown
     notes: >
       Benefit Kitchen lists Medicaid among the benefits its platform
-      screens across 50 states.
+      screens, and its service status sheet marks adult, child and
+      older-adult health care as served in all 50 states and DC through its
+      API.
     sources:
       - label: Benefit Kitchen homepage
         url: https://benefitkitchen.com/
+        kind: self
+      - label: Benefit Kitchen — service status sheet (embedded on its
+          Currently Serving page)
+        url: https://docs.google.com/spreadsheets/d/e/2PACX-1vT2wgvqeHQHErQpR7yWH4ECm3CZlT-upcrXspOvbnaQFEauP_zAmri7nHHA_3ZKYSYRI1OCi6jrSgAa/pubhtml?gid=0
         kind: self
 
   - model: benefit-kitchen
     program: us-premium-tax-credit
-    status: partial
+    status: unknown
     statuteTraceable: no
     testCoverage: unknown
     notes: >
-      Benefit Kitchen lists health plans and tax credits among screened
-      benefits; public materials do not separately document Form 8962 or
-      ACA marketplace reconciliation mechanics.
+      Benefit Kitchen lists health plans among screened benefits, but no
+      public source says whether it computes premium tax credits, and its
+      service status sheet has no premium tax credit column.
     sources:
       - label: Benefit Kitchen homepage
         url: https://benefitkitchen.com/
+        kind: self
+      - label: Benefit Kitchen — service status sheet (embedded on its
+          Currently Serving page)
+        url: https://docs.google.com/spreadsheets/d/e/2PACX-1vT2wgvqeHQHErQpR7yWH4ECm3CZlT-upcrXspOvbnaQFEauP_zAmri7nHHA_3ZKYSYRI1OCi6jrSgAa/pubhtml?gid=0
         kind: self
 
   - model: benefit-kitchen
     program: us-eitc
-    status: partial
+    status: implemented
     statuteTraceable: no
     testCoverage: unknown
     notes: >
-      Benefit Kitchen lists tax credits among screened benefits, but public
-      materials do not itemize EITC parameters.
+      Benefit Kitchen's service status sheet marks the EITC as served in all
+      50 states and DC through its API and in all 20 states its screener app
+      covers. Public materials do not itemize EITC parameters.
     sources:
       - label: Benefit Kitchen homepage
         url: https://benefitkitchen.com/
         kind: self
+      - label: Benefit Kitchen — service status sheet (embedded on its
+          Currently Serving page)
+        url: https://docs.google.com/spreadsheets/d/e/2PACX-1vT2wgvqeHQHErQpR7yWH4ECm3CZlT-upcrXspOvbnaQFEauP_zAmri7nHHA_3ZKYSYRI1OCi6jrSgAa/pubhtml?gid=0
+        kind: self
 
   - model: benefit-kitchen
     program: us-ctc
-    status: partial
+    status: implemented
     statuteTraceable: no
     testCoverage: unknown
     notes: >
-      Benefit Kitchen lists tax credits among screened benefits, but public
-      materials do not itemize Child Tax Credit parameters.
+      Benefit Kitchen's service status sheet marks the CTC as served in all
+      50 states and DC through its API and in all 20 states its screener app
+      covers. Public materials do not itemize Child Tax Credit parameters.
     sources:
       - label: Benefit Kitchen homepage
         url: https://benefitkitchen.com/
+        kind: self
+      - label: Benefit Kitchen — service status sheet (embedded on its
+          Currently Serving page)
+        url: https://docs.google.com/spreadsheets/d/e/2PACX-1vT2wgvqeHQHErQpR7yWH4ECm3CZlT-upcrXspOvbnaQFEauP_zAmri7nHHA_3ZKYSYRI1OCi6jrSgAa/pubhtml?gid=0
         kind: self
 
   - model: benefit-kitchen
@@ -2180,26 +2205,43 @@ coverage:
     statuteTraceable: no
     testCoverage: unknown
     notes: >
-      Benefit Kitchen lists childcare benefits among the federal, state,
-      and local work-support programs its platform screens.
+      Benefit Kitchen lists childcare among the work-support programs its
+      platform screens, and its service status sheet marks child care
+      assistance as served in all 50 states and DC through its API.
     sources:
       - label: Benefit Kitchen homepage
         url: https://benefitkitchen.com/
         kind: self
+      - label: Benefit Kitchen — service status sheet (embedded on its
+          Currently Serving page)
+        url: https://docs.google.com/spreadsheets/d/e/2PACX-1vT2wgvqeHQHErQpR7yWH4ECm3CZlT-upcrXspOvbnaQFEauP_zAmri7nHHA_3ZKYSYRI1OCi6jrSgAa/pubhtml?gid=0
+        kind: self
 
   - model: benefit-kitchen
     program: us-liheap
-    status: partial
+    status: implemented
     statuteTraceable: no
     testCoverage: unknown
     notes: >
-      Benefit Kitchen public materials cite utility assistance in example
-      screenings, but they do not identify LIHEAP-specific rule coverage
-      for every state.
+      Benefit Kitchen's service status sheet marks "HEAP" as served in all
+      50 states and DC through its API, and a 2023 NCOA report prepared with Benefit Kitchen lists LIHEAP among the
+      benefits its API screens. Public materials do not itemize LIHEAP
+      parameters.
     sources:
-      - label: Benefit Kitchen ICF screener page
-        url: https://benefitkitchen.com/icfs
+      - label: Benefit Kitchen — service status sheet (embedded on its
+          Currently Serving page)
+        url: https://docs.google.com/spreadsheets/d/e/2PACX-1vT2wgvqeHQHErQpR7yWH4ECm3CZlT-upcrXspOvbnaQFEauP_zAmri7nHHA_3ZKYSYRI1OCi6jrSgAa/pubhtml?gid=0
         kind: self
+      - label: NCOA — Feasibility Study to Determine the Capability to
+          Streamline and Automate Processes for Key Public Benefits
+          Enrollment, final report (April 2023; prepared by L&M Policy
+          Research in partnership with Benefit Kitchen), p. 34
+        url: https://assets.ncoa.org/ffacfe7d-10b6-0083-2632-604077fd4eca/edbd8375-dcef-4557-9afa-9d4b9e0f103d/2024_MIPPA_Fesasibility_Study_Report.pdf
+        kind: civilsociety
+        quote: >-
+          screenings for up to 18 federal, state, and local benefits (e.g.,
+          SNAP, TANF, WIC, school meals, childcare, LIHEAP, Internet, Phone,
+          and tax credits)
 
   - model: benefits-cliffs
     program: us-eitc

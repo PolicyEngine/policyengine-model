@@ -939,10 +939,12 @@ modeling:
     label: Product documentation rather than rule documentation
     detail: >
       Benefit Kitchen describes its consumer screener, screening API, and
-      broad benefit categories, but public pages do not publish API
-      documentation, a model manual, rule tables, parameters, validation
-      tests, or release notes. The documentation supports product scope,
-      not mechanical reverse engineering.
+      broad benefit categories, but public pages do not publish
+      screening-API documentation, a model manual, rule tables, parameters,
+      validation tests, or release notes. Its separate Real Cost Measure
+      budget API (BING) has a public endpoint description. The
+      documentation supports product scope, not mechanical reverse
+      engineering.
     scope: eligibility-screener product pages
     sources:
       - label: Benefit Kitchen homepage
@@ -950,6 +952,9 @@ modeling:
         kind: self
       - label: Benefit Kitchen — currently serving (API key requests)
         url: https://benefitkitchen.com/currently-serving
+        kind: self
+      - label: Benefit Kitchen — BING / Real Cost Measure API
+        url: https://benefitkitchen.com/binginfo
         kind: self
 
   - model: benefits-cliffs

@@ -647,14 +647,15 @@ transparency:
     parameterSourcing: unknown
     testSuitePublic: unknown
     testCount: unknown
-    datasetPublic: no
+    datasetPublic: unknown
     reproducibleBuilds: no
     notes: >
       Benefit Kitchen is a for-profit eligibility-screener product. The
-      consumer-facing app is free; API keys are requested by email, and no
-      API documentation is published. Source code, parameter files, and
-      test suite are not public. About page summarizes scope but not
-      implementation details.
+      consumer-facing app is free. Its subscription-based API screens
+      client-submitted household data; API keys are requested by email.
+      No public screening-API documentation, source code, parameter files,
+      or test suite were found (checked 2026-10-06). The About section
+      summarizes scope but not implementation details.
     sources:
       - label: Benefit Kitchen — homepage
         url: https://benefitkitchen.com/
@@ -675,18 +676,29 @@ transparency:
           existing client data)
         url: https://benefitkitchen.com/#works
         kind: self
-        supports: [datasetPublic]
+        supports: [notes]
         quote: >-
           Using your existing client data (zip code, income, family
           demographics, etc.), Benefit Kitchen tells you (with specific
           dollar estimates) about eligibility
-      - label: New York Department of State — corporation record for
-          Benefit Kitchen LLC (domestic limited liability company)
-        url: https://data.ny.gov/resource/n9v6-gdp6.json?dos_id=3066658&$select=dos_id,current_entity_name,initial_dos_filing_date,county,entity_type
-        kind: government
+      - label: Benefit Kitchen — currently serving (API key requests)
+        url: https://benefitkitchen.com/currently-serving
+        kind: self
         supports: [notes]
         quote: >-
-          "current_entity_name":"BENEFIT KITCHEN LLC","initial_dos_filing_date":"2004-06-16T00:00:00.000","county":"Kings","entity_type":"DOMESTIC LIMITED LIABILITY COMPANY"
+          Contact us today at info@benefitkitchen.com to ask for a quote to
+          develop your state or to acquire an API key.
+      - label: NCOA — Feasibility Study to Determine the Capability to
+          Streamline and Automate Processes for Key Public Benefits
+          Enrollment, final report (April 2023; prepared by L&M Policy
+          Research in partnership with Benefit Kitchen), p. 36
+        url: https://assets.ncoa.org/ffacfe7d-10b6-0083-2632-604077fd4eca/edbd8375-dcef-4557-9afa-9d4b9e0f103d/2024_MIPPA_Fesasibility_Study_Report.pdf
+        kind: civilsociety
+        supports: [notes]
+        quote: >-
+          Benefit Kitchen is a for-profit organization that charges
+          subscription fees for the use of its API, which vary based on the
+          scope of its use.
 
   - model: benefits-cliffs
     codePublic: no

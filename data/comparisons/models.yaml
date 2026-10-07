@@ -716,9 +716,11 @@ models:
       lets households check eligibility across a range of federal and
       state benefits. A screening API, which Benefit Kitchen says is live
       in all 50 states, lets other systems run its screenings and
-      referrals; API keys are requested by email, and no published API
-      pricing, documentation or terms were found (checked 2026-10-06).
-      Not a population microsimulation.
+      referrals; a 2023 NCOA report prepared with Benefit Kitchen says it
+      charges subscription fees for the API that vary with the scope of
+      use. API keys are requested by email; no public fee schedule or
+      screening-API documentation was found (checked 2026-10-06). Not a
+      population microsimulation.
     capabilities:
       reformImpact: no
       integratedMicrodata: no
@@ -745,9 +747,19 @@ models:
         quote: >-
           Contact us today at info@benefitkitchen.com to ask for a quote to
           develop your state or to acquire an API key.
+      - label: NCOA — Feasibility Study to Determine the Capability to
+          Streamline and Automate Processes for Key Public Benefits
+          Enrollment, final report (April 2023; prepared by L&M Policy
+          Research in partnership with Benefit Kitchen), p. 36
+        url: https://assets.ncoa.org/ffacfe7d-10b6-0083-2632-604077fd4eca/edbd8375-dcef-4557-9afa-9d4b9e0f103d/2024_MIPPA_Fesasibility_Study_Report.pdf
+        kind: civilsociety
+        quote: >-
+          Benefit Kitchen is a for-profit organization that charges
+          subscription fees for the use of its API, which vary based on the
+          scope of its use.
       - label: NYC Department of Small Business Services — Neighborhood
-          Challenge winners (2017), Myrtle Avenue screening app built with
-          Benefit Kitchen
+          Challenge winners (2017), Myrtle Avenue screening app planned
+          with Benefit Kitchen
         url: https://www.nyc.gov/site/sbs/about/pr20170619-NeighborhoodChallenge.page
         kind: government
         quote: >-
