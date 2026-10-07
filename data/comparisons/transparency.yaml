@@ -647,32 +647,58 @@ transparency:
     parameterSourcing: unknown
     testSuitePublic: unknown
     testCount: unknown
-    datasetPublic: no
+    datasetPublic: unknown
     reproducibleBuilds: no
     notes: >
-      BenefitKitchen is a for-profit eligibility-screener product. The
-      consumer-facing app is free; the API is sold to partner
-      organizations. Source code, parameter files, and test suite are
-      not public. About page summarizes scope but not implementation
-      details.
+      Benefit Kitchen is a for-profit eligibility-screener product. The
+      consumer-facing app is free. Its subscription-based API screens
+      client-submitted household data; API keys are requested by email.
+      No public screening-API documentation, source code, parameter files,
+      or test suite were found (checked 2026-10-06). The About section
+      summarizes scope but not implementation details.
     sources:
-      - label: BenefitKitchen — homepage
+      - label: Benefit Kitchen — homepage
         url: https://benefitkitchen.com/
         kind: self
         supports: [codePublic, codeLicense, documentationPublic]
-      - label: BenefitKitchen — about page
+      - label: Benefit Kitchen — about page
         url: https://benefitkitchen.com/#about
         kind: self
         supports: [documentationPublic]
-      - label: BenefitKitchen — API / partners page
-        url: https://benefitkitchen.com/api
+      - label: Benefit Kitchen — legal (terms of use)
+        url: https://benefitkitchen.com/legal
         kind: self
-        supports: [codePublic, codeLicense, datasetPublic]
-      - label: NYC Mayor's Office for Economic Opportunity — ACCESS NYC
-          ecosystem of public eligibility screeners
-        url: https://www.nyc.gov/site/opportunity/portfolio/access-nyc.page
-        kind: government
-        supports: [codePublic]
+        supports: [codeLicense]
+        quote: >-
+          Benefit Kitchen owns and retains all rights in the Benefit Kitchen
+          Content and the Service.
+      - label: Benefit Kitchen — homepage, how it works (screens
+          existing client data)
+        url: https://benefitkitchen.com/#works
+        kind: self
+        supports: [notes]
+        quote: >-
+          Using your existing client data (zip code, income, family
+          demographics, etc.), Benefit Kitchen tells you (with specific
+          dollar estimates) about eligibility
+      - label: Benefit Kitchen — currently serving (API key requests)
+        url: https://benefitkitchen.com/currently-serving
+        kind: self
+        supports: [notes]
+        quote: >-
+          Contact us today at info@benefitkitchen.com to ask for a quote to
+          develop your state or to acquire an API key.
+      - label: NCOA — Feasibility Study to Determine the Capability to
+          Streamline and Automate Processes for Key Public Benefits
+          Enrollment, final report (April 2023; prepared by L&M Policy
+          Research in partnership with Benefit Kitchen), p. 36
+        url: https://assets.ncoa.org/ffacfe7d-10b6-0083-2632-604077fd4eca/edbd8375-dcef-4557-9afa-9d4b9e0f103d/2024_MIPPA_Fesasibility_Study_Report.pdf
+        kind: civilsociety
+        supports: [notes]
+        quote: >-
+          Benefit Kitchen is a for-profit organization that charges
+          subscription fees for the use of its API, which vary based on the
+          scope of its use.
 
   - model: benefits-cliffs
     codePublic: no

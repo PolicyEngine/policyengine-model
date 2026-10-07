@@ -698,8 +698,8 @@ models:
         kind: civilsociety
 
   - id: benefit-kitchen
-    name: BenefitKitchen
-    organization: BenefitKitchen
+    name: Benefit Kitchen
+    organization: Benefit Kitchen
     organizationUrl: https://benefitkitchen.com/
     country: us
     sector: for-profit
@@ -714,8 +714,13 @@ models:
     summary: >
       For-profit benefits eligibility screener. Free consumer-facing app
       lets households check eligibility across a range of federal and
-      state benefits; a paid API tier exposes the same rules engine to
-      partner organizations. Not a population microsimulation.
+      state benefits. A screening API, which Benefit Kitchen says is live
+      in all 50 states, lets other systems run its screenings and
+      referrals; a 2023 NCOA report prepared with Benefit Kitchen says it
+      charges subscription fees for the API that vary with the scope of
+      use. API keys are requested by email; no public fee schedule or
+      screening-API documentation was found (checked 2026-10-06). Not a
+      population microsimulation.
     capabilities:
       reformImpact: no
       integratedMicrodata: no
@@ -723,20 +728,50 @@ models:
       publicInterface: yes
       apiAccess: yes
     sources:
-      - label: BenefitKitchen — homepage
+      - label: Benefit Kitchen — homepage
         url: https://benefitkitchen.com/
         kind: self
-      - label: BenefitKitchen — about
+      - label: Benefit Kitchen — about
         url: https://benefitkitchen.com/#about
         kind: self
-      - label: BenefitKitchen — API / partners
-        url: https://benefitkitchen.com/api
+      - label: Benefit Kitchen — homepage, products (API)
+        url: https://benefitkitchen.com/#products
         kind: self
-      - label: NYC Mayor's Office for Economic Opportunity — Benefits
-          Plus / NYC ACCESS HRA family of screeners (BenefitKitchen-
-          adjacent ecosystem)
-        url: https://www.nyc.gov/site/opportunity/portfolio/access-nyc.page
+        quote: >-
+          Do screenings and make referrals in your own system with our
+          Application Programming Interface for all benefits. Our APIs are
+          live in all 50 states.
+      - label: Benefit Kitchen — currently serving (API key requests)
+        url: https://benefitkitchen.com/currently-serving
+        kind: self
+        quote: >-
+          Contact us today at info@benefitkitchen.com to ask for a quote to
+          develop your state or to acquire an API key.
+      - label: NCOA — Feasibility Study to Determine the Capability to
+          Streamline and Automate Processes for Key Public Benefits
+          Enrollment, final report (April 2023; prepared by L&M Policy
+          Research in partnership with Benefit Kitchen), p. 36
+        url: https://assets.ncoa.org/ffacfe7d-10b6-0083-2632-604077fd4eca/edbd8375-dcef-4557-9afa-9d4b9e0f103d/2024_MIPPA_Fesasibility_Study_Report.pdf
+        kind: civilsociety
+        quote: >-
+          Benefit Kitchen is a for-profit organization that charges
+          subscription fees for the use of its API, which vary based on the
+          scope of its use.
+      - label: NYC Department of Small Business Services — Neighborhood
+          Challenge winners (2017), Myrtle Avenue screening app planned
+          with Benefit Kitchen
+        url: https://www.nyc.gov/site/sbs/about/pr20170619-NeighborhoodChallenge.page
         kind: government
+        quote: >-
+          Together with Benefit Kitchen, the project team will develop a
+          Myrtle Avenue-branded outreach app that will screen eligibility
+          for 18 government benefits and local promotions.
+      - label: New York Department of State — corporation record for
+          Benefit Kitchen LLC (domestic limited liability company)
+        url: https://data.ny.gov/resource/n9v6-gdp6.json?dos_id=3066658&$select=dos_id,current_entity_name,initial_dos_filing_date,county,entity_type
+        kind: government
+        quote: >-
+          "current_entity_name":"BENEFIT KITCHEN LLC","initial_dos_filing_date":"2004-06-16T00:00:00.000","county":"Kings","entity_type":"DOMESTIC LIMITED LIABILITY COMPANY"
 
   - id: benefits-cliffs
     name: BenefitsCliffs.com

@@ -98,6 +98,7 @@ const SKIP_TIER2_DOMAINS = new Set([
   'onlinelibrary.wiley.com', // paywalled
   'taxsim.nber.org', // JS form
   'ukdataservice.ac.uk', // JS
+  'assets.ncoa.org', // PDFs; quote text is compressed, not in the raw body
   ...BOT_BLOCKED_DOMAINS,
 ]);
 
