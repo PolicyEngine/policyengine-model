@@ -1,74 +1,45 @@
 import { useState, useMemo } from 'react';
 import { colors, typography, spacing } from '../../designTokens';
-import usCalibrationTargets from '../../data/calibrationTargets.json';
+import {
+  describeLevels,
+  formatPercent,
+  joinList,
+  usCalibration,
+} from '../../data/calibrationTargets';
 import PageHeader from '../../components/layout/PageHeader';
 import SearchInput from '../../components/layout/SearchInput';
+import CalibrationTargetsTable from './CalibrationTargetsTable';
+import { formatDate, formatSourceFamily, groupLabel } from './calibrationFormat';
 import type { Country } from '../../hooks/useCountry';
 
-interface CalibrationRow {
-  variable: string;
-  domain: string | null;
-  geoLevels: string[];
-  nationalValue: number | null;
-  nationalCount: number;
-  stateCount: number;
-  districtCount: number;
-  source: string;
-  period: number;
-}
+export const DASHBOARD_URL = 'https://microcosm.institute/calibration/dashboard/microcosm?country=us';
 
-function formatValue(val: number | null): string {
-  if (val === null || val === undefined) return '—';
-  const abs = Math.abs(val);
-  if (abs >= 1e12) return `$${(val / 1e12).toFixed(2)}T`;
-  if (abs >= 1e9) return `$${(val / 1e9).toFixed(1)}B`;
-  if (abs >= 1e6) return `${(val / 1e6).toFixed(1)}M`;
-  if (abs >= 1e3) return `${(val / 1e3).toFixed(0)}K`;
-  return val.toLocaleString();
-}
-
-function formatVariable(name: string): string {
-  return name
-    .replace(/_/g, ' ')
-    .replace(/\b\w/g, (c) => c.toUpperCase());
-}
-
-const geoLevelColors: Record<string, { bg: string; text: string }> = {
-  national: { bg: '#dbeafe', text: '#1e40af' },
-  state: { bg: '#dcfce7', text: '#166534' },
-  district: { bg: '#fef3c7', text: '#92400e' },
-};
-
-const geoLevelLabels: Record<string, string> = {
-  national: 'National',
-  state: 'State',
-  district: 'CD',
+const prose = {
+  fontSize: typography.fontSize.base,
+  color: colors.text.secondary,
+  lineHeight: 1.7,
+  marginBottom: spacing.xl,
+  maxWidth: '720px',
 };
 
 export default function CalibrationPage({ country }: { country: Country }) {
   const [search, setSearch] = useState('');
+  const data = usCalibration;
 
-  const allTargets: CalibrationRow[] = useMemo(
-    () => country === 'us' ? (usCalibrationTargets as CalibrationRow[]) : [],
-    [country],
+  const allRows = useMemo(
+    () => (country === 'us' ? [...data.targets].sort((a, b) => b.targetCount - a.targetCount) : []),
+    [country, data.targets],
   );
 
   const filtered = useMemo(() => {
-    if (!search) return allTargets;
+    if (!search) return allRows;
     const q = search.toLowerCase();
-    return allTargets.filter(
-      (t) =>
-        t.variable.toLowerCase().includes(q) ||
-        (t.domain && t.domain.toLowerCase().includes(q)) ||
-        t.source.toLowerCase().includes(q) ||
-        t.geoLevels.some((g) => g.toLowerCase().includes(q)),
+    return allRows.filter((r) =>
+      [groupLabel(r), r.concept, formatSourceFamily(r.sourceFamily), r.sourceTable].some((s) =>
+        s.toLowerCase().includes(q),
+      ),
     );
-  }, [allTargets, search]);
-
-  const targetCount = allTargets.reduce(
-    (sum, t) => sum + t.nationalCount + t.stateCount + t.districtCount,
-    0,
-  );
+  }, [allRows, search]);
 
   if (country !== 'us') {
     return (
@@ -82,160 +53,87 @@ export default function CalibrationPage({ country }: { country: Country }) {
     );
   }
 
+  const levels = data.levelCounts;
+  const internal = levels.other;
+  const calibratedOn = formatDate(data.calibratedAt);
+  const inherited = data.calibrationReleaseId !== data.releaseId;
+  const calibrationYear = joinList(
+    [...new Set(data.targets.flatMap((g) => g.periods))].sort((a, b) => a - b).map(String),
+  );
+
   return (
     <div>
       <PageHeader
         category="Data"
         title="Calibration targets"
-        description={`PolicyEngine calibrates household survey weights using L0-regularized optimization so that weighted aggregates match ${targetCount.toLocaleString()} administrative targets from IRS, CBO, Census, CMS, and other agencies across national, state, and congressional district levels.`}
+        description={`PolicyEngine’s default US dataset is reweighted so its weighted totals match ${describeLevels(levels)} derived from statistics published by the IRS, Census Bureau, CMS, USDA, SSA, and other agencies${internal > 0 ? `, plus ${internal === 1 ? 'one build-internal constraint' : `${internal} build-internal constraints`}` : ''}. ${formatPercent(data.withinTenPctShare)} of all ${data.totalTargets.toLocaleString()} targets land within 10% of their target value.`}
       />
-      <SearchInput value={search} onChange={setSearch} placeholder="Search variables, domains, sources..." />
 
-      <p style={{
-        fontSize: typography.fontSize.xs,
-        color: colors.text.tertiary,
-        marginBottom: spacing.md,
-        marginTop: `-${spacing.sm}`,
-      }}>
-        {filtered.length} unique target{filtered.length !== 1 ? 's' : ''} shown
-        {search ? ` (filtered from ${allTargets.length})` : ''}
+      <div
+        style={{
+          padding: `${spacing.md} ${spacing.lg}`,
+          borderRadius: spacing.radius.lg,
+          border: `1px solid ${colors.border.light}`,
+          backgroundColor: colors.gray[50],
+          marginBottom: spacing.xl,
+          maxWidth: '720px',
+          fontSize: typography.fontSize.sm,
+          color: colors.text.secondary,
+          lineHeight: 1.6,
+        }}
+      >
+        {data.households.toLocaleString()} households in release{' '}
+        <code style={{ fontFamily: typography.fontFamily.mono }}>{data.releaseId}</code>
+        {data.policyenginePackageVersion
+          ? `, the US default in the policyengine Python package ${data.policyenginePackageVersion}`
+          : ''}
+        .{' '}
+        {inherited ? (
+          <>
+            Its weights are those of{' '}
+            <code style={{ fontFamily: typography.fontFamily.mono }}>{data.calibrationReleaseId}</code>
+            {calibratedOn ? `, calibrated ${calibratedOn}` : ''}, unchanged.{' '}
+          </>
+        ) : calibratedOn ? (
+          `Calibrated ${calibratedOn}. `
+        ) : null}
+        <a href={DASHBOARD_URL} target="_blank" rel="noopener noreferrer" style={{ color: colors.primary[600] }}>
+          See the fit for every target on the Microcosm dashboard
+        </a>
+        .
+      </div>
+
+      <p style={prose}>
+        Congressional districts are a filter on this same file, not separate datasets: every household carries one of
+        the 436 districts, and a district analysis selects those households and keeps their weights.{' '}
+        {levels.district > 0
+          ? `This release calibrates ${levels.district.toLocaleString()} district-level targets alongside the national and state rows.`
+          : 'This release calibrates national and state targets; it has no district-level target rows.'}{' '}
+        District-level targets exist in two places. Microcosm’s local-area build calibrates a 2020 Census population
+        target for each of the 436 districts. The Microcosm build spec compiles one target surface that includes IRS
+        income targets by district alongside the national and state rows, and a release can calibrate a subset of it.
+      </p>
+
+      <SearchInput value={search} onChange={setSearch} placeholder="Search targets and sources..." />
+
+      <p
+        style={{
+          fontSize: typography.fontSize.xs,
+          color: colors.text.tertiary,
+          marginBottom: spacing.md,
+          marginTop: `-${spacing.sm}`,
+        }}
+      >
+        {filtered.length} target group{filtered.length !== 1 ? 's' : ''} shown
+        {search ? ` (filtered from ${allRows.length})` : ''}. A group is one measured concept from one source table;
+        the release has {data.totalTargets.toLocaleString()} targets across all groups. Values are calibration targets
+        for {calibrationYear}; some source figures from earlier years are uprated to it.
       </p>
 
       {filtered.length === 0 ? (
         <p style={{ color: colors.text.tertiary }}>No calibration targets found.</p>
       ) : (
-        <div
-          style={{
-            borderRadius: spacing.radius.xl,
-            border: `1px solid ${colors.border.light}`,
-            overflow: 'hidden',
-            boxShadow: spacing.shadow.sm,
-          }}
-        >
-          <table
-            style={{
-              width: '100%',
-              borderCollapse: 'collapse',
-              fontFamily: typography.fontFamily.primary,
-            }}
-          >
-            <thead>
-              <tr>
-                {[
-                  { label: 'Variable', width: '25%' },
-                  { label: 'Domain', width: '25%' },
-                  { label: 'Geographic Levels', width: '25%' },
-                  { label: 'National Target', width: '13%' },
-                  { label: 'Source', width: '17%' },
-                ].map((col) => (
-                  <th
-                    key={col.label}
-                    style={{
-                      padding: `${spacing.sm} ${spacing.lg}`,
-                      textAlign: 'left',
-                      fontSize: typography.fontSize.xs,
-                      fontWeight: typography.fontWeight.semibold,
-                      color: colors.text.secondary,
-                      backgroundColor: colors.gray[50],
-                      borderBottom: `1px solid ${colors.border.light}`,
-                      whiteSpace: 'nowrap',
-                      width: col.width,
-                    }}
-                  >
-                    {col.label}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.map((t, i) => (
-                <tr
-                  key={`${t.variable}-${t.domain}-${i}`}
-                  style={{
-                    borderBottom:
-                      i < filtered.length - 1
-                        ? `1px solid ${colors.border.light}`
-                        : 'none',
-                  }}
-                >
-                  <td
-                    style={{
-                      padding: `${spacing.sm} ${spacing.lg}`,
-                      fontSize: typography.fontSize.sm,
-                      fontWeight: typography.fontWeight.medium,
-                      color: colors.text.primary,
-                    }}
-                  >
-                    {formatVariable(t.variable)}
-                  </td>
-                  <td
-                    style={{
-                      padding: `${spacing.sm} ${spacing.lg}`,
-                      fontSize: typography.fontSize.sm,
-                      color: t.domain ? colors.text.primary : colors.text.tertiary,
-                      fontFamily: typography.fontFamily.mono,
-                    }}
-                  >
-                    {t.domain ? formatVariable(t.domain) : '—'}
-                  </td>
-                  <td
-                    style={{
-                      padding: `${spacing.sm} ${spacing.lg}`,
-                      fontSize: typography.fontSize.xs,
-                    }}
-                  >
-                    <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
-                      {['national', 'state', 'district'].filter((l) => t.geoLevels.includes(l)).map((level) => {
-                        const style = geoLevelColors[level] || { bg: '#f3f4f6', text: '#374151' };
-                        const count = level === 'national' ? t.nationalCount
-                          : level === 'state' ? t.stateCount
-                          : t.districtCount;
-                        return (
-                          <span
-                            key={level}
-                            style={{
-                              display: 'inline-block',
-                              padding: '1px 8px',
-                              borderRadius: '9999px',
-                              backgroundColor: style.bg,
-                              color: style.text,
-                              fontSize: typography.fontSize.xs,
-                              fontWeight: typography.fontWeight.medium,
-                              whiteSpace: 'nowrap',
-                            }}
-                          >
-                            {geoLevelLabels[level] || level}
-                            {count > 1 ? ` (${count})` : ''}
-                          </span>
-                        );
-                      })}
-                    </div>
-                  </td>
-                  <td
-                    style={{
-                      padding: `${spacing.sm} ${spacing.lg}`,
-                      fontSize: typography.fontSize.sm,
-                      color: colors.text.primary,
-                      fontFamily: typography.fontFamily.mono,
-                      whiteSpace: 'nowrap',
-                    }}
-                  >
-                    {formatValue(t.nationalValue)}
-                  </td>
-                  <td
-                    style={{
-                      padding: `${spacing.sm} ${spacing.lg}`,
-                      fontSize: typography.fontSize.xs,
-                      color: colors.text.secondary,
-                    }}
-                  >
-                    {t.source}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <CalibrationTargetsTable rows={filtered} />
       )}
     </div>
   );
