@@ -1,6 +1,6 @@
 {
   "releaseId": "populace-us-2024-spm-20260915",
-  "policyenginePackageVersion": "6.1.1",
+  "policyenginePackageVersion": "6.2.5",
   "calibrationReleaseId": "populace-us-2024-buildp-sparse-rmloss100-cae8640-20260728T011454Z",
   "calibratedAt": "2026-07-28T03:56:03.415544+00:00",
   "households": 57240,
@@ -15,9 +15,11 @@
   "targets": [
     {
       "concept": "amount",
+      "measureConcept": "bea_nipa.proprietors_income_with_inventory_valuation_and_capital_consumption_adjustments",
       "sourceFamily": "bea",
       "sourceTable": "BEA NIPA annual data flat file",
       "sourceUrl": "https://apps.bea.gov/national/Release/TXT/NipaDataA.txt",
+      "domain": "personal_income",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -32,9 +34,11 @@
     },
     {
       "concept": "wages_salaries_amount",
+      "measureConcept": "bea_nipa.wages_and_salaries",
       "sourceFamily": "bea",
       "sourceTable": "BEA NIPA annual data flat file",
       "sourceUrl": "https://apps.bea.gov/national/Release/TXT/NipaDataA.txt",
+      "domain": "compensation_of_employees",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -49,26 +53,106 @@
     },
     {
       "concept": "projected_amount",
+      "measureConcept": "cbo.adjusted_gross_income_projection",
       "sourceFamily": "cbo",
       "sourceTable": "Revenue Projections, by Category, February 2026, sheet 3.Individual Income Tax Details",
       "sourceUrl": "https://www.cbo.gov/system/files/2026-02/51138-2026-02-Revenue-Projections.xlsx",
-      "nationalCount": 5,
+      "domain": "individual_income_tax_returns",
+      "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
       "otherCount": 0,
-      "targetCount": 5,
+      "targetCount": 1,
       "unit": "usd",
-      "withinTenPctShare": 0.8,
-      "nationalValue": null,
+      "withinTenPctShare": 1.0,
+      "nationalValue": 16685900000000.0,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "projected_amount",
+      "measureConcept": "cbo.net_business_income_projection",
+      "sourceFamily": "cbo",
+      "sourceTable": "Revenue Projections, by Category, February 2026, sheet 3.Individual Income Tax Details",
+      "sourceUrl": "https://www.cbo.gov/system/files/2026-02/51138-2026-02-Revenue-Projections.xlsx",
+      "domain": "individual_income_tax_returns",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "usd",
+      "withinTenPctShare": 0.0,
+      "nationalValue": 1916000000000.0,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "projected_amount",
+      "measureConcept": "cbo.net_capital_gain_projection",
+      "sourceFamily": "cbo",
+      "sourceTable": "Revenue Projections, by Category, February 2026, sheet 3.Individual Income Tax Details",
+      "sourceUrl": "https://www.cbo.gov/system/files/2026-02/51138-2026-02-Revenue-Projections.xlsx",
+      "domain": "individual_income_tax_returns",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "usd",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 1290900000000.0,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "projected_amount",
+      "measureConcept": "cbo.qualified_dividend_income_projection",
+      "sourceFamily": "cbo",
+      "sourceTable": "Revenue Projections, by Category, February 2026, sheet 3.Individual Income Tax Details",
+      "sourceUrl": "https://www.cbo.gov/system/files/2026-02/51138-2026-02-Revenue-Projections.xlsx",
+      "domain": "individual_income_tax_returns",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "usd",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 354300000000.0,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "projected_amount",
+      "measureConcept": "cbo.wages_and_salaries_projection",
+      "sourceFamily": "cbo",
+      "sourceTable": "Revenue Projections, by Category, February 2026, sheet 3.Individual Income Tax Details",
+      "sourceUrl": "https://www.cbo.gov/system/files/2026-02/51138-2026-02-Revenue-Projections.xlsx",
+      "domain": "individual_income_tax_returns",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "usd",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 10832700000000.0,
       "periods": [
         2024
       ]
     },
     {
       "concept": "population",
+      "measureConcept": "census_pep.resident_population",
       "sourceFamily": "census_pep",
       "sourceTable": "Annual Estimates of the Resident Population by Single Year of Age and Sex for the United States",
       "sourceUrl": "https://www2.census.gov/programs-surveys/popest/datasets/2020-2024/national/asrh/nc-est2024-agesex-res.csv",
+      "domain": "resident_population",
       "nationalCount": 18,
       "stateCount": 0,
       "districtCount": 0,
@@ -83,9 +167,11 @@
     },
     {
       "concept": "population",
+      "measureConcept": "census_pep.resident_population",
       "sourceFamily": "census_pep",
       "sourceTable": "Annual State Resident Population Estimates by Single Year of Age, Sex, Race, and Hispanic Origin",
       "sourceUrl": "https://www2.census.gov/programs-surveys/popest/datasets/2020-2024/state/asrh/sc-est2024-alldata6.csv",
+      "domain": "resident_population",
       "nationalCount": 0,
       "stateCount": 918,
       "districtCount": 0,
@@ -100,9 +186,11 @@
     },
     {
       "concept": "collections",
+      "measureConcept": "census_stc.individual_income_tax_collections",
       "sourceFamily": "census_stc",
       "sourceTable": "FY2023 STC Flat File item T40 Individual Income Taxes",
       "sourceUrl": "https://www2.census.gov/programs-surveys/stc/datasets/2023/FY2023-Flat-File.txt",
+      "domain": "state_government_tax_collections",
       "nationalCount": 0,
       "stateCount": 44,
       "districtCount": 0,
@@ -117,9 +205,11 @@
     },
     {
       "concept": "aptc_recipients",
+      "measureConcept": "cms_aca.aptc_consumers",
       "sourceFamily": "cms_aca",
       "sourceTable": "2024 OEP State-Level Public Use File",
       "sourceUrl": "https://www.cms.gov/files/zip/2024-oep-state-level-public-use-file.zip",
+      "domain": "aca_marketplace_qhp_selections",
       "nationalCount": 0,
       "stateCount": 51,
       "districtCount": 0,
@@ -134,9 +224,11 @@
     },
     {
       "concept": "marketplace_enrollment",
+      "measureConcept": "cms_aca.marketplace_plan_selections",
       "sourceFamily": "cms_aca",
       "sourceTable": "2024 OEP State-Level Public Use File",
       "sourceUrl": "https://www.cms.gov/files/zip/2024-oep-state-level-public-use-file.zip",
+      "domain": "aca_marketplace_qhp_selections",
       "nationalCount": 0,
       "stateCount": 51,
       "districtCount": 0,
@@ -150,27 +242,12 @@
       ]
     },
     {
-      "concept": "medicaid_enrollment_substitution",
-      "sourceFamily": "cms_medicaid",
-      "sourceTable": "State Medicaid and CHIP Applications, Eligibility Determinations, and Enrollment Data",
-      "sourceUrl": "https://download.medicaid.gov/data/pi-dataset-april-2026-release.csv",
-      "nationalCount": 0,
-      "stateCount": 1,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "count",
-      "withinTenPctShare": 1.0,
-      "nationalValue": null,
-      "periods": [
-        2024
-      ]
-    },
-    {
       "concept": "total_chip_enrollment",
+      "measureConcept": "cms_medicaid.total_chip_enrollment",
       "sourceFamily": "cms_medicaid",
       "sourceTable": "State Medicaid and CHIP Applications, Eligibility Determinations, and Enrollment Data",
       "sourceUrl": "https://download.medicaid.gov/data/pi-dataset-april-2026-release.csv",
+      "domain": "medicaid_chip_enrollment",
       "nationalCount": 1,
       "stateCount": 31,
       "districtCount": 0,
@@ -185,9 +262,11 @@
     },
     {
       "concept": "total_medicaid_chip_enrollment",
+      "measureConcept": "cms_medicaid.total_medicaid_chip_enrollment",
       "sourceFamily": "cms_medicaid",
       "sourceTable": "State Medicaid and CHIP Applications, Eligibility Determinations, and Enrollment Data",
       "sourceUrl": "https://download.medicaid.gov/data/pi-dataset-april-2026-release.csv",
+      "domain": "medicaid_chip_enrollment",
       "nationalCount": 1,
       "stateCount": 50,
       "districtCount": 0,
@@ -201,10 +280,31 @@
       ]
     },
     {
-      "concept": "total_medicaid_enrollment",
+      "concept": "medicaid_enrollment_substitution",
+      "measureConcept": "cms_medicaid.total_medicaid_enrollment",
       "sourceFamily": "cms_medicaid",
       "sourceTable": "State Medicaid and CHIP Applications, Eligibility Determinations, and Enrollment Data",
       "sourceUrl": "https://download.medicaid.gov/data/pi-dataset-april-2026-release.csv",
+      "domain": "medicaid_chip_enrollment",
+      "nationalCount": 0,
+      "stateCount": 1,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "count",
+      "withinTenPctShare": 1.0,
+      "nationalValue": null,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "total_medicaid_enrollment",
+      "measureConcept": "cms_medicaid.total_medicaid_enrollment",
+      "sourceFamily": "cms_medicaid",
+      "sourceTable": "State Medicaid and CHIP Applications, Eligibility Determinations, and Enrollment Data",
+      "sourceUrl": "https://download.medicaid.gov/data/pi-dataset-april-2026-release.csv",
+      "domain": "medicaid_chip_enrollment",
       "nationalCount": 1,
       "stateCount": 50,
       "districtCount": 0,
@@ -219,9 +319,11 @@
     },
     {
       "concept": "actual_amount",
+      "measureConcept": "cms_medicare.part_b_premium_income",
       "sourceFamily": "cms_medicare",
       "sourceTable": "2025 Medicare Trustees Report Table III.C3",
       "sourceUrl": "https://www.cms.gov/oact/tr/2025",
+      "domain": "medicare_financing",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -236,9 +338,11 @@
     },
     {
       "concept": "amount_outstanding",
+      "measureConcept": "federal_reserve.z1.households_nonprofits_net_worth",
       "sourceFamily": "federal_reserve",
       "sourceTable": "Z.1 B.101 Households and nonprofit organizations",
       "sourceUrl": "https://www.federalreserve.gov/releases/z1/20260319/html/b101.htm",
+      "domain": "household_balance_sheet",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -253,9 +357,11 @@
     },
     {
       "concept": "households_served",
+      "measureConcept": "hhs_acf_liheap.households_served_by_state_programs",
       "sourceFamily": "hhs_acf_liheap",
       "sourceTable": "LIHEAP FY2024 National Profile (All States)",
       "sourceUrl": "https://liheappm.acf.gov/sites/default/files/private/congress/profiles/2024/FY2024_AllStates%28National%29_Profile.pdf",
+      "domain": "liheap_state_programs",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -270,9 +376,11 @@
     },
     {
       "concept": "all_funds",
+      "measureConcept": "hhs_acf_tanf.cash_assistance_expenditures",
       "sourceFamily": "hhs_acf_tanf",
       "sourceTable": "FY 2024 Federal TANF and State MOE Financial Data",
       "sourceUrl": "https://acf.gov/ofa/data/tanf-financial-data-fy-2024",
+      "domain": "tanf_cash_assistance",
       "nationalCount": 1,
       "stateCount": 22,
       "districtCount": 0,
@@ -286,27 +394,12 @@
       ]
     },
     {
-      "concept": "total_earned_income_credit_amount",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Filing Season Statistics Table 1",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/25inweek47.xlsx",
-      "nationalCount": 17,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 17,
-      "unit": "usd",
-      "withinTenPctShare": 0.9412,
-      "nationalValue": null,
-      "periods": [
-        2024
-      ]
-    },
-    {
       "concept": "total_earned_income_credit_returns",
+      "measureConcept": "irs_soi.returns_with_total_earned_income_credit",
       "sourceFamily": "irs_soi",
       "sourceTable": "Filing Season Statistics Table 1",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/25inweek47.xlsx",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 17,
       "stateCount": 0,
       "districtCount": 0,
@@ -320,10 +413,31 @@
       ]
     },
     {
+      "concept": "total_earned_income_credit_amount",
+      "measureConcept": "irs_soi.total_earned_income_credit",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Filing Season Statistics Table 1",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/25inweek47.xlsx",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 17,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 17,
+      "unit": "usd",
+      "withinTenPctShare": 0.9412,
+      "nationalValue": null,
+      "periods": [
+        2024
+      ]
+    },
+    {
       "concept": "actc_amount",
+      "measureConcept": "irs_soi.additional_child_tax_credit",
       "sourceFamily": "irs_soi",
       "sourceTable": "Historic Table 2",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -337,44 +451,12 @@
       ]
     },
     {
-      "concept": "actc_claims",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "count",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 17691450.0,
-      "periods": [
-        2024
-      ]
-    },
-    {
-      "concept": "adjusted_gross_income",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "usd",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 16561505578793.234,
-      "periods": [
-        2024
-      ]
-    },
-    {
       "concept": "ctc_amount",
+      "measureConcept": "irs_soi.child_tax_credit",
       "sourceFamily": "irs_soi",
       "sourceTable": "Historic Table 2",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -388,27 +470,12 @@
       ]
     },
     {
-      "concept": "ctc_claims",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "count",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 38069010.0,
-      "periods": [
-        2024
-      ]
-    },
-    {
       "concept": "eitc_amount",
+      "measureConcept": "irs_soi.earned_income_credit",
       "sourceFamily": "irs_soi",
       "sourceTable": "Historic Table 2",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -422,27 +489,12 @@
       ]
     },
     {
-      "concept": "eitc_claims",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "count",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 23692190.0,
-      "periods": [
-        2024
-      ]
-    },
-    {
       "concept": "income_tax_before_credits_amount",
+      "measureConcept": "irs_soi.income_tax_before_credits",
       "sourceFamily": "irs_soi",
       "sourceTable": "Historic Table 2",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -456,350 +508,12 @@
       ]
     },
     {
-      "concept": "income_tax_before_credits_returns",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "count",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 128597410.0,
-      "periods": [
-        2024
-      ]
-    },
-    {
-      "concept": "income_tax_liability_amount",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "usd",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 2358715520045.6733,
-      "periods": [
-        2024
-      ]
-    },
-    {
-      "concept": "income_tax_liability_returns",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "count",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 113562590.0,
-      "periods": [
-        2024
-      ]
-    },
-    {
-      "concept": "itemized_deductions_amount",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "usd",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 728802287524.4347,
-      "periods": [
-        2024
-      ]
-    },
-    {
-      "concept": "limited_state_local_taxes_amount",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "usd",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 137379203044.0616,
-      "periods": [
-        2024
-      ]
-    },
-    {
-      "concept": "limited_state_local_taxes_returns",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "count",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 14968720.0,
-      "periods": [
-        2024
-      ]
-    },
-    {
-      "concept": "medical_dental_expense_amount",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "usd",
-      "withinTenPctShare": 0.0,
-      "nationalValue": 89891939590.30547,
-      "periods": [
-        2024
-      ]
-    },
-    {
-      "concept": "medical_dental_expense_returns",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "count",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 3895410.0,
-      "periods": [
-        2024
-      ]
-    },
-    {
-      "concept": "ordinary_dividends_amount",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "usd",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 457395367290.9117,
-      "periods": [
-        2024
-      ]
-    },
-    {
-      "concept": "ordinary_dividends_returns",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "count",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 32693980.0,
-      "periods": [
-        2024
-      ]
-    },
-    {
-      "concept": "partnership_scorp_income_amount",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "usd",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 1157602275777.119,
-      "periods": [
-        2024
-      ]
-    },
-    {
-      "concept": "partnership_scorp_income_returns",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "count",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 9551770.0,
-      "periods": [
-        2024
-      ]
-    },
-    {
-      "concept": "premium_tax_credit_amount",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "usd",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 60398047561.677315,
-      "periods": [
-        2024
-      ]
-    },
-    {
-      "concept": "premium_tax_credit_returns",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "count",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 7841370.0,
-      "periods": [
-        2024
-      ]
-    },
-    {
-      "concept": "qualified_dividends_amount",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "usd",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 346585456967.9997,
-      "periods": [
-        2024
-      ]
-    },
-    {
-      "concept": "qualified_dividends_returns",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "count",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 30610150.0,
-      "periods": [
-        2024
-      ]
-    },
-    {
-      "concept": "real_estate_taxes_amount",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "usd",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 118976211843.9755,
-      "periods": [
-        2024
-      ]
-    },
-    {
-      "concept": "real_estate_taxes_claims",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "count",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 12905140.0,
-      "periods": [
-        2024
-      ]
-    },
-    {
-      "concept": "rental_royalty_income_amount",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "usd",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 95949567370.41321,
-      "periods": [
-        2024
-      ]
-    },
-    {
-      "concept": "rental_royalty_income_returns",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "count",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 9398010.0,
-      "periods": [
-        2024
-      ]
-    },
-    {
       "concept": "return_count",
+      "measureConcept": "irs_soi.individual_income_tax_returns",
       "sourceFamily": "irs_soi",
       "sourceTable": "Historic Table 2",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -813,10 +527,12 @@
       ]
     },
     {
-      "concept": "schedule_c_income_amount",
+      "concept": "limited_state_local_taxes_amount",
+      "measureConcept": "irs_soi.limited_state_local_taxes",
       "sourceFamily": "irs_soi",
       "sourceTable": "Historic Table 2",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -824,16 +540,379 @@
       "targetCount": 1,
       "unit": "usd",
       "withinTenPctShare": 1.0,
-      "nationalValue": 472289642161.9491,
+      "nationalValue": 137379203044.0616,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "medical_dental_expense_amount",
+      "measureConcept": "irs_soi.medical_dental_expense_deduction",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "usd",
+      "withinTenPctShare": 0.0,
+      "nationalValue": 89891939590.30547,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "ordinary_dividends_amount",
+      "measureConcept": "irs_soi.ordinary_dividends",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "usd",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 457395367290.9117,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "partnership_scorp_income_amount",
+      "measureConcept": "irs_soi.partnership_scorp_income",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "usd",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 1157602275777.119,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "premium_tax_credit_amount",
+      "measureConcept": "irs_soi.premium_tax_credit",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "usd",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 60398047561.677315,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "qualified_dividends_amount",
+      "measureConcept": "irs_soi.qualified_dividends",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "usd",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 346585456967.9997,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "real_estate_taxes_amount",
+      "measureConcept": "irs_soi.real_estate_taxes",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "usd",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 118976211843.9755,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "rental_royalty_income_amount",
+      "measureConcept": "irs_soi.rental_royalty_income",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "usd",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 95949567370.41321,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "actc_claims",
+      "measureConcept": "irs_soi.returns_with_additional_child_tax_credit",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "count",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 17691450.0,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "ctc_claims",
+      "measureConcept": "irs_soi.returns_with_child_tax_credit",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "count",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 38069010.0,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "eitc_claims",
+      "measureConcept": "irs_soi.returns_with_earned_income_credit",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "count",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 23692190.0,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "income_tax_before_credits_returns",
+      "measureConcept": "irs_soi.returns_with_income_tax_before_credits",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "count",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 128597410.0,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "limited_state_local_taxes_returns",
+      "measureConcept": "irs_soi.returns_with_limited_state_local_taxes",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "count",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 14968720.0,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "medical_dental_expense_returns",
+      "measureConcept": "irs_soi.returns_with_medical_dental_expense_deduction",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "count",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 3895410.0,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "ordinary_dividends_returns",
+      "measureConcept": "irs_soi.returns_with_ordinary_dividends",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "count",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 32693980.0,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "partnership_scorp_income_returns",
+      "measureConcept": "irs_soi.returns_with_partnership_scorp_income",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "count",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 9551770.0,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "premium_tax_credit_returns",
+      "measureConcept": "irs_soi.returns_with_premium_tax_credit",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "count",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 7841370.0,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "qualified_dividends_returns",
+      "measureConcept": "irs_soi.returns_with_qualified_dividends",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "count",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 30610150.0,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "real_estate_taxes_claims",
+      "measureConcept": "irs_soi.returns_with_real_estate_taxes",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "count",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 12905140.0,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "rental_royalty_income_returns",
+      "measureConcept": "irs_soi.returns_with_rental_royalty_income",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "count",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 9398010.0,
       "periods": [
         2024
       ]
     },
     {
       "concept": "schedule_c_income_returns",
+      "measureConcept": "irs_soi.returns_with_schedule_c_income",
       "sourceFamily": "irs_soi",
       "sourceTable": "Historic Table 2",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -847,27 +926,12 @@
       ]
     },
     {
-      "concept": "tax_exempt_interest_amount",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "usd",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 61719678255.34045,
-      "periods": [
-        2024
-      ]
-    },
-    {
       "concept": "tax_exempt_interest_returns",
+      "measureConcept": "irs_soi.returns_with_tax_exempt_interest",
       "sourceFamily": "irs_soi",
       "sourceTable": "Historic Table 2",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -881,27 +945,12 @@
       ]
     },
     {
-      "concept": "taxable_income_amount",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "usd",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 13084971599037.432,
-      "periods": [
-        2024
-      ]
-    },
-    {
       "concept": "taxable_income_returns",
+      "measureConcept": "irs_soi.returns_with_taxable_income",
       "sourceFamily": "irs_soi",
       "sourceTable": "Historic Table 2",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -915,27 +964,12 @@
       ]
     },
     {
-      "concept": "taxable_interest_amount",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 10,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 10,
-      "unit": "usd",
-      "withinTenPctShare": 0.7,
-      "nationalValue": null,
-      "periods": [
-        2024
-      ]
-    },
-    {
       "concept": "taxable_interest_returns",
+      "measureConcept": "irs_soi.returns_with_taxable_interest",
       "sourceFamily": "irs_soi",
       "sourceTable": "Historic Table 2",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 10,
       "stateCount": 0,
       "districtCount": 0,
@@ -949,27 +983,12 @@
       ]
     },
     {
-      "concept": "taxable_ira_distributions_amount",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "usd",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 486992822981.1038,
-      "periods": [
-        2024
-      ]
-    },
-    {
       "concept": "taxable_ira_distributions_returns",
+      "measureConcept": "irs_soi.returns_with_taxable_ira_distributions",
       "sourceFamily": "irs_soi",
       "sourceTable": "Historic Table 2",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -983,27 +1002,12 @@
       ]
     },
     {
-      "concept": "taxable_pension_income_amount",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "usd",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 1006766934453.9479,
-      "periods": [
-        2024
-      ]
-    },
-    {
       "concept": "taxable_pension_income_returns",
+      "measureConcept": "irs_soi.returns_with_taxable_pension_income",
       "sourceFamily": "irs_soi",
       "sourceTable": "Historic Table 2",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -1017,27 +1021,12 @@
       ]
     },
     {
-      "concept": "taxable_social_security_amount",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "usd",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 510771015700.78534,
-      "periods": [
-        2024
-      ]
-    },
-    {
       "concept": "taxable_social_security_returns",
+      "measureConcept": "irs_soi.returns_with_taxable_social_security_benefits",
       "sourceFamily": "irs_soi",
       "sourceTable": "Historic Table 2",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -1051,27 +1040,12 @@
       ]
     },
     {
-      "concept": "unemployment_compensation_amount",
+      "concept": "income_tax_liability_returns",
+      "measureConcept": "irs_soi.returns_with_total_income_tax",
       "sourceFamily": "irs_soi",
       "sourceTable": "Historic Table 2",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "usd",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 33542675616.210106,
-      "periods": [
-        2024
-      ]
-    },
-    {
-      "concept": "unemployment_compensation_returns",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -1079,33 +1053,18 @@
       "targetCount": 1,
       "unit": "count",
       "withinTenPctShare": 1.0,
-      "nationalValue": 4647860.0,
-      "periods": [
-        2024
-      ]
-    },
-    {
-      "concept": "wages_salaries_amount",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "usd",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 10740065415423.898,
+      "nationalValue": 113562590.0,
       "periods": [
         2024
       ]
     },
     {
       "concept": "wages_salaries_returns",
+      "measureConcept": "irs_soi.returns_with_total_wages",
       "sourceFamily": "irs_soi",
       "sourceTable": "Historic Table 2",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -1119,27 +1078,259 @@
       ]
     },
     {
-      "concept": "taxable_interest_amount",
+      "concept": "unemployment_compensation_returns",
+      "measureConcept": "irs_soi.returns_with_unemployment_compensation",
       "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2 state AGI facts",
+      "sourceTable": "Historic Table 2",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 0,
-      "stateCount": 441,
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 1,
+      "stateCount": 0,
       "districtCount": 0,
       "otherCount": 0,
-      "targetCount": 441,
+      "targetCount": 1,
+      "unit": "count",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 4647860.0,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "schedule_c_income_amount",
+      "measureConcept": "irs_soi.schedule_c_income",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
       "unit": "usd",
-      "withinTenPctShare": 0.9229,
+      "withinTenPctShare": 1.0,
+      "nationalValue": 472289642161.9491,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "tax_exempt_interest_amount",
+      "measureConcept": "irs_soi.tax_exempt_interest",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "usd",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 61719678255.34045,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "taxable_income_amount",
+      "measureConcept": "irs_soi.taxable_income",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "usd",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 13084971599037.432,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "taxable_interest_amount",
+      "measureConcept": "irs_soi.taxable_interest",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 10,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 10,
+      "unit": "usd",
+      "withinTenPctShare": 0.7,
       "nationalValue": null,
       "periods": [
         2024
       ]
     },
     {
+      "concept": "taxable_ira_distributions_amount",
+      "measureConcept": "irs_soi.taxable_ira_distributions",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "usd",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 486992822981.1038,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "taxable_pension_income_amount",
+      "measureConcept": "irs_soi.taxable_pension_income",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "usd",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 1006766934453.9479,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "taxable_social_security_amount",
+      "measureConcept": "irs_soi.taxable_social_security_benefits",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "usd",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 510771015700.78534,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "income_tax_liability_amount",
+      "measureConcept": "irs_soi.total_income_tax",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "usd",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 2358715520045.6733,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "itemized_deductions_amount",
+      "measureConcept": "irs_soi.total_itemized_deductions",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "usd",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 728802287524.4347,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "unemployment_compensation_amount",
+      "measureConcept": "irs_soi.unemployment_compensation",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "usd",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 33542675616.210106,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "adjusted_gross_income",
+      "measureConcept": "us:statutes/26/62#adjusted_gross_income",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "usd",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 16561505578793.234,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "wages_salaries_amount",
+      "measureConcept": "us:statutes/26/62#input.wages",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "usd",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 10740065415423.898,
+      "periods": [
+        2024
+      ]
+    },
+    {
       "concept": "taxable_interest_returns",
+      "measureConcept": "irs_soi.returns_with_taxable_interest",
       "sourceFamily": "irs_soi",
       "sourceTable": "Historic Table 2 state AGI facts",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 0,
       "stateCount": 441,
       "districtCount": 0,
@@ -1153,10 +1344,31 @@
       ]
     },
     {
+      "concept": "taxable_interest_amount",
+      "measureConcept": "irs_soi.taxable_interest",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2 state AGI facts",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 0,
+      "stateCount": 441,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 441,
+      "unit": "usd",
+      "withinTenPctShare": 0.9229,
+      "nationalValue": null,
+      "periods": [
+        2024
+      ]
+    },
+    {
       "concept": "eitc_amount",
+      "measureConcept": "irs_soi.earned_income_credit",
       "sourceFamily": "irs_soi",
       "sourceTable": "Historic Table 2 state EITC totals",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "individual_income_tax_returns",
       "nationalCount": 0,
       "stateCount": 51,
       "districtCount": 0,
@@ -1170,27 +1382,12 @@
       ]
     },
     {
-      "concept": "eitc_claims",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2 state EITC totals",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 0,
-      "stateCount": 51,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 51,
-      "unit": "count",
-      "withinTenPctShare": 1.0,
-      "nationalValue": null,
-      "periods": [
-        2024
-      ]
-    },
-    {
       "concept": "eitc_no_children_amount",
+      "measureConcept": "irs_soi.earned_income_credit",
       "sourceFamily": "irs_soi",
       "sourceTable": "Historic Table 2 state EITC totals",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "individual_income_tax_returns",
       "nationalCount": 0,
       "stateCount": 51,
       "districtCount": 0,
@@ -1204,27 +1401,12 @@
       ]
     },
     {
-      "concept": "eitc_no_children_claims",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2 state EITC totals",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 0,
-      "stateCount": 51,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 51,
-      "unit": "count",
-      "withinTenPctShare": 1.0,
-      "nationalValue": null,
-      "periods": [
-        2024
-      ]
-    },
-    {
       "concept": "eitc_one_child_amount",
+      "measureConcept": "irs_soi.earned_income_credit",
       "sourceFamily": "irs_soi",
       "sourceTable": "Historic Table 2 state EITC totals",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "individual_income_tax_returns",
       "nationalCount": 0,
       "stateCount": 51,
       "districtCount": 0,
@@ -1238,27 +1420,12 @@
       ]
     },
     {
-      "concept": "eitc_one_child_claims",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2 state EITC totals",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 0,
-      "stateCount": 51,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 51,
-      "unit": "count",
-      "withinTenPctShare": 1.0,
-      "nationalValue": null,
-      "periods": [
-        2024
-      ]
-    },
-    {
       "concept": "eitc_three_or_more_children_amount",
+      "measureConcept": "irs_soi.earned_income_credit",
       "sourceFamily": "irs_soi",
       "sourceTable": "Historic Table 2 state EITC totals",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "individual_income_tax_returns",
       "nationalCount": 0,
       "stateCount": 51,
       "districtCount": 0,
@@ -1272,27 +1439,12 @@
       ]
     },
     {
-      "concept": "eitc_three_or_more_children_claims",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2 state EITC totals",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 0,
-      "stateCount": 51,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 51,
-      "unit": "count",
-      "withinTenPctShare": 1.0,
-      "nationalValue": null,
-      "periods": [
-        2024
-      ]
-    },
-    {
       "concept": "eitc_two_children_amount",
+      "measureConcept": "irs_soi.earned_income_credit",
       "sourceFamily": "irs_soi",
       "sourceTable": "Historic Table 2 state EITC totals",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "individual_income_tax_returns",
       "nationalCount": 0,
       "stateCount": 51,
       "districtCount": 0,
@@ -1306,10 +1458,88 @@
       ]
     },
     {
-      "concept": "eitc_two_children_claims",
+      "concept": "eitc_claims",
+      "measureConcept": "irs_soi.returns_with_earned_income_credit",
       "sourceFamily": "irs_soi",
       "sourceTable": "Historic Table 2 state EITC totals",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "individual_income_tax_returns",
+      "nationalCount": 0,
+      "stateCount": 51,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 51,
+      "unit": "count",
+      "withinTenPctShare": 1.0,
+      "nationalValue": null,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "eitc_no_children_claims",
+      "measureConcept": "irs_soi.returns_with_earned_income_credit",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2 state EITC totals",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "individual_income_tax_returns",
+      "nationalCount": 0,
+      "stateCount": 51,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 51,
+      "unit": "count",
+      "withinTenPctShare": 1.0,
+      "nationalValue": null,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "eitc_one_child_claims",
+      "measureConcept": "irs_soi.returns_with_earned_income_credit",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2 state EITC totals",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "individual_income_tax_returns",
+      "nationalCount": 0,
+      "stateCount": 51,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 51,
+      "unit": "count",
+      "withinTenPctShare": 1.0,
+      "nationalValue": null,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "eitc_three_or_more_children_claims",
+      "measureConcept": "irs_soi.returns_with_earned_income_credit",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2 state EITC totals",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "individual_income_tax_returns",
+      "nationalCount": 0,
+      "stateCount": 51,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 51,
+      "unit": "count",
+      "withinTenPctShare": 1.0,
+      "nationalValue": null,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "eitc_two_children_claims",
+      "measureConcept": "irs_soi.returns_with_earned_income_credit",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2 state EITC totals",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "individual_income_tax_returns",
       "nationalCount": 0,
       "stateCount": 51,
       "districtCount": 0,
@@ -1324,9 +1554,11 @@
     },
     {
       "concept": "actc_amount",
+      "measureConcept": "irs_soi.additional_child_tax_credit",
       "sourceFamily": "irs_soi",
       "sourceTable": "Historic Table 2 state broad totals",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 0,
       "stateCount": 51,
       "districtCount": 0,
@@ -1340,44 +1572,12 @@
       ]
     },
     {
-      "concept": "actc_claims",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2 state broad totals",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 0,
-      "stateCount": 51,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 51,
-      "unit": "count",
-      "withinTenPctShare": 1.0,
-      "nationalValue": null,
-      "periods": [
-        2024
-      ]
-    },
-    {
-      "concept": "adjusted_gross_income",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2 state broad totals",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 0,
-      "stateCount": 51,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 51,
-      "unit": "usd",
-      "withinTenPctShare": 1.0,
-      "nationalValue": null,
-      "periods": [
-        2024
-      ]
-    },
-    {
       "concept": "ctc_amount",
+      "measureConcept": "irs_soi.child_tax_credit",
       "sourceFamily": "irs_soi",
       "sourceTable": "Historic Table 2 state broad totals",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 0,
       "stateCount": 51,
       "districtCount": 0,
@@ -1391,27 +1591,12 @@
       ]
     },
     {
-      "concept": "ctc_claims",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2 state broad totals",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 0,
-      "stateCount": 51,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 51,
-      "unit": "count",
-      "withinTenPctShare": 1.0,
-      "nationalValue": null,
-      "periods": [
-        2024
-      ]
-    },
-    {
       "concept": "income_tax_before_credits_amount",
+      "measureConcept": "irs_soi.income_tax_before_credits",
       "sourceFamily": "irs_soi",
       "sourceTable": "Historic Table 2 state broad totals",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 0,
       "stateCount": 51,
       "districtCount": 0,
@@ -1425,67 +1610,18 @@
       ]
     },
     {
-      "concept": "income_tax_before_credits_returns",
+      "concept": "return_count",
+      "measureConcept": "irs_soi.individual_income_tax_returns",
       "sourceFamily": "irs_soi",
       "sourceTable": "Historic Table 2 state broad totals",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 0,
       "stateCount": 51,
       "districtCount": 0,
       "otherCount": 0,
       "targetCount": 51,
       "unit": "count",
-      "withinTenPctShare": 1.0,
-      "nationalValue": null,
-      "periods": [
-        2024
-      ]
-    },
-    {
-      "concept": "income_tax_liability_amount",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2 state broad totals",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 0,
-      "stateCount": 51,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 51,
-      "unit": "usd",
-      "withinTenPctShare": 1.0,
-      "nationalValue": null,
-      "periods": [
-        2024
-      ]
-    },
-    {
-      "concept": "income_tax_liability_returns",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2 state broad totals",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 0,
-      "stateCount": 51,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 51,
-      "unit": "count",
-      "withinTenPctShare": 1.0,
-      "nationalValue": null,
-      "periods": [
-        2024
-      ]
-    },
-    {
-      "concept": "itemized_deductions_amount",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2 state broad totals",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 0,
-      "stateCount": 51,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 51,
-      "unit": "usd",
       "withinTenPctShare": 0.9608,
       "nationalValue": null,
       "periods": [
@@ -1494,9 +1630,11 @@
     },
     {
       "concept": "limited_state_local_taxes_amount",
+      "measureConcept": "irs_soi.limited_state_local_taxes",
       "sourceFamily": "irs_soi",
       "sourceTable": "Historic Table 2 state broad totals",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 0,
       "stateCount": 51,
       "districtCount": 0,
@@ -1510,27 +1648,12 @@
       ]
     },
     {
-      "concept": "limited_state_local_taxes_returns",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2 state broad totals",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 0,
-      "stateCount": 51,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 51,
-      "unit": "count",
-      "withinTenPctShare": 1.0,
-      "nationalValue": null,
-      "periods": [
-        2024
-      ]
-    },
-    {
       "concept": "medical_dental_expense_amount",
+      "measureConcept": "irs_soi.medical_dental_expense_deduction",
       "sourceFamily": "irs_soi",
       "sourceTable": "Historic Table 2 state broad totals",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 0,
       "stateCount": 51,
       "districtCount": 0,
@@ -1544,61 +1667,12 @@
       ]
     },
     {
-      "concept": "medical_dental_expense_returns",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2 state broad totals",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 0,
-      "stateCount": 51,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 51,
-      "unit": "count",
-      "withinTenPctShare": 0.9804,
-      "nationalValue": null,
-      "periods": [
-        2024
-      ]
-    },
-    {
-      "concept": "net_capital_gains_amount",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2 state broad totals",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 0,
-      "stateCount": 51,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 51,
-      "unit": "usd",
-      "withinTenPctShare": 0.9412,
-      "nationalValue": null,
-      "periods": [
-        2024
-      ]
-    },
-    {
-      "concept": "net_capital_gains_returns",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2 state broad totals",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 0,
-      "stateCount": 51,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 51,
-      "unit": "count",
-      "withinTenPctShare": 0.9804,
-      "nationalValue": null,
-      "periods": [
-        2024
-      ]
-    },
-    {
       "concept": "ordinary_dividends_amount",
+      "measureConcept": "irs_soi.ordinary_dividends",
       "sourceFamily": "irs_soi",
       "sourceTable": "Historic Table 2 state broad totals",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 0,
       "stateCount": 51,
       "districtCount": 0,
@@ -1612,27 +1686,12 @@
       ]
     },
     {
-      "concept": "ordinary_dividends_returns",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2 state broad totals",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 0,
-      "stateCount": 51,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 51,
-      "unit": "count",
-      "withinTenPctShare": 1.0,
-      "nationalValue": null,
-      "periods": [
-        2024
-      ]
-    },
-    {
       "concept": "partnership_scorp_income_amount",
+      "measureConcept": "irs_soi.partnership_scorp_income",
       "sourceFamily": "irs_soi",
       "sourceTable": "Historic Table 2 state broad totals",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 0,
       "stateCount": 51,
       "districtCount": 0,
@@ -1640,23 +1699,6 @@
       "targetCount": 51,
       "unit": "usd",
       "withinTenPctShare": 1.0,
-      "nationalValue": null,
-      "periods": [
-        2024
-      ]
-    },
-    {
-      "concept": "partnership_scorp_income_returns",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2 state broad totals",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 0,
-      "stateCount": 51,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 51,
-      "unit": "count",
-      "withinTenPctShare": 0.9412,
       "nationalValue": null,
       "periods": [
         2024
@@ -1664,9 +1706,11 @@
     },
     {
       "concept": "premium_tax_credit_amount",
+      "measureConcept": "irs_soi.premium_tax_credit",
       "sourceFamily": "irs_soi",
       "sourceTable": "Historic Table 2 state broad totals",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 0,
       "stateCount": 51,
       "districtCount": 0,
@@ -1674,23 +1718,6 @@
       "targetCount": 51,
       "unit": "usd",
       "withinTenPctShare": 0.9804,
-      "nationalValue": null,
-      "periods": [
-        2024
-      ]
-    },
-    {
-      "concept": "premium_tax_credit_returns",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2 state broad totals",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 0,
-      "stateCount": 51,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 51,
-      "unit": "count",
-      "withinTenPctShare": 1.0,
       "nationalValue": null,
       "periods": [
         2024
@@ -1698,9 +1725,11 @@
     },
     {
       "concept": "qualified_dividends_amount",
+      "measureConcept": "irs_soi.qualified_dividends",
       "sourceFamily": "irs_soi",
       "sourceTable": "Historic Table 2 state broad totals",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 0,
       "stateCount": 51,
       "districtCount": 0,
@@ -1714,27 +1743,12 @@
       ]
     },
     {
-      "concept": "qualified_dividends_returns",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2 state broad totals",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 0,
-      "stateCount": 51,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 51,
-      "unit": "count",
-      "withinTenPctShare": 1.0,
-      "nationalValue": null,
-      "periods": [
-        2024
-      ]
-    },
-    {
       "concept": "real_estate_taxes_amount",
+      "measureConcept": "irs_soi.real_estate_taxes",
       "sourceFamily": "irs_soi",
       "sourceTable": "Historic Table 2 state broad totals",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 0,
       "stateCount": 51,
       "districtCount": 0,
@@ -1748,27 +1762,12 @@
       ]
     },
     {
-      "concept": "real_estate_taxes_claims",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2 state broad totals",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 0,
-      "stateCount": 51,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 51,
-      "unit": "count",
-      "withinTenPctShare": 1.0,
-      "nationalValue": null,
-      "periods": [
-        2024
-      ]
-    },
-    {
       "concept": "rental_royalty_income_amount",
+      "measureConcept": "irs_soi.rental_royalty_income",
       "sourceFamily": "irs_soi",
       "sourceTable": "Historic Table 2 state broad totals",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 0,
       "stateCount": 51,
       "districtCount": 0,
@@ -1782,10 +1781,12 @@
       ]
     },
     {
-      "concept": "rental_royalty_income_returns",
+      "concept": "actc_claims",
+      "measureConcept": "irs_soi.returns_with_additional_child_tax_credit",
       "sourceFamily": "irs_soi",
       "sourceTable": "Historic Table 2 state broad totals",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 0,
       "stateCount": 51,
       "districtCount": 0,
@@ -1799,33 +1800,75 @@
       ]
     },
     {
-      "concept": "return_count",
+      "concept": "ctc_claims",
+      "measureConcept": "irs_soi.returns_with_child_tax_credit",
       "sourceFamily": "irs_soi",
       "sourceTable": "Historic Table 2 state broad totals",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 0,
       "stateCount": 51,
       "districtCount": 0,
       "otherCount": 0,
       "targetCount": 51,
       "unit": "count",
-      "withinTenPctShare": 0.9608,
+      "withinTenPctShare": 1.0,
       "nationalValue": null,
       "periods": [
         2024
       ]
     },
     {
-      "concept": "schedule_c_income_amount",
+      "concept": "income_tax_before_credits_returns",
+      "measureConcept": "irs_soi.returns_with_income_tax_before_credits",
       "sourceFamily": "irs_soi",
       "sourceTable": "Historic Table 2 state broad totals",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 0,
       "stateCount": 51,
       "districtCount": 0,
       "otherCount": 0,
       "targetCount": 51,
-      "unit": "usd",
+      "unit": "count",
+      "withinTenPctShare": 1.0,
+      "nationalValue": null,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "limited_state_local_taxes_returns",
+      "measureConcept": "irs_soi.returns_with_limited_state_local_taxes",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2 state broad totals",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 0,
+      "stateCount": 51,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 51,
+      "unit": "count",
+      "withinTenPctShare": 1.0,
+      "nationalValue": null,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "medical_dental_expense_returns",
+      "measureConcept": "irs_soi.returns_with_medical_dental_expense_deduction",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2 state broad totals",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 0,
+      "stateCount": 51,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 51,
+      "unit": "count",
       "withinTenPctShare": 0.9804,
       "nationalValue": null,
       "periods": [
@@ -1833,10 +1876,126 @@
       ]
     },
     {
-      "concept": "schedule_c_income_returns",
+      "concept": "ordinary_dividends_returns",
+      "measureConcept": "irs_soi.returns_with_ordinary_dividends",
       "sourceFamily": "irs_soi",
       "sourceTable": "Historic Table 2 state broad totals",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 0,
+      "stateCount": 51,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 51,
+      "unit": "count",
+      "withinTenPctShare": 1.0,
+      "nationalValue": null,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "partnership_scorp_income_returns",
+      "measureConcept": "irs_soi.returns_with_partnership_scorp_income",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2 state broad totals",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 0,
+      "stateCount": 51,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 51,
+      "unit": "count",
+      "withinTenPctShare": 0.9412,
+      "nationalValue": null,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "premium_tax_credit_returns",
+      "measureConcept": "irs_soi.returns_with_premium_tax_credit",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2 state broad totals",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 0,
+      "stateCount": 51,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 51,
+      "unit": "count",
+      "withinTenPctShare": 1.0,
+      "nationalValue": null,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "qualified_dividends_returns",
+      "measureConcept": "irs_soi.returns_with_qualified_dividends",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2 state broad totals",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 0,
+      "stateCount": 51,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 51,
+      "unit": "count",
+      "withinTenPctShare": 1.0,
+      "nationalValue": null,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "real_estate_taxes_claims",
+      "measureConcept": "irs_soi.returns_with_real_estate_taxes",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2 state broad totals",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 0,
+      "stateCount": 51,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 51,
+      "unit": "count",
+      "withinTenPctShare": 1.0,
+      "nationalValue": null,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "rental_royalty_income_returns",
+      "measureConcept": "irs_soi.returns_with_rental_royalty_income",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2 state broad totals",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 0,
+      "stateCount": 51,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 51,
+      "unit": "count",
+      "withinTenPctShare": 1.0,
+      "nationalValue": null,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "schedule_c_income_returns",
+      "measureConcept": "irs_soi.returns_with_schedule_c_income",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2 state broad totals",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 0,
       "stateCount": 51,
       "districtCount": 0,
@@ -1850,50 +2009,18 @@
       ]
     },
     {
-      "concept": "tax_exempt_interest_amount",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2 state broad totals",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 0,
-      "stateCount": 51,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 51,
-      "unit": "usd",
-      "withinTenPctShare": 1.0,
-      "nationalValue": null,
-      "periods": [
-        2024
-      ]
-    },
-    {
       "concept": "tax_exempt_interest_returns",
+      "measureConcept": "irs_soi.returns_with_tax_exempt_interest",
       "sourceFamily": "irs_soi",
       "sourceTable": "Historic Table 2 state broad totals",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 0,
       "stateCount": 51,
       "districtCount": 0,
       "otherCount": 0,
       "targetCount": 51,
       "unit": "count",
-      "withinTenPctShare": 1.0,
-      "nationalValue": null,
-      "periods": [
-        2024
-      ]
-    },
-    {
-      "concept": "taxable_income_amount",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2 state broad totals",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 0,
-      "stateCount": 51,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 51,
-      "unit": "usd",
       "withinTenPctShare": 1.0,
       "nationalValue": null,
       "periods": [
@@ -1902,9 +2029,11 @@
     },
     {
       "concept": "taxable_income_returns",
+      "measureConcept": "irs_soi.returns_with_taxable_income",
       "sourceFamily": "irs_soi",
       "sourceTable": "Historic Table 2 state broad totals",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 0,
       "stateCount": 51,
       "districtCount": 0,
@@ -1918,27 +2047,12 @@
       ]
     },
     {
-      "concept": "taxable_interest_amount",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2 state broad totals",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 0,
-      "stateCount": 51,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 51,
-      "unit": "usd",
-      "withinTenPctShare": 0.9216,
-      "nationalValue": null,
-      "periods": [
-        2024
-      ]
-    },
-    {
       "concept": "taxable_interest_returns",
+      "measureConcept": "irs_soi.returns_with_taxable_interest",
       "sourceFamily": "irs_soi",
       "sourceTable": "Historic Table 2 state broad totals",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 0,
       "stateCount": 51,
       "districtCount": 0,
@@ -1952,27 +2066,12 @@
       ]
     },
     {
-      "concept": "taxable_ira_distributions_amount",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2 state broad totals",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 0,
-      "stateCount": 51,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 51,
-      "unit": "usd",
-      "withinTenPctShare": 1.0,
-      "nationalValue": null,
-      "periods": [
-        2024
-      ]
-    },
-    {
       "concept": "taxable_ira_distributions_returns",
+      "measureConcept": "irs_soi.returns_with_taxable_ira_distributions",
       "sourceFamily": "irs_soi",
       "sourceTable": "Historic Table 2 state broad totals",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 0,
       "stateCount": 51,
       "districtCount": 0,
@@ -1986,17 +2085,19 @@
       ]
     },
     {
-      "concept": "taxable_pension_income_amount",
+      "concept": "net_capital_gains_returns",
+      "measureConcept": "irs_soi.returns_with_taxable_net_capital_gains",
       "sourceFamily": "irs_soi",
       "sourceTable": "Historic Table 2 state broad totals",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 0,
       "stateCount": 51,
       "districtCount": 0,
       "otherCount": 0,
       "targetCount": 51,
-      "unit": "usd",
-      "withinTenPctShare": 1.0,
+      "unit": "count",
+      "withinTenPctShare": 0.9804,
       "nationalValue": null,
       "periods": [
         2024
@@ -2004,32 +2105,17 @@
     },
     {
       "concept": "taxable_pension_income_returns",
+      "measureConcept": "irs_soi.returns_with_taxable_pension_income",
       "sourceFamily": "irs_soi",
       "sourceTable": "Historic Table 2 state broad totals",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 0,
       "stateCount": 51,
       "districtCount": 0,
       "otherCount": 0,
       "targetCount": 51,
       "unit": "count",
-      "withinTenPctShare": 1.0,
-      "nationalValue": null,
-      "periods": [
-        2024
-      ]
-    },
-    {
-      "concept": "taxable_social_security_amount",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2 state broad totals",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 0,
-      "stateCount": 51,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 51,
-      "unit": "usd",
       "withinTenPctShare": 1.0,
       "nationalValue": null,
       "periods": [
@@ -2038,9 +2124,11 @@
     },
     {
       "concept": "taxable_social_security_returns",
+      "measureConcept": "irs_soi.returns_with_taxable_social_security_benefits",
       "sourceFamily": "irs_soi",
       "sourceTable": "Historic Table 2 state broad totals",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 0,
       "stateCount": 51,
       "districtCount": 0,
@@ -2054,50 +2142,18 @@
       ]
     },
     {
-      "concept": "unemployment_compensation_amount",
+      "concept": "income_tax_liability_returns",
+      "measureConcept": "irs_soi.returns_with_total_income_tax",
       "sourceFamily": "irs_soi",
       "sourceTable": "Historic Table 2 state broad totals",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 0,
-      "stateCount": 51,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 51,
-      "unit": "usd",
-      "withinTenPctShare": 1.0,
-      "nationalValue": null,
-      "periods": [
-        2024
-      ]
-    },
-    {
-      "concept": "unemployment_compensation_returns",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2 state broad totals",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 0,
       "stateCount": 51,
       "districtCount": 0,
       "otherCount": 0,
       "targetCount": 51,
       "unit": "count",
-      "withinTenPctShare": 1.0,
-      "nationalValue": null,
-      "periods": [
-        2024
-      ]
-    },
-    {
-      "concept": "wages_salaries_amount",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2 state broad totals",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
-      "nationalCount": 0,
-      "stateCount": 51,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 51,
-      "unit": "usd",
       "withinTenPctShare": 1.0,
       "nationalValue": null,
       "periods": [
@@ -2106,9 +2162,11 @@
     },
     {
       "concept": "wages_salaries_returns",
+      "measureConcept": "irs_soi.returns_with_total_wages",
       "sourceFamily": "irs_soi",
       "sourceTable": "Historic Table 2 state broad totals",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 0,
       "stateCount": 51,
       "districtCount": 0,
@@ -2122,15 +2180,17 @@
       ]
     },
     {
-      "concept": "return_count",
+      "concept": "unemployment_compensation_returns",
+      "measureConcept": "irs_soi.returns_with_unemployment_compensation",
       "sourceFamily": "irs_soi",
-      "sourceTable": "Historic Table 2 state data, United States total",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in54us.xlsx",
-      "nationalCount": 2,
-      "stateCount": 0,
+      "sourceTable": "Historic Table 2 state broad totals",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 0,
+      "stateCount": 51,
       "districtCount": 0,
       "otherCount": 0,
-      "targetCount": 2,
+      "targetCount": 51,
       "unit": "count",
       "withinTenPctShare": 1.0,
       "nationalValue": null,
@@ -2139,27 +2199,297 @@
       ]
     },
     {
-      "concept": "adjusted_gross_income",
+      "concept": "schedule_c_income_amount",
+      "measureConcept": "irs_soi.schedule_c_income",
       "sourceFamily": "irs_soi",
-      "sourceTable": "Publication 1304 Table 1.1",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in11si.xls",
-      "nationalCount": 1,
-      "stateCount": 0,
+      "sourceTable": "Historic Table 2 state broad totals",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 0,
+      "stateCount": 51,
       "districtCount": 0,
       "otherCount": 0,
-      "targetCount": 1,
+      "targetCount": 51,
+      "unit": "usd",
+      "withinTenPctShare": 0.9804,
+      "nationalValue": null,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "tax_exempt_interest_amount",
+      "measureConcept": "irs_soi.tax_exempt_interest",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2 state broad totals",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 0,
+      "stateCount": 51,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 51,
       "unit": "usd",
       "withinTenPctShare": 1.0,
-      "nationalValue": 16619163965918.531,
+      "nationalValue": null,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "taxable_income_amount",
+      "measureConcept": "irs_soi.taxable_income",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2 state broad totals",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 0,
+      "stateCount": 51,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 51,
+      "unit": "usd",
+      "withinTenPctShare": 1.0,
+      "nationalValue": null,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "taxable_interest_amount",
+      "measureConcept": "irs_soi.taxable_interest",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2 state broad totals",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 0,
+      "stateCount": 51,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 51,
+      "unit": "usd",
+      "withinTenPctShare": 0.9216,
+      "nationalValue": null,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "taxable_ira_distributions_amount",
+      "measureConcept": "irs_soi.taxable_ira_distributions",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2 state broad totals",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 0,
+      "stateCount": 51,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 51,
+      "unit": "usd",
+      "withinTenPctShare": 1.0,
+      "nationalValue": null,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "net_capital_gains_amount",
+      "measureConcept": "irs_soi.taxable_net_capital_gains",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2 state broad totals",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 0,
+      "stateCount": 51,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 51,
+      "unit": "usd",
+      "withinTenPctShare": 0.9412,
+      "nationalValue": null,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "taxable_pension_income_amount",
+      "measureConcept": "irs_soi.taxable_pension_income",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2 state broad totals",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 0,
+      "stateCount": 51,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 51,
+      "unit": "usd",
+      "withinTenPctShare": 1.0,
+      "nationalValue": null,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "taxable_social_security_amount",
+      "measureConcept": "irs_soi.taxable_social_security_benefits",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2 state broad totals",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 0,
+      "stateCount": 51,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 51,
+      "unit": "usd",
+      "withinTenPctShare": 1.0,
+      "nationalValue": null,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "income_tax_liability_amount",
+      "measureConcept": "irs_soi.total_income_tax",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2 state broad totals",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 0,
+      "stateCount": 51,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 51,
+      "unit": "usd",
+      "withinTenPctShare": 1.0,
+      "nationalValue": null,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "itemized_deductions_amount",
+      "measureConcept": "irs_soi.total_itemized_deductions",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2 state broad totals",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 0,
+      "stateCount": 51,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 51,
+      "unit": "usd",
+      "withinTenPctShare": 0.9608,
+      "nationalValue": null,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "unemployment_compensation_amount",
+      "measureConcept": "irs_soi.unemployment_compensation",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2 state broad totals",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 0,
+      "stateCount": 51,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 51,
+      "unit": "usd",
+      "withinTenPctShare": 1.0,
+      "nationalValue": null,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "adjusted_gross_income",
+      "measureConcept": "us:statutes/26/62#adjusted_gross_income",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2 state broad totals",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 0,
+      "stateCount": 51,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 51,
+      "unit": "usd",
+      "withinTenPctShare": 1.0,
+      "nationalValue": null,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "wages_salaries_amount",
+      "measureConcept": "us:statutes/26/62#input.wages",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2 state broad totals",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 0,
+      "stateCount": 51,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 51,
+      "unit": "usd",
+      "withinTenPctShare": 1.0,
+      "nationalValue": null,
       "periods": [
         2024
       ]
     },
     {
       "concept": "return_count",
+      "measureConcept": "irs_soi.individual_income_tax_returns",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2 state data, United States total",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in54us.xlsx",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "count",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 159651330.0,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "return_count",
+      "measureConcept": "irs_soi.returns_with_earned_income_credit",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Historic Table 2 state data, United States total",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/22in54us.xlsx",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "count",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 3080790.0,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "return_count",
+      "measureConcept": "irs_soi.individual_income_tax_returns",
       "sourceFamily": "irs_soi",
       "sourceTable": "Publication 1304 Table 1.1",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in11si.xls",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -2174,9 +2504,11 @@
     },
     {
       "concept": "adjusted_gross_income",
+      "measureConcept": "us:statutes/26/62#adjusted_gross_income",
       "sourceFamily": "irs_soi",
-      "sourceTable": "Publication 1304 Table 1.2",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in12ms.xls",
+      "sourceTable": "Publication 1304 Table 1.1",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in11si.xls",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -2191,9 +2523,11 @@
     },
     {
       "concept": "return_count",
+      "measureConcept": "irs_soi.individual_income_tax_returns",
       "sourceFamily": "irs_soi",
       "sourceTable": "Publication 1304 Table 1.2",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in12ms.xls",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -2208,9 +2542,11 @@
     },
     {
       "concept": "taxable_income_amount",
+      "measureConcept": "irs_soi.taxable_income",
       "sourceFamily": "irs_soi",
       "sourceTable": "Publication 1304 Table 1.2",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in12ms.xls",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -2225,9 +2561,11 @@
     },
     {
       "concept": "total_itemized_deductions_amount",
+      "measureConcept": "irs_soi.total_itemized_deductions",
       "sourceFamily": "irs_soi",
       "sourceTable": "Publication 1304 Table 1.2",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in12ms.xls",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -2241,10 +2579,31 @@
       ]
     },
     {
+      "concept": "adjusted_gross_income",
+      "measureConcept": "us:statutes/26/62#adjusted_gross_income",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Publication 1304 Table 1.2",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in12ms.xls",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "usd",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 16619163965918.531,
+      "periods": [
+        2024
+      ]
+    },
+    {
       "concept": "capital_gain_distributions_amount",
+      "measureConcept": "irs_soi.capital_gain_distributions_1040",
       "sourceFamily": "irs_soi",
       "sourceTable": "Publication 1304 Table 1.4",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in14ar.xls",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -2258,27 +2617,12 @@
       ]
     },
     {
-      "concept": "capital_gain_distributions_returns",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Publication 1304 Table 1.4",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in14ar.xls",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "count",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 3209131.0,
-      "periods": [
-        2024
-      ]
-    },
-    {
       "concept": "estate_trust_net_income_amount",
+      "measureConcept": "irs_soi.estate_and_trust_net_income",
       "sourceFamily": "irs_soi",
       "sourceTable": "Publication 1304 Table 1.4",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in14ar.xls",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -2292,27 +2636,12 @@
       ]
     },
     {
-      "concept": "estate_trust_net_income_returns",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Publication 1304 Table 1.4",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in14ar.xls",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "count",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 648583.0,
-      "periods": [
-        2024
-      ]
-    },
-    {
       "concept": "estate_trust_net_loss_amount",
+      "measureConcept": "irs_soi.estate_and_trust_net_loss",
       "sourceFamily": "irs_soi",
       "sourceTable": "Publication 1304 Table 1.4",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in14ar.xls",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -2326,10 +2655,50 @@
       ]
     },
     {
-      "concept": "estate_trust_net_loss_returns",
+      "concept": "capital_gain_distributions_returns",
+      "measureConcept": "irs_soi.returns_with_capital_gain_distributions_1040",
       "sourceFamily": "irs_soi",
       "sourceTable": "Publication 1304 Table 1.4",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in14ar.xls",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "count",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 3209131.0,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "estate_trust_net_income_returns",
+      "measureConcept": "irs_soi.returns_with_estate_and_trust_net_income",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Publication 1304 Table 1.4",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in14ar.xls",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "count",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 648583.0,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "estate_trust_net_loss_returns",
+      "measureConcept": "irs_soi.returns_with_estate_and_trust_net_loss",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Publication 1304 Table 1.4",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in14ar.xls",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -2343,61 +2712,12 @@
       ]
     },
     {
-      "concept": "net_capital_gains_amount",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Publication 1304 Table 1.4",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in14ar.xls",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "usd",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 1270864366489.301,
-      "periods": [
-        2024
-      ]
-    },
-    {
-      "concept": "net_capital_gains_returns",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Publication 1304 Table 1.4",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in14ar.xls",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "count",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 12392020.0,
-      "periods": [
-        2024
-      ]
-    },
-    {
-      "concept": "taxable_ira_distributions_amount",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Publication 1304 Table 1.4",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in14ar.xls",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "usd",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 476360339775.7405,
-      "periods": [
-        2024
-      ]
-    },
-    {
       "concept": "taxable_ira_distributions_returns",
+      "measureConcept": "irs_soi.returns_with_taxable_ira_distributions",
       "sourceFamily": "irs_soi",
       "sourceTable": "Publication 1304 Table 1.4",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in14ar.xls",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -2411,27 +2731,31 @@
       ]
     },
     {
-      "concept": "taxable_pension_income_amount",
+      "concept": "net_capital_gains_returns",
+      "measureConcept": "irs_soi.returns_with_taxable_net_capital_gains",
       "sourceFamily": "irs_soi",
       "sourceTable": "Publication 1304 Table 1.4",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in14ar.xls",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
       "otherCount": 0,
       "targetCount": 1,
-      "unit": "usd",
+      "unit": "count",
       "withinTenPctShare": 1.0,
-      "nationalValue": 1013424547797.8289,
+      "nationalValue": 12392020.0,
       "periods": [
         2024
       ]
     },
     {
       "concept": "taxable_pension_income_returns",
+      "measureConcept": "irs_soi.returns_with_taxable_pension_income",
       "sourceFamily": "irs_soi",
       "sourceTable": "Publication 1304 Table 1.4",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in14ar.xls",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -2445,27 +2769,12 @@
       ]
     },
     {
-      "concept": "taxable_social_security_amount",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Publication 1304 Table 1.4",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in14ar.xls",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "usd",
-      "withinTenPctShare": 0.0,
-      "nationalValue": 573040726871.6981,
-      "periods": [
-        2024
-      ]
-    },
-    {
       "concept": "taxable_social_security_returns",
+      "measureConcept": "irs_soi.returns_with_taxable_social_security_benefits",
       "sourceFamily": "irs_soi",
       "sourceTable": "Publication 1304 Table 1.4",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in14ar.xls",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -2479,61 +2788,12 @@
       ]
     },
     {
-      "concept": "unemployment_compensation_amount",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Publication 1304 Table 1.4",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in14ar.xls",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "usd",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 33637347541.042778,
-      "periods": [
-        2024
-      ]
-    },
-    {
-      "concept": "unemployment_compensation_returns",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Publication 1304 Table 1.4",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in14ar.xls",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "count",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 4697502.0,
-      "periods": [
-        2024
-      ]
-    },
-    {
-      "concept": "wages_salaries_amount",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Publication 1304 Table 1.4",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in14ar.xls",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "usd",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 10773360188644.922,
-      "periods": [
-        2024
-      ]
-    },
-    {
       "concept": "wages_salaries_returns",
+      "measureConcept": "irs_soi.returns_with_total_wages",
       "sourceFamily": "irs_soi",
       "sourceTable": "Publication 1304 Table 1.4",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in14ar.xls",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -2547,10 +2807,31 @@
       ]
     },
     {
-      "concept": "adjusted_gross_income",
+      "concept": "unemployment_compensation_returns",
+      "measureConcept": "irs_soi.returns_with_unemployment_compensation",
       "sourceFamily": "irs_soi",
-      "sourceTable": "Publication 1304 Table 2.1",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in21id.xls",
+      "sourceTable": "Publication 1304 Table 1.4",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in14ar.xls",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "count",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 4697502.0,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "taxable_ira_distributions_amount",
+      "measureConcept": "irs_soi.taxable_ira_distributions",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Publication 1304 Table 1.4",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in14ar.xls",
+      "domain": "all_individual_income_tax_returns",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -2558,16 +2839,113 @@
       "targetCount": 1,
       "unit": "usd",
       "withinTenPctShare": 1.0,
-      "nationalValue": 5076561078303.816,
+      "nationalValue": 476360339775.7405,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "net_capital_gains_amount",
+      "measureConcept": "irs_soi.taxable_net_capital_gains",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Publication 1304 Table 1.4",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in14ar.xls",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "usd",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 1270864366489.301,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "taxable_pension_income_amount",
+      "measureConcept": "irs_soi.taxable_pension_income",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Publication 1304 Table 1.4",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in14ar.xls",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "usd",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 1013424547797.8289,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "taxable_social_security_amount",
+      "measureConcept": "irs_soi.taxable_social_security_benefits",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Publication 1304 Table 1.4",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in14ar.xls",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "usd",
+      "withinTenPctShare": 0.0,
+      "nationalValue": 573040726871.6981,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "unemployment_compensation_amount",
+      "measureConcept": "irs_soi.unemployment_compensation",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Publication 1304 Table 1.4",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in14ar.xls",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "usd",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 33637347541.042778,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "wages_salaries_amount",
+      "measureConcept": "us:statutes/26/62#input.wages",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Publication 1304 Table 1.4",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in14ar.xls",
+      "domain": "all_individual_income_tax_returns",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "usd",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 10773360188644.922,
       "periods": [
         2024
       ]
     },
     {
       "concept": "charitable_amount",
+      "measureConcept": "irs_soi.contributions_deduction",
       "sourceFamily": "irs_soi",
       "sourceTable": "Publication 1304 Table 2.1",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in21id.xls",
+      "domain": "individual_income_tax_returns_with_itemized_deductions",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -2581,61 +2959,12 @@
       ]
     },
     {
-      "concept": "charitable_returns",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Publication 1304 Table 2.1",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in21id.xls",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "count",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 11747949.0,
-      "periods": [
-        2024
-      ]
-    },
-    {
-      "concept": "home_mortgage_interest_amount",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Publication 1304 Table 2.1",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in21id.xls",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "usd",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 186310104604.25217,
-      "periods": [
-        2024
-      ]
-    },
-    {
-      "concept": "home_mortgage_interest_returns",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Publication 1304 Table 2.1",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in21id.xls",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "count",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 11644348.0,
-      "periods": [
-        2024
-      ]
-    },
-    {
       "concept": "interest_paid_deduction_amount",
+      "measureConcept": "irs_soi.interest_paid_deduction",
       "sourceFamily": "irs_soi",
       "sourceTable": "Publication 1304 Table 2.1",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in21id.xls",
+      "domain": "individual_income_tax_returns_with_itemized_deductions",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -2649,27 +2978,12 @@
       ]
     },
     {
-      "concept": "interest_paid_deduction_returns",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Publication 1304 Table 2.1",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in21id.xls",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "count",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 11944817.0,
-      "periods": [
-        2024
-      ]
-    },
-    {
       "concept": "limited_state_local_taxes_amount",
+      "measureConcept": "irs_soi.limited_state_local_taxes",
       "sourceFamily": "irs_soi",
       "sourceTable": "Publication 1304 Table 2.1",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in21id.xls",
+      "domain": "individual_income_tax_returns_with_itemized_deductions",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -2683,27 +2997,12 @@
       ]
     },
     {
-      "concept": "limited_state_local_taxes_returns",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Publication 1304 Table 2.1",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in21id.xls",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "count",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 14928283.0,
-      "periods": [
-        2024
-      ]
-    },
-    {
       "concept": "ordinary_dividends_amount",
+      "measureConcept": "irs_soi.ordinary_dividends",
       "sourceFamily": "irs_soi",
       "sourceTable": "Publication 1304 Table 2.1",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in21id.xls",
+      "domain": "individual_income_tax_returns_with_itemized_deductions",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -2717,27 +3016,12 @@
       ]
     },
     {
-      "concept": "ordinary_dividends_returns",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Publication 1304 Table 2.1",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in21id.xls",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "count",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 6513096.0,
-      "periods": [
-        2024
-      ]
-    },
-    {
       "concept": "real_estate_taxes_amount",
+      "measureConcept": "irs_soi.real_estate_taxes",
       "sourceFamily": "irs_soi",
       "sourceTable": "Publication 1304 Table 2.1",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in21id.xls",
+      "domain": "individual_income_tax_returns_with_itemized_deductions",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -2751,10 +3035,88 @@
       ]
     },
     {
-      "concept": "real_estate_taxes_claims",
+      "concept": "charitable_returns",
+      "measureConcept": "irs_soi.returns_with_contributions_deduction",
       "sourceFamily": "irs_soi",
       "sourceTable": "Publication 1304 Table 2.1",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in21id.xls",
+      "domain": "individual_income_tax_returns_with_itemized_deductions",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "count",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 11747949.0,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "interest_paid_deduction_returns",
+      "measureConcept": "irs_soi.returns_with_interest_paid_deduction",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Publication 1304 Table 2.1",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in21id.xls",
+      "domain": "individual_income_tax_returns_with_itemized_deductions",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "count",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 11944817.0,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "limited_state_local_taxes_returns",
+      "measureConcept": "irs_soi.returns_with_limited_state_local_taxes",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Publication 1304 Table 2.1",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in21id.xls",
+      "domain": "individual_income_tax_returns_with_itemized_deductions",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "count",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 14928283.0,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "ordinary_dividends_returns",
+      "measureConcept": "irs_soi.returns_with_ordinary_dividends",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Publication 1304 Table 2.1",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in21id.xls",
+      "domain": "individual_income_tax_returns_with_itemized_deductions",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "count",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 6513096.0,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "real_estate_taxes_claims",
+      "measureConcept": "irs_soi.returns_with_real_estate_taxes",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Publication 1304 Table 2.1",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in21id.xls",
+      "domain": "individual_income_tax_returns_with_itemized_deductions",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -2768,27 +3130,12 @@
       ]
     },
     {
-      "concept": "taxable_interest_amount",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Publication 1304 Table 2.1",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in21id.xls",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "usd",
-      "withinTenPctShare": 0.0,
-      "nationalValue": 179972765558.77216,
-      "periods": [
-        2024
-      ]
-    },
-    {
       "concept": "taxable_interest_returns",
+      "measureConcept": "irs_soi.returns_with_taxable_interest",
       "sourceFamily": "irs_soi",
       "sourceTable": "Publication 1304 Table 2.1",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in21id.xls",
+      "domain": "individual_income_tax_returns_with_itemized_deductions",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -2802,27 +3149,12 @@
       ]
     },
     {
-      "concept": "taxable_ira_distributions_amount",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Publication 1304 Table 2.1",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in21id.xls",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "usd",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 113319020490.3762,
-      "periods": [
-        2024
-      ]
-    },
-    {
       "concept": "taxable_ira_distributions_returns",
+      "measureConcept": "irs_soi.returns_with_taxable_ira_distributions",
       "sourceFamily": "irs_soi",
       "sourceTable": "Publication 1304 Table 2.1",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in21id.xls",
+      "domain": "individual_income_tax_returns_with_itemized_deductions",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -2836,27 +3168,12 @@
       ]
     },
     {
-      "concept": "taxable_pension_income_amount",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Publication 1304 Table 2.1",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in21id.xls",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "usd",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 181788315290.64206,
-      "periods": [
-        2024
-      ]
-    },
-    {
       "concept": "taxable_pension_income_returns",
+      "measureConcept": "irs_soi.returns_with_taxable_pension_income",
       "sourceFamily": "irs_soi",
       "sourceTable": "Publication 1304 Table 2.1",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in21id.xls",
+      "domain": "individual_income_tax_returns_with_itemized_deductions",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -2870,27 +3187,12 @@
       ]
     },
     {
-      "concept": "taxable_social_security_amount",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Publication 1304 Table 2.1",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in21id.xls",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "usd",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 95485411201.91693,
-      "periods": [
-        2024
-      ]
-    },
-    {
       "concept": "taxable_social_security_returns",
+      "measureConcept": "irs_soi.returns_with_taxable_social_security_benefits",
       "sourceFamily": "irs_soi",
       "sourceTable": "Publication 1304 Table 2.1",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in21id.xls",
+      "domain": "individual_income_tax_returns_with_itemized_deductions",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -2904,10 +3206,126 @@
       ]
     },
     {
-      "concept": "total_itemized_deductions_amount",
+      "concept": "home_mortgage_interest_returns",
+      "measureConcept": "irs_soi.returns_with_total_home_mortgage_interest_deduction",
       "sourceFamily": "irs_soi",
       "sourceTable": "Publication 1304 Table 2.1",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in21id.xls",
+      "domain": "individual_income_tax_returns_with_itemized_deductions",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "count",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 11644348.0,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "taxable_interest_amount",
+      "measureConcept": "irs_soi.taxable_interest",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Publication 1304 Table 2.1",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in21id.xls",
+      "domain": "individual_income_tax_returns_with_itemized_deductions",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "usd",
+      "withinTenPctShare": 0.0,
+      "nationalValue": 179972765558.77216,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "taxable_ira_distributions_amount",
+      "measureConcept": "irs_soi.taxable_ira_distributions",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Publication 1304 Table 2.1",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in21id.xls",
+      "domain": "individual_income_tax_returns_with_itemized_deductions",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "usd",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 113319020490.3762,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "taxable_pension_income_amount",
+      "measureConcept": "irs_soi.taxable_pension_income",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Publication 1304 Table 2.1",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in21id.xls",
+      "domain": "individual_income_tax_returns_with_itemized_deductions",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "usd",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 181788315290.64206,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "taxable_social_security_amount",
+      "measureConcept": "irs_soi.taxable_social_security_benefits",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Publication 1304 Table 2.1",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in21id.xls",
+      "domain": "individual_income_tax_returns_with_itemized_deductions",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "usd",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 95485411201.91693,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "home_mortgage_interest_amount",
+      "measureConcept": "irs_soi.total_home_mortgage_interest_deduction",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Publication 1304 Table 2.1",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in21id.xls",
+      "domain": "individual_income_tax_returns_with_itemized_deductions",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "usd",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 186310104604.25217,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "total_itemized_deductions_amount",
+      "measureConcept": "irs_soi.total_itemized_deductions",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Publication 1304 Table 2.1",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in21id.xls",
+      "domain": "individual_income_tax_returns_with_itemized_deductions",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -2922,9 +3340,11 @@
     },
     {
       "concept": "adjusted_gross_income",
+      "measureConcept": "us:statutes/26/62#adjusted_gross_income",
       "sourceFamily": "irs_soi",
-      "sourceTable": "Publication 1304 Table 2.5",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in25ic.xls",
+      "sourceTable": "Publication 1304 Table 2.1",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in21id.xls",
+      "domain": "individual_income_tax_returns_with_itemized_deductions",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -2932,33 +3352,18 @@
       "targetCount": 1,
       "unit": "usd",
       "withinTenPctShare": 1.0,
-      "nationalValue": 598279175320.393,
-      "periods": [
-        2024
-      ]
-    },
-    {
-      "concept": "total_earned_income_credit_amount",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Publication 1304 Table 2.5",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in25ic.xls",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "usd",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 72049636615.97403,
+      "nationalValue": 5076561078303.816,
       "periods": [
         2024
       ]
     },
     {
       "concept": "total_earned_income_credit_returns",
+      "measureConcept": "irs_soi.returns_with_total_earned_income_credit",
       "sourceFamily": "irs_soi",
       "sourceTable": "Publication 1304 Table 2.5",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in25ic.xls",
+      "domain": "individual_income_tax_returns_with_earned_income_credit",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -2972,10 +3377,50 @@
       ]
     },
     {
+      "concept": "total_earned_income_credit_amount",
+      "measureConcept": "irs_soi.total_earned_income_credit",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Publication 1304 Table 2.5",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in25ic.xls",
+      "domain": "individual_income_tax_returns_with_earned_income_credit",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "usd",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 72049636615.97403,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "adjusted_gross_income",
+      "measureConcept": "us:statutes/26/62#adjusted_gross_income",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Publication 1304 Table 2.5",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in25ic.xls",
+      "domain": "individual_income_tax_returns_with_earned_income_credit",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "usd",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 598279175320.393,
+      "periods": [
+        2024
+      ]
+    },
+    {
       "concept": "eitc_returns",
+      "measureConcept": "irs_soi.returns_with_total_earned_income_credit",
       "sourceFamily": "irs_soi",
       "sourceTable": "Publication 1304 Table 2.5 EITC by AGI and qualifying children",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in25ic.xls",
+      "domain": "individual_income_tax_returns_with_earned_income_credit",
       "nationalCount": 116,
       "stateCount": 0,
       "districtCount": 0,
@@ -2990,9 +3435,11 @@
     },
     {
       "concept": "eitc_total",
+      "measureConcept": "irs_soi.total_earned_income_credit",
       "sourceFamily": "irs_soi",
       "sourceTable": "Publication 1304 Table 2.5 EITC by AGI and qualifying children",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in25ic.xls",
+      "domain": "individual_income_tax_returns_with_earned_income_credit",
       "nationalCount": 116,
       "stateCount": 0,
       "districtCount": 0,
@@ -3006,44 +3453,31 @@
       ]
     },
     {
-      "concept": "adjusted_gross_income",
+      "concept": "return_count",
+      "measureConcept": "irs_soi.individual_income_tax_returns_excluding_dependents",
       "sourceFamily": "irs_soi",
       "sourceTable": "Publication 1304 Table 4.3",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in43ts.xls",
+      "domain": "individual_income_tax_returns_excluding_dependents",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
       "otherCount": 0,
       "targetCount": 1,
-      "unit": "usd",
+      "unit": "count",
       "withinTenPctShare": 1.0,
-      "nationalValue": 16522240985619.51,
-      "periods": [
-        2024
-      ]
-    },
-    {
-      "concept": "itemized_deductions_amount",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Publication 1304 Table 4.3",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in43ts.xls",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "usd",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 750317793383.3157,
+      "nationalValue": 153076443.0,
       "periods": [
         2024
       ]
     },
     {
       "concept": "ordinary_dividends_amount",
+      "measureConcept": "irs_soi.ordinary_dividends",
       "sourceFamily": "irs_soi",
       "sourceTable": "Publication 1304 Table 4.3",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in43ts.xls",
+      "domain": "individual_income_tax_returns_excluding_dependents",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -3058,9 +3492,11 @@
     },
     {
       "concept": "ordinary_dividends_returns",
+      "measureConcept": "irs_soi.returns_with_ordinary_dividends",
       "sourceFamily": "irs_soi",
       "sourceTable": "Publication 1304 Table 4.3",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in43ts.xls",
+      "domain": "individual_income_tax_returns_excluding_dependents",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -3074,44 +3510,12 @@
       ]
     },
     {
-      "concept": "return_count",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Publication 1304 Table 4.3",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in43ts.xls",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "count",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 153076443.0,
-      "periods": [
-        2024
-      ]
-    },
-    {
-      "concept": "taxable_income_amount",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Publication 1304 Table 4.3",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in43ts.xls",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "usd",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 12956718165651.217,
-      "periods": [
-        2024
-      ]
-    },
-    {
       "concept": "taxable_income_returns",
+      "measureConcept": "irs_soi.returns_with_taxable_income",
       "sourceFamily": "irs_soi",
       "sourceTable": "Publication 1304 Table 4.3",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in43ts.xls",
+      "domain": "individual_income_tax_returns_excluding_dependents",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -3125,27 +3529,12 @@
       ]
     },
     {
-      "concept": "taxable_interest_amount",
-      "sourceFamily": "irs_soi",
-      "sourceTable": "Publication 1304 Table 4.3",
-      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in43ts.xls",
-      "nationalCount": 1,
-      "stateCount": 0,
-      "districtCount": 0,
-      "otherCount": 0,
-      "targetCount": 1,
-      "unit": "usd",
-      "withinTenPctShare": 1.0,
-      "nationalValue": 340428148892.9851,
-      "periods": [
-        2024
-      ]
-    },
-    {
       "concept": "taxable_interest_returns",
+      "measureConcept": "irs_soi.returns_with_taxable_interest",
       "sourceFamily": "irs_soi",
       "sourceTable": "Publication 1304 Table 4.3",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in43ts.xls",
+      "domain": "individual_income_tax_returns_excluding_dependents",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -3159,10 +3548,88 @@
       ]
     },
     {
+      "concept": "taxable_income_amount",
+      "measureConcept": "irs_soi.taxable_income",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Publication 1304 Table 4.3",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in43ts.xls",
+      "domain": "individual_income_tax_returns_excluding_dependents",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "usd",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 12956718165651.217,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "taxable_interest_amount",
+      "measureConcept": "irs_soi.taxable_interest",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Publication 1304 Table 4.3",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in43ts.xls",
+      "domain": "individual_income_tax_returns_excluding_dependents",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "usd",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 340428148892.9851,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "itemized_deductions_amount",
+      "measureConcept": "irs_soi.total_itemized_deductions",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Publication 1304 Table 4.3",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in43ts.xls",
+      "domain": "individual_income_tax_returns_excluding_dependents",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "usd",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 750317793383.3157,
+      "periods": [
+        2024
+      ]
+    },
+    {
+      "concept": "adjusted_gross_income",
+      "measureConcept": "us:statutes/26/62#adjusted_gross_income",
+      "sourceFamily": "irs_soi",
+      "sourceTable": "Publication 1304 Table 4.3",
+      "sourceUrl": "https://www.irs.gov/pub/irs-soi/23in43ts.xls",
+      "domain": "individual_income_tax_returns_excluding_dependents",
+      "nationalCount": 1,
+      "stateCount": 0,
+      "districtCount": 0,
+      "otherCount": 0,
+      "targetCount": 1,
+      "unit": "usd",
+      "withinTenPctShare": 1.0,
+      "nationalValue": 16522240985619.51,
+      "periods": [
+        2024
+      ]
+    },
+    {
       "concept": "amount",
+      "measureConcept": "irs_soi.form_w2_social_security_tip_income",
       "sourceFamily": "irs_soi",
       "sourceTable": "Table 4.B. Summary of Items for Taxpayers with Form W-2, by Return and Earner Type, Tax Year 2020",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/20in04w2all.xlsx",
+      "domain": "form_w2_items",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -3177,9 +3644,11 @@
     },
     {
       "concept": "return_count",
+      "measureConcept": "irs_soi.form_w2_social_security_tip_returns",
       "sourceFamily": "irs_soi",
       "sourceTable": "Table 4.B. Summary of Items for Taxpayers with Form W-2, by Return and Earner Type, Tax Year 2020",
       "sourceUrl": "https://www.irs.gov/pub/irs-soi/20in04w2all.xlsx",
+      "domain": "form_w2_items",
       "nationalCount": 1,
       "stateCount": 0,
       "districtCount": 0,
@@ -3194,9 +3663,11 @@
     },
     {
       "concept": "revenue_loss",
+      "measureConcept": "jct.individual_tax_expenditure_revenue_loss",
       "sourceFamily": "jct",
       "sourceTable": "Estimates of Federal Tax Expenditures for Fiscal Years 2024-2028",
       "sourceUrl": "https://www.jct.gov/getattachment/765709fb-9a4b-430a-8f9e-4d342ec97f7e/x-48-24.pdf",
+      "domain": "federal_income_tax",
       "nationalCount": 11,
       "stateCount": 0,
       "districtCount": 0,
@@ -3211,9 +3682,11 @@
     },
     {
       "concept": "keogh_distributions",
+      "measureConcept": null,
       "sourceFamily": "policyengine_build",
       "sourceTable": "Locked-source mass measured on the base pool at base weights (PolicyEngine/populace#445; #434 protect-swap)",
       "sourceUrl": "",
+      "domain": null,
       "nationalCount": 0,
       "stateCount": 0,
       "districtCount": 0,
@@ -3226,9 +3699,11 @@
     },
     {
       "concept": "payment_amount",
+      "measureConcept": "ssa.ssi_payment_amount",
       "sourceFamily": "ssa",
       "sourceTable": "SSA Annual Statistical Supplement 2025 Table 7.B1",
       "sourceUrl": "https://www.ssa.gov/policy/docs/statcomps/supplement/2025/7b.html",
+      "domain": "social_security_and_ssi_payments",
       "nationalCount": 0,
       "stateCount": 51,
       "districtCount": 0,
@@ -3243,9 +3718,11 @@
     },
     {
       "concept": "recipient_count",
+      "measureConcept": "ssa.ssi_recipient_count",
       "sourceFamily": "ssa",
       "sourceTable": "SSA Annual Statistical Supplement 2025 Table 7.B1",
       "sourceUrl": "https://www.ssa.gov/policy/docs/statcomps/supplement/2025/7b.html",
+      "domain": "social_security_and_ssi_payments",
       "nationalCount": 0,
       "stateCount": 51,
       "districtCount": 0,
@@ -3260,9 +3737,11 @@
     },
     {
       "concept": "payment_amount",
+      "measureConcept": "ssa.annual_oasdi_or_ssi_payment_amount",
       "sourceFamily": "ssa",
       "sourceTable": "SSA Annual Statistical Supplement 2025 extracted OASDI and SSI target rows",
       "sourceUrl": "https://www.ssa.gov/policy/docs/statcomps/supplement/2025/index.html",
+      "domain": "social_security_and_ssi_payments",
       "nationalCount": 6,
       "stateCount": 0,
       "districtCount": 0,
@@ -3277,9 +3756,11 @@
     },
     {
       "concept": "recipient_count",
+      "measureConcept": "ssa.ssi_federal_payment_recipient_count",
       "sourceFamily": "ssa",
       "sourceTable": "SSI Monthly Statistics, December 2024, Table 1",
       "sourceUrl": "https://www.ssa.gov/policy/docs/statcomps/ssi_monthly/2024-12/table01.html",
+      "domain": "social_security_and_ssi_payments",
       "nationalCount": 3,
       "stateCount": 0,
       "districtCount": 0,
@@ -3294,9 +3775,11 @@
     },
     {
       "concept": "average_monthly_households",
+      "measureConcept": "usda_snap.average_monthly_households",
       "sourceFamily": "usda_snap",
       "sourceTable": "SNAP Monthly State Participation and Benefit Summary FY69 to current",
       "sourceUrl": "https://www.fns.usda.gov/sites/default/files/resource-files/snap-zip-fy69tocurrent-6.zip",
+      "domain": "supplemental_nutrition_assistance_program",
       "nationalCount": 1,
       "stateCount": 51,
       "districtCount": 0,
@@ -3311,9 +3794,11 @@
     },
     {
       "concept": "total_benefits",
+      "measureConcept": "usda_snap.total_benefits",
       "sourceFamily": "usda_snap",
       "sourceTable": "SNAP Monthly State Participation and Benefit Summary FY69 to current",
       "sourceUrl": "https://www.fns.usda.gov/sites/default/files/resource-files/snap-zip-fy69tocurrent-6.zip",
+      "domain": "supplemental_nutrition_assistance_program",
       "nationalCount": 1,
       "stateCount": 51,
       "districtCount": 0,

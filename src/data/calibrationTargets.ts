@@ -7,7 +7,12 @@ import raw from './calibrationTargets.json';
  * hand.
  */
 export interface CalibrationGroup {
+  /** Final segment of the target names, e.g. "return_count" */
   concept: string;
+  /** Ledger measure concept, e.g. "irs_soi.individual_income_tax_returns"; null for build-internal rows */
+  measureConcept: string | null;
+  /** Ledger domain: the population the figures cover, when shared by the group */
+  domain: string | null;
   sourceFamily: string;
   sourceTable: string;
   sourceUrl: string;

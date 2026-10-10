@@ -19,6 +19,7 @@ import {
   usCalibration,
 } from '../data/calibrationTargets';
 import { formatConcept, formatValue, groupLabel } from '../views/data/calibrationFormat';
+import CalibrationTargetsTable from '../views/data/CalibrationTargetsTable';
 
 const data = usCalibration;
 const LEVELS = ['national', 'state', 'district', 'other'] as const;
@@ -36,6 +37,11 @@ const STALE_OR_FORBIDDEN = [
   'Enhanced CPS',
   'certified',
   'Certified',
+  // Corrected by the independent review: calibration holds household-weight
+  // mass, not population; PUF copies share only the survey state.
+  'Total population is held fixed',
+  'shares its geography',
+  '2024 population estimate',
 ];
 
 describe('US pipeline stages describe the one-national-file build', () => {
@@ -95,8 +101,10 @@ describe('Calibration targets data is internally consistent', () => {
     }
   });
 
-  it('groups are unique by source table and concept', () => {
-    const keys = data.targets.map((r) => `${r.sourceFamily}|${r.sourceTable}|${r.concept}`);
+  it('groups are unique by source table and measured concept', () => {
+    const keys = data.targets.map(
+      (r) => `${r.sourceFamily}|${r.sourceTable}|${r.measureConcept}|${r.concept}`,
+    );
     expect(new Set(keys).size).toBe(keys.length);
   });
 
@@ -134,6 +142,46 @@ describe('Target labels', () => {
   it('leaves no lowercase acronym or program name in any label', () => {
     const lowercase = /\b(aptc|actc|ctc|eitc|ira|chip|snap|ssi|tanf|agi|medicaid|medicare|keogh|scorp)\b/;
     for (const r of data.targets) expect(groupLabel(r)).not.toMatch(lowercase);
+  });
+
+  it('labels different measured concepts in one table differently', () => {
+    const byTable = new Map<string, Set<string>>();
+    for (const r of data.targets) {
+      const labels = byTable.get(r.sourceTable) ?? new Set<string>();
+      expect(labels.has(groupLabel(r))).toBe(false);
+      labels.add(groupLabel(r));
+      byTable.set(r.sourceTable, labels);
+    }
+  });
+
+  it('keeps the all-returns and EITC return counts apart', () => {
+    const table = 'Historic Table 2 state data, United States total';
+    const labels = data.targets.filter((r) => r.sourceTable === table).map(groupLabel).sort();
+    expect(labels).toEqual(['EITC returns with three or more qualifying children', 'Returns filed']);
+  });
+
+  it('names the population behind restricted IRS figures', () => {
+    const agi = data.targets.filter((r) => r.concept === 'adjusted_gross_income').map(groupLabel);
+    expect(agi).toContain('Adjusted gross income (itemizing returns)');
+    expect(agi).toContain('Adjusted gross income (returns with EITC)');
+    expect(agi).toContain('Adjusted gross income (returns excluding dependents)');
+    expect(
+      groupLabel({
+        sourceFamily: 'irs_soi', sourceTable: 'T', concept: 'eitc_returns',
+        measureConcept: 'irs_soi.returns_with_total_earned_income_credit',
+        domain: 'individual_income_tax_returns_with_earned_income_credit',
+      }),
+    ).toBe('EITC returns');
+  });
+
+  it('shows within-10% shares to one decimal so a miss is visible', () => {
+    const statePop = data.targets.find(
+      (r) => r.sourceFamily === 'census_pep' && r.stateCount > 0,
+    )!;
+    expect(statePop.withinTenPctShare).toBeLessThan(1);
+    const { container } = render(<CalibrationTargetsTable rows={[statePop]} />);
+    expect(container.textContent).toContain('99.9%');
+    expect(container.textContent).not.toContain('100%');
   });
 
   it('gives every group a specific label, never a bare measure name', () => {

@@ -132,7 +132,7 @@ export default function DataPipeline({ country = 'us' }: { country?: Country }) 
 
   const introText = country === 'uk'
     ? 'PolicyEngine constructs its representative household dataset through a multi-stage pipeline, starting from the Family Resources Survey and producing two weight matrices: one for 650 parliamentary constituencies and one for 360 local authorities.'
-    : `PolicyEngine’s US simulations run on one national household file, built by Microcosm, PolicyEngine’s data build system. Census CPS ASEC households, and copies of them carrying tax-return detail from the IRS Public Use File, are enriched with survey imputations and program take-up flags, assigned a state, congressional district, county, and census block, and reweighted so weighted totals match ${usTargetSummary} from government statistics. A state or congressional district analysis filters the same file — there are no per-area datasets.`;
+    : `PolicyEngine’s US simulations run on one national household file, built by Microcosm, PolicyEngine’s data build system. Census CPS ASEC households, and copies of them carrying tax-return detail from the IRS Public Use File, are enriched with survey imputations and program take-up flags, keep their survey state while being assigned a congressional district, county, and census block, and are reweighted so weighted totals match ${usTargetSummary} derived from government statistics. A state or congressional district analysis filters the same file — there are no per-area datasets.`;
 
   const nationalLabel = country === 'uk' ? 'Constituency (national)' : 'National';
   const localLabel = country === 'uk' ? 'Local authority' : 'Geography-specific';

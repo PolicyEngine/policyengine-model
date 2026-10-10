@@ -3,6 +3,7 @@ import { colors, typography, spacing } from '../../designTokens';
 import {
   describeLevels,
   formatPercent,
+  joinList,
   usCalibration,
 } from '../../data/calibrationTargets';
 import PageHeader from '../../components/layout/PageHeader';
@@ -56,13 +57,16 @@ export default function CalibrationPage({ country }: { country: Country }) {
   const internal = levels.other;
   const calibratedOn = formatDate(data.calibratedAt);
   const inherited = data.calibrationReleaseId !== data.releaseId;
+  const calibrationYear = joinList(
+    [...new Set(data.targets.flatMap((g) => g.periods))].sort((a, b) => a - b).map(String),
+  );
 
   return (
     <div>
       <PageHeader
         category="Data"
         title="Calibration targets"
-        description={`PolicyEngine’s default US dataset is reweighted so its weighted totals match ${describeLevels(levels)} published by the IRS, Census Bureau, CMS, USDA, SSA, and other agencies${internal > 0 ? `, plus ${internal === 1 ? 'one build-internal constraint' : `${internal} build-internal constraints`}` : ''}. ${formatPercent(data.withinTenPctShare)} of all ${data.totalTargets.toLocaleString()} targets land within 10% of their target value.`}
+        description={`PolicyEngine’s default US dataset is reweighted so its weighted totals match ${describeLevels(levels)} derived from statistics published by the IRS, Census Bureau, CMS, USDA, SSA, and other agencies${internal > 0 ? `, plus ${internal === 1 ? 'one build-internal constraint' : `${internal} build-internal constraints`}` : ''}. ${formatPercent(data.withinTenPctShare)} of all ${data.totalTargets.toLocaleString()} targets land within 10% of their target value.`}
       />
 
       <div
@@ -121,8 +125,9 @@ export default function CalibrationPage({ country }: { country: Country }) {
         }}
       >
         {filtered.length} target group{filtered.length !== 1 ? 's' : ''} shown
-        {search ? ` (filtered from ${allRows.length})` : ''} · a group is one measured concept from one source table,
-        and its {data.totalTargets.toLocaleString()} targets span the levels listed
+        {search ? ` (filtered from ${allRows.length})` : ''}. A group is one measured concept from one source table;
+        the release has {data.totalTargets.toLocaleString()} targets across all groups. Values are calibration targets
+        for {calibrationYear}; some source figures from earlier years are uprated to it.
       </p>
 
       {filtered.length === 0 ? (

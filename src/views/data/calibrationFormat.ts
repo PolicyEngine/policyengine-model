@@ -48,14 +48,13 @@ export function formatConcept(name: string): string {
   return sentence.charAt(0).toUpperCase() + sentence.slice(1);
 }
 
-// Readable names for groups whose concept segment is generic ("amount",
+// Readable names for groups whose name segment is generic ("amount",
 // "return_count", ...), read off the full target names in the release
-// diagnostics. Keyed by `${sourceFamily}:${concept}`, or by
-// `${sourceFamily}:${sourceTable}:${concept}` where one family reuses a
-// concept across tables.
+// diagnostics. Keyed, most specific first, by
+// `${sourceFamily}:${sourceTable}:${measureConcept}:${concept}`,
+// `${sourceFamily}:${sourceTable}:${concept}`, or `${sourceFamily}:${concept}`.
 const GROUP_LABELS: Record<string, string> = {
   'bea:amount': "Proprietors' income",
-  'cbo:projected_amount': 'Projected income by source',
   'census_pep:population': 'Population by five-year age group',
   'census_stc:collections': 'State individual income tax collections',
   'cms_medicaid:medicaid_enrollment_substitution':
@@ -65,6 +64,8 @@ const GROUP_LABELS: Record<string, string> = {
   'hhs_acf_liheap:households_served': 'LIHEAP households served',
   'hhs_acf_tanf:all_funds': 'TANF basic assistance spending',
   'irs_soi:return_count': 'Returns filed',
+  'irs_soi:Historic Table 2 state data, United States total:irs_soi.returns_with_earned_income_credit:return_count':
+    'EITC returns with three or more qualifying children',
   'irs_soi:Table 4.B. Summary of Items for Taxpayers with Form W-2, by Return and Earner Type, Tax Year 2020:amount':
     'Social Security tips on Form W-2',
   'irs_soi:Table 4.B. Summary of Items for Taxpayers with Form W-2, by Return and Earner Type, Tax Year 2020:return_count':
@@ -80,12 +81,45 @@ const GROUP_LABELS: Record<string, string> = {
   'usda_snap:total_benefits': 'SNAP benefits',
 };
 
-export function groupLabel(g: Pick<CalibrationGroup, 'sourceFamily' | 'sourceTable' | 'concept'>): string {
-  return (
+// Labels keyed by the ledger measure concept, for concepts whose name segment
+// is shared with other concepts in the same table.
+const CONCEPT_LABELS: Record<string, string> = {
+  'cbo.adjusted_gross_income_projection': 'Adjusted gross income (CBO projection)',
+  'cbo.net_business_income_projection': 'Net business income (CBO projection)',
+  'cbo.net_capital_gain_projection': 'Net capital gain (CBO projection)',
+  'cbo.qualified_dividend_income_projection': 'Qualified dividends (CBO projection)',
+  'cbo.wages_and_salaries_projection': 'Wages and salaries (CBO projection)',
+  'irs_soi.individual_income_tax_returns_excluding_dependents': 'Returns filed, excluding dependents',
+};
+
+// The population a figure covers, when narrower than all returns, and a
+// pattern that means the label already says so.
+const DOMAIN_QUALIFIERS: Record<string, { qualifier: string; implied: RegExp }> = {
+  individual_income_tax_returns_with_itemized_deductions: {
+    qualifier: 'itemizing returns',
+    implied: /itemiz/i,
+  },
+  individual_income_tax_returns_with_earned_income_credit: {
+    qualifier: 'returns with EITC',
+    implied: /EITC|earned income credit/i,
+  },
+  individual_income_tax_returns_excluding_dependents: {
+    qualifier: 'returns excluding dependents',
+    implied: /dependents/i,
+  },
+};
+
+type LabelFields = Pick<CalibrationGroup, 'sourceFamily' | 'sourceTable' | 'concept' | 'measureConcept' | 'domain'>;
+
+export function groupLabel(g: LabelFields): string {
+  const base =
+    GROUP_LABELS[`${g.sourceFamily}:${g.sourceTable}:${g.measureConcept}:${g.concept}`] ??
     GROUP_LABELS[`${g.sourceFamily}:${g.sourceTable}:${g.concept}`] ??
+    (g.measureConcept ? CONCEPT_LABELS[g.measureConcept] : undefined) ??
     GROUP_LABELS[`${g.sourceFamily}:${g.concept}`] ??
-    formatConcept(g.concept)
-  );
+    formatConcept(g.concept);
+  const scope = g.domain ? DOMAIN_QUALIFIERS[g.domain] : undefined;
+  return scope && !scope.implied.test(base) ? `${base} (${scope.qualifier})` : base;
 }
 
 const SOURCE_FAMILY_LABELS: Record<string, string> = {

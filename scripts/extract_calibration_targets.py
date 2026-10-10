@@ -39,15 +39,23 @@ OUTPUT_PATH = os.path.join(
     os.path.dirname(__file__), "..", "src", "data", "calibrationTargets.json"
 )
 
-# ledger_geography_level values -> page levels. Anything else (including a
-# missing level) is a build-internal constraint rather than an administrative
-# fact at a geography.
+# ledger_geography_level values -> page levels.
 LEVELS = {
     "country": "national",
     "state": "state",
     "congressional_district": "district",
 }
 LEVEL_KEYS = ("national", "state", "district", "other")
+# Targets with no ledger geography are accepted only when the build marks them
+# as one of these internal constraint roles; any other missing or unknown
+# geography is an error rather than a silent "build-internal" row.
+INTERNAL_TARGET_ROLES = {"selection_mass_protection"}
+# calibration_diagnostics.json schema versions this script understands.
+SUPPORTED_SCHEMA_VERSIONS = {5}
+
+
+class UnsupportedDiagnostics(ValueError):
+    """The diagnostics file is not a schema this extraction understands."""
 
 
 def fetch_bytes(url: str) -> bytes:
@@ -75,11 +83,50 @@ def release_manifest_url(release_id: str) -> str:
 
 
 def geography_level(target: dict) -> str:
-    level = (target.get("metadata") or {}).get("ledger_geography_level")
-    return LEVELS.get(level, "other")
+    metadata = target.get("metadata") or {}
+    level = metadata.get("ledger_geography_level")
+    if level in LEVELS:
+        return LEVELS[level]
+    if level is None and metadata.get("target_role") in INTERNAL_TARGET_ROLES:
+        return "other"
+    raise UnsupportedDiagnostics(
+        f"target {target.get('name')!r}: unrecognized geography {level!r} "
+        f"and no internal target role"
+    )
 
 
-def concept_from_name(name: str) -> str:
+def validate(diagnostics: dict) -> None:
+    """Refuse diagnostics this extraction would misread, before writing anything."""
+    version = diagnostics.get("schema_version")
+    if version not in SUPPORTED_SCHEMA_VERSIONS:
+        raise UnsupportedDiagnostics(
+            f"diagnostics schema_version {version!r} is not one of "
+            f"{sorted(SUPPORTED_SCHEMA_VERSIONS)}"
+        )
+    if diagnostics.get("weight_entity") != "household":
+        raise UnsupportedDiagnostics(
+            f"weight_entity {diagnostics.get('weight_entity')!r} is not 'household'"
+        )
+    n_records = diagnostics.get("n_records")
+    if not isinstance(n_records, int) or isinstance(n_records, bool) or n_records <= 0:
+        raise UnsupportedDiagnostics(f"n_records {n_records!r} is not a positive integer")
+    targets = diagnostics.get("targets")
+    if not isinstance(targets, list) or not targets:
+        raise UnsupportedDiagnostics("targets is missing or empty")
+    for t in targets:
+        if not isinstance(t, dict) or not isinstance(t.get("name"), str):
+            raise UnsupportedDiagnostics(f"target without a name: {t!r:.200}")
+        if not isinstance(t.get("source"), str):
+            raise UnsupportedDiagnostics(f"target {t['name']!r} has no source")
+        if not isinstance(t.get("target"), (int, float)):
+            raise UnsupportedDiagnostics(f"target {t['name']!r} has no numeric target")
+        rel = t.get("relative_error")
+        if rel is not None and not isinstance(rel, (int, float)):
+            raise UnsupportedDiagnostics(f"target {t['name']!r} has a non-numeric relative_error")
+        geography_level(t)
+
+
+def suffix_from_name(name: str) -> str:
     """Final dot-path segment of the target name, without the @period suffix."""
     base = name.split("@", 1)[0]
     return base.rsplit(".", 1)[-1]
@@ -95,39 +142,54 @@ def split_source(source: str) -> tuple[str, str, str]:
 
 
 def extract(diagnostics: dict) -> dict:
+    """Group targets by source table and measured concept.
+
+    A group is one ledger measure concept (``metadata.ledger_measure_concept``)
+    from one source table. The final name segment (``concept``) also enters the
+    key, so an amount and a count of the same concept stay separate.
+    """
+    validate(diagnostics)
     targets = diagnostics["targets"]
 
-    groups: dict[tuple[str, str, str], dict] = {}
+    groups: dict[tuple[str, str, str, str], dict] = {}
     level_totals: dict[str, int] = defaultdict(int)
     for t in targets:
-        family, table, url = split_source(t.get("source"))
-        concept = concept_from_name(t["name"])
+        metadata = t.get("metadata") or {}
+        family, table, url = split_source(t["source"])
+        concept = suffix_from_name(t["name"])
+        measure_concept = metadata.get("ledger_measure_concept") or ""
         level = geography_level(t)
         level_totals[level] += 1
         g = groups.setdefault(
-            (family, table, concept),
+            (family, table, measure_concept, concept),
             {
                 "concept": concept,
+                "measureConcept": measure_concept or None,
                 "sourceFamily": family,
                 "sourceTable": table,
                 "sourceUrl": url,
                 "counts": defaultdict(int),
                 "units": set(),
+                "domains": set(),
                 "withinTenPct": 0,
                 "nationalValues": [],
                 "periods": set(),
             },
         )
         g["counts"][level] += 1
-        g["units"].add((t.get("metadata") or {}).get("ledger_measure_unit"))
+        g["units"].add(metadata.get("ledger_measure_unit"))
+        g["domains"].add(metadata.get("ledger_domain"))
         rel = t.get("relative_error")
         if rel is not None and abs(rel) <= 0.10:
             g["withinTenPct"] += 1
         if level == "national":
-            g["nationalValues"].append(t.get("target"))
+            g["nationalValues"].append(t["target"])
         period = t.get("period")
         if period:
             g["periods"].add(period)
+
+    def only(values: set):
+        return next(iter(values)) if len(values) == 1 else None
 
     rows = []
     for g in groups.values():
@@ -135,16 +197,19 @@ def extract(diagnostics: dict) -> dict:
         rows.append(
             {
                 "concept": g["concept"],
+                "measureConcept": g["measureConcept"],
                 "sourceFamily": g["sourceFamily"],
                 "sourceTable": g["sourceTable"],
                 "sourceUrl": g["sourceUrl"],
+                # ledger_domain (the population the figure covers) when shared
+                "domain": only(g["domains"]),
                 "nationalCount": g["counts"]["national"],
                 "stateCount": g["counts"]["state"],
                 "districtCount": g["counts"]["district"],
                 "otherCount": g["counts"]["other"],
                 "targetCount": total,
                 # 'usd' or 'count' when every row in the group shares it
-                "unit": next(iter(g["units"])) if len(g["units"]) == 1 else None,
+                "unit": only(g["units"]),
                 "withinTenPctShare": round(g["withinTenPct"] / total, 4),
                 "nationalValue": (
                     g["nationalValues"][0] if len(g["nationalValues"]) == 1 else None
@@ -152,7 +217,14 @@ def extract(diagnostics: dict) -> dict:
                 "periods": sorted(g["periods"]),
             }
         )
-    rows.sort(key=lambda r: (r["sourceFamily"], r["sourceTable"], r["concept"]))
+    rows.sort(
+        key=lambda r: (
+            r["sourceFamily"],
+            r["sourceTable"],
+            r["measureConcept"] or "",
+            r["concept"],
+        )
+    )
 
     n_targets = len(targets)
     within = sum(
@@ -161,7 +233,7 @@ def extract(diagnostics: dict) -> dict:
         if t.get("relative_error") is not None and abs(t["relative_error"]) <= 0.10
     )
     return {
-        "households": diagnostics.get("n_records"),
+        "households": diagnostics["n_records"],
         "totalTargets": n_targets,
         "withinTenPctShare": round(within / n_targets, 4),
         "levelCounts": {k: level_totals.get(k, 0) for k in LEVEL_KEYS},

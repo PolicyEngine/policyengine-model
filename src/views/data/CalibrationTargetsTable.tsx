@@ -1,5 +1,5 @@
 import { colors, typography, spacing } from '../../designTokens';
-import type { CalibrationGroup } from '../../data/calibrationTargets';
+import { formatPercent, type CalibrationGroup } from '../../data/calibrationTargets';
 import { formatSourceFamily, formatValue, groupLabel } from './calibrationFormat';
 
 const LEVELS = [
@@ -13,9 +13,9 @@ const COLUMNS = [
   { label: 'Target', width: '30%' },
   { label: 'Source', width: '24%' },
   { label: 'Levels', width: '18%' },
-  { label: 'National value', width: '12%' },
+  { label: 'National target value', width: '12%' },
   { label: 'Within 10%', width: '10%' },
-  { label: 'Period', width: '6%' },
+  { label: 'Calibration year', width: '6%' },
 ];
 
 const cell = {
@@ -67,7 +67,7 @@ export default function CalibrationTargetsTable({ rows }: { rows: CalibrationGro
         <tbody>
           {rows.map((r, i) => (
             <tr
-              key={`${r.sourceFamily}-${r.sourceTable}-${r.concept}`}
+              key={`${r.sourceFamily}-${r.sourceTable}-${r.measureConcept}-${r.concept}`}
               style={{ borderBottom: i < rows.length - 1 ? `1px solid ${colors.border.light}` : 'none' }}
             >
               <td style={{ ...cell, fontWeight: typography.fontWeight.medium }}>{groupLabel(r)}</td>
@@ -103,7 +103,7 @@ export default function CalibrationTargetsTable({ rows }: { rows: CalibrationGro
                 </div>
               </td>
               <td style={mono}>{formatValue(r.nationalValue, r.unit)}</td>
-              <td style={mono}>{(r.withinTenPctShare * 100).toFixed(0)}%</td>
+              <td style={mono}>{formatPercent(r.withinTenPctShare)}</td>
               <td style={{ ...cell, fontSize: typography.fontSize.xs, color: colors.text.secondary, whiteSpace: 'nowrap' }}>
                 {r.periods.length > 0 ? r.periods.join(', ') : '—'}
               </td>
