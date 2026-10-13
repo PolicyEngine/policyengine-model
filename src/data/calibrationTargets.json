@@ -1,6 +1,6 @@
 {
   "releaseId": "populace-us-2024-spm-20260915",
-  "policyenginePackageVersion": "6.2.5",
+  "policyenginePackageVersion": "6.3.3",
   "calibrationReleaseId": "populace-us-2024-buildp-sparse-rmloss100-cae8640-20260728T011454Z",
   "calibratedAt": "2026-07-28T03:56:03.415544+00:00",
   "households": 57240,

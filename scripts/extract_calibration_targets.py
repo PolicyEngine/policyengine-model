@@ -25,6 +25,7 @@ written to src/data/calibrationTargets.json.
 import argparse
 import hashlib
 import json
+import math
 import os
 import subprocess
 import urllib.request
@@ -52,6 +53,8 @@ LEVEL_KEYS = ("national", "state", "district", "other")
 INTERNAL_TARGET_ROLES = {"selection_mass_protection"}
 # calibration_diagnostics.json schema versions this script understands.
 SUPPORTED_SCHEMA_VERSIONS = {5}
+# ledger_measure_unit values an administrative target may carry.
+MEASURE_UNITS = {"usd", "count"}
 
 
 class UnsupportedDiagnostics(ValueError):
@@ -95,6 +98,54 @@ def geography_level(target: dict) -> str:
     )
 
 
+def _is_finite_number(value) -> bool:
+    return (
+        isinstance(value, (int, float))
+        and not isinstance(value, bool)
+        and math.isfinite(value)
+    )
+
+
+def _is_nonempty_string(value) -> bool:
+    return isinstance(value, str) and bool(value.strip())
+
+
+def validate_target(t) -> None:
+    """Every field extract() reads must be present and well-formed."""
+    if not isinstance(t, dict) or not _is_nonempty_string(t.get("name")):
+        raise UnsupportedDiagnostics(f"target without a name: {t!r:.200}")
+    name = t["name"]
+
+    def fail(problem: str):
+        raise UnsupportedDiagnostics(f"target {name!r}: {problem}")
+
+    if not _is_nonempty_string(t.get("source")):
+        fail("no source")
+    if not isinstance(t.get("metadata"), dict):
+        fail("metadata is not an object")
+    if not _is_finite_number(t.get("target")):
+        fail(f"target value {t.get('target')!r} is not a finite number")
+    # The release contract requires relative_error on every target; a missing
+    # one would silently count as outside 10%.
+    if not _is_finite_number(t.get("relative_error")):
+        fail(f"relative_error {t.get('relative_error')!r} is not a finite number")
+    period = t.get("period")
+    if not isinstance(period, int) or isinstance(period, bool) or period < 0:
+        fail(f"period {period!r} is not a non-negative integer")
+
+    if geography_level(t) == "other":
+        return
+    metadata = t["metadata"]
+    # Without a measure concept, different concepts that share a name suffix
+    # would merge into one group.
+    if not _is_nonempty_string(metadata.get("ledger_measure_concept")):
+        fail("no ledger_measure_concept")
+    if metadata.get("ledger_measure_unit") not in MEASURE_UNITS:
+        fail(f"ledger_measure_unit {metadata.get('ledger_measure_unit')!r} is not one of {sorted(MEASURE_UNITS)}")
+    if period == 0:
+        fail("no calibration period")
+
+
 def validate(diagnostics: dict) -> None:
     """Refuse diagnostics this extraction would misread, before writing anything."""
     version = diagnostics.get("schema_version")
@@ -114,16 +165,7 @@ def validate(diagnostics: dict) -> None:
     if not isinstance(targets, list) or not targets:
         raise UnsupportedDiagnostics("targets is missing or empty")
     for t in targets:
-        if not isinstance(t, dict) or not isinstance(t.get("name"), str):
-            raise UnsupportedDiagnostics(f"target without a name: {t!r:.200}")
-        if not isinstance(t.get("source"), str):
-            raise UnsupportedDiagnostics(f"target {t['name']!r} has no source")
-        if not isinstance(t.get("target"), (int, float)):
-            raise UnsupportedDiagnostics(f"target {t['name']!r} has no numeric target")
-        rel = t.get("relative_error")
-        if rel is not None and not isinstance(rel, (int, float)):
-            raise UnsupportedDiagnostics(f"target {t['name']!r} has a non-numeric relative_error")
-        geography_level(t)
+        validate_target(t)
 
 
 def suffix_from_name(name: str) -> str:
@@ -154,7 +196,7 @@ def extract(diagnostics: dict) -> dict:
     groups: dict[tuple[str, str, str, str], dict] = {}
     level_totals: dict[str, int] = defaultdict(int)
     for t in targets:
-        metadata = t.get("metadata") or {}
+        metadata = t["metadata"]
         family, table, url = split_source(t["source"])
         concept = suffix_from_name(t["name"])
         measure_concept = metadata.get("ledger_measure_concept") or ""
@@ -179,8 +221,7 @@ def extract(diagnostics: dict) -> dict:
         g["counts"][level] += 1
         g["units"].add(metadata.get("ledger_measure_unit"))
         g["domains"].add(metadata.get("ledger_domain"))
-        rel = t.get("relative_error")
-        if rel is not None and abs(rel) <= 0.10:
+        if abs(t["relative_error"]) <= 0.10:
             g["withinTenPct"] += 1
         if level == "national":
             g["nationalValues"].append(t["target"])
@@ -227,11 +268,7 @@ def extract(diagnostics: dict) -> dict:
     )
 
     n_targets = len(targets)
-    within = sum(
-        1
-        for t in targets
-        if t.get("relative_error") is not None and abs(t["relative_error"]) <= 0.10
-    )
+    within = sum(1 for t in targets if abs(t["relative_error"]) <= 0.10)
     return {
         "households": diagnostics["n_records"],
         "totalTargets": n_targets,
@@ -319,7 +356,7 @@ def main():
 
     out_path = os.path.normpath(OUTPUT_PATH)
     with open(out_path, "w") as f:
-        json.dump(output, f, indent=2)
+        json.dump(output, f, indent=2, allow_nan=False)
         f.write("\n")
     print(f"Written to {out_path}")
 

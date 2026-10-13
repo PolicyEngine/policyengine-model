@@ -46,7 +46,11 @@ def wrap(rows, **overrides):
 
 
 def target(name, source, level="country", concept="c", **extra):
-    metadata = {"ledger_geography_level": level, "ledger_measure_concept": concept}
+    metadata = {
+        "ledger_geography_level": level,
+        "ledger_measure_concept": concept,
+        "ledger_measure_unit": "usd",
+    }
     return {
         "name": name,
         "source": source,
@@ -70,24 +74,24 @@ def diagnostics(draw):
         if internal:
             source = "Locked-source mass (internal)"
             metadata = {"target_role": "selection_mass_protection"}
+            period = 0
         else:
             source = f"{family} | {table} | file.csv | 2024 | https://example.org/{family}"
             metadata = {
                 "ledger_geography_level": draw(st.sampled_from(GEO_LEVELS)),
                 "ledger_measure_concept": f"{family}.{draw(st.sampled_from(CONCEPTS))}",
-                "ledger_measure_unit": draw(st.sampled_from(["usd", "count", None])),
+                "ledger_measure_unit": draw(st.sampled_from(["usd", "count"])),
                 "ledger_domain": draw(st.sampled_from(["all_returns", "itemizers", None])),
             }
+            period = draw(st.sampled_from([2024, 2023]))
         targets.append(
             {
                 "name": f"{family}.{table}.{i}.{suffix}@2024",
                 "source": source,
                 "metadata": metadata,
                 "target": draw(st.floats(min_value=-1e12, max_value=1e12, allow_nan=False)),
-                "relative_error": draw(
-                    st.one_of(st.none(), st.floats(min_value=-5, max_value=5, allow_nan=False))
-                ),
-                "period": draw(st.sampled_from([2024, 2023, 0, None])),
+                "relative_error": draw(st.floats(min_value=-5, max_value=5, allow_nan=False)),
+                "period": period,
             }
         )
     return wrap(targets, n_records=draw(st.integers(1, 10**6)))
@@ -125,11 +129,7 @@ def test_group_keys_are_unique_and_sorted(diag):
 @given(diagnostics())
 def test_within_ten_percent_share_matches_a_recount(diag):
     out = extract(diag)
-    within = sum(
-        1
-        for t in diag["targets"]
-        if t["relative_error"] is not None and abs(t["relative_error"]) <= 0.10
-    )
+    within = sum(1 for t in diag["targets"] if abs(t["relative_error"]) <= 0.10)
     assert out["withinTenPctShare"] == round(within / len(diag["targets"]), 4)
     assert 0 <= out["withinTenPctShare"] <= 1
     for r in out["targets"]:
@@ -234,6 +234,59 @@ def test_rejects_unknown_geography_instead_of_calling_it_internal():
         extract(wrap([target("a.amount@2024", "bea | T | f | 2024 | u", level="county")]))
     with pytest.raises(UnsupportedDiagnostics):
         extract(wrap([{**target("a.amount@2024", "bea | T | f | 2024 | u"), "metadata": None}]))
+
+
+GOOD = ("a.amount@2024", "bea | T | f | 2024 | u")
+
+
+def _without(row, key):
+    return {k: v for k, v in row.items() if k != key}
+
+
+def _with_metadata(row, **changes):
+    return {**row, "metadata": {**row["metadata"], **changes}}
+
+
+@pytest.mark.parametrize(
+    "bad",
+    [
+        # relative_error is required: a missing one would count as a miss
+        _without(target(*GOOD), "relative_error"),
+        {**target(*GOOD), "relative_error": None},
+        {**target(*GOOD), "relative_error": float("nan")},
+        # target values must be finite, non-boolean numbers
+        {**target(*GOOD), "target": True},
+        {**target(*GOOD), "target": float("nan")},
+        {**target(*GOOD), "target": float("inf")},
+        {**target(*GOOD), "target": "1.0"},
+        # names and sources must be non-empty
+        {**target(*GOOD), "name": ""},
+        {**target(*GOOD), "source": " "},
+        # administrative targets need a measure concept, a unit, and a year
+        _with_metadata(target(*GOOD), ledger_measure_concept=None),
+        _with_metadata(target(*GOOD), ledger_measure_concept=""),
+        _with_metadata(target(*GOOD), ledger_measure_unit="euros"),
+        {**target(*GOOD), "period": 0},
+        {**target(*GOOD), "period": None},
+        {**target(*GOOD), "period": True},
+        {**target(*GOOD), "period": -1},
+    ],
+)
+def test_rejects_malformed_targets(bad):
+    with pytest.raises(UnsupportedDiagnostics):
+        extract(wrap([target("ok.amount@2024", GOOD[1]), bad]))
+
+
+def test_missing_measure_concept_cannot_merge_groups():
+    # Dropping the concept from the shipped all-returns/EITC pair used to
+    # merge them into one "return_count" group; now it is refused.
+    source = "irs_soi | Historic Table 2 state data, United States total | f.csv | 2022 | u"
+    rows = [
+        _with_metadata(target("irs.us.all.return_count@2024", source), ledger_measure_concept=None),
+        _with_metadata(target("irs.us.eitc.return_count@2024", source), ledger_measure_concept=None),
+    ]
+    with pytest.raises(UnsupportedDiagnostics):
+        extract(wrap(rows))
 
 
 def test_committed_json_matches_the_release_diagnostics():
