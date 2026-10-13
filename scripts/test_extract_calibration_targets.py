@@ -34,27 +34,49 @@ SUFFIXES = ["amount", "return_count", "population"]
 CONCEPTS = ["concept_a", "concept_b"]
 GEO_LEVELS = ["country", "state", "congressional_district"]
 
+BEA = "bea | T | f | 2024 | https://example.org/bea"
+IRS_US_TOTAL = (
+    "irs_soi | Historic Table 2 state data, United States total | f.csv | 2022 | "
+    "https://example.org/irs"
+)
+
+
+def within_share(rows):
+    hits = sum(
+        1
+        for r in rows
+        if isinstance(r, dict)
+        and isinstance(r.get("relative_error"), (int, float))
+        and not isinstance(r.get("relative_error"), bool)
+        and abs(r["relative_error"]) <= 0.10
+    )
+    return hits / max(len(rows), 1)
+
 
 def wrap(rows, **overrides):
-    return {
+    """Schema-5 diagnostics whose stated totals agree with ``rows``."""
+    diag = {
         "schema_version": 5,
         "weight_entity": "household",
         "n_records": 1000,
+        "fraction_within_10pct": within_share(rows),
         "targets": rows,
         **overrides,
     }
+    diag.setdefault("target_surface", {"n_targets": len(rows), "n_records": diag["n_records"]})
+    return diag
 
 
-def target(name, source, level="country", concept="c", **extra):
-    metadata = {
-        "ledger_geography_level": level,
-        "ledger_measure_concept": concept,
-        "ledger_measure_unit": "usd",
-    }
+def target(name="a.amount@2024", source=BEA, level="country", concept="c", **extra):
+    """A valid administrative target."""
     return {
         "name": name,
         "source": source,
-        "metadata": metadata,
+        "metadata": {
+            "ledger_geography_level": level,
+            "ledger_measure_concept": concept,
+            "ledger_measure_unit": "usd",
+        },
         "target": 1.0,
         "relative_error": 0.0,
         "period": 2024,
@@ -62,16 +84,36 @@ def target(name, source, level="country", concept="c", **extra):
     }
 
 
+def internal(**extra):
+    """A valid build-internal constraint."""
+    return {
+        "name": "selection_mass_protection.keogh_distributions@0",
+        "source": "Locked-source mass measured on the base pool",
+        "metadata": {"target_role": "selection_mass_protection"},
+        "target": 5.0,
+        "relative_error": 0.0,
+        "period": 0,
+        **extra,
+    }
+
+
+def without(row, key):
+    return {k: v for k, v in row.items() if k != key}
+
+
+def with_metadata(row, **changes):
+    return {**row, "metadata": {**row["metadata"], **changes}}
+
+
 @st.composite
 def diagnostics(draw):
     n = draw(st.integers(min_value=1, max_value=60))
-    targets = []
+    rows = []
     for i in range(n):
         family = draw(st.sampled_from(FAMILIES))
         table = draw(st.sampled_from(TABLES))
         suffix = draw(st.sampled_from(SUFFIXES))
-        internal = draw(st.booleans()) and draw(st.booleans())
-        if internal:
+        if draw(st.booleans()) and draw(st.booleans()):
             source = "Locked-source mass (internal)"
             metadata = {"target_role": "selection_mass_protection"}
             period = 0
@@ -84,7 +126,7 @@ def diagnostics(draw):
                 "ledger_domain": draw(st.sampled_from(["all_returns", "itemizers", None])),
             }
             period = draw(st.sampled_from([2024, 2023]))
-        targets.append(
+        rows.append(
             {
                 "name": f"{family}.{table}.{i}.{suffix}@2024",
                 "source": source,
@@ -94,7 +136,7 @@ def diagnostics(draw):
                 "period": period,
             }
         )
-    return wrap(targets, n_records=draw(st.integers(1, 10**6)))
+    return wrap(rows, n_records=draw(st.integers(1, 10**6)))
 
 
 @settings(max_examples=300, deadline=None)
@@ -158,13 +200,12 @@ def test_extract_is_deterministic_and_order_invariant(diag):
 def test_same_name_suffix_with_different_concepts_stays_separate():
     # Shipped case: two national IRS rows in one table both end in
     # .return_count but measure all returns and EITC returns respectively.
-    source = "irs_soi | Historic Table 2 state data, United States total | f.csv | 2022 | u"
     out = extract(
         wrap(
             [
-                target("irs.us.all.return_count@2024", source,
+                target("irs.us.all.return_count@2024", IRS_US_TOTAL,
                        concept="irs_soi.individual_income_tax_returns"),
-                target("irs.us.eitc.return_count@2024", source,
+                target("irs.us.eitc.return_count@2024", IRS_US_TOTAL,
                        concept="irs_soi.returns_with_earned_income_credit"),
             ]
         )
@@ -178,22 +219,22 @@ def test_same_name_suffix_with_different_concepts_stays_separate():
 
 
 def test_internal_constraint_is_counted_as_other():
-    out = extract(
-        wrap(
-            [
-                target("a.amount@2024", "bea | T | f | 2024 | u"),
-                {
-                    "name": "selection_mass_protection.keogh_distributions@0",
-                    "source": "Locked-source mass measured on the base pool",
-                    "metadata": {"target_role": "selection_mass_protection"},
-                    "target": 5.0,
-                    "relative_error": 0.0,
-                    "period": 0,
-                },
-            ]
-        )
-    )
+    out = extract(wrap([target(), internal()]))
     assert out["levelCounts"] == {"national": 1, "state": 0, "district": 0, "other": 1}
+    families = {r["sourceFamily"] for r in out["targets"]}
+    assert families == {"bea", "policyengine_build"}
+
+
+def test_internal_constraint_keeps_its_family_whatever_its_source_looks_like():
+    row = internal(source="bea | T | f | 2024 | https://example.org/bea")
+    out = extract(wrap([target(), row]))
+    families = sorted(r["sourceFamily"] for r in out["targets"])
+    assert families == ["bea", "policyengine_build"]
+
+
+def test_empty_domain_is_treated_as_no_domain():
+    out = extract(wrap([with_metadata(target(), ledger_domain="")]))
+    assert out["targets"][0]["domain"] is None
 
 
 def test_rejects_the_legacy_local_area_schema():
@@ -214,79 +255,121 @@ def test_rejects_the_legacy_local_area_schema():
         extract(legacy)
 
 
+@pytest.mark.parametrize("bad", [[], None, "x", 5])
+def test_rejects_diagnostics_that_are_not_an_object(bad):
+    with pytest.raises(UnsupportedDiagnostics):
+        extract(bad)
+
+
 @pytest.mark.parametrize(
     "overrides",
     [
         {"schema_version": 4},
+        {"schema_version": None},
+        {"schema_version": True},
+        {"schema_version": [5]},
+        {"schema_version": 5.0},
         {"weight_entity": "person"},
         {"n_records": None},
         {"n_records": 0},
+        {"n_records": True},
+        {"n_records": 1000.0},
         {"targets": []},
+        {"targets": {}},
     ],
 )
 def test_rejects_unsupported_top_level_fields(overrides):
     with pytest.raises(UnsupportedDiagnostics):
-        extract(wrap([target("a.amount@2024", "bea | T | f | 2024 | u")], **overrides))
-
-
-def test_rejects_unknown_geography_instead_of_calling_it_internal():
-    with pytest.raises(UnsupportedDiagnostics):
-        extract(wrap([target("a.amount@2024", "bea | T | f | 2024 | u", level="county")]))
-    with pytest.raises(UnsupportedDiagnostics):
-        extract(wrap([{**target("a.amount@2024", "bea | T | f | 2024 | u"), "metadata": None}]))
-
-
-GOOD = ("a.amount@2024", "bea | T | f | 2024 | u")
-
-
-def _without(row, key):
-    return {k: v for k, v in row.items() if k != key}
-
-
-def _with_metadata(row, **changes):
-    return {**row, "metadata": {**row["metadata"], **changes}}
+        extract(wrap([target()], **overrides))
 
 
 @pytest.mark.parametrize(
     "bad",
     [
         # relative_error is required: a missing one would count as a miss
-        _without(target(*GOOD), "relative_error"),
-        {**target(*GOOD), "relative_error": None},
-        {**target(*GOOD), "relative_error": float("nan")},
+        without(target(), "relative_error"),
+        target(relative_error=None),
+        target(relative_error=float("nan")),
+        target(relative_error=True),
         # target values must be finite, non-boolean numbers
-        {**target(*GOOD), "target": True},
-        {**target(*GOOD), "target": float("nan")},
-        {**target(*GOOD), "target": float("inf")},
-        {**target(*GOOD), "target": "1.0"},
+        target(target=True),
+        target(target=float("nan")),
+        target(target=float("inf")),
+        target(target="1.0"),
+        target(target=None),
         # names and sources must be non-empty
-        {**target(*GOOD), "name": ""},
-        {**target(*GOOD), "source": " "},
+        target(name=""),
+        target(source=" "),
+        # the final name segment is the group's concept suffix
+        target(name="@2024"),
+        target(name="a.b.@2024"),
+        # an administrative citation must be 'family | table | file | vintage |
+        # url': anything else would be filed as build-internal or mis-linked
+        target(source="bea | T | f | 2024"),
+        target(source="bea | T | x | f | 2024 | https://example.org/bea"),
+        target(source="bea |  | f | 2024 | https://example.org/bea"),
+        target(source="bea | T | f | 2024 | not-a-url"),
+        target(source="PolicyEngine Ledger source-backed fact"),
         # administrative targets need a measure concept, a unit, and a year
-        _with_metadata(target(*GOOD), ledger_measure_concept=None),
-        _with_metadata(target(*GOOD), ledger_measure_concept=""),
-        _with_metadata(target(*GOOD), ledger_measure_unit="euros"),
-        {**target(*GOOD), "period": 0},
-        {**target(*GOOD), "period": None},
-        {**target(*GOOD), "period": True},
-        {**target(*GOOD), "period": -1},
+        with_metadata(target(), ledger_measure_concept=None),
+        with_metadata(target(), ledger_measure_concept=""),
+        with_metadata(target(), ledger_measure_concept="c "),
+        with_metadata(target(), ledger_measure_unit="euros"),
+        with_metadata(target(), ledger_measure_unit=None),
+        with_metadata(target(), ledger_measure_unit=["usd"]),
+        {**target(), "metadata": without(target()["metadata"], "ledger_measure_unit")},
+        with_metadata(target(), ledger_domain=["all_returns"]),
+        target(period=0),
+        target(period=None),
+        target(period=True),
+        target(period=-1),
+        target(period=2024.0),
+        target(period=1),
+        target(period=20240),
+        # geography must be recognised, or the row must declare an internal role
+        target(level="county"),
+        with_metadata(target(), ledger_geography_level=None),
+        {**target(), "metadata": None},
+        {**target(), "metadata": []},
+        internal(metadata={"target_role": "something_new"}),
+        internal(metadata={"target_role": ["selection_mass_protection"]}),
+        "not a target",
     ],
 )
 def test_rejects_malformed_targets(bad):
     with pytest.raises(UnsupportedDiagnostics):
-        extract(wrap([target("ok.amount@2024", GOOD[1]), bad]))
+        extract(wrap([target("ok.amount@2024"), bad]))
 
 
 def test_missing_measure_concept_cannot_merge_groups():
     # Dropping the concept from the shipped all-returns/EITC pair used to
     # merge them into one "return_count" group; now it is refused.
-    source = "irs_soi | Historic Table 2 state data, United States total | f.csv | 2022 | u"
     rows = [
-        _with_metadata(target("irs.us.all.return_count@2024", source), ledger_measure_concept=None),
-        _with_metadata(target("irs.us.eitc.return_count@2024", source), ledger_measure_concept=None),
+        with_metadata(target("irs.us.all.return_count@2024", IRS_US_TOTAL), ledger_measure_concept=None),
+        with_metadata(target("irs.us.eitc.return_count@2024", IRS_US_TOTAL), ledger_measure_concept=None),
     ]
     with pytest.raises(UnsupportedDiagnostics):
         extract(wrap(rows))
+
+
+def test_rejects_totals_that_disagree_with_the_targets():
+    rows = [target(), target("b.amount@2024")]
+    # a truncated or padded list no longer matches the stated target count
+    with pytest.raises(UnsupportedDiagnostics):
+        extract(wrap(rows, target_surface={"n_targets": 3, "n_records": 1000}))
+    with pytest.raises(UnsupportedDiagnostics):
+        extract(wrap(rows, target_surface=None))
+    # the household count must match the constraint matrix's
+    with pytest.raises(UnsupportedDiagnostics):
+        extract(wrap(rows, target_surface={"n_targets": 2, "n_records": 999}))
+    # the stated fit share must equal a recount
+    with pytest.raises(UnsupportedDiagnostics):
+        extract(wrap(rows, fraction_within_10pct=0.5))
+    with pytest.raises(UnsupportedDiagnostics):
+        extract(wrap(rows, fraction_within_10pct=None))
+    # duplicate rows would be double-counted
+    with pytest.raises(UnsupportedDiagnostics):
+        extract(wrap([target(), target()]))
 
 
 def test_committed_json_matches_the_release_diagnostics():

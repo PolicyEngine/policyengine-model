@@ -85,7 +85,7 @@ export default function CalibrationPage({ country }: { country: Country }) {
         {data.households.toLocaleString()} households in release{' '}
         <code style={{ fontFamily: typography.fontFamily.mono }}>{data.releaseId}</code>
         {data.policyenginePackageVersion
-          ? `, the US default in the policyengine Python package as of version ${data.policyenginePackageVersion}`
+          ? `, the US default in version ${data.policyenginePackageVersion} of the policyengine Python package`
           : ''}
         .{' '}
         {inherited ? (

@@ -51,10 +51,14 @@ LEVEL_KEYS = ("national", "state", "district", "other")
 # as one of these internal constraint roles; any other missing or unknown
 # geography is an error rather than a silent "build-internal" row.
 INTERNAL_TARGET_ROLES = {"selection_mass_protection"}
+# Source family the page shows for those internal constraints.
+INTERNAL_FAMILY = "policyengine_build"
 # calibration_diagnostics.json schema versions this script understands.
 SUPPORTED_SCHEMA_VERSIONS = {5}
 # ledger_measure_unit values an administrative target may carry.
 MEASURE_UNITS = {"usd", "count"}
+# Plausible calibration years for an administrative target's period.
+CALIBRATION_YEARS = (1990, 2100)
 
 
 class UnsupportedDiagnostics(ValueError):
@@ -85,12 +89,17 @@ def release_manifest_url(release_id: str) -> str:
     )
 
 
+def _one_of(value, allowed) -> bool:
+    """Membership that is False, not a TypeError, for unhashable JSON values."""
+    return isinstance(value, str) and value in allowed
+
+
 def geography_level(target: dict) -> str:
     metadata = target.get("metadata") or {}
     level = metadata.get("ledger_geography_level")
-    if level in LEVELS:
+    if _one_of(level, LEVELS):
         return LEVELS[level]
-    if level is None and metadata.get("target_role") in INTERNAL_TARGET_ROLES:
+    if level is None and _one_of(metadata.get("target_role"), INTERNAL_TARGET_ROLES):
         return "other"
     raise UnsupportedDiagnostics(
         f"target {target.get('name')!r}: unrecognized geography {level!r} "
@@ -99,11 +108,11 @@ def geography_level(target: dict) -> str:
 
 
 def _is_finite_number(value) -> bool:
-    return (
-        isinstance(value, (int, float))
-        and not isinstance(value, bool)
-        and math.isfinite(value)
-    )
+    if isinstance(value, bool):
+        return False
+    if isinstance(value, int):
+        return True
+    return isinstance(value, float) and math.isfinite(value)
 
 
 def _is_nonempty_string(value) -> bool:
@@ -115,13 +124,16 @@ def validate_target(t) -> None:
     if not isinstance(t, dict) or not _is_nonempty_string(t.get("name")):
         raise UnsupportedDiagnostics(f"target without a name: {t!r:.200}")
     name = t["name"]
+    if not suffix_from_name(name).strip():
+        raise UnsupportedDiagnostics(f"target {name!r}: name has no final segment")
 
     def fail(problem: str):
         raise UnsupportedDiagnostics(f"target {name!r}: {problem}")
 
     if not _is_nonempty_string(t.get("source")):
         fail("no source")
-    if not isinstance(t.get("metadata"), dict):
+    metadata = t.get("metadata")
+    if not isinstance(metadata, dict):
         fail("metadata is not an object")
     if not _is_finite_number(t.get("target")):
         fail(f"target value {t.get('target')!r} is not a finite number")
@@ -132,24 +144,38 @@ def validate_target(t) -> None:
     period = t.get("period")
     if not isinstance(period, int) or isinstance(period, bool) or period < 0:
         fail(f"period {period!r} is not a non-negative integer")
+    domain = metadata.get("ledger_domain")
+    if domain is not None and not isinstance(domain, str):
+        fail(f"ledger_domain {domain!r} is not a string")
 
     if geography_level(t) == "other":
         return
-    metadata = t["metadata"]
+    # An administrative citation that is not 'family | table | file | vintage |
+    # url' would be filed under the build-internal family, or link to the
+    # wrong part.
+    parts = [p.strip() for p in t["source"].split(" | ")]
+    if len(parts) != 5 or not all(parts) or not parts[4].startswith(("http://", "https://")):
+        fail(f"source {t['source']!r} is not 'family | table | file | vintage | url'")
     # Without a measure concept, different concepts that share a name suffix
     # would merge into one group.
-    if not _is_nonempty_string(metadata.get("ledger_measure_concept")):
-        fail("no ledger_measure_concept")
-    if metadata.get("ledger_measure_unit") not in MEASURE_UNITS:
-        fail(f"ledger_measure_unit {metadata.get('ledger_measure_unit')!r} is not one of {sorted(MEASURE_UNITS)}")
-    if period == 0:
-        fail("no calibration period")
+    concept = metadata.get("ledger_measure_concept")
+    if not _is_nonempty_string(concept) or concept != concept.strip():
+        fail(f"ledger_measure_concept {concept!r} is missing or padded")
+    if not _one_of(metadata.get("ledger_measure_unit"), MEASURE_UNITS):
+        fail(
+            f"ledger_measure_unit {metadata.get('ledger_measure_unit')!r} "
+            f"is not one of {sorted(MEASURE_UNITS)}"
+        )
+    if not CALIBRATION_YEARS[0] <= period <= CALIBRATION_YEARS[1]:
+        fail(f"period {period!r} is not a calibration year")
 
 
-def validate(diagnostics: dict) -> None:
+def validate(diagnostics) -> None:
     """Refuse diagnostics this extraction would misread, before writing anything."""
+    if not isinstance(diagnostics, dict):
+        raise UnsupportedDiagnostics("diagnostics is not an object")
     version = diagnostics.get("schema_version")
-    if version not in SUPPORTED_SCHEMA_VERSIONS:
+    if not isinstance(version, int) or isinstance(version, bool) or version not in SUPPORTED_SCHEMA_VERSIONS:
         raise UnsupportedDiagnostics(
             f"diagnostics schema_version {version!r} is not one of "
             f"{sorted(SUPPORTED_SCHEMA_VERSIONS)}"
@@ -167,20 +193,35 @@ def validate(diagnostics: dict) -> None:
     for t in targets:
         validate_target(t)
 
+    # Cross-checks against the totals the diagnostics state about themselves,
+    # so a truncated or duplicated target list is caught.
+    names = [t["name"] for t in targets]
+    if len(set(names)) != len(names):
+        raise UnsupportedDiagnostics("target names are not unique")
+    surface = diagnostics.get("target_surface")
+    surface = surface if isinstance(surface, dict) else {}
+    if surface.get("n_targets") != len(targets):
+        raise UnsupportedDiagnostics(
+            f"target_surface.n_targets {surface.get('n_targets')!r} does not match "
+            f"{len(targets)} targets"
+        )
+    if surface.get("n_records") != n_records:
+        raise UnsupportedDiagnostics(
+            f"target_surface.n_records {surface.get('n_records')!r} does not match "
+            f"n_records {n_records!r}"
+        )
+    stated_share = diagnostics.get("fraction_within_10pct")
+    share = sum(1 for t in targets if abs(t["relative_error"]) <= 0.10) / len(targets)
+    if not _is_finite_number(stated_share) or abs(stated_share - share) > 1e-9:
+        raise UnsupportedDiagnostics(
+            f"fraction_within_10pct {stated_share!r} does not match the targets ({share!r})"
+        )
+
 
 def suffix_from_name(name: str) -> str:
     """Final dot-path segment of the target name, without the @period suffix."""
     base = name.split("@", 1)[0]
     return base.rsplit(".", 1)[-1]
-
-
-def split_source(source: str) -> tuple[str, str, str]:
-    """The diagnostics 'source' field is 'family | table | file | vintage | url'."""
-    parts = [p.strip() for p in (source or "").split(" | ")]
-    if len(parts) >= 5:
-        return parts[0], parts[1], parts[4]
-    # Build-internal targets carry a prose source description
-    return "policyengine_build", source or "unknown", ""
 
 
 def extract(diagnostics: dict) -> dict:
@@ -197,10 +238,13 @@ def extract(diagnostics: dict) -> dict:
     level_totals: dict[str, int] = defaultdict(int)
     for t in targets:
         metadata = t["metadata"]
-        family, table, url = split_source(t["source"])
+        level = geography_level(t)
+        if level == "other":
+            family, table, url = INTERNAL_FAMILY, t["source"], ""
+        else:
+            family, table, _file, _vintage, url = (p.strip() for p in t["source"].split(" | "))
         concept = suffix_from_name(t["name"])
         measure_concept = metadata.get("ledger_measure_concept") or ""
-        level = geography_level(t)
         level_totals[level] += 1
         g = groups.setdefault(
             (family, table, measure_concept, concept),
@@ -220,7 +264,7 @@ def extract(diagnostics: dict) -> dict:
         )
         g["counts"][level] += 1
         g["units"].add(metadata.get("ledger_measure_unit"))
-        g["domains"].add(metadata.get("ledger_domain"))
+        g["domains"].add(metadata.get("ledger_domain") or None)
         if abs(t["relative_error"]) <= 0.10:
             g["withinTenPct"] += 1
         if level == "national":
