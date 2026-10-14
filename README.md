@@ -84,12 +84,19 @@ moves, regenerate them:
    src/data/ukDataRelease.json --rows-out src/data/ukTargetChecks.json`. It checks
    every file's sha256 against the release manifest and refuses a release other
    than the pin.
-4. Run `UK_RELEASE_ARTIFACTS=<folder> uv run --no-project --with pytest --with
-   hypothesis --with h5py --with tables --with pandas --with numpy pytest
-   scripts/test_extract_uk_release.py` and `bun run test`, then reread the
-   pipeline stage copy in `src/data/ukPipelineStages.ts` against the new
-   release's `datasets/create_datasets.py`: the counts update themselves, the
-   mechanisms do not.
+   The target check records the dataset's sha256, data package version and
+   year, and the extractor refuses a check of any other file, package or year.
+4. Run `UK_RELEASE_ARTIFACTS=<folder> UK_DATA_SOURCE=<policyengine-uk-data at
+   the pin> uv run --no-project --with pytest --with hypothesis --with h5py
+   --with tables --with pandas --with numpy pytest
+   scripts/test_extract_uk_release.py`, and
+   `UK_MODEL_SOURCE=<policyengine-uk at the pin> bun run test`. The first
+   checks the extractor's labels, areas and notes against the data package's
+   code; the second runs policyengine-uk's own behavioural functions against
+   the behavioural page. Then reread the pipeline stage copy in
+   `src/data/ukPipelineStages.ts` against the new release's
+   `datasets/create_datasets.py`: the counts update themselves, the mechanisms
+   do not.
 
 The household files hold UK Data Service microdata. Only the aggregates the
 extractor writes may leave that folder.

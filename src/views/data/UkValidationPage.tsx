@@ -77,7 +77,7 @@ const KNOWN_ISSUES: { repo: string; n: number; text: string }[] = [
   {
     repo: 'policyengine-uk-data',
     n: 588,
-    text: 'The OBR’s DWP benefit lines cover Great Britain, but the release scores them on every UK household, Northern Ireland’s included.',
+    text: 'The OBR’s DWP benefit lines cover Great Britain, but apart from Universal Credit the release scores them on every UK household, Northern Ireland’s included.',
   },
   {
     repo: 'policyengine-uk-data',
@@ -182,7 +182,8 @@ export default function UkValidationPage() {
         <p style={{ ...bodyText, fontSize: typography.fontSize.sm, marginTop: spacing.md }}>
           Each PolicyEngine UK figure follows the release’s scoring for that target, which can sum a different variable
           from the one the line names, or only some nations’ households. The OBR’s lines for DWP benefits cover Great
-          Britain, but the release scores them on every UK household. The disability line combines Disability Living
+          Britain; except for Universal Credit, the release scores them on every UK household, Northern Ireland’s
+          included. The disability line combines Disability Living
           Allowance and PIP, against modelled PIP alone. The UK council tax line also includes Northern Ireland
           domestic rates and an accruals adjustment, which the model’s council tax leaves out. Fuel duty is the duty
           on households’ car fuel, against all fuel duty receipts.
@@ -202,7 +203,7 @@ export default function UkValidationPage() {
         <p style={bodyText}>
           Share of each family’s non-zero targets within 10%, at calibration’s epoch {cal.epoch} and with the pinned
           model. The <PageLink path="/data/calibration">calibration targets</PageLink> page lists each family’s
-          publisher and area.
+          source and area.
         </p>
         <DataTable head={['Target family', 'Targets', `Epoch ${cal.epoch}`, `policyengine-uk ${v.modelVersion}`]} minWidth={620}>
           {cal.nationalGroups.map((g) => (

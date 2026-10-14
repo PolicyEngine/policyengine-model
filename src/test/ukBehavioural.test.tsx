@@ -1,3 +1,4 @@
+import { execFileSync } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it, vi } from 'vitest';
@@ -100,18 +101,47 @@ describe.skipIf(!source)('UK behavioural values match policyengine-uk', () => {
     }
   });
 
-  it('matches the OBR-method elasticities in dynamics/progression.py', () => {
-    const code = read('dynamics/progression.py');
-    const body = (name: string) => {
-      const start = code.indexOf(`def ${name}`);
-      return code.slice(start, code.indexOf('return elasticities', start));
-    };
-    // Non-zero literals assigned in each function, as a sorted multiset.
-    const literals = (text: string) =>
-      [...text.matchAll(/(?<![\w.%])-?\d+\.\d+(?![\w.%])/g)].map((m) => Number(m[0])).filter((x) => x !== 0).sort((a, b) => a - b);
-    const shown = (key: 'substitution' | 'income') =>
-      obrElasticities.map((r) => r[key]).filter((x) => x !== 0).sort((a, b) => a - b);
-    expect(literals(body('calculate_labour_substitution_elasticities'))).toEqual(shown('substitution'));
-    expect(literals(body('calculate_labour_net_income_elasticities'))).toEqual(shown('income'));
+  it('matches the OBR-method elasticities policyengine-uk assigns to every family type', () => {
+    // scripts/uk_obr_elasticity_grid.py runs dynamics/progression.py's own
+    // functions on made-up people of every gender, marital status and youngest
+    // child age.
+    type Cell = { gender: string; married: boolean; youngest: number | null; substitution: number; income: number };
+    const grid: Cell[] = JSON.parse(
+      execFileSync('uv', ['run', '--no-project', '--with', 'numpy', '--with', 'pandas', 'python', '-I', 'scripts/uk_obr_elasticity_grid.py', source!], {
+        encoding: 'utf8',
+      }),
+    );
+    const covered = new Set<Cell>();
+    for (const row of obrElasticities) {
+      for (const c of row.covers) {
+        const cells = grid.filter(
+          (g) =>
+            g.gender === c.gender &&
+            g.married === c.married &&
+            (c.youngest === 'none' ? g.youngest === null : g.youngest !== null && g.youngest >= c.youngest[0] && g.youngest <= c.youngest[1]),
+        );
+        expect(cells.length).toBeGreaterThan(0);
+        for (const g of cells) {
+          expect([row.group, row.youngestChild, g.substitution, g.income]).toEqual([row.group, row.youngestChild, row.substitution, row.income]);
+          covered.add(g);
+        }
+      }
+    }
+    // Every family type the module distinguishes appears on the page exactly once.
+    expect(covered.size).toBe(grid.length);
+    expect(obrElasticities.flatMap((r) => r.covers).length).toBe(new Set(obrElasticities.flatMap((r) => r.covers.map((c) => JSON.stringify(c)))).size);
+  });
+
+  it('describes the pay channels as policyengine-uk computes them', () => {
+    const employer = read('variables/contrib/policyengine/employer_ni/employer_ni_fixed_employer_cost_change.py');
+    expect(employer).toMatch(/if employee_incidence == 0:\s*\n\s*return 0/);
+    expect(employer).toMatch(/c_b = ni_class_1_income \+ baseline_employer_ni/); // the employer's baseline cost
+    expect(employer).toMatch(/new_ni_class_1_income = \(c_b \+ r_r \* \(pen_con_subtracted_r \+ t_r\)\) \/ \(1 \+ r_r\)/); // above-threshold algebra
+    expect(employer).toMatch(/below_threshold = previous_employment_income < t_b/); // the baseline threshold
+    const haircut = read('variables/gov/hmrc/national_insurance/salary_sacrifice_broad_base_haircut.py');
+    expect(haircut).toMatch(/return -employment_income \* haircut_rate/);
+    expect(haircut).toMatch(/if np\.isinf\(cap\):\s*\n\s*return 0/);
+    const returned = read('variables/gov/hmrc/pensions/salary_sacrifice_returned_to_income.py');
+    expect(returned).toMatch(/excess = max_\(intended_ss - cap, 0\)/);
   });
 });

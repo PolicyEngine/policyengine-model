@@ -36,7 +36,7 @@ export interface ParameterRow {
 export const payParameters: ParameterRow[] = [
   { path: 'gov.contrib.policyengine.employer_ni.employee_incidence', label: 'Share of a change in employer National Insurance passed to pay', value: '1 (100%)' },
   { path: 'gov.hmrc.national_insurance.salary_sacrifice_pension_cap', label: 'Cap on salary-sacrificed pension contributions free of National Insurance', value: 'None until 5 April 2029, then £2,000' },
-  { path: 'gov.contrib.behavioral_responses.salary_sacrifice_broad_base_haircut_rate', label: 'Cut to every worker’s pay while that cap applies', value: '0.0016 (0.16%)' },
+  { path: 'gov.contrib.behavioral_responses.salary_sacrifice_broad_base_haircut_rate', label: 'Haircut on every worker’s employment income while that cap applies', value: '0.0016 (0.16%)' },
 ];
 
 /** Simulation parameters: elasticities applied inside a reform simulation. */
@@ -54,11 +54,19 @@ export const capitalGainsParameters: ParameterRow[] = [
   { path: 'gov.simulation.capital_gains_responses.mtr_elasticity', label: 'Tax-rate elasticity (alternative convention)', value: '0' },
 ];
 
+/** Who a row covers: gender, marital status, and the youngest child's age (none, or an inclusive range). */
+export interface ElasticityCase {
+  gender: 'FEMALE' | 'MALE';
+  married: boolean;
+  youngest: 'none' | [number, number];
+}
+
 export interface ElasticityRow {
   group: string;
   youngestChild: string;
   substitution: number;
   income: number;
+  covers: ElasticityCase[];
 }
 
 /**
@@ -67,16 +75,26 @@ export interface ElasticityRow {
  * couple when no input says otherwise. Children are benefit-unit members
  * under 18. Unmarried men with children get no elasticity.
  */
+const W = (married: boolean, youngest: ElasticityCase['youngest']): ElasticityCase => ({ gender: 'FEMALE', married, youngest });
+const M = (married: boolean, youngest: ElasticityCase['youngest']): ElasticityCase => ({ gender: 'MALE', married, youngest });
+const ANY_CHILD: [number, number] = [0, 17];
+
 export const obrElasticities: ElasticityRow[] = [
-  { group: 'Married women', youngestChild: 'No children', substitution: 0.14, income: 0 },
-  { group: 'Married women', youngestChild: '0–2', substitution: 0.301, income: -0.185 },
-  { group: 'Married women', youngestChild: '3–4', substitution: 0.439, income: -0.173 },
-  { group: 'Married women', youngestChild: '5–10', substitution: 0.173, income: -0.102 },
-  { group: 'Married women', youngestChild: '11–17', substitution: 0.16, income: -0.063 },
-  { group: 'Unmarried women with children', youngestChild: '0–4', substitution: 0.094, income: -0.037 },
-  { group: 'Unmarried women with children', youngestChild: '5–10', substitution: 0.128, income: -0.075 },
-  { group: 'Unmarried women with children', youngestChild: '11–17', substitution: 0.136, income: -0.054 },
-  { group: 'Unmarried women without children', youngestChild: '–', substitution: 0.15, income: -0.05 },
-  { group: 'Men, except unmarried men with children', youngestChild: '–', substitution: 0.15, income: -0.05 },
-  { group: 'Unmarried men with children', youngestChild: '–', substitution: 0, income: 0 },
+  { group: 'Married women', youngestChild: 'No children', substitution: 0.14, income: 0, covers: [W(true, 'none')] },
+  { group: 'Married women', youngestChild: '0–2', substitution: 0.301, income: -0.185, covers: [W(true, [0, 2])] },
+  { group: 'Married women', youngestChild: '3–4', substitution: 0.439, income: -0.173, covers: [W(true, [3, 4])] },
+  { group: 'Married women', youngestChild: '5–10', substitution: 0.173, income: -0.102, covers: [W(true, [5, 10])] },
+  { group: 'Married women', youngestChild: '11–17', substitution: 0.16, income: -0.063, covers: [W(true, [11, 17])] },
+  { group: 'Unmarried women with children', youngestChild: '0–4', substitution: 0.094, income: -0.037, covers: [W(false, [0, 4])] },
+  { group: 'Unmarried women with children', youngestChild: '5–10', substitution: 0.128, income: -0.075, covers: [W(false, [5, 10])] },
+  { group: 'Unmarried women with children', youngestChild: '11–17', substitution: 0.136, income: -0.054, covers: [W(false, [11, 17])] },
+  { group: 'Unmarried women without children', youngestChild: '–', substitution: 0.15, income: -0.05, covers: [W(false, 'none')] },
+  {
+    group: 'Men, except unmarried men with children',
+    youngestChild: '–',
+    substitution: 0.15,
+    income: -0.05,
+    covers: [M(true, 'none'), M(true, ANY_CHILD), M(false, 'none')],
+  },
+  { group: 'Unmarried men with children', youngestChild: '–', substitution: 0, income: 0, covers: [M(false, ANY_CHILD)] },
 ];

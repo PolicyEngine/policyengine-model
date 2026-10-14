@@ -12,6 +12,7 @@ one row per target (aggregates only).
       <artifacts>/enhanced_frs_2024_25.h5 2025 <artifacts>/pinned_target_check.csv
 """
 
+import hashlib
 import sys
 from importlib.metadata import version
 
@@ -19,6 +20,14 @@ import pandas as pd
 from policyengine_uk import Microsimulation
 from policyengine_uk.data import UKSingleYearDataset
 from policyengine_uk_data.targets.build_loss_matrix import create_target_matrix
+
+
+def sha256(path: str) -> str:
+    digest = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(1 << 20), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def main(dataset_path: str, year: str, out_path: str) -> None:
@@ -34,6 +43,8 @@ def main(dataset_path: str, year: str, out_path: str) -> None:
     meta = {
         "policyengine_uk": version("policyengine-uk"),
         "policyengine_core": version("policyengine-core"),
+        "policyengine_uk_data": version("policyengine-uk-data"),
+        "dataset_sha256": sha256(dataset_path),
         "year": year,
         "people": float(sim.calculate("people", int(year)).sum()),
         "households": float(weights.sum()),

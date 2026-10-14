@@ -66,13 +66,13 @@ export const dataSection: Record<Country, SectionCopy> = {
       {
         label: 'Pipeline',
         description:
-          'Each stage that turns survey and tax records into PolicyEngine-ready microdata.',
+          'Each stage that turns raw CPS, FRS, and SCF records into PolicyEngine-ready microdata.',
         path: '/data/pipeline',
       },
       {
         label: 'Calibration targets',
         description:
-          'The population totals (program enrollment, income aggregates, demographic counts) used to reweight the underlying survey.',
+          'The population totals (program enrolment, income aggregates, demographic counts) used to reweight the underlying survey.',
         path: '/data/calibration',
       },
       {

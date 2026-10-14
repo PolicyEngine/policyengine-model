@@ -59,7 +59,7 @@ const noteStyle = {
 
 function LocalTable({ local, areaName }: { local: UkLocalCalibration; areaName: string }) {
   return (
-    <DataTable head={['Target family', 'Source', 'Measures', `${areaName} targets`, 'Within 10%']} minWidth={680}>
+    <DataTable head={['Target family', 'Source, as the build cites it', 'Measures', `${areaName} targets`, 'Within 10%']} minWidth={680}>
       {local.families.map((fam) => (
         <tr key={fam.label}>
           <td style={cell('left', { fontWeight: typography.fontWeight.medium })}>
@@ -129,14 +129,15 @@ export default function UkCalibrationPage() {
           At epoch {cal.epoch}, {fmtPct(cal.nationalWithin10)} of the {fmtInt(scored)} non-zero targets lie within 10%
           of their value, and {fmtPct(cal.nationalWithin5)} within 5%. Each target counts once, whatever its size, so
           a share says nothing about how far the misses are; the{' '}
-          <PageLink path="/data/validation">validation</PageLink> page gives each OBR line’s gap.
+          <PageLink path="/data/validation">validation</PageLink> page gives each OBR line’s gap. Each family’s
+          source links to the reference the build records for it.
           {zeroTargets.length > 0 &&
             ` Relative error is undefined for a target of zero, so the shares leave out ${zeroTargets
               .map((r) => `${r.id}, in “${r.group}”, where calibration estimates ${fmtTarget(r.calibrationEstimate, r.unit)}`)
               .join(', ')}.`}
         </p>
-        <SearchInput value={search} onChange={setSearch} placeholder="Search targets, publishers..." />
-        <DataTable head={['Target family', 'Published by', 'Area', 'Targets', '2025 value', 'Within 10%']} minWidth={760}>
+        <SearchInput value={search} onChange={setSearch} placeholder="Search targets, sources..." />
+        <DataTable head={['Target family', 'Source', 'Area', 'Targets', '2025 value', 'Within 10%']} minWidth={760}>
           {groups.map((g) => (
             <tr key={`${g.source}-${g.label}`}>
               <td style={cell('left', { fontWeight: typography.fontWeight.medium })}>

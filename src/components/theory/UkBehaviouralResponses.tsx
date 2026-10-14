@@ -44,13 +44,16 @@ export default function UkBehaviouralResponses() {
         <h2 style={sectionHeading}>Pay under employer National Insurance and salary sacrifice reforms</h2>
         <p style={bodyText}>
           When a reform changes employer National Insurance, through its rate, its threshold or its treatment of
-          employer pension contributions, the model holds what each employer pays for each employee fixed, and by
-          default passes the whole change through to pay. Pay below the employer threshold stays as it was.
+          employer pension contributions, the model sets pay with a formula meant to keep what each employer pays for
+          each employee the same, and by default passes the whole change through to pay. The formula assumes pay
+          stays above the reform’s employer threshold, so a reform that lifts the threshold past someone’s pay can
+          raise what their employer pays. Pay below the baseline employer threshold stays as it was.
         </p>
         <p style={bodyText}>
           When a cap on salary-sacrificed pension contributions free of National Insurance applies, as the model’s
-          current law has it from April 2029, contributions above the cap return to pay, and every worker’s pay falls
-          by 0.16%, the parameter’s estimate of employers spreading the extra National Insurance across all staff.
+          current law has it from April 2029, contributions above the cap return to pay. A separate haircut takes
+          0.16% off every worker’s employment income before these adjustments, the parameter’s estimate of employers
+          spreading the extra National Insurance across all staff.
         </p>
         <ParameterTable rows={payParameters} />
       </section>
@@ -120,15 +123,16 @@ export default function UkBehaviouralResponses() {
         <h2 style={sectionHeading}>Capital gains</h2>
         <p style={bodyText}>
           An elasticity of realised gains with respect to the retention rate sets how gains respond, and it is 0 by
-          default. The retention rate is one minus the person’s marginal rate on gains, which the model measures as
-          the rise in household net income from £1,000 more gains (or 0.1% of their gains, if larger), for the two
-          adults in each household with the largest gains before the response; it counts as at least 0.001. Under a
+          default. The retention rate is the share of extra gains a household keeps: the model adds £1,000 of gains
+          (or 0.1% of the person’s gains, if larger) and divides the rise in household net income by the rise in
+          gains, for the two adults in each household with the largest gains before the response. It counts as at
+          least 0.001. Under a
           reform, each person’s gains scale by the ratio of their reform to baseline retention rates, raised to the
           elasticity. Gains that qualify for Business Asset Disposal Relief can take their own elasticity, 1.4, which
           the parameter cites to the OBR’s{' '}
           <ExternalLink href={ukSourceLinks.obrCgt}>January 2025 capital gains tax costing</ExternalLink>; until that
-          switch is on, they take the main elasticity. A tax-rate elasticity offers the same response in another
-          convention, and the model refuses to run with both set.
+          switch is on, they take the main elasticity. A tax-rate elasticity instead bases the response on the change
+          in the marginal rate itself, and the model refuses to run with both set.
         </p>
         <ParameterTable rows={capitalGainsParameters} />
       </section>

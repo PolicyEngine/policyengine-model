@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 from pathlib import Path
 
 import extract_uk_release as ex
@@ -208,7 +209,10 @@ def artifacts(tmp_path: Path) -> Path:
     (d / "registry_targets.json").write_text(json.dumps(REGISTRY))
     with open(d / "pinned_target_check.csv", "w") as f:
         f.write(
-            "# policyengine_uk=2.126.12\n# policyengine_core=3.33.0\n# year=2025\n# people=40\n# households=1500\n"
+            "# policyengine_uk=2.126.12\n# policyengine_core=3.33.0\n"
+            "# policyengine_uk_data=1.58.0\n"
+            f"# dataset_sha256={_sha(d / 'enhanced_frs_2024_25.h5')}\n"
+            "# year=2025\n# people=40\n# households=1500\n"
         )
         pd.DataFrame(
             [(m, t, e * 1.02) for m, t, e in NATIONAL],
@@ -339,6 +343,22 @@ def test_scores_the_pinned_run_against_the_targets_calibration_fitted(artifacts)
     assert vat["target"] == 50.0
 
 
+@pytest.mark.parametrize(
+    "line, replacement",
+    [
+        ("# dataset_sha256=", "# dataset_sha256=0"),  # another file
+        ("# policyengine_uk_data=1.58.0", "# policyengine_uk_data=1.58.1"),
+        ("# year=2025", "# year=2026"),
+    ],
+)
+def test_rejects_a_pinned_check_of_another_file_package_or_year(
+    artifacts, line, replacement
+):
+    path = artifacts / "pinned_target_check.csv"
+    path.write_text(path.read_text().replace(line, replacement, 1))
+    _expect_error(artifacts, "pinned check has")
+
+
 def test_is_deterministic_and_independent_of_log_row_order(artifacts):
     first = run(artifacts)
     log = pd.read_csv(artifacts / "constituency_calibration_log.csv")
@@ -417,6 +437,12 @@ def test_rejects_repeated_source_households(artifacts):
         path
     )
     (artifacts / "bundle_manifest.json").write_text(json.dumps(bundle))
+    check = artifacts / "pinned_target_check.csv"
+    check.write_text(
+        re.sub(
+            r"# dataset_sha256=\w+", f"# dataset_sha256={_sha(path)}", check.read_text()
+        )
+    )
     _expect_error(artifacts, "more than one Output Area")
 
 
@@ -481,3 +507,89 @@ def test_names_publishers_and_counts_targets_carried_from_an_earlier_year(artifa
     assert plan["publisher"] == "Explore Education Statistics"
     assert cal["targetsWithoutYearValue"] == 1  # the Plan 5 target lists only 2024
     assert cal["nationalTargetsByArea"] == {"UK": 2, "England": 1}
+
+
+# The extractor's labels, areas, publishers and notes restate the release's
+# code. Re-extracting the release can't catch a restatement that has gone
+# wrong, so this reads the data package's source directly:
+# UK_DATA_SOURCE=/path/to/policyengine-uk-data (at the pinned release).
+DATA_SOURCE = __import__("os").environ.get("UK_DATA_SOURCE")
+
+
+def _read(path: str) -> str:
+    return (Path(DATA_SOURCE) / "policyengine_uk_data" / path).read_text()
+
+
+@pytest.mark.skipif(
+    not DATA_SOURCE, reason="set UK_DATA_SOURCE to policyengine-uk-data at the pin"
+)
+def test_area_overrides_and_notes_restate_the_data_package():
+    import re
+
+    obr = _read("targets/sources/obr.py")
+    rows = obr[
+        obr.index("benefit_rows = {") : obr.index(
+            "targets = []", obr.index("benefit_rows = {")
+        )
+    ]
+    benefit_targets = {
+        f"obr/{name}" for name in re.findall(r'^\s+"(\w+)": \(', rows, re.M)
+    }
+    great_britain = {
+        m for m, area in ex.AREA_BY_TARGET.items() if area == "Great Britain"
+    }
+    # Every DWP benefit row but Child Benefit (HMRC) is a Great Britain line
+    # built without a country restriction.
+    assert great_britain == benefit_targets - {"obr/child_benefit"}
+    assert "countries=" not in rows
+    assert "which covers Great Britain" in obr
+    assert '"NI domestic rates"' in obr and "obr/domestic_rates" in ex.AREA_BY_TARGET
+    assert "_PRIVATE_SCHOOL = {y: 557_000 for y in range(2018, 2032)}" in obr
+    for figure in (
+        "7_700_000",
+        "4_300_000",
+        "3_300_000",
+        "_SS_HEADCOUNT_GROWTH = 1.024",
+    ):
+        assert figure in obr
+    assert 'uprating.loc[row, "2023"]' in _read("targets/compute/income.py")
+    assert "Borrower counts for England only" in _read("targets/sources/slc.py")
+    assert "_MORTGAGE_TOTAL = 1_100 * 12 * 7.5e6" in _read("targets/sources/housing.py")
+    assert "_PROPERTY_INCOME_SCALE = 1.9" in _read("targets/sources/hmrc_spi.py")
+    land = _read("targets/sources/_land.py")
+    assert "_ONS_2020_HOUSEHOLD" in land
+    assert "2025: HOUSEHOLD_LAND_VALUES[2024]" in land
+    assert 'df["dwellings"] * df["avg_house_price"]' in _read(
+        "targets/sources/mhclg_regional_land.py"
+    )
+    assert "float(_CGT_TAXPAYERS) for year in range" in _read(
+        "targets/sources/hmrc_cgt.py"
+    )
+
+
+@pytest.mark.skipif(
+    not DATA_SOURCE, reason="set UK_DATA_SOURCE to policyengine-uk-data at the pin"
+)
+def test_local_notes_restate_the_loss_builders():
+    import re
+
+    uc = _read("targets/sources/local_uc.py")
+    assert "(positional order)" in uc
+    assert 'scaled["N"] = gb_bucket_totals.copy()' in uc  # NI takes GB's child shares
+    for area in ("constituencies", "local_authorities"):
+        loss = _read(f"datasets/local_areas/{area}/loss.py")
+        assert re.search(r'y\["uc_households"\] = get_\w+_uc_targets\(\)\.values', loss)
+        assert "y[col] *= uk_total_population / targets_total_pop * 0.9" in loss
+        assert re.search(
+            r'y\[f"hmrc/\{income_variable\}/count"\] = \(\s*incomes\[f"\{income_variable\}_count"\]\.values \* adjustment',
+            loss,
+        )
+    assert "mapping_matrix @ y.values" in _read(
+        "datasets/local_areas/constituencies/loss.py"
+    )
+    fill = _read(
+        "datasets/local_areas/local_authorities/targets/create_total_incomes.py"
+    )
+    assert "df[col] = df[col].fillna(avg)" in fill
+    held = _read("datasets/create_datasets.py")
+    assert f'VALIDATION_ONLY_LOCAL_TARGETS = ["{ex.HELD_OUT_LOCAL}"]' in held

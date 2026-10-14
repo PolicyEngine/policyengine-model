@@ -174,6 +174,32 @@ GROUP_NOTES = {
         "Amounts scaled up 1.9 times, the build's ratio of HMRC's property "
         "rental income statistics to the SPI"
     ),
+    # targets/sources/_land.py and mhclg_regional_land.py
+    ("ons", "land_value", "national", None): "ONS's 2024 total, held flat for 2025",
+    ("ons", "household_land_value", "national", None): (
+        "ONS's 2024 total land value times the 2020 household share, held flat for 2025"
+    ),
+    ("ons", "corporate_land_value", "national", None): (
+        "ONS's 2024 total land value times the 2020 corporate share, held flat for 2025"
+    ),
+    ("ons", "household_land_value", "region", None): (
+        "The household total shared out by each region's dwellings times its "
+        "average house price"
+    ),
+    # targets/sources/obr.py and targets/compute/income.py
+    ("obr", "attends_private_school", "national", None): (
+        "557,000 in every year from 2018 to 2031, a figure set in the build"
+    ),
+    (
+        "obr",
+        "pension_contributions_via_salary_sacrifice",
+        "national",
+        None,
+    ): (
+        "2024 users set in the build (7.7 million; 4.3 million at or below the "
+        "cap, 3.3 million above), grown 2.4% a year; the £2,000 test uses 2023 "
+        "prices"
+    ),
     ("hmrc", "capital_gains", "national", None): (
         "2023-24 outturn: gains uprated to 2025, taxpayer counts held flat"
     ),
@@ -463,7 +489,8 @@ LOCAL_FAMILIES = [
         "age/",
         "Population by ten-year age band, 0 to 79",
         "ONS mid-year population estimates",
-        "Rescaled so every area's bands add to 90% of the UK population",
+        "Rescaled so the bands across all areas together add to 90% of the UK "
+        "population",
     ),
     (
         "hmrc/employment_income/amount",
@@ -858,7 +885,9 @@ def national_groups(
     return groups, target_rows
 
 
-def read_pinned_check(path: Path, model_version: str) -> tuple[dict, pd.DataFrame]:
+def read_pinned_check(
+    path: Path, model_version: str, pin_checks: dict | None = None
+) -> tuple[dict, pd.DataFrame]:
     meta = {}
     with open(path) as f:
         for line in f:
@@ -870,6 +899,11 @@ def read_pinned_check(path: Path, model_version: str) -> tuple[dict, pd.DataFram
         raise ExtractionError(
             f"pinned check ran policyengine-uk {meta.get('policyengine_uk')}, the bundle pins {model_version}"
         )
+    for key, expected in (pin_checks or {}).items():
+        if meta.get(key) != expected:
+            raise ExtractionError(
+                f"pinned check has {key}={meta.get(key)}, expected {expected}"
+            )
     checked = pd.read_csv(path, comment="#")
     if (
         checked["metric"].duplicated().any()
@@ -993,9 +1027,19 @@ def extract(artifacts: Path, registry_path: Path) -> dict:
         )
 
     registry = pd.DataFrame(json.loads(registry_path.read_text())).set_index("name")
+    # The check must have run the pinned file, from the pinned data package,
+    # for the year the weight matrices were fitted to.
     run, pinned = read_pinned_check(
-        artifacts / "pinned_target_check.csv", pin["modelVersion"]
+        artifacts / "pinned_target_check.csv",
+        pin["modelVersion"],
+        {
+            "dataset_sha256": pin["datasetSha256"],
+            "policyengine_uk_data": pin["dataVersion"],
+            "year": constituency["year"],
+        },
     )
+    if authority["year"] != constituency["year"]:
+        raise ExtractionError("the two weight matrices were fitted to different years")
     constituency_cal, national = calibration(
         artifacts / "constituency_calibration_log.csv", registry, constituency["areas"]
     )

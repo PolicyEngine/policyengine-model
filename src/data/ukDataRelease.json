@@ -89,7 +89,7 @@
         {
           "label": "Population by ten-year age band, 0 to 79",
           "source": "ONS mid-year population estimates",
-          "note": "Rescaled so every area's bands add to 90% of the UK population",
+          "note": "Rescaled so the bands across all areas together add to 90% of the UK population",
           "metrics": 8,
           "heldOut": false,
           "cells": 5200,
@@ -177,7 +177,7 @@
         {
           "label": "Population by ten-year age band, 0 to 79",
           "source": "ONS mid-year population estimates",
-          "note": "Rescaled so every area's bands add to 90% of the UK population",
+          "note": "Rescaled so the bands across all areas together add to 90% of the UK population",
           "metrics": 8,
           "heldOut": false,
           "cells": 2880,
@@ -302,7 +302,7 @@
         "label": "Salary sacrifice users, in total and either side of the \u00a32,000 cap",
         "publisher": "HM Treasury and HMRC",
         "geography": "UK",
-        "note": null,
+        "note": "2024 users set in the build (7.7 million; 4.3 million at or below the cap, 3.3 million above), grown 2.4% a year; the \u00a32,000 test uses 2023 prices",
         "units": [
           "count"
         ],
@@ -571,7 +571,7 @@
         "label": "Pupils at independent schools",
         "publisher": "Independent Schools Council census",
         "geography": "UK",
-        "note": null,
+        "note": "557,000 in every year from 2018 to 2031, a figure set in the build",
         "units": [
           "count"
         ],
@@ -1196,7 +1196,7 @@
         "label": "Household land value by region",
         "publisher": "ONS",
         "geography": "Region",
-        "note": null,
+        "note": "The household total shared out by each region's dwellings times its average house price",
         "units": [
           "gbp"
         ],
@@ -1269,7 +1269,7 @@
         "label": "Corporate land value",
         "publisher": "ONS",
         "geography": "UK",
-        "note": null,
+        "note": "ONS's 2024 total land value times the 2020 corporate share, held flat for 2025",
         "units": [
           "gbp"
         ],
@@ -1288,7 +1288,7 @@
         "label": "Household land value",
         "publisher": "ONS",
         "geography": "UK",
-        "note": null,
+        "note": "ONS's 2024 total land value times the 2020 household share, held flat for 2025",
         "units": [
           "gbp"
         ],
@@ -1364,7 +1364,7 @@
         "label": "Total land value",
         "publisher": "ONS",
         "geography": "UK",
-        "note": null,
+        "note": "ONS's 2024 total, held flat for 2025",
         "units": [
           "gbp"
         ],

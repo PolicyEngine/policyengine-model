@@ -53,9 +53,9 @@ function reformTax(earnings: number, children: number, creditPerChild: number): 
   return Math.max(0, base - credit);
 }
 
-// A fixed credit per child leaves each family's marginal tax rate where it was,
-// so it has no substitution effect. It raises net income, so the example
-// applies an income elasticity to the credit's share of net income.
+// The example models only the income effect: the credit raises net income,
+// and earnings respond through an income elasticity applied to the credit's
+// share of net income.
 const INCOME_ELASTICITY = -0.05;
 
 export function behavioralEarnings(earnings: number, children: number, creditPerChild: number): number {

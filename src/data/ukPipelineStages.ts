@@ -73,7 +73,7 @@ export const ukPipelineStages: PipelineStage[] = [
     icon: 'coin',
     inputSize: `${f.baseHouseholds} households`,
     outputSize: `${f.baseHouseholds} households`,
-    dataSources: ['Wealth and Assets Survey Round 8', 'UK House Price Index'],
+    dataSources: ['Wealth and Assets Survey Round 8', 'Regional house prices the build stores (attributed to the UK HPI)'],
     details: [
       '11 predictors: household net income; adults; children; employment, self-employment, private pension and capital income; bedrooms; council tax; renting; region',
       'The forest’s regions stop at Great Britain, so it treats Northern Ireland households as if they lived in Wales',
@@ -81,7 +81,7 @@ export const ukPipelineStages: PipelineStage[] = [
       'This stage runs before the spending stage, which uses the imputed number of vehicles',
     ],
     imputations: [
-      { name: 'Main residence value', source: 'WAS Round 8, UK HPI', method: 'Quantile random forest, rescaled to regional means' },
+      { name: 'Main residence value', source: 'WAS Round 8, stored regional house prices', method: 'Quantile random forest, rescaled to regional means' },
       { name: 'Property and corporate wealth; gross and net financial wealth', source: 'WAS Round 8', method: 'Quantile random forest' },
       { name: 'Other residential and non-residential property, land', source: 'WAS Round 8', method: 'Quantile random forest' },
       { name: 'Savings', source: 'WAS Round 8', method: 'Quantile random forest' },
@@ -97,12 +97,12 @@ export const ukPipelineStages: PipelineStage[] = [
     description:
       'A quantile random forest trained on the Living Costs and Food Survey 2023-24 (UK Data Service study 9468) ' +
       'imputes spending, so PolicyEngine UK can model VAT, duties and energy policy. Petrol and diesel spending ' +
-      'depend on whether a household runs a fuel-burning car: the build flags 90% of households with a vehicle ' +
-      'from the wealth stage, at random, a share its code attributes to the National Travel Survey 2024.',
+      'depend on whether a household runs a fuel-burning car: the build gives each household with a vehicle from ' +
+      'the wealth stage a 90% chance of that flag, a share its code attributes to the National Travel Survey 2024.',
     icon: 'shopping-cart',
     inputSize: `${f.baseHouseholds} households`,
     outputSize: `${f.baseHouseholds} households`,
-    dataSources: ['Living Costs and Food Survey 2023-24', 'NEED 2023', 'National Travel Survey 2024'],
+    dataSources: ['Living Costs and Food Survey 2023-24', 'Energy use targets set in the build (attributed to NEED 2023)', 'Car fuel share set in the build (attributed to the NTS 2024)'],
     details: [
       '10 predictors: adults, children, region, employment income, self-employment income, private pension income, household net income, tenure, accommodation type, and fuel-burning car',
       '18 outputs: the 12 COICOP spending categories, petrol, diesel, bus fares, domestic energy, electricity and gas',
@@ -111,9 +111,9 @@ export const ukPipelineStages: PipelineStage[] = [
     ],
     imputations: [
       { name: '12 COICOP spending categories', source: 'LCFS 2023-24', method: 'Quantile random forest' },
-      { name: 'Petrol and diesel spending', source: 'LCFS 2023-24, NTS 2024', method: 'Quantile random forest, given a fuel-burning car' },
+      { name: 'Petrol and diesel spending', source: 'LCFS 2023-24, assumed car fuel share', method: 'Quantile random forest, given a fuel-burning car' },
       { name: 'Bus fares', source: 'LCFS 2023-24', method: 'Quantile random forest' },
-      { name: 'Electricity and gas', source: 'LCFS 2023-24, NEED 2023', method: 'Quantile random forest, raked to NEED' },
+      { name: 'Electricity and gas', source: 'LCFS 2023-24, energy targets set in the build', method: 'Quantile random forest, raked to the build’s energy targets' },
     ],
   },
   {
@@ -157,7 +157,7 @@ export const ukPipelineStages: PipelineStage[] = [
     outputSize: `${fmtInt(stacked)} households`,
     dataSources: ['HMRC Survey of Personal Incomes 2022-23'],
     details: [
-      'One quantile random forest per earnings group (none, employee, self-employed, both) predicts incomes from age, sex and region; together they train on 100,000 SPI records drawn by weight with replacement, split across the groups by weight with at least 10,000 each',
+      'One quantile random forest per earnings group (none, employee, self-employed, both) predicts incomes from age, sex and region; they train on a nominal 100,000 SPI records drawn by weight with replacement, shared across the groups by weight with at least 10,000 per group, so the floors can take the total above 100,000',
       'Copies get all six income types plus Gift Aid and charitable gifts of investments; the original FRS households get only dividend income. Children keep their own values in this step',
       'A second forest re-imputes each copy’s pension contributions, tax-free savings income and benefit reports from its new incomes',
       'The build then zeroes 14 of each copy’s benefit reports, among them the means-tested benefits, contributory ESA and JSA, and Child Benefit; restores its industrial injuries, armed forces compensation and bereavement support reports; and redraws its Universal Credit and Pension Credit claim flags',
@@ -201,16 +201,16 @@ export const ukPipelineStages: PipelineStage[] = [
     icon: 'school',
     inputSize: `${f.households} households`,
     outputSize: `${f.households} households`,
-    dataSources: ['FRS 2024-25', 'Student Loans Company', 'DWP take-up statistics'],
+    dataSources: ['FRS 2024-25', 'Student loan borrower counts the build stores', 'Pension Credit take-up rate set in the data package'],
     details: [
       'Salary sacrifice: a forest on age and employment income fills in people the FRS did not ask about salary sacrifice, then the build switches employed pension contributors to salary sacrifice at random, aiming for about 5.4 million users for calibration to fit',
-      'Student loans: people repaying through PAYE get Plan 1, 2 or 5 from their estimated university start year, in every nation; in England, the build then gives Plan 2 or Plan 5 at random to people with tertiary education in the matching age band who do not repay, so the expected number at survey weights matches the Student Loans Company’s count of borrowers liable to repay',
-      'Pension Credit: the build solves the claim probability for entitled families so that, in expectation at survey weights, take-up in Great Britain equals DWP’s caseload take-up rate; FRS families that report Pension Credit keep claiming (top-income copies’ predicted reports do not count), and entitled families in Northern Ireland draw at the same probability',
+      'Student loans: people repaying through PAYE get Plan 1, 2 or 5 from their estimated university start year, in every nation; in England, the build then gives Plan 2 or Plan 5 at random to people with tertiary education in the matching age band who do not repay, so the expected number at survey weights matches the stored count of borrowers liable to repay, which the build takes from the student loan forecasts for England',
+      'Pension Credit: the build solves the claim probability for entitled families so that, in expectation at survey weights, take-up in Great Britain equals the data package’s caseload take-up rate, which it cites to DWP; FRS families that report Pension Credit keep claiming (top-income copies’ predicted reports do not count), and entitled families in Northern Ireland draw at the same probability',
     ],
     imputations: [
       { name: 'Salary sacrifice pension contributions', source: 'FRS 2024-25', method: 'Quantile random forest, then random switching' },
-      { name: 'Student loan plan', source: 'Student Loans Company totals', method: 'Rules, then random assignment in England' },
-      { name: 'Pension Credit claim flags', source: 'DWP take-up rate', method: 'Probability solved over entitled families in Great Britain' },
+      { name: 'Student loan plan', source: 'Stored borrower counts for England', method: 'Rules, then random assignment in England' },
+      { name: 'Pension Credit claim flags', source: 'Take-up rate in the data package', method: 'Probability solved over entitled families in Great Britain' },
     ],
   },
   {
