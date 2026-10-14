@@ -1,4 +1,5 @@
-import type { Metadata } from '../types/Variable';
+import type { Metadata, Variable } from '../types/Variable';
+import { publicBasePrefixFromPath } from '../hooks/usePublicBasePrefix';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const rawCache = new Map<string, any>();
@@ -23,12 +24,56 @@ export async function fetchMetadata(country: string = 'us'): Promise<Metadata> {
   if (metadataCache.has(country)) return metadataCache.get(country)!;
 
   const raw = await fetchMetadataRaw(country);
+  const variables: Record<string, Variable> = raw.variables ?? {};
 
   const result: Metadata = {
-    variables: raw.variables ?? {},
+    variables: await withModuleNames(country, variables),
     parameters: raw.parameters ?? {},
   };
 
   metadataCache.set(country, result);
   return result;
+}
+
+/**
+ * Give each variable without a `moduleName` the module of the one source file
+ * named after it, e.g. `income_tax` -> `gov.hmrc.income_tax.income_tax`.
+ * Names that match no file, or several, stay without a module.
+ */
+export function fillModuleNames(
+  variables: Record<string, Variable>,
+  paths: string[],
+): Record<string, Variable> {
+  const byStem = new Map<string, string | null>();
+  for (const path of paths) {
+    const stem = path.split('/').pop()!.replace(/\.py$/, '');
+    byStem.set(stem, byStem.has(stem) ? null : path);
+  }
+  return Object.fromEntries(
+    Object.entries(variables).map(([name, v]) => {
+      if (v.moduleName) return [name, v];
+      const path = byStem.get(name);
+      if (!path) return [name, v];
+      return [name, { ...v, moduleName: path.replace(/\.py$/, '').replace(/\//g, '.') }];
+    }),
+  );
+}
+
+/** The UK API serves no module names; fill them from the build-time variable tree. */
+async function withModuleNames(
+  country: string,
+  variables: Record<string, Variable>,
+): Promise<Record<string, Variable>> {
+  const all = Object.values(variables);
+  const missing = all.filter((v) => !v.moduleName).length;
+  if (all.length === 0 || missing < all.length / 2) return variables;
+  try {
+    const prefix = typeof window === 'undefined' ? '' : publicBasePrefixFromPath(window.location.pathname);
+    const res = await fetch(`${prefix}/variable-tree-${country}.json`);
+    if (!res.ok) return variables;
+    const tree = await res.json();
+    return Array.isArray(tree?.paths) ? fillModuleNames(variables, tree.paths) : variables;
+  } catch {
+    return variables;
+  }
 }

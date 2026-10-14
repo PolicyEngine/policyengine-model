@@ -6,6 +6,7 @@ import {
   fetchMetadataFiles,
   fetchParameterYamlPaths,
   fetchRegistrySnapshot,
+  fetchVariableModulePaths,
   parseProgramsYaml,
   readPackageVersion,
   resolveRepository,
@@ -123,6 +124,37 @@ describe('registry snapshot fetch script', () => {
     });
     await expect(fetchParameterYamlPaths('us', source, fetchImpl))
       .resolves.toEqual(['gov/hhs/tanf.yaml']);
+  });
+
+  it('reads variable module files from the resolved commit, skipping package markers', async () => {
+    const ukSource = { repo: 'PolicyEngine/policyengine-uk', branch: 'main', commit };
+    const treeRoot = `https://api.github.com/repos/${ukSource.repo}/git/trees`;
+    const fetchImpl = mockFetch({
+      [`${treeRoot}/${commit}`]: { tree: [{ path: 'policyengine_uk', sha: 'package-tree' }] },
+      [`${treeRoot}/package-tree`]: { tree: [
+        { path: 'parameters', sha: 'parameter-tree' },
+        { path: 'variables', sha: 'variable-tree' },
+      ] },
+      [`${treeRoot}/variable-tree?recursive=1`]: { tree: [
+        { type: 'blob', path: 'gov/hmrc/income_tax/income_tax.py' },
+        { type: 'blob', path: 'gov/hmrc/__init__.py' },
+        { type: 'blob', path: 'gov/dwp/README.md' },
+        { type: 'tree', path: 'gov' },
+      ] },
+    });
+    await expect(fetchVariableModulePaths('uk', ukSource, fetchImpl))
+      .resolves.toEqual(['gov/hmrc/income_tax/income_tax.py']);
+  });
+
+  it('refuses a truncated variable tree rather than writing a partial one', async () => {
+    const ukSource = { repo: 'PolicyEngine/policyengine-uk', branch: 'main', commit };
+    const treeRoot = `https://api.github.com/repos/${ukSource.repo}/git/trees`;
+    const fetchImpl = mockFetch({
+      [`${treeRoot}/${commit}`]: { tree: [{ path: 'policyengine_uk', sha: 'package-tree' }] },
+      [`${treeRoot}/package-tree`]: { tree: [{ path: 'variables', sha: 'variable-tree' }] },
+      [`${treeRoot}/variable-tree?recursive=1`]: { truncated: true, tree: [] },
+    });
+    await expect(fetchVariableModulePaths('uk', ukSource, fetchImpl)).rejects.toThrow('truncated');
   });
 
   it('writes the snapshot even when fetching the independent parameter tree fails', async () => {

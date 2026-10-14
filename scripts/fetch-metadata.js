@@ -112,25 +112,37 @@ export async function fetchRegistrySnapshot(country, source, {
   return snapshot;
 }
 
-/** Fetch only the parameter subtree, using the same resolved commit as coverage. */
-export async function fetchParameterYamlPaths(country, source, fetchImpl = globalThis.fetch) {
+/** List every file in one directory of the country package at the resolved commit. */
+async function fetchPackageSubtree(country, source, directory, fetchImpl) {
   const treeRoot = `https://api.github.com/repos/${source.repo}/git/trees`;
   const root = await (await request(`${treeRoot}/${source.commit}`, fetchImpl)).json();
   const packageTree = root.tree?.find(entry => entry.path === `policyengine_${country}`);
   if (!packageTree?.sha) throw new Error('Package directory missing from repository tree');
 
   const packageFiles = await (await request(`${treeRoot}/${packageTree.sha}`, fetchImpl)).json();
-  const parameters = packageFiles.tree?.find(entry => entry.path === 'parameters');
-  if (!parameters?.sha) throw new Error('Parameter directory missing from repository tree');
+  const subtree = packageFiles.tree?.find(entry => entry.path === directory);
+  if (!subtree?.sha) throw new Error(`${directory} directory missing from repository tree`);
 
-  const files = await (await request(`${treeRoot}/${parameters.sha}?recursive=1`, fetchImpl)).json();
-  if (files.truncated) throw new Error('GitHub returned a truncated parameter tree');
-  if (!Array.isArray(files.tree)) throw new Error('GitHub did not return a parameter tree');
-  return files.tree
-    .filter(entry => entry.type === 'blob'
-      && entry.path.endsWith('.yaml')
-      && !entry.path.startsWith('calibration/'))
-    .map(entry => entry.path);
+  const files = await (await request(`${treeRoot}/${subtree.sha}?recursive=1`, fetchImpl)).json();
+  if (files.truncated) throw new Error(`GitHub returned a truncated ${directory} tree`);
+  if (!Array.isArray(files.tree)) throw new Error(`GitHub did not return a ${directory} tree`);
+  return files.tree.filter(entry => entry.type === 'blob').map(entry => entry.path);
+}
+
+/** Fetch only the parameter subtree, using the same resolved commit as coverage. */
+export async function fetchParameterYamlPaths(country, source, fetchImpl = globalThis.fetch) {
+  const paths = await fetchPackageSubtree(country, source, 'parameters', fetchImpl);
+  return paths.filter(path => path.endsWith('.yaml') && !path.startsWith('calibration/'));
+}
+
+/**
+ * Variable module files at the same commit, e.g. `gov/hmrc/income_tax/income_tax.py`.
+ * The UK metadata API serves no `moduleName`, so the explorer maps variable names to
+ * these files to group variables by department and link their source.
+ */
+export async function fetchVariableModulePaths(country, source, fetchImpl = globalThis.fetch) {
+  const paths = await fetchPackageSubtree(country, source, 'variables', fetchImpl);
+  return paths.filter(path => path.endsWith('.py') && !path.endsWith('__init__.py'));
 }
 
 export async function fetchMetadataFiles({
@@ -177,6 +189,17 @@ export async function fetchMetadataFiles({
           logger.log(`  ${country}: wrote ${treePath} (${paths.length} files)`);
         } catch (error) {
           logger.warn(`  ${country}: parameter tree skipped — ${error.message}`);
+        }
+      })(),
+      (async () => {
+        const treePath = join(outputDir, `variable-tree-${country}.json`);
+        try {
+          rmSync(treePath, { force: true });
+          const paths = await fetchVariableModulePaths(country, source, fetchImpl);
+          writeFileSync(treePath, JSON.stringify({ source, paths }));
+          logger.log(`  ${country}: wrote ${treePath} (${paths.length} files)`);
+        } catch (error) {
+          logger.warn(`  ${country}: variable tree skipped — ${error.message}`);
         }
       })(),
     ]);
