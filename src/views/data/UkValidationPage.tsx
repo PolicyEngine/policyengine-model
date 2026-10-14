@@ -32,14 +32,14 @@ const OBR_ROW_LABELS: Record<string, string> = {
 const areaOf = new Map(cal.nationalGroups.map((g) => [g.label, g.geography]));
 
 // The release scores OBR's total NICs line against employee NICs alone
-// (policyengine-uk-data#537), so the table shows the classes and sums them.
+// (policyengine-uk-data#537), so the table leaves that line out and compares
+// the three classes, each with its own OBR forecast, as a sum.
 const NI_TOTAL = 'obr/ni';
 const NI_CLASSES = ['obr/ni_employee', 'obr/ni_employer', 'obr/ni_self_employed'];
 const byId = new Map(rows.map((r) => [r.id, r]));
-export const niTotal = {
-  target: byId.get(NI_TOTAL)?.target ?? 0,
-  estimate: NI_CLASSES.reduce((sum, id) => sum + (byId.get(id)?.estimate ?? 0), 0),
-};
+const sumOf = (key: 'target' | 'estimate') => NI_CLASSES.reduce((sum, id) => sum + (byId.get(id)?.[key] ?? 0), 0);
+export const niClasses = { target: sumOf('target'), estimate: sumOf('estimate') };
+export const niTotalTarget = byId.get(NI_TOTAL)?.target ?? 0;
 
 /** OBR receipts and spending lines, in £, from the March 2026 forecast. */
 export const obrRows = rows
@@ -58,11 +58,13 @@ export function fmtDifference(target: number, estimate: number): string {
   return `${pct >= 0 ? '+' : '−'}${Math.abs(pct).toFixed(1)}%`;
 }
 
-const KNOWN_ISSUES = [
+// Issues without a number are confirmed in the release's code and await a
+// policyengine-uk-data issue.
+const KNOWN_ISSUES: { repo: string; n: number | null; text: string }[] = [
   {
     repo: 'policyengine-uk-data',
     n: 581,
-    text: `The build calibrated the release with policyengine-uk ${uk.release.builtWithModelVersion}; policyengine.py runs it with ${uk.release.modelVersion}. UK-wide fit within 10% falls from ${fmtPct(cal.nationalWithin10)} to ${fmtPct(v.within10)} between the two.`,
+    text: `The build calibrated the release with policyengine-uk ${uk.release.builtWithModelVersion}; policyengine.py runs it with ${uk.release.modelVersion}. The share of national and regional targets within 10% falls from ${fmtPct(cal.nationalWithin10)} to ${fmtPct(v.within10)} between the two.`,
   },
   {
     repo: 'policyengine-uk-data',
@@ -72,21 +74,51 @@ const KNOWN_ISSUES = [
   {
     repo: 'policyengine-uk-data',
     n: 582,
-    text: 'The OBR’s incapacity benefits line is compared with income-related ESA alone.',
+    text: 'The OBR’s incapacity benefits line also covers incapacity benefit, severe disablement allowance and the incapacity part of Income Support, which the release’s comparison with ESA leaves out.',
+  },
+  {
+    repo: 'policyengine-uk-data',
+    n: null,
+    text: 'The OBR’s DWP benefit lines cover Great Britain, but the release scores them on every UK household, Northern Ireland’s included.',
+  },
+  {
+    repo: 'policyengine-uk-data',
+    n: null,
+    text: 'The OBR’s disability line combines Disability Living Allowance and PIP, and the release scores it against PIP alone.',
+  },
+  {
+    repo: 'policyengine-uk-data',
+    n: null,
+    text: 'The OBR’s UK council tax line includes Northern Ireland domestic rates and an accruals adjustment, which the model’s council tax leaves out.',
+  },
+  {
+    repo: 'policyengine-uk-data',
+    n: null,
+    text: `Both local calibrations assign Universal Credit household counts to areas by row order, which does not match the areas.`,
+  },
+  {
+    repo: 'policyengine-uk-data',
+    n: null,
+    text: `policyengine-uk ${uk.release.modelVersion} uprates the saved weights to ${v.year} by population growth, not by the factor the build used to save them, so a ${v.year} run has ${fmtPct(1 - v.households / (uk.enhanced.weightedHouseholds * uk.weightMatrices.columnSumPerSavedWeight))} fewer households than calibration fitted.`,
+  },
+  {
+    repo: 'policyengine-uk-data',
+    n: null,
+    text: 'The Output Area lookup gives every Scottish Output Area the same population, and has no Output Areas for Cumberland, Westmorland and Furness, North Yorkshire or Somerset.',
   },
   { repo: 'policyengine-uk', n: 1996, text: 'Modelled VAT exceeds OBR receipts.' },
   { repo: 'policyengine-uk-data', n: 570, text: 'Capital gains fall short of HMRC’s totals.' },
   {
     repo: 'policyengine-uk-data',
     n: 580,
-    text: 'Northern Ireland households have no Output Area, so Northern Ireland constituencies and local authorities have no households.',
+    text: 'Northern Ireland households have no Output Area, so analyses of Northern Ireland constituencies and local authorities find no households, although calibration fits those areas’ targets with Northern Ireland households.',
   },
 ];
 
 /**
  * How the UK default dataset compares with official statistics: the saved
  * file run by the model policyengine.py pins (scripts/run_uk_target_check.py),
- * scored on the release's own UK-wide calibration targets, plus the area
+ * scored on the release's own national and regional calibration targets, plus the area
  * targets the build holds out of calibration.
  */
 export default function UkValidationPage() {
@@ -105,29 +137,36 @@ export default function UkValidationPage() {
         category="Data"
         title="Validation"
         description={
-          `PolicyEngine UK checks its default dataset against the official statistics it is calibrated to, using the ` +
-          `model version ${f.pin} pins, and against area statistics the build leaves out of calibration. This page ` +
-          `publishes every target, misses included.`
+          `PolicyEngine UK checks its default dataset against the targets it is calibrated to, using the model ` +
+          `version ${f.pin} pins, and against area statistics the build leaves out of calibration. This page lists ` +
+          `every national and regional target, misses included.`
         }
       />
 
       <div className="tw:flex tw:flex-wrap" style={{ gap: spacing.md, marginBottom: spacing['3xl'] }}>
-        <StatTile value={fmtPct(v.within10)} label={`of ${fmtInt(scored)} UK-wide targets within 10%, policyengine-uk ${v.modelVersion}`} />
+        <StatTile value={fmtPct(v.within10)} label={`of ${fmtInt(scored)} national and regional targets within 10%, policyengine-uk ${v.modelVersion}`} />
         <StatTile value={fmtPct(v.within5)} label="within 5%" />
-        <StatTile value={fmtPct(cal.nationalWithin10)} label={`within 10% at the end of calibration, policyengine-uk ${uk.release.builtWithModelVersion}`} />
+        <StatTile value={fmtPct(cal.nationalWithin10)} label={`within 10% at calibration’s epoch ${cal.epoch}, policyengine-uk ${uk.release.builtWithModelVersion}`} />
         <StatTile value={fmtPct(cal.constituency.heldOut.within10)} label="of held-out constituency targets within 10%" />
       </div>
 
       <section style={{ marginBottom: spacing['4xl'] }}>
-        <h2 style={sectionHeading}>The default dataset against its UK-wide targets</h2>
+        <h2 style={sectionHeading}>The default dataset against its calibration targets</h2>
         <p style={bodyText}>
           policyengine-uk {v.modelVersion}, the version {f.pin} pins, runs {uk.release.defaultDataset} from {f.data}{' '}
           for {v.year}-{String(v.year + 1).slice(2)}, and the build’s own code scores the result against the{' '}
-          {f.nationalTargets} UK-wide targets the release is calibrated to. {fmtPct(v.within10)} of the{' '}
-          {fmtInt(scored)} non-zero targets lie within 10%, and {fmtPct(v.within5)} within 5%. At the end of
-          calibration, with policyengine-uk {uk.release.builtWithModelVersion}, the shares were{' '}
-          {fmtPct(cal.nationalWithin10)} and {fmtPct(cal.nationalWithin5)}. The run counts {fmtInt(v.people)} people
-          in {fmtInt(v.households)} households.
+          {f.nationalTargets} national and regional targets the release is calibrated to, at the values calibration
+          fitted. {fmtPct(v.within10)} of the {fmtInt(scored)} non-zero targets lie within 10%, and{' '}
+          {fmtPct(v.within5)} within 5%. At calibration’s epoch {cal.epoch}, with policyengine-uk{' '}
+          {uk.release.builtWithModelVersion} and policyengine-core {uk.release.builtWithCoreVersion}, the shares were{' '}
+          {fmtPct(cal.nationalWithin10)} and {fmtPct(cal.nationalWithin5)}; the pinned run uses policyengine-core{' '}
+          {v.coreVersion}. The run counts {fmtInt(v.people)} people in {fmtInt(v.households)} households.
+        </p>
+        <p style={bodyText}>
+          These are the targets calibration fitted, so the shares measure how far the fit holds up under the pinned
+          model, not accuracy on statistics the build never saw. Each target also counts once, whatever its size.
+          {v.revisedTargets.length > 0 &&
+            ` When the pinned run rebuilds the targets, ${fmtInt(v.revisedTargets.length)} come out at slightly different values (${v.revisedTargets.join(', ')}); the page keeps the values calibration fitted.`}
         </p>
         <p style={bodyText}>
           The OBR’s March 2026 Economic and Fiscal Outlook forecasts these receipts and spending lines for 2025-26:
@@ -143,25 +182,41 @@ export default function UkValidationPage() {
           ))}
         </DataTable>
         <p style={{ ...bodyText, fontSize: typography.fontSize.sm, marginTop: spacing.md }}>
-          Each PolicyEngine UK figure sums the variable that the release’s target registry assigns to that line. The
-          OBR forecasts total National Insurance receipts of {fmtTarget(niTotal.target, 'gbp')}; PolicyEngine UK’s
-          employee, employer and self-employed contributions add to {fmtTarget(niTotal.estimate, 'gbp')}
-          {` (${fmtDifference(niTotal.target, niTotal.estimate)})`}. The release scores that total against employee
-          contributions alone (<ExternalLink href={issueUrl('policyengine-uk-data', 537)}>policyengine-uk-data#537</ExternalLink>),
-          so the fit figures above count it as a miss.
+          Each PolicyEngine UK figure follows the release’s scoring for that target, which can sum a different variable
+          from the one the line names, or only some nations’ households. The OBR’s lines for DWP benefits cover Great
+          Britain, but the release scores them on every UK household. The disability line combines Disability Living
+          Allowance and PIP, against modelled PIP alone. The UK council tax line also includes Northern Ireland
+          domestic rates and an accruals adjustment, which the model’s council tax leaves out. Fuel duty is the duty
+          on households’ car fuel, against all fuel duty receipts.
+        </p>
+        <p style={{ ...bodyText, fontSize: typography.fontSize.sm }}>
+          The OBR forecasts employee, employer and self-employed National Insurance contributions that add to{' '}
+          {fmtTarget(niClasses.target, 'gbp')}; PolicyEngine UK’s add to {fmtTarget(niClasses.estimate, 'gbp')}
+          {` (${fmtDifference(niClasses.target, niClasses.estimate)})`}. The release scores the OBR’s forecast of
+          total receipts, {fmtTarget(niTotalTarget, 'gbp')}, against employee contributions alone (
+          <ExternalLink href={issueUrl('policyengine-uk-data', 537)}>policyengine-uk-data#537</ExternalLink>), so the
+          table leaves that line out and the fit figures count it as a miss.
         </p>
       </section>
 
       <section style={{ marginBottom: spacing['4xl'] }}>
         <h2 style={sectionHeading}>Fit by target family</h2>
         <p style={bodyText}>
-          Share of each family’s targets within 10%, at the end of calibration and with the pinned model. The{' '}
-          <PageLink path="/data/calibration">calibration targets</PageLink> page lists each family’s publisher.
+          Share of each family’s non-zero targets within 10%, at calibration’s epoch {cal.epoch} and with the pinned
+          model. The <PageLink path="/data/calibration">calibration targets</PageLink> page lists each family’s
+          publisher and area.
         </p>
-        <DataTable head={['Target family', 'Targets', 'End of calibration', `policyengine-uk ${v.modelVersion}`]} minWidth={620}>
+        <DataTable head={['Target family', 'Targets', `Epoch ${cal.epoch}`, `policyengine-uk ${v.modelVersion}`]} minWidth={620}>
           {cal.nationalGroups.map((g) => (
             <tr key={`${g.source}-${g.label}`}>
-              <td style={cell('left', { fontWeight: typography.fontWeight.medium })}>{g.label}</td>
+              <td style={cell('left', { fontWeight: typography.fontWeight.medium })}>
+                {g.label}
+                {g.note && (
+                  <div style={{ fontSize: typography.fontSize.xs, color: colors.text.tertiary, fontWeight: typography.fontWeight.normal, marginTop: spacing.xs }}>
+                    {g.note}
+                  </div>
+                )}
+              </td>
               <td style={cell()}>{fmtInt(g.targets)}</td>
               <td style={cell()}>{fmtPct(g.within10)}</td>
               <td style={cell()}>{fmtPct(g.pinnedWithin10)}</td>
@@ -174,10 +229,13 @@ export default function UkValidationPage() {
         <h2 style={sectionHeading}>Held out of calibration</h2>
         <p style={bodyText}>
           The build logs HMRC’s counts of income taxpayers with employment income for each constituency and local
-          authority, but does not fit them: HMRC’s counts cover every income taxpayer with pay in the year, including
-          people the FRS finds out of work when it interviews them. At the end of calibration,{' '}
-          {fmtPct(cal.constituency.heldOut.within10)} of the {f.constituencies} constituency counts and{' '}
-          {fmtPct(cal.localAuthority.heldOut.within10)} of the {f.localAuthorities} local authority counts lie within 10%.
+          authority, scaled by the same factor as the local income amounts, but does not fit them. Its code explains
+          why: the counts are annual, so they include people with pay for part of the year whom the FRS finds out of
+          work at interview, and fitting them would move weight from people out of work to employees. The local
+          employment income amounts, and the national counts by income band, are still fitted. At calibration’s
+          epoch {cal.epoch}, {fmtPct(cal.constituency.heldOut.within10)} of the {f.constituencies} constituency counts
+          and {fmtPct(cal.localAuthority.heldOut.within10)} of the {f.localAuthorities} local authority counts lie
+          within 10%. These are the only targets the build holds out.
         </p>
       </section>
 
@@ -185,19 +243,25 @@ export default function UkValidationPage() {
         <h2 style={sectionHeading}>Known issues</h2>
         <ul style={{ ...bodyText, paddingLeft: spacing.xl }}>
           {KNOWN_ISSUES.map((issue) => (
-            <li key={`${issue.repo}-${issue.n}`} style={{ marginBottom: spacing.sm }}>
-              {issue.text}{' '}
-              <ExternalLink href={issueUrl(issue.repo, issue.n)}>{`${issue.repo}#${issue.n}`}</ExternalLink>
+            <li key={issue.text} style={{ marginBottom: spacing.sm }}>
+              {issue.text}
+              {issue.n !== null && (
+                <>
+                  {' '}
+                  <ExternalLink href={issueUrl(issue.repo, issue.n)}>{`${issue.repo}#${issue.n}`}</ExternalLink>
+                </>
+              )}
             </li>
           ))}
         </ul>
       </section>
 
       <section>
-        <h2 style={sectionHeading}>Every UK-wide target</h2>
+        <h2 style={sectionHeading}>Every national and regional target</h2>
         <p style={bodyText}>
-          All {fmtInt(rows.length)} targets, with the pinned model’s {v.year}-{String(v.year + 1).slice(2)} estimate
-          of the variable each one is scored against. Target identifiers match policyengine-uk-data’s target registry.
+          All {fmtInt(rows.length)} targets, at the values calibration fitted, with the pinned model’s{' '}
+          {v.year}-{String(v.year + 1).slice(2)} estimate from each target’s scoring. Target identifiers match
+          policyengine-uk-data’s target registry.
         </p>
         {showAll ? (
           <>

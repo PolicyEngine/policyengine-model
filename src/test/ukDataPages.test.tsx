@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import release from '../data/ukDataRelease.json';
-import { ukPipelineIntro, ukPipelineStages, ukBranchLabels } from '../data/ukPipelineStages';
+import { ukPipelineIntro, ukPipelineStages, ukBranchLabels, runtimeShortfall } from '../data/ukPipelineStages';
 import { fmtInt, fmtPct, fmtTarget } from '../data/ukDataRelease';
 
 vi.mock('next/navigation', () => ({
@@ -37,6 +37,31 @@ const STALE_UK_PHRASES = [
   /~60,000|~30,000/,
   /zero-weight copy \(10,000/,
   /TAXSIM|CBO|federal|congressional/i,
+  /certified/i,
+  // Corrected by the 2026-10-14 fact-check of the 1.58.0 pages.
+  /pension wealth/,
+  /each trains on 100,000/,
+  /below the repayment threshold/,
+  /bus subsidy to £3\.0bn/,
+  /beyond the 95th/,
+  /in proportion to population within its survey region/,
+  /Census 2021 and 2022/,
+  /Ofgem’s April 2026/,
+  /decides who takes up/,
+  /UK-wide targets/,
+  /end of calibration/,
+];
+
+// Claims the calibration and validation pages made before the same fact-check.
+const STALE_DATA_PAGE_PHRASES = [
+  /UK-wide targets/,
+  /income-related ESA alone|scored against income-related ESA/,
+  /Personal Independence Payment spending/,
+  /sums the variable that the release’s target registry assigns/,
+  /removes it/,
+  /up to three years back/,
+  /end of calibration/i,
+  /Dwellings by tenure, by nation/,
   /certified/i,
 ];
 
@@ -75,6 +100,14 @@ describe('UK pipeline copy', () => {
     expect(g.householdsWithArea + g.householdsWithoutArea).toBe(release.enhanced.households);
   });
 
+  it('states the weight a pinned-model run loses against calibration', () => {
+    const calibrated = release.enhanced.weightedHouseholds * release.weightMatrices.columnSumPerSavedWeight;
+    expect(runtimeShortfall).toBeCloseTo(1 - release.validation.households / calibrated, 12);
+    expect(runtimeShortfall).toBeGreaterThan(0);
+    expect(runtimeShortfall).toBeLessThan(0.01);
+    expect(text).toContain(`${fmtPct(runtimeShortfall)} fewer`);
+  });
+
   it('renders the UK intro and branch labels', () => {
     render(<DataPipeline country="uk" />);
     expect(screen.getByText(ukPipelineIntro)).toBeInTheDocument();
@@ -84,20 +117,38 @@ describe('UK pipeline copy', () => {
 });
 
 import fc from 'fast-check';
-import UkCalibrationPage from '../views/data/UkCalibrationPage';
-import UkValidationPage, { fmtDifference, niTotal, obrRows } from '../views/data/UkValidationPage';
+import UkCalibrationPage, { listAreas } from '../views/data/UkCalibrationPage';
+import UkValidationPage, { fmtDifference, niClasses, niTotalTarget, obrRows } from '../views/data/UkValidationPage';
 import checks from '../data/ukTargetChecks.json';
 
 describe('UK calibration and validation pages', () => {
-  it('lists every UK-wide target family with the release counts, and no US-only text', () => {
+  it('lists every national and regional target family, with its area and notes, and no US-only text', () => {
     const { container } = render(<UkCalibrationPage />);
     const text = container.textContent ?? '';
-    expect(text).toContain(`${release.calibration.nationalTargets} UK-wide targets`);
-    expect(text).toContain(`${release.calibration.nationalGroups.length} families`);
-    for (const g of release.calibration.nationalGroups) expect(text).toContain(g.label);
+    expect(text).toContain(`${release.calibration.nationalTargets} targets in ${release.calibration.nationalGroups.length} families`);
+    expect(text).toContain(listAreas(release.calibration.nationalTargetsByArea));
+    for (const g of release.calibration.nationalGroups) {
+      expect(text).toContain(g.label);
+      if (g.note) expect(text).toContain(g.note);
+    }
+    for (const fam of [...release.calibration.constituency.families, ...release.calibration.localAuthority.families]) {
+      if (fam.note) expect(text).toContain(fam.note);
+    }
+    expect(text).toContain(`epoch ${release.calibration.epoch}`);
     expect(text).not.toMatch(/US model only|congressional|IRS|L0/);
+    for (const phrase of STALE_DATA_PAGE_PHRASES) expect(text).not.toMatch(phrase);
     const families = release.calibration.nationalGroups.reduce((n, g) => n + g.targets, 0);
     expect(families).toBe(release.calibration.nationalTargets);
+    const byArea = Object.values(release.calibration.nationalTargetsByArea).reduce((n, x) => n + x, 0);
+    expect(byArea).toBe(release.calibration.nationalTargets);
+  });
+
+  it('flags the misassigned local Universal Credit targets in both calibrations', () => {
+    for (const local of [release.calibration.constituency, release.calibration.localAuthority]) {
+      const uc = local.families.filter((f) => f.label.startsWith('Universal Credit'));
+      expect(uc.length).toBeGreaterThan(0);
+      for (const f of uc) expect(f.note).toMatch(/row order/);
+    }
   });
 
   it('shows the pinned run and never claims TAXSIM for the UK', () => {
@@ -106,7 +157,18 @@ describe('UK calibration and validation pages', () => {
     expect(text).not.toMatch(/TAXSIM|federal|state income tax|filing status/i);
     expect(text).toContain(`policyengine-uk ${release.validation.modelVersion}`);
     expect(text).toContain(fmtPct(release.validation.within10));
+    expect(text).toContain(fmtPct(release.validation.within5));
     for (const n of [537, 570, 580, 581, 582, 1996]) expect(text).toContain(`#${n}`);
+    for (const phrase of STALE_DATA_PAGE_PHRASES) expect(text).not.toMatch(phrase);
+    for (const id of release.validation.revisedTargets) expect(text).toContain(id);
+  });
+
+  it('scores the pinned run against the values calibration fitted', () => {
+    const fitted = new Map(release.calibration.nationalGroups.map((g) => [g.label, g]));
+    for (const r of checks) expect(fitted.has(r.group)).toBe(true);
+    const scorable = checks.filter((r) => r.target !== 0);
+    const within = scorable.filter((r) => Math.abs(r.estimate / r.target - 1) < 0.1).length / scorable.length;
+    expect(within).toBeCloseTo(release.validation.within10, 6);
   });
 
   it('scores the same targets the release calibrates to', () => {
@@ -116,16 +178,21 @@ describe('UK calibration and validation pages', () => {
     expect(obrRows.length).toBe(checks.filter((r) => r.id.startsWith('obr/') && r.unit === 'gbp').length - 1);
     expect(obrRows.some((r) => r.id === 'obr/ni')).toBe(false);
     expect(obrRows.find((r) => r.id === 'obr/universal_credit')?.label).toMatch(/Great Britain/);
+    expect(obrRows.find((r) => r.id === 'obr/state_pension')?.label).toMatch(/Great Britain/);
+    expect(obrRows.find((r) => r.id === 'obr/pip')?.label).toMatch(/Disability Living Allowance and PIP/);
   });
 
-  it('compares OBR total NICs with the sum of the three classes, not the mismapped column', () => {
+  it('compares the three National Insurance classes with their own OBR forecasts, not the mismapped total', () => {
     const get = (id: string) => checks.find((r) => r.id === id)!;
-    expect(niTotal.target).toBe(get('obr/ni').target);
-    expect(niTotal.estimate).toBeCloseTo(
-      get('obr/ni_employee').estimate + get('obr/ni_employer').estimate + get('obr/ni_self_employed').estimate,
-    );
+    const classes = ['obr/ni_employee', 'obr/ni_employer', 'obr/ni_self_employed'];
+    expect(niClasses.target).toBeCloseTo(classes.reduce((n, id) => n + get(id).target, 0));
+    expect(niClasses.estimate).toBeCloseTo(classes.reduce((n, id) => n + get(id).estimate, 0));
+    expect(niTotalTarget).toBe(get('obr/ni').target);
     const { container } = render(<UkValidationPage />);
-    expect(container.textContent).toContain(fmtTarget(niTotal.estimate, 'gbp'));
+    const text = container.textContent ?? '';
+    expect(text).toContain(fmtTarget(niClasses.target, 'gbp'));
+    expect(text).toContain(fmtTarget(niClasses.estimate, 'gbp'));
+    expect(text).toContain(fmtDifference(niClasses.target, niClasses.estimate));
   });
 
   it('formats differences with the sign of estimate minus target', () => {
