@@ -140,6 +140,7 @@ REGISTRY = [
         breakdown_variable=None,
         reference_url="https://obr.uk/x",
         forecast_vintage="march_2026",
+        countries=None,
     ),
     dict(
         name="obr/vat",
@@ -150,6 +151,7 @@ REGISTRY = [
         breakdown_variable=None,
         reference_url="https://obr.uk/x",
         forecast_vintage="march_2026",
+        countries=None,
     ),
     dict(
         name="slc/plan_5_borrowers_above_threshold",
@@ -160,6 +162,7 @@ REGISTRY = [
         breakdown_variable=None,
         reference_url="https://slc.example",
         forecast_vintage=None,
+        countries=["ENGLAND", "SCOTLAND", "WALES"],
     ),
 ]
 
@@ -439,3 +442,14 @@ def test_committed_summary_equals_a_fresh_extraction():
     assert json.loads(
         (REPO / "src/data/ukTargetChecks.json").read_text()
     ) == json.loads(json.dumps(rows))
+
+
+def test_labels_a_family_by_its_country_scope(artifacts):
+    groups = {g["label"]: g for g in run(artifacts)["calibration"]["nationalGroups"]}
+    assert groups["Income tax receipts"]["geography"] == "UK"
+    assert (
+        groups["Plan 2 and Plan 5 borrowers, liable and above the repayment threshold"][
+            "geography"
+        ]
+        == "Great Britain"
+    )

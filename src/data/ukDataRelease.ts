@@ -31,7 +31,8 @@ export interface UkTargetGroup {
   source: string;
   label: string;
   publisher: string;
-  geography: 'UK' | 'Region' | 'Nation';
+  /** UK, Great Britain, Region or Nation: the registry's country scope, else the target's level. */
+  geography: string;
   units: ('gbp' | 'count')[];
   targets: number;
   zeroTargets: number;

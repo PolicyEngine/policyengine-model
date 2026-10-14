@@ -1,4 +1,5 @@
 import CalibrationPage from '../../../src/views/data/CalibrationPageClient';
+import UkCalibrationPage from '../../../src/views/data/UkCalibrationPage';
 import CalibrationComparison from '../../../src/components/comparison/CalibrationComparison';
 import { loadComparisonData } from '../../../src/data/comparisons';
 import { detectComparePeers } from '../../../src/components/comparison/detectComparePeers';
@@ -18,7 +19,7 @@ export default async function CalibrationRoute({
   );
 
   if (!parsed.compareMode) {
-    return <CalibrationPage country={country} />;
+    return country === 'uk' ? <UkCalibrationPage /> : <CalibrationPage country={country} />;
   }
 
   const data = loadComparisonData();

@@ -645,7 +645,7 @@
         "source": "obr",
         "label": "Universal Credit spending",
         "publisher": "OBR",
-        "geography": "UK",
+        "geography": "Great Britain",
         "units": [
           "gbp"
         ],
@@ -939,7 +939,7 @@
         "source": "dwp",
         "label": "Housing Benefit claims and spending, by age group",
         "publisher": "DWP",
-        "geography": "UK",
+        "geography": "Great Britain",
         "units": [
           "count",
           "gbp"
@@ -994,7 +994,7 @@
         "source": "dwp",
         "label": "Pension Credit claims and spending",
         "publisher": "DWP",
-        "geography": "UK",
+        "geography": "Great Britain",
         "units": [
           "count",
           "gbp"

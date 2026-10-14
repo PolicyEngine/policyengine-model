@@ -82,3 +82,53 @@ describe('UK pipeline copy', () => {
     expect(screen.getByText(ukBranchLabels.local)).toBeInTheDocument();
   });
 });
+
+import fc from 'fast-check';
+import UkCalibrationPage from '../views/data/UkCalibrationPage';
+import UkValidationPage, { fmtDifference, obrRows } from '../views/data/UkValidationPage';
+import checks from '../data/ukTargetChecks.json';
+
+describe('UK calibration and validation pages', () => {
+  it('lists every UK-wide target family with the release counts, and no US-only text', () => {
+    const { container } = render(<UkCalibrationPage />);
+    const text = container.textContent ?? '';
+    expect(text).toContain(`${release.calibration.nationalTargets} UK-wide targets`);
+    expect(text).toContain(`${release.calibration.nationalGroups.length} families`);
+    for (const g of release.calibration.nationalGroups) expect(text).toContain(g.label);
+    expect(text).not.toMatch(/US model only|congressional|IRS|L0/);
+    const families = release.calibration.nationalGroups.reduce((n, g) => n + g.targets, 0);
+    expect(families).toBe(release.calibration.nationalTargets);
+  });
+
+  it('shows the pinned run and never claims TAXSIM for the UK', () => {
+    const { container } = render(<UkValidationPage />);
+    const text = container.textContent ?? '';
+    expect(text).not.toMatch(/TAXSIM|federal|state income tax|filing status/i);
+    expect(text).toContain(`policyengine-uk ${release.validation.modelVersion}`);
+    expect(text).toContain(fmtPct(release.validation.within10));
+    for (const n of [537, 570, 580, 581, 1996]) expect(text).toContain(`#${n}`);
+  });
+
+  it('scores the same targets the release calibrates to', () => {
+    expect(checks.length).toBe(release.calibration.nationalTargets);
+    expect(release.validation.targets).toBe(checks.length);
+    expect(new Set(checks.map((r) => r.id)).size).toBe(checks.length);
+    expect(obrRows.length).toBe(checks.filter((r) => r.id.startsWith('obr/') && r.unit === 'gbp').length);
+    expect(obrRows.find((r) => r.id === 'obr/universal_credit')?.label).toMatch(/Great Britain/);
+  });
+
+  it('formats differences with the sign of estimate minus target', () => {
+    fc.assert(fc.property(
+      fc.double({ min: 1, max: 1e12, noNaN: true }),
+      fc.double({ min: 0, max: 1e12, noNaN: true }),
+      (target, estimate) => {
+        const out = fmtDifference(target, estimate);
+        const pct = Number(out.replace('−', '-').replace('%', ''));
+        expect(Math.abs(pct - (estimate / target - 1) * 100)).toBeLessThanOrEqual(0.05 + 1e-9);
+        if (estimate > target * 1.001) expect(out.startsWith('+')).toBe(true);
+        if (estimate < target * 0.999) expect(out.startsWith('−')).toBe(true);
+      },
+    ));
+    expect(fmtDifference(0, 10)).toBe('–');
+  });
+});

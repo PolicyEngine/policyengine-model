@@ -1,4 +1,5 @@
 import ValidationPage from '../../../src/views/data/ValidationPage';
+import UkValidationPage from '../../../src/views/data/UkValidationPage';
 import ValidationComparison from '../../../src/components/comparison/ValidationComparison';
 import { loadComparisonData } from '../../../src/data/comparisons';
 import { detectComparePeers } from '../../../src/components/comparison/detectComparePeers';
@@ -18,7 +19,7 @@ export default async function ValidationRoute({
   );
 
   if (!parsed.compareMode) {
-    return <ValidationPage country={country} />;
+    return country === 'uk' ? <UkValidationPage /> : <ValidationPage country={country} />;
   }
 
   const data = loadComparisonData();

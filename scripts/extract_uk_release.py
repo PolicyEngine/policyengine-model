@@ -547,6 +547,24 @@ def last_epoch(log: pd.DataFrame) -> pd.DataFrame:
     return log[log["epoch"] == epoch].copy()
 
 
+GREAT_BRITAIN = {"ENGLAND", "SCOTLAND", "WALES"}
+
+
+def area_label(level: str, countries: pd.Series) -> str:
+    """The area a target family covers: the registry's country scope, else its level."""
+    scopes = {
+        tuple(sorted(c)) if isinstance(c, (list, tuple)) else None for c in countries
+    }
+    if len(scopes) != 1:
+        raise ExtractionError(f"a target family mixes country scopes: {scopes}")
+    scope = scopes.pop()
+    if scope is None:
+        return {"national": "UK", "region": "Region", "country": "Nation"}[level]
+    if set(scope) == GREAT_BRITAIN:
+        return "Great Britain"
+    return ", ".join(c.replace("_", " ").title() for c in scope)
+
+
 def national_groups(
     national: pd.DataFrame, registry: pd.DataFrame, pinned: pd.DataFrame
 ) -> tuple[list[dict], list[dict]]:
@@ -593,9 +611,7 @@ def national_groups(
             "source": source,
             "label": label,
             "publisher": " and ".join(publishers),
-            "geography": {"national": "UK", "region": "Region", "country": "Nation"}[
-                level
-            ],
+            "geography": area_label(level, group["countries"]),
             "units": units,
             "targets": len(group),
             "zeroTargets": int((group["target"] == 0).sum()),
