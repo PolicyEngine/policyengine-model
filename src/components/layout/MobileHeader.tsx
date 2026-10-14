@@ -1,5 +1,6 @@
 import { colors } from '../../designTokens';
 import { IconMenu2, IconX } from '@tabler/icons-react';
+import { logos } from '@policyengine/ui-kit/assets';
 
 interface MobileHeaderProps {
   isOpen: boolean;
@@ -22,7 +23,7 @@ export default function MobileHeader({ isOpen, onToggle }: MobileHeaderProps) {
       </button>
       <div className="tw:flex tw:items-center tw:gap-2">
         <img
-          src="https://policyengine.org/assets/logos/policyengine/teal-square.svg"
+          src={logos.tealSquare}
           alt="PolicyEngine"
           className="tw:h-6 tw:w-6"
         />

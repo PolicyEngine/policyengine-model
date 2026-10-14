@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { colors, typography, spacing } from '../../designTokens';
 import { IconChevronDown, IconChevronRight } from '@tabler/icons-react';
+import { logos } from '@policyengine/ui-kit/assets';
 import type { Country } from '../../hooks/useCountry';
 import {
   appPathFromPublicPath,
@@ -95,7 +96,7 @@ export default function Sidebar({ country, onClose }: SidebarProps) {
         style={{ borderBottom: `1px solid ${colors.border.light}` }}
       >
         <img
-          src="https://policyengine.org/assets/logos/policyengine/teal-square.svg"
+          src={logos.tealSquare}
           alt="PolicyEngine"
           className="tw:h-7 tw:w-7"
         />
