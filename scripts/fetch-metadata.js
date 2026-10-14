@@ -7,7 +7,9 @@
 import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { gunzipSync } from 'node:zlib';
 import yaml from 'js-yaml';
+import { extractVariableModules } from './variable-modules.js';
 
 const PUBLIC_DIR = join(dirname(fileURLToPath(import.meta.url)), '..', 'public');
 const REPO_MAP = {
@@ -145,6 +147,23 @@ export async function fetchVariableModulePaths(country, source, fetchImpl = glob
   return paths.filter(path => path.endsWith('.py') && !path.endsWith('__init__.py'));
 }
 
+/** Map UK Variable classes from the very same commit as the file tree. */
+export async function fetchVariableTreeSnapshot(country, source, {
+  fetchImpl = globalThis.fetch,
+  logger = console,
+} = {}) {
+  if (country === 'uk') {
+    try {
+      const response = await request(`https://codeload.github.com/${source.repo}/tar.gz/${source.commit}`, fetchImpl);
+      const tar = gunzipSync(Buffer.from(await response.arrayBuffer()));
+      return { source, ...extractVariableModules(country, tar) };
+    } catch (error) {
+      logger.warn(`  ${country}: class-to-module map unavailable, using file tree — ${error.message}`);
+    }
+  }
+  return { source, paths: await fetchVariableModulePaths(country, source, fetchImpl) };
+}
+
 export async function fetchMetadataFiles({
   countries = ['us', 'uk'],
   outputDir = PUBLIC_DIR,
@@ -196,9 +215,9 @@ export async function fetchMetadataFiles({
       })(),
       (async () => {
         try {
-          const paths = await fetchVariableModulePaths(country, source, fetchImpl);
-          writeFileSync(variableTreePath, JSON.stringify({ source, paths }));
-          logger.log(`  ${country}: wrote ${variableTreePath} (${paths.length} files)`);
+          const tree = await fetchVariableTreeSnapshot(country, source, { fetchImpl, logger });
+          writeFileSync(variableTreePath, JSON.stringify(tree));
+          logger.log(`  ${country}: wrote ${variableTreePath} (${tree.paths.length} files)`);
         } catch (error) {
           logger.warn(`  ${country}: variable tree skipped — ${error.message}`);
         }

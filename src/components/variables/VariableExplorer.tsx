@@ -408,9 +408,11 @@ export default function VariableExplorer({ variables, parameters, country, onVie
 
   // Folder contents at current level
   const folderContents = useMemo(() => {
-    if (!activeSubGroup || !currentFolder) return { folders: [], directVars: [] };
+    if (!activeSubGroup) return { folders: [], directVars: [] };
+    if (country === 'uk' && activeLevel === 'unclassified') return { folders: [], directVars: subGroupVars };
+    if (!currentFolder) return { folders: [], directVars: [] };
     return getVarFolderContents(subGroupVars, currentFolder);
-  }, [subGroupVars, currentFolder, activeSubGroup]);
+  }, [subGroupVars, currentFolder, activeSubGroup, activeLevel, country]);
 
   // Reset folder stack when sub-group changes
   // eslint-disable-next-line react-hooks/set-state-in-effect -- reset navigation when sub-group changes

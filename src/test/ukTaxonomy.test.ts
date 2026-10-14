@@ -1,13 +1,14 @@
 import { describe, expect, it } from 'vitest';
 import fc from 'fast-check';
 import {
-  getLevel, getSubGroup, getSubGroupLabel, levelsFor, levelConfig, LEVEL_CONFIG, type Level,
+  getLevel, getSubGroup, getSubGroupLabel, getSubGroupDescription, levelsFor, levelConfig, LEVEL_CONFIG, type Level,
 } from '../components/shared/categoryUtils';
 import { fillModuleNames } from '../data/fetchMetadata';
+import { verifiedLinks } from '../components/rules/UkCoverageTracker';
 import type { Variable } from '../types/Variable';
 
 const US_ONLY: Level[] = ['federal', 'state', 'local', 'territory'];
-const UK_ONLY: Level[] = ['uk_government', 'devolved', 'local_authority', 'assumptions'];
+const UK_ONLY: Level[] = ['uk_government', 'devolved', 'local_authority', 'assumptions', 'unclassified'];
 
 describe('UK parameter and variable taxonomy', () => {
   it.each([
@@ -19,6 +20,10 @@ describe('UK parameter and variable taxonomy', () => {
     ['gov.local_authorities.newham.council_tax_reduction.max', 'local_authority', 'newham', 'Newham'],
     ['gov.economic_assumptions.yoy_growth.obr.cpi', 'assumptions', 'economic_assumptions', 'Economic assumptions'],
     ['gov.simulation.labour_supply_responses.income_elasticity', 'assumptions', 'simulation', 'Simulation settings'],
+    ['gov.dynamic.labour_supply_response', 'assumptions', 'dynamic', 'Dynamic response settings'],
+    ['gov.gov_tax', 'uk_government', 'all_government_totals', 'Totals across all levels of government'],
+    ['gov.gov_spending', 'uk_government', 'all_government_totals', 'Totals across all levels of government'],
+    ['gov.gov_balance', 'uk_government', 'all_government_totals', 'Totals across all levels of government'],
     ['gov.contrib.policyengine.disable_simulated_benefits', 'reform', 'policyengine', 'Policyengine'],
     ['household.income.employment_income', 'household', 'income', 'Income'],
     ['input.vehicle.num_vehicles', 'household', 'vehicle', 'Vehicles'],
@@ -27,6 +32,25 @@ describe('UK parameter and variable taxonomy', () => {
     expect(getLevel(path, 'uk')).toBe(level);
     expect(getSubGroup(path, 'uk')).toBe(group);
     expect(getSubGroupLabel(group, level as Level, 'uk')).toBe(label);
+  });
+
+  it('keeps unknown UK modules separate from household variables', () => {
+    for (const path of [null, '', 'misc.unknown']) {
+      expect(getLevel(path, 'uk')).toBe('unclassified');
+      expect(getSubGroup(path, 'uk')).toBe('Other');
+    }
+    expect(levelConfig('unclassified', 'uk').label).toBe('Unclassified variables');
+    expect(getLevel('household.income.household_net_income', 'uk')).toBe('household');
+    expect(getLevel('input.demographic', 'uk')).toBe('household');
+  });
+
+  it('describes UK inputs, calculated results, reform assumptions, and cross-government totals', () => {
+    expect(levelConfig('household', 'uk')).toMatchObject({
+      label: 'Household variables',
+      description: 'Demographic, income, consumption, and wealth inputs, and calculated household results such as household net income',
+    });
+    expect(levelConfig('reform', 'uk').description).toBe('Contributed reform proposals and modelling assumptions, some enabled by default');
+    expect(getSubGroupDescription('all_government_totals', 'uk_government', 'uk')).toBe('Tax, spending, and balance totals across UK, devolved, and local government');
   });
 
   it('never puts a UK path in a US level, or a US path in a UK level', () => {
@@ -47,6 +71,18 @@ describe('UK parameter and variable taxonomy', () => {
     expect(getLevel('gov.states.ca.tax.income.rates')).toBe('state');
     expect(getSubGroup('gov.states.ca.tax.income.rates')).toBe('CA');
     expect(levelsFor()).toEqual(['federal', 'state', 'local', 'territory', 'reform', 'household']);
+    expect(levelConfig('household', 'us')).toEqual({
+      label: 'Household inputs', description: 'Demographics, income, expenses, and geographic inputs', color: '#475569', order: 5,
+    });
+    expect(levelConfig('reform', 'us')).toEqual({
+      label: 'Reforms', description: 'Contributed reform proposals and policy experiments', color: '#2C7A7B', order: 4,
+    });
+    expect(getSubGroupLabel('income', 'household', 'us')).toBe('Income');
+    expect(getSubGroupDescription('income', 'household', 'us')).toBe('Employment, self-employment, investment, and other income sources');
+    expect(getSubGroup('gov.gov_tax', 'us')).toBe('gov_tax');
+    expect(getSubGroupLabel('gov_tax', 'federal', 'us')).toBe('GOV_TAX');
+    expect(getLevel(null, 'us')).toBe('household');
+    expect(getLevel('misc.unknown', 'us')).toBe('household');
   });
 
   it('describes UK levels without US agencies', () => {
@@ -97,7 +133,6 @@ describe('fillModuleNames', () => {
 
 describe('UK coverage links', () => {
   it('links only to parameter folders and variable files that the pinned snapshot has', async () => {
-    const { verifiedLinks } = await import('../components/rules/UkCoverageTracker');
     const segment = fc.stringMatching(/^[a-z][a-z_]{0,8}$/);
     fc.assert(fc.property(
       fc.array(fc.array(segment, { minLength: 1, maxLength: 4 }), { maxLength: 6 }),
@@ -121,7 +156,6 @@ describe('UK coverage links', () => {
   });
 
   it('gives no links before the snapshot trees load, and none for ambiguous variable names', async () => {
-    const { verifiedLinks } = await import('../components/rules/UkCoverageTracker');
     const program = { id: 'p', name: 'P', fullName: 'P', status: 'complete' as const, variable: 'rent', githubLinks: {} };
     expect(verifiedLinks(program, 'gov.dwp', null, 'main')).toEqual({});
     expect(verifiedLinks(program, undefined, { parameterPaths: new Set(), variablePaths: new Map([['rent', null]]) }, 'main')).toEqual({});

@@ -1,6 +1,7 @@
 import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { gzipSync } from 'node:zlib';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
   fetchMetadataFiles,
@@ -11,6 +12,7 @@ import {
   readPackageVersion,
   resolveRepository,
 } from '../../scripts/fetch-metadata.js';
+import { variableArchive } from './fixtures/variableArchive';
 
 const commit = 'a'.repeat(40);
 const source = { repo: 'PolicyEngine/policyengine-us', branch: 'main', commit };
@@ -219,6 +221,32 @@ describe('registry snapshot fetch script', () => {
     }
     expect(JSON.parse(readFileSync(join(outputDir, 'param-tree-us.json'), 'utf8')))
       .toEqual({ source, paths: ['gov/hhs/tanf.yaml'] });
+  });
+
+  it('writes the exact UK class map into the variable tree JSON at the registry commit', async () => {
+    const outputDir = outputDirectory();
+    const ukSource = { ...source, repo: 'PolicyEngine/policyengine-uk' };
+    const rawRoot = `https://raw.githubusercontent.com/${ukSource.repo}/${commit}`;
+    const tar = variableArchive([{
+      path: 'repo/policyengine_uk/variables/gov/dwp/afip.py',
+      contents: 'class armed_forces_independence_payment(Variable):\n    pass\n',
+    }]);
+    const fetchImpl = mockFetch({
+      'https://api.github.com/repos/PolicyEngine/policyengine-uk': { default_branch: 'main' },
+      'https://api.github.com/repos/PolicyEngine/policyengine-uk/commits/main': { sha: commit },
+      [`${rawRoot}/policyengine_uk/programs.yaml`]: registry,
+      [`${rawRoot}/pyproject.toml`]: '[project]\nversion = "2.126.12"',
+      'https://api.policyengine.org/uk/metadata': { version: '2.126.12' },
+      [`https://api.github.com/repos/${ukSource.repo}/git/trees/${commit}`]: new Error('Parameter tree unavailable'),
+      [`https://codeload.github.com/${ukSource.repo}/tar.gz/${commit}`]: new Response(gzipSync(tar)),
+    });
+    await fetchMetadataFiles({ countries: ['uk'], outputDir, fetchImpl, logger });
+    expect(JSON.parse(readFileSync(join(outputDir, 'variable-tree-uk.json'), 'utf8'))).toEqual({
+      source: ukSource,
+      paths: ['gov/dwp/afip.py'],
+      modules: { armed_forces_independence_payment: 'gov.dwp.afip' },
+    });
+    expect(JSON.parse(readFileSync(join(outputDir, 'programs-uk.json'), 'utf8')).source).toMatchObject(ukSource);
   });
 
   it('skips a missing UK registry gracefully, removing any previous snapshot', async () => {
