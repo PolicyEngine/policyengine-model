@@ -1,8 +1,8 @@
 import ValidationPage from '../../../src/views/data/ValidationPage';
-import UkValidationPage from '../../../src/views/data/UkValidationPage';
 import ValidationComparison from '../../../src/components/comparison/ValidationComparison';
 import { loadComparisonData } from '../../../src/data/comparisons';
 import { detectComparePeers } from '../../../src/components/comparison/detectComparePeers';
+import UkValidationPage from '../../../src/views/data/UkValidationPage';
 
 export default async function ValidationRoute({
   searchParams,
@@ -18,8 +18,13 @@ export default async function ValidationRoute({
     sp.country,
   );
 
+  // The UK page reports the pinned UK release; TAXSIM covers US taxes only.
+  if (!parsed.compareMode && country === 'uk') {
+    return <UkValidationPage />;
+  }
+
   if (!parsed.compareMode) {
-    return country === 'uk' ? <UkValidationPage /> : <ValidationPage country={country} />;
+    return <ValidationPage country={country} />;
   }
 
   const data = loadComparisonData();
