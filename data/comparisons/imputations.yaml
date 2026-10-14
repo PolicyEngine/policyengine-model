@@ -971,7 +971,7 @@ imputations:
       build.
     baseDataset: Microcosm US 2024 (CPS ASEC + IRS PUF)
     calibrationTargets:
-      - 4,182 IRS SOI targets (state Historic Table 2, national Publication 1304 tables, filing-season statistics)
+      - 4,182 IRS SOI targets (Historic Table 2, Publication 1304 tables, filing-season and W-2 statistics)
       - 936 Census population estimates by age (national and state, vintage 2024)
       - 135 CMS Medicaid and CHIP enrollment and 102 CMS Marketplace targets
       - 111 SSA, 104 USDA SNAP, 23 HHS TANF and 44 Census state income tax targets

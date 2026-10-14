@@ -201,16 +201,17 @@ modeling:
       congressional district, county, tract and census block; all 436 districts have
       records (34 to 1,068 each). State and congressional-district analyses in
       policyengine.py 6.3.4 filter the national file by `state_fips` or
-      `congressional_district_geoid` and keep each household's national weight; there
-      are no per-area datasets or area-specific weights, and the default calibration
-      has no district targets.
+      `congressional_district_geoid` and keep each household's national weight, and
+      the default calibration has no district targets. The bundle also pins a
+      separately built local-area file, `populace_us_2024_acs_local`, that users can
+      load by name.
     scope: states, congressional districts
     sources:
       - label: policyengine.py 6.3.4 US region registry
         url: https://github.com/PolicyEngine/policyengine.py/blob/9d0c7c5714231156dbdda9eac4d6e9d5998cf972/src/policyengine/countries/us/regions.py#L24-L101
         kind: self
-      - label: policyengine.py 6.3.4 bundle (region datasets)
-        url: https://github.com/PolicyEngine/policyengine.py/blob/9d0c7c5714231156dbdda9eac4d6e9d5998cf972/src/policyengine/data/bundle/manifest.json
+      - label: policyengine.py 6.3.4 bundle (region datasets, local-area file)
+        url: https://github.com/PolicyEngine/policyengine.py/blob/9d0c7c5714231156dbdda9eac4d6e9d5998cf972/src/policyengine/data/bundle/manifest.json#L174-L230
         kind: self
       - label: Default release microdata (geography columns)
         url: https://huggingface.co/datasets/policyengine/populace-us/tree/populace-us-2024-spm-20260915/releases/populace-us-2024-spm-20260915
