@@ -132,7 +132,7 @@ describe('fillModuleNames', () => {
 });
 
 describe('UK coverage links', () => {
-  it('links only to parameter folders and variable files that the pinned snapshot has', async () => {
+  it('links only to parameter folders and variable files that the pinned snapshot has', () => {
     const segment = fc.stringMatching(/^[a-z][a-z_]{0,8}$/);
     fc.assert(fc.property(
       fc.array(fc.array(segment, { minLength: 1, maxLength: 4 }), { maxLength: 6 }),
@@ -150,12 +150,13 @@ describe('UK coverage links', () => {
         const exists = parameterPaths.has(`${dir}.yaml`) || [...parameterPaths].some((p) => p.startsWith(`${dir}/`));
         expect(Boolean(links.parameters)).toBe(exists);
         expect(links.source).toBe(`https://github.com/PolicyEngine/policyengine-uk/blob/abc123/policyengine_uk/variables/gov/x/${variable}.py`);
+        expect(links.computationTree).toBe(`https://policyengine.github.io/flowchart/?variable=${variable}&country=UK`);
         if (links.parameters) expect(links.parameters).toContain('/abc123/policyengine_uk/parameters/');
       },
     ));
   });
 
-  it('gives no links before the snapshot trees load, and none for ambiguous variable names', async () => {
+  it('gives no links before the snapshot trees load, and none for ambiguous variable names', () => {
     const program = { id: 'p', name: 'P', fullName: 'P', status: 'complete' as const, variable: 'rent', githubLinks: {} };
     expect(verifiedLinks(program, 'gov.dwp', null, 'main')).toEqual({});
     expect(verifiedLinks(program, undefined, { parameterPaths: new Set(), variablePaths: new Map([['rent', null]]) }, 'main')).toEqual({});
