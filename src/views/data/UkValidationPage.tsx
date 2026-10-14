@@ -58,9 +58,7 @@ export function fmtDifference(target: number, estimate: number): string {
   return `${pct >= 0 ? '+' : '−'}${Math.abs(pct).toFixed(1)}%`;
 }
 
-// Issues without a number are confirmed in the release's code and await a
-// policyengine-uk-data issue.
-const KNOWN_ISSUES: { repo: string; n: number | null; text: string }[] = [
+const KNOWN_ISSUES: { repo: string; n: number; text: string }[] = [
   {
     repo: 'policyengine-uk-data',
     n: 581,
@@ -78,32 +76,32 @@ const KNOWN_ISSUES: { repo: string; n: number | null; text: string }[] = [
   },
   {
     repo: 'policyengine-uk-data',
-    n: null,
+    n: 588,
     text: 'The OBR’s DWP benefit lines cover Great Britain, but the release scores them on every UK household, Northern Ireland’s included.',
   },
   {
     repo: 'policyengine-uk-data',
-    n: null,
+    n: 583,
     text: 'The OBR’s disability line combines Disability Living Allowance and PIP, and the release scores it against PIP alone.',
   },
   {
     repo: 'policyengine-uk-data',
-    n: null,
+    n: 584,
     text: 'The OBR’s UK council tax line includes Northern Ireland domestic rates and an accruals adjustment, which the model’s council tax leaves out.',
   },
   {
     repo: 'policyengine-uk-data',
-    n: null,
+    n: 468,
     text: `Both local calibrations assign Universal Credit household counts to areas by row order, which does not match the areas.`,
   },
   {
     repo: 'policyengine-uk-data',
-    n: null,
+    n: 538,
     text: `policyengine-uk ${uk.release.modelVersion} uprates the saved weights to ${v.year} by population growth, not by the factor the build used to save them, so a ${v.year} run has ${fmtPct(1 - v.households / (uk.enhanced.weightedHouseholds * uk.weightMatrices.columnSumPerSavedWeight))} fewer households than calibration fitted.`,
   },
   {
     repo: 'policyengine-uk-data',
-    n: null,
+    n: 587,
     text: 'The Output Area lookup gives every Scottish Output Area the same population, and has no Output Areas for Cumberland, Westmorland and Furness, North Yorkshire or Somerset.',
   },
   { repo: 'policyengine-uk', n: 1996, text: 'Modelled VAT exceeds OBR receipts.' },
@@ -166,7 +164,7 @@ export default function UkValidationPage() {
           These are the targets calibration fitted, so the shares measure how far the fit holds up under the pinned
           model, not accuracy on statistics the build never saw. Each target also counts once, whatever its size.
           {v.revisedTargets.length > 0 &&
-            ` When the pinned run rebuilds the targets, ${fmtInt(v.revisedTargets.length)} come out at slightly different values (${v.revisedTargets.join(', ')}); the page keeps the values calibration fitted.`}
+            ` When the pinned run rebuilds the targets, ${fmtInt(v.revisedTargets.length)} come out at different values (${v.revisedTargets.join(', ')}); the page keeps the values calibration fitted.`}
         </p>
         <p style={bodyText}>
           The OBR’s March 2026 Economic and Fiscal Outlook forecasts these receipts and spending lines for 2025-26:
@@ -244,13 +242,8 @@ export default function UkValidationPage() {
         <ul style={{ ...bodyText, paddingLeft: spacing.xl }}>
           {KNOWN_ISSUES.map((issue) => (
             <li key={issue.text} style={{ marginBottom: spacing.sm }}>
-              {issue.text}
-              {issue.n !== null && (
-                <>
-                  {' '}
-                  <ExternalLink href={issueUrl(issue.repo, issue.n)}>{`${issue.repo}#${issue.n}`}</ExternalLink>
-                </>
-              )}
+              {issue.text}{' '}
+              <ExternalLink href={issueUrl(issue.repo, issue.n)}>{`${issue.repo}#${issue.n}`}</ExternalLink>
             </li>
           ))}
         </ul>

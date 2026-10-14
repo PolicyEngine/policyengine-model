@@ -125,7 +125,7 @@
         {
           "label": "Universal Credit households",
           "source": "DWP Stat-Xplore and DfC Northern Ireland statistics",
-          "note": "The build assigns these counts to areas by row order, which does not match the areas, so this fit is not a check on Universal Credit by area",
+          "note": "The build assigns these counts to areas by row order, which does not match the areas, so this fit is not a check on Universal Credit by area (policyengine-uk-data#468)",
           "metrics": 1,
           "heldOut": false,
           "cells": 650,
@@ -134,7 +134,7 @@
         {
           "label": "Universal Credit households by number of children",
           "source": "DWP Stat-Xplore and DfC Northern Ireland statistics",
-          "note": "Each area's total split by its nation's shares (Northern Ireland takes Great Britain's). The build assigns these counts to areas by row order, which does not match the areas, so this fit is not a check on Universal Credit by area",
+          "note": "Each area's total split by its nation's shares (Northern Ireland takes Great Britain's). The build assigns these counts to areas by row order, which does not match the areas, so this fit is not a check on Universal Credit by area (policyengine-uk-data#468)",
           "metrics": 4,
           "heldOut": false,
           "cells": 2600,
@@ -213,7 +213,7 @@
         {
           "label": "Universal Credit households",
           "source": "DWP Stat-Xplore and DfC Northern Ireland statistics",
-          "note": "The build assigns these counts to areas by row order, which does not match the areas, so this fit is not a check on Universal Credit by area",
+          "note": "The build assigns these counts to areas by row order, which does not match the areas, so this fit is not a check on Universal Credit by area (policyengine-uk-data#468)",
           "metrics": 1,
           "heldOut": false,
           "cells": 360,
@@ -282,7 +282,7 @@
         "label": "Council tax receipts, UK and by nation",
         "publisher": "OBR",
         "geography": "UK",
-        "note": "OBR's UK total also includes Northern Ireland domestic rates and an accruals adjustment; the model sums council tax net of reductions",
+        "note": "OBR's UK total also includes Northern Ireland domestic rates and an accruals adjustment; the model sums council tax net of reductions (policyengine-uk-data#584)",
         "units": [
           "gbp"
         ],
@@ -340,7 +340,7 @@
         "label": "Attendance Allowance spending",
         "publisher": "OBR",
         "geography": "Great Britain",
-        "note": "Scored on UK households",
+        "note": "Scored on UK households (policyengine-uk-data#588)",
         "units": [
           "gbp"
         ],
@@ -382,7 +382,7 @@
         "label": "Carer's Allowance spending",
         "publisher": "OBR",
         "geography": "Great Britain",
-        "note": "Scored on UK households",
+        "note": "Scored on UK households (policyengine-uk-data#588)",
         "units": [
           "gbp"
         ],
@@ -424,7 +424,7 @@
         "label": "Disability Living Allowance and PIP spending, scored against PIP alone",
         "publisher": "OBR",
         "geography": "Great Britain",
-        "note": "Scored on UK households",
+        "note": "Scored on UK households (policyengine-uk-data#583, #588)",
         "units": [
           "gbp"
         ],
@@ -487,7 +487,7 @@
         "label": "Incapacity benefits spending, scored against ESA (income-related and contributory)",
         "publisher": "OBR",
         "geography": "Great Britain",
-        "note": "OBR's line also covers incapacity benefit, severe disablement allowance and the incapacity part of Income Support; scored on UK households",
+        "note": "OBR's line also covers incapacity benefit, severe disablement allowance and the incapacity part of Income Support; scored on UK households (policyengine-uk-data#582, #588)",
         "units": [
           "gbp"
         ],
@@ -529,7 +529,7 @@
         "label": "Jobseeker's Allowance spending",
         "publisher": "OBR",
         "geography": "Great Britain",
-        "note": "Scored on UK households",
+        "note": "Scored on UK households (policyengine-uk-data#588)",
         "units": [
           "gbp"
         ],
@@ -632,7 +632,7 @@
         "label": "State Pension spending",
         "publisher": "OBR",
         "geography": "Great Britain",
-        "note": "Scored on UK households",
+        "note": "Scored on UK households (policyengine-uk-data#588)",
         "units": [
           "gbp"
         ],
@@ -653,7 +653,7 @@
         "label": "Statutory Maternity Pay spending",
         "publisher": "OBR",
         "geography": "Great Britain",
-        "note": "Scored on UK households",
+        "note": "Scored on UK households (policyengine-uk-data#588)",
         "units": [
           "gbp"
         ],
@@ -737,7 +737,7 @@
         "label": "Winter Fuel Payment spending",
         "publisher": "OBR",
         "geography": "Great Britain",
-        "note": "Scored on UK households",
+        "note": "Scored on UK households (policyengine-uk-data#588)",
         "units": [
           "gbp"
         ],

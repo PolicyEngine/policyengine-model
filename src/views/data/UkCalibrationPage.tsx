@@ -15,7 +15,7 @@ import {
   type UkTargetCheck,
   type UkTargetGroup,
 } from '../../data/ukDataRelease';
-import { DataTable, ExternalLink, PageLink, StatTile, bodyText, cell, sectionHeading } from './ukTables';
+import { DataTable, ExternalLink, PageLink, StatTile, bodyText, cell, issueUrl, sectionHeading } from './ukTables';
 
 const cal = uk.calibration;
 const rows = checks as UkTargetCheck[];
@@ -194,8 +194,8 @@ export default function UkCalibrationPage() {
           it, at their national weights, not those files, so the figures above do not measure how well such an
           analysis matches the area. The <PageLink path="/data/pipeline">data pipeline</PageLink> page describes how
           households get an Output Area. In this release the build also assigns Universal Credit counts to the wrong
-          areas, as the notes in both tables say, so the Universal Credit rows above do not check Universal Credit by
-          area.
+          areas (<ExternalLink href={issueUrl('policyengine-uk-data', 468)}>policyengine-uk-data#468</ExternalLink>),
+          so the Universal Credit rows above do not check Universal Credit by area.
         </p>
       </section>
     </div>

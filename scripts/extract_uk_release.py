@@ -131,6 +131,7 @@ def area_override(metric: str) -> str | None:
 
 # How a target family is built or scored, where its label alone would
 # mislead. Every note restates code in the release.
+GB_ON_UK_NOTE = "Scored on UK households (policyengine-uk-data#588)"
 GROUP_NOTES = {
     ("obr", "ni_employee", "national", None): (
         "OBR's total includes employer and self-employed contributions "
@@ -139,19 +140,22 @@ GROUP_NOTES = {
     ("obr", "esa_income", "national", None): (
         "OBR's line also covers incapacity benefit, severe disablement "
         "allowance and the incapacity part of Income Support; scored on UK "
-        "households"
+        "households (policyengine-uk-data#582, #588)"
     ),
     ("obr", "council_tax", "national", None): (
         "OBR's UK total also includes Northern Ireland domestic rates and an "
-        "accruals adjustment; the model sums council tax net of reductions"
+        "accruals adjustment; the model sums council tax net of reductions "
+        "(policyengine-uk-data#584)"
     ),
-    ("obr", "pip", "national", None): "Scored on UK households",
-    ("obr", "attendance_allowance", "national", None): "Scored on UK households",
-    ("obr", "carers_allowance", "national", None): "Scored on UK households",
-    ("obr", "statutory_maternity_pay", "national", None): "Scored on UK households",
-    ("obr", "winter_fuel_allowance", "national", None): "Scored on UK households",
-    ("obr", "state_pension", "national", None): "Scored on UK households",
-    ("obr", "jsa", "national", None): "Scored on UK households",
+    ("obr", "pip", "national", None): (
+        "Scored on UK households (policyengine-uk-data#583, #588)"
+    ),
+    ("obr", "attendance_allowance", "national", None): GB_ON_UK_NOTE,
+    ("obr", "carers_allowance", "national", None): GB_ON_UK_NOTE,
+    ("obr", "statutory_maternity_pay", "national", None): GB_ON_UK_NOTE,
+    ("obr", "winter_fuel_allowance", "national", None): GB_ON_UK_NOTE,
+    ("obr", "state_pension", "national", None): GB_ON_UK_NOTE,
+    ("obr", "jsa", "national", None): GB_ON_UK_NOTE,
     (
         "ons",
         "mortgage_capital_repayment",
@@ -448,7 +452,8 @@ INCOME_COUNT_NOTE = "Scaled by the same factor as the amounts"
 # them by position to areas in another order.
 UC_ORDER_NOTE = (
     "The build assigns these counts to areas by row order, which does not "
-    "match the areas, so this fit is not a check on Universal Credit by area"
+    "match the areas, so this fit is not a check on Universal Credit by area "
+    "(policyengine-uk-data#468)"
 )
 
 # Local (per-area) metric families. Sources are the ones each loss builder's

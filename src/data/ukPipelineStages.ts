@@ -133,7 +133,7 @@ export const ukPipelineStages: PipelineStage[] = [
     details: [
       'VAT: a forest on adults, children, pension age (the survey’s retirement flag in training) and household net income predicts the share of spending taxed at the full rate',
       'Public services: a forest on age groups, pupils by school stage, DLA and PIP amounts, and household net income predicts education, rail and bus subsidy spending',
-      'NHS: A&E, admitted patient and outpatient visits and spending, by age and sex. The FRS records adult ages up to 80; the build drops the cost table’s rows for ages 85 and over before scaling, so spending on people aged 80 and over is understated',
+      'NHS: A&E, admitted patient and outpatient visits and spending, by age and sex. The FRS records adult ages up to 80; the build drops the cost table’s rows for ages 85 and over before scaling, so spending on people aged 80 and over is understated (policyengine-uk-data#586)',
       'After calibration, the build scales rail subsidy to £21.6bn and bus subsidy to £3.55bn, England’s £3.0bn uplifted to the UK by population',
     ],
     imputations: [
@@ -178,7 +178,7 @@ export const ukPipelineStages: PipelineStage[] = [
       'The build duplicates every household and gives capital gains to the first adult in each copy. An ' +
       'optimiser splits each household’s weight between its two versions, aiming for the share with gains in ' +
       'each income band in Advani and Summers’ estimates; the split it returns gives the copies more weight than ' +
-      `the one it fitted. ${fmtInt(c.cgtBandDonors)} donor households then carry HMRC’s average gain for each ` +
+      `the one it fitted (policyengine-uk-data#585). ${fmtInt(c.cgtBandDonors)} donor households then carry HMRC’s average gain for each ` +
       'size-of-gain band from £12,300 up, so calibration can fit HMRC’s taxpayers and gains in each band.',
     icon: 'trending-up',
     inputSize: `${fmtInt(stacked)} households`,
@@ -221,7 +221,8 @@ export const ukPipelineStages: PipelineStage[] = [
     description:
       'The build gives each household in Great Britain one Output Area, drawn at random within its survey ' +
       'region: in proportion to population in England and Wales, and with equal chances in Scotland, where the ' +
-      'lookup gives every Output Area the same population in this release. The Output Area fixes the household’s ' +
+      'lookup gives every Output Area the same population in this release (policyengine-uk-data#587). The Output ' +
+      'Area fixes the household’s ' +
       'local authority and constituency. The build then uprates the file to 2025, the year the calibration ' +
       'targets describe.',
     icon: 'map-pin',
@@ -231,7 +232,7 @@ export const ukPipelineStages: PipelineStage[] = [
     details: [
       `${fmtInt(g.householdsWithArea)} households have an Output Area; each of the ${f.gbConstituencies} constituencies in Great Britain has ${g.householdsPerConstituency.min} to ${g.householdsPerConstituency.max} of them`,
       `Northern Ireland’s ${f.niHouseholds} households have none in this release: the build skips Northern Ireland while its small-area lookup is unavailable (policyengine-uk-data#580)`,
-      'The lookup has no Output Areas for Cumberland, Westmorland and Furness, North Yorkshire or Somerset, four of the local authorities the build calibrates; households there carry 17 older district codes instead',
+      'The lookup has no Output Areas for Cumberland, Westmorland and Furness, North Yorkshire or Somerset, four of the local authorities the build calibrates; households there carry 17 older district codes instead (policyengine-uk-data#587)',
       `The build can draw several Output Areas per household; the publish run drew ${g.outputAreaDrawsPerHousehold}`,
     ],
   },
@@ -255,7 +256,7 @@ export const ukPipelineStages: PipelineStage[] = [
       'Starting weights: the positive weights are halved, the zero-weight households (the top-income copies and their capital gains copies) share the other half equally, and each household’s starting weight is divided by the number of constituencies in its nation',
       'The build treats the constituency targets as figures for the 2010 boundaries and maps them to the 2024 boundaries',
       `The build saves the weights, and logs the fit, every tenth epoch, so the release’s weights are from epoch ${cal.epoch}. There, ${fmtPct(cal.nationalWithin10)} of national and regional targets and ${fmtPct(cal.constituency.trainingWithin10)} of constituency targets lie within 10%`,
-      'In this release the build assigns Universal Credit household counts to the wrong constituencies',
+      'In this release the build assigns Universal Credit household counts to the wrong constituencies (policyengine-uk-data#468)',
     ],
     calibrationTargets: [
       ...cal.constituency.families.map((fam) => ({
@@ -284,7 +285,7 @@ export const ukPipelineStages: PipelineStage[] = [
     details: [
       `${f.households} households and ${f.people} people, weighted to ${fmtMillions(uk.enhanced.weightedHouseholds)} households in 2024`,
       `${fmtInt(c.frs)} FRS households, ${fmtInt(c.spiCopies)} top-income copies, ${fmtInt(c.capitalGainsCopies)} capital gains copies and ${fmtInt(c.cgtBandDonors)} capital gains donors`,
-      `policyengine-uk ${v.modelVersion} uprates the weights when it loads the file, by population growth rather than the build’s factor, so a ${v.year} run has ${fmtMillions(v.households)} households against the ${fmtMillions(calibratedHouseholds)} calibration fitted, ${fmtPct(runtimeShortfall)} fewer`,
+      `policyengine-uk ${v.modelVersion} uprates the weights when it loads the file, by population growth rather than the build’s factor, so a ${v.year} run has ${fmtMillions(v.households)} households against the ${fmtMillions(calibratedHouseholds)} calibration fitted, ${fmtPct(runtimeShortfall)} fewer (policyengine-uk-data#538)`,
       'Bus fares: England’s fare receipts uplifted to the UK by population, split between London and the rest of England, and spread across income groups by bus trips in the National Travel Survey. Petrol and diesel spending: one factor, so the litres they imply match the 2024 road fuel volume the build uses',
       'policyengine.py analyses a constituency or local authority with the households whose Output Area lies in it, at their national weights, not with the constituency or local authority weights',
       'Northern Ireland constituencies and local authorities have no households with an Output Area in this release, so policyengine.py stops with an error for them',
@@ -308,7 +309,7 @@ export const ukPipelineStages: PipelineStage[] = [
     details: [
       `${fmtInt(laFitted)} fitted local targets and ${fmtInt(cal.localAuthority.heldOut.cells)} logged but not fitted, across ${cal.localAuthority.metrics} measures; ${fmtInt(cal.localAuthority.cellsWithoutSource)} area and measure pairs have no figure`,
       `At epoch ${cal.epoch}, ${fmtPct(cal.localAuthority.trainingWithin10)} of local authority targets lie within 10%`,
-      'In this release the build assigns Universal Credit household counts to the wrong local authorities',
+      'In this release the build assigns Universal Credit household counts to the wrong local authorities (policyengine-uk-data#468)',
     ],
     calibrationTargets: [
       ...cal.localAuthority.families.map((fam) => ({
