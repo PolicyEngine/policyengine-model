@@ -347,8 +347,8 @@ LOCAL_FAMILIES = [
         "Equivalised income before and after housing costs, and housing costs",
         "ONS small area income estimates",
     ),
-    ("tenure/", "Households by tenure", "English Housing Survey and ONS"),
-    ("rent/private_rent", "Private rent paid", "ONS private rental market statistics"),
+    ("tenure/", "Households by tenure", "English Housing Survey"),
+    ("rent/private_rent", "Private rent paid", "VOA private rental market statistics"),
     (
         "voa/council_tax/",
         "Dwellings by council tax band, A to H",

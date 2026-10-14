@@ -215,7 +215,7 @@
         },
         {
           "label": "Households by tenure",
-          "source": "English Housing Survey and ONS",
+          "source": "English Housing Survey",
           "metrics": 4,
           "heldOut": false,
           "cells": 1164,
@@ -223,7 +223,7 @@
         },
         {
           "label": "Private rent paid",
-          "source": "ONS private rental market statistics",
+          "source": "VOA private rental market statistics",
           "metrics": 1,
           "heldOut": false,
           "cells": 289,
