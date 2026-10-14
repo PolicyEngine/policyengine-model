@@ -555,4 +555,134 @@ describe('comparison data', () => {
       expect(result).not.toContain(tagged);
     });
   });
+
+  describe('PolicyEngine US rows describe the Microcosm default data', () => {
+    // The default release policyengine.py pins, and the build its weights
+    // come from (calibrated at microcosm cae8640).
+    const DEFAULT_RELEASE = 'populace-us-2024-spm-20260915';
+    const PARENT_RELEASE =
+      'populace-us-2024-buildp-sparse-rmloss100-cae8640-20260728T011454Z';
+    const FULL_SHA = /^[0-9a-f]{40}$/;
+
+    const peRows: Array<{ file: string; row: Record<string, unknown> }> = [
+      ...data.models
+        .filter((m) => m.id === 'policyengine-us')
+        .map((row) => ({ file: 'models', row })),
+      ...(
+        [
+          ['imputations', data.imputations],
+          ['modeling', data.modeling],
+          ['behavioral_parameters', data.behavioralParameters],
+          ['artifacts', data.artifacts],
+          ['transparency', data.transparency],
+          ['accuracy', data.accuracy],
+          ['freshness', data.freshness],
+        ] as const
+      ).flatMap(([file, rows]) =>
+        (rows as Array<{ model: string }>)
+          .filter((r) => r.model === 'policyengine-us')
+          .map((row) => ({ file, row: row as Record<string, unknown> })),
+      ),
+    ];
+
+    const urlsIn = (value: unknown): string[] =>
+      JSON.stringify(value).match(/https?:\/\/[^"\s]+/g) ?? [];
+
+    it('cover every PolicyEngine US row in the data files', () => {
+      expect(peRows.length).toBeGreaterThan(50);
+    });
+
+    it('never describe the retired Enhanced CPS pipeline', () => {
+      const retired = /enhanced cps|policyengine[-_ ]us[-_ ]data|\bL0\b|l0-calibration/i;
+      for (const { file, row } of peRows) {
+        expect(
+          JSON.stringify(row),
+          `${file}: ${JSON.stringify(row).slice(0, 80)}`,
+        ).not.toMatch(retired);
+      }
+    });
+
+    it('never call data or releases "certified"', () => {
+      for (const { file, row } of peRows) {
+        expect(JSON.stringify(row), file).not.toMatch(/certif/i);
+      }
+    });
+
+    it('link microcosm code only at a full commit SHA', () => {
+      const links = peRows.flatMap(({ row }) =>
+        urlsIn(row).filter((u) => u.includes('github.com/PolicyEngine/microcosm/')),
+      );
+      expect(links.length).toBeGreaterThan(20);
+      for (const url of links) {
+        const ref = url.match(/microcosm\/(?:blob|tree)\/([^/#]+)/)?.[1];
+        expect(ref, url).toMatch(FULL_SHA);
+      }
+    });
+
+    it('link populace-us release files only at the default or parent release', () => {
+      const links = peRows.flatMap(({ row }) =>
+        urlsIn(row).filter((u) =>
+          u.includes('huggingface.co/datasets/policyengine/populace-us/'),
+        ),
+      );
+      expect(links.length).toBeGreaterThan(10);
+      for (const url of links) {
+        const revision = url.match(/populace-us\/(?:blob|tree|resolve)\/([^/]+)/)?.[1];
+        expect([DEFAULT_RELEASE, PARENT_RELEASE], url).toContain(revision);
+        // A release's files live under its own releases/ folder.
+        const folder = url.match(/\/releases\/([^/]+)/)?.[1];
+        if (folder !== undefined) {
+          expect(folder, url).toBe(revision);
+        }
+      }
+    });
+
+    it('link policyengine.py code, and policyengine-us code on imputation rows, at pinned commits', () => {
+      const pinnedRepo = (u: string) =>
+        /github\.com\/PolicyEngine\/policyengine\.py\/(blob|tree)\//.test(u);
+      const imputationLinks = data.imputations
+        .filter((r) => r.model === 'policyengine-us')
+        .flatMap((r) =>
+          urlsIn(r).filter((u) =>
+            /github\.com\/PolicyEngine\/policyengine-us\/(blob|tree)\//.test(u),
+          ),
+        );
+      const links = [
+        ...peRows.flatMap(({ row }) => urlsIn(row).filter(pinnedRepo)),
+        ...imputationLinks,
+      ];
+      expect(imputationLinks.length).toBeGreaterThan(20);
+      for (const url of links) {
+        const ref = url.match(/\/(?:blob|tree)\/([^/#]+)/)?.[1];
+        expect(ref, url).toMatch(FULL_SHA);
+      }
+    });
+
+    it('name a Microcosm or spm-calculator base dataset on every imputation row', () => {
+      const rows = data.imputations.filter((r) => r.model === 'policyengine-us');
+      expect(rows.length).toBeGreaterThan(30);
+      for (const r of rows) {
+        expect(r.baseDataset, r.concept).toMatch(/^(Microcosm US 2024|spm-calculator)/);
+      }
+    });
+
+    it('state the calibration target split consistently', () => {
+      const national = 447;
+      const state = 5211;
+      const internal = 1;
+      const total = national + state + internal;
+      const calibration = data.modeling.find(
+        (r) => r.model === 'policyengine-us' && r.category === 'calibration',
+      );
+      const aggregate = data.imputations.find(
+        (r) => r.model === 'policyengine-us' && r.concept === 'aggregate-calibration',
+      );
+      expect(calibration?.label).toContain(total.toLocaleString('en-US'));
+      for (const text of [calibration?.detail, aggregate?.description]) {
+        expect(text).toContain(`${national} national`);
+        expect(text).toContain(`${state.toLocaleString('en-US')} state`);
+      }
+      expect(aggregate?.description).toContain(total.toLocaleString('en-US'));
+    });
+  });
 });

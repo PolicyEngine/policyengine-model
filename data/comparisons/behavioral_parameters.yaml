@@ -61,24 +61,27 @@ behavioralParameters:
   - model: policyengine-us
     domain: take-up
     kind: take-up-model
-    parameter: enhanced_cps_take_up_priors
-    label: Enhanced CPS take-up and claiming priors
+    parameter: microcosm_take_up_inputs
+    label: Microcosm take-up and claiming inputs
     status: qualitative
-    value: unknown
-    population: Enhanced CPS tax units, SPM units, and people
-    policyScope: SNAP, ACA/PTC, Medicaid, TANF, SSI, EITC, WIC, Head Start, DC PTC, voluntary filing
-    margin: program take-up and claiming gates
-    functionalForm: Seeded random draws from external take-up or claiming-rate tables; selected programs preserve reported-recipient anchors.
-    notes: These are input-data priors, not endogenous behavioral elasticities. Medicaid uses state-specific priors; the current shared take-up construction does not include a separate external CHIP prior. Calibration and reweighting determine final population-level take-up-sensitive totals where targets are available.
+    value: varies
+    population: people, SPM units and tax units in the default Microcosm US 2024 release
+    policyScope: SNAP, TANF, EITC, Medicaid, SSI, Medicare, ACA premium tax credit, Head Start, housing assistance, WIC, voluntary filing
+    margin: program take-up and claiming inputs
+    functionalForm: Reported-receipt anchors plus seeded draws keyed to survey identity; SNAP, Medicaid and ACA are adjusted to state administrative counts; SSI uses SSA age-band priors; TANF, EITC and WIC use published participation rates; Head Start and voluntary filing come from SIPP-trained quantile regression forests.
+    notes: These are inputs fixed when the dataset is built, not behavioral responses. A reform changes who is eligible, but each unit's stored flag stays the same. CHIP, Basic Health Program, DC property tax credit and Early Head Start flags are not seeded and default to true.
     sources:
-      - label: policyengine-us-data CPS take-up assignment
-        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/datasets/cps/cps.py
+      - label: Microcosm take-up contract
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/take_up_contract.json
         kind: self
-      - label: policyengine-us-data take-up parameters
-        url: https://github.com/PolicyEngine/policyengine-us-data/tree/main/policyengine_us_data/parameters/take_up
+      - label: Microcosm source stages
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/source_stages.json
         kind: self
-      - label: policyengine-us-data take-up target mapping
-        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/utils/takeup.py
+      - label: Microcosm take-up assignment and count calibration
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us_runtime/source_runtime.py#L451-L629
+        kind: self
+      - label: Microcosm take-up seeding (TANF, EITC)
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us_runtime/take_up.py#L182-L283
         kind: self
 
   - model: policyengine-us
@@ -93,13 +96,13 @@ behavioralParameters:
     policyScope: CHIP
     margin: program take-up
     functionalForm: Boolean enrollment gate defaults to true unless data or a reform overrides it.
-    notes: PolicyEngine US Data currently does not seed a separate external CHIP prior in the shared CPS take-up assignment.
+    notes: The default Microcosm US 2024 release does not store this flag; Microcosm's take-up contract leaves CHIP unseeded until CMS's combined CHIP count can be split to match the separate CHIP the model simulates.
     sources:
-      - label: PolicyEngine US CHIP take-up formula
-        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/hhs/chip/takes_up_chip_if_eligible.py
+      - label: PolicyEngine US 2.2.1 CHIP take-up default
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/gov/hhs/chip/takes_up_chip_if_eligible.py
         kind: self
-      - label: policyengine-us-data CPS take-up assignment
-        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/datasets/cps/cps.py
+      - label: Microcosm take-up contract (CHIP left unseeded)
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/take_up_contract.json
         kind: self
 
   # ============================ TRIM3 / Urban ================================
