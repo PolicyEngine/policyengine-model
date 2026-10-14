@@ -1129,11 +1129,11 @@ imputations:
       The build duplicates each CPS ASEC household into a survey copy and a
       tax-detail copy, each with half its weight. The released file keeps 22,200
       survey copies and 35,040 tax-detail copies (9,963 households keep both), and
-      calibration then sets all weights. Survey copies keep ASEC-reported wages, self-employment, interest, dividends, rents,
-      pensions, Social Security and unemployment compensation, with fixed splits where
-      the ASEC reports only a total: 44.8% of dividends
-      qualified, 59% of pensions and annuities taxable and 88% of capital gains long
-      term. Tax-detail copies replace tax-return items (wages, self-employment,
+      calibration then sets all weights. Survey copies keep ASEC-reported wages,
+      self-employment income, rents, Social Security and unemployment compensation,
+      and split ASEC dividends, pensions and capital gains by fixed shares: 44.8% of
+      dividends qualified, 59% of pensions and annuities taxable and 88% of capital
+      gains long term. Tax-detail copies replace tax-return items (wages, self-employment,
       interest, dividends, capital gains, taxable pensions and IRA distributions,
       Social Security, rents, partnership income and others) with draws from a QRF
       trained on the IRS 2015 PUF uprated to 2024, conditioned on the copy's survey
