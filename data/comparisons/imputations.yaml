@@ -100,10 +100,9 @@ imputations:
       The default Microcosm US 2024 release holds survey copies and tax-detail copies
       of CPS ASEC households. On survey copies, ASEC-reported capital gains (`CAP_VAL`)
       are split 88% long term and 12% short term. On tax-detail copies, short-term,
-      long-term, collectibles and non-Schedule D gains are drawn from a chained,
-      weighted quantile regression forest (QRF) trained on the IRS 2015 Public Use
-      File uprated to 2024, conditioned on the copy's filing status, tax-unit size,
-      wages, self-employment income, interest, dividends and survey capital gains.
+      long-term, collectibles and non-Schedule D gains are drawn from a quantile
+      regression forest (QRF) trained on the IRS 2015 Public Use File uprated to
+      2024, conditioned on the copy's survey-reported incomes.
       Before calibration, capital gain distributions reported directly on Form 1040
       are rescaled to the IRS SOI tax year 2023 Table 1.4 total. Household weights are
       calibrated to IRS SOI net capital
@@ -131,7 +130,7 @@ imputations:
       - label: Microcosm pre-calibration distribution rescale
         url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/tools/build_us_fiscal_refresh_release.py#L5062-L5130
         kind: self
-      - label: Microcosm weighted QRF
+      - label: Microcosm QRF
         url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-fit/src/populace/fit/qrf.py#L1-L38
         kind: self
       - label: Microcosm source stages (puf_tax_detail, capital_gain_distributions)
@@ -812,7 +811,7 @@ imputations:
       On tax-detail copies of CPS ASEC households, charitable cash
       and non-cash gifts, real estate taxes, home mortgage interest, investment
       interest, casualty losses and unreimbursed employee
-      expenses are drawn from the weighted QRF trained on the IRS 2015 Public Use File
+      expenses are drawn from a QRF trained on the IRS 2015 Public Use File
       uprated to 2024. Mortgage interest is then converted into first- and
       second-mortgage balances and interest using SCF 2022 mortgage debt. Survey
       copies carry none of these amounts. State and local income taxes and the
@@ -860,8 +859,8 @@ imputations:
       split into retirement, disability, survivor and dependent benefits from the
       ASEC's reason codes. On tax-detail copies, taxable pensions,
       taxable IRA distributions and the Social Security components come from the
-      weighted QRF trained on the uprated IRS 2015 PUF, and 401(k), 403(b), Keogh and
-      SEP distributions from weighted QRFs trained on the ASEC. Before calibration,
+      QRF trained on the uprated IRS 2015 PUF, and 401(k), 403(b), Keogh and SEP
+      distributions from QRFs trained on the ASEC. Before calibration,
       the build rescales each Social Security component so its weighted total equals
       SSA's 2024 total for that benefit type. policyengine-us computes the taxable
       share of Social Security. Household weights are calibrated
@@ -1132,12 +1131,13 @@ imputations:
       survey copies and 35,040 tax-detail copies (9,963 households keep both), and
       calibration then sets all weights. Survey copies keep ASEC-reported wages, self-employment, interest, dividends, rents,
       pensions, Social Security and unemployment compensation, with fixed splits where
-      the ASEC reports only a total: 68% of interest taxable, 44.8% of dividends
+      the ASEC reports only a total: 44.8% of dividends
       qualified, 59% of pensions and annuities taxable and 88% of capital gains long
       term. Tax-detail copies replace tax-return items (wages, self-employment,
       interest, dividends, capital gains, taxable pensions and IRA distributions,
-      Social Security, rents, partnership and S corporation income, and others) with
-      draws from the weighted QRF trained on the IRS 2015 PUF uprated to 2024. The
+      Social Security, rents, partnership income and others) with draws from a QRF
+      trained on the IRS 2015 PUF uprated to 2024, conditioned on the copy's survey
+      incomes; a tax-detail copy keeps its survey copy's pattern of who has wages. The
       source files lack person-level survivor benefits and financial assistance, so
       those resource components are zero.
     baseDataset: Microcosm US 2024 (CPS ASEC + IRS PUF)
@@ -1299,7 +1299,7 @@ imputations:
       the maximum subsidy and gross rent minus total tenant payment) for SPM units
       that take up assistance. In the default Microcosm US 2024 release the take-up
       flag equals reported receipt on survey copies (ASEC `SPM_CAPHOUSESUB` above
-      zero) and receipt imputed by a weighted QRF trained on ASEC on tax-detail copies,
+      zero) and receipt imputed by a QRF trained on the ASEC on tax-detail copies,
       so only units flagged as receiving get a payment. SPM resources count the
       payment capped, as in Census's SPM method, at the threshold's housing portion
       minus the tenant payment.
@@ -1342,7 +1342,7 @@ imputations:
       policyengine-us 2.2.1 adds the input `spm_unit_energy_subsidy` to SPM resources
       rather than computing energy assistance from program rules. In the default
       Microcosm US 2024 release that input is the ASEC SPM energy subsidy
-      (`SPM_ENGVAL`) on survey copies and a weighted QRF imputation trained on ASEC
+      (`SPM_ENGVAL`) on survey copies and a QRF imputation trained on the ASEC
       on tax-detail copies; policyengine-us uprates it by CPI-U for later years.
       Household weights are calibrated to the number of households LIHEAP served in
       fiscal year 2024 (one national target from HHS ACF).
@@ -1633,7 +1633,7 @@ imputations:
     method: survey-reported
     description: >
       Child care expenses are the ASEC SPM child care field (`SPM_CHILDCAREXPNS`) on
-      survey copies and a weighted QRF imputation trained on ASEC on tax-detail
+      survey copies and a QRF imputation trained on the ASEC on tax-detail
       copies. policyengine-us 2.2.1 subtracts them together with work
       expenses, under the earnings cap described in the work expenses row.
     baseDataset: Microcosm US 2024 (CPS ASEC + IRS PUF)
@@ -1672,7 +1672,7 @@ imputations:
       credit, CHIP, Medicaid, Medicare Parts A and B and the Part D income-related
       surcharge are modeled; the remaining premium input is the ASEC premium total
       (`PHIP_VAL`) net of the modeled Marketplace, CHIP and Medicaid premiums, imputed
-      with a weighted QRF trained on ASEC on tax-detail copies.
+      with a QRF trained on the ASEC on tax-detail copies.
     baseDataset: Microcosm US 2024 (CPS ASEC + IRS PUF)
     documentationUrl: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/source_stages.json
     reproducible: yes
@@ -1710,7 +1710,7 @@ imputations:
     method: survey-reported
     description: >
       Child support paid is the ASEC's annual amount paid (`CHSP_VAL`) on survey
-      copies and a weighted QRF imputation trained on ASEC on tax-detail copies. policyengine-us 2.2.1 subtracts it from SPM resources and uprates it
+      copies and a QRF imputation trained on the ASEC on tax-detail copies. policyengine-us 2.2.1 subtracts it from SPM resources and uprates it
       by CPI-U for later years.
     baseDataset: Microcosm US 2024 (CPS ASEC + IRS PUF)
     documentationUrl: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/source_stages.json

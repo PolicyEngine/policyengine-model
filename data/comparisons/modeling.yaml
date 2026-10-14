@@ -30,7 +30,7 @@ modeling:
       (March 2023, 2024 and 2025, covering income years 2022 to 2024). Before
       selection, each household is duplicated: one copy keeps its survey-reported
       incomes; the other keeps the same people and survey state but takes tax-return
-      detail from a weighted quantile regression forest trained on the IRS 2015 Public
+      detail from a quantile regression forest trained on the IRS 2015 Public
       Use File uprated to 2024. Each copy starts with half the household's weight. The
       build kept 57,240 of 337,704 candidate households (22,200 survey copies and
       35,040 tax-detail copies, from 47,277 survey households) with 166,321 people.
@@ -91,8 +91,8 @@ modeling:
     category: data-enhancement
     label: Microcosm source stages
     detail: >
-      37 source stages add inputs the CPS ASEC lacks or measures poorly. 19 use
-      chained, weighted quantile regression forests, including PUF tax detail, SCF
+      Microcosm's 37 source stages add inputs the CPS ASEC lacks or measures poorly.
+      19 fit quantile regression forests, including PUF tax detail, SCF
       2022 wealth, 2023 SIPP tips, vehicles, Head Start and voluntary filing, 2024 CPS
       outgoing rotation group wages and ACS 2022 rent, plus ASEC-trained imputations
       onto the tax-detail copies; the others map ASEC fields directly, assign
@@ -105,7 +105,7 @@ modeling:
       - label: Microcosm source stages
         url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/source_stages.json
         kind: self
-      - label: Microcosm weighted QRF
+      - label: Microcosm QRF
         url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-fit/src/populace/fit/qrf.py#L1-L38
         kind: self
       - label: Microcosm release runner (source stage order)
