@@ -3,6 +3,7 @@ import { colors, typography, spacing } from '../../designTokens';
 import { cboDefaults, BLOG_URL, sources } from '../../data/elasticities';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
 import type { Country } from '../../hooks/useCountry';
+import UkBehaviouralResponses from './UkBehaviouralResponses';
 
 function generateBudgetData(substitutionElasticity: number, incomeElasticity: number) {
   const data = [];
@@ -24,7 +25,8 @@ function generateBudgetData(substitutionElasticity: number, incomeElasticity: nu
 }
 
 export default function BehavioralResponses({ country = 'us' }: { country?: Country }) {
-  const currencySymbol = country === 'uk' ? '£' : '$';
+  if (country === 'uk') return <UkBehaviouralResponses />;
+  const currencySymbol = '$';
   const avgSubstitution = cboDefaults.substitutionElasticities.reduce((a, b) => a + b.central, 0) / cboDefaults.substitutionElasticities.length;
   const budgetData = generateBudgetData(avgSubstitution, cboDefaults.incomeElasticity.central);
 
@@ -32,7 +34,7 @@ export default function BehavioralResponses({ country = 'us' }: { country?: Coun
     <div>
       <p className="tw:text-lg tw:text-[#5A5A5A] tw:leading-[1.7] tw:mb-3 tw:max-w-[720px]">
         Tax and benefit reforms change incentives to work and earn. PolicyEngine models these
-        {country === 'uk' ? ' behavioural' : ' behavioral'} responses using the elasticity of taxable income framework, capturing both
+        {' behavioral'} responses using the elasticity of taxable income framework, capturing both
         substitution effects (changing work effort) and income effects (adjusting for changes in after-tax income).
       </p>
       <p className="tw:text-sm tw:text-pe-primary-600 tw:mb-8">
@@ -75,7 +77,7 @@ export default function BehavioralResponses({ country = 'us' }: { country?: Coun
               <ReferenceLine x={40} stroke={colors.gray[300]} strokeDasharray="5 5" />
               <Line type="monotone" dataKey="baseline" stroke={colors.gray[400]} strokeWidth={2} dot={false} name="Baseline" />
               <Line type="monotone" dataKey="reform" stroke={colors.primary[500]} strokeWidth={2} dot={false} name="Reform (static)" />
-              <Line type="monotone" dataKey="behavioral" stroke={colors.warning} strokeWidth={2} dot={false} name={country === 'uk' ? 'Reform (behavioural)' : 'Reform (behavioral)'} strokeDasharray="5 5" />
+              <Line type="monotone" dataKey="behavioral" stroke={colors.warning} strokeWidth={2} dot={false} name="Reform (behavioral)" strokeDasharray="5 5" />
             </LineChart>
           </ResponsiveContainer>
           <div className="tw:flex tw:gap-6 tw:justify-center tw:mt-3 tw:flex-wrap">
@@ -89,7 +91,7 @@ export default function BehavioralResponses({ country = 'us' }: { country?: Coun
             </div>
             <div className="tw:flex tw:items-center tw:gap-2">
               <div className="tw:w-5 tw:h-[3px] tw:rounded-sm" style={{ backgroundColor: colors.warning }} />
-              <span className="tw:text-xs tw:text-[#5A5A5A]">{country === 'uk' ? 'Reform (behavioural)' : 'Reform (behavioral)'}</span>
+              <span className="tw:text-xs tw:text-[#5A5A5A]">Reform (behavioral)</span>
             </div>
           </div>
         </div>
