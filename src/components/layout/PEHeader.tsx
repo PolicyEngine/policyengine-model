@@ -8,6 +8,7 @@ import {
   IconWorld,
   IconX,
 } from '@tabler/icons-react';
+import { logos } from '@policyengine/ui-kit/assets';
 import { colors, spacing, typography } from '@policyengine/ui-kit/legacy/tokens';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
 import {
@@ -41,9 +42,6 @@ const COUNTRIES = [
   { id: 'us', label: 'United States' },
   { id: 'uk', label: 'United Kingdom' },
 ];
-
-const PE_LOGO_URL =
-  'https://raw.githubusercontent.com/PolicyEngine/policyengine-app-v2/main/app/public/assets/logos/policyengine/white.svg';
 
 const NAV_ITEM_PADDING_X = 14;
 const NAV_UNDERLINE_INSET = 10;
@@ -555,7 +553,7 @@ export default function PEHeader({ country }: PEHeaderProps) {
             }}
           >
             <img
-              src={PE_LOGO_URL}
+              src={logos.whiteWordmark}
               alt="PolicyEngine"
               style={{ height: '24px', width: 'auto' }}
             />
