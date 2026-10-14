@@ -42,7 +42,7 @@ export default function BehavioralResponses({ country = 'us' }: { country?: Coun
       </p>
 
       {/* Concepts + chart */}
-      <div className="tw:grid tw:grid-cols-2 tw:gap-8 tw:mb-12">
+      <div className="tw:grid tw:grid-cols-1 tw:md:grid-cols-2 tw:gap-8 tw:mb-12">
         <div className="tw:flex tw:flex-col tw:gap-6">
           <div className="tw:p-6 tw:rounded-xl tw:border tw:border-[#E2E8F0] tw:bg-white">
             <h4 className="tw:text-lg tw:font-bold tw:text-pe-primary-800 tw:mb-2">
@@ -143,8 +143,10 @@ export default function BehavioralResponses({ country = 'us' }: { country?: Coun
         <h4 className="tw:text-base tw:font-semibold tw:text-black tw:mb-4">
           Substitution elasticity by income decile
         </h4>
-        <div className="tw:rounded-xl tw:border tw:border-[#E2E8F0] tw:overflow-x-auto tw:shadow-sm">
-          <table className="tw:w-full tw:min-w-[400px] tw:border-collapse tw:font-primary">
+        {/* contain: inline-size stops the table's min-content width from widening
+            <main> (and the page) on phones; anything wider scrolls here instead */}
+        <div className="tw:rounded-xl tw:border tw:border-[#E2E8F0] tw:overflow-x-auto tw:[contain:inline-size] tw:shadow-sm">
+          <table className="tw:w-full tw:border-collapse tw:font-primary">
             <thead>
               <tr>
                 {['Decile', 'Lower', 'Central', 'Upper'].map(col => (
