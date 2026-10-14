@@ -39,7 +39,7 @@ export const ukPipelineStages: PipelineStage[] = [
     dataSources: ['DWP Family Resources Survey 2024-25'],
     details: [
       `The FRS grossing weights sum to ${fmtMillions(uk.base.weightedHouseholds)} households`,
-      'Families that report Child Benefit, Pension Credit or Universal Credit claim it; the build draws other families at random, at take-up rates set in the data package',
+      'Families that report Child Benefit, Pension Credit or Universal Credit claim it; the build then draws enough other families at random to bring the share of all families claiming to a take-up rate set in the data package',
       'A family whose adults have all reached State Pension age never claims Universal Credit',
       'The build draws Marriage Allowance, Tax-Free Childcare, free childcare entitlements and Scottish Child Payment at random, at rates set in the data package',
       'Households without a reported council tax bill get the mean reported bill for their region, band and number of adults (one or more); the build nets Scottish water and sewerage charges out',
