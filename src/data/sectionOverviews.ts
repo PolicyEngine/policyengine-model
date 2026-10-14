@@ -38,13 +38,13 @@ export const rulesSection: Record<Country, SectionCopy> = {
       {
         label: 'Coverage tracker',
         description:
-          'Which UK-wide and devolved taxes and benefits PolicyEngine UK models, by department, with the status of each.',
+          'The programmes PolicyEngine UK’s coverage registry lists, grouped by department, with the status the registry records for each.',
         path: '/rules/coverage',
       },
       {
         label: 'Parameters',
         description:
-          'Browse every legislative parameter that drives the model: rates, thresholds, allowances, and eligibility cut-offs.',
+          'Browse the legislative parameters in PolicyEngine UK’s metadata: rates, thresholds, allowances, and eligibility cut-offs.',
         path: '/rules/parameters',
       },
       {
@@ -85,7 +85,7 @@ export const dataSection: Record<Country, SectionCopy> = {
   },
   uk: {
     description:
-      'How PolicyEngine builds the UK household data behind its simulations: from Family Resources Survey households to a calibrated file whose weighted totals match official statistics.',
+      'How PolicyEngine builds the UK household data behind its simulations: from Family Resources Survey households to a file whose weights are calibrated towards official statistics.',
     children: [
       {
         label: 'Pipeline',
@@ -96,13 +96,13 @@ export const dataSection: Record<Country, SectionCopy> = {
       {
         label: 'Calibration targets',
         description:
-          'The OBR, DWP, HMRC, ONS, and other official statistics the household weights are fitted to, nationally and for each constituency and local authority.',
+          'The statistics the household weights are fitted towards, mostly from the OBR, DWP, HMRC and ONS, with separate weight sets for constituencies and local authorities.',
         path: '/data/calibration',
       },
       {
         label: 'Validation',
         description:
-          'How closely the calibrated data matches its targets, and how it does on statistics held out of calibration.',
+          'How closely the data matches its calibration targets when policyengine.py’s pinned model runs it, and how it does on the statistics the build holds out.',
         path: '/data/validation',
       },
     ],

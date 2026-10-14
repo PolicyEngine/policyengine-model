@@ -53,12 +53,15 @@ function reformTax(earnings: number, children: number, creditPerChild: number): 
   return Math.max(0, base - credit);
 }
 
-function behavioralEarnings(earnings: number, children: number, creditPerChild: number): number {
-  const mtrBefore = earnings <= 40000 ? 0.1 : earnings <= 85000 ? 0.22 : 0.32;
-  const creditRate = children > 0 ? (children * creditPerChild) / earnings : 0;
-  const elasticity = 0.25;
-  const mtrAfter = Math.max(0, mtrBefore - creditRate);
-  const pctChange = -elasticity * (mtrAfter - mtrBefore) / (1 - mtrBefore);
+// A fixed credit per child leaves each family's marginal tax rate where it was,
+// so it has no substitution effect. It raises net income, so the example
+// applies an income elasticity to the credit's share of net income.
+const INCOME_ELASTICITY = -0.05;
+
+export function behavioralEarnings(earnings: number, children: number, creditPerChild: number): number {
+  const tax = baselineTax(earnings);
+  const credit = Math.min(children * creditPerChild, tax); // the credit cannot take tax below zero
+  const pctChange = (INCOME_ELASTICITY * credit) / (earnings - tax);
   return Math.round(earnings * (1 + pctChange));
 }
 
@@ -148,13 +151,17 @@ export function getMicrosimSteps(country: Country): MicrosimStep[] {
     {
       id: 0,
       title: 'Start with households',
-      description: 'A representative sample of households, each with their own characteristics.',
+      description: country === 'uk'
+        ? 'Five hypothetical households, each with its own earnings, children and weight.'
+        : 'A representative sample of households, each with their own characteristics.',
       ingredient: 'households',
     },
     {
       id: 1,
       title: 'Calculate baseline taxes',
-      description: 'Apply current tax rules to each household to compute their tax liability.',
+      description: country === 'uk'
+        ? 'Apply a simplified tax schedule to each household to compute its tax.'
+        : 'Apply current tax rules to each household to compute their tax liability.',
       ingredient: 'policies',
     },
     {
@@ -167,15 +174,15 @@ export function getMicrosimSteps(country: Country): MicrosimStep[] {
       id: 3,
       title: country === 'uk' ? 'Model behavioural responses' : 'Model behavioral responses',
       description: country === 'uk'
-        ? 'People change their behaviour in response to tax changes. Using labour supply elasticities, we estimate how earnings shift.'
-        : 'People change their behavior in response to tax changes. Using elasticity of taxable income, we estimate how earnings shift.',
+        ? 'People change their behaviour in response to tax changes. The credit raises families’ income; using an income elasticity, we estimate how much less they earn.'
+        : 'People change their behavior in response to tax changes. The credit raises families’ income; using an income elasticity, we estimate how much less they earn.',
       ingredient: 'dynamics',
     },
     {
       id: 4,
       title: 'Weight and aggregate',
       description: country === 'uk'
-        ? 'Each household represents many real households. Multiply by survey weights and sum for population-level estimates.'
+        ? 'Each household stands for many real ones. Multiply by its weight and sum for a population total.'
         : 'Each household represents many real households. Multiply by survey weights and sum for population-level estimates.',
       ingredient: null,
     },
