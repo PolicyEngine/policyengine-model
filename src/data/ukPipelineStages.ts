@@ -1,33 +1,56 @@
 import type { PipelineStage } from './pipelineStages';
+import { ukRelease as uk, ukFacts as f, fmtInt, fmtPct, fmtMillions } from './ukDataRelease';
+
+/*
+ * The UK build as policyengine-uk-data runs it for the release policyengine.py
+ * pins (datasets/create_datasets.py at the release tag, with the publish run's
+ * settings). Mechanisms cite that code; counts and fit come from
+ * ukDataRelease.json, which scripts/extract_uk_release.py extracts from the
+ * release's own files and calibration logs.
+ */
+
+const c = uk.enhanced.composition;
+const g = uk.enhanced.geography;
+const cal = uk.calibration;
+const stacked = c.frs + c.spiCopies;
+const donorBands = c.cgtBandDonors / 30;
+
+export const ukPipelineIntro =
+  `PolicyEngine UK runs on the enhanced Family Resources Survey that ${f.pin} pins: ` +
+  `${f.data}, built on ${f.builtOn}. The build starts from ${f.baseHouseholds} households in the ` +
+  `Family Resources Survey 2024-25, imputes wealth, spending, top incomes and capital gains from other ` +
+  `surveys, places each household in Great Britain in an Output Area, and fits household weights to ` +
+  `official statistics for every constituency and for the UK as a whole.`;
+
+export const ukBranchLabels = { national: 'UK and constituencies', local: 'Local authorities' };
 
 export const ukPipelineStages: PipelineStage[] = [
   {
     id: 'frs',
     branch: 'shared',
     title: 'Family Resources Survey',
-    subtitle: 'Base microdata',
-    description: 'The Family Resources Survey (FRS) 2023-24 provides the baseline microdata, covering income, benefits, housing, and demographics for ~20,000 UK households. Variables are mapped to PolicyEngine\'s system, and benefit take-up rates are stochastically assigned.',
+    subtitle: 'FRS 2024-25',
+    description:
+      `The build starts from the Family Resources Survey 2024-25 (UK Data Service study 9563): ` +
+      `${f.baseHouseholds} households and ${f.basePeople} people. It maps the survey’s answers to PolicyEngine ` +
+      `UK’s inputs, keeps DWP’s grossing weights, and decides who takes up each benefit.`,
     icon: 'chart-bar',
-    inputSize: '~20,000 households',
-    outputSize: '~20,000 households',
-    dataSources: ['DWP Family Resources Survey 2023-24'],
+    outputSize: `${f.baseHouseholds} households`,
+    dataSources: ['DWP Family Resources Survey 2024-25'],
     details: [
-      'Demographics: age, gender, marital status, employment status, education, region (12 UK regions)',
-      '18+ reported benefit types: child benefit, universal credit, PIP, DLA, ESA, JSA, state pension, pension credit, housing benefit, carer\'s allowance, and more',
-      'Income: employment, self-employment, private pension, savings interest, dividends, property, maintenance',
-      'Housing: rent, council tax (with imputation for ~75% missing), mortgage interest/capital, tenure type, accommodation type',
-      'Stochastic take-up: child benefit, UC, pension credit, marriage allowance, Scottish Child Payment, tax-free childcare, extended/universal/targeted childcare',
-      'Grossing weights from FRS GROSS4 field',
+      `The FRS grossing weights sum to ${fmtMillions(uk.base.weightedHouseholds)} households`,
+      'Families that report Child Benefit, Pension Credit or Universal Credit claim it; the build draws other families at random, at take-up rates set in the data package',
+      'A family whose adults have all reached State Pension age never claims Universal Credit',
+      'The build draws Marriage Allowance, Tax-Free Childcare, free childcare entitlements and Scottish Child Payment at random, at rates set in the data package',
+      'Households without a reported council tax bill get the mean reported bill for their region, band and number of adults (one or more); the build nets Scottish water and sewerage charges out',
+      'The build places each family in a broad rental market area at random, in proportion to privately renting households of its size in its region',
     ],
     imputations: [
-      { name: 'Council tax (missing ~75%)', source: 'FRS 2023-24', method: 'Imputed from council tax band and regional rates' },
-      { name: 'Benefit take-up (child benefit)', source: 'HMRC/DWP', method: 'Stochastic assignment at reported take-up rates' },
-      { name: 'Benefit take-up (UC, pension credit)', source: 'DWP', method: 'Stochastic assignment at reported rates' },
-      { name: 'Benefit take-up (tax-free childcare)', source: 'HMRC', method: 'Stochastic assignment at reported rate' },
-      { name: 'Benefit take-up (childcare entitlements)', source: 'DfE', method: 'Stochastic assignment: extended, universal, targeted childcare' },
-      { name: 'Property purchase', source: 'HMRC transaction data', method: '3.85% stochastic assignment' },
-      { name: 'Private school attendance', source: 'ISC Census 2024', method: 'Stochastic assignment by region' },
-      { name: 'TV ownership and licence evasion', source: 'TV Licensing data', method: 'Stochastic assignment' },
+      { name: 'Council tax (unreported bills)', source: 'FRS 2024-25 reported bills', method: 'Mean by region, band and single-adult household' },
+      { name: 'Benefit take-up', source: 'Reported receipt and data package take-up rates', method: 'Reporters claim; others drawn at random' },
+      { name: 'Broad rental market area', source: 'Privately renting households by area', method: 'Seeded random draw' },
+      { name: 'Property purchase', source: 'HMRC transactions ÷ ONS households', method: '3.85% of households, seeded random draw' },
+      { name: 'TV ownership, licence evasion, first-time buyers', source: 'Rates set in the data package', method: 'Seeded random draws' },
     ],
   },
   {
@@ -35,59 +58,52 @@ export const ukPipelineStages: PipelineStage[] = [
     branch: 'shared',
     title: 'Wealth imputation',
     subtitle: 'WAS → FRS',
-    description: 'Wealth and vehicle ownership variables are imputed from the Wealth and Assets Survey (WAS) Round 7 onto FRS households using quantile random forests. This adds property, financial, and pension wealth needed for capital tax calculations, and vehicle ownership needed for fuel consumption bridging.',
+    description:
+      'A quantile random forest trained on the Wealth and Assets Survey (Round 8, UK Data Service study 7215) ' +
+      'imputes property, financial and pension wealth, vehicles and student loan balances. The build then ' +
+      'rescales main residence values so each region’s mean matches the UK House Price Index.',
     icon: 'coin',
-    inputSize: '~20,000 households',
-    outputSize: '~20,000 households',
-    dataSources: ['Wealth and Assets Survey Round 7 (2018–20, released March 2022)'],
+    inputSize: `${f.baseHouseholds} households`,
+    outputSize: `${f.baseHouseholds} households`,
+    dataSources: ['Wealth and Assets Survey Round 8', 'UK House Price Index'],
     details: [
-      '11 predictors: household net income, adults, children, pension/employment/self-employment/capital income, bedrooms, council tax, renting, region',
-      'Northern Ireland households mapped to Wales (WAS does not sample NI)',
-      'Must run before consumption imputation (num_vehicles needed as predictor)',
+      '11 predictors: household net income; adults; children; employment, self-employment, private pension and capital income; bedrooms; council tax; renting; region',
+      'The Wealth and Assets Survey does not cover Northern Ireland, so the forest treats Northern Ireland households as if they lived in Wales',
+      'This stage runs before the spending stage, which uses the imputed number of vehicles',
     ],
     imputations: [
-      { name: 'Owned land', source: 'WAS Round 7', method: 'Quantile random forest' },
-      { name: 'Property wealth', source: 'WAS Round 7', method: 'Quantile random forest' },
-      { name: 'Corporate wealth (pensions + shares + ISAs)', source: 'WAS Round 7', method: 'Quantile random forest' },
-      { name: 'Gross/net financial wealth', source: 'WAS Round 7', method: 'Quantile random forest' },
-      { name: 'Main residence value', source: 'WAS Round 7', method: 'Quantile random forest' },
-      { name: 'Other residential property', source: 'WAS Round 7', method: 'Quantile random forest' },
-      { name: 'Non-residential property', source: 'WAS Round 7', method: 'Quantile random forest' },
-      { name: 'Savings', source: 'WAS Round 7', method: 'Quantile random forest' },
-      { name: 'Number of vehicles', source: 'WAS Round 7', method: 'Quantile random forest' },
+      { name: 'Main residence value', source: 'WAS Round 8, UK HPI', method: 'Quantile random forest, rescaled to regional means' },
+      { name: 'Property, corporate and financial wealth (gross and net)', source: 'WAS Round 8', method: 'Quantile random forest' },
+      { name: 'Other residential and non-residential property, land', source: 'WAS Round 8', method: 'Quantile random forest' },
+      { name: 'Savings', source: 'WAS Round 8', method: 'Quantile random forest' },
+      { name: 'Number of vehicles', source: 'WAS Round 8', method: 'Quantile random forest' },
+      { name: 'Student loan balance', source: 'WAS Round 8', method: 'Quantile random forest, allocated to people in the household' },
     ],
   },
   {
     id: 'consumption',
     branch: 'shared',
-    title: 'Consumption imputation',
+    title: 'Spending imputation',
     subtitle: 'LCFS → FRS',
-    description: 'Spending patterns are imputed from the Living Costs and Food Survey (LCFS) onto FRS households, enabling VAT, fuel duty, and indirect tax modeling. A two-step bridge via WAS vehicle ownership corrects LCFS fuel underreporting.',
+    description:
+      'A quantile random forest trained on the Living Costs and Food Survey 2023-24 (UK Data Service study 9468) ' +
+      'imputes spending, so PolicyEngine UK can model VAT, duties and energy policy. Petrol and diesel spending ' +
+      'depend on whether a household runs a fuel-burning car: the build gives one to 90% of households with a ' +
+      'vehicle from the wealth stage, at random, the share in the National Travel Survey 2024.',
     icon: 'shopping-cart',
-    inputSize: '~20,000 households',
-    outputSize: '~20,000 households',
-    dataSources: ['Living Costs and Food Survey 2021-22', 'NTS 2024 (vehicle ownership)'],
+    inputSize: `${f.baseHouseholds} households`,
+    outputSize: `${f.baseHouseholds} households`,
+    dataSources: ['Living Costs and Food Survey 2023-24', 'NEED 2023', 'National Travel Survey 2024'],
     details: [
-      '12 COICOP categories + petrol/diesel + domestic energy = 14 consumption variables',
-      '8 predictors: adult/child status, region, employment/self-employment/pension income, household net income, has_fuel_consumption',
-      'Two-step fuel bridge: WAS vehicle ownership (78%) corrects LCFS diary undercount (58%)',
-      'LCFS data uprated from 2021 to 2024 using CPI from OBR, with separate 1.3x fuel uprating',
+      '10 predictors: adults, children, region, employment income, self-employment income, private pension income, household net income, tenure, accommodation type, and fuel-burning car',
+      '18 outputs: the 12 COICOP spending categories, petrol, diesel, bus fares, domestic energy, electricity and gas',
+      'The build rakes electricity and gas to NEED 2023 average use by income band, tenure, accommodation type and region, priced at Ofgem’s April 2026 price cap',
     ],
     imputations: [
-      { name: 'Food and non-alcoholic beverages', source: 'LCFS 2021-22', method: 'Quantile random forest' },
-      { name: 'Alcohol and tobacco', source: 'LCFS 2021-22', method: 'Quantile random forest' },
-      { name: 'Clothing and footwear', source: 'LCFS 2021-22', method: 'Quantile random forest' },
-      { name: 'Housing, water, and electricity', source: 'LCFS 2021-22', method: 'Quantile random forest' },
-      { name: 'Household furnishings', source: 'LCFS 2021-22', method: 'Quantile random forest' },
-      { name: 'Health', source: 'LCFS 2021-22', method: 'Quantile random forest' },
-      { name: 'Transport', source: 'LCFS 2021-22', method: 'Quantile random forest' },
-      { name: 'Communication', source: 'LCFS 2021-22', method: 'Quantile random forest' },
-      { name: 'Recreation', source: 'LCFS 2021-22', method: 'Quantile random forest' },
-      { name: 'Education', source: 'LCFS 2021-22', method: 'Quantile random forest' },
-      { name: 'Restaurants and hotels', source: 'LCFS 2021-22', method: 'Quantile random forest' },
-      { name: 'Miscellaneous goods and services', source: 'LCFS 2021-22', method: 'Quantile random forest' },
-      { name: 'Petrol and diesel spending', source: 'LCFS 2021-22', method: 'Quantile random forest (fuel-bridged)' },
-      { name: 'Domestic energy consumption', source: 'LCFS 2021-22', method: 'Quantile random forest' },
+      { name: '12 COICOP spending categories', source: 'LCFS 2023-24', method: 'Quantile random forest' },
+      { name: 'Petrol and diesel spending', source: 'LCFS 2023-24, NTS 2024', method: 'Quantile random forest, given a fuel-burning car' },
+      { name: 'Bus fares', source: 'LCFS 2023-24', method: 'Quantile random forest' },
+      { name: 'Electricity and gas', source: 'LCFS 2023-24, NEED 2023, Ofgem', method: 'Quantile random forest, raked to NEED' },
     ],
   },
   {
@@ -95,153 +111,194 @@ export const ukPipelineStages: PipelineStage[] = [
     branch: 'shared',
     title: 'VAT and public services',
     subtitle: 'ETB + NHS data',
-    description: 'VAT expenditure rates and public service usage (NHS, education, transport subsidies) are imputed from the Effects of Taxes and Benefits survey and NHS administrative data.',
+    description:
+      'Forests trained on the Effects of Taxes and Benefits survey impute the share of spending taxed at the ' +
+      'full VAT rate and the education, rail and bus subsidies each household receives. The build assigns NHS ' +
+      'visits and spending by age and sex, scaled to a £202bn 2025-26 NHS budget.',
     icon: 'heart-pulse',
-    inputSize: '~20,000 households',
-    outputSize: '~20,000 households',
-    dataSources: ['Effects of Taxes and Benefits survey (2020)', 'NHS consumption by age/gender', 'NTS 2024'],
+    inputSize: `${f.baseHouseholds} households`,
+    outputSize: `${f.baseHouseholds} households`,
+    dataSources: ['Effects of Taxes and Benefits 1977-2024', 'NHS activity and cost by age and sex'],
     details: [
-      'VAT: full-rate expenditure share imputed via QRF (assumes 3% at reduced rate per OBR)',
-      'NHS: deterministic assignment of per-person spending by age-gender cell, scaled to £202bn 2025/26 budget',
-      'NHS visit types: A&E, admitted patient, outpatient (6 variables)',
-      'Education: DfE spending by primary/secondary/further education',
-      'Transport: rail and bus subsidy spending from ETB',
+      'VAT: a forest on adults, children, State Pension age and household net income predicts the share of spending taxed at the full rate',
+      'Public services: a forest on age groups, pupils by school stage, DLA and PIP receipt, and household net income predicts education, rail and bus subsidy spending',
+      'NHS: A&E, admitted patient and outpatient visits and spending, by age and sex',
+      'After calibration, the build scales rail subsidy to £21.6bn and bus subsidy to £3.0bn, uplifted from England to the UK by population',
     ],
     imputations: [
-      { name: 'Full-rate VAT expenditure rate', source: 'ETB 2020', method: 'Quantile random forest' },
-      { name: 'NHS A&E/admitted/outpatient visits and spending', source: 'NHS data', method: 'Deterministic by age-gender cell' },
-      { name: 'Education spending (DfE)', source: 'ETB 2020', method: 'Quantile random forest' },
-      { name: 'Rail and bus subsidy', source: 'ETB 2020', method: 'Quantile random forest' },
+      { name: 'Full-rate VAT spending share', source: 'ETB, financial year ending 2024', method: 'Quantile random forest' },
+      { name: 'Education, rail and bus subsidy', source: 'ETB, latest year', method: 'Quantile random forest' },
+      { name: 'NHS visits and spending', source: 'NHS activity and cost data', method: 'Average by age and sex, scaled to £202bn' },
     ],
   },
   {
     id: 'spi-income',
     branch: 'shared',
-    title: 'SPI income imputation',
-    subtitle: 'HMRC → FRS (stacked)',
-    description: 'Income variables are imputed from the HMRC Survey of Personal Incomes (SPI) to enrich the high-income tail. The FRS is stacked: original records keep their income, and a subsampled zero-weight copy (10,000 households) receives SPI-imputed incomes. Calibration later activates the most informative records.',
+    title: 'Top incomes',
+    subtitle: 'SPI → FRS (stacked)',
+    description:
+      `To represent high incomes, the build adds ${fmtInt(c.spiCopies)} copies of FRS households with zero ` +
+      `weight and incomes drawn from HMRC’s Survey of Personal Incomes 2022-23. Calibration then sets how much ` +
+      `weight each copy gets: in the released file, these households hold ${fmtPct(c.spiWeightShare)} of ` +
+      `household weight.`,
     icon: 'building-bank',
-    inputSize: '~20,000 households + 100,000 SPI records',
-    outputSize: '~30,000 households (stacked)',
-    dataSources: ['HMRC Survey of Personal Incomes 2020-21'],
+    inputSize: `${f.baseHouseholds} households`,
+    outputSize: `${fmtInt(stacked)} households`,
+    dataSources: ['HMRC Survey of Personal Incomes 2022-23'],
     details: [
-      'Original FRS: only dividend_income imputed from SPI',
-      'Zero-weight copy (10,000 households): all 6 income variables imputed',
-      'Stacked: original + zero-weight records (calibration decides which to activate)',
-      '3 predictors: age, gender, region',
-      'Rent and mortgage adjusted proportionally to income changes',
+      'One quantile random forest per earnings group (none, employee, self-employed, both) predicts incomes from age, sex and region; each trains on 100,000 SPI records drawn by weight',
+      'Copies get all six income types plus Gift Aid and charitable gifts of investments; the original FRS households get only dividend income',
+      'A second forest re-imputes each copy’s pension contributions and reported benefits from its new incomes, and the build redraws its Universal Credit and Pension Credit take-up',
+      'Children keep their own values',
     ],
     imputations: [
-      { name: 'Employment income', source: 'SPI 2020-21', method: 'Quantile random forest (zero-weight copy)' },
-      { name: 'Self-employment income', source: 'SPI 2020-21', method: 'Quantile random forest (zero-weight copy)' },
-      { name: 'Savings interest income', source: 'SPI 2020-21', method: 'Quantile random forest (zero-weight copy)' },
-      { name: 'Dividend income', source: 'SPI 2020-21', method: 'Quantile random forest (both copies)' },
-      { name: 'Private pension income', source: 'SPI 2020-21', method: 'Quantile random forest (zero-weight copy)' },
-      { name: 'Property income', source: 'SPI 2020-21', method: 'Quantile random forest (zero-weight copy)' },
+      { name: 'Employment, self-employment, pension, property and savings income', source: 'SPI 2022-23', method: 'Forest per earnings group (copies only)' },
+      { name: 'Dividend income', source: 'SPI 2022-23', method: 'Forest per earnings group (all households)' },
+      { name: 'Gift Aid and charitable gifts of investments', source: 'SPI 2022-23', method: 'Forest per earnings group (copies only)' },
+      { name: 'Pension contributions and reported benefits', source: 'FRS 2024-25', method: 'Second forest, given the new incomes (copies only)' },
     ],
   },
   {
     id: 'capital-gains',
     branch: 'shared',
     title: 'Capital gains',
-    subtitle: 'Advani-Summers distribution',
-    description: 'Capital gains are imputed using percentile distributions from Advani & Summers research, split by income band. The dataset is doubled: each household appears as a "has gains" and "no gains" copy, with PyTorch-optimised weight splitting matching the income-band-specific percentage with gains.',
+    subtitle: 'Advani-Summers + HMRC',
+    description:
+      'The build duplicates every household and gives capital gains to the first adult in each copy. An ' +
+      'optimiser splits each household’s weight between its two versions so the share with gains in each income ' +
+      `band matches Advani and Summers’ estimates. ${fmtInt(c.cgtBandDonors)} donor households then carry ` +
+      `HMRC’s average gain for each size-of-gain band from £12,300 up, covering gains beyond the 95th ` +
+      'percentiles where the income-band distributions stop.',
     icon: 'trending-up',
-    inputSize: '~30,000 households',
-    outputSize: '~60,000 households (doubled)',
-    dataSources: ['Advani & Summers capital gains percentile distributions'],
+    inputSize: `${fmtInt(stacked)} households`,
+    outputSize: `${f.households} households`,
+    dataSources: ['Advani & Summers capital gains distributions', 'HMRC Capital Gains Tax statistics, table 2.1a'],
     details: [
-      'Dataset duplicated: each household gets "has CG" and "no CG" versions',
-      'PyTorch Adam optimiser with sigmoid blend factors splits each household\'s weight',
-      '100 optimisation epochs matching income-band-specific gain percentages',
-      'CG amounts assigned via univariate splines fit to percentile distributions (p05-p95)',
+      'Weight split: an Adam optimiser takes up to 100 steps, with each household’s share passed through a sigmoid',
+      'Gain amounts: a random draw from a piecewise-linear fit to the 5th–95th percentiles of gains in the household’s income band',
+      `Donors: 30 for each of HMRC’s ${fmtInt(donorBands)} size-of-gain bands from £12,300 (2023-24), each starting at the weight that reproduces its band’s taxpayers`,
     ],
   },
   {
     id: 'misc-imputations',
     branch: 'shared',
     title: 'Other imputations',
-    subtitle: 'Salary sacrifice, student loans',
-    description: 'Remaining imputations cover salary sacrifice pension contributions (from FRS respondents asked about SALSAC) and student loan plan assignment based on age and reported repayments.',
+    subtitle: 'Salary sacrifice, student loans, Pension Credit',
+    description:
+      'The build sets pension contributions through salary sacrifice, student loan plans and Pension Credit ' +
+      'take-up last, because each depends on incomes or wealth imputed earlier.',
     icon: 'school',
-    inputSize: '~60,000 households',
-    outputSize: '~60,000 households',
-    dataSources: ['FRS 2023-24 (SALSAC field)', 'Student loan plan rules'],
+    inputSize: `${f.households} households`,
+    outputSize: `${f.households} households`,
+    dataSources: ['FRS 2024-25', 'Student Loans Company', 'DWP take-up statistics'],
     details: [
-      'Salary sacrifice: QRF trained on ~4,000 FRS jobs with SALSAC response, imputed to ~13,000 not asked',
-      'Student loan plan: rule-based from age and repayments (Plan 1 before 2012, Plan 2 2012-2023, Plan 5 2023+)',
-      'Uprating from 2023 to 2025 using OBR economic assumptions for all variables',
+      'Salary sacrifice: a forest on age and employment income fills in jobs whose holders the FRS did not ask, then the build switches pension contributors to salary sacrifice at random, aiming for about 5.4 million users for calibration to fit',
+      'Student loans: people repaying get Plan 1, 2 or 5 from their estimated university start year; in England, the build adds Plan 2 and Plan 5 holders below the repayment threshold to match Student Loans Company totals',
+      'Pension Credit: the build solves the take-up probability among entitled families so weighted take-up in Great Britain equals DWP’s caseload take-up rate; families that report Pension Credit keep claiming',
     ],
     imputations: [
-      { name: 'Pension contributions via salary sacrifice', source: 'FRS 2023-24', method: 'Quantile random forest from age, employment income' },
-      { name: 'Student loan plan type', source: 'Rules', method: 'Deterministic from age and repayment status' },
+      { name: 'Salary sacrifice pension contributions', source: 'FRS 2024-25', method: 'Quantile random forest, then random switching' },
+      { name: 'Student loan plan', source: 'Student Loans Company totals', method: 'Rules, then random assignment in England' },
+      { name: 'Pension Credit take-up', source: 'DWP take-up rate', method: 'Probability solved over entitled families' },
+    ],
+  },
+  {
+    id: 'geography',
+    branch: 'shared',
+    title: 'Small-area geography',
+    subtitle: 'Output Areas',
+    description:
+      'The build gives each household in Great Britain one Output Area, drawn at random in proportion to ' +
+      'population within its survey region, which fixes its local authority and constituency. It then uprates ' +
+      'the file to 2025, the year the calibration targets describe.',
+    icon: 'map-pin',
+    inputSize: `${f.households} households`,
+    outputSize: `${f.households} households`,
+    dataSources: ['ONS and NRS Output Area lookups', 'Census 2021 and 2022 populations'],
+    details: [
+      `${fmtInt(g.householdsWithArea)} households have an Output Area; each of the ${f.gbConstituencies} constituencies in Great Britain has ${g.householdsPerConstituency.min} to ${g.householdsPerConstituency.max} of them`,
+      `Northern Ireland’s ${f.niHouseholds} households have none in this release: the build skips Northern Ireland while its small-area lookup is unavailable (policyengine-uk-data#580)`,
+      `The build can draw several Output Areas per household; the publish run drew ${g.outputAreaDrawsPerHousehold}`,
     ],
   },
   {
     id: 'constituency-calibration',
     branch: 'national',
-    isFinalDataset: true,
     title: 'Constituency calibration',
-    subtitle: '650 × N weight matrix',
-    description: 'Unlike the US L0 approach, the UK uses a weight matrix: a single 650 × N matrix where each constituency gets its own set of household weights, optimised jointly with national targets using gradient descent. Column sums give the national weights. This single dataset serves both national and constituency-level analysis.',
+    subtitle: `${f.constituencies} × ${f.households} weights`,
+    description:
+      `Calibration gives each of the ${f.constituencies} constituencies its own weight for every household in ` +
+      `its nation, and fits all of them together: each constituency’s weights match its local targets, and their ` +
+      `sum over constituencies matches ${f.nationalTargets} UK-wide targets. That sum becomes each household’s ` +
+      `national weight.`,
     icon: 'checkbox',
-    inputSize: '~60,000 households (uprated)',
-    outputSize: '650 × ~60,000 weight matrix',
-    dataSources: ['ONS mid-year population estimates', 'HMRC SPI by constituency', 'DWP Stat-Xplore (UC)', 'OBR', 'HMRC', 'DWP', 'VOA'],
+    inputSize: `${f.households} households`,
+    outputSize: `${f.constituencies} × ${f.households} weights`,
+    dataSources: ['ONS', 'HMRC', 'DWP', 'OBR', 'VOA', 'Student Loans Company', 'and others'],
     details: [
-      'PyTorch Adam optimiser (lr=0.1, 512 epochs), not L0 regularisation',
-      'Country mask: households only get weight in constituencies of the same country (England/Wales/Scotland/NI)',
-      'Country-aware initialisation: initial weight ÷ number of areas in household\'s country',
-      '5% weight dropout for regularisation',
-      'Symmetric relative loss: min(((1+x)/(1+y)-1)², ((1+y)/(1+x)-1)²)',
-      'Joint optimisation of constituency-level and national targets simultaneously',
-      'Column sums = national weights (no separate national calibration needed)',
-      'Boundary mapping: 2010-boundary constituency targets transformed to 2024 boundaries via population overlap matrix',
+      'An Adam optimiser fits log weights at learning rate 0.1 for 512 epochs, replacing a random 5% of weights with their mean at each step',
+      'The loss adds the mean squared relative error over local targets to the same over national targets, measured symmetrically between target and estimate',
+      'Starting weights divide each FRS weight by the number of constituencies in the household’s nation; the zero-weight top-income copies share half the starting total',
+      'The build maps local targets from 2010 constituency boundaries to the 2024 boundaries',
+      `At the end of calibration, ${fmtPct(cal.nationalWithin10)} of national and ${fmtPct(cal.constituency.trainingWithin10)} of constituency targets lie within 10%`,
     ],
     calibrationTargets: [
-      { variable: 'Income tax revenue', target: 'National total', source: 'OBR' },
-      { variable: 'National Insurance (employee + employer)', target: 'National total', source: 'OBR' },
-      { variable: 'Council tax (England/Scotland/Wales separately)', target: 'National + country', source: 'OBR' },
-      { variable: 'VAT, fuel duties, CGT, SDLT, TV licence', target: 'National total', source: 'OBR' },
-      { variable: 'Universal credit (total + jobseekers split)', target: 'National + per constituency', source: 'DWP Stat-Xplore' },
-      { variable: 'State pension, pension credit, child benefit', target: 'National totals + caseloads', source: 'DWP/OBR' },
-      { variable: 'PIP, DLA, ESA, JSA, housing benefit, carer\'s allowance', target: 'National totals + caseloads', source: 'DWP/OBR' },
-      { variable: 'Population by region × age band', target: '12 regions × 9 bands', source: 'ONS mid-year estimates' },
-      { variable: 'Income distribution by band', target: '6 income types × ~14 bands', source: 'HMRC income projection' },
-      { variable: 'Employment/self-employment income by constituency', target: '650 constituencies', source: 'HMRC SPI' },
-      { variable: 'Age demographics by constituency', target: '650 × 8 age bands', source: 'ONS' },
-      { variable: 'Council tax bands by region', target: '11 regions × 8 bands', source: 'VOA/Scottish Govt' },
-      { variable: 'Salary sacrifice', target: 'IT relief by band + total', source: 'HMRC' },
-      { variable: 'Scottish Child Payment', target: '£471m total spend', source: 'Scottish Government' },
-      { variable: 'Vehicle ownership', target: '0/1/2+ distribution', source: 'NTS 2024' },
-      { variable: 'Mortgage payments, private rent', target: 'National totals', source: 'ONS' },
+      ...cal.constituency.families.map((fam) => ({
+        variable: fam.heldOut ? `${fam.label} (logged, not fitted)` : fam.label,
+        target: `${f.constituencies} × ${fam.metrics}`,
+        source: fam.source,
+      })),
+      { variable: 'UK-wide targets', target: f.nationalTargets, source: 'See calibration targets' },
     ],
+    link: { label: 'All calibration targets', path: '/data/calibration' },
+  },
+  {
+    id: 'final-dataset',
+    branch: 'national',
+    isFinalDataset: true,
+    title: 'Enhanced FRS 2024-25',
+    subtitle: 'Default dataset',
+    description:
+      `The build scales the national weights back to 2024, the file’s year, and PolicyEngine UK uprates them ` +
+      `when it loads the file. It rescales rail and bus subsidies, bus fares and road fuel volumes to published ` +
+      `totals and saves the file as ${uk.release.defaultDataset}, the dataset ${f.pin} runs for the UK.`,
+    icon: 'stack-2',
+    inputSize: `${f.constituencies} × ${f.households} weights`,
+    outputSize: `${f.households} households`,
+    dataSources: [f.data],
+    details: [
+      `${f.households} households and ${f.people} people, weighted to ${fmtMillions(uk.enhanced.weightedHouseholds)} households in 2024`,
+      `${fmtInt(c.frs)} FRS households, ${fmtInt(c.spiCopies)} top-income copies, ${fmtInt(c.capitalGainsCopies)} capital gains copies and ${fmtInt(c.cgtBandDonors)} capital gains donors`,
+      'policyengine.py analyses a constituency or local authority with the households whose Output Area lies in it, at their national weights',
+      'Northern Ireland constituencies and local authorities have no households in this release, so policyengine.py stops with an error for them',
+    ],
+    link: { label: 'How the data compares with official statistics', path: '/data/validation' },
   },
   {
     id: 'la-calibration',
     branch: 'local',
-    isFinalDataset: true,
     title: 'Local authority calibration',
-    subtitle: '360 × N weight matrix',
-    description: 'A second weight matrix covers 360 local authorities, using the same gradient descent approach but with additional LA-specific targets including ONS income estimates, tenure type, and private rents by area.',
+    subtitle: `${f.localAuthorities} × ${f.households} weights`,
+    description:
+      `The same fit runs over ${f.localAuthorities} local authorities, with more local targets: income and ` +
+      `housing costs, tenure, private rents, and council tax bands and bills. The loss leaves out any target ` +
+      `with no local source. The release ships these weights as local_authority_weights.h5; the default ` +
+      `dataset’s weights come from the constituency fit.`,
     icon: 'building-community',
-    inputSize: '~60,000 households (uprated)',
-    outputSize: '360 × ~60,000 weight matrix',
-    dataSources: ['ONS income estimates by MSOA', 'DWP Stat-Xplore (UC by LA)', 'ONS Census tenure data', 'VOA private rents'],
+    inputSize: `${f.households} households`,
+    outputSize: `${f.localAuthorities} × ${f.households} weights`,
+    dataSources: ['ONS', 'HMRC', 'DWP', 'VOA', 'MHCLG', 'Welsh Government'],
     details: [
-      'Same PyTorch Adam optimiser and loss function as constituency calibration',
-      'Same national targets plus LA-specific targets',
-      'Additional targets not in constituency calibration: tenure type, private rents, ONS income estimates',
-      'Output saved as separate local_authority_weights.h5',
+      `${fmtInt(cal.localAuthority.cellsWithTarget)} local targets across ${cal.localAuthority.metrics} measures; ${fmtInt(cal.localAuthority.cellsWithoutSource)} area and measure pairs have no source`,
+      `At the end of calibration, ${fmtPct(cal.localAuthority.trainingWithin10)} of local authority targets lie within 10%`,
     ],
     calibrationTargets: [
-      { variable: 'Age demographics by LA', target: '360 × 8 age bands', source: 'ONS' },
-      { variable: 'Employment/self-employment income by LA', target: '360 LAs', source: 'HMRC SPI' },
-      { variable: 'UC households by LA', target: '360 LAs', source: 'DWP Stat-Xplore' },
-      { variable: 'Equivalent net income (BHC/AHC)', target: 'Per LA', source: 'ONS MSOA income (uprated)' },
-      { variable: 'Tenure type (owned/mortgage/private/social)', target: 'Per LA', source: 'ONS Census' },
-      { variable: 'Private rent amounts', target: 'Per LA', source: 'VOA median rents' },
-      { variable: '+ all national targets from constituency calibration', target: 'See above', source: 'OBR/HMRC/DWP/ONS' },
+      ...cal.localAuthority.families.map((fam) => ({
+        variable: fam.heldOut ? `${fam.label} (logged, not fitted)` : fam.label,
+        target: `${f.localAuthorities} × ${fam.metrics}`,
+        source: fam.source,
+      })),
+      { variable: 'UK-wide targets', target: f.nationalTargets, source: 'See calibration targets' },
     ],
   },
 ];
