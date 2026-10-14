@@ -1,5 +1,5 @@
 /**
- * Snapshot the default-branch program registries and parameter YAML file trees.
+ * Snapshot the default-branch program registries and source file trees.
  * Run: node scripts/fetch-metadata.js (also called by `bun run build`).
  * Fetch failures are warnings: the app can fall back to API metadata.
  */
@@ -161,10 +161,14 @@ export async function fetchMetadataFiles({
 
   for (const country of countries) {
     const snapshotPath = join(outputDir, `programs-${country}.json`);
+    const parameterTreePath = join(outputDir, `param-tree-${country}.json`);
+    const variableTreePath = join(outputDir, `variable-tree-${country}.json`);
     let source;
     try {
-      // A failed refresh must not leave a snapshot from an earlier build behind.
-      rmSync(snapshotPath, { force: true });
+      // Clear all three before resolving HEAD, including when resolution fails.
+      for (const path of [snapshotPath, parameterTreePath, variableTreePath]) {
+        rmSync(path, { force: true });
+      }
       source = await resolveRepository(country, fetchImpl);
     } catch (error) {
       logger.warn(`  ${country}: could not resolve registry source — ${error.message}`);
@@ -184,20 +188,17 @@ export async function fetchMetadataFiles({
       (async () => {
         try {
           const paths = await fetchParameterYamlPaths(country, source, fetchImpl);
-          const treePath = join(outputDir, `param-tree-${country}.json`);
-          writeFileSync(treePath, JSON.stringify(paths));
-          logger.log(`  ${country}: wrote ${treePath} (${paths.length} files)`);
+          writeFileSync(parameterTreePath, JSON.stringify({ source, paths }));
+          logger.log(`  ${country}: wrote ${parameterTreePath} (${paths.length} files)`);
         } catch (error) {
           logger.warn(`  ${country}: parameter tree skipped — ${error.message}`);
         }
       })(),
       (async () => {
-        const treePath = join(outputDir, `variable-tree-${country}.json`);
         try {
-          rmSync(treePath, { force: true });
           const paths = await fetchVariableModulePaths(country, source, fetchImpl);
-          writeFileSync(treePath, JSON.stringify({ source, paths }));
-          logger.log(`  ${country}: wrote ${treePath} (${paths.length} files)`);
+          writeFileSync(variableTreePath, JSON.stringify({ source, paths }));
+          logger.log(`  ${country}: wrote ${variableTreePath} (${paths.length} files)`);
         } catch (error) {
           logger.warn(`  ${country}: variable tree skipped — ${error.message}`);
         }

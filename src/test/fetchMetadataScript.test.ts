@@ -159,6 +159,10 @@ describe('registry snapshot fetch script', () => {
 
   it('writes the snapshot even when fetching the independent parameter tree fails', async () => {
     const outputDir = outputDirectory();
+    const parameterTreePath = join(outputDir, 'param-tree-us.json');
+    const variableTreePath = join(outputDir, 'variable-tree-us.json');
+    writeFileSync(parameterTreePath, '["stale/parameter.yaml"]');
+    writeFileSync(variableTreePath, '{"source":{"commit":"old"},"paths":["stale.py"]}');
     const rawRoot = `https://raw.githubusercontent.com/${source.repo}/${commit}`;
     const fetchImpl = mockFetch({
       'https://api.github.com/repos/PolicyEngine/policyengine-us': { default_branch: 'main' },
@@ -173,19 +177,48 @@ describe('registry snapshot fetch script', () => {
       source, version: '1.823.4', apiVersion: '1.764.6',
     });
     expect(logger.warn).toHaveBeenCalledWith(expect.stringContaining('Tree unavailable'));
+    expect(existsSync(parameterTreePath)).toBe(false);
+    expect(existsSync(variableTreePath)).toBe(false);
   });
 
-  it('removes an old snapshot and skips a country when its default branch cannot be fetched', async () => {
+  it('removes all old snapshots when the default branch cannot be fetched', async () => {
     const outputDir = outputDirectory();
-    const snapshotPath = join(outputDir, 'programs-us.json');
-    writeFileSync(snapshotPath, '{"stale":true}');
+    const snapshotPaths = ['programs-us.json', 'param-tree-us.json', 'variable-tree-us.json']
+      .map(name => join(outputDir, name));
+    for (const path of snapshotPaths) writeFileSync(path, '{"stale":true}');
     const fetchImpl = mockFetch({
       'https://api.github.com/repos/PolicyEngine/policyengine-us': new Error('Network unavailable'),
     });
     await expect(fetchMetadataFiles({ countries: ['us'], outputDir, fetchImpl, logger }))
       .resolves.toBeUndefined();
-    expect(existsSync(snapshotPath)).toBe(false);
+    for (const path of snapshotPaths) expect(existsSync(path)).toBe(false);
     expect(logger.warn).toHaveBeenCalledWith(expect.stringContaining('Network unavailable'));
+  });
+
+  it('records the same source commit in the registry and both source trees', async () => {
+    const outputDir = outputDirectory();
+    const rawRoot = `https://raw.githubusercontent.com/${source.repo}/${commit}`;
+    const treeRoot = `https://api.github.com/repos/${source.repo}/git/trees`;
+    const fetchImpl = mockFetch({
+      'https://api.github.com/repos/PolicyEngine/policyengine-us': { default_branch: 'main' },
+      'https://api.github.com/repos/PolicyEngine/policyengine-us/commits/main': { sha: commit },
+      [`${rawRoot}/policyengine_us/programs.yaml`]: registry,
+      [`${rawRoot}/pyproject.toml`]: '[project]\nversion = "1.823.4"',
+      'https://api.policyengine.org/us/metadata': { version: '1.764.6' },
+      [`${treeRoot}/${commit}`]: { tree: [{ path: 'policyengine_us', sha: 'package-tree' }] },
+      [`${treeRoot}/package-tree`]: { tree: [
+        { path: 'parameters', sha: 'parameter-tree' },
+        { path: 'variables', sha: 'variable-tree' },
+      ] },
+      [`${treeRoot}/parameter-tree?recursive=1`]: { tree: [{ type: 'blob', path: 'gov/hhs/tanf.yaml' }] },
+      [`${treeRoot}/variable-tree?recursive=1`]: { tree: [{ type: 'blob', path: 'gov/hhs/tanf.py' }] },
+    });
+    await fetchMetadataFiles({ countries: ['us'], outputDir, fetchImpl, logger });
+    for (const name of ['programs-us.json', 'param-tree-us.json', 'variable-tree-us.json']) {
+      expect(JSON.parse(readFileSync(join(outputDir, name), 'utf8')).source).toMatchObject(source);
+    }
+    expect(JSON.parse(readFileSync(join(outputDir, 'param-tree-us.json'), 'utf8')))
+      .toEqual({ source, paths: ['gov/hhs/tanf.yaml'] });
   });
 
   it('skips a missing UK registry gracefully, removing any previous snapshot', async () => {
