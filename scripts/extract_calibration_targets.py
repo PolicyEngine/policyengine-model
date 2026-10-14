@@ -99,7 +99,13 @@ def geography_level(target: dict) -> str:
     level = metadata.get("ledger_geography_level")
     if _one_of(level, LEVELS):
         return LEVELS[level]
-    if level is None and _one_of(metadata.get("target_role"), INTERNAL_TARGET_ROLES):
+    # Ledger facts never carry a target_role, so a row with ledger metadata is
+    # administrative even if it also claims an internal role.
+    if (
+        level is None
+        and _one_of(metadata.get("target_role"), INTERNAL_TARGET_ROLES)
+        and not any(str(k).startswith("ledger_") for k in metadata)
+    ):
         return "other"
     raise UnsupportedDiagnostics(
         f"target {target.get('name')!r}: unrecognized geography {level!r} "

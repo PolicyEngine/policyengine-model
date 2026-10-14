@@ -225,6 +225,15 @@ def test_internal_constraint_is_counted_as_other():
     assert families == {"bea", "policyengine_build"}
 
 
+def test_ten_percent_exactly_counts_as_within():
+    # The calibrator counts abs(relative_error) <= 0.10 as within tolerance.
+    rows = [target(relative_error=0.10), target("b.amount@2024", relative_error=-0.10),
+            target("c.amount@2024", relative_error=0.1000001)]
+    out = extract(wrap(rows))
+    assert out["withinTenPctShare"] == round(2 / 3, 4)
+    assert out["targets"][0]["withinTenPctShare"] == round(2 / 3, 4)
+
+
 def test_internal_constraint_keeps_its_family_whatever_its_source_looks_like():
     row = internal(source="bea | T | f | 2024 | https://example.org/bea")
     out = extract(wrap([target(), row]))
@@ -333,6 +342,10 @@ def test_rejects_unsupported_top_level_fields(overrides):
         {**target(), "metadata": []},
         internal(metadata={"target_role": "something_new"}),
         internal(metadata={"target_role": ["selection_mass_protection"]}),
+        # an administrative row cannot pass as internal by losing its geography
+        # and gaining the internal role
+        {**target(), "metadata": {**without(target()["metadata"], "ledger_geography_level"),
+                                  "target_role": "selection_mass_protection"}},
         "not a target",
     ],
 )
