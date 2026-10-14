@@ -16,8 +16,9 @@ import MobileHeader from '../components/layout/MobileHeader';
 import Footer from '../components/layout/Footer';
 
 const REPO_ROOT = path.resolve(__dirname, '../..');
-// Any absolute http(s) URL that points at an image file.
-const REMOTE_IMAGE_URL = /https?:\/\/[^\s'"`)]+\.(?:svg|png|jpe?g|gif|webp|ico|avif)\b/gi;
+// An http(s) or protocol-relative (//host/...) URL that points at an image file.
+const REMOTE_IMAGE_URL =
+  /(?:https?:\/\/|(?<![\w:/])\/\/(?=[\w-]+\.))[^\s'"`)]+\.(?:svg|png|jpe?g|gif|webp|ico|avif)\b/gi;
 
 function sourceFiles(dir: string): string[] {
   return readdirSync(dir).flatMap((name) => {
@@ -55,9 +56,26 @@ describe('PolicyEngine logos', () => {
     expect(screen.getByAltText('PolicyEngine')).toHaveAttribute('src', logos.tealSquare);
   });
 
+  it.each([
+    ['src="https://example.org/logo.svg"', true],
+    ['src="http://example.org/a/b.PNG?v=2"', true],
+    ['src={`https://${host}/logo.webp`}', true],
+    ['src="//example.org/assets/white.svg"', true],
+    ["url('//cdn.example.org/bg.jpg')", true],
+    ['src={logos.whiteWordmark}', false],
+    ['fetch(`${prefix}/programs-us.json`)', false],
+    ['href="https://example.org/docs"', false],
+    ['// see the logo.svg in ui-kit', false],
+    ['icon: `${prodOrigin}/icon.svg`', false],
+  ])('remote image URL pattern on %s is %s', (text, expected) => {
+    expect([...text.matchAll(REMOTE_IMAGE_URL)].length > 0).toBe(expected);
+  });
+
   it('are never hotlinked from a remote URL in app or src', () => {
     const offenders = ['app', 'src']
       .flatMap((dir) => sourceFiles(path.join(REPO_ROOT, dir)))
+      // This file holds sample URLs for the pattern cases above.
+      .filter((file) => file !== __filename)
       .flatMap((file) =>
         [...readFileSync(file, 'utf8').matchAll(REMOTE_IMAGE_URL)].map(
           (match) => `${path.relative(REPO_ROOT, file)}: ${match[0]}`,
