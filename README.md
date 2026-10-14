@@ -35,9 +35,16 @@ available, the version served by the production API.
 
 The same run snapshots each repository's `parameters/` and `variables/` file trees
 (`public/param-tree-<country>.json`, `public/variable-tree-<country>.json`) at that
-commit. Parameter pages use them to link each parameter to its YAML file; the UK
-variable explorer uses the variable tree to find each variable's module, because
-the UK metadata API serves none.
+commit. Both trees record `{ source, paths }`. The UK variable tree also records
+`modules`, an exact class-to-module map read from that commit's source archive,
+because the UK metadata API serves no module names. The UK coverage tracker
+verifies parameter, source and computation-tree links only against trees whose
+repository and commit match its programme registry snapshot.
+
+If the archive is unavailable, module enrichment falls back to unique file stems.
+UK variables whose modules remain unknown appear under “Unclassified variables”.
+The registry and both trees are cleared before each refresh so a failed fetch
+cannot reuse a stale snapshot.
 
 The program loader tries the static snapshot first, then production API metadata,
 then the bundled hardcoded programs (US only; the UK page says the registry could

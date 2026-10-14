@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { IconCalendar, IconX } from '@tabler/icons-react';
 import { colors, typography, spacing, statusColors } from '../../designTokens';
-import { fetchProgramsWithSource, type ProgramsWithSource } from '../../data/fetchPrograms';
+import { fetchProgramsWithSource, type ProgramsSource, type ProgramsWithSource } from '../../data/fetchPrograms';
 import { publicBasePrefixFromPath } from '../../hooks/usePublicBasePrefix';
 import type { CoverageStatus, Program } from '../../types/Program';
 import CoverageProvenance from './CoverageProvenance';
@@ -44,15 +44,27 @@ interface SourceTrees {
   variablePaths: Map<string, string | null>;
 }
 
+interface SourceTree {
+  source: { repo: string; commit: string };
+  paths: string[];
+  modules?: Record<string, string>;
+}
+
+interface ProgrammeLinks {
+  parameters?: string;
+  source?: string;
+  computationTree?: string;
+}
+
 /** A programme's links, kept only where the pinned snapshot has the file or folder. */
 export function verifiedLinks(
   program: Program,
   parameterPrefix: string | undefined,
   trees: SourceTrees | null,
   ref: string,
-): { parameters?: string; source?: string } {
+): ProgrammeLinks {
   if (!trees) return {};
-  const links: { parameters?: string; source?: string } = {};
+  const links: ProgrammeLinks = {};
   if (parameterPrefix) {
     const dir = parameterPrefix.replace(/\./g, '/');
     const base = `https://github.com/${REPO}`;
@@ -63,27 +75,51 @@ export function verifiedLinks(
     }
   }
   const file = program.variable ? trees.variablePaths.get(program.variable) : null;
-  if (file) links.source = `https://github.com/${REPO}/blob/${ref}/policyengine_uk/variables/${file}`;
+  if (file) {
+    links.source = `https://github.com/${REPO}/blob/${ref}/policyengine_uk/variables/${file}`;
+    links.computationTree = `https://policyengine.github.io/flowchart/?variable=${program.variable}&country=UK`;
+  }
   return links;
 }
 
-async function loadTrees(): Promise<SourceTrees | null> {
-  const prefix = publicBasePrefixFromPath(window.location.pathname);
+async function loadTree(url: string, source: Extract<ProgramsSource, { kind: 'snapshot' }>): Promise<SourceTree | null> {
   try {
-    const [params, vars] = await Promise.all([
-      fetch(`${prefix}/param-tree-uk.json`).then((r) => (r.ok ? r.json() : null)),
-      fetch(`${prefix}/variable-tree-uk.json`).then((r) => (r.ok ? r.json() : null)),
-    ]);
-    if (!Array.isArray(params) || !Array.isArray(vars?.paths)) return null;
-    const variablePaths = new Map<string, string | null>();
-    for (const path of vars.paths as string[]) {
-      const stem = path.split('/').pop()!.replace(/\.py$/, '');
-      variablePaths.set(stem, variablePaths.has(stem) ? null : path);
-    }
-    return { parameterPaths: new Set(params as string[]), variablePaths };
+    const response = await fetch(url);
+    if (!response.ok) return null;
+    const tree = await response.json();
+    if (tree?.source?.repo !== source.repo || tree?.source?.commit !== source.commit ||
+      !Array.isArray(tree.paths) || !tree.paths.every((path: unknown) => typeof path === 'string')) return null;
+    return tree;
   } catch {
     return null;
   }
+}
+
+/** A tree can verify links only for the same repository and commit as the registry. */
+async function loadTrees(source: ProgramsSource): Promise<SourceTrees | null> {
+  if (source.kind !== 'snapshot' || source.repo !== REPO) return null;
+  const prefix = publicBasePrefixFromPath(window.location.pathname);
+  const [params, vars] = await Promise.all([
+    loadTree(`${prefix}/param-tree-uk.json`, source),
+    loadTree(`${prefix}/variable-tree-uk.json`, source),
+  ]);
+  if (!params && !vars) return null;
+  const variablePaths = new Map<string, string | null>();
+  if (vars?.modules && typeof vars.modules === 'object' && !Array.isArray(vars.modules)) {
+    const paths = new Set(vars.paths);
+    for (const [name, moduleName] of Object.entries(vars.modules)) {
+      if (typeof moduleName !== 'string') continue;
+      const path = `${moduleName.replace(/\./g, '/')}.py`;
+      if (paths.has(path)) variablePaths.set(name, path);
+    }
+  } else if (vars && vars.modules === undefined) {
+    // Older snapshots have only paths: accept a unique, exact file stem.
+    for (const path of vars.paths) {
+      const stem = path.split('/').pop()!.replace(/\.py$/, '');
+      variablePaths.set(stem, variablePaths.has(stem) ? null : path);
+    }
+  }
+  return { parameterPaths: new Set(params?.paths ?? []), variablePaths };
 }
 
 function ProgrammeDetail({
@@ -92,7 +128,7 @@ function ProgrammeDetail({
   onClose,
 }: {
   program: Program;
-  links: { parameters?: string; source?: string };
+  links: ProgrammeLinks;
   onClose: () => void;
 }) {
   const linkStyle = {
@@ -166,9 +202,9 @@ function ProgrammeDetail({
         {links.source && (
           <a href={links.source} target="_blank" rel="noopener noreferrer" style={linkStyle}>Source code</a>
         )}
-        {program.variable && (
+        {links.computationTree && (
           <a
-            href={`https://policyengine.github.io/flowchart/?variable=${program.variable}&country=UK`}
+            href={links.computationTree}
             target="_blank"
             rel="noopener noreferrer"
             style={linkStyle}
@@ -195,8 +231,11 @@ export default function UkCoverageTracker() {
 
   useEffect(() => {
     let active = true;
-    fetchProgramsWithSource('uk').then((result) => { if (active) setLoaded(result); });
-    loadTrees().then((result) => { if (active) setTrees(result); });
+    fetchProgramsWithSource('uk').then((result) => {
+      if (!active) return;
+      setLoaded(result);
+      loadTrees(result.source).then((result) => { if (active) setTrees(result); });
+    });
     return () => { active = false; };
   }, []);
 

@@ -273,8 +273,12 @@ async function loadParamTree(country: string): Promise<Set<string> | null> {
     const prefix = publicBasePrefixFromPath(window.location.pathname);
     const res = await fetch(`${prefix}/param-tree-${country}.json`);
     if (!res.ok) throw new Error('not found');
-    const paths: string[] = await res.json();
-    const set = new Set(paths);
+    const tree = await res.json();
+    const paths = Array.isArray(tree) ? tree : tree?.paths;
+    if (!Array.isArray(paths) || !paths.every((path: unknown) => typeof path === 'string')) {
+      throw new Error('invalid parameter tree');
+    }
+    const set = new Set<string>(paths);
     treeCache.set(country, set);
     return set;
   } catch {
