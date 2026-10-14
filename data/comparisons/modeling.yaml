@@ -27,13 +27,13 @@ modeling:
     label: Pooled CPS ASEC with IRS PUF tax detail
     detail: >
       The default Microcosm US 2024 release starts from three pooled CPS ASEC files
-      (March 2023, 2024 and 2025, covering income years 2022 to 2024). Each household
-      is duplicated: one copy keeps its survey-reported incomes; the other keeps the
-      same people and survey state but takes tax-return detail from a weighted
-      quantile regression forest trained on the IRS 2015 Public Use File uprated to
-      2024. Each copy starts with half the household's weight. The build kept 57,240
-      of 337,704 candidate households (22,200 survey copies and 35,040 tax-detail
-      copies) with 166,321 people.
+      (March 2023, 2024 and 2025, covering income years 2022 to 2024). Before
+      selection, each household is duplicated: one copy keeps its survey-reported
+      incomes; the other keeps the same people and survey state but takes tax-return
+      detail from a weighted quantile regression forest trained on the IRS 2015 Public
+      Use File uprated to 2024. Each copy starts with half the household's weight. The
+      build kept 57,240 of 337,704 candidate households (22,200 survey copies and
+      35,040 tax-detail copies, from 47,277 survey households) with 166,321 people.
     scope: US household microdata (populace-us-2024-spm-20260915)
     sources:
       - label: Default release source enrichment (three ASEC files joined)

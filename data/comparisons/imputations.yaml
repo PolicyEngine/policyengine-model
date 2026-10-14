@@ -11,7 +11,7 @@ imputations:
     concept: snap-participation
     method: caseload-driven
     description: >
-      PolicyEngine-US computes SNAP eligibility and benefits from program rules and
+      PolicyEngine US computes SNAP eligibility and benefits from program rules and
       pays them only to SPM units whose `takes_up_snap_if_eligible` flag is true. In
       the default Microcosm US 2024 release, every unit that reported SNAP in the CPS
       ASEC (`SPM_SNAPSUB` above zero) takes up. Other units draw against a state rate
@@ -97,9 +97,9 @@ imputations:
     concept: capital-gains
     method: machine-learning
     description: >
-      Each CPS ASEC household appears twice in the default Microcosm US 2024 release.
-      On the survey copy, ASEC-reported capital gains (`CAP_VAL`) are split 88% long
-      term and 12% short term. On the copy that carries tax-return detail, short-term,
+      The default Microcosm US 2024 release holds survey copies and tax-detail copies
+      of CPS ASEC households. On survey copies, ASEC-reported capital gains (`CAP_VAL`)
+      are split 88% long term and 12% short term. On tax-detail copies, short-term,
       long-term, collectibles and non-Schedule D gains are drawn from a chained,
       weighted quantile regression forest (QRF) trained on the IRS 2015 Public Use
       File uprated to 2024, conditioned on the copy's filing status, tax-unit size,
@@ -172,7 +172,7 @@ imputations:
     concept: tanf-participation
     method: parameterized-take-up
     description: >
-      PolicyEngine-US multiplies state TANF cash benefits by `takes_up_tanf_if_eligible`.
+      PolicyEngine US multiplies state TANF cash benefits by `takes_up_tanf_if_eligible`.
       In the default Microcosm US 2024 release each SPM unit gets a seeded draw, keyed
       to its survey identity so both copies of a household agree, and takes up when the
       draw falls below 21.9%, the HHS ASPE TRIM3-based TANF participation rate among
@@ -233,12 +233,12 @@ imputations:
     concept: ssi-participation
     method: caseload-driven
     description: >
-      PolicyEngine-US pays SSI only to people whose `takes_up_ssi_if_eligible` flag is
+      PolicyEngine US pays SSI only to people whose `takes_up_ssi_if_eligible` flag is
       true. In the default Microcosm US 2024 release, every person who reported SSI in
       the CPS ASEC (`SSI_VAL` above zero) takes up. Every other person draws once
       against an age-band prior (under 18, 18 to 64, 65 and over) derived from SSA's
       December 2024 count of people receiving a federal SSI payment, and the decision
-      is shared by both copies of the household. Household weights are calibrated to
+      is shared by a person's survey and tax-detail copies. Household weights are calibrated to
       those three SSA age-band counts and to SSA 2024 SSI recipients and payments by
       state. The release's SSI diagnostics show the under-18 band saturated: about
       177,000 weighted recipients against SSA's 1.0 million.
@@ -301,7 +301,7 @@ imputations:
     concept: medicaid-participation
     method: caseload-driven
     description: >
-      PolicyEngine-US computes Medicaid eligibility by category and state rules and
+      PolicyEngine US computes Medicaid eligibility by category and state rules and
       enrolls eligible people whose `takes_up_medicaid_if_eligible` flag is true. In
       the default Microcosm US 2024 release, every person who reported Medicaid
       coverage at the CPS ASEC interview takes up. Other people draw against a state
@@ -388,7 +388,7 @@ imputations:
     concept: chip-participation
     method: not-modeled
     description: >
-      PolicyEngine-US computes CHIP eligibility through child and pregnant-person
+      PolicyEngine US computes CHIP eligibility through child and pregnant-person
       pathways and enrolls eligible people whose `takes_up_chip_if_eligible` flag is
       true. The default Microcosm US 2024 release does not carry that flag, so it takes
       the policyengine-us default (true) and every CHIP-eligible person enrolls.
@@ -465,7 +465,7 @@ imputations:
     concept: aca-ptc-participation
     method: caseload-driven
     description: >
-      PolicyEngine-US pays the premium tax credit to eligible tax units whose
+      PolicyEngine US pays the premium tax credit to eligible tax units whose
       `takes_up_aca_if_eligible` flag is true. In the default Microcosm US 2024
       release, eligible tax units with a member who reported subsidized Marketplace
       coverage at the CPS ASEC interview take up. Other eligible units draw against a
@@ -511,7 +511,7 @@ imputations:
     concept: eitc-claiming
     method: parameterized-take-up
     description: >
-      PolicyEngine-US pays the EITC only to eligible tax units whose `takes_up_eitc`
+      PolicyEngine US pays the EITC only to eligible tax units whose `takes_up_eitc`
       flag is true and that file a return (they are required to, would file
       voluntarily, or would file to claim a refundable credit). In the default
       Microcosm US 2024 release, each tax unit draws once, keyed to its survey
@@ -576,7 +576,7 @@ imputations:
     concept: dc-ptc-claiming
     method: not-modeled
     description: >
-      PolicyEngine-US computes DC's property tax credit (Schedule H) and pays it to DC
+      PolicyEngine US computes DC's property tax credit (Schedule H) and pays it to DC
       tax units whose `takes_up_dc_ptc` flag is true. The default Microcosm US 2024
       release leaves that flag unseeded, so it takes the policyengine-us default
       (true) and every eligible DC tax unit claims. Microcosm's take-up contract
@@ -605,7 +605,7 @@ imputations:
     concept: wic-participation
     method: parameterized-take-up
     description: >
-      PolicyEngine-US pays WIC to eligible people whose take-up input is true. The
+      PolicyEngine US pays WIC to eligible people whose take-up input is true. The
       default Microcosm US 2024 release stores a seeded claim draw, `would_claim_wic`,
       assigned at USDA FNS calendar year 2022 coverage rates by participant category:
       45.6% for pregnant women, 68.9% for women with an infant in the family (FNS's
@@ -667,11 +667,11 @@ imputations:
     concept: head-start-participation
     method: machine-learning
     description: >
-      PolicyEngine-US values Head Start for eligible children whose
+      PolicyEngine US values Head Start for eligible children whose
       `takes_up_head_start_if_eligible` flag is true. In the default Microcosm US 2024
       release, a weighted quantile regression forest trained on December responses in
-      the 2023 SIPP predicts that flag once for each child aged 3 to 5, and both copies
-      of the household share it; the flag is false at other ages. The SIPP item asks
+      the 2023 SIPP predicts that flag once for each child aged 3 to 5, shared by the
+      child's survey and tax-detail copies; the flag is false at other ages. The SIPP item asks
       whether a preschool enrollee attends a federally sponsored program and names
       Head Start among its examples, so the label is a Head Start proxy. The default
       release has no Head Start calibration target.
@@ -724,12 +724,12 @@ imputations:
     concept: voluntary-tax-filing
     method: machine-learning
     description: >
-      PolicyEngine-US treats a tax unit as filing if it is required to file, would
+      PolicyEngine US treats a tax unit as filing if it is required to file, would
       file to claim a refundable credit it is eligible for, or would file voluntarily.
       In the default Microcosm US 2024 release, `would_file_taxes_voluntarily` comes
       from a weighted quantile regression forest trained on 2023 SIPP December
       answers about whether people filed, or expected to file, a federal return. It is
-      predicted once per tax unit from the survey copy and shared by both copies. The
+      predicted once per source tax unit and shared by that unit's copies. The
       refundable-credit filing propensity is not in the file and takes its
       policyengine-us default (true). No calibration target measures filing directly.
     baseDataset: Microcosm US 2024 (CPS ASEC + IRS PUF)
@@ -757,7 +757,7 @@ imputations:
     concept: child-care-subsidy-participation
     method: not-modeled
     description: >
-      PolicyEngine-US computes child care subsidies from the state programs listed in
+      PolicyEngine US computes child care subsidies from the state programs listed in
       its `gov.hhs.ccdf.child_care_subsidy_programs` parameter (51 entries for 2025).
       None of those formulas reads a child care take-up input, the default Microcosm
       US 2024 release carries none, and the default calibration has no child care
@@ -809,13 +809,13 @@ imputations:
     concept: itemized-deductions
     method: machine-learning
     description: >
-      On the copy of each household that carries tax-return detail, charitable cash
+      On tax-detail copies of CPS ASEC households, charitable cash
       and non-cash gifts, real estate taxes, home mortgage interest, investment
       interest, casualty losses and unreimbursed employee
       expenses are drawn from the weighted QRF trained on the IRS 2015 Public Use File
       uprated to 2024. Mortgage interest is then converted into first- and
-      second-mortgage balances and interest using SCF 2022 mortgage debt. The survey
-      copy carries none of these amounts. State and local income taxes and the
+      second-mortgage balances and interest using SCF 2022 mortgage debt. Survey
+      copies carry none of these amounts. State and local income taxes and the
       medical expense deduction are computed by policyengine-us rules. Household
       weights are calibrated to IRS SOI itemized deductions, real estate taxes and
       medical expenses by state (tax year 2022), SOI tax year 2023 national totals
@@ -852,13 +852,13 @@ imputations:
     concept: retirement-income
     method: other
     description: >
-      On the survey copy of each CPS ASEC household, pensions and annuities
+      On survey copies of CPS ASEC households, pensions and annuities
       (`PNSN_VAL` plus `ANN_VAL`) are split 59% taxable and 41% tax-exempt, and
       retirement account distributions follow the ASEC account codes: 401(k), 403(b),
       regular IRA and SEP distributions are taxable, Roth IRA distributions are
       tax-exempt, and Keogh distributions are carried separately. Social Security is
       split into retirement, disability, survivor and dependent benefits from the
-      ASEC's reason codes. On the copy with tax-return detail, taxable pensions,
+      ASEC's reason codes. On tax-detail copies, taxable pensions,
       taxable IRA distributions and the Social Security components come from the
       weighted QRF trained on the uprated IRS 2015 PUF, and 401(k), 403(b), Keogh and
       SEP distributions from weighted QRFs trained on the ASEC. Before calibration,
@@ -1029,7 +1029,7 @@ imputations:
       SPM units in the default Microcosm US 2024 release are the Census Bureau's own
       CPS ASEC SPM units: each person's unit follows the ASEC `SPM_ID`, so unit
       membership (cohabiting partners, foster children, unrelated children) is the
-      one Census assigned, and both copies of a household keep it. For the SPM
+      one Census assigned, on both survey and tax-detail copies. For the SPM
       equivalence scale, policyengine-us 2.2.1 counts people aged 18 and over as
       adults, plus 15- to 17-year-olds flagged as independent. The release adds that
       flag (`is_spm_independent_minor_role`) from ASEC relationship fields, and with
@@ -1127,13 +1127,14 @@ imputations:
     concept: spm-cash-income
     method: other
     description: >
-      Market and cash incomes come from two copies of each CPS ASEC household, which
-      each start with half its weight before calibration sets all weights. The survey
-      copy keeps ASEC-reported wages, self-employment, interest, dividends, rents,
+      The build duplicates each CPS ASEC household into a survey copy and a
+      tax-detail copy, each with half its weight. The released file keeps 22,200
+      survey copies and 35,040 tax-detail copies (9,963 households keep both), and
+      calibration then sets all weights. Survey copies keep ASEC-reported wages, self-employment, interest, dividends, rents,
       pensions, Social Security and unemployment compensation, with fixed splits where
       the ASEC reports only a total: 68% of interest taxable, 44.8% of dividends
       qualified, 59% of pensions and annuities taxable and 88% of capital gains long
-      term. The other copy replaces tax-return items (wages, self-employment,
+      term. Tax-detail copies replace tax-return items (wages, self-employment,
       interest, dividends, capital gains, taxable pensions and IRA distributions,
       Social Security, rents, partnership and S corporation income, and others) with
       draws from the weighted QRF trained on the IRS 2015 PUF uprated to 2024. The
@@ -1297,8 +1298,8 @@ imputations:
       policyengine-us 2.2.1 computes HUD's housing assistance payment (the lesser of
       the maximum subsidy and gross rent minus total tenant payment) for SPM units
       that take up assistance. In the default Microcosm US 2024 release the take-up
-      flag equals reported receipt on the survey copy (ASEC `SPM_CAPHOUSESUB` above
-      zero) and receipt imputed by a weighted QRF trained on ASEC on the other copy,
+      flag equals reported receipt on survey copies (ASEC `SPM_CAPHOUSESUB` above
+      zero) and receipt imputed by a weighted QRF trained on ASEC on tax-detail copies,
       so only units flagged as receiving get a payment. SPM resources count the
       payment capped, as in Census's SPM method, at the threshold's housing portion
       minus the tenant payment.
@@ -1341,8 +1342,8 @@ imputations:
       policyengine-us 2.2.1 adds the input `spm_unit_energy_subsidy` to SPM resources
       rather than computing energy assistance from program rules. In the default
       Microcosm US 2024 release that input is the ASEC SPM energy subsidy
-      (`SPM_ENGVAL`) on the survey copy and a weighted QRF imputation trained on ASEC
-      on the other copy; policyengine-us uprates it by CPI-U for later years.
+      (`SPM_ENGVAL`) on survey copies and a weighted QRF imputation trained on ASEC
+      on tax-detail copies; policyengine-us uprates it by CPI-U for later years.
       Household weights are calibrated to the number of households LIHEAP served in
       fiscal year 2024 (one national target from HHS ACF).
     baseDataset: Microcosm US 2024 (CPS ASEC + IRS PUF)
@@ -1599,8 +1600,8 @@ imputations:
       parameter) times weeks worked for each adult with earnings. Work and child care
       expenses are subtracted together, capped at the lower of the reference person's
       and their spouse's or partner's earnings (the reference person's earnings when
-      there is no spouse or partner). Weeks worked are the ASEC's reported weeks on the
-      survey copy.
+      there is no spouse or partner). Weeks worked are the ASEC's reported weeks on
+      survey copies.
     baseDataset: Microcosm US 2024 (CPS ASEC + IRS PUF)
     documentationUrl: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/household/expense/childcare/spm_unit_work_expenses.py
     reproducible: yes
@@ -1632,8 +1633,8 @@ imputations:
     method: survey-reported
     description: >
       Child care expenses are the ASEC SPM child care field (`SPM_CHILDCAREXPNS`) on
-      the survey copy of each household and a weighted QRF imputation trained on ASEC
-      on the other copy. policyengine-us 2.2.1 subtracts them together with work
+      survey copies and a weighted QRF imputation trained on ASEC on tax-detail
+      copies. policyengine-us 2.2.1 subtracts them together with work
       expenses, under the earnings cap described in the work expenses row.
     baseDataset: Microcosm US 2024 (CPS ASEC + IRS PUF)
     documentationUrl: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/source_stages.json
@@ -1671,7 +1672,7 @@ imputations:
       credit, CHIP, Medicaid, Medicare Parts A and B and the Part D income-related
       surcharge are modeled; the remaining premium input is the ASEC premium total
       (`PHIP_VAL`) net of the modeled Marketplace, CHIP and Medicaid premiums, imputed
-      with a weighted QRF trained on ASEC on the copy with tax-return detail.
+      with a weighted QRF trained on ASEC on tax-detail copies.
     baseDataset: Microcosm US 2024 (CPS ASEC + IRS PUF)
     documentationUrl: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/source_stages.json
     reproducible: yes
@@ -1708,9 +1709,8 @@ imputations:
     concept: spm-child-support-paid
     method: survey-reported
     description: >
-      Child support paid is the ASEC's annual amount paid (`CHSP_VAL`) on the survey
-      copy of each household and a weighted QRF imputation trained on ASEC on the
-      other copy. policyengine-us 2.2.1 subtracts it from SPM resources and uprates it
+      Child support paid is the ASEC's annual amount paid (`CHSP_VAL`) on survey
+      copies and a weighted QRF imputation trained on ASEC on tax-detail copies. policyengine-us 2.2.1 subtracts it from SPM resources and uprates it
       by CPI-U for later years.
     baseDataset: Microcosm US 2024 (CPS ASEC + IRS PUF)
     documentationUrl: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/source_stages.json
