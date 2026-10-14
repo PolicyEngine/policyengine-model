@@ -6,7 +6,7 @@ import { colors, typography, spacing } from '../../designTokens';
 import { useDebounce } from '../../hooks/useDebounce';
 import {
   getLevel, getSubGroup, getSubGroupLabel, getSubGroupDescription,
-  LEVEL_CONFIG, LEVELS_ORDERED,
+  levelConfig, levelsFor, emptyLevelRecord,
   type Level,
 } from '../shared/categoryUtils';
 import ParameterCard from './ParameterCard';
@@ -284,11 +284,13 @@ function StateTileGrid({
 function SubGroupCardGrid({
   subGroups,
   level,
+  country,
   levelColor,
   onSelect,
 }: {
   subGroups: [string, ParameterLeaf[]][];
   level: Level;
+  country: string;
   levelColor: string;
   onSelect: (key: string) => void;
 }) {
@@ -298,8 +300,8 @@ function SubGroupCardGrid({
       style={{ gap: spacing.md }}
     >
       {subGroups.map(([key, params], i) => {
-        const label = getSubGroupLabel(key, level);
-        const desc = getSubGroupDescription(key, level);
+        const label = getSubGroupLabel(key, level, country);
+        const desc = getSubGroupDescription(key, level, country);
         return (
           <motion.button
             key={key}
@@ -554,12 +556,12 @@ export default function ParameterExplorer({ parameters, country }: ParameterExpl
 
   // Count unique parameter groups (files) per level
   const levelCounts = useMemo(() => {
-    const seen: Record<Level, Set<string>> = { federal: new Set(), state: new Set(), local: new Set(), territory: new Set(), reform: new Set(), household: new Set() };
+    const seen = emptyLevelRecord(() => new Set<string>());
     for (const p of allParameters) {
-      seen[getLevel(p.parameter)].add(getParameterGroup(p.parameter));
+      seen[getLevel(p.parameter, country)].add(getParameterGroup(p.parameter));
     }
     return Object.fromEntries(Object.entries(seen).map(([k, v]) => [k, v.size])) as Record<Level, number>;
-  }, [allParameters]);
+  }, [allParameters, country]);
 
   // Filtered list
   const filtered = useMemo(() => {
@@ -573,22 +575,22 @@ export default function ParameterExplorer({ parameters, country }: ParameterExpl
       });
     }
 
-    if (activeLevel) result = result.filter((p) => getLevel(p.parameter) === activeLevel);
+    if (activeLevel) result = result.filter((p) => getLevel(p.parameter, country) === activeLevel);
 
     return result;
-  }, [allParameters, debouncedSearch, activeLevel]);
+  }, [allParameters, debouncedSearch, activeLevel, country]);
 
   // Sub-groups for the active level
   const subGroups = useMemo(() => {
     if (!activeLevel) return [];
     const map = new Map<string, ParameterLeaf[]>();
     for (const p of filtered) {
-      const key = getSubGroup(p.parameter);
+      const key = getSubGroup(p.parameter, country);
       if (!map.has(key)) map.set(key, []);
       map.get(key)!.push(p);
     }
     return [...map.entries()].sort(([a], [b]) => a.localeCompare(b));
-  }, [filtered, activeLevel]);
+  }, [filtered, activeLevel, country]);
 
   // Parameters in active sub-group
   const subGroupParams = useMemo(() => {
@@ -701,13 +703,13 @@ export default function ParameterExplorer({ parameters, country }: ParameterExpl
 
     if (activeLevel) {
       items.push({
-        label: LEVEL_CONFIG[activeLevel].label,
+        label: levelConfig(activeLevel, country).label,
         onClick: () => { setActiveLevel(activeLevel); setActiveSubGroup(null); setFolderStack([]); setActiveGroup(null); setSelectedParam(null); },
       });
     }
     if (activeSubGroup && activeLevel) {
       items.push({
-        label: getSubGroupLabel(activeSubGroup, activeLevel),
+        label: getSubGroupLabel(activeSubGroup, activeLevel, country),
         onClick: () => { setFolderStack([]); setActiveGroup(null); setSelectedParam(null); },
       });
     }
@@ -725,7 +727,7 @@ export default function ParameterExplorer({ parameters, country }: ParameterExpl
       });
     }
     return items;
-  }, [activeLevel, activeSubGroup, folderStack, activeGroup, parameters]);
+  }, [activeLevel, activeSubGroup, folderStack, activeGroup, parameters, country]);
 
   // Current heading label
   const currentHeadingLabel = activeGroup
@@ -733,7 +735,7 @@ export default function ParameterExplorer({ parameters, country }: ParameterExpl
     : folderStack.length > 0
       ? getGroupLabel(currentFolder, parameters)
       : activeSubGroup && activeLevel
-        ? getSubGroupLabel(activeSubGroup, activeLevel)
+        ? getSubGroupLabel(activeSubGroup, activeLevel, country)
         : '';
 
   // Param count summary for folder view (count groups, not individual leaves)
@@ -772,9 +774,9 @@ export default function ParameterExplorer({ parameters, country }: ParameterExpl
       {isSearching && (
         <div className="tw:flex tw:flex-wrap tw:items-center" style={{ gap: spacing.lg, marginBottom: spacing.xl }}>
           <div className="tw:flex tw:flex-wrap" style={{ gap: spacing.xs }}>
-            {([null, ...LEVELS_ORDERED] as (Level | null)[]).map((level) => {
-              const label = level ? LEVEL_CONFIG[level].label : 'All';
-              const clr = level ? LEVEL_CONFIG[level].color : colors.text.secondary;
+            {([null, ...levelsFor(country)] as (Level | null)[]).map((level) => {
+              const label = level ? levelConfig(level, country).label : 'All';
+              const clr = level ? levelConfig(level, country).color : colors.text.secondary;
               const isActive = activeLevel === level;
               return (
                 <button
@@ -833,8 +835,8 @@ export default function ParameterExplorer({ parameters, country }: ParameterExpl
           className="tw:grid tw:grid-cols-[repeat(auto-fill,minmax(280px,1fr))]"
           style={{ gap: spacing.lg }}
         >
-          {LEVELS_ORDERED.map((level) => {
-            const config = LEVEL_CONFIG[level];
+          {levelsFor(country).map((level) => {
+            const config = levelConfig(level, country);
             const count = levelCounts[level];
             if (!count) return null;
             return (
@@ -897,10 +899,10 @@ export default function ParameterExplorer({ parameters, country }: ParameterExpl
             <h2 style={{
               fontSize: typography.fontSize['2xl'],
               fontWeight: typography.fontWeight.bold,
-              color: LEVEL_CONFIG[activeLevel].color,
+              color: levelConfig(activeLevel, country).color,
               margin: 0,
             }}>
-              {LEVEL_CONFIG[activeLevel].label}
+              {levelConfig(activeLevel, country).label}
             </h2>
             <span style={{ fontSize: typography.fontSize.xs, color: colors.text.tertiary }}>
               {countUniqueGroups(filtered).toLocaleString()} parameters across {subGroups.length} groups
@@ -910,14 +912,15 @@ export default function ParameterExplorer({ parameters, country }: ParameterExpl
           {activeLevel === 'state' ? (
             <StateTileGrid
               subGroups={subGroups}
-              levelColor={LEVEL_CONFIG[activeLevel].color}
+              levelColor={levelConfig(activeLevel, country).color}
               onSelect={setActiveSubGroup}
             />
           ) : (
             <SubGroupCardGrid
               subGroups={subGroups}
               level={activeLevel}
-              levelColor={LEVEL_CONFIG[activeLevel].color}
+              country={country}
+              levelColor={levelConfig(activeLevel, country).color}
               onSelect={setActiveSubGroup}
             />
           )}
@@ -933,21 +936,21 @@ export default function ParameterExplorer({ parameters, country }: ParameterExpl
             <h2 style={{
               fontSize: typography.fontSize['2xl'],
               fontWeight: typography.fontWeight.bold,
-              color: LEVEL_CONFIG[activeLevel].color,
+              color: levelConfig(activeLevel, country).color,
               margin: 0,
             }}>
               {currentHeadingLabel}
             </h2>
             <span style={{ fontSize: typography.fontSize.xs, color: colors.text.tertiary }}>
               {currentFolderTotalParams.toLocaleString()} parameters
-              {currentFolderTotalItems > 1 && ` across ${currentFolderTotalItems} ${folderContents.folders.length > 0 ? 'programs' : 'groups'}`}
+              {currentFolderTotalItems > 1 && ` across ${currentFolderTotalItems} ${folderContents.folders.length > 0 ? (country === 'uk' ? 'programmes' : 'programs') : 'groups'}`}
             </span>
           </div>
 
           <FolderContentsGrid
             folders={folderContents.folders}
             directGroups={folderContents.directGroups}
-            levelColor={LEVEL_CONFIG[activeLevel].color}
+            levelColor={levelConfig(activeLevel, country).color}
             allParameters={parameters}
             onFolderSelect={handleFolderSelect}
             onGroupSelect={handleGroupSelect}
@@ -964,7 +967,7 @@ export default function ParameterExplorer({ parameters, country }: ParameterExpl
             <h2 style={{
               fontSize: typography.fontSize['2xl'],
               fontWeight: typography.fontWeight.bold,
-              color: LEVEL_CONFIG[activeLevel].color,
+              color: levelConfig(activeLevel, country).color,
               margin: 0,
             }}>
               {getGroupLabel(activeGroup, parameters)}

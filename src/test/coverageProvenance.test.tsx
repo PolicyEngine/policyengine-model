@@ -90,10 +90,35 @@ describe('Coverage provenance', () => {
     expect(within(partialCard).getByText('0')).toBeInTheDocument();
   });
 
-  it('preserves the static UK introduction without assigning it registry provenance', () => {
+  it('renders the UK registry by department with its own provenance, never US programs', async () => {
+    vi.mocked(fetchProgramsWithSource).mockResolvedValue({
+      source: { ...snapshotSource, repo: 'PolicyEngine/policyengine-uk', version: '2.130.1', apiVersion: '2.102.3' },
+      programs: [
+        { id: 'universal_credit', name: 'Universal Credit', fullName: 'Universal Credit', status: 'complete', agency: 'DWP' as never, coverage: 'UK', githubLinks: {} },
+        { id: 'alcohol_duty', name: 'Alcohol duty', fullName: 'Alcohol Duty', status: 'partial', agency: 'HMRC' as never, coverage: 'UK', githubLinks: {} },
+        { id: 'scottish_child_payment', name: 'Scottish Child Payment', fullName: 'Scottish Child Payment', status: 'complete', agency: 'Social Security Scotland' as never, coverage: 'Scotland', githubLinks: {} },
+        { id: 'council_tax_reduction', name: 'Council Tax Reduction', fullName: 'Council Tax Reduction', status: 'partial', agency: 'Local', coverage: 'UK', githubLinks: {} },
+      ],
+    });
+
     render(<CoverageTrackerPage country="uk" />);
-    expect(screen.getByText(/PolicyEngine UK models over 50/)).toBeInTheDocument();
-    expect(screen.queryByText(/Coverage reflects/)).not.toBeInTheDocument();
-    expect(fetchProgramsWithSource).not.toHaveBeenCalled();
+
+    expect(await screen.findByText(/Coverage reflects policyengine-uk 2.130.1/)).toBeInTheDocument();
+    expect(fetchProgramsWithSource).toHaveBeenCalledWith('uk');
+    expect(screen.getByText('Department for Work and Pensions (DWP) (1)')).toBeInTheDocument();
+    expect(screen.getByText('HM Revenue and Customs (HMRC) (1)')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Devolved' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Local authorities (1)' })).toBeInTheDocument();
+    expect(screen.getByText('Scotland')).toBeInTheDocument();
+    const totalCard = screen.getByText('Programmes').parentElement!;
+    expect(within(totalCard).getByText('4')).toBeInTheDocument();
+    expect(screen.queryByText(/Federal|State programs|By state|PolicyEngine UK models over 50/)).not.toBeInTheDocument();
+  });
+
+  it('says the UK registry could not be loaded instead of showing the bundled US registry', async () => {
+    vi.mocked(fetchProgramsWithSource).mockResolvedValue({ source: { kind: 'fallback' }, programs: [] });
+    render(<CoverageTrackerPage country="uk" />);
+    expect(await screen.findByText(/UK programme registry could not be loaded/)).toBeInTheDocument();
+    expect(screen.queryByText('TANF')).not.toBeInTheDocument();
   });
 });

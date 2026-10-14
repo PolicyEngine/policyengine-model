@@ -1,5 +1,5 @@
 /**
- * Snapshot the default-branch program registries and parameter YAML file trees.
+ * Snapshot the default-branch program registries and source file trees.
  * Run: node scripts/fetch-metadata.js (also called by `bun run build`).
  * Fetch failures are warnings: the app can fall back to API metadata.
  */
@@ -7,7 +7,9 @@
 import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { gunzipSync } from 'node:zlib';
 import yaml from 'js-yaml';
+import { extractVariableModules } from './variable-modules.js';
 
 const PUBLIC_DIR = join(dirname(fileURLToPath(import.meta.url)), '..', 'public');
 const REPO_MAP = {
@@ -112,25 +114,54 @@ export async function fetchRegistrySnapshot(country, source, {
   return snapshot;
 }
 
-/** Fetch only the parameter subtree, using the same resolved commit as coverage. */
-export async function fetchParameterYamlPaths(country, source, fetchImpl = globalThis.fetch) {
+/** List every file in one directory of the country package at the resolved commit. */
+async function fetchPackageSubtree(country, source, directory, fetchImpl) {
   const treeRoot = `https://api.github.com/repos/${source.repo}/git/trees`;
   const root = await (await request(`${treeRoot}/${source.commit}`, fetchImpl)).json();
   const packageTree = root.tree?.find(entry => entry.path === `policyengine_${country}`);
   if (!packageTree?.sha) throw new Error('Package directory missing from repository tree');
 
   const packageFiles = await (await request(`${treeRoot}/${packageTree.sha}`, fetchImpl)).json();
-  const parameters = packageFiles.tree?.find(entry => entry.path === 'parameters');
-  if (!parameters?.sha) throw new Error('Parameter directory missing from repository tree');
+  const subtree = packageFiles.tree?.find(entry => entry.path === directory);
+  if (!subtree?.sha) throw new Error(`${directory} directory missing from repository tree`);
 
-  const files = await (await request(`${treeRoot}/${parameters.sha}?recursive=1`, fetchImpl)).json();
-  if (files.truncated) throw new Error('GitHub returned a truncated parameter tree');
-  if (!Array.isArray(files.tree)) throw new Error('GitHub did not return a parameter tree');
-  return files.tree
-    .filter(entry => entry.type === 'blob'
-      && entry.path.endsWith('.yaml')
-      && !entry.path.startsWith('calibration/'))
-    .map(entry => entry.path);
+  const files = await (await request(`${treeRoot}/${subtree.sha}?recursive=1`, fetchImpl)).json();
+  if (files.truncated) throw new Error(`GitHub returned a truncated ${directory} tree`);
+  if (!Array.isArray(files.tree)) throw new Error(`GitHub did not return a ${directory} tree`);
+  return files.tree.filter(entry => entry.type === 'blob').map(entry => entry.path);
+}
+
+/** Fetch only the parameter subtree, using the same resolved commit as coverage. */
+export async function fetchParameterYamlPaths(country, source, fetchImpl = globalThis.fetch) {
+  const paths = await fetchPackageSubtree(country, source, 'parameters', fetchImpl);
+  return paths.filter(path => path.endsWith('.yaml') && !path.startsWith('calibration/'));
+}
+
+/**
+ * Variable module files at the same commit, e.g. `gov/hmrc/income_tax/income_tax.py`.
+ * The UK metadata API serves no `moduleName`, so the explorer maps variable names to
+ * these files to group variables by department and link their source.
+ */
+export async function fetchVariableModulePaths(country, source, fetchImpl = globalThis.fetch) {
+  const paths = await fetchPackageSubtree(country, source, 'variables', fetchImpl);
+  return paths.filter(path => path.endsWith('.py') && !path.endsWith('__init__.py'));
+}
+
+/** Map UK Variable classes from the very same commit as the file tree. */
+export async function fetchVariableTreeSnapshot(country, source, {
+  fetchImpl = globalThis.fetch,
+  logger = console,
+} = {}) {
+  if (country === 'uk') {
+    try {
+      const response = await request(`https://codeload.github.com/${source.repo}/tar.gz/${source.commit}`, fetchImpl);
+      const tar = gunzipSync(Buffer.from(await response.arrayBuffer()));
+      return { source, ...extractVariableModules(country, tar) };
+    } catch (error) {
+      logger.warn(`  ${country}: class-to-module map unavailable, using file tree — ${error.message}`);
+    }
+  }
+  return { source, paths: await fetchVariableModulePaths(country, source, fetchImpl) };
 }
 
 export async function fetchMetadataFiles({
@@ -149,10 +180,14 @@ export async function fetchMetadataFiles({
 
   for (const country of countries) {
     const snapshotPath = join(outputDir, `programs-${country}.json`);
+    const parameterTreePath = join(outputDir, `param-tree-${country}.json`);
+    const variableTreePath = join(outputDir, `variable-tree-${country}.json`);
     let source;
     try {
-      // A failed refresh must not leave a snapshot from an earlier build behind.
-      rmSync(snapshotPath, { force: true });
+      // Clear all three before resolving HEAD, including when resolution fails.
+      for (const path of [snapshotPath, parameterTreePath, variableTreePath]) {
+        rmSync(path, { force: true });
+      }
       source = await resolveRepository(country, fetchImpl);
     } catch (error) {
       logger.warn(`  ${country}: could not resolve registry source — ${error.message}`);
@@ -172,11 +207,19 @@ export async function fetchMetadataFiles({
       (async () => {
         try {
           const paths = await fetchParameterYamlPaths(country, source, fetchImpl);
-          const treePath = join(outputDir, `param-tree-${country}.json`);
-          writeFileSync(treePath, JSON.stringify(paths));
-          logger.log(`  ${country}: wrote ${treePath} (${paths.length} files)`);
+          writeFileSync(parameterTreePath, JSON.stringify({ source, paths }));
+          logger.log(`  ${country}: wrote ${parameterTreePath} (${paths.length} files)`);
         } catch (error) {
           logger.warn(`  ${country}: parameter tree skipped — ${error.message}`);
+        }
+      })(),
+      (async () => {
+        try {
+          const tree = await fetchVariableTreeSnapshot(country, source, { fetchImpl, logger });
+          writeFileSync(variableTreePath, JSON.stringify(tree));
+          logger.log(`  ${country}: wrote ${variableTreePath} (${tree.paths.length} files)`);
+        } catch (error) {
+          logger.warn(`  ${country}: variable tree skipped — ${error.message}`);
         }
       })(),
     ]);

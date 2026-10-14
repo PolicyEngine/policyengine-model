@@ -151,7 +151,7 @@ export default function Walkthrough({ country = 'us' }: { country?: Country }) {
 
       {/* Single persistent table — only visible columns rendered */}
       <div
-        className="tw:rounded-xl tw:overflow-hidden"
+        className="tw:rounded-xl tw:overflow-x-auto"
         style={{
           border: `1px solid ${colors.border.light}`,
           boxShadow: spacing.shadow.sm,
@@ -263,6 +263,10 @@ export default function Walkthrough({ country = 'us' }: { country?: Country }) {
           </tbody>
         </table>
       </div>
+      <p className="tw:text-xs tw:mt-3 tw:mb-0" style={{ color: colors.text.tertiary }}>
+        Illustrative example: five hypothetical households, a simplified tax schedule, and a
+        single elasticity. The figures are not output from the model.
+      </p>
     </div>
   );
 }
