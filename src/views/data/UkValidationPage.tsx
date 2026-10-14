@@ -31,9 +31,19 @@ const OBR_ROW_LABELS: Record<string, string> = {
 
 const areaOf = new Map(cal.nationalGroups.map((g) => [g.label, g.geography]));
 
+// The release scores OBR's total NICs line against employee NICs alone
+// (policyengine-uk-data#537), so the table shows the classes and sums them.
+const NI_TOTAL = 'obr/ni';
+const NI_CLASSES = ['obr/ni_employee', 'obr/ni_employer', 'obr/ni_self_employed'];
+const byId = new Map(rows.map((r) => [r.id, r]));
+export const niTotal = {
+  target: byId.get(NI_TOTAL)?.target ?? 0,
+  estimate: NI_CLASSES.reduce((sum, id) => sum + (byId.get(id)?.estimate ?? 0), 0),
+};
+
 /** OBR receipts and spending lines, in £, from the March 2026 forecast. */
 export const obrRows = rows
-  .filter((r) => r.id.startsWith('obr/') && r.unit === 'gbp')
+  .filter((r) => r.id.startsWith('obr/') && r.unit === 'gbp' && r.id !== NI_TOTAL)
   .map((r) => {
     const label = OBR_ROW_LABELS[r.id] ?? r.group;
     const area = areaOf.get(r.group);
@@ -127,6 +137,14 @@ export default function UkValidationPage() {
             </tr>
           ))}
         </DataTable>
+        <p style={{ ...bodyText, fontSize: typography.fontSize.sm, marginTop: spacing.md }}>
+          Each PolicyEngine UK figure sums the variable that the release’s target registry assigns to that line. The
+          OBR forecasts total National Insurance receipts of {fmtTarget(niTotal.target, 'gbp')}; PolicyEngine UK’s
+          employee, employer and self-employed contributions add to {fmtTarget(niTotal.estimate, 'gbp')}
+          {` (${fmtDifference(niTotal.target, niTotal.estimate)})`}. The release scores that total against employee
+          contributions alone (<ExternalLink href={issueUrl('policyengine-uk-data', 537)}>policyengine-uk-data#537</ExternalLink>),
+          so the fit figures above count it as a miss.
+        </p>
       </section>
 
       <section style={{ marginBottom: spacing['4xl'] }}>
@@ -173,8 +191,8 @@ export default function UkValidationPage() {
       <section>
         <h2 style={sectionHeading}>Every UK-wide target</h2>
         <p style={bodyText}>
-          All {fmtInt(rows.length)} targets, with the pinned model’s {v.year}-{String(v.year + 1).slice(2)} estimate.
-          Target identifiers match policyengine-uk-data’s target registry.
+          All {fmtInt(rows.length)} targets, with the pinned model’s {v.year}-{String(v.year + 1).slice(2)} estimate
+          of the variable each one is scored against. Target identifiers match policyengine-uk-data’s target registry.
         </p>
         {showAll ? (
           <>

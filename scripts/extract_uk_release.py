@@ -214,7 +214,7 @@ GROUP_LABELS = {
         "esa_income",
         "national",
         None,
-    ): "Employment and Support Allowance spending",
+    ): "Incapacity benefits spending, scored against income-related ESA",
     ("obr", "jsa", "national", None): "Jobseeker's Allowance spending",
     ("obr", "winter_fuel_allowance", "national", None): "Winter Fuel Payment spending",
     (

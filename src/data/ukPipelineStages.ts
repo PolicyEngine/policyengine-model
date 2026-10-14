@@ -245,7 +245,7 @@ export const ukPipelineStages: PipelineStage[] = [
     calibrationTargets: [
       ...cal.constituency.families.map((fam) => ({
         variable: fam.heldOut ? `${fam.label} (logged, not fitted)` : fam.label,
-        target: `${f.constituencies} × ${fam.metrics}`,
+        target: `${fmtInt(fam.cells)} area targets`,
         source: fam.source,
       })),
       { variable: 'UK-wide targets', target: f.nationalTargets, source: 'See calibration targets' },
@@ -295,7 +295,7 @@ export const ukPipelineStages: PipelineStage[] = [
     calibrationTargets: [
       ...cal.localAuthority.families.map((fam) => ({
         variable: fam.heldOut ? `${fam.label} (logged, not fitted)` : fam.label,
-        target: `${f.localAuthorities} × ${fam.metrics}`,
+        target: `${fmtInt(fam.cells)} area targets`,
         source: fam.source,
       })),
       { variable: 'UK-wide targets', target: f.nationalTargets, source: 'See calibration targets' },

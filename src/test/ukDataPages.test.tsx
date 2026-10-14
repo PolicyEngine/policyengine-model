@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import release from '../data/ukDataRelease.json';
 import { ukPipelineIntro, ukPipelineStages, ukBranchLabels } from '../data/ukPipelineStages';
-import { fmtInt, fmtPct } from '../data/ukDataRelease';
+import { fmtInt, fmtPct, fmtTarget } from '../data/ukDataRelease';
 
 vi.mock('next/navigation', () => ({
   usePathname: () => '/uk/model/data/pipeline',
@@ -85,7 +85,7 @@ describe('UK pipeline copy', () => {
 
 import fc from 'fast-check';
 import UkCalibrationPage from '../views/data/UkCalibrationPage';
-import UkValidationPage, { fmtDifference, obrRows } from '../views/data/UkValidationPage';
+import UkValidationPage, { fmtDifference, niTotal, obrRows } from '../views/data/UkValidationPage';
 import checks from '../data/ukTargetChecks.json';
 
 describe('UK calibration and validation pages', () => {
@@ -113,8 +113,19 @@ describe('UK calibration and validation pages', () => {
     expect(checks.length).toBe(release.calibration.nationalTargets);
     expect(release.validation.targets).toBe(checks.length);
     expect(new Set(checks.map((r) => r.id)).size).toBe(checks.length);
-    expect(obrRows.length).toBe(checks.filter((r) => r.id.startsWith('obr/') && r.unit === 'gbp').length);
+    expect(obrRows.length).toBe(checks.filter((r) => r.id.startsWith('obr/') && r.unit === 'gbp').length - 1);
+    expect(obrRows.some((r) => r.id === 'obr/ni')).toBe(false);
     expect(obrRows.find((r) => r.id === 'obr/universal_credit')?.label).toMatch(/Great Britain/);
+  });
+
+  it('compares OBR total NICs with the sum of the three classes, not the mismapped column', () => {
+    const get = (id: string) => checks.find((r) => r.id === id)!;
+    expect(niTotal.target).toBe(get('obr/ni').target);
+    expect(niTotal.estimate).toBeCloseTo(
+      get('obr/ni_employee').estimate + get('obr/ni_employer').estimate + get('obr/ni_self_employed').estimate,
+    );
+    const { container } = render(<UkValidationPage />);
+    expect(container.textContent).toContain(fmtTarget(niTotal.estimate, 'gbp'));
   });
 
   it('formats differences with the sign of estimate minus target', () => {

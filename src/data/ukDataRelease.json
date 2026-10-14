@@ -405,26 +405,6 @@
       },
       {
         "source": "obr",
-        "label": "Employment and Support Allowance spending",
-        "publisher": "OBR",
-        "geography": "UK",
-        "units": [
-          "gbp"
-        ],
-        "targets": 1,
-        "zeroTargets": 0,
-        "within10": 1.0,
-        "pinnedWithin10": 1.0,
-        "urls": [
-          "https://obr.uk/download/march-2026-economic-and-fiscal-outlook-detailed-forecast-tables-expenditure/"
-        ],
-        "vintages": [
-          "march_2026"
-        ],
-        "value": 7206287181.538654
-      },
-      {
-        "source": "obr",
         "label": "Fuel duty receipts",
         "publisher": "OBR",
         "geography": "UK",
@@ -442,6 +422,26 @@
           "march_2026"
         ],
         "value": 24241874775.213375
+      },
+      {
+        "source": "obr",
+        "label": "Incapacity benefits spending, scored against income-related ESA",
+        "publisher": "OBR",
+        "geography": "UK",
+        "units": [
+          "gbp"
+        ],
+        "targets": 1,
+        "zeroTargets": 0,
+        "within10": 1.0,
+        "pinnedWithin10": 1.0,
+        "urls": [
+          "https://obr.uk/download/march-2026-economic-and-fiscal-outlook-detailed-forecast-tables-expenditure/"
+        ],
+        "vintages": [
+          "march_2026"
+        ],
+        "value": 7206287181.538654
       },
       {
         "source": "obr",
