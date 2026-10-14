@@ -18,8 +18,9 @@ accuracy:
       url: https://www.fns.usda.gov/pd/supplemental-nutrition-assistance-program-snap
       kind: government
     notes: >
-      Calibration target for the enhanced CPS dataset. Predicted value from
-      model run pending.
+      The default Microcosm US 2024 release calibrates to USDA FNS fiscal
+      year 2024 SNAP benefits (national and by state), not this fiscal year
+      2023 figure. Predicted value from a model run pending.
 
   - model: policyengine-us
     metric: eitc-outlays

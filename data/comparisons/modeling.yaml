@@ -23,63 +23,200 @@ modeling:
         kind: self
 
   - model: policyengine-us
-    category: data-enhancement
-    label: Enhanced CPS with tax and benefit imputations
+    category: base-data
+    label: Pooled CPS ASEC with IRS PUF tax detail
     detail: >
-      Starts from CPS-ASEC, imputes missing tax and benefit variables, and
-      calibrates weights/participation so simulated totals align with
-      administrative targets.
-    scope: US population microdata
+      The default Microcosm US 2024 release starts from three pooled CPS ASEC files
+      (March 2023, 2024 and 2025, covering income years 2022 to 2024). Each household
+      is duplicated: one copy keeps its survey-reported incomes; the other keeps the
+      same people and survey state but takes tax-return detail from a weighted
+      quantile regression forest trained on the IRS 2015 Public Use File uprated to
+      2024. Each copy starts with half the household's weight. The build kept 57,240
+      of 337,704 candidate households (22,200 survey copies and 35,040 tax-detail
+      copies) with 166,321 people.
+    scope: US household microdata (populace-us-2024-spm-20260915)
     sources:
-      - label: PolicyEngine US Data repository
-        url: https://github.com/PolicyEngine/policyengine-us-data
+      - label: Default release source enrichment (three ASEC files joined)
+        url: https://huggingface.co/datasets/policyengine/populace-us/blob/populace-us-2024-spm-20260915/releases/populace-us-2024-spm-20260915/source_enrichment.json
         kind: self
+      - label: Microcosm ASEC pooling
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us_runtime/asec_pool.py#L78-L230
+        kind: self
+      - label: Microcosm support-copy construction (half weight each)
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us_runtime/puf_support.py#L433-L500
+        kind: self
+      - label: "Calibrating build manifest (frozen selection: 57,240 of 337,704)"
+        url: https://huggingface.co/datasets/policyengine/populace-us/blob/populace-us-2024-buildp-sparse-rmloss100-cae8640-20260728T011454Z/releases/populace-us-2024-buildp-sparse-rmloss100-cae8640-20260728T011454Z/build_manifest.json
+        kind: self
+      - label: Default release microdata (populace_us_2024.h5)
+        url: https://huggingface.co/datasets/policyengine/populace-us/tree/populace-us-2024-spm-20260915/releases/populace-us-2024-spm-20260915
+        kind: self
+      - label: Census CPS ASEC
+        url: https://www.census.gov/programs-surveys/cps.html
+        kind: government
+      - label: IRS SOI individual public use microdata files
+        url: https://www.irs.gov/statistics/soi-tax-stats-individual-public-use-microdata-files
+        kind: government
+
+  - model: policyengine-us
+    category: aging-uprating
+    label: 2024 file uprated per variable for later years
+    detail: >
+      The default release is calibrated to 2024. For later years policyengine-us
+      2.2.1 computes each stored input with its uprating parameter (for example,
+      wages grow with an IRS SOI employment income series extended by CBO
+      income-by-source projections, and household weights with CBO's population
+      projection), and policyengine.py writes one uprated file per year. Within the
+      build, earlier-year dollar targets are aged to 2024 before calibration; count
+      targets are not.
+    scope: all stored inputs and household weights
+    sources:
+      - label: PolicyEngine US 2.2.1 uprating parameters
+        url: https://github.com/PolicyEngine/policyengine-us/tree/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/parameters/calibration/gov
+        kind: self
+      - label: PolicyEngine US 2.2.1 household weight uprating
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/household/demographic/weights/household_weight.py
+        kind: self
+      - label: policyengine.py 6.3.4 per-year dataset files
+        url: https://github.com/PolicyEngine/policyengine.py/blob/9d0c7c5714231156dbdda9eac4d6e9d5998cf972/src/policyengine/tax_benefit_models/us/datasets.py#L405-L500
+        kind: self
+      - label: Default release calibration diagnostics (target aging factors)
+        url: https://huggingface.co/datasets/policyengine/populace-us/blob/populace-us-2024-spm-20260915/releases/populace-us-2024-spm-20260915/calibration_diagnostics.json
+        kind: self
+      - label: CBO revenue projections, February 2026
+        url: https://www.cbo.gov/system/files/2026-02/51138-2026-02-Revenue-Projections.xlsx
+        kind: government
+
+  - model: policyengine-us
+    category: data-enhancement
+    label: Microcosm source stages
+    detail: >
+      37 source stages add inputs the CPS ASEC lacks or measures poorly. 19 use
+      chained, weighted quantile regression forests, including PUF tax detail, SCF
+      2022 wealth, 2023 SIPP tips, vehicles, Head Start and voluntary filing, 2024 CPS
+      outgoing rotation group wages and ACS 2022 rent, plus ASEC-trained imputations
+      onto the tax-detail copies; the others map ASEC fields directly, assign
+      participation, or derive values. Employer-sponsored insurance premiums
+      (MEPS-IC) did not run because the ASEC files lack the required fields, and
+      person-level survivor benefits, financial assistance, the unmarried-partner
+      flag and WIC nutritional risk are recorded as known gaps.
+    scope: US household microdata inputs
+    sources:
+      - label: Microcosm source stages
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/source_stages.json
+        kind: self
+      - label: Microcosm weighted QRF
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-fit/src/populace/fit/qrf.py#L1-L38
+        kind: self
+      - label: Microcosm release runner (source stage order)
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/tools/build_us_fiscal_refresh_release.py#L7173-L8720
+        kind: self
+      - label: Calibrating build manifest (known gaps)
+        url: https://huggingface.co/datasets/policyengine/populace-us/blob/populace-us-2024-buildp-sparse-rmloss100-cae8640-20260728T011454Z/releases/populace-us-2024-buildp-sparse-rmloss100-cae8640-20260728T011454Z/build_manifest.json
+        kind: self
+      - label: Federal Reserve Survey of Consumer Finances
+        url: https://www.federalreserve.gov/econres/scfindex.htm
+        kind: government
+      - label: Census SIPP
+        url: https://www.census.gov/programs-surveys/sipp.html
+        kind: government
 
   - model: policyengine-us
     category: take-up
-    label: Seeded take-up priors before calibration
+    label: Take-up assigned per program from reports, rates and caseloads
     detail: >
-      Enhanced CPS construction assigns take-up and claiming gates for
-      SNAP, ACA/PTC, DC PTC, Head Start, Early Head Start, housing
-      assistance, SSI, Medicaid, TANF, EITC, WIC, WIC nutritional
-      risk, and voluntary tax filing. Priors are external-rate tables;
-      SNAP, SSI, ACA, and Medicaid preserve available
-      reported-recipient or coverage anchors. CCDF is not currently
-      seeded — simulated CCDF receipt equals simulated CCDF
-      eligibility.
-    scope: Enhanced CPS program participation and claiming inputs
+      The default Microcosm US 2024 release stores take-up inputs for SNAP, TANF,
+      EITC, Medicaid, SSI, Medicare, Head Start, housing assistance and the ACA
+      premium tax credit, plus a WIC claim draw. Reported receipt anchors SNAP,
+      Medicaid, SSI and ACA take-up; SNAP, Medicaid and ACA are then adjusted to state
+      administrative counts (FNS, CMS); SSI draws against SSA age-band priors; TANF,
+      EITC and WIC use published participation rates; Head Start comes from a
+      SIPP-trained forest; Medicare equals ASEC-reported coverage and housing
+      assistance equals reported or imputed receipt. CHIP, the Basic Health Program,
+      DC's property tax credit and Early Head Start are left unseeded, so
+      policyengine-us treats everyone eligible as taking them up; child care
+      subsidies have no take-up input.
+    scope: program participation and claiming inputs (populace-us-2024-spm-20260915)
     sources:
-      - label: policyengine-us-data CPS take-up assignment
-        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/datasets/cps/cps.py
+      - label: Microcosm take-up contract
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/take_up_contract.json
         kind: self
-      - label: policyengine-us-data take-up parameters
-        url: https://github.com/PolicyEngine/policyengine-us-data/tree/main/policyengine_us_data/parameters/take_up
+      - label: Microcosm source stages
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/source_stages.json
         kind: self
-      - label: policyengine-us-data take-up helpers
-        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/datasets/cps/takeup.py
+      - label: Microcosm take-up assignment and count calibration
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us_runtime/source_runtime.py#L451-L629
         kind: self
+      - label: Default release microdata (take-up columns)
+        url: https://huggingface.co/datasets/policyengine/populace-us/tree/populace-us-2024-spm-20260915/releases/populace-us-2024-spm-20260915
+        kind: self
+      - label: PolicyEngine US 2.2.1 take-up defaults (CHIP example)
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/gov/hhs/chip/takes_up_chip_if_eligible.py
+        kind: self
+      - label: USDA FNS SNAP state participation and benefit data (FY2024)
+        url: https://www.fns.usda.gov/sites/default/files/resource-files/snap-zip-fy69tocurrent-6.zip
+        kind: government
+      - label: CMS Medicaid and CHIP enrollment data (April 2026 release)
+        url: https://download.medicaid.gov/data/pi-dataset-april-2026-release.csv
+        kind: government
 
   - model: policyengine-us
     category: calibration
-    label: Take-up targets recomputed in the calibration matrix
+    label: Gradient-descent reweighting to 5,659 targets
     detail: >
-      For take-up-affected targets, PolicyEngine US Data computes
-      eligible target values with all relevant gates open, then applies
-      block-level seeded take-up draws while building calibration matrix
-      entries. L0 reweighting then determines the final weighted
-      population totals against administrative targets; WIC and EITC are
-      also constrained through target totals even when their gates are not
-      in the shared rerandomized target list.
-    scope: SNAP, ACA/PTC, Medicaid, TANF, SSI, selected tax and benefit targets
+      Household weights are calibrated by 6,000 Adam steps on log weights, minimizing
+      the weighted mean relative error, capped at 100% per target, across 447
+      national and 5,211 state targets plus one build-internal constraint; dollar and
+      count targets carry equal total weight. No weight may exceed five times its
+      starting value, and the household-weight total is held fixed. Take-up flags are
+      assigned before calibration, so calibration changes weights, not who takes up.
+      95.7% of targets end within 10%. The default has no congressional-district
+      targets, and the published release inherits these weights unchanged.
+    scope: IRS SOI, Census, CMS, SSA, USDA, HHS, CBO, JCT, BEA and Federal Reserve targets
     sources:
-      - label: policyengine-us-data take-up target mapping
-        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/utils/takeup.py
+      - label: Microcosm calibration loss and optimizer
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-calibrate/src/populace/calibrate/solve.py#L498-L860
         kind: self
-      - label: policyengine-us-data unified matrix builder
-        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/calibration/unified_matrix_builder.py
+      - label: Microcosm target loss weights
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/tools/build_us_fiscal_refresh_release.py#L5282-L5316
         kind: self
-      - label: policyengine-us-data calibration target config
-        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/calibration/target_config.yaml
+      - label: Default release calibration diagnostics
+        url: https://huggingface.co/datasets/policyengine/populace-us/blob/populace-us-2024-spm-20260915/releases/populace-us-2024-spm-20260915/calibration_diagnostics.json
+        kind: self
+      - label: Default release build manifest (calibration inherited)
+        url: https://huggingface.co/datasets/policyengine/populace-us/blob/populace-us-2024-spm-20260915/releases/populace-us-2024-spm-20260915/build_manifest.json
+        kind: self
+      - label: IRS SOI Historic Table 2 (TY2022)
+        url: https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv
+        kind: government
+      - label: Census population estimates, vintage 2024 (state by age)
+        url: https://www2.census.gov/programs-surveys/popest/datasets/2020-2024/state/asrh/sc-est2024-alldata6.csv
+        kind: government
+
+  - model: policyengine-us
+    category: geography
+    label: One national file; states and districts are filters
+    detail: >
+      Each household in the default release carries its survey state and an assigned
+      congressional district, county, tract and census block; all 436 districts have
+      records (34 to 1,068 each). State and congressional-district analyses in
+      policyengine.py 6.3.4 filter the national file by `state_fips` or
+      `congressional_district_geoid` and keep each household's national weight; there
+      are no per-area datasets or area-specific weights, and the default calibration
+      has no district targets.
+    scope: states, congressional districts
+    sources:
+      - label: policyengine.py 6.3.4 US region registry
+        url: https://github.com/PolicyEngine/policyengine.py/blob/9d0c7c5714231156dbdda9eac4d6e9d5998cf972/src/policyengine/countries/us/regions.py#L24-L101
+        kind: self
+      - label: policyengine.py 6.3.4 bundle (region datasets)
+        url: https://github.com/PolicyEngine/policyengine.py/blob/9d0c7c5714231156dbdda9eac4d6e9d5998cf972/src/policyengine/data/bundle/manifest.json
+        kind: self
+      - label: Default release microdata (geography columns)
+        url: https://huggingface.co/datasets/policyengine/populace-us/tree/populace-us-2024-spm-20260915/releases/populace-us-2024-spm-20260915
+        kind: self
+      - label: Default release calibration diagnostics
+        url: https://huggingface.co/datasets/policyengine/populace-us/blob/populace-us-2024-spm-20260915/releases/populace-us-2024-spm-20260915/calibration_diagnostics.json
         kind: self
 
   - model: policyengine-us

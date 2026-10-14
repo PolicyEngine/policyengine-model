@@ -9,33 +9,48 @@ imputations:
   # ============================ SNAP participation ============================
   - model: policyengine-us
     concept: snap-participation
-    method: l0-calibration
+    method: caseload-driven
     description: >
-      Base SNAP eligibility and benefits are computed rule-by-rule. The
-      Enhanced CPS first assigns `takes_up_snap_if_eligible` using a
-      USDA take-up-rate prior while preserving CPS-reported SNAP
-      recipients as take-up anchors. Calibration/local-area builds then
-      rerandomize the SNAP gate with block-level seeded draws and L0
-      reweighting governs final state and national SNAP totals.
-    baseDataset: Enhanced CPS
+      PolicyEngine-US computes SNAP eligibility and benefits from program rules and
+      pays them only to SPM units whose `takes_up_snap_if_eligible` flag is true. In
+      the default Microcosm US 2024 release, every unit that reported SNAP in the CPS
+      ASEC (`SPM_SNAPSUB` above zero) takes up. Other units draw against a state rate
+      (USDA FNS fiscal year 2024 average monthly SNAP households over the state's
+      weighted modeled-eligible units), and eligible non-reporting units are then
+      added or dropped in draw order until each state's weighted count of taking-up
+      units matches the FNS count at the build's starting weights. Where the FNS
+      count exceeds modeled eligibility, every eligible unit takes up. This state
+      assignment replaces an earlier national fill at FNS's 82% participation rate.
+      Household weights are then calibrated to FNS fiscal year 2024 SNAP benefits
+      and average monthly households, nationally and for every state.
+    baseDataset: Microcosm US 2024 (CPS ASEC + IRS PUF)
     calibrationTargets:
-      - state-level SNAP dollars
-      - national SNAP outlays
-    documentationUrl: https://github.com/PolicyEngine/policyengine-us-data
+      - USDA FNS FY2024 SNAP benefits, national and 51 state totals
+      - USDA FNS FY2024 average monthly SNAP households, national and 51 states
+    documentationUrl: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/source_stages.json
     reproducible: yes
     sources:
-      - label: policyengine-us-data CPS take-up assignment
-        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/datasets/cps/cps.py
+      - label: Microcosm SNAP state take-up stage (cae8640)
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us_runtime/snap_state_take_up.py#L225-L300
         kind: self
-      - label: policyengine-us-data take-up draw utilities
-        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/utils/takeup.py
+      - label: Microcosm greedy count calibration of take-up flags
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us_runtime/source_runtime.py#L451-L629
         kind: self
-      - label: policyengine-us-data calibration target config
-        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/calibration/target_config.yaml
+      - label: Microcosm national SNAP take-up stage
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us_runtime/snap_take_up.py#L161-L237
         kind: self
-      - label: policyengine-us SNAP formula
-        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/usda/snap/snap.py
+      - label: Microcosm source stages (snap_take_up, snap_state_take_up)
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/source_stages.json
         kind: self
+      - label: Default release calibration diagnostics
+        url: https://huggingface.co/datasets/policyengine/populace-us/blob/populace-us-2024-spm-20260915/releases/populace-us-2024-spm-20260915/calibration_diagnostics.json
+        kind: self
+      - label: PolicyEngine US 2.2.1 SNAP formula
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/gov/usda/snap/snap.py
+        kind: self
+      - label: USDA FNS SNAP state participation and benefit data (FY2024)
+        url: https://www.fns.usda.gov/sites/default/files/resource-files/snap-zip-fy69tocurrent-6.zip
+        kind: government
 
   - model: trim3
     concept: snap-participation
@@ -80,20 +95,57 @@ imputations:
   # ============================ Capital gains =================================
   - model: policyengine-us
     concept: capital-gains
-    method: statistical-matching
+    method: machine-learning
     description: >
-      Capital gains components imputed from IRS PUF onto the Enhanced CPS
-      via statistical matching, then top-incomes weighted to match SOI
-      totals.
-    baseDataset: Enhanced CPS
+      Each CPS ASEC household appears twice in the default Microcosm US 2024 release.
+      On the survey copy, ASEC-reported capital gains (`CAP_VAL`) are split 88% long
+      term and 12% short term. On the copy that carries tax-return detail, short-term,
+      long-term, collectibles and non-Schedule D gains are drawn from a chained,
+      weighted quantile regression forest (QRF) trained on the IRS 2015 Public Use
+      File uprated to 2024, conditioned on the copy's filing status, tax-unit size,
+      wages, self-employment income, interest, dividends and survey capital gains.
+      Before calibration, capital gain distributions reported directly on Form 1040
+      are rescaled to the IRS SOI tax year 2023 Table 1.4 total. Household weights are
+      calibrated to IRS SOI net capital
+      gains (tax year 2022 by state, aged to 2024; tax year 2023 nationally), SOI
+      capital gain distributions and CBO's 2024 net capital gain projection.
+      Rebuilding the file requires the PUF, which the build reads from a non-public
+      artifact.
+    baseDataset: Microcosm US 2024 (CPS ASEC + IRS PUF)
     calibrationTargets:
-      - SOI AGI bin totals
-    documentationUrl: https://github.com/PolicyEngine/policyengine-us-data
-    reproducible: yes
+      - IRS SOI TY2022 net capital gains, amount and returns, 51 states (aged to 2024)
+      - IRS SOI TY2023 Table 1.4 net capital gains and capital gain distributions, national
+      - CBO February 2026 projection of 2024 net capital gains
+    documentationUrl: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/source_stages.json
+    reproducible: partial
     sources:
-      - label: policyengine-us-data
-        url: https://github.com/PolicyEngine/policyengine-us-data
+      - label: Microcosm PUF tax-detail predictors and outputs
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us_runtime/puf_support.py#L112-L180
         kind: self
+      - label: Microcosm support-copy construction
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us_runtime/puf_support.py#L433-L501
+        kind: self
+      - label: Microcosm ASEC capital gains split
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us_runtime/cps_carried.py#L26-L29
+        kind: self
+      - label: Microcosm pre-calibration distribution rescale
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/tools/build_us_fiscal_refresh_release.py#L5062-L5130
+        kind: self
+      - label: Microcosm weighted QRF
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-fit/src/populace/fit/qrf.py#L1-L38
+        kind: self
+      - label: Microcosm source stages (puf_tax_detail, capital_gain_distributions)
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/source_stages.json
+        kind: self
+      - label: Default release calibration diagnostics
+        url: https://huggingface.co/datasets/policyengine/populace-us/blob/populace-us-2024-spm-20260915/releases/populace-us-2024-spm-20260915/calibration_diagnostics.json
+        kind: self
+      - label: IRS SOI individual public use microdata files
+        url: https://www.irs.gov/statistics/soi-tax-stats-individual-public-use-microdata-files
+        kind: government
+      - label: IRS SOI Publication 1304 Table 1.4 (TY2023)
+        url: https://www.irs.gov/pub/irs-soi/23in14ar.xls
+        kind: government
 
   - model: tpc-microsim
     concept: capital-gains
@@ -118,37 +170,39 @@ imputations:
   # ============================ TANF participation ============================
   - model: policyengine-us
     concept: tanf-participation
-    method: l0-calibration
+    method: parameterized-take-up
     description: >
-      The Enhanced CPS assigns `takes_up_tanf_if_eligible` with a
-      scalar TANF prior from HHS ASPE / Urban participation-rate
-      sources. The PolicyEngine-US TANF formula multiplies state TANF
-      benefits by this gate. Calibration rerandomizes the TANF gate for
-      take-up-affected targets and L0 reweighting governs final TANF
-      dollars and recipient-unit counts.
-    baseDataset: Enhanced CPS
+      PolicyEngine-US multiplies state TANF cash benefits by `takes_up_tanf_if_eligible`.
+      In the default Microcosm US 2024 release each SPM unit gets a seeded draw, keyed
+      to its survey identity so both copies of a household agree, and takes up when the
+      draw falls below 21.9%, the HHS ASPE TRIM3-based TANF participation rate among
+      eligible families for 2022. Reported TANF receipt is not used as an anchor.
+      Household weights are calibrated to HHS ACF fiscal year 2024 TANF basic
+      assistance spending nationally and for 22 states.
+    baseDataset: Microcosm US 2024 (CPS ASEC + IRS PUF)
     calibrationTargets:
-      - state-level TANF dollars
-      - national TANF dollars
-      - state and national TANF-recipient SPM unit counts
-    documentationUrl: https://github.com/PolicyEngine/policyengine-us-data
+      - HHS ACF FY2024 TANF basic assistance (federal and MOE funds), national and 22 states
+    documentationUrl: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/source_stages.json
     reproducible: yes
     sources:
-      - label: TANF take-up prior
-        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/parameters/take_up/tanf.yaml
+      - label: Microcosm take-up seeding (TANF, EITC)
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us_runtime/take_up.py#L224-L283
         kind: self
-      - label: policyengine-us-data CPS take-up assignment
-        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/datasets/cps/cps.py
+      - label: Microcosm take-up contract (TANF rate and source)
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/take_up_contract.json
         kind: self
-      - label: policyengine-us-data take-up draw utilities
-        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/utils/takeup.py
+      - label: Default release calibration diagnostics
+        url: https://huggingface.co/datasets/policyengine/populace-us/blob/populace-us-2024-spm-20260915/releases/populace-us-2024-spm-20260915/calibration_diagnostics.json
         kind: self
-      - label: policyengine-us-data calibration target config
-        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/calibration/target_config.yaml
+      - label: PolicyEngine US 2.2.1 TANF formula
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/gov/hhs/tanf/cash/tanf.py
         kind: self
-      - label: policyengine-us TANF formula
-        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/hhs/tanf/cash/tanf.py
-        kind: self
+      - label: HHS ASPE 24th Welfare Indicators report (Table 10)
+        url: https://aspe.hhs.gov/sites/default/files/documents/0cfb67b2619c9f7ef4fd40b14a5d4da7/24th%20Welfare%20Indicators%20Report%20to%20Congress.pdf
+        kind: government
+      - label: HHS ACF FY2024 TANF and MOE financial data
+        url: https://acf.gov/ofa/data/tanf-financial-data-fy-2024
+        kind: government
 
   - model: trim3
     concept: tanf-participation
@@ -177,33 +231,46 @@ imputations:
   # ============================ SSI participation =============================
   - model: policyengine-us
     concept: ssi-participation
-    method: l0-calibration
+    method: caseload-driven
     description: >
-      The Enhanced CPS assigns `takes_up_ssi_if_eligible` from an
-      external SSI participation-rate prior while preserving CPS-reported
-      SSI recipients as take-up anchors. It also marks under-65 reported
-      SSI recipients as disabled so the rule-based eligibility pathway is
-      internally consistent. Calibration rerandomizes the SSI gate for
-      take-up-affected targets and L0 reweighting governs final SSI
-      dollars.
-    baseDataset: Enhanced CPS
+      PolicyEngine-US pays SSI only to people whose `takes_up_ssi_if_eligible` flag is
+      true. In the default Microcosm US 2024 release, every person who reported SSI in
+      the CPS ASEC (`SSI_VAL` above zero) takes up. Every other person draws once
+      against an age-band prior (under 18, 18 to 64, 65 and over) derived from SSA's
+      December 2024 count of people receiving a federal SSI payment, and the decision
+      is shared by both copies of the household. Household weights are calibrated to
+      those three SSA age-band counts and to SSA 2024 SSI recipients and payments by
+      state. The release's SSI diagnostics show the under-18 band saturated: about
+      177,000 weighted recipients against SSA's 1.0 million.
+    baseDataset: Microcosm US 2024 (CPS ASEC + IRS PUF)
     calibrationTargets:
-      - national SSI outlays
-    documentationUrl: https://github.com/PolicyEngine/policyengine-us-data
+      - SSA December 2024 SSI recipients with a federal payment, three age bands
+      - SSA 2024 SSI recipients and payments, 51 states
+      - SSA 2024 total SSI payments, national
+    documentationUrl: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/source_stages.json
     reproducible: yes
     sources:
-      - label: SSI take-up prior
-        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/parameters/take_up/ssi.yaml
+      - label: Microcosm SSI take-up stage
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us_runtime/ssi_take_up.py#L506-L531
         kind: self
-      - label: policyengine-us-data CPS take-up assignment
-        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/datasets/cps/cps.py
+      - label: Microcosm take-up contract (SSI)
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/take_up_contract.json
         kind: self
-      - label: policyengine-us-data reported-recipient helpers
-        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/datasets/cps/takeup.py
+      - label: Calibrating build's SSI take-up diagnostics
+        url: https://huggingface.co/datasets/policyengine/populace-us/blob/populace-us-2024-buildp-sparse-rmloss100-cae8640-20260728T011454Z/releases/populace-us-2024-buildp-sparse-rmloss100-cae8640-20260728T011454Z/us_ssi_take_up.json
         kind: self
-      - label: policyengine-us SSI formula
-        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/ssa/ssi/ssi.py
+      - label: Default release calibration diagnostics
+        url: https://huggingface.co/datasets/policyengine/populace-us/blob/populace-us-2024-spm-20260915/releases/populace-us-2024-spm-20260915/calibration_diagnostics.json
         kind: self
+      - label: PolicyEngine US 2.2.1 SSI formula
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/gov/ssa/ssi/ssi.py
+        kind: self
+      - label: SSA SSI Monthly Statistics, December 2024, Table 1
+        url: https://www.ssa.gov/policy/docs/statcomps/ssi_monthly/2024-12/table01.html
+        kind: government
+      - label: SSA Annual Statistical Supplement 2025, Table 7.B1
+        url: https://www.ssa.gov/policy/docs/statcomps/supplement/2025/7b.html
+        kind: government
 
   - model: trim3
     concept: ssi-participation
@@ -232,41 +299,48 @@ imputations:
   # ============================ Medicaid participation ========================
   - model: policyengine-us
     concept: medicaid-participation
-    method: l0-calibration
+    method: caseload-driven
     description: >
-      PolicyEngine computes annual Medicaid eligibility through category
-      and state rules. Enhanced CPS construction assigns Medicaid take-up
-      with state-specific KFF / MACPAC-derived priors and preserves
-      reported Medicaid coverage at interview as an enrollment anchor.
-      Calibration rerandomizes the Medicaid gate for take-up-affected
-      targets, and L0 reweighting determines final state and national
-      Medicaid enrollment counts. Because PolicyEngine values enrolled
-      people with state and eligibility-group per-capita spending rather
-      than service-level claims or a rule-computed medical benefit,
-      Medicaid spending mostly follows enrollment times the per-capita
-      cost table.
-    baseDataset: Enhanced CPS
+      PolicyEngine-US computes Medicaid eligibility by category and state rules and
+      enrolls eligible people whose `takes_up_medicaid_if_eligible` flag is true. In
+      the default Microcosm US 2024 release, every person who reported Medicaid
+      coverage at the CPS ASEC interview takes up. Other people draw against a state
+      rate (CMS December 2024 Medicaid enrollment over the state's weighted
+      modeled-eligible people), and eligible non-reporting people are then added or
+      dropped in draw order until each state's weighted enrollment matches the CMS
+      count at the build's starting weights. Where the CMS count exceeds modeled
+      eligibility, every eligible person enrolls. Rhode Island uses its November 2024
+      count because CMS reports no December figure for the state. Household weights
+      are then calibrated to CMS Medicaid enrollment and combined Medicaid and CHIP
+      enrollment, nationally and by state.
+    baseDataset: Microcosm US 2024 (CPS ASEC + IRS PUF)
     calibrationTargets:
-      - state and national Medicaid enrollment counts
-      - national Medicaid spending implied by enrollment and per-capita costs
-    documentationUrl: https://github.com/PolicyEngine/policyengine-us-data
+      - "CMS December 2024 Medicaid enrollment, national and 51 states (Rhode Island: November 2024)"
+      - CMS December 2024 Medicaid and CHIP enrollment, national and 50 states
+    documentationUrl: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/source_stages.json
     reproducible: yes
     sources:
-      - label: Medicaid take-up prior
-        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/parameters/take_up/medicaid.yaml
+      - label: Microcosm Medicaid take-up stage
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us_runtime/medicaid_take_up.py#L214-L340
         kind: self
-      - label: policyengine-us-data CPS take-up assignment
-        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/datasets/cps/cps.py
+      - label: Microcosm greedy count calibration of take-up flags
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us_runtime/source_runtime.py#L451-L629
         kind: self
-      - label: policyengine-us-data take-up draw utilities
-        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/utils/takeup.py
+      - label: Microcosm source stages (medicaid_take_up)
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/source_stages.json
         kind: self
-      - label: policyengine-us-data calibration target config
-        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/calibration/target_config.yaml
+      - label: Calibrating build manifest (Rhode Island substitution)
+        url: https://huggingface.co/datasets/policyengine/populace-us/blob/populace-us-2024-buildp-sparse-rmloss100-cae8640-20260728T011454Z/releases/populace-us-2024-buildp-sparse-rmloss100-cae8640-20260728T011454Z/build_manifest.json
         kind: self
-      - label: policyengine-us Medicaid enrollment formula
-        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/hhs/medicaid/medicaid_enrolled.py
+      - label: Default release calibration diagnostics
+        url: https://huggingface.co/datasets/policyengine/populace-us/blob/populace-us-2024-spm-20260915/releases/populace-us-2024-spm-20260915/calibration_diagnostics.json
         kind: self
+      - label: PolicyEngine US 2.2.1 Medicaid enrollment formula
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/gov/hhs/medicaid/medicaid_enrolled.py
+        kind: self
+      - label: CMS Medicaid and CHIP enrollment data (April 2026 release)
+        url: https://download.medicaid.gov/data/pi-dataset-april-2026-release.csv
+        kind: government
 
   - model: trim3
     concept: medicaid-participation
@@ -312,31 +386,38 @@ imputations:
 
   - model: policyengine-us
     concept: chip-participation
-    method: parameterized-take-up
+    method: not-modeled
     description: >
-      PolicyEngine computes annual CHIP eligibility through child and
-      pregnant-person pathways, then applies a CHIP take-up gate and
-      state per-capita CHIP payment. Upstream PolicyEngine-US defaults
-      the eligible-person CHIP enrollment gate to true unless data or a
-      reform overrides it. Current Enhanced CPS take-up construction does
-      not seed a separate external CHIP prior or calibrate a separate CHIP
-      enrollment target in the shared Medicaid rerandomization target list.
-    baseDataset: Enhanced CPS
-    documentationUrl: https://github.com/PolicyEngine/policyengine-us
+      PolicyEngine-US computes CHIP eligibility through child and pregnant-person
+      pathways and enrolls eligible people whose `takes_up_chip_if_eligible` flag is
+      true. The default Microcosm US 2024 release does not carry that flag, so it takes
+      the policyengine-us default (true) and every CHIP-eligible person enrolls.
+      Microcosm's take-up contract leaves CHIP unseeded until CMS's CHIP count, which
+      combines Medicaid-expansion CHIP with separate CHIP, can be split to match the
+      separate CHIP the model simulates. Household weights are still calibrated to CMS
+      December 2024 CHIP enrollment and combined Medicaid and CHIP enrollment.
+    baseDataset: Microcosm US 2024 (CPS ASEC + IRS PUF)
+    calibrationTargets:
+      - CMS December 2024 CHIP enrollment, national and 31 states
+      - CMS December 2024 Medicaid and CHIP enrollment, national and 50 states
+    documentationUrl: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/take_up_contract.json
     reproducible: yes
     sources:
-      - label: PolicyEngine US CHIP eligibility formula
-        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/hhs/chip/is_chip_eligible.py
+      - label: Microcosm take-up contract (CHIP left unseeded)
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/take_up_contract.json
         kind: self
-      - label: PolicyEngine US CHIP take-up formula
-        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/hhs/chip/takes_up_chip_if_eligible.py
+      - label: Default release calibration diagnostics
+        url: https://huggingface.co/datasets/policyengine/populace-us/blob/populace-us-2024-spm-20260915/releases/populace-us-2024-spm-20260915/calibration_diagnostics.json
         kind: self
-      - label: policyengine-us-data CPS take-up assignment
-        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/datasets/cps/cps.py
+      - label: PolicyEngine US 2.2.1 CHIP take-up default
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/gov/hhs/chip/takes_up_chip_if_eligible.py
         kind: self
-      - label: policyengine-us-data take-up target mapping
-        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/utils/takeup.py
+      - label: PolicyEngine US 2.2.1 CHIP category formula
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/gov/hhs/chip/chip_category.py
         kind: self
+      - label: CMS Medicaid and CHIP enrollment data (April 2026 release)
+        url: https://download.medicaid.gov/data/pi-dataset-april-2026-release.csv
+        kind: government
 
   - model: trim3
     concept: chip-participation
@@ -382,72 +463,96 @@ imputations:
   # ============================ ACA / PTC participation =======================
   - model: policyengine-us
     concept: aca-ptc-participation
-    method: l0-calibration
+    method: caseload-driven
     description: >
-      The Enhanced CPS assigns `takes_up_aca_if_eligible` with an ACA
-      coverage take-up prior and preserves reported subsidized marketplace
-      coverage, aggregated from people to tax units, as an anchor.
-      Calibration rerandomizes the ACA gate for take-up-affected targets
-      and L0 reweighting governs final ACA PTC dollars, state tax-unit
-      recipient counts, national person recipient counts, and
-      selected-plan benchmark-ratio composition.
-    baseDataset: Enhanced CPS
+      PolicyEngine-US pays the premium tax credit to eligible tax units whose
+      `takes_up_aca_if_eligible` flag is true. In the default Microcosm US 2024
+      release, eligible tax units with a member who reported subsidized Marketplace
+      coverage at the CPS ASEC interview take up. Other eligible units draw against a
+      state rate (CMS 2024 open enrollment APTC recipients over the state's weighted
+      modeled-eligible tax units). The assignment is then adjusted in draw order
+      toward CMS state APTC recipient counts and IRS SOI state premium tax credit
+      returns and amounts. A selected-plan-to-benchmark premium ratio is also set for
+      each tax unit and clipped to 0.5–1.5. Household weights are calibrated to CMS
+      2024 open enrollment Marketplace enrollment and APTC recipients by state, and to
+      IRS SOI tax year 2022 premium tax credit returns and amounts, nationally and by
+      state.
+    baseDataset: Microcosm US 2024 (CPS ASEC + IRS PUF)
     calibrationTargets:
-      - district and national ACA PTC dollars
-      - state ACA PTC tax-unit recipient counts
-      - national ACA PTC person recipient count
-      - state selected-marketplace-plan benchmark-ratio counts
-    documentationUrl: https://github.com/PolicyEngine/policyengine-us-data
+      - CMS 2024 open enrollment Marketplace enrollment and APTC recipients, 51 states
+      - IRS SOI TY2022 premium tax credit returns and amounts, national and 51 states (amounts aged to 2024)
+    documentationUrl: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/source_stages.json
     reproducible: yes
     sources:
-      - label: ACA take-up prior
-        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/parameters/take_up/aca.yaml
+      - label: Microcosm ACA take-up assignment in the release runner
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/tools/build_us_fiscal_refresh_release.py#L2598-L2672
         kind: self
-      - label: policyengine-us-data CPS take-up assignment
-        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/datasets/cps/cps.py
+      - label: Microcosm ACA state take-up rates
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/tools/build_us_fiscal_refresh_release.py#L2327-L2350
         kind: self
-      - label: policyengine-us-data take-up draw utilities
-        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/utils/takeup.py
+      - label: Microcosm source stages (aca_marketplace_inputs)
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/source_stages.json
         kind: self
-      - label: policyengine-us-data calibration target config
-        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/calibration/target_config.yaml
+      - label: Default release calibration diagnostics
+        url: https://huggingface.co/datasets/policyengine/populace-us/blob/populace-us-2024-spm-20260915/releases/populace-us-2024-spm-20260915/calibration_diagnostics.json
         kind: self
-      - label: policyengine-us ACA receipt formula
-        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/aca/person_receives_aca.py
+      - label: PolicyEngine US 2.2.1 ACA take-up default
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/gov/aca/takes_up_aca_if_eligible.py
         kind: self
+      - label: CMS 2024 open enrollment state-level public use file
+        url: https://www.cms.gov/files/zip/2024-oep-state-level-public-use-file.zip
+        kind: government
+      - label: IRS SOI Historic Table 2 (TY2022)
+        url: https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv
+        kind: government
 
   # ============================ EITC claiming =================================
   - model: policyengine-us
     concept: eitc-claiming
-    method: other
+    method: parameterized-take-up
     description: >
-      The Enhanced CPS assigns `takes_up_eitc` using external claim-rate
-      priors by EITC child count, then separately assigns voluntary filing
-      for nonrequired filers. PolicyEngine-US pays EITC only when the tax
-      unit is eligible, takes up EITC, and files. Final EITC totals are
-      governed by L0 reweighting against district, state, national, and
-      SOI-domain EITC targets; the take-up gate itself is not currently
-      one of the block-rerandomized target gates.
-    baseDataset: Enhanced CPS
+      PolicyEngine-US pays the EITC only to eligible tax units whose `takes_up_eitc`
+      flag is true and that file a return (they are required to, would file
+      voluntarily, or would file to claim a refundable credit). In the default
+      Microcosm US 2024 release, each tax unit draws once, keyed to its survey
+      identity, against the IRS National Taxpayer Advocate's tax year 2016
+      participation rate for its number of children: 65% with none, 86% with one, 85%
+      with two and 82% with three or more, counting members under 19 as children.
+      Reported EITC receipt is not used as an anchor. The file carries no
+      `would_file_if_eligible_for_refundable_credit` input, so that propensity takes
+      its policyengine-us default (true). Household weights are calibrated to IRS EITC
+      claims and amounts by state and number of children (tax year 2022), nationally
+      by AGI band and number of children (tax year 2023), and nationally by AGI band
+      from filing-season statistics for tax year 2024.
+    baseDataset: Microcosm US 2024 (CPS ASEC + IRS PUF)
     calibrationTargets:
-      - district, state, and national EITC dollars
-      - national EITC dollars by child count and AGI domains
-      - national filer counts by EITC child-count domains
-    documentationUrl: https://github.com/PolicyEngine/policyengine-us-data
+      - IRS SOI TY2022 EITC claims and amounts by number of children, 51 states (amounts aged to 2024)
+      - IRS SOI TY2023 Table 2.5 EITC returns and amounts by AGI band and number of children, national
+      - IRS 2025 filing-season statistics (week 47) EITC returns and amounts by AGI band, TY2024
+    documentationUrl: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/source_stages.json
     reproducible: yes
     sources:
-      - label: EITC take-up prior
-        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/parameters/take_up/eitc.yaml
+      - label: Microcosm take-up seeding (EITC child-count rates)
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us_runtime/take_up.py#L182-L283
         kind: self
-      - label: policyengine-us-data CPS take-up assignment
-        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/datasets/cps/cps.py
+      - label: Microcosm take-up contract (EITC rates and source)
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/take_up_contract.json
         kind: self
-      - label: policyengine-us-data calibration target config
-        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/calibration/target_config.yaml
+      - label: Default release calibration diagnostics
+        url: https://huggingface.co/datasets/policyengine/populace-us/blob/populace-us-2024-spm-20260915/releases/populace-us-2024-spm-20260915/calibration_diagnostics.json
         kind: self
-      - label: policyengine-us EITC formula
-        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/irs/credits/earned_income/eitc.py
+      - label: PolicyEngine US 2.2.1 EITC formula
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/gov/irs/credits/earned_income/eitc.py
         kind: self
+      - label: IRS National Taxpayer Advocate 2020 report, Vol. 3
+        url: https://www.taxpayeradvocate.irs.gov/wp-content/uploads/2020/08/JRC20_Volume3.pdf
+        kind: government
+      - label: IRS SOI Publication 1304 Table 2.5 (TY2023)
+        url: https://www.irs.gov/pub/irs-soi/23in25ic.xls
+        kind: government
+      - label: IRS filing season statistics, week 47 of 2025
+        url: https://www.irs.gov/pub/irs-soi/25inweek47.xlsx
+        kind: government
 
   - model: trim3
     concept: eitc-claiming
@@ -469,62 +574,69 @@ imputations:
   # ============================ DC PTC claiming ===============================
   - model: policyengine-us
     concept: dc-ptc-claiming
-    method: rule-based
+    method: not-modeled
     description: >
-      The Enhanced CPS assigns `takes_up_dc_ptc` with a DC Tax
-      Expenditure Report-derived claiming-rate prior. The draw is listed
-      with take-up-affected targets in the shared take-up utilities, but
-      no active calibration target for `dc_property_tax_credit` appears
-      in the current target configuration, so this remains primarily an
-      initial microdata claiming prior.
-    baseDataset: Enhanced CPS
-    documentationUrl: https://github.com/PolicyEngine/policyengine-us-data
+      PolicyEngine-US computes DC's property tax credit (Schedule H) and pays it to DC
+      tax units whose `takes_up_dc_ptc` flag is true. The default Microcosm US 2024
+      release leaves that flag unseeded, so it takes the policyengine-us default
+      (true) and every eligible DC tax unit claims. Microcosm's take-up contract
+      rejects the retired 32% claiming rate because it divided DC's 37,133 tax year
+      2021 claims by a PolicyEngine estimate rather than an eligible population. No
+      calibration target covers the credit.
+    baseDataset: Microcosm US 2024 (CPS ASEC + IRS PUF)
+    documentationUrl: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/take_up_contract.json
     reproducible: yes
     sources:
-      - label: DC PTC take-up prior
-        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/parameters/take_up/dc_ptc.yaml
+      - label: Microcosm take-up contract (DC property tax credit)
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/take_up_contract.json
         kind: self
-      - label: policyengine-us-data CPS take-up assignment
-        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/datasets/cps/cps.py
+      - label: "Calibrating build manifest (known gap: takes_up_dc_ptc)"
+        url: https://huggingface.co/datasets/policyengine/populace-us/blob/populace-us-2024-buildp-sparse-rmloss100-cae8640-20260728T011454Z/releases/populace-us-2024-buildp-sparse-rmloss100-cae8640-20260728T011454Z/build_manifest.json
         kind: self
-      - label: policyengine-us DC property tax credit formula
-        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/states/dc/tax/income/credits/dc_ptc.py
+      - label: PolicyEngine US 2.2.1 DC PTC take-up default
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/gov/states/dc/tax/income/credits/takes_up_dc_ptc.py
+        kind: self
+      - label: PolicyEngine US 2.2.1 DC property tax credit formula
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/gov/states/dc/tax/income/credits/dc_ptc.py
         kind: self
 
   # ============================ WIC participation =============================
   - model: policyengine-us
     concept: wic-participation
-    method: other
+    method: parameterized-take-up
     description: >
-      The Enhanced CPS assigns `would_claim_wic` with category-specific
-      WIC take-up priors and separately imputes WIC nutritional risk by
-      category, always treating reported WIC recipients as nutritionally at
-      risk. The current calibration target config includes national WIC
-      dollar and recipient-count targets, so final WIC totals are
-      governed by reweighting even though WIC is not in the shared
-      block-rerandomized take-up target list.
-    baseDataset: Enhanced CPS
-    calibrationTargets:
-      - national WIC dollars
-      - national WIC recipient count
-    documentationUrl: https://github.com/PolicyEngine/policyengine-us-data
+      PolicyEngine-US pays WIC to eligible people whose take-up input is true. The
+      default Microcosm US 2024 release stores a seeded claim draw, `would_claim_wic`,
+      assigned at USDA FNS calendar year 2022 coverage rates by participant category:
+      45.6% for pregnant women, 68.9% for women with an infant in the family (FNS's
+      all-postpartum rate, since the sources carry no breastfeeding status), 78.4% for
+      infants and 46.0% for children aged 1 to 4. policyengine.py 6.3.4 maps that
+      stored column onto policyengine-us 2.2.1's `takes_up_wic_if_eligible`. The
+      release has no nutritional-risk input, so `is_wic_at_nutritional_risk` takes its
+      default (true) for everyone in a WIC category who meets the income or categorical
+      test. The default release has no WIC calibration target.
+    baseDataset: Microcosm US 2024 (CPS ASEC + IRS PUF)
+    documentationUrl: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/source_stages.json
     reproducible: yes
     sources:
-      - label: WIC take-up prior
-        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/parameters/take_up/wic_takeup.yaml
+      - label: Microcosm WIC claim stage
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us_runtime/wic_claim.py#L280-L430
         kind: self
-      - label: WIC nutritional-risk prior
-        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/parameters/take_up/wic_nutritional_risk.yaml
+      - label: Microcosm source stages (wic_claim_input)
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/source_stages.json
         kind: self
-      - label: policyengine-us-data CPS take-up assignment
-        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/datasets/cps/cps.py
+      - label: policyengine.py 6.3.4 stored-input rename (would_claim_wic)
+        url: https://github.com/PolicyEngine/policyengine.py/blob/9d0c7c5714231156dbdda9eac4d6e9d5998cf972/src/policyengine/tax_benefit_models/us/legacy_inputs.py#L35-L51
         kind: self
-      - label: policyengine-us-data calibration target config
-        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/calibration/target_config.yaml
+      - label: PolicyEngine US 2.2.1 WIC eligibility formula
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/gov/usda/wic/is_wic_eligible.py
         kind: self
-      - label: policyengine-us WIC formula
-        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/usda/wic/wic.py
+      - label: "Calibrating build manifest (known gap: is_wic_at_nutritional_risk)"
+        url: https://huggingface.co/datasets/policyengine/populace-us/blob/populace-us-2024-buildp-sparse-rmloss100-cae8640-20260728T011454Z/releases/populace-us-2024-buildp-sparse-rmloss100-cae8640-20260728T011454Z/build_manifest.json
         kind: self
+      - label: USDA FNS WIC eligibility and coverage rates, 2022
+        url: https://fns-prod.azureedge.us/sites/default/files/resource-files/wic-eer-2022-summary.pdf
+        kind: government
 
   - model: trim3
     concept: wic-participation
@@ -553,103 +665,118 @@ imputations:
   # ============================ Head Start participation ======================
   - model: policyengine-us
     concept: head-start-participation
-    method: rule-based
+    method: machine-learning
     description: >
-      The Enhanced CPS assigns `takes_up_head_start_if_eligible` with a
-      scalar Head Start enrollment prior from NIEER. PolicyEngine-US then
-      multiplies eligible state-level per-enrollee Head Start value by
-      this gate. The shared take-up utilities define a Head Start target
-      key, but no active Head Start target appears in the current
-      calibration target configuration.
-    baseDataset: Enhanced CPS
-    documentationUrl: https://github.com/PolicyEngine/policyengine-us-data
+      PolicyEngine-US values Head Start for eligible children whose
+      `takes_up_head_start_if_eligible` flag is true. In the default Microcosm US 2024
+      release, a weighted quantile regression forest trained on December responses in
+      the 2023 SIPP predicts that flag once for each child aged 3 to 5, and both copies
+      of the household share it; the flag is false at other ages. The SIPP item asks
+      whether a preschool enrollee attends a federally sponsored program and names
+      Head Start among its examples, so the label is a Head Start proxy. The default
+      release has no Head Start calibration target.
+    baseDataset: Microcosm US 2024 (CPS ASEC + IRS PUF)
+    documentationUrl: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/source_stages.json
     reproducible: yes
     sources:
-      - label: Head Start take-up prior
-        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/parameters/take_up/head_start.yaml
+      - label: Microcosm SIPP Head Start stage
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us_runtime/sipp_head_start.py#L1-L24
         kind: self
-      - label: policyengine-us-data CPS take-up assignment
-        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/datasets/cps/cps.py
+      - label: Microcosm take-up contract (Head Start)
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/take_up_contract.json
         kind: self
-      - label: policyengine-us Head Start formula
-        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/hhs/head_start/head_start.py
+      - label: PolicyEngine US 2.2.1 Head Start formula
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/gov/hhs/head_start/head_start.py
         kind: self
+      - label: Census SIPP
+        url: https://www.census.gov/programs-surveys/sipp.html
+        kind: government
 
   - model: policyengine-us
     concept: early-head-start-participation
-    method: rule-based
+    method: not-modeled
     description: >
-      The Enhanced CPS assigns `takes_up_early_head_start_if_eligible`
-      with a scalar Early Head Start enrollment prior from NIEER.
-      PolicyEngine-US then multiplies eligible state-level per-enrollee
-      Early Head Start value by this gate. The shared take-up utilities
-      define an Early Head Start target key, but no active Early Head
-      Start target appears in the current calibration target
-      configuration.
-    baseDataset: Enhanced CPS
-    documentationUrl: https://github.com/PolicyEngine/policyengine-us-data
+      The default Microcosm US 2024 release does not seed
+      `takes_up_early_head_start_if_eligible`, so it takes the policyengine-us default
+      (true) and every eligible child under the age limit, or pregnant person, is
+      counted as enrolled. Microcosm's take-up contract rejects the retired 9% NIEER
+      scalar and records that no pinned survey observes Early Head Start enrollment.
+      No calibration target covers the program.
+    baseDataset: Microcosm US 2024 (CPS ASEC + IRS PUF)
+    documentationUrl: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/take_up_contract.json
     reproducible: yes
     sources:
-      - label: Early Head Start take-up prior
-        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/parameters/take_up/early_head_start.yaml
+      - label: Microcosm take-up contract (Early Head Start)
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/take_up_contract.json
         kind: self
-      - label: policyengine-us-data CPS take-up assignment
-        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/datasets/cps/cps.py
+      - label: "Calibrating build manifest (known gap: Early Head Start take-up)"
+        url: https://huggingface.co/datasets/policyengine/populace-us/blob/populace-us-2024-buildp-sparse-rmloss100-cae8640-20260728T011454Z/releases/populace-us-2024-buildp-sparse-rmloss100-cae8640-20260728T011454Z/build_manifest.json
         kind: self
-      - label: policyengine-us Early Head Start formula
-        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/hhs/head_start/early_head_start.py
+      - label: PolicyEngine US 2.2.1 Early Head Start take-up default
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/gov/hhs/head_start/takes_up_early_head_start_if_eligible.py
+        kind: self
+      - label: PolicyEngine US 2.2.1 Early Head Start eligibility
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/gov/hhs/head_start/is_early_head_start_eligible.py
         kind: self
 
   # ============================ Voluntary tax filing ==========================
   - model: policyengine-us
     concept: voluntary-tax-filing
-    method: rule-based
+    method: machine-learning
     description: >
-      The Enhanced CPS assigns `would_file_taxes_voluntarily` for
-      non-EITC-claiming tax units from a demographic cell table by child
-      dependents, wage-income band, and head age. PolicyEngine-US uses
-      this alongside required filing and refundable-credit filing gates
-      to determine whether a tax unit files; there is no standalone
-      voluntary-filing calibration target, but it affects calibrated tax
-      and credit targets.
-    baseDataset: Enhanced CPS
-    documentationUrl: https://github.com/PolicyEngine/policyengine-us-data
+      PolicyEngine-US treats a tax unit as filing if it is required to file, would
+      file to claim a refundable credit it is eligible for, or would file voluntarily.
+      In the default Microcosm US 2024 release, `would_file_taxes_voluntarily` comes
+      from a weighted quantile regression forest trained on 2023 SIPP December
+      answers about whether people filed, or expected to file, a federal return. It is
+      predicted once per tax unit from the survey copy and shared by both copies. The
+      refundable-credit filing propensity is not in the file and takes its
+      policyengine-us default (true). No calibration target measures filing directly.
+    baseDataset: Microcosm US 2024 (CPS ASEC + IRS PUF)
+    documentationUrl: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/source_stages.json
     reproducible: yes
     sources:
-      - label: Voluntary filing prior
-        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/parameters/take_up/voluntary_filing.yaml
+      - label: Microcosm SIPP voluntary-filing stage
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us_runtime/voluntary_filing.py#L1-L27
         kind: self
-      - label: policyengine-us-data CPS take-up assignment
-        url: https://github.com/PolicyEngine/policyengine-us-data/blob/main/policyengine_us_data/datasets/cps/cps.py
+      - label: Microcosm voluntary-filing QRF
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us_runtime/voluntary_filing.py#L789-L897
         kind: self
-      - label: policyengine-us tax filing formula
-        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/irs/tax_unit_is_filer.py
+      - label: PolicyEngine US 2.2.1 filer formula
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/gov/irs/tax_unit_is_filer.py
         kind: self
+      - label: PolicyEngine US 2.2.1 voluntary-filing input
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/gov/irs/would_file_taxes_voluntarily.py
+        kind: self
+      - label: Census SIPP
+        url: https://www.census.gov/programs-surveys/sipp.html
+        kind: government
 
   # ============================ Child care subsidy ============================
   - model: policyengine-us
     concept: child-care-subsidy-participation
-    method: rule-based
+    method: not-modeled
     description: >
-      CCDF eligibility and benefit rules implemented at the federal
-      level (age, income, asset, immigration, activity, and reason-for-
-      care tests; copay; subsidy) plus twelve state-specific child
-      care subsidy programs: AK CCAP, CalWORKs Childcare (CA), CCAP
-      (CO), Care 4 Kids (CT), Purchase of Care (DE), CCSP (DC), CCAP
-      (IL — eligibility only), CCFA (MA), CCAP (ME), SCCA (NC),
-      Nebraska Child Care Subsidy, Pennsylvania CCW, and CCS (TX).
-      The Enhanced CPS pipeline does not seed CCDF take-up priors or
-      calibrate simulated receipt to administrative caseloads, so
-      simulated CCDF participation equals simulated CCDF eligibility
-      — an overstatement of actual receipt.
-    baseDataset: Enhanced CPS
+      PolicyEngine-US computes child care subsidies from the state programs listed in
+      its `gov.hhs.ccdf.child_care_subsidy_programs` parameter (51 entries for 2025).
+      None of those formulas reads a child care take-up input, the default Microcosm
+      US 2024 release carries none, and the default calibration has no child care
+      subsidy target, so simulated receipt equals simulated eligibility.
+    baseDataset: Microcosm US 2024 (CPS ASEC + IRS PUF)
+    documentationUrl: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/parameters/gov/hhs/ccdf/child_care_subsidy_programs.yaml
     reproducible: yes
     sources:
-      - label: policyengine-us CCDF variables (federal)
-        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/hhs/ccdf
+      - label: PolicyEngine US 2.2.1 child care subsidy program list
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/parameters/gov/hhs/ccdf/child_care_subsidy_programs.yaml
         kind: self
-      - label: policyengine-us-data take-up parameters (CCDF absent)
-        url: https://github.com/PolicyEngine/policyengine-us-data/tree/main/policyengine_us_data/parameters/take_up
+      - label: PolicyEngine US 2.2.1 CCDF variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/gov/hhs/ccdf
+        kind: self
+      - label: Microcosm take-up contract (no child care entry)
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/take_up_contract.json
+        kind: self
+      - label: Default release calibration diagnostics
+        url: https://huggingface.co/datasets/policyengine/populace-us/blob/populace-us-2024-spm-20260915/releases/populace-us-2024-spm-20260915/calibration_diagnostics.json
         kind: self
 
   - model: trim3
@@ -680,21 +807,98 @@ imputations:
   # ============================ Itemized deductions ===========================
   - model: policyengine-us
     concept: itemized-deductions
-    method: statistical-matching
+    method: machine-learning
     description: >
-      Itemized deduction components (mortgage interest, SALT paid,
-      charitable contributions) imputed from IRS PUF onto the Enhanced
-      CPS via statistical matching, then top-incomes weighted to match
-      SOI totals.
-    baseDataset: Enhanced CPS
+      On the copy of each household that carries tax-return detail, charitable cash
+      and non-cash gifts, real estate taxes, home mortgage interest, investment
+      interest, casualty losses and unreimbursed employee
+      expenses are drawn from the weighted QRF trained on the IRS 2015 Public Use File
+      uprated to 2024. Mortgage interest is then converted into first- and
+      second-mortgage balances and interest using SCF 2022 mortgage debt. The survey
+      copy carries none of these amounts. State and local income taxes and the
+      medical expense deduction are computed by policyengine-us rules. Household
+      weights are calibrated to IRS SOI itemized deductions, real estate taxes and
+      medical expenses by state (tax year 2022), SOI tax year 2023 national totals
+      for itemized deductions, charitable gifts, mortgage interest, interest paid and
+      state and local taxes, and JCT's 2024 tax expenditure estimates for the SALT,
+      mortgage interest, charitable and medical deductions. Rebuilding the file
+      requires the PUF, which the build reads from a non-public artifact.
+    baseDataset: Microcosm US 2024 (CPS ASEC + IRS PUF)
     calibrationTargets:
-      - SOI AGI bin totals
-    documentationUrl: https://github.com/PolicyEngine/policyengine-us-data
-    reproducible: yes
+      - IRS SOI TY2022 itemized deductions, real estate taxes and medical expenses, national and 51 states (amounts aged to 2024)
+      - IRS SOI TY2023 Tables 1.2, 2.1 and 4.3 itemized deduction totals, national
+      - JCT 2024 tax expenditures for SALT, mortgage interest, charitable and medical deductions
+    documentationUrl: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/source_stages.json
+    reproducible: partial
     sources:
-      - label: policyengine-us-data
-        url: https://github.com/PolicyEngine/policyengine-us-data
+      - label: Microcosm PUF tax-detail outputs
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us_runtime/puf_support.py#L123-L180
         kind: self
+      - label: Microcosm source stages (puf_tax_detail, mortgage_conversion)
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/source_stages.json
+        kind: self
+      - label: Default release calibration diagnostics
+        url: https://huggingface.co/datasets/policyengine/populace-us/blob/populace-us-2024-spm-20260915/releases/populace-us-2024-spm-20260915/calibration_diagnostics.json
+        kind: self
+      - label: IRS SOI individual public use microdata files
+        url: https://www.irs.gov/statistics/soi-tax-stats-individual-public-use-microdata-files
+        kind: government
+      - label: IRS SOI Publication 1304 Table 2.1 (TY2023)
+        url: https://www.irs.gov/pub/irs-soi/23in21id.xls
+        kind: government
+
+  # ============================ Retirement income =============================
+  - model: policyengine-us
+    concept: retirement-income
+    method: other
+    description: >
+      On the survey copy of each CPS ASEC household, pensions and annuities
+      (`PNSN_VAL` plus `ANN_VAL`) are split 59% taxable and 41% tax-exempt, and
+      retirement account distributions follow the ASEC account codes: 401(k), 403(b),
+      regular IRA and SEP distributions are taxable, Roth IRA distributions are
+      tax-exempt, and Keogh distributions are carried separately. Social Security is
+      split into retirement, disability, survivor and dependent benefits from the
+      ASEC's reason codes. On the copy with tax-return detail, taxable pensions,
+      taxable IRA distributions and the Social Security components come from the
+      weighted QRF trained on the uprated IRS 2015 PUF, and 401(k), 403(b), Keogh and
+      SEP distributions from weighted QRFs trained on the ASEC. Before calibration,
+      the build rescales each Social Security component so its weighted total equals
+      SSA's 2024 total for that benefit type. policyengine-us computes the taxable
+      share of Social Security. Household weights are calibrated
+      to IRS SOI taxable pensions, IRA distributions and Social Security (tax year
+      2022 by state, tax year 2023 nationally) and SSA 2024 benefit totals by type.
+    baseDataset: Microcosm US 2024 (CPS ASEC + IRS PUF)
+    calibrationTargets:
+      - IRS SOI TY2022 taxable pensions, IRA distributions and Social Security, national and 51 states (amounts aged to 2024)
+      - IRS SOI TY2023 Tables 1.4 and 2.1 taxable pensions, IRA distributions and Social Security, national
+      - SSA 2024 OASDI benefit totals (retirement, disability, survivors, dependents)
+    documentationUrl: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/source_stages.json
+    reproducible: partial
+    sources:
+      - label: Microcosm ASEC retirement and Social Security mappings
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us_runtime/cps_carried.py#L92-L180
+        kind: self
+      - label: Microcosm Social Security reason-code split
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us_runtime/cps_carried.py#L213-L260
+        kind: self
+      - label: Microcosm pre-calibration Social Security rescale
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/tools/build_us_fiscal_refresh_release.py#L4996-L5060
+        kind: self
+      - label: Microcosm source stages (retirement_distributions, puf_tax_detail)
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/source_stages.json
+        kind: self
+      - label: Microcosm PUF tax-detail outputs
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us_runtime/puf_support.py#L123-L180
+        kind: self
+      - label: Default release calibration diagnostics
+        url: https://huggingface.co/datasets/policyengine/populace-us/blob/populace-us-2024-spm-20260915/releases/populace-us-2024-spm-20260915/calibration_diagnostics.json
+        kind: self
+      - label: Census CPS ASEC
+        url: https://www.census.gov/programs-surveys/cps.html
+        kind: government
+      - label: SSA Annual Statistical Supplement 2025
+        url: https://www.ssa.gov/policy/docs/statcomps/supplement/2025/index.html
+        kind: government
 
   # ============================ Dataset aging =================================
   - model: tpc-microsim
@@ -718,17 +922,85 @@ imputations:
     concept: dataset-aging
     method: other
     description: >
-      CBO-style uprating applied at runtime via per-variable indexation
-      parameters; growth factors versioned in the parameters tree.
-    baseDataset: Enhanced CPS
+      The default Microcosm US 2024 release is a 2024 file. For later years,
+      policyengine-us computes each stored input with its uprating parameter: for
+      example, wages grow with an IRS SOI employment income series extended by CBO's
+      income-by-source projections, and household weights grow with CBO's population
+      projection. policyengine.py writes these uprated inputs to one file per year.
+      Within the 2024 build, earlier-year dollar targets are aged to 2024 before
+      calibration, mostly by IRS SOI tax year 2023 growth chained with CBO's 2024
+      projection of AGI or wages; count targets are not aged.
+    baseDataset: Microcosm US 2024 (CPS ASEC + IRS PUF)
     calibrationTargets:
-      - CBO baseline economic projections
-    documentationUrl: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/parameters/calibration/gov/cbo
+      - CBO income-by-source and population projections (uprating parameters)
+    documentationUrl: https://github.com/PolicyEngine/policyengine-us/tree/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/parameters/calibration/gov
     reproducible: yes
     sources:
-      - label: CBO uprating parameters
-        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/parameters/calibration/gov/cbo
+      - label: PolicyEngine US 2.2.1 uprating parameters
+        url: https://github.com/PolicyEngine/policyengine-us/tree/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/parameters/calibration/gov
         kind: self
+      - label: PolicyEngine US 2.2.1 household weight uprating
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/household/demographic/weights/household_weight.py
+        kind: self
+      - label: policyengine.py 6.3.4 per-year dataset files
+        url: https://github.com/PolicyEngine/policyengine.py/blob/9d0c7c5714231156dbdda9eac4d6e9d5998cf972/src/policyengine/tax_benefit_models/us/datasets.py#L405-L500
+        kind: self
+      - label: Default release calibration diagnostics (target aging factors)
+        url: https://huggingface.co/datasets/policyengine/populace-us/blob/populace-us-2024-spm-20260915/releases/populace-us-2024-spm-20260915/calibration_diagnostics.json
+        kind: self
+      - label: CBO revenue projections, February 2026
+        url: https://www.cbo.gov/system/files/2026-02/51138-2026-02-Revenue-Projections.xlsx
+        kind: government
+
+  # ============================ Aggregate calibration =========================
+  - model: policyengine-us
+    concept: aggregate-calibration
+    method: gradient-reweighting
+    description: >
+      The default Microcosm US 2024 release has 57,240 households. Their starting
+      weights are the build's base weights scaled to a 334.2 million-person benchmark.
+      Calibration then runs 6,000 Adam steps on log household weights. The loss is
+      the weighted mean, across 5,659 targets, of each target's relative error capped
+      at 100%; dollar and count targets carry equal total loss weight, and within each
+      a target's weight grows with the square root of its size. After every step no
+      weight may exceed five times its starting value, and the household-weight total
+      is held fixed. The targets are 447 national and 5,211 state statistics from
+      IRS SOI, Census, CMS, SSA, USDA, HHS, CBO, JCT, BEA and the Federal Reserve,
+      plus one build-internal constraint; the default has no congressional-district
+      targets. 95.7% of targets end within 10%. The default release
+      (populace-us-2024-spm-20260915) inherits these weights unchanged from its parent
+      build.
+    baseDataset: Microcosm US 2024 (CPS ASEC + IRS PUF)
+    calibrationTargets:
+      - 4,182 IRS SOI targets (state Historic Table 2, national Publication 1304 tables, filing-season statistics)
+      - 936 Census population estimates by age (national and state, vintage 2024)
+      - 135 CMS Medicaid and CHIP enrollment and 102 CMS Marketplace targets
+      - 111 SSA, 104 USDA SNAP, 23 HHS TANF and 44 Census state income tax targets
+      - 11 JCT tax expenditure, 5 CBO projection, 2 BEA and 3 other national totals
+    documentationUrl: https://huggingface.co/datasets/policyengine/populace-us/tree/populace-us-2024-spm-20260915/releases/populace-us-2024-spm-20260915
+    reproducible: partial
+    sources:
+      - label: Microcosm calibration loss and optimizer
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-calibrate/src/populace/calibrate/solve.py#L498-L860
+        kind: self
+      - label: Microcosm target loss weights
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/tools/build_us_fiscal_refresh_release.py#L5282-L5316
+        kind: self
+      - label: Default release calibration diagnostics
+        url: https://huggingface.co/datasets/policyengine/populace-us/blob/populace-us-2024-spm-20260915/releases/populace-us-2024-spm-20260915/calibration_diagnostics.json
+        kind: self
+      - label: Default release build manifest (calibration inherited)
+        url: https://huggingface.co/datasets/policyengine/populace-us/blob/populace-us-2024-spm-20260915/releases/populace-us-2024-spm-20260915/build_manifest.json
+        kind: self
+      - label: Calibrating build manifest (base population scale)
+        url: https://huggingface.co/datasets/policyengine/populace-us/blob/populace-us-2024-buildp-sparse-rmloss100-cae8640-20260728T011454Z/releases/populace-us-2024-buildp-sparse-rmloss100-cae8640-20260728T011454Z/build_manifest.json
+        kind: self
+      - label: Census population estimates, vintage 2024 (state by age)
+        url: https://www2.census.gov/programs-surveys/popest/datasets/2020-2024/state/asrh/sc-est2024-alldata6.csv
+        kind: government
+      - label: IRS SOI Historic Table 2 (TY2022)
+        url: https://www.irs.gov/pub/irs-soi/22in55cmcsv.csv
+        kind: government
 
   # ===========================================================================
   # Supplemental Poverty Measure (SPM) — atomic methodology rows.
@@ -739,10 +1011,10 @@ imputations:
   # imputed value, or use survey-reported data unchanged?
   #
   # The pattern that emerges:
-  #   - PolicyEngine US computes every component it touches (taxes,
-  #     program benefits) from its own variables; only the genuinely
-  #     survey-reported deductions (medical OOP, child care, child
-  #     support paid) stay survey-reported.
+  #   - PolicyEngine US computes taxes and most program benefits from its
+  #     own rules. Energy assistance and the medical, child care and child
+  #     support deductions come from ASEC-reported values (imputed on the
+  #     tax-detail copies of the Microcosm file).
   #   - TRIM3 and ATTIS use Census's SPM Research File as the baseline
   #     and overwrite specific components when the simulation changes
   #     them — a hybrid that anchors to Census totals on unchanged
@@ -752,18 +1024,30 @@ imputations:
   # ----------------------------- SPM unit definition --------------------------
   - model: policyengine-us
     concept: spm-unit-definition
-    method: rule-based
+    method: survey-reported
     description: >
-      Implements its own SPM-unit construction in code, closely tracking
-      Census's definition: cohabitating partners, foster children, and
-      unrelated children under 15 share resources within an SPM unit.
-    baseDataset: Enhanced CPS
+      SPM units in the default Microcosm US 2024 release are the Census Bureau's own
+      CPS ASEC SPM units: each person's unit follows the ASEC `SPM_ID`, so unit
+      membership (cohabiting partners, foster children, unrelated children) is the
+      one Census assigned, and both copies of a household keep it. For the SPM
+      equivalence scale, policyengine-us 2.2.1 counts people aged 18 and over as
+      adults, plus 15- to 17-year-olds flagged as independent. The release adds that
+      flag (`is_spm_independent_minor_role`) from ASEC relationship fields, and with
+      it reproduces Census's adult and child counts in all 59,900 SPM units.
+    baseDataset: Microcosm US 2024 (CPS ASEC + IRS PUF)
+    documentationUrl: https://huggingface.co/datasets/policyengine/populace-us/blob/populace-us-2024-spm-20260915/releases/populace-us-2024-spm-20260915/source_enrichment.json
     reproducible: yes
     sources:
-      - label: policyengine-us SPM unit entity
-        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/entities.py
+      - label: Default release source enrichment (SPM role and Census reconciliation)
+        url: https://huggingface.co/datasets/policyengine/populace-us/blob/populace-us-2024-spm-20260915/releases/populace-us-2024-spm-20260915/source_enrichment.json
         kind: self
-      - label: Census Bureau — SPM technical documentation (definition)
+      - label: spm-calculator 1.0.0 SPM adult and child counts
+        url: https://github.com/PolicyEngine/spm-calculator/blob/37d748096cfca4ac8c6edd7601c529521524dc3c/spm_calculator/policyengine_adapter.py#L326-L371
+        kind: self
+      - label: PolicyEngine US 2.2.1 SPM system
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/spm.py
+        kind: self
+      - label: Census Bureau SPM technical documentation
         url: https://www2.census.gov/programs-surveys/supplemental-poverty-measure/technical-documentation/spm_techdoc.pdf
         kind: government
 
@@ -785,17 +1069,33 @@ imputations:
     concept: spm-thresholds
     method: rule-based
     description: >
-      Census-published SPM thresholds loaded as YAML parameters indexed
-      by year, housing tenure, and metropolitan/non-metro status; looked
-      up at runtime per SPM unit.
-    baseDataset: Census SPM threshold tables (published)
+      policyengine-us 2.2.1 takes SPM thresholds from the spm-calculator package
+      (1.0.0). A unit's threshold is the national reference threshold for its housing
+      tenure (owner with a mortgage, owner without one, renter) times the SPM
+      equivalence scale for its adults and children, times a geographic adjustment for
+      the SPM area its county maps to. Reference thresholds for 2022 to 2025 are the
+      BLS-published values; later years come from the package's rolling forecast,
+      built from Consumer Expenditure Survey and ACS data. policyengine.py 6.3.4 pins
+      that forecast by content hash and selects its `ce_trend` scenario with county
+      geography (2020 counties).
+    baseDataset: spm-calculator 1.0.0 forecast (BLS thresholds, CE and ACS data)
+    documentationUrl: https://github.com/PolicyEngine/spm-calculator/blob/37d748096cfca4ac8c6edd7601c529521524dc3c/spm_calculator/rolling_forecast.py
     reproducible: yes
     sources:
-      - label: SPM threshold parameter file
-        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/parameters/gov/census/spm
+      - label: spm-calculator 1.0.0 threshold calculation
+        url: https://github.com/PolicyEngine/spm-calculator/blob/37d748096cfca4ac8c6edd7601c529521524dc3c/spm_calculator/rolling_forecast.py#L517-L630
         kind: self
-      - label: Census Bureau — SPM thresholds
-        url: https://www.census.gov/data/tables/2025/demo/supplemental-poverty-measure/poverty-thresholds.html
+      - label: spm-calculator 1.0.0 PolicyEngine provider
+        url: https://github.com/PolicyEngine/spm-calculator/blob/37d748096cfca4ac8c6edd7601c529521524dc3c/spm_calculator/policyengine_adapter.py#L175-L262
+        kind: self
+      - label: PolicyEngine US 2.2.1 SPM system
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/spm.py
+        kind: self
+      - label: policyengine.py 6.3.4 bundle (SPM forecast pin and scenario)
+        url: https://github.com/PolicyEngine/policyengine.py/blob/9d0c7c5714231156dbdda9eac4d6e9d5998cf972/src/policyengine/data/bundle/manifest.json
+        kind: self
+      - label: BLS SPM thresholds
+        url: https://www.bls.gov/pir/spm/spm_thresholds_2025.htm
         kind: government
 
   - model: trim3
@@ -825,17 +1125,42 @@ imputations:
   # ----------------------------- Cash income ----------------------------------
   - model: policyengine-us
     concept: spm-cash-income
-    method: survey-reported
+    method: other
     description: >
-      Cash income components (earnings, interest, dividends, retirement
-      income, etc.) taken from CPS-ASEC as reported, with PUF-based
-      imputations for high-income tax variables.
-    baseDataset: Enhanced CPS
-    reproducible: yes
+      Market and cash incomes come from two copies of each CPS ASEC household, which
+      each start with half its weight before calibration sets all weights. The survey
+      copy keeps ASEC-reported wages, self-employment, interest, dividends, rents,
+      pensions, Social Security and unemployment compensation, with fixed splits where
+      the ASEC reports only a total: 68% of interest taxable, 44.8% of dividends
+      qualified, 59% of pensions and annuities taxable and 88% of capital gains long
+      term. The other copy replaces tax-return items (wages, self-employment,
+      interest, dividends, capital gains, taxable pensions and IRA distributions,
+      Social Security, rents, partnership and S corporation income, and others) with
+      draws from the weighted QRF trained on the IRS 2015 PUF uprated to 2024. The
+      source files lack person-level survivor benefits and financial assistance, so
+      those resource components are zero.
+    baseDataset: Microcosm US 2024 (CPS ASEC + IRS PUF)
+    documentationUrl: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/source_stages.json
+    reproducible: partial
     sources:
-      - label: policyengine-us-data (cash income variables)
-        url: https://github.com/PolicyEngine/policyengine-us-data
+      - label: Microcosm ASEC income mappings
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us_runtime/cps_carried.py#L92-L190
         kind: self
+      - label: Microcosm PUF tax-detail outputs
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us_runtime/puf_support.py#L123-L180
+        kind: self
+      - label: Microcosm support-copy construction (half weight each)
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us_runtime/puf_support.py#L433-L500
+        kind: self
+      - label: "Calibrating build manifest (known gaps: survivor benefits, financial assistance)"
+        url: https://huggingface.co/datasets/policyengine/populace-us/blob/populace-us-2024-buildp-sparse-rmloss100-cae8640-20260728T011454Z/releases/populace-us-2024-buildp-sparse-rmloss100-cae8640-20260728T011454Z/build_manifest.json
+        kind: self
+      - label: PolicyEngine US 2.2.1 SPM benefits list
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/household/income/spm_unit/spm_unit_benefits.py
+        kind: self
+      - label: Census CPS ASEC
+        url: https://www.census.gov/programs-surveys/cps.html
+        kind: government
 
   - model: trim3
     concept: spm-cash-income
@@ -853,16 +1178,26 @@ imputations:
     concept: spm-eitc
     method: rule-based
     description: >
-      Refundable portion of EITC computed from PolicyEngine's EITC rules
-      and added to SPM resources directly.
-    baseDataset: Enhanced CPS
+      policyengine-us 2.2.1 computes the EITC from its rules, gated by the seeded
+      `takes_up_eitc` flag and filing (see EITC claiming). Refundable credits reach SPM
+      resources through federal income tax: SPM net income subtracts each unit's
+      federal income tax after refundable credits, so an EITC larger than the unit's
+      tax liability raises resources.
+    baseDataset: Microcosm US 2024 (CPS ASEC + IRS PUF)
+    documentationUrl: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/household/income/spm_unit/spm_unit_net_income.py
     reproducible: yes
     sources:
-      - label: spm_unit_net_income variable (assembles resources)
-        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/household/income/spm_unit
+      - label: PolicyEngine US 2.2.1 SPM net income
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/household/income/spm_unit/spm_unit_net_income.py
         kind: self
-      - label: EITC variables
-        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/irs/credits/earned_income
+      - label: PolicyEngine US 2.2.1 federal income tax
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/gov/irs/tax/federal_income/income_tax.py
+        kind: self
+      - label: PolicyEngine US 2.2.1 refundable credit list
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/parameters/gov/irs/credits/refundable.yaml
+        kind: self
+      - label: PolicyEngine US 2.2.1 EITC formula
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/gov/irs/credits/earned_income/eitc.py
         kind: self
 
   - model: trim3
@@ -882,12 +1217,22 @@ imputations:
   - model: policyengine-us
     concept: spm-ctc
     method: rule-based
-    description: Refundable portion of CTC computed from PolicyEngine's CTC rules.
-    baseDataset: Enhanced CPS
+    description: >
+      policyengine-us 2.2.1 computes the refundable child tax credit from its rules.
+      It reaches SPM resources the same way as the EITC: SPM net income subtracts
+      federal income tax after refundable credits.
+    baseDataset: Microcosm US 2024 (CPS ASEC + IRS PUF)
+    documentationUrl: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/household/income/spm_unit/spm_unit_net_income.py
     reproducible: yes
     sources:
-      - label: CTC variables
-        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/irs/credits/ctc
+      - label: PolicyEngine US 2.2.1 refundable credit list
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/parameters/gov/irs/credits/refundable.yaml
+        kind: self
+      - label: PolicyEngine US 2.2.1 CTC variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/gov/irs/credits/ctc
+        kind: self
+      - label: PolicyEngine US 2.2.1 SPM net income
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/household/income/spm_unit/spm_unit_net_income.py
         kind: self
 
   - model: trim3
@@ -906,14 +1251,17 @@ imputations:
     concept: spm-snap
     method: rule-based
     description: >
-      SNAP benefit value computed from rules-engine eligibility and
-      benefit formulae, with L0-calibrated participation, then added to
-      SPM resources.
-    baseDataset: Enhanced CPS
+      policyengine-us 2.2.1 computes SNAP benefits from its rules for SPM units whose
+      take-up flag is true (see SNAP participation) and adds them to SPM resources.
+    baseDataset: Microcosm US 2024 (CPS ASEC + IRS PUF)
+    documentationUrl: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/household/income/spm_unit/spm_unit_benefits.py
     reproducible: yes
     sources:
-      - label: SNAP variables
-        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/usda/snap
+      - label: PolicyEngine US 2.2.1 SNAP variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/gov/usda/snap
+        kind: self
+      - label: PolicyEngine US 2.2.1 SPM benefits list
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/household/income/spm_unit/spm_unit_benefits.py
         kind: self
 
   - model: trim3
@@ -946,15 +1294,33 @@ imputations:
     concept: spm-housing-subsidy
     method: rule-based
     description: >
-      Section 8 / public housing subsidy value computed from
-      PolicyEngine's HUD rules (Fair Market Rent, Total Tenant Payment,
-      etc.) and added to SPM resources.
-    baseDataset: Enhanced CPS
+      policyengine-us 2.2.1 computes HUD's housing assistance payment (the lesser of
+      the maximum subsidy and gross rent minus total tenant payment) for SPM units
+      that take up assistance. In the default Microcosm US 2024 release the take-up
+      flag equals reported receipt on the survey copy (ASEC `SPM_CAPHOUSESUB` above
+      zero) and receipt imputed by a weighted QRF trained on ASEC on the other copy,
+      so only units flagged as receiving get a payment. SPM resources count the
+      payment capped, as in Census's SPM method, at the threshold's housing portion
+      minus the tenant payment.
+    baseDataset: Microcosm US 2024 (CPS ASEC + IRS PUF)
+    documentationUrl: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/household/income/spm_unit/spm_unit_capped_housing_subsidy.py
     reproducible: yes
     sources:
-      - label: HUD Section 8 variables
-        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/hud
+      - label: PolicyEngine US 2.2.1 housing assistance
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/gov/hud/housing_assistance.py
         kind: self
+      - label: PolicyEngine US 2.2.1 HUD payment formula
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/gov/hud/hud_hap.py
+        kind: self
+      - label: PolicyEngine US 2.2.1 capped SPM housing subsidy
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/household/income/spm_unit/spm_unit_capped_housing_subsidy.py
+        kind: self
+      - label: "Microcosm source stages (acs_rent: housing receipt and take-up)"
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/source_stages.json
+        kind: self
+      - label: Census Bureau SPM technical documentation
+        url: https://www2.census.gov/programs-surveys/supplemental-poverty-measure/technical-documentation/spm_techdoc.pdf
+        kind: government
 
   - model: trim3
     concept: spm-housing-subsidy
@@ -970,14 +1336,36 @@ imputations:
   # ----------------------------- LIHEAP ---------------------------------------
   - model: policyengine-us
     concept: spm-liheap
-    method: rule-based
-    description: LIHEAP energy assistance value computed from state-specific rules and added to SPM resources.
-    baseDataset: Enhanced CPS
+    method: survey-reported
+    description: >
+      policyengine-us 2.2.1 adds the input `spm_unit_energy_subsidy` to SPM resources
+      rather than computing energy assistance from program rules. In the default
+      Microcosm US 2024 release that input is the ASEC SPM energy subsidy
+      (`SPM_ENGVAL`) on the survey copy and a weighted QRF imputation trained on ASEC
+      on the other copy; policyengine-us uprates it by CPI-U for later years.
+      Household weights are calibrated to the number of households LIHEAP served in
+      fiscal year 2024 (one national target from HHS ACF).
+    baseDataset: Microcosm US 2024 (CPS ASEC + IRS PUF)
+    calibrationTargets:
+      - HHS ACF LIHEAP FY2024 households served, national
+    documentationUrl: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/source_stages.json
     reproducible: yes
     sources:
-      - label: LIHEAP variables
-        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/parameters/gov/hhs/liheap
+      - label: Microcosm source stages (energy_subsidy)
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/source_stages.json
         kind: self
+      - label: PolicyEngine US 2.2.1 SPM energy subsidy input
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/household/income/spm_unit/spm_unit_energy_subsidy.py
+        kind: self
+      - label: PolicyEngine US 2.2.1 SPM benefits list
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/household/income/spm_unit/spm_unit_benefits.py
+        kind: self
+      - label: Default release calibration diagnostics
+        url: https://huggingface.co/datasets/policyengine/populace-us/blob/populace-us-2024-spm-20260915/releases/populace-us-2024-spm-20260915/calibration_diagnostics.json
+        kind: self
+      - label: HHS ACF LIHEAP FY2024 national profile
+        url: https://liheappm.acf.gov/sites/default/files/private/congress/profiles/2024/FY2024_AllStates%28National%29_Profile.pdf
+        kind: government
 
   - model: trim3
     concept: spm-liheap
@@ -996,12 +1384,19 @@ imputations:
   - model: policyengine-us
     concept: spm-wic
     method: rule-based
-    description: WIC benefit value computed from PolicyEngine's WIC rules and added to SPM resources.
-    baseDataset: Enhanced CPS
+    description: >
+      policyengine-us 2.2.1 computes WIC benefit values from its rules for eligible
+      people whose take-up input is true (see WIC participation) and adds them to SPM
+      resources.
+    baseDataset: Microcosm US 2024 (CPS ASEC + IRS PUF)
+    documentationUrl: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/household/income/spm_unit/spm_unit_benefits.py
     reproducible: yes
     sources:
-      - label: WIC variables
-        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/usda/wic
+      - label: PolicyEngine US 2.2.1 WIC variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/gov/usda/wic
+        kind: self
+      - label: PolicyEngine US 2.2.1 SPM benefits list
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/household/income/spm_unit/spm_unit_benefits.py
         kind: self
 
   - model: trim3
@@ -1027,13 +1422,21 @@ imputations:
     concept: spm-school-meals
     method: rule-based
     description: >
-      Free and reduced-price school meal value computed from National
-      School Lunch Program eligibility rules and added to SPM resources.
-    baseDataset: Enhanced CPS
+      policyengine-us 2.2.1 places each SPM unit in a free, reduced-price or paid
+      school meal tier from its income, categorical eligibility and any state
+      universal free meals policy, then values the National School Lunch and School
+      Breakfast Program subsidy above the paid rate per K-12 child per school day by
+      state group and tier. Free and reduced-price meal values are added to SPM
+      resources; the ASEC's reported school lunch value is not used.
+    baseDataset: Microcosm US 2024 (CPS ASEC + IRS PUF)
+    documentationUrl: https://github.com/PolicyEngine/policyengine-us/tree/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/gov/usda/school_meals
     reproducible: yes
     sources:
-      - label: NSLP variables
-        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/usda/school_meals
+      - label: PolicyEngine US 2.2.1 school meal variables
+        url: https://github.com/PolicyEngine/policyengine-us/tree/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/gov/usda/school_meals
+        kind: self
+      - label: PolicyEngine US 2.2.1 SPM benefits list
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/household/income/spm_unit/spm_unit_benefits.py
         kind: self
 
   - model: trim3
@@ -1053,12 +1456,18 @@ imputations:
   - model: policyengine-us
     concept: spm-tax-federal
     method: rule-based
-    description: Federal income tax computed from PolicyEngine's tax rules and subtracted from SPM resources.
-    baseDataset: Enhanced CPS
+    description: >
+      Federal income tax after refundable credits, computed by policyengine-us 2.2.1
+      for each tax unit and summed to the SPM unit, is subtracted from SPM resources.
+    baseDataset: Microcosm US 2024 (CPS ASEC + IRS PUF)
+    documentationUrl: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/household/expense/tax/spm_unit_federal_tax.py
     reproducible: yes
     sources:
-      - label: Federal income tax variables
-        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/irs
+      - label: PolicyEngine US 2.2.1 SPM federal tax
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/household/expense/tax/spm_unit_federal_tax.py
+        kind: self
+      - label: PolicyEngine US 2.2.1 federal income tax
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/gov/irs/tax/federal_income/income_tax.py
         kind: self
 
   - model: trim3
@@ -1076,12 +1485,18 @@ imputations:
   - model: policyengine-us
     concept: spm-tax-payroll
     method: rule-based
-    description: Employee-side FICA computed from PolicyEngine's payroll tax rules and subtracted from SPM resources.
-    baseDataset: Enhanced CPS
+    description: >
+      Employee payroll tax and self-employment tax, computed by policyengine-us 2.2.1,
+      are subtracted from SPM resources.
+    baseDataset: Microcosm US 2024 (CPS ASEC + IRS PUF)
+    documentationUrl: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/household/income/spm_unit/spm_unit_taxes.py
     reproducible: yes
     sources:
-      - label: Payroll tax variables
-        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/gov/irs/tax/payroll
+      - label: PolicyEngine US 2.2.1 SPM taxes
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/household/income/spm_unit/spm_unit_taxes.py
+        kind: self
+      - label: PolicyEngine US 2.2.1 SPM payroll tax
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/household/expense/tax/spm_unit_payroll_tax.py
         kind: self
 
   - model: trim3
@@ -1100,19 +1515,22 @@ imputations:
     concept: spm-tax-state
     method: rule-based
     description: >
-      PolicyEngine computes state income tax from public per-state income
-      tax rules, including state-specific income bases, deductions,
-      exemptions, rate schedules, and refundable and nonrefundable credits
-      where PolicyEngine implements them, then subtracts it from SPM
-      resources.
-    baseDataset: Enhanced CPS
+      policyengine-us 2.2.1 computes state income tax from per-state rules, including
+      state income bases, deductions, exemptions, rate schedules and the refundable
+      and nonrefundable credits it implements, adds state use tax, and subtracts the
+      sum from SPM resources.
+    baseDataset: Microcosm US 2024 (CPS ASEC + IRS PUF)
+    documentationUrl: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/household/expense/tax/spm_unit_state_tax.py
     reproducible: yes
     sources:
-      - label: State tax parameters
-        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/parameters/gov/states
+      - label: PolicyEngine US 2.2.1 SPM state tax
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/household/expense/tax/spm_unit_state_tax.py
         kind: self
-      - label: PolicyEngine US modeled policies metadata
-        url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/programs.yaml
+      - label: PolicyEngine US 2.2.1 state tax parameters
+        url: https://github.com/PolicyEngine/policyengine-us/tree/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/parameters/gov/states
+        kind: self
+      - label: PolicyEngine US 2.2.1 modeled policies
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/programs.yaml
         kind: self
 
   - model: trim3
@@ -1177,16 +1595,23 @@ imputations:
     concept: spm-work-expenses
     method: rule-based
     description: >
-      Work-related expenses computed via Census's published formula
-      (median weekly amount × weeks worked, capped at earnings) applied
-      per working adult.
-    baseDataset: Enhanced CPS
+      policyengine-us 2.2.1 sets work expenses to a weekly amount (a Census SPM
+      parameter) times weeks worked for each adult with earnings. Work and child care
+      expenses are subtracted together, capped at the lower of the reference person's
+      and their spouse's or partner's earnings (the reference person's earnings when
+      there is no spouse or partner). Weeks worked are the ASEC's reported weeks on the
+      survey copy.
+    baseDataset: Microcosm US 2024 (CPS ASEC + IRS PUF)
+    documentationUrl: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/household/expense/childcare/spm_unit_work_expenses.py
     reproducible: yes
     sources:
-      - label: Work expenses variable
-        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/household/income/spm_unit
+      - label: PolicyEngine US 2.2.1 SPM work expenses
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/household/expense/childcare/spm_unit_work_expenses.py
         kind: self
-      - label: Census SPM work expenses methodology
+      - label: PolicyEngine US 2.2.1 capped work and child care expenses
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/household/expense/childcare/spm_unit_capped_work_childcare_expenses.py
+        kind: self
+      - label: Census Bureau SPM technical documentation
         url: https://www2.census.gov/programs-surveys/supplemental-poverty-measure/technical-documentation/spm_techdoc.pdf
         kind: government
 
@@ -1206,15 +1631,23 @@ imputations:
     concept: spm-child-care-expenses
     method: survey-reported
     description: >
-      Out-of-pocket child care expenses taken from CPS-ASEC reported
-      values with PolicyEngine-Data pipeline imputations where the
-      survey is blank.
-    baseDataset: Enhanced CPS
+      Child care expenses are the ASEC SPM child care field (`SPM_CHILDCAREXPNS`) on
+      the survey copy of each household and a weighted QRF imputation trained on ASEC
+      on the other copy. policyengine-us 2.2.1 subtracts them together with work
+      expenses, under the earnings cap described in the work expenses row.
+    baseDataset: Microcosm US 2024 (CPS ASEC + IRS PUF)
+    documentationUrl: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/source_stages.json
     reproducible: yes
     sources:
-      - label: policyengine-us-data child care imputations
-        url: https://github.com/PolicyEngine/policyengine-us-data
+      - label: Microcosm source stages (childcare_inputs)
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/source_stages.json
         kind: self
+      - label: PolicyEngine US 2.2.1 capped work and child care expenses
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/household/expense/childcare/spm_unit_capped_work_childcare_expenses.py
+        kind: self
+      - label: Census CPS ASEC
+        url: https://www.census.gov/programs-surveys/cps.html
+        kind: government
 
   - model: trim3
     concept: spm-child-care-expenses
@@ -1231,13 +1664,33 @@ imputations:
   - model: policyengine-us
     concept: spm-medical-oop
     method: survey-reported
-    description: Medical out-of-pocket expenses taken from CPS-ASEC reported MOOP fields.
-    baseDataset: Enhanced CPS
+    description: >
+      Medical out-of-pocket spending adds ASEC-reported other medical expenses
+      (`PMED_VAL`) and over-the-counter spending (`POTC_VAL`) to premiums. Premiums
+      policyengine-us 2.2.1 computes for Marketplace coverage net of the premium tax
+      credit, CHIP, Medicaid, Medicare Parts A and B and the Part D income-related
+      surcharge are modeled; the remaining premium input is the ASEC premium total
+      (`PHIP_VAL`) net of the modeled Marketplace, CHIP and Medicaid premiums, imputed
+      with a weighted QRF trained on ASEC on the copy with tax-return detail.
+    baseDataset: Microcosm US 2024 (CPS ASEC + IRS PUF)
+    documentationUrl: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/source_stages.json
     reproducible: yes
     sources:
-      - label: policyengine-us-data MOOP variable
-        url: https://github.com/PolicyEngine/policyengine-us-data
+      - label: Microcosm source stages (other_health_insurance_premiums)
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/source_stages.json
         kind: self
+      - label: Microcosm ASEC medical expense mappings
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us_runtime/cps_carried.py#L160-L180
+        kind: self
+      - label: PolicyEngine US 2.2.1 SPM medical out-of-pocket expenses
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/household/income/spm_unit/spm_unit_medical_out_of_pocket_expenses.py
+        kind: self
+      - label: PolicyEngine US 2.2.1 SPM health insurance premiums
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/household/income/spm_unit/spm_unit_health_insurance_premiums.py
+        kind: self
+      - label: Census CPS ASEC
+        url: https://www.census.gov/programs-surveys/cps.html
+        kind: government
 
   - model: trim3
     concept: spm-medical-oop
@@ -1254,13 +1707,27 @@ imputations:
   - model: policyengine-us
     concept: spm-child-support-paid
     method: survey-reported
-    description: Child support paid taken from CPS-ASEC reported amounts.
-    baseDataset: Enhanced CPS
+    description: >
+      Child support paid is the ASEC's annual amount paid (`CHSP_VAL`) on the survey
+      copy of each household and a weighted QRF imputation trained on ASEC on the
+      other copy. policyengine-us 2.2.1 subtracts it from SPM resources and uprates it
+      by CPI-U for later years.
+    baseDataset: Microcosm US 2024 (CPS ASEC + IRS PUF)
+    documentationUrl: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/source_stages.json
     reproducible: yes
     sources:
-      - label: policyengine-us-data child support
-        url: https://github.com/PolicyEngine/policyengine-us-data
+      - label: Microcosm source stages (child_support_inputs)
+        url: https://github.com/PolicyEngine/microcosm/blob/cae8640f9e65e274aea65c7916cb37b956978e32/packages/populace-build/src/populace/build/us/source_stages.json
         kind: self
+      - label: PolicyEngine US 2.2.1 child support expense
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/household/expense/child_support/child_support_expense.py
+        kind: self
+      - label: PolicyEngine US 2.2.1 SPM expenses
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/household/income/spm_unit/spm_unit_spm_expenses.py
+        kind: self
+      - label: Census CPS ASEC
+        url: https://www.census.gov/programs-surveys/cps.html
+        kind: government
 
   - model: trim3
     concept: spm-child-support-paid
@@ -1278,14 +1745,24 @@ imputations:
     concept: spm-poverty-rate
     method: rule-based
     description: >
-      SPM poverty rate computed from all PolicyEngine-computed resource
-      components against Census thresholds — internally consistent
-      across baseline and reform scenarios.
-    baseDataset: Enhanced CPS
+      policyengine-us 2.2.1 marks an SPM unit poor when its SPM net income (market
+      income plus benefits, minus taxes and SPM expenses, all computed or carried as
+      the rows above describe) is below its spm-calculator threshold. Baseline and
+      reform runs share the same thresholds, which depend only on year, tenure, unit
+      composition and county, so a policy reform moves the poverty rate only through
+      resources.
+    baseDataset: Microcosm US 2024 (CPS ASEC + IRS PUF)
+    documentationUrl: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/household/income/spm_unit/spm_unit_is_in_spm_poverty.py
     reproducible: yes
     sources:
-      - label: SPM poverty rate variable
-        url: https://github.com/PolicyEngine/policyengine-us/tree/main/policyengine_us/variables/household/income/spm_unit
+      - label: PolicyEngine US 2.2.1 SPM poverty status
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/household/income/spm_unit/spm_unit_is_in_spm_poverty.py
+        kind: self
+      - label: PolicyEngine US 2.2.1 SPM net income
+        url: https://github.com/PolicyEngine/policyengine-us/blob/f88982f25ee3b21f08f7f876fc059fae5a3fbe90/policyengine_us/variables/household/income/spm_unit/spm_unit_net_income.py
+        kind: self
+      - label: spm-calculator 1.0.0 threshold calculation
+        url: https://github.com/PolicyEngine/spm-calculator/blob/37d748096cfca4ac8c6edd7601c529521524dc3c/spm_calculator/rolling_forecast.py#L569-L630
         kind: self
 
   - model: trim3
