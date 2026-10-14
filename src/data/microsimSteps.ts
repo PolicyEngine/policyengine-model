@@ -167,7 +167,7 @@ export function getMicrosimSteps(country: Country): MicrosimStep[] {
       id: 3,
       title: country === 'uk' ? 'Model behavioural responses' : 'Model behavioral responses',
       description: country === 'uk'
-        ? 'People change their behaviour in response to tax changes. Using elasticity of taxable income, we estimate how earnings shift.'
+        ? 'People change their behaviour in response to tax changes. Using labour supply elasticities, we estimate how earnings shift.'
         : 'People change their behavior in response to tax changes. Using elasticity of taxable income, we estimate how earnings shift.',
       ingredient: 'dynamics',
     },

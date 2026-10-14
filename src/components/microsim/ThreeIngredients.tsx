@@ -47,14 +47,18 @@ export default function ThreeIngredients({ activeIngredient, country = 'us' }: T
     {
       title: 'Policy rules',
       description:
-        'Tax codes, benefit formulas, and eligibility rules encoded as executable logic. Over 55 federal, state, and local programs.',
+        country === 'uk'
+          ? 'Tax codes, benefit formulas, and eligibility rules encoded as executable logic, from income tax and National Insurance to Universal Credit and Scottish Child Payment.'
+          : 'Tax codes, benefit formulas, and eligibility rules encoded as executable logic. Over 55 federal, state, and local programs.',
       icon: <IconFileText size={36} stroke={1.5} />,
       key: 'policies' as const,
     },
     {
       title: 'Household data',
       description:
-        'A representative microdata sample of the population, with income, demographics, and program participation for each household.',
+        country === 'uk'
+          ? 'A representative sample of UK households, with the incomes, demographics, and benefit receipt of each.'
+          : 'A representative microdata sample of the population, with income, demographics, and program participation for each household.',
       icon: <IconUsers size={36} stroke={1.5} />,
       key: 'households' as const,
     },

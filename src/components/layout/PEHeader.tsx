@@ -109,7 +109,10 @@ function getNavItems(country: Country): NavItemSetup[] {
             { label: 'Validation', href: `${base}/model/data/validation` },
           ],
         },
-        { label: 'Behavioral responses', href: `${base}/model/behavioral` },
+        {
+          label: country === 'uk' ? 'Behavioural responses' : 'Behavioral responses',
+          href: `${base}/model/behavioral`,
+        },
       ],
     },
     { label: 'API', href: `${base}/api` },

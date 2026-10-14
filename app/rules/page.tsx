@@ -1,31 +1,20 @@
 import SectionOverview from '../../src/components/layout/SectionOverview';
+import { detectCountry } from '../../src/components/comparison/detectCountry';
+import { rulesSection } from '../../src/data/sectionOverviews';
 
-export default function RulesOverviewPage() {
+export default async function RulesOverviewPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ country?: string | string[] }>;
+}) {
+  const country = await detectCountry((await searchParams).country);
+  const copy = rulesSection[country];
   return (
     <SectionOverview
       category="Model"
       title="Rules"
-      description="How PolicyEngine encodes tax-and-benefit rules — which programs are covered, the legislative parameters that drive calculations, and the input and output variables exposed to households and microsimulations."
-      children={[
-        {
-          label: 'Coverage tracker',
-          description:
-            'Which federal, state, and local tax-and-benefit programs PolicyEngine and peer models implement.',
-          path: '/rules/coverage',
-        },
-        {
-          label: 'Parameters',
-          description:
-            'Browse every legislative parameter that drives the model — thresholds, rates, brackets, eligibility cut-offs.',
-          path: '/rules/parameters',
-        },
-        {
-          label: 'Variables',
-          description:
-            'Inspect the input and output variables computed at the person, family, tax unit, and household level.',
-          path: '/rules/variables',
-        },
-      ]}
+      description={copy.description}
+      children={copy.children}
     />
   );
 }

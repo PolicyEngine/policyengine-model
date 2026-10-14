@@ -100,5 +100,7 @@ export const config = {
     '/((?!_next|.*\\..*).*)',
     '/:country(us|uk)/programs-:registry(us|uk).json',
     '/:country(us|uk)/model/programs-:registry(us|uk).json',
+    '/:country(us|uk)/param-tree-:registry(us|uk).json',
+    '/:country(us|uk)/model/param-tree-:registry(us|uk).json',
   ],
 };
