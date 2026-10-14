@@ -33,8 +33,15 @@ version is included when its metadata endpoint responds. The coverage page uses
 this provenance to show which model version the coverage reflects and, when
 available, the version served by the production API.
 
+The same run snapshots each repository's `parameters/` and `variables/` file trees
+(`public/param-tree-<country>.json`, `public/variable-tree-<country>.json`) at that
+commit. Parameter pages use them to link each parameter to its YAML file; the UK
+variable explorer uses the variable tree to find each variable's module, because
+the UK metadata API serves none.
+
 The program loader tries the static snapshot first, then production API metadata,
-then the bundled hardcoded programs. Snapshot URLs use the public base prefix so
+then the bundled hardcoded programs (US only; the UK page says the registry could
+not be loaded). Snapshot URLs use the public base prefix so
 they work both locally and under `/us/model`.
 
 ## Daily registry refresh
@@ -55,3 +62,39 @@ The workflow sends a POST request to the hook. If the secret is absent, it logs 
 notice and exits successfully. The workflow must be on the default branch for
 scheduled runs to apply. The Vercel build must run `bun run build` so each
 deployment fetches a fresh snapshot.
+
+## UK data release pages
+
+The UK pipeline, calibration targets and validation pages quote
+`src/data/ukDataRelease.json` and `src/data/ukTargetChecks.json`, not typed-in
+numbers. Both describe the UK data release that policyengine.py pins
+(`src/policyengine/data/bundle/manifest.json`, `data_releases.uk`). When that pin
+moves, regenerate them:
+
+1. Put the pinned release's files in one folder: the bundle manifest, the
+   release manifest at the revision the bundle names, `frs_<year>.h5`,
+   `enhanced_frs_<year>.h5`, both weight files (from the gated
+   `policyengine/policyengine-uk-data-private` Hugging Face repo), and the two
+   calibration logs (GitHub Actions artifacts of the uk-data publish run:
+   `gh run download <run> -R PolicyEngine/policyengine-uk-data`).
+2. Dump the release's target registry with `scripts/dump_uk_target_registry.py`,
+   and score the saved file with the pinned model with
+   `scripts/run_uk_target_check.py` (commands in each script's docstring).
+3. Run `scripts/extract_uk_release.py --artifacts <folder> --out
+   src/data/ukDataRelease.json --rows-out src/data/ukTargetChecks.json`. It checks
+   every file's sha256 against the release manifest and refuses a release other
+   than the pin.
+4. Run `UK_RELEASE_ARTIFACTS=<folder> uv run --no-project --with pytest --with
+   hypothesis --with h5py --with tables --with pandas --with numpy pytest
+   scripts/test_extract_uk_release.py` and `bun run test`, then reread the
+   pipeline stage copy in `src/data/ukPipelineStages.ts` against the new
+   release's `datasets/create_datasets.py`: the counts update themselves, the
+   mechanisms do not.
+
+The household files hold UK Data Service microdata. Only the aggregates the
+extractor writes may leave that folder.
+
+The UK behavioural responses page mirrors policyengine-uk's parameters and
+`dynamics/progression.py` (`src/data/ukBehaviouralResponses.ts`); run `bun run
+test` with `UK_MODEL_SOURCE` set to a policyengine-uk checkout at the pinned
+version to compare them.
