@@ -3,6 +3,9 @@
  * version policyengine.py 6.3.4 pins) defines them. Values mirror:
  * - parameters/gov/simulation/labour_supply_responses/*.yaml
  * - parameters/gov/simulation/capital_gains_responses/*.yaml
+ * - parameters/gov/contrib/policyengine/employer_ni/employee_incidence.yaml,
+ *   parameters/gov/hmrc/national_insurance/salary_sacrifice_pension_cap.yaml and
+ *   parameters/gov/contrib/behavioral_responses/salary_sacrifice_broad_base_haircut_rate.yaml
  * - dynamics/progression.py: calculate_labour_substitution_elasticities and
  *   calculate_labour_net_income_elasticities
  * src/test/ukBehavioural.test.ts compares them with that source when
@@ -24,6 +27,17 @@ export interface ParameterRow {
   label: string;
   value: string;
 }
+
+/**
+ * Pay that changes under particular reforms by default: employment_income adds
+ * employer_ni_fixed_employer_cost_change, salary_sacrifice_returned_to_income
+ * and salary_sacrifice_broad_base_haircut.
+ */
+export const payParameters: ParameterRow[] = [
+  { path: 'gov.contrib.policyengine.employer_ni.employee_incidence', label: 'Share of a change in employer National Insurance passed to pay', value: '1 (100%)' },
+  { path: 'gov.hmrc.national_insurance.salary_sacrifice_pension_cap', label: 'Cap on salary-sacrificed pension contributions free of National Insurance', value: 'None until 5 April 2029, then £2,000' },
+  { path: 'gov.contrib.behavioral_responses.salary_sacrifice_broad_base_haircut_rate', label: 'Cut to every worker’s pay while that cap applies', value: '0.0016 (0.16%)' },
+];
 
 /** Simulation parameters: elasticities applied inside a reform simulation. */
 export const labourSupplyParameters: ParameterRow[] = [
@@ -49,8 +63,9 @@ export interface ElasticityRow {
 
 /**
  * The OBR-method module's elasticities by group. "Married" is the model's
- * is_married: married or in a civil partnership. Children are benefit-unit
- * members under 18. Unmarried men with children get no elasticity.
+ * is_married: married or in a civil partnership, from the survey, and every
+ * couple when no input says otherwise. Children are benefit-unit members
+ * under 18. Unmarried men with children get no elasticity.
  */
 export const obrElasticities: ElasticityRow[] = [
   { group: 'Married women', youngestChild: 'No children', substitution: 0.14, income: 0 },

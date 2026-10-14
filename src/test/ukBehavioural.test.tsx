@@ -6,6 +6,7 @@ import {
   capitalGainsParameters,
   labourSupplyParameters,
   obrElasticities,
+  payParameters,
 } from '../data/ukBehaviouralResponses';
 
 vi.mock('next/navigation', () => ({
@@ -20,9 +21,16 @@ describe('UK behavioural responses page', () => {
     const { container } = render(<BehavioralPage country="uk" />);
     const text = container.textContent ?? '';
     expect(container.querySelector('h1')).toHaveTextContent('Behavioural responses');
-    expect(text).not.toMatch(/CBO|\blabor\b|behavioral|taxable income|decile|\$/);
-    expect(text).toContain('statically by default');
-    for (const row of [...labourSupplyParameters, ...capitalGainsParameters]) expect(text).toContain(row.path);
+    // Parameter paths are identifiers, some spelled the US way; the prose is not.
+    const prose = [...payParameters, ...labourSupplyParameters, ...capitalGainsParameters].reduce(
+      (t, row) => t.split(row.path).join(''),
+      text,
+    );
+    expect(prose).not.toMatch(/CBO|\blabor\b|behavioral|taxable income|decile|\$/);
+    expect(text).not.toMatch(/statically by default|without feeding it back|full-time students/);
+    expect(text).toContain('off by default');
+    expect(text).toContain('writes the change in earnings into the reform simulation');
+    for (const row of [...payParameters, ...labourSupplyParameters, ...capitalGainsParameters]) expect(text).toContain(row.path);
     const link = container.querySelector('a[href*="NICS-Cut-Impact-on-Labour-Supply"]');
     expect(link).not.toBeNull();
   });
@@ -69,6 +77,26 @@ describe.skipIf(!source)('UK behavioural values match policyengine-uk', () => {
       const raw = yamlValue(files[row.path]);
       const shown = row.value.split(' ')[0];
       expect(raw === 'false' ? 'Off' : raw === 'true' ? 'On' : raw).toBe(shown);
+    }
+  });
+
+  it('matches the defaults behind pay changes under employer NI and salary sacrifice reforms', () => {
+    const values = (path: string) => [...read(path).matchAll(/^\s+([\d-]+):\s*([^\s#]+)/gm)].map((m) => [m[1], m[2]]);
+    expect(values('parameters/gov/contrib/policyengine/employer_ni/employee_incidence.yaml')).toEqual([['2010-01-01', '1']]);
+    expect(values('parameters/gov/contrib/behavioral_responses/salary_sacrifice_broad_base_haircut_rate.yaml')).toEqual([
+      ['2010-01-01', '0.0016'],
+    ]);
+    expect(values('parameters/gov/hmrc/national_insurance/salary_sacrifice_pension_cap.yaml')).toEqual([
+      ['2010-01-01', '.inf'],
+      ['2029-04-06', '2000'],
+    ]);
+    const shown = Object.fromEntries(payParameters.map((r) => [r.path, r.value]));
+    expect(shown['gov.contrib.policyengine.employer_ni.employee_incidence']).toMatch(/^1 /);
+    expect(shown['gov.contrib.behavioral_responses.salary_sacrifice_broad_base_haircut_rate']).toMatch(/^0\.0016 /);
+    expect(shown['gov.hmrc.national_insurance.salary_sacrifice_pension_cap']).toMatch(/until 5 April 2029, then £2,000/);
+    const income = read('variables/input/employment_income.py');
+    for (const v of ['employer_ni_fixed_employer_cost_change', 'salary_sacrifice_returned_to_income', 'salary_sacrifice_broad_base_haircut']) {
+      expect(income).toContain(`"${v}"`);
     }
   });
 
