@@ -89,7 +89,7 @@ describe('UK class-to-module snapshot', () => {
       if (url.endsWith('variable-tree?recursive=1')) return new Response(JSON.stringify({ tree: [{ type: 'blob', path: 'gov/dwp/afip.py' }] }));
       throw new Error(`Unexpected request: ${url}`);
     });
-    const logger = { warn: vi.fn() };
+    const logger = { ...console, warn: vi.fn() };
     await expect(fetchVariableTreeSnapshot('uk', source, { fetchImpl, logger })).resolves.toEqual({
       source, paths: ['gov/dwp/afip.py'],
     });
