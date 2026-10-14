@@ -16,107 +16,18 @@ import {
 } from '../../data/programStatus';
 import type { CoverageStatus, Program } from '../../types/Program';
 import { IconX, IconCalendar } from '@tabler/icons-react';
+import {
+  StatCard,
+  StatusDot,
+  collectAllYears,
+  programIncludesYear,
+  statusLabels,
+} from './coverageParts';
+import UkCoverageTracker from './UkCoverageTracker';
 import type { Country } from '../../hooks/useCountry';
 
 
 
-
-const MAX_FORWARD_YEAR = new Date().getFullYear() + 5;
-
-/** Parse a verifiedYears string like "2022-2026", "2022+", or "2024" into a Set of year numbers. */
-function parseYearRange(verifiedYears?: string): Set<number> {
-  if (!verifiedYears) return new Set();
-  const trimmed = verifiedYears.trim();
-  // "2022+" means from 2022 onward (no end year — uprating covers future)
-  const openMatch = trimmed.match(/^(\d{4})\+$/);
-  if (openMatch) {
-    const start = parseInt(openMatch[1], 10);
-    const years = new Set<number>();
-    for (let y = start; y <= MAX_FORWARD_YEAR; y++) years.add(y);
-    return years;
-  }
-  // "2022-2026" range
-  const rangeMatch = trimmed.match(/^(\d{4})\s*-\s*(\d{4})$/);
-  if (rangeMatch) {
-    const start = parseInt(rangeMatch[1], 10);
-    const end = parseInt(rangeMatch[2], 10);
-    const years = new Set<number>();
-    for (let y = start; y <= end; y++) years.add(y);
-    return years;
-  }
-  // Single year "2024"
-  const singleMatch = trimmed.match(/^(\d{4})$/);
-  if (singleMatch) return new Set([parseInt(singleMatch[1], 10)]);
-  return new Set();
-}
-
-/** Collect all unique years across all programs' verifiedYears fields. */
-function collectAllYears(programs: Program[]): number[] {
-  const allYears = new Set<number>();
-  for (const p of programs) {
-    for (const y of parseYearRange(p.verifiedYears)) allYears.add(y);
-  }
-  return Array.from(allYears).sort((a, b) => a - b);
-}
-
-/** Check if a program's verifiedYears includes a given year. */
-function programIncludesYear(program: Program, year: number): boolean {
-  return parseYearRange(program.verifiedYears).has(year);
-}
-
-const statusLabels: Record<CoverageStatus, string> = {
-  complete: 'Complete',
-  partial: 'Partial',
-  inProgress: 'In progress',
-  notStarted: 'Not started',
-};
-
-const statusIcons: Record<CoverageStatus, string> = {
-  complete: '\u2713',
-  partial: '\u25D1',
-  inProgress: '\u21BB',
-  notStarted: '\u25CB',
-};
-
-function StatusDot({ status, size = 10 }: { status: CoverageStatus; size?: number }) {
-  return (
-    <span
-      className="tw:inline-flex tw:items-center tw:justify-center"
-      style={{
-        width: size,
-        height: size,
-        borderRadius: '50%',
-        backgroundColor: statusColors[status],
-        color: status === 'complete' || status === 'partial' ? colors.white : colors.gray[600],
-        fontSize: size * 0.7,
-        lineHeight: 1,
-      }}
-    >
-      {size >= 14 ? statusIcons[status] : ''}
-    </span>
-  );
-}
-
-function StatCard({ label, count, color, delay }: { label: string; count: number; color: string; delay: number }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.4, delay }}
-      className="tw:flex-1 tw:text-center"
-      style={{
-        minWidth: '120px',
-        padding: spacing.xl,
-        borderRadius: spacing.radius.xl,
-        border: `1px solid ${colors.border.light}`,
-        backgroundColor: colors.white,
-      }}
-    >
-      <div style={{ fontSize: typography.fontSize['3xl'], fontWeight: typography.fontWeight.bold, color, marginBottom: spacing.xs }}>{count}</div>
-      <div style={{ fontSize: typography.fontSize.xs, color: colors.text.secondary, fontWeight: typography.fontWeight.medium }}>{label}</div>
-    </motion.div>
-  );
-}
 
 type ViewMode = 'programs' | 'states';
 
@@ -357,7 +268,7 @@ export default function RulesOverview({ country = 'us' }: { country?: Country })
   const { programs, source } = loadedPrograms;
 
   useEffect(() => {
-    // The UK view currently displays a static introduction, not registry data.
+    // The UK tracker loads its own registry.
     if (country === 'uk') return;
     let active = true;
     fetchProgramsWithSource(country).then(result => {
@@ -425,20 +336,7 @@ export default function RulesOverview({ country = 'us' }: { country?: Country })
     }).sort((a, b) => b.pct - a.pct);
   }, [yearFilteredPrograms]);
 
-  if (country === 'uk') {
-    return (
-      <div>
-        <p style={{ fontSize: typography.fontSize.lg, color: colors.text.secondary, lineHeight: 1.7, maxWidth: '720px' }}>
-          PolicyEngine UK models over 50 tax and benefit programs across HMRC, DWP, DfE, Treasury, and devolved administrations including income tax, National Insurance, VAT, Universal Credit, pension credit, child benefit, and many more.
-        </p>
-        <p style={{ fontSize: typography.fontSize.sm, color: colors.primary[600], marginTop: spacing.lg }}>
-          <a href="https://github.com/PolicyEngine/policyengine-uk" target="_blank" rel="noopener noreferrer" style={{ color: colors.primary[600], textDecoration: 'underline' }}>
-            View the full UK model on GitHub
-          </a>
-        </p>
-      </div>
-    );
-  }
+  if (country === 'uk') return <UkCoverageTracker />;
 
   return (
     <div>
