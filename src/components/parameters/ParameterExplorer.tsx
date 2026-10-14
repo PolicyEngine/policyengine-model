@@ -943,7 +943,7 @@ export default function ParameterExplorer({ parameters, country }: ParameterExpl
             </h2>
             <span style={{ fontSize: typography.fontSize.xs, color: colors.text.tertiary }}>
               {currentFolderTotalParams.toLocaleString()} parameters
-              {currentFolderTotalItems > 1 && ` across ${currentFolderTotalItems} ${folderContents.folders.length > 0 ? 'programs' : 'groups'}`}
+              {currentFolderTotalItems > 1 && ` across ${currentFolderTotalItems} ${folderContents.folders.length > 0 ? (country === 'uk' ? 'programmes' : 'programs') : 'groups'}`}
             </span>
           </div>
 
