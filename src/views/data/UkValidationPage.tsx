@@ -69,6 +69,11 @@ const KNOWN_ISSUES = [
     n: 537,
     text: 'The total National Insurance target is compared with employee contributions alone.',
   },
+  {
+    repo: 'policyengine-uk-data',
+    n: 582,
+    text: 'The OBR’s incapacity benefits line is compared with income-related ESA alone.',
+  },
   { repo: 'policyengine-uk', n: 1996, text: 'Modelled VAT exceeds OBR receipts.' },
   { repo: 'policyengine-uk-data', n: 570, text: 'Capital gains fall short of HMRC’s totals.' },
   {

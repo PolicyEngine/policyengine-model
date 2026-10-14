@@ -106,7 +106,7 @@ describe('UK calibration and validation pages', () => {
     expect(text).not.toMatch(/TAXSIM|federal|state income tax|filing status/i);
     expect(text).toContain(`policyengine-uk ${release.validation.modelVersion}`);
     expect(text).toContain(fmtPct(release.validation.within10));
-    for (const n of [537, 570, 580, 581, 1996]) expect(text).toContain(`#${n}`);
+    for (const n of [537, 570, 580, 581, 582, 1996]) expect(text).toContain(`#${n}`);
   });
 
   it('scores the same targets the release calibrates to', () => {
