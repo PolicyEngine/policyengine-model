@@ -64,6 +64,115 @@ PUBLISHER_BY_TARGET = {
     "obr/salary_sacrifice_users_total": "HM Treasury and HMRC",
     "obr/salary_sacrifice_users_below_cap": "HM Treasury and HMRC",
     "obr/salary_sacrifice_users_above_cap": "HM Treasury and HMRC",
+    # targets/sources/housing.py: monthly payment x owners, both set in code.
+    "housing/total_mortgage": "Assumption set in the build",
+}
+
+# Publishers by target-name prefix, where one family mixes publishers.
+PUBLISHER_BY_PREFIX = {
+    # voa_council_tax.py takes Scotland's band counts from gov.scot.
+    "voa/council_tax/SCOTLAND/": "Scottish Government",
+    # slc.py: borrower counts come from Student loan forecasts for England,
+    # on Explore Education Statistics.
+    "slc/plan_": "Explore Education Statistics",
+}
+
+
+def publisher_of(metric: str, source: str) -> str:
+    if metric in PUBLISHER_BY_TARGET:
+        return PUBLISHER_BY_TARGET[metric]
+    for prefix, publisher in PUBLISHER_BY_PREFIX.items():
+        if metric.startswith(prefix):
+            return publisher
+    return PUBLISHERS.get(source, source)
+
+
+# The area a target covers, where the registry leaves it unset (meaning UK)
+# but the source or the model says otherwise.
+AREA_BY_TARGET = {
+    # OBR table 4.9 lists these under "DWP social security", which excludes
+    # Northern Ireland's separate "NI social security" rows (obr.py says so
+    # for Universal Credit, which it restricts to Great Britain). These are
+    # scored on every UK household.
+    **{
+        f"obr/{name}": "Great Britain"
+        for name in [
+            "pip",
+            "esa",
+            "attendance_allowance",
+            "carers_allowance",
+            "statutory_maternity_pay",
+            "winter_fuel_allowance",
+            "state_pension",
+            "jobseekers_allowance",
+        ]
+    },
+    "obr/domestic_rates": "Northern Ireland",
+    # policyengine-uk's sdlt_liable: England and Northern Ireland.
+    "obr/stamp_duty_land_tax": "England and Northern Ireland",
+}
+# slc.py: every SLC target counts England's borrowers and students.
+AREA_BY_PREFIX = {
+    "slc/plan_": "England",
+    "slc/maintenance_loan": "England",
+    "slc/parents_learning_allowance": "England",
+    "slc/adult_dependants_grant": "England",
+}
+
+
+def area_override(metric: str) -> str | None:
+    if metric in AREA_BY_TARGET:
+        return AREA_BY_TARGET[metric]
+    for prefix, area in AREA_BY_PREFIX.items():
+        if metric.startswith(prefix):
+            return area
+    return None
+
+
+# How a target family is built or scored, where its label alone would
+# mislead. Every note restates code in the release.
+GROUP_NOTES = {
+    ("obr", "ni_employee", "national", None): (
+        "OBR's total includes employer and self-employed contributions "
+        "(policyengine-uk-data#537)"
+    ),
+    ("obr", "esa_income", "national", None): (
+        "OBR's line also covers incapacity benefit, severe disablement "
+        "allowance and the incapacity part of Income Support; scored on UK "
+        "households"
+    ),
+    ("obr", "council_tax", "national", None): (
+        "OBR's UK total also includes Northern Ireland domestic rates and an "
+        "accruals adjustment; the model sums council tax net of reductions"
+    ),
+    ("obr", "pip", "national", None): "Scored on UK households",
+    ("obr", "attendance_allowance", "national", None): "Scored on UK households",
+    ("obr", "carers_allowance", "national", None): "Scored on UK households",
+    ("obr", "statutory_maternity_pay", "national", None): "Scored on UK households",
+    ("obr", "winter_fuel_allowance", "national", None): "Scored on UK households",
+    ("obr", "state_pension", "national", None): "Scored on UK households",
+    ("obr", "jsa", "national", None): "Scored on UK households",
+    (
+        "ons",
+        "mortgage_capital_repayment",
+        "national",
+        None,
+    ): "£1,100 a month for 7.5 million mortgaged owners, figures set in the build",
+    ("ehs", "rent", "national", None): (
+        "Average rents times renter numbers, set in the build"
+    ),
+    (
+        "hmrc_spi",
+        "property_income",
+        "national",
+        "total_income",
+    ): (
+        "Amounts scaled up 1.9 times, the build's ratio of HMRC's property "
+        "rental income statistics to the SPI"
+    ),
+    ("hmrc", "capital_gains", "national", None): (
+        "2023-24 outturn: gains uprated to 2025, taxpayer counts held flat"
+    ),
 }
 
 # One row per (source, variable, geographic level, breakdown). Every group in
@@ -97,7 +206,7 @@ GROUP_LABELS = {
         "universal_credit",
         "national",
         None,
-    ): "Universal Credit households by family type and number of children",
+    ): "Universal Credit households: total, by family type and number of children, and Scottish households with a child under 1",
     (
         "dwp",
         "universal_credit",
@@ -183,7 +292,7 @@ GROUP_LABELS = {
         "ni_employee",
         "national",
         None,
-    ): "National Insurance receipts, in total and from employees",
+    ): "National Insurance receipts, total and employee, both scored against employee contributions",
     ("obr", "ni_employer", "national", None): "Employer National Insurance receipts",
     (
         "obr",
@@ -192,7 +301,12 @@ GROUP_LABELS = {
         None,
     ): "Self-employed National Insurance receipts",
     ("obr", "vat", "national", None): "VAT receipts",
-    ("obr", "fuel_duty", "national", None): "Fuel duty receipts",
+    (
+        "obr",
+        "fuel_duty",
+        "national",
+        None,
+    ): "Fuel duty receipts, scored against duty on households' car fuel",
     ("obr", "capital_gains_tax", "national", None): "Capital gains tax receipts",
     ("obr", "stamp_duty_land_tax", "national", None): "Stamp Duty Land Tax receipts",
     ("obr", "council_tax", "national", None): "Council tax receipts, UK and by nation",
@@ -205,7 +319,12 @@ GROUP_LABELS = {
     ("obr", "tv_licence", "national", None): "TV licence fee receipts",
     ("obr", "universal_credit", "national", None): "Universal Credit spending",
     ("obr", "state_pension", "national", None): "State Pension spending",
-    ("obr", "pip", "national", None): "Personal Independence Payment spending",
+    (
+        "obr",
+        "pip",
+        "national",
+        None,
+    ): "Disability Living Allowance and PIP spending, scored against PIP alone",
     ("obr", "child_benefit", "national", None): "Child Benefit spending",
     ("obr", "attendance_allowance", "national", None): "Attendance Allowance spending",
     ("obr", "carers_allowance", "national", None): "Carer's Allowance spending",
@@ -214,7 +333,7 @@ GROUP_LABELS = {
         "esa_income",
         "national",
         None,
-    ): "Incapacity benefits spending, scored against income-related ESA",
+    ): "Incapacity benefits spending, scored against ESA (income-related and contributory)",
     ("obr", "jsa", "national", None): "Jobseeker's Allowance spending",
     ("obr", "winter_fuel_allowance", "national", None): "Winter Fuel Payment spending",
     (
@@ -241,9 +360,19 @@ GROUP_LABELS = {
         "national",
         None,
     ): "UK population, in total and by sex and five-year age band",
-    ("ons", "age", "region", None): "Population by region and ten-year age band",
+    (
+        "ons",
+        "age",
+        "region",
+        None,
+    ): "Population by region and ten-year age band, and Scottish children under 1 and under 16",
     ("ons", "family_type", "national", None): "Households by family type",
-    ("ons", "tenure_type", "country", None): "Dwellings by tenure, by nation",
+    (
+        "ons",
+        "tenure_type",
+        "country",
+        None,
+    ): "Dwellings in England, in total and by tenure",
     (
         "ons",
         "employment_status",
@@ -252,7 +381,12 @@ GROUP_LABELS = {
     ): "Employees and self-employed people",
     ("ons", "employment_sector", "national", None): "Public sector employment",
     ("ons", "savings_interest_income", "national", None): "Household savings interest",
-    ("ons", "mortgage_capital_repayment", "national", None): "Mortgage payments",
+    (
+        "ons",
+        "mortgage_capital_repayment",
+        "national",
+        None,
+    ): "Mortgage payments, capital and interest",
     ("ons", "land_value", "national", None): "Total land value",
     ("ons", "household_land_value", "national", None): "Household land value",
     ("ons", "household_land_value", "region", None): "Household land value by region",
@@ -304,8 +438,18 @@ GROUP_LABELS = {
         "council_tax_band",
         "region",
         None,
-    ): "Dwellings by council tax band and region",
+    ): "Dwellings by region, in total and by council tax band",
 }
+
+# Constituency and local authority loss builders (datasets/local_areas/*/loss.py).
+INCOME_NOTE = "Rescaled so the areas add to a projected UK total"
+INCOME_COUNT_NOTE = "Scaled by the same factor as the amounts"
+# local_uc.py returns counts in the workbook's row order, and loss.py assigns
+# them by position to areas in another order.
+UC_ORDER_NOTE = (
+    "The build assigns these counts to areas by row order, which does not "
+    "match the areas, so this fit is not a check on Universal Credit by area"
+)
 
 # Local (per-area) metric families. Sources are the ones each loss builder's
 # docstring and source module name.
@@ -314,50 +458,82 @@ LOCAL_FAMILIES = [
         "age/",
         "Population by ten-year age band, 0 to 79",
         "ONS mid-year population estimates",
+        "Rescaled so every area's bands add to 90% of the UK population",
     ),
     (
         "hmrc/employment_income/amount",
         "Employment income of income taxpayers",
         "HMRC Survey of Personal Incomes, table 3.15",
+        INCOME_NOTE,
     ),
     (
         "hmrc/employment_income/count",
         "Income taxpayers with employment income",
         "HMRC Survey of Personal Incomes, table 3.15",
+        INCOME_COUNT_NOTE,
     ),
     (
         "hmrc/self_employment_income/",
         "Self-employment income: taxpayers and amount",
         "HMRC Survey of Personal Incomes, table 3.15",
+        INCOME_NOTE,
     ),
-    ("uc_households", "Universal Credit households", "DWP Stat-Xplore"),
-    ("uc_hh_", "Universal Credit households by number of children", "DWP Stat-Xplore"),
+    (
+        "uc_households",
+        "Universal Credit households",
+        "DWP Stat-Xplore and DfC Northern Ireland statistics",
+        UC_ORDER_NOTE,
+    ),
+    (
+        "uc_hh_",
+        "Universal Credit households by number of children",
+        "DWP Stat-Xplore and DfC Northern Ireland statistics",
+        "Each area's total split by its nation's shares (Northern Ireland "
+        "takes Great Britain's). " + UC_ORDER_NOTE,
+    ),
     (
         "housing/scotland_",
         "Private renters and rent in Scottish constituencies",
         "Country totals set in the build, shared by population",
+        None,
     ),
     (
         "housing/wales_",
         "Private renters and rent in Welsh constituencies",
         "Country totals set in the build, shared by population",
+        None,
     ),
     (
         "ons/equiv_",
         "Equivalised income before and after housing costs, and housing costs",
         "ONS small area income estimates",
+        "The average of each authority's small-area estimates, times its "
+        "households, uprated",
     ),
-    ("tenure/", "Households by tenure", "English Housing Survey"),
-    ("rent/private_rent", "Private rent paid", "VOA private rental market statistics"),
+    (
+        "tenure/",
+        "Households by tenure",
+        "English Housing Survey",
+        "Tenure shares times households",
+    ),
+    (
+        "rent/private_rent",
+        "Private rent paid",
+        "VOA private rental market statistics",
+        "Median rent times private renting households, England only",
+    ),
     (
         "voa/council_tax/",
         "Dwellings by council tax band, A to H",
         "VOA council tax stock of properties",
+        "VOA counts dwellings, including empty ones; the model counts households",
     ),
     (
         "housing/council_tax_net",
         "Council tax paid, net of Council Tax Reduction",
         "MHCLG and Welsh Government council tax statistics",
+        "Taxbase times Band D (England) or council tax income (Wales), against "
+        "households' reported bills net of reductions",
     ),
 ]
 
@@ -391,7 +567,7 @@ def fit_share(
     if not scorable.any():
         return None
     error = (estimate[scorable] / target[scorable] - 1).abs()
-    return round(float((error < tolerance).mean()), 4)
+    return round(float((error < tolerance).mean()), 6)
 
 
 def pinned_release(bundle: dict) -> dict:
@@ -548,17 +724,40 @@ def last_epoch(log: pd.DataFrame) -> pd.DataFrame:
 
 
 GREAT_BRITAIN = {"ENGLAND", "SCOTLAND", "WALES"}
+# The areas national targets describe, broadest first.
+AREA_ORDER = [
+    "UK",
+    "Great Britain",
+    "England and Northern Ireland",
+    "England",
+    "Scotland",
+    "Northern Ireland",
+    "Nation",
+    "Region",
+]
 
 
-def area_label(level: str, countries: pd.Series) -> str:
-    """The area a target family covers: the registry's country scope, else its level."""
+def area_label(level: str, group: pd.DataFrame) -> str:
+    """The area a target family covers: an override for the source's own
+    coverage, else the registry's country scope or nation, else its level."""
+    overrides = {area_override(m) for m in group["metric"]}
+    if len(overrides) != 1:
+        raise ExtractionError(f"a target family mixes area overrides: {overrides}")
+    override = overrides.pop()
+    if override is not None:
+        return override
     scopes = {
-        tuple(sorted(c)) if isinstance(c, (list, tuple)) else None for c in countries
+        tuple(sorted(c)) if isinstance(c, (list, tuple)) else None
+        for c in group["countries"]
     }
     if len(scopes) != 1:
         raise ExtractionError(f"a target family mixes country scopes: {scopes}")
     scope = scopes.pop()
     if scope is None:
+        if level == "country":
+            names = set(group["geo_name"].dropna())
+            if len(names) == 1 and group["geo_name"].notna().all():
+                return names.pop()
         return {"national": "UK", "region": "Region", "country": "Nation"}[level]
     if set(scope) == GREAT_BRITAIN:
         return "Great Britain"
@@ -600,25 +799,19 @@ def national_groups(
             raise ExtractionError(
                 f"no label for target group {(source, variable, level, breakdown)}"
             )
-        publishers = sorted(
-            {
-                PUBLISHER_BY_TARGET.get(m, PUBLISHERS.get(source, source))
-                for m in group["metric"]
-            }
-        )
+        publishers = sorted({publisher_of(m, source) for m in group["metric"]})
         units = sorted(set(group["unit"]))
         entry = {
             "source": source,
             "label": label,
             "publisher": " and ".join(publishers),
-            "geography": area_label(level, group["countries"]),
+            "geography": area_label(level, group),
+            "note": GROUP_NOTES.get((source, variable, level, breakdown)),
             "units": units,
             "targets": len(group),
             "zeroTargets": int((group["target"] == 0).sum()),
             "within10": fit_share(group["estimate"], group["target"]),
-            "pinnedWithin10": fit_share(
-                group["pinned_estimate"], group["pinned_target"]
-            ),
+            "pinnedWithin10": fit_share(group["pinned_estimate"], group["target"]),
             "urls": sorted(set(group["reference_url"].dropna())),
             "vintages": sorted(set(group["forecast_vintage"].dropna())),
         }
@@ -631,7 +824,7 @@ def national_groups(
                     "id": row["metric"],
                     "group": label,
                     "unit": row["unit"],
-                    "target": float(row["pinned_target"]),
+                    "target": float(row["target"]),
                     "estimate": float(row["pinned_estimate"]),
                     "calibrationEstimate": float(row["estimate"]),
                 }
@@ -697,7 +890,7 @@ def local_summary(local: pd.DataFrame, areas: int) -> dict:
     held = finite[finite["metric"] == HELD_OUT_LOCAL]
     families = []
     claimed: set[str] = set()
-    for prefix, label, source in LOCAL_FAMILIES:
+    for prefix, label, source, note in LOCAL_FAMILIES:
         metrics = sorted(
             m
             for m in local["metric"].unique()
@@ -713,6 +906,7 @@ def local_summary(local: pd.DataFrame, areas: int) -> dict:
         family = {
             "label": label,
             "source": source,
+            "note": note,
             "metrics": len(metrics),
             "heldOut": bool(len(held_family)) and not len(cells),
         }
@@ -810,6 +1004,25 @@ def extract(artifacts: Path, registry_path: Path) -> dict:
             "the pinned check scored a different set of national targets from calibration"
         )
     groups, target_rows = national_groups(national, registry, pinned)
+    # build_loss_matrix._resolve_value: a target with no value for the year
+    # takes its nearest earlier listed year's, within three years.
+    year = str(int(run["year"]))
+    carried = [m for m in national["metric"] if year not in registry.loc[m, "values"]]
+    unknown = {g["geography"] for g in groups} - set(AREA_ORDER)
+    if unknown:
+        raise ExtractionError(
+            f"national targets cover areas the pages don't name: {unknown}"
+        )
+    # The pinned run rebuilds the targets with today's code, and a few values
+    # can move (a source download can fall back, say). Validation scores the
+    # pinned estimates against the values calibration fitted, and lists the
+    # targets whose rebuilt value differs.
+    scored = national.set_index("metric")[["target"]].join(
+        pinned.set_index("metric")[["target", "estimate"]].add_prefix("pinned_")
+    )
+    revised = scored[
+        ~np.isclose(scored["pinned_target"], scored["target"], rtol=1e-9, atol=0)
+    ]
 
     build = manifest["build"]
     return {
@@ -819,6 +1032,7 @@ def extract(artifacts: Path, registry_path: Path) -> dict:
             "datasetSha256": pin["datasetSha256"],
             "builtAt": build["built_at"],
             "builtWithModelVersion": build["built_with_model_package"]["version"],
+            "builtWithCoreVersion": build["built_with_core_package"]["version"],
             "dataGitSha": build["metadata"]["data_package_git_sha"],
         },
         "base": {**base_summary, "dataset": "frs_2024_25"},
@@ -841,6 +1055,12 @@ def extract(artifacts: Path, registry_path: Path) -> dict:
             "nationalWithin5": constituency_cal["nationalWithin5"],
             "constituency": constituency_cal["local"],
             "localAuthority": authority_cal["local"],
+            "targetsWithoutYearValue": len(carried),
+            "nationalTargetsByArea": {
+                area: sum(g["targets"] for g in groups if g["geography"] == area)
+                for area in AREA_ORDER
+                if any(g["geography"] == area for g in groups)
+            },
             "nationalGroups": groups,
         },
         "validation": {
@@ -849,10 +1069,11 @@ def extract(artifacts: Path, registry_path: Path) -> dict:
             "year": int(run["year"]),
             "people": int(round(float(run["people"]))),
             "households": int(round(float(run["households"]))),
-            "targets": len(pinned),
-            "zeroTargets": int((pinned["target"] == 0).sum()),
-            "within10": fit_share(pinned["estimate"], pinned["target"]),
-            "within5": fit_share(pinned["estimate"], pinned["target"], 0.05),
+            "targets": len(scored),
+            "zeroTargets": int((scored["target"] == 0).sum()),
+            "within10": fit_share(scored["pinned_estimate"], scored["target"]),
+            "within5": fit_share(scored["pinned_estimate"], scored["target"], 0.05),
+            "revisedTargets": sorted(revised.index),
             "rows": target_rows,
         },
     }

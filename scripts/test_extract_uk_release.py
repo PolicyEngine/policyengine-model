@@ -141,6 +141,8 @@ REGISTRY = [
         reference_url="https://obr.uk/x",
         forecast_vintage="march_2026",
         countries=None,
+        geo_name=None,
+        values={"2025": 100.0},
     ),
     dict(
         name="obr/vat",
@@ -152,6 +154,8 @@ REGISTRY = [
         reference_url="https://obr.uk/x",
         forecast_vintage="march_2026",
         countries=None,
+        geo_name=None,
+        values={"2025": 50.0},
     ),
     dict(
         name="slc/plan_5_borrowers_above_threshold",
@@ -163,6 +167,8 @@ REGISTRY = [
         reference_url="https://slc.example",
         forecast_vintage=None,
         countries=["ENGLAND", "SCOTLAND", "WALES"],
+        geo_name=None,
+        values={"2024": 0.0},
     ),
 ]
 
@@ -229,6 +235,7 @@ def artifacts(tmp_path: Path) -> Path:
         "build": {
             "built_at": "2026-10-07T17:31:53Z",
             "built_with_model_package": {"version": "2.122.2"},
+            "built_with_core_package": {"version": "3.32.13"},
             "metadata": {"data_package_git_sha": "abc"},
         },
     }
@@ -317,6 +324,19 @@ def test_scores_fit_on_nonzero_targets_and_holds_out_the_validation_metric(artif
     assert len(v["rows"]) == 3 and {r["id"] for r in v["rows"]} == {
         m for m, *_ in NATIONAL
     }
+
+
+def test_scores_the_pinned_run_against_the_targets_calibration_fitted(artifacts):
+    """A target the pinned run rebuilds at another value is still scored at the
+    value calibration fitted, and listed as revised."""
+    path = artifacts / "pinned_target_check.csv"
+    text = path.read_text().replace("obr/vat,50.0,", "obr/vat,81.0,")
+    path.write_text(text)
+    v = run(artifacts)["validation"]
+    assert v["revisedTargets"] == ["obr/vat"]
+    assert v["within10"] == 0.5  # VAT's 81.6 still misses the fitted 50
+    vat = next(r for r in v["rows"] if r["id"] == "obr/vat")
+    assert vat["target"] == 50.0
 
 
 def test_is_deterministic_and_independent_of_log_row_order(artifacts):
@@ -419,7 +439,7 @@ def test_fit_share_is_a_share_of_the_nonzero_targets(pairs, tolerance):
         return
     expected = sum(abs(e / t - 1) < tolerance for t, e in scorable) / len(scorable)
     assert 0 <= share <= 1
-    assert share == round(expected, 4)
+    assert share == round(expected, 6)
     assert (
         ex.fit_share(estimates, targets, tolerance * 2) >= share
     )  # wider tolerance never scores fewer
@@ -451,5 +471,13 @@ def test_labels_a_family_by_its_country_scope(artifacts):
         groups["Plan 2 and Plan 5 borrowers, liable and above the repayment threshold"][
             "geography"
         ]
-        == "Great Britain"
+        == "England"  # slc.py counts England's borrowers, whatever the registry scope
     )
+
+
+def test_names_publishers_and_counts_targets_carried_from_an_earlier_year(artifacts):
+    cal = run(artifacts)["calibration"]
+    plan = next(g for g in cal["nationalGroups"] if g["source"] == "slc")
+    assert plan["publisher"] == "Explore Education Statistics"
+    assert cal["targetsWithoutYearValue"] == 1  # the Plan 5 target lists only 2024
+    assert cal["nationalTargetsByArea"] == {"UK": 2, "England": 1}

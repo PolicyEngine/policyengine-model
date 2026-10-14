@@ -13,6 +13,7 @@
     "datasetSha256": "5ba399ea5ab9a6c7d4e9aaf6c623080beb34d9ad5f330f6244dbad72b8d960b6",
     "builtAt": "2026-10-07T17:31:53.189867Z",
     "builtWithModelVersion": "2.122.2",
+    "builtWithCoreVersion": "3.32.13",
     "dataGitSha": "4cbedbecca352f52dffe47e849553c2759a00711"
   },
   "base": {
@@ -69,8 +70,8 @@
     "epoch": 510,
     "nationalTargets": 645,
     "nationalZeroTargets": 1,
-    "nationalWithin10": 0.8696,
-    "nationalWithin5": 0.6615,
+    "nationalWithin10": 0.869565,
+    "nationalWithin5": 0.661491,
     "constituency": {
       "areas": 650,
       "metrics": 21,
@@ -78,72 +79,80 @@
       "cellsWithoutSource": 0,
       "structuralZeroCells": 2422,
       "trainingCells": 10578,
-      "trainingWithin10": 0.9596,
+      "trainingWithin10": 0.959633,
       "heldOut": {
         "metric": "hmrc/employment_income/count",
         "cells": 650,
-        "within10": 0.3754
+        "within10": 0.375385
       },
       "families": [
         {
           "label": "Population by ten-year age band, 0 to 79",
           "source": "ONS mid-year population estimates",
+          "note": "Rescaled so every area's bands add to 90% of the UK population",
           "metrics": 8,
           "heldOut": false,
           "cells": 5200,
-          "within10": 0.9335
+          "within10": 0.933462
         },
         {
           "label": "Employment income of income taxpayers",
           "source": "HMRC Survey of Personal Incomes, table 3.15",
+          "note": "Rescaled so the areas add to a projected UK total",
           "metrics": 1,
           "heldOut": false,
           "cells": 650,
-          "within10": 0.9985
+          "within10": 0.998462
         },
         {
           "label": "Income taxpayers with employment income",
           "source": "HMRC Survey of Personal Incomes, table 3.15",
+          "note": "Scaled by the same factor as the amounts",
           "metrics": 1,
           "heldOut": true,
           "cells": 650,
-          "within10": 0.3754
+          "within10": 0.375385
         },
         {
           "label": "Self-employment income: taxpayers and amount",
           "source": "HMRC Survey of Personal Incomes, table 3.15",
+          "note": "Rescaled so the areas add to a projected UK total",
           "metrics": 2,
           "heldOut": false,
           "cells": 1300,
-          "within10": 0.9838
+          "within10": 0.983846
         },
         {
           "label": "Universal Credit households",
-          "source": "DWP Stat-Xplore",
+          "source": "DWP Stat-Xplore and DfC Northern Ireland statistics",
+          "note": "The build assigns these counts to areas by row order, which does not match the areas, so this fit is not a check on Universal Credit by area",
           "metrics": 1,
           "heldOut": false,
           "cells": 650,
-          "within10": 0.9938
+          "within10": 0.993846
         },
         {
           "label": "Universal Credit households by number of children",
-          "source": "DWP Stat-Xplore",
+          "source": "DWP Stat-Xplore and DfC Northern Ireland statistics",
+          "note": "Each area's total split by its nation's shares (Northern Ireland takes Great Britain's). The build assigns these counts to areas by row order, which does not match the areas, so this fit is not a check on Universal Credit by area",
           "metrics": 4,
           "heldOut": false,
           "cells": 2600,
-          "within10": 0.9835
+          "within10": 0.983462
         },
         {
           "label": "Private renters and rent in Scottish constituencies",
           "source": "Country totals set in the build, shared by population",
+          "note": null,
           "metrics": 2,
           "heldOut": false,
           "cells": 114,
-          "within10": 0.9298
+          "within10": 0.929825
         },
         {
           "label": "Private renters and rent in Welsh constituencies",
           "source": "Country totals set in the build, shared by population",
+          "note": null,
           "metrics": 2,
           "heldOut": false,
           "cells": 64,
@@ -158,24 +167,26 @@
       "cellsWithoutSource": 905,
       "structuralZeroCells": 0,
       "trainingCells": 9535,
-      "trainingWithin10": 0.8988,
+      "trainingWithin10": 0.898794,
       "heldOut": {
         "metric": "hmrc/employment_income/count",
         "cells": 360,
-        "within10": 0.3667
+        "within10": 0.366667
       },
       "families": [
         {
           "label": "Population by ten-year age band, 0 to 79",
           "source": "ONS mid-year population estimates",
+          "note": "Rescaled so every area's bands add to 90% of the UK population",
           "metrics": 8,
           "heldOut": false,
           "cells": 2880,
-          "within10": 0.9392
+          "within10": 0.939236
         },
         {
           "label": "Employment income of income taxpayers",
           "source": "HMRC Survey of Personal Incomes, table 3.15",
+          "note": "Rescaled so the areas add to a projected UK total",
           "metrics": 1,
           "heldOut": false,
           "cells": 360,
@@ -184,54 +195,61 @@
         {
           "label": "Income taxpayers with employment income",
           "source": "HMRC Survey of Personal Incomes, table 3.15",
+          "note": "Scaled by the same factor as the amounts",
           "metrics": 1,
           "heldOut": true,
           "cells": 360,
-          "within10": 0.3667
+          "within10": 0.366667
         },
         {
           "label": "Self-employment income: taxpayers and amount",
           "source": "HMRC Survey of Personal Incomes, table 3.15",
+          "note": "Rescaled so the areas add to a projected UK total",
           "metrics": 2,
           "heldOut": false,
           "cells": 720,
-          "within10": 0.9819
+          "within10": 0.981944
         },
         {
           "label": "Universal Credit households",
-          "source": "DWP Stat-Xplore",
+          "source": "DWP Stat-Xplore and DfC Northern Ireland statistics",
+          "note": "The build assigns these counts to areas by row order, which does not match the areas, so this fit is not a check on Universal Credit by area",
           "metrics": 1,
           "heldOut": false,
           "cells": 360,
-          "within10": 0.9639
+          "within10": 0.963889
         },
         {
           "label": "Equivalised income before and after housing costs, and housing costs",
           "source": "ONS small area income estimates",
+          "note": "The average of each authority's small-area estimates, times its households, uprated",
           "metrics": 3,
           "heldOut": false,
           "cells": 903,
-          "within10": 0.9324
+          "within10": 0.932447
         },
         {
           "label": "Households by tenure",
           "source": "English Housing Survey",
+          "note": "Tenure shares times households",
           "metrics": 4,
           "heldOut": false,
           "cells": 1164,
-          "within10": 0.6856
+          "within10": 0.685567
         },
         {
           "label": "Private rent paid",
           "source": "VOA private rental market statistics",
+          "note": "Median rent times private renting households, England only",
           "metrics": 1,
           "heldOut": false,
           "cells": 289,
-          "within10": 0.9827
+          "within10": 0.982699
         },
         {
           "label": "Dwellings by council tax band, A to H",
           "source": "VOA council tax stock of properties",
+          "note": "VOA counts dwellings, including empty ones; the model counts households",
           "metrics": 8,
           "heldOut": false,
           "cells": 2541,
@@ -240,12 +258,23 @@
         {
           "label": "Council tax paid, net of Council Tax Reduction",
           "source": "MHCLG and Welsh Government council tax statistics",
+          "note": "Taxbase times Band D (England) or council tax income (Wales), against households' reported bills net of reductions",
           "metrics": 1,
           "heldOut": false,
           "cells": 318,
-          "within10": 0.4717
+          "within10": 0.471698
         }
       ]
+    },
+    "targetsWithoutYearValue": 165,
+    "nationalTargetsByArea": {
+      "UK": 384,
+      "Great Britain": 15,
+      "England": 15,
+      "Scotland": 2,
+      "Northern Ireland": 1,
+      "Nation": 8,
+      "Region": 220
     },
     "nationalGroups": [
       {
@@ -253,6 +282,7 @@
         "label": "Council tax receipts, UK and by nation",
         "publisher": "OBR",
         "geography": "UK",
+        "note": "OBR's UK total also includes Northern Ireland domestic rates and an accruals adjustment; the model sums council tax net of reductions",
         "units": [
           "gbp"
         ],
@@ -272,6 +302,7 @@
         "label": "Salary sacrifice users, in total and either side of the \u00a32,000 cap",
         "publisher": "HM Treasury and HMRC",
         "geography": "UK",
+        "note": null,
         "units": [
           "count"
         ],
@@ -286,9 +317,10 @@
       },
       {
         "source": "obr",
-        "label": "National Insurance receipts, in total and from employees",
+        "label": "National Insurance receipts, total and employee, both scored against employee contributions",
         "publisher": "OBR",
         "geography": "UK",
+        "note": "OBR's total includes employer and self-employed contributions (policyengine-uk-data#537)",
         "units": [
           "gbp"
         ],
@@ -307,7 +339,8 @@
         "source": "obr",
         "label": "Attendance Allowance spending",
         "publisher": "OBR",
-        "geography": "UK",
+        "geography": "Great Britain",
+        "note": "Scored on UK households",
         "units": [
           "gbp"
         ],
@@ -328,6 +361,7 @@
         "label": "Capital gains tax receipts",
         "publisher": "OBR",
         "geography": "UK",
+        "note": null,
         "units": [
           "gbp"
         ],
@@ -347,7 +381,8 @@
         "source": "obr",
         "label": "Carer's Allowance spending",
         "publisher": "OBR",
-        "geography": "UK",
+        "geography": "Great Britain",
+        "note": "Scored on UK households",
         "units": [
           "gbp"
         ],
@@ -368,6 +403,7 @@
         "label": "Child Benefit spending",
         "publisher": "OBR",
         "geography": "UK",
+        "note": null,
         "units": [
           "gbp"
         ],
@@ -385,9 +421,31 @@
       },
       {
         "source": "obr",
+        "label": "Disability Living Allowance and PIP spending, scored against PIP alone",
+        "publisher": "OBR",
+        "geography": "Great Britain",
+        "note": "Scored on UK households",
+        "units": [
+          "gbp"
+        ],
+        "targets": 1,
+        "zeroTargets": 0,
+        "within10": 0.0,
+        "pinnedWithin10": 0.0,
+        "urls": [
+          "https://obr.uk/download/march-2026-economic-and-fiscal-outlook-detailed-forecast-tables-expenditure/"
+        ],
+        "vintages": [
+          "march_2026"
+        ],
+        "value": 36910059270.5278
+      },
+      {
+        "source": "obr",
         "label": "Employer National Insurance receipts",
         "publisher": "OBR",
         "geography": "UK",
+        "note": null,
         "units": [
           "gbp"
         ],
@@ -405,9 +463,10 @@
       },
       {
         "source": "obr",
-        "label": "Fuel duty receipts",
+        "label": "Fuel duty receipts, scored against duty on households' car fuel",
         "publisher": "OBR",
         "geography": "UK",
+        "note": null,
         "units": [
           "gbp"
         ],
@@ -425,9 +484,10 @@
       },
       {
         "source": "obr",
-        "label": "Incapacity benefits spending, scored against income-related ESA",
+        "label": "Incapacity benefits spending, scored against ESA (income-related and contributory)",
         "publisher": "OBR",
-        "geography": "UK",
+        "geography": "Great Britain",
+        "note": "OBR's line also covers incapacity benefit, severe disablement allowance and the incapacity part of Income Support; scored on UK households",
         "units": [
           "gbp"
         ],
@@ -448,6 +508,7 @@
         "label": "Income tax receipts",
         "publisher": "OBR",
         "geography": "UK",
+        "note": null,
         "units": [
           "gbp"
         ],
@@ -467,7 +528,8 @@
         "source": "obr",
         "label": "Jobseeker's Allowance spending",
         "publisher": "OBR",
-        "geography": "UK",
+        "geography": "Great Britain",
+        "note": "Scored on UK households",
         "units": [
           "gbp"
         ],
@@ -487,7 +549,8 @@
         "source": "obr",
         "label": "Northern Ireland domestic rates receipts",
         "publisher": "OBR",
-        "geography": "UK",
+        "geography": "Northern Ireland",
+        "note": null,
         "units": [
           "gbp"
         ],
@@ -505,29 +568,10 @@
       },
       {
         "source": "obr",
-        "label": "Personal Independence Payment spending",
-        "publisher": "OBR",
-        "geography": "UK",
-        "units": [
-          "gbp"
-        ],
-        "targets": 1,
-        "zeroTargets": 0,
-        "within10": 0.0,
-        "pinnedWithin10": 0.0,
-        "urls": [
-          "https://obr.uk/download/march-2026-economic-and-fiscal-outlook-detailed-forecast-tables-expenditure/"
-        ],
-        "vintages": [
-          "march_2026"
-        ],
-        "value": 36910059270.5278
-      },
-      {
-        "source": "obr",
         "label": "Pupils at independent schools",
         "publisher": "Independent Schools Council census",
         "geography": "UK",
+        "note": null,
         "units": [
           "count"
         ],
@@ -546,6 +590,7 @@
         "label": "Self-employed National Insurance receipts",
         "publisher": "OBR",
         "geography": "UK",
+        "note": null,
         "units": [
           "gbp"
         ],
@@ -566,6 +611,7 @@
         "label": "Stamp Duty Land Tax receipts",
         "publisher": "OBR",
         "geography": "UK",
+        "note": null,
         "units": [
           "gbp"
         ],
@@ -585,7 +631,8 @@
         "source": "obr",
         "label": "State Pension spending",
         "publisher": "OBR",
-        "geography": "UK",
+        "geography": "Great Britain",
+        "note": "Scored on UK households",
         "units": [
           "gbp"
         ],
@@ -605,7 +652,8 @@
         "source": "obr",
         "label": "Statutory Maternity Pay spending",
         "publisher": "OBR",
-        "geography": "UK",
+        "geography": "Great Britain",
+        "note": "Scored on UK households",
         "units": [
           "gbp"
         ],
@@ -626,6 +674,7 @@
         "label": "TV licence fee receipts",
         "publisher": "OBR",
         "geography": "UK",
+        "note": null,
         "units": [
           "gbp"
         ],
@@ -646,6 +695,7 @@
         "label": "Universal Credit spending",
         "publisher": "OBR",
         "geography": "Great Britain",
+        "note": null,
         "units": [
           "gbp"
         ],
@@ -666,6 +716,7 @@
         "label": "VAT receipts",
         "publisher": "OBR",
         "geography": "UK",
+        "note": null,
         "units": [
           "gbp"
         ],
@@ -685,7 +736,8 @@
         "source": "obr",
         "label": "Winter Fuel Payment spending",
         "publisher": "OBR",
-        "geography": "UK",
+        "geography": "Great Britain",
+        "note": "Scored on UK households",
         "units": [
           "gbp"
         ],
@@ -706,6 +758,7 @@
         "label": "Capital gains: taxpayers and gains, in total and by size of gain",
         "publisher": "HMRC",
         "geography": "UK",
+        "note": "2023-24 outturn: gains uprated to 2025, taxpayer counts held flat",
         "units": [
           "count",
           "gbp"
@@ -726,6 +779,7 @@
         "label": "Salary sacrifice: income tax relief by rate band",
         "publisher": "HMRC",
         "geography": "UK",
+        "note": null,
         "units": [
           "gbp"
         ],
@@ -743,6 +797,7 @@
         "label": "Pension contributions made through salary sacrifice",
         "publisher": "HMRC",
         "geography": "UK",
+        "note": null,
         "units": [
           "gbp"
         ],
@@ -761,6 +816,7 @@
         "label": "Salary sacrifice: employee National Insurance relief",
         "publisher": "HMRC",
         "geography": "UK",
+        "note": null,
         "units": [
           "gbp"
         ],
@@ -779,6 +835,7 @@
         "label": "Salary sacrifice: employer National Insurance relief",
         "publisher": "HMRC",
         "geography": "UK",
+        "note": null,
         "units": [
           "gbp"
         ],
@@ -797,14 +854,15 @@
         "label": "Dividend income: taxpayers and amounts, by total income band",
         "publisher": "HMRC Survey of Personal Incomes",
         "geography": "UK",
+        "note": null,
         "units": [
           "count",
           "gbp"
         ],
         "targets": 26,
         "zeroTargets": 0,
-        "within10": 0.8462,
-        "pinnedWithin10": 0.8077,
+        "within10": 0.846154,
+        "pinnedWithin10": 0.807692,
         "urls": [
           "https://assets.publishing.service.gov.uk/media/69f1f12d2fae53a03709682f/Collated_Tables_3_1_to_3_11_2324.ods"
         ],
@@ -815,13 +873,14 @@
         "label": "Employment income: taxpayers and amounts, by total income band",
         "publisher": "HMRC Survey of Personal Incomes",
         "geography": "UK",
+        "note": null,
         "units": [
           "count",
           "gbp"
         ],
         "targets": 26,
         "zeroTargets": 0,
-        "within10": 0.8462,
+        "within10": 0.846154,
         "pinnedWithin10": 0.5,
         "urls": [
           "https://assets.publishing.service.gov.uk/media/69f1f12d2fae53a03709682f/Collated_Tables_3_1_to_3_11_2324.ods"
@@ -833,14 +892,15 @@
         "label": "Private pension income: taxpayers and amounts, by total income band",
         "publisher": "HMRC Survey of Personal Incomes",
         "geography": "UK",
+        "note": null,
         "units": [
           "count",
           "gbp"
         ],
         "targets": 26,
         "zeroTargets": 0,
-        "within10": 0.8846,
-        "pinnedWithin10": 0.8077,
+        "within10": 0.884615,
+        "pinnedWithin10": 0.807692,
         "urls": [
           "https://assets.publishing.service.gov.uk/media/69f1f12d2fae53a03709682f/Collated_Tables_3_1_to_3_11_2324.ods"
         ],
@@ -851,14 +911,15 @@
         "label": "Property income: taxpayers and amounts, by total income band",
         "publisher": "HMRC Survey of Personal Incomes",
         "geography": "UK",
+        "note": "Amounts scaled up 1.9 times, the build's ratio of HMRC's property rental income statistics to the SPI",
         "units": [
           "count",
           "gbp"
         ],
         "targets": 26,
         "zeroTargets": 0,
-        "within10": 0.8077,
-        "pinnedWithin10": 0.7308,
+        "within10": 0.807692,
+        "pinnedWithin10": 0.730769,
         "urls": [
           "https://assets.publishing.service.gov.uk/media/69f1f12d2fae53a03709682f/Collated_Tables_3_1_to_3_11_2324.ods"
         ],
@@ -869,14 +930,15 @@
         "label": "Self-employment income: taxpayers and amounts, by total income band",
         "publisher": "HMRC Survey of Personal Incomes",
         "geography": "UK",
+        "note": null,
         "units": [
           "count",
           "gbp"
         ],
         "targets": 26,
         "zeroTargets": 0,
-        "within10": 0.9231,
-        "pinnedWithin10": 0.5385,
+        "within10": 0.923077,
+        "pinnedWithin10": 0.538462,
         "urls": [
           "https://assets.publishing.service.gov.uk/media/69f1f12d2fae53a03709682f/Collated_Tables_3_1_to_3_11_2324.ods"
         ],
@@ -887,14 +949,15 @@
         "label": "State Pension: taxpayers and amounts, by total income band",
         "publisher": "HMRC Survey of Personal Incomes",
         "geography": "UK",
+        "note": null,
         "units": [
           "count",
           "gbp"
         ],
         "targets": 26,
         "zeroTargets": 0,
-        "within10": 0.8462,
-        "pinnedWithin10": 0.7692,
+        "within10": 0.846154,
+        "pinnedWithin10": 0.769231,
         "urls": [
           "https://assets.publishing.service.gov.uk/media/69f1f12d2fae53a03709682f/Collated_Tables_3_1_to_3_11_2324.ods"
         ],
@@ -905,13 +968,14 @@
         "label": "Universal Credit households by family type and annual award band",
         "publisher": "DWP",
         "geography": "UK",
+        "note": null,
         "units": [
           "count"
         ],
         "targets": 104,
         "zeroTargets": 0,
-        "within10": 0.9519,
-        "pinnedWithin10": 0.4423,
+        "within10": 0.951923,
+        "pinnedWithin10": 0.442308,
         "urls": [
           "https://stat-xplore.dwp.gov.uk/"
         ],
@@ -919,16 +983,17 @@
       },
       {
         "source": "dwp",
-        "label": "Universal Credit households by family type and number of children",
+        "label": "Universal Credit households: total, by family type and number of children, and Scottish households with a child under 1",
         "publisher": "DWP",
         "geography": "UK",
+        "note": null,
         "units": [
           "count"
         ],
         "targets": 11,
         "zeroTargets": 0,
-        "within10": 0.9091,
-        "pinnedWithin10": 0.9091,
+        "within10": 0.909091,
+        "pinnedWithin10": 0.909091,
         "urls": [
           "https://stat-xplore.dwp.gov.uk/",
           "https://www.gov.uk/government/statistics/universal-credit-quarterly-statistics-29-april-2013-to-12-february-2026/universal-credit-deductions-statistics-march-2025-to-february-2026"
@@ -940,6 +1005,7 @@
         "label": "Housing Benefit claims and spending, by age group",
         "publisher": "DWP",
         "geography": "Great Britain",
+        "note": null,
         "units": [
           "count",
           "gbp"
@@ -960,6 +1026,7 @@
         "label": "Benefit cap: households capped and total reduction",
         "publisher": "DWP",
         "geography": "UK",
+        "note": null,
         "units": [
           "count",
           "gbp"
@@ -978,6 +1045,7 @@
         "label": "PIP daily living claimants, standard and enhanced rate",
         "publisher": "DWP",
         "geography": "UK",
+        "note": null,
         "units": [
           "count"
         ],
@@ -995,6 +1063,7 @@
         "label": "Pension Credit claims and spending",
         "publisher": "DWP",
         "geography": "Great Britain",
+        "note": null,
         "units": [
           "count",
           "gbp"
@@ -1015,6 +1084,7 @@
         "label": "Contribution-based ESA claimants",
         "publisher": "DWP",
         "geography": "UK",
+        "note": null,
         "units": [
           "count"
         ],
@@ -1033,6 +1103,7 @@
         "label": "Employment and Support Allowance claimants",
         "publisher": "DWP",
         "geography": "UK",
+        "note": null,
         "units": [
           "count"
         ],
@@ -1051,6 +1122,7 @@
         "label": "Income-related ESA claimants",
         "publisher": "DWP",
         "geography": "UK",
+        "note": null,
         "units": [
           "count"
         ],
@@ -1069,6 +1141,7 @@
         "label": "Jobseeker's Allowance claimants",
         "publisher": "DWP",
         "geography": "UK",
+        "note": null,
         "units": [
           "count"
         ],
@@ -1084,16 +1157,17 @@
       },
       {
         "source": "ons",
-        "label": "Population by region and ten-year age band",
+        "label": "Population by region and ten-year age band, and Scottish children under 1 and under 16",
         "publisher": "ONS",
         "geography": "Region",
+        "note": null,
         "units": [
           "count"
         ],
         "targets": 110,
         "zeroTargets": 0,
-        "within10": 0.9818,
-        "pinnedWithin10": 0.9818,
+        "within10": 0.981818,
+        "pinnedWithin10": 0.981818,
         "urls": [
           "https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationprojections/datasets/z1zippedpopulationprojectionsdatafilesuk"
         ],
@@ -1104,13 +1178,14 @@
         "label": "UK population, in total and by sex and five-year age band",
         "publisher": "ONS",
         "geography": "UK",
+        "note": null,
         "units": [
           "count"
         ],
         "targets": 37,
         "zeroTargets": 0,
-        "within10": 0.8919,
-        "pinnedWithin10": 0.8919,
+        "within10": 0.891892,
+        "pinnedWithin10": 0.891892,
         "urls": [
           "https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationprojections/datasets/z1zippedpopulationprojectionsdatafilesuk"
         ],
@@ -1121,6 +1196,7 @@
         "label": "Household land value by region",
         "publisher": "ONS",
         "geography": "Region",
+        "note": null,
         "units": [
           "gbp"
         ],
@@ -1138,6 +1214,7 @@
         "label": "Households by family type",
         "publisher": "ONS",
         "geography": "UK",
+        "note": null,
         "units": [
           "count"
         ],
@@ -1152,9 +1229,10 @@
       },
       {
         "source": "ons",
-        "label": "Dwellings by tenure, by nation",
+        "label": "Dwellings in England, in total and by tenure",
         "publisher": "ONS",
-        "geography": "Nation",
+        "geography": "England",
+        "note": null,
         "units": [
           "count"
         ],
@@ -1172,6 +1250,7 @@
         "label": "Employees and self-employed people",
         "publisher": "ONS",
         "geography": "UK",
+        "note": null,
         "units": [
           "count"
         ],
@@ -1190,6 +1269,7 @@
         "label": "Corporate land value",
         "publisher": "ONS",
         "geography": "UK",
+        "note": null,
         "units": [
           "gbp"
         ],
@@ -1208,6 +1288,7 @@
         "label": "Household land value",
         "publisher": "ONS",
         "geography": "UK",
+        "note": null,
         "units": [
           "gbp"
         ],
@@ -1226,6 +1307,7 @@
         "label": "Household savings interest",
         "publisher": "ONS",
         "geography": "UK",
+        "note": null,
         "units": [
           "gbp"
         ],
@@ -1241,9 +1323,10 @@
       },
       {
         "source": "ons",
-        "label": "Mortgage payments",
-        "publisher": "ONS",
+        "label": "Mortgage payments, capital and interest",
+        "publisher": "Assumption set in the build",
         "geography": "UK",
+        "note": "\u00a31,100 a month for 7.5 million mortgaged owners, figures set in the build",
         "units": [
           "gbp"
         ],
@@ -1262,6 +1345,7 @@
         "label": "Public sector employment",
         "publisher": "ONS",
         "geography": "UK",
+        "note": null,
         "units": [
           "count"
         ],
@@ -1280,6 +1364,7 @@
         "label": "Total land value",
         "publisher": "ONS",
         "geography": "UK",
+        "note": null,
         "units": [
           "gbp"
         ],
@@ -1295,16 +1380,17 @@
       },
       {
         "source": "voa",
-        "label": "Dwellings by council tax band and region",
-        "publisher": "Valuation Office Agency",
+        "label": "Dwellings by region, in total and by council tax band",
+        "publisher": "Scottish Government and Valuation Office Agency",
         "geography": "Region",
+        "note": null,
         "units": [
           "count"
         ],
         "targets": 99,
         "zeroTargets": 0,
-        "within10": 0.9697,
-        "pinnedWithin10": 0.9697,
+        "within10": 0.969697,
+        "pinnedWithin10": 0.969697,
         "urls": [
           "https://www.gov.scot/publications/council-tax-datasets/",
           "https://www.gov.uk/government/statistics/council-tax-stock-of-properties-2025"
@@ -1316,6 +1402,7 @@
         "label": "Student loan repayments, by nation and plan",
         "publisher": "Student Loans Company",
         "geography": "Nation",
+        "note": null,
         "units": [
           "gbp"
         ],
@@ -1334,15 +1421,16 @@
       {
         "source": "slc",
         "label": "Plan 2 and Plan 5 borrowers, liable and above the repayment threshold",
-        "publisher": "Student Loans Company",
-        "geography": "UK",
+        "publisher": "Explore Education Statistics",
+        "geography": "England",
+        "note": null,
         "units": [
           "count"
         ],
         "targets": 4,
         "zeroTargets": 1,
-        "within10": 0.3333,
-        "pinnedWithin10": 0.6667,
+        "within10": 0.333333,
+        "pinnedWithin10": 0.666667,
         "urls": [
           "https://explore-education-statistics.service.gov.uk/data-tables/permalink/6ff75517-7124-487c-cb4e-08de6eccf22d"
         ],
@@ -1352,7 +1440,8 @@
         "source": "slc",
         "label": "Adult Dependants' Grant: recipients and spending",
         "publisher": "Student Loans Company",
-        "geography": "UK",
+        "geography": "England",
+        "note": null,
         "units": [
           "count",
           "gbp"
@@ -1370,7 +1459,8 @@
         "source": "slc",
         "label": "Maintenance loans: recipients and spending",
         "publisher": "Student Loans Company",
-        "geography": "UK",
+        "geography": "England",
+        "note": null,
         "units": [
           "count",
           "gbp"
@@ -1388,7 +1478,8 @@
         "source": "slc",
         "label": "Parents' Learning Allowance: recipients and spending",
         "publisher": "Student Loans Company",
-        "geography": "UK",
+        "geography": "England",
+        "note": null,
         "units": [
           "count",
           "gbp"
@@ -1407,13 +1498,14 @@
         "label": "Households with no, one, and two or more vehicles",
         "publisher": "DfT National Travel Survey",
         "geography": "UK",
+        "note": null,
         "units": [
           "count"
         ],
         "targets": 3,
         "zeroTargets": 0,
-        "within10": 0.6667,
-        "pinnedWithin10": 0.6667,
+        "within10": 0.666667,
+        "pinnedWithin10": 0.666667,
         "urls": [
           "https://www.gov.uk/government/statistics/national-travel-survey-2024"
         ],
@@ -1424,6 +1516,7 @@
         "label": "Private and social rent paid",
         "publisher": "English Housing Survey and ONS",
         "geography": "UK",
+        "note": "Average rents times renter numbers, set in the build",
         "units": [
           "gbp"
         ],
@@ -1441,7 +1534,8 @@
         "source": "scottish_government",
         "label": "Scottish Child Payment spending",
         "publisher": "Scottish Government",
-        "geography": "Nation",
+        "geography": "Scotland",
+        "note": null,
         "units": [
           "gbp"
         ],
@@ -1459,7 +1553,8 @@
         "source": "scotland_census",
         "label": "Scottish households with three or more children",
         "publisher": "Scotland's Census",
-        "geography": "Nation",
+        "geography": "Scotland",
+        "note": null,
         "units": [
           "count"
         ],
@@ -1483,7 +1578,17 @@
     "households": 31245112,
     "targets": 645,
     "zeroTargets": 1,
-    "within10": 0.736,
-    "within5": 0.5186
+    "within10": 0.736025,
+    "within5": 0.521739,
+    "revisedTargets": [
+      "voa/council_tax/SCOTLAND/A",
+      "voa/council_tax/SCOTLAND/B",
+      "voa/council_tax/SCOTLAND/C",
+      "voa/council_tax/SCOTLAND/D",
+      "voa/council_tax/SCOTLAND/E",
+      "voa/council_tax/SCOTLAND/F",
+      "voa/council_tax/SCOTLAND/G",
+      "voa/council_tax/SCOTLAND/H"
+    ]
   }
 }

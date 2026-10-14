@@ -9,6 +9,8 @@ import release from './ukDataRelease.json';
 export interface UkLocalFamily {
   label: string;
   source: string;
+  /** How the build constructs or scores the family, where the label alone would mislead. */
+  note: string | null;
   metrics: number;
   heldOut: boolean;
   cells: number;
@@ -31,8 +33,10 @@ export interface UkTargetGroup {
   source: string;
   label: string;
   publisher: string;
-  /** UK, Great Britain, Region or Nation: the registry's country scope, else the target's level. */
+  /** The area the target covers: the source's own coverage, the registry's country scope, or the target's level. */
   geography: string;
+  /** How the build constructs or scores the family, where the label alone would mislead. */
+  note: string | null;
   units: ('gbp' | 'count')[];
   targets: number;
   zeroTargets: number;
@@ -58,6 +62,7 @@ export interface UkDataRelease {
     datasetSha256: string;
     builtAt: string;
     builtWithModelVersion: string;
+    builtWithCoreVersion: string;
     dataGitSha: string;
   };
   base: { households: number; benefitUnits: number; people: number; weightedHouseholds: number; timePeriod: string; dataset: string };
@@ -89,11 +94,14 @@ export interface UkDataRelease {
     nationalZeroTargets: number;
     nationalWithin10: number;
     nationalWithin5: number;
+    /** National targets with no figure for the calibration year, which take an earlier year's. */
+    targetsWithoutYearValue: number;
+    nationalTargetsByArea: Record<string, number>;
     constituency: UkLocalCalibration;
     localAuthority: UkLocalCalibration;
     nationalGroups: UkTargetGroup[];
   };
-  /** The saved file run by the pinned model, scored on the same national targets. */
+  /** The saved file run by the pinned model, scored on the target values calibration fitted. */
   validation: {
     modelVersion: string;
     coreVersion: string;
@@ -104,10 +112,12 @@ export interface UkDataRelease {
     zeroTargets: number;
     within10: number;
     within5: number;
+    /** Targets whose value the pinned run's rebuild of the targets changes. */
+    revisedTargets: string[];
   };
 }
 
-/** One national target, scored on the saved file by the pinned model. */
+/** One national target, scored on the saved file by the pinned model against the value calibration fitted. */
 export interface UkTargetCheck {
   id: string;
   group: string;
@@ -122,7 +132,7 @@ export const ukRelease = release as UkDataRelease;
 /** 16288 -> "16,288" */
 export const fmtInt = (n: number) => Math.round(n).toLocaleString('en-GB');
 
-/** 0.8682 -> "86.8%"; a share with nothing to score -> "–" */
+/** 0.998462 -> "99.8%"; a share with nothing to score -> "–" */
 export const fmtPct = (share: number | null) => (share === null ? '–' : `${(share * 100).toFixed(1)}%`);
 
 /** 28972433 -> "29.0 million" */
@@ -160,6 +170,8 @@ export const ukFacts = {
   constituencies: fmtInt(uk.weightMatrices.constituency.areas),
   localAuthorities: fmtInt(uk.weightMatrices.localAuthority.areas),
   nationalTargets: fmtInt(uk.calibration.nationalTargets),
+  /** What the national targets describe: the UK, Great Britain, its nations and its regions. */
+  nationalScope: 'the UK, Great Britain, its nations and its regions',
   niHouseholds: fmtInt(geo.householdsWithoutArea),
   gbConstituencies: fmtInt(geo.constituenciesWithHouseholds),
 };
