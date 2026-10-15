@@ -6,6 +6,7 @@ import { useSearchParams } from 'next/navigation';
 import { colors, typography, spacing } from '../../designTokens';
 import { pipelineStages } from '../../data/pipelineStages';
 import { ukPipelineStages } from '../../data/ukPipelineStages';
+import { describeLevels, usCalibration } from '../../data/calibrationTargets';
 import type { PipelineStage } from '../../data/pipelineStages';
 import type { Country } from '../../hooks/useCountry';
 import { usePublicBasePrefix } from '../../hooks/usePublicBasePrefix';
@@ -89,6 +90,8 @@ function StageButton({ s, isActive, onClick, borderRadiusLeft, borderRadiusRight
   );
 }
 
+const usTargetSummary = describeLevels(usCalibration.levelCounts);
+
 export default function DataPipeline({ country = 'us' }: { country?: Country }) {
   const allStages = country === 'uk' ? ukPipelineStages : pipelineStages;
   const sharedStages = allStages.filter(s => s.branch === 'shared');
@@ -98,6 +101,10 @@ export default function DataPipeline({ country = 'us' }: { country?: Country }) 
   const localSub2Stages = allStages.filter(s => s.branch === 'local-sub-2');
   const localSub3Stages = allStages.filter(s => s.branch === 'local-sub-3');
   const localSub4Stages = allStages.filter(s => s.branch === 'local-sub-4');
+  // A country whose stages are all 'shared' renders as one linear flow
+  // (the US build is one national file); the fork layout only appears
+  // when a country declares 'national' / 'local' branch stages (UK).
+  const hasBranches = nationalStages.length > 0 || localStages.length > 0;
 
   const [activeStage, setActiveStage] = useState(0);
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
@@ -125,7 +132,7 @@ export default function DataPipeline({ country = 'us' }: { country?: Country }) 
 
   const introText = country === 'uk'
     ? 'PolicyEngine constructs its representative household dataset through a multi-stage pipeline, starting from the Family Resources Survey and producing two weight matrices: one for 650 parliamentary constituencies and one for 360 local authorities.'
-    : 'PolicyEngine constructs its representative household dataset through a 14-step pipeline. Public survey data is merged, stratified, and cloned to 10 geographic variants per household. Each clone is simulated through PolicyEngine US with stochastic take-up, then calibrated via L0-regularized optimization against administrative targets at the national, state, and congressional district levels simultaneously, producing 488 geographically representative datasets.';
+    : `PolicyEngine’s US simulations run on one national household file, built by Microcosm, PolicyEngine’s data build system. Census CPS ASEC households, and copies of them carrying tax-return detail from the IRS Public Use File, are enriched with survey imputations and program take-up flags, keep their survey state while being assigned a congressional district, county, and census block, and are reweighted so weighted totals match ${usTargetSummary} derived from government statistics. A state or congressional district analysis filters the same file — there are no per-area datasets.`;
 
   const nationalLabel = country === 'uk' ? 'Constituency (national)' : 'National';
   const localLabel = country === 'uk' ? 'Local authority' : 'Geography-specific';
@@ -138,8 +145,8 @@ export default function DataPipeline({ country = 'us' }: { country?: Country }) 
 
       {/* Pipeline flow - branching layout */}
       <div className="tw:mb-8">
-        {/* Shared linear portion */}
-        <div className="tw:flex tw:items-stretch tw:gap-0">
+        {/* Shared linear portion; scrolls inside itself on narrow screens */}
+        <div className="tw:flex tw:items-stretch tw:gap-0 tw:overflow-x-auto">
           {sharedStages.map((s, i) => (
             <div key={s.id} className="tw:flex-1 tw:flex tw:items-stretch">
               <StageButton
@@ -154,64 +161,68 @@ export default function DataPipeline({ country = 'us' }: { country?: Country }) 
           ))}
         </div>
 
-        {/* Fork connector */}
-        <div className="tw:flex tw:justify-center tw:relative tw:h-10">
-          <div className="tw:absolute tw:top-0 tw:w-[2px] tw:h-5" style={{ backgroundColor: colors.border.light, left: 'calc(50% - 2px)' }} />
-          <div className="tw:absolute tw:top-5 tw:h-[2px]" style={{ backgroundColor: colors.border.light, left: 'calc(25% - 6px)', right: 'calc(25% - 6px)' }} />
-          <div className="tw:absolute tw:top-5 tw:w-[2px] tw:h-5" style={{ backgroundColor: colors.border.light, left: 'calc(25% - 6px)' }} />
-          <div className="tw:absolute tw:top-5 tw:w-[2px] tw:h-5" style={{ backgroundColor: colors.border.light, right: 'calc(25% - 6px)' }} />
-        </div>
+        {hasBranches && (
+          <>
+            {/* Fork connector */}
+            <div className="tw:flex tw:justify-center tw:relative tw:h-10">
+              <div className="tw:absolute tw:top-0 tw:w-[2px] tw:h-5" style={{ backgroundColor: colors.border.light, left: 'calc(50% - 2px)' }} />
+              <div className="tw:absolute tw:top-5 tw:h-[2px]" style={{ backgroundColor: colors.border.light, left: 'calc(25% - 6px)', right: 'calc(25% - 6px)' }} />
+              <div className="tw:absolute tw:top-5 tw:w-[2px] tw:h-5" style={{ backgroundColor: colors.border.light, left: 'calc(25% - 6px)' }} />
+              <div className="tw:absolute tw:top-5 tw:w-[2px] tw:h-5" style={{ backgroundColor: colors.border.light, right: 'calc(25% - 6px)' }} />
+            </div>
 
-        {/* Two branches side by side */}
-        <div className="tw:flex tw:gap-6">
-          {/* National branch */}
-          <div className="tw:flex-1">
-            <div
-              className="tw:text-xs tw:font-semibold tw:text-center tw:mb-2 tw:uppercase tw:tracking-widest"
-              style={{ color: colors.primary[700] }}
-            >
-              {nationalLabel}
-            </div>
-            <div className="tw:flex tw:items-stretch tw:gap-0">
-              {nationalStages.map((s, i) => (
-                <div key={s.id} className="tw:flex-1 tw:flex tw:items-stretch">
-                  <StageButton
-                    s={s}
-                    isActive={allStages.indexOf(s) === activeStage}
-                    onClick={() => selectStage(s.id)}
-                    borderRadiusLeft={i === 0}
-                    borderRadiusRight={i === nationalStages.length - 1}
-                    marginLeft={i > 0}
-                  />
+            {/* Two branches side by side */}
+            <div className="tw:flex tw:gap-6">
+              {/* National branch */}
+              <div className="tw:flex-1">
+                <div
+                  className="tw:text-xs tw:font-semibold tw:text-center tw:mb-2 tw:uppercase tw:tracking-widest"
+                  style={{ color: colors.primary[700] }}
+                >
+                  {nationalLabel}
                 </div>
-              ))}
-            </div>
-          </div>
+                <div className="tw:flex tw:items-stretch tw:gap-0">
+                  {nationalStages.map((s, i) => (
+                    <div key={s.id} className="tw:flex-1 tw:flex tw:items-stretch">
+                      <StageButton
+                        s={s}
+                        isActive={allStages.indexOf(s) === activeStage}
+                        onClick={() => selectStage(s.id)}
+                        borderRadiusLeft={i === 0}
+                        borderRadiusRight={i === nationalStages.length - 1}
+                        marginLeft={i > 0}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
 
-          {/* Local branch */}
-          <div className="tw:flex-1">
-            <div
-              className="tw:text-xs tw:font-semibold tw:text-center tw:mb-2 tw:uppercase tw:tracking-widest"
-              style={{ color: colors.primary[700] }}
-            >
-              {localLabel}
-            </div>
-            <div className="tw:flex tw:items-stretch tw:gap-0">
-              {localStages.map((s, i) => (
-                <div key={s.id} className="tw:flex-1 tw:flex tw:items-stretch">
-                  <StageButton
-                    s={s}
-                    isActive={allStages.indexOf(s) === activeStage}
-                    onClick={() => selectStage(s.id)}
-                    borderRadiusLeft={i === 0}
-                    borderRadiusRight={i === localStages.length - 1}
-                    marginLeft={i > 0}
-                  />
+              {/* Local branch */}
+              <div className="tw:flex-1">
+                <div
+                  className="tw:text-xs tw:font-semibold tw:text-center tw:mb-2 tw:uppercase tw:tracking-widest"
+                  style={{ color: colors.primary[700] }}
+                >
+                  {localLabel}
                 </div>
-              ))}
+                <div className="tw:flex tw:items-stretch tw:gap-0">
+                  {localStages.map((s, i) => (
+                    <div key={s.id} className="tw:flex-1 tw:flex tw:items-stretch">
+                      <StageButton
+                        s={s}
+                        isActive={allStages.indexOf(s) === activeStage}
+                        onClick={() => selectStage(s.id)}
+                        borderRadiusLeft={i === 0}
+                        borderRadiusRight={i === localStages.length - 1}
+                        marginLeft={i > 0}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+          </>
+        )}
 
         {/* Local-sub-1: connector from center of local row → centered Simulation box */}
         {localSub1Stages.length > 0 && (
@@ -487,8 +498,8 @@ export default function DataPipeline({ country = 'us' }: { country?: Country }) 
             ))}
           </ul>
 
-          {/* Matrix band visual for matrix-building stage */}
-          {stage.id === 'matrix-building' && (
+          {/* Matrix band visual for the calibration stage */}
+          {stage.id === 'calibration' && (
             <div
               className="tw:mb-6 tw:p-5 tw:rounded-xl"
               style={{ border: `1px solid ${colors.border.light}`, backgroundColor: colors.gray[50] }}
@@ -552,38 +563,11 @@ export default function DataPipeline({ country = 'us' }: { country?: Country }) 
                     ))}
                   </div>
                 ))}
-                {/* CD bands — smaller subsets */}
-                {[
-                  { label: 'CD A-1', filled: [0, 2, 4] },
-                  { label: 'CD A-2', filled: [1, 7] },
-                  { label: 'CD B-1', filled: [3, 5, 9] },
-                  { label: 'CD B-2', filled: [6, 8, 11] },
-                  { label: 'CD C-1', filled: [10] },
-                ].map(({ label, filled }) => (
-                  <div key={label} className="tw:flex tw:gap-[2px] tw:items-center">
-                    <div
-                      className="tw:w-[72px] tw:shrink-0 tw:text-[10px] tw:font-semibold tw:pr-2 tw:text-right"
-                      style={{ color: colors.primary[300] }}
-                    >
-                      {label}
-                    </div>
-                    {Array.from({ length: 12 }).map((_, i) => (
-                      <div
-                        key={i}
-                        className="tw:flex-1 tw:h-4 tw:rounded-[2px]"
-                        style={{
-                          backgroundColor: filled.includes(i) ? colors.primary[200] : colors.gray[100],
-                        }}
-                      />
-                    ))}
-                  </div>
-                ))}
               </div>
               <div className="tw:flex tw:gap-4 tw:mt-3 tw:justify-end">
                 {[
                   { color: colors.primary[400], label: 'National' },
                   { color: colors.primary[300], label: 'State' },
-                  { color: colors.primary[200], label: 'CD' },
                   { color: colors.gray[100], label: 'Empty' },
                 ].map(({ color, label }) => (
                   <div key={label} className="tw:flex tw:items-center tw:gap-1">
