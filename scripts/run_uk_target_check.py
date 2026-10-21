@@ -5,10 +5,10 @@ run by the model version policyengine.py pins, for the calibration year,
 against the same national targets the release was calibrated to. It writes
 one row per target (aggregates only).
 
-    git -C policyengine-uk-data archive 1.58.0 | tar -x -C /tmp/uk-data-1.58.0
-    uv run --no-project --python 3.13 --with policyengine-uk==2.126.12 \\
+    git -C policyengine-uk-data archive 1.58.1 | tar -x -C /tmp/uk-data-1.58.1
+    uv run --no-project --python 3.13 --with policyengine-uk==2.130.1 \\
       --with policyengine-core==3.33.0 --with pydantic --with pyyaml \\
-      --with /tmp/uk-data-1.58.0 python scripts/run_uk_target_check.py \\
+      --with /tmp/uk-data-1.58.1 python scripts/run_uk_target_check.py \\
       <artifacts>/enhanced_frs_2024_25.h5 2025 <artifacts>/pinned_target_check.csv
 """
 

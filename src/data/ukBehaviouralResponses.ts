@@ -1,6 +1,6 @@
 /**
- * PolicyEngine UK's behavioural responses, as policyengine-uk 2.126.12 (the
- * version policyengine.py 6.3.4 pins) defines them. Values mirror:
+ * PolicyEngine UK's behavioural responses, as policyengine-uk 2.130.1 (the
+ * version policyengine.py 6.9.0 pins) defines them. Values mirror:
  * - parameters/gov/simulation/labour_supply_responses/*.yaml
  * - parameters/gov/simulation/capital_gains_responses/*.yaml
  * - parameters/gov/contrib/policyengine/employer_ni/employee_incidence.yaml,
@@ -12,7 +12,7 @@
  * UK_MODEL_SOURCE points at a policyengine-uk checkout.
  */
 
-export const UK_MODEL_VERSION = '2.126.12';
+export const UK_MODEL_VERSION = '2.130.1';
 
 const REPO = 'https://github.com/PolicyEngine/policyengine-uk';
 export const ukSourceLinks = {

@@ -552,7 +552,14 @@ def test_area_overrides_and_notes_restate_the_data_package():
         "_SS_HEADCOUNT_GROWTH = 1.024",
     ):
         assert figure in obr
-    assert 'uprating.loc[row, "2023"]' in _read("targets/compute/income.py")
+    # The £2,000 test applies to contributions as simulated, not deflated.
+    assert "mask = (ss > 0) & (ss <= 2000)" in _read("targets/compute/income.py")
+    assert (
+        "contributions as the model runs them"
+        in ex.GROUP_NOTES[
+            ("obr", "pension_contributions_via_salary_sacrifice", "national", None)
+        ]
+    )
     assert "Borrower counts for England only" in _read("targets/sources/slc.py")
     assert "_MORTGAGE_TOTAL = 1_100 * 12 * 7.5e6" in _read("targets/sources/housing.py")
     assert "_PROPERTY_INCOME_SCALE = 1.9" in _read("targets/sources/hmrc_spi.py")

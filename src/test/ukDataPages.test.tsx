@@ -3,6 +3,7 @@ import { render, screen } from '@testing-library/react';
 import release from '../data/ukDataRelease.json';
 import { ukPipelineIntro, ukPipelineStages, ukBranchLabels, runtimeShortfall } from '../data/ukPipelineStages';
 import { fmtInt, fmtPct, fmtTarget } from '../data/ukDataRelease';
+import { UK_MODEL_VERSION } from '../data/ukBehaviouralResponses';
 
 vi.mock('next/navigation', () => ({
   usePathname: () => '/uk/model/data/pipeline',
@@ -106,6 +107,12 @@ describe('UK pipeline copy', () => {
     expect(runtimeShortfall).toBeGreaterThan(0);
     expect(runtimeShortfall).toBeLessThan(0.01);
     expect(text).toContain(`${fmtPct(runtimeShortfall)} fewer`);
+  });
+
+  it('describes the behavioural responses of the model version the release pins', () => {
+    // A new pin must fail here until someone re-checks the behavioural page
+    // against the new policyengine-uk (UK_MODEL_SOURCE=… bun run test).
+    expect(UK_MODEL_VERSION).toBe(release.release.modelVersion);
   });
 
   it('renders the UK intro and branch labels', () => {

@@ -9,6 +9,7 @@ import {
   type ParameterRow,
 } from '../../data/ukBehaviouralResponses';
 import { DataTable, ExternalLink, bodyText, cell, sectionHeading } from '../../views/data/ukTables';
+import { ukRelease } from '../../data/ukDataRelease';
 
 const fmtElasticity = (x: number) => (x === 0 ? '0' : x < 0 ? `−${Math.abs(x).toFixed(3).replace(/0+$/, '')}` : x.toFixed(3).replace(/0+$/, ''));
 
@@ -35,7 +36,7 @@ export default function UkBehaviouralResponses() {
   return (
     <div>
       <p style={{ ...bodyText, fontSize: typography.fontSize.lg }}>
-        In policyengine-uk {UK_MODEL_VERSION}, the version policyengine.py 6.3.4 pins, the labour supply and capital
+        In policyengine-uk {UK_MODEL_VERSION}, the version policyengine.py {ukRelease.release.policyengine} pins, the labour supply and capital
         gains responses below are off by default. Two modelling assumptions do change pay by default, under reforms
         to employer National Insurance or to salary sacrifice.
       </p>

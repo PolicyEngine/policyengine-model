@@ -197,8 +197,8 @@ GROUP_NOTES = {
         None,
     ): (
         "2024 users set in the build (7.7 million; 4.3 million at or below the "
-        "cap, 3.3 million above), grown 2.4% a year; the £2,000 test uses 2023 "
-        "prices"
+        "cap, 3.3 million above), grown 2.4% a year; the £2,000 test uses "
+        "contributions as the model runs them, which it does not uprate"
     ),
     ("hmrc", "capital_gains", "national", None): (
         "2023-24 outturn: gains uprated to 2025, taxpayer counts held flat"

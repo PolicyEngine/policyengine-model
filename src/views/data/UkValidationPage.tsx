@@ -102,7 +102,7 @@ const KNOWN_ISSUES: { repo: string; n: number; text: string }[] = [
   {
     repo: 'policyengine-uk-data',
     n: 587,
-    text: 'The Output Area lookup gives every Scottish Output Area the same population, and has no Output Areas for Cumberland, Westmorland and Furness, North Yorkshire or Somerset.',
+    text: 'The Output Area lookup gives every Scottish Output Area the same population, and has no Output Areas for Cumberland, Westmorland and Furness, North Yorkshire or Somerset, so policyengine.py finds no households for those four authorities.',
   },
   { repo: 'policyengine-uk', n: 1996, text: 'Modelled VAT exceeds OBR receipts.' },
   { repo: 'policyengine-uk-data', n: 570, text: 'Capital gains fall short of HMRC’s totals.' },

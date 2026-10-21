@@ -1,12 +1,12 @@
 """Dump policyengine-uk-data's calibration target registry to JSON.
 
 Run it against the data package at the release tag, with the model version
-that built the release, e.g. for policyengine-uk-data 1.58.0:
+that built the release, e.g. for policyengine-uk-data 1.58.1:
 
-    git -C policyengine-uk-data archive 1.58.0 | tar -x -C /tmp/uk-data-1.58.0
+    git -C policyengine-uk-data archive 1.58.1 | tar -x -C /tmp/uk-data-1.58.1
     uv run --no-project --python 3.13 --with policyengine-uk==2.122.2 \\
       --with policyengine-core==3.32.13 --with pydantic --with pyyaml \\
-      --with /tmp/uk-data-1.58.0 python scripts/dump_uk_target_registry.py registry_targets.json
+      --with /tmp/uk-data-1.58.1 python scripts/dump_uk_target_registry.py registry_targets.json
 
 The registry reads only target statistics bundled with the package, no microdata.
 """

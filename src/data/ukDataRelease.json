@@ -1,20 +1,20 @@
 {
   "schemaVersion": 1,
   "release": {
-    "policyengine": "6.3.4",
-    "modelVersion": "2.126.12",
+    "policyengine": "6.9.0",
+    "modelVersion": "2.130.1",
     "dataPackage": "policyengine-uk-data",
-    "dataVersion": "1.58.0",
-    "releaseManifestRevision": "0aa3eee1cdae8f8125f4aff126a8f01957595dc3",
+    "dataVersion": "1.58.1",
+    "releaseManifestRevision": "89be6b73fc1e6eeba6dae2f9400676d8510bcd51",
     "defaultDataset": "enhanced_frs_2024_25",
     "regionDatasets": [
       "national"
     ],
-    "datasetSha256": "5ba399ea5ab9a6c7d4e9aaf6c623080beb34d9ad5f330f6244dbad72b8d960b6",
-    "builtAt": "2026-10-07T17:31:53.189867Z",
+    "datasetSha256": "056e80fd8e9151d78f432a25cde863340baee81304c6216a37fb575ce8563784",
+    "builtAt": "2026-10-14T07:43:49.920588Z",
     "builtWithModelVersion": "2.122.2",
     "builtWithCoreVersion": "3.32.13",
-    "dataGitSha": "4cbedbecca352f52dffe47e849553c2759a00711"
+    "dataGitSha": "daad71cd26c107f1b784ff600d1464ba59c70e4a"
   },
   "base": {
     "households": 16288,
@@ -28,7 +28,7 @@
     "households": 52846,
     "benefitUnits": 61214,
     "people": 113589,
-    "weightedHouseholds": 31021756,
+    "weightedHouseholds": 30943898,
     "timePeriod": "2024",
     "dataset": "enhanced_frs_2024_25",
     "composition": {
@@ -36,7 +36,7 @@
       "spiCopies": 10000,
       "capitalGainsCopies": 26288,
       "cgtBandDonors": 270,
-      "spiWeightShare": 0.2803
+      "spiWeightShare": 0.2777
     },
     "geography": {
       "outputAreaDrawsPerHousehold": 1,
@@ -70,8 +70,8 @@
     "epoch": 510,
     "nationalTargets": 645,
     "nationalZeroTargets": 1,
-    "nationalWithin10": 0.869565,
-    "nationalWithin5": 0.661491,
+    "nationalWithin10": 0.868012,
+    "nationalWithin5": 0.673913,
     "constituency": {
       "areas": 650,
       "metrics": 21,
@@ -79,11 +79,11 @@
       "cellsWithoutSource": 0,
       "structuralZeroCells": 2422,
       "trainingCells": 10578,
-      "trainingWithin10": 0.959633,
+      "trainingWithin10": 0.96436,
       "heldOut": {
         "metric": "hmrc/employment_income/count",
         "cells": 650,
-        "within10": 0.375385
+        "within10": 0.341538
       },
       "families": [
         {
@@ -93,7 +93,7 @@
           "metrics": 8,
           "heldOut": false,
           "cells": 5200,
-          "within10": 0.933462
+          "within10": 0.939615
         },
         {
           "label": "Employment income of income taxpayers",
@@ -102,7 +102,7 @@
           "metrics": 1,
           "heldOut": false,
           "cells": 650,
-          "within10": 0.998462
+          "within10": 1.0
         },
         {
           "label": "Income taxpayers with employment income",
@@ -111,7 +111,7 @@
           "metrics": 1,
           "heldOut": true,
           "cells": 650,
-          "within10": 0.375385
+          "within10": 0.341538
         },
         {
           "label": "Self-employment income: taxpayers and amount",
@@ -120,7 +120,7 @@
           "metrics": 2,
           "heldOut": false,
           "cells": 1300,
-          "within10": 0.983846
+          "within10": 0.987692
         },
         {
           "label": "Universal Credit households",
@@ -129,7 +129,7 @@
           "metrics": 1,
           "heldOut": false,
           "cells": 650,
-          "within10": 0.993846
+          "within10": 0.990769
         },
         {
           "label": "Universal Credit households by number of children",
@@ -138,7 +138,7 @@
           "metrics": 4,
           "heldOut": false,
           "cells": 2600,
-          "within10": 0.983462
+          "within10": 0.986923
         },
         {
           "label": "Private renters and rent in Scottish constituencies",
@@ -147,7 +147,7 @@
           "metrics": 2,
           "heldOut": false,
           "cells": 114,
-          "within10": 0.929825
+          "within10": 0.982456
         },
         {
           "label": "Private renters and rent in Welsh constituencies",
@@ -156,7 +156,7 @@
           "metrics": 2,
           "heldOut": false,
           "cells": 64,
-          "within10": 0.9375
+          "within10": 0.921875
         }
       ]
     },
@@ -167,11 +167,11 @@
       "cellsWithoutSource": 905,
       "structuralZeroCells": 0,
       "trainingCells": 9535,
-      "trainingWithin10": 0.898794,
+      "trainingWithin10": 0.899109,
       "heldOut": {
         "metric": "hmrc/employment_income/count",
         "cells": 360,
-        "within10": 0.366667
+        "within10": 0.336111
       },
       "families": [
         {
@@ -181,7 +181,7 @@
           "metrics": 8,
           "heldOut": false,
           "cells": 2880,
-          "within10": 0.939236
+          "within10": 0.940972
         },
         {
           "label": "Employment income of income taxpayers",
@@ -190,7 +190,7 @@
           "metrics": 1,
           "heldOut": false,
           "cells": 360,
-          "within10": 0.975
+          "within10": 0.966667
         },
         {
           "label": "Income taxpayers with employment income",
@@ -199,7 +199,7 @@
           "metrics": 1,
           "heldOut": true,
           "cells": 360,
-          "within10": 0.366667
+          "within10": 0.336111
         },
         {
           "label": "Self-employment income: taxpayers and amount",
@@ -208,7 +208,7 @@
           "metrics": 2,
           "heldOut": false,
           "cells": 720,
-          "within10": 0.981944
+          "within10": 0.988889
         },
         {
           "label": "Universal Credit households",
@@ -217,7 +217,7 @@
           "metrics": 1,
           "heldOut": false,
           "cells": 360,
-          "within10": 0.963889
+          "within10": 0.958333
         },
         {
           "label": "Equivalised income before and after housing costs, and housing costs",
@@ -226,7 +226,7 @@
           "metrics": 3,
           "heldOut": false,
           "cells": 903,
-          "within10": 0.932447
+          "within10": 0.93134
         },
         {
           "label": "Households by tenure",
@@ -235,7 +235,7 @@
           "metrics": 4,
           "heldOut": false,
           "cells": 1164,
-          "within10": 0.685567
+          "within10": 0.677835
         },
         {
           "label": "Private rent paid",
@@ -244,7 +244,7 @@
           "metrics": 1,
           "heldOut": false,
           "cells": 289,
-          "within10": 0.982699
+          "within10": 0.986159
         },
         {
           "label": "Dwellings by council tax band, A to H",
@@ -253,7 +253,7 @@
           "metrics": 8,
           "heldOut": false,
           "cells": 2541,
-          "within10": 0.939
+          "within10": 0.939787
         },
         {
           "label": "Council tax paid, net of Council Tax Reduction",
@@ -262,7 +262,7 @@
           "metrics": 1,
           "heldOut": false,
           "cells": 318,
-          "within10": 0.471698
+          "within10": 0.487421
         }
       ]
     },
@@ -302,7 +302,7 @@
         "label": "Salary sacrifice users, in total and either side of the \u00a32,000 cap",
         "publisher": "HM Treasury and HMRC",
         "geography": "UK",
-        "note": "2024 users set in the build (7.7 million; 4.3 million at or below the cap, 3.3 million above), grown 2.4% a year; the \u00a32,000 test uses 2023 prices",
+        "note": "2024 users set in the build (7.7 million; 4.3 million at or below the cap, 3.3 million above), grown 2.4% a year; the \u00a32,000 test uses contributions as the model runs them, which it does not uprate",
         "units": [
           "count"
         ],
@@ -515,7 +515,7 @@
         "targets": 1,
         "zeroTargets": 0,
         "within10": 0.0,
-        "pinnedWithin10": 1.0,
+        "pinnedWithin10": 0.0,
         "urls": [
           "https://obr.uk/download/march-2026-economic-and-fiscal-outlook-detailed-forecast-tables-receipts/"
         ],
@@ -597,7 +597,7 @@
         "targets": 1,
         "zeroTargets": 0,
         "within10": 1.0,
-        "pinnedWithin10": 0.0,
+        "pinnedWithin10": 1.0,
         "urls": [
           "https://obr.uk/download/march-2026-economic-and-fiscal-outlook-detailed-forecast-tables-receipts/"
         ],
@@ -766,7 +766,7 @@
         "targets": 20,
         "zeroTargets": 0,
         "within10": 0.4,
-        "pinnedWithin10": 0.2,
+        "pinnedWithin10": 0.4,
         "urls": [
           "https://www.gov.uk/government/statistics/capital-gains-tax-statistics"
         ],
@@ -803,8 +803,8 @@
         ],
         "targets": 1,
         "zeroTargets": 0,
-        "within10": 0.0,
-        "pinnedWithin10": 0.0,
+        "within10": 1.0,
+        "pinnedWithin10": 1.0,
         "urls": [
           "https://assets.publishing.service.gov.uk/media/67ce0e7c08e764d17a5d3c21/2025_SPP_Review.pdf"
         ],
@@ -861,8 +861,8 @@
         ],
         "targets": 26,
         "zeroTargets": 0,
-        "within10": 0.846154,
-        "pinnedWithin10": 0.807692,
+        "within10": 0.884615,
+        "pinnedWithin10": 0.884615,
         "urls": [
           "https://assets.publishing.service.gov.uk/media/69f1f12d2fae53a03709682f/Collated_Tables_3_1_to_3_11_2324.ods"
         ],
@@ -880,8 +880,8 @@
         ],
         "targets": 26,
         "zeroTargets": 0,
-        "within10": 0.846154,
-        "pinnedWithin10": 0.5,
+        "within10": 0.769231,
+        "pinnedWithin10": 0.807692,
         "urls": [
           "https://assets.publishing.service.gov.uk/media/69f1f12d2fae53a03709682f/Collated_Tables_3_1_to_3_11_2324.ods"
         ],
@@ -900,7 +900,7 @@
         "targets": 26,
         "zeroTargets": 0,
         "within10": 0.884615,
-        "pinnedWithin10": 0.807692,
+        "pinnedWithin10": 0.884615,
         "urls": [
           "https://assets.publishing.service.gov.uk/media/69f1f12d2fae53a03709682f/Collated_Tables_3_1_to_3_11_2324.ods"
         ],
@@ -919,7 +919,7 @@
         "targets": 26,
         "zeroTargets": 0,
         "within10": 0.807692,
-        "pinnedWithin10": 0.730769,
+        "pinnedWithin10": 0.807692,
         "urls": [
           "https://assets.publishing.service.gov.uk/media/69f1f12d2fae53a03709682f/Collated_Tables_3_1_to_3_11_2324.ods"
         ],
@@ -937,8 +937,8 @@
         ],
         "targets": 26,
         "zeroTargets": 0,
-        "within10": 0.923077,
-        "pinnedWithin10": 0.538462,
+        "within10": 0.961538,
+        "pinnedWithin10": 0.961538,
         "urls": [
           "https://assets.publishing.service.gov.uk/media/69f1f12d2fae53a03709682f/Collated_Tables_3_1_to_3_11_2324.ods"
         ],
@@ -957,7 +957,7 @@
         "targets": 26,
         "zeroTargets": 0,
         "within10": 0.846154,
-        "pinnedWithin10": 0.769231,
+        "pinnedWithin10": 0.846154,
         "urls": [
           "https://assets.publishing.service.gov.uk/media/69f1f12d2fae53a03709682f/Collated_Tables_3_1_to_3_11_2324.ods"
         ],
@@ -974,8 +974,8 @@
         ],
         "targets": 104,
         "zeroTargets": 0,
-        "within10": 0.951923,
-        "pinnedWithin10": 0.442308,
+        "within10": 0.942308,
+        "pinnedWithin10": 0.394231,
         "urls": [
           "https://stat-xplore.dwp.gov.uk/"
         ],
@@ -1013,7 +1013,7 @@
         "targets": 4,
         "zeroTargets": 0,
         "within10": 1.0,
-        "pinnedWithin10": 0.75,
+        "pinnedWithin10": 1.0,
         "urls": [
           "https://www.gov.uk/government/publications/benefit-expenditure-and-caseload-tables-2026"
         ],
@@ -1167,7 +1167,7 @@
         "targets": 110,
         "zeroTargets": 0,
         "within10": 0.981818,
-        "pinnedWithin10": 0.981818,
+        "pinnedWithin10": 0.972727,
         "urls": [
           "https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationprojections/datasets/z1zippedpopulationprojectionsdatafilesuk"
         ],
@@ -1409,7 +1409,7 @@
         "targets": 8,
         "zeroTargets": 0,
         "within10": 0.75,
-        "pinnedWithin10": 0.625,
+        "pinnedWithin10": 0.75,
         "urls": [
           "https://assets.publishing.service.gov.uk/media/6943ee619273c48f554cf5c5/slcsp012025_Corrected.xlsx",
           "https://www.gov.uk/government/statistics/student-loans-in-northern-ireland-2024-to-2025/student-loans-for-higher-education-in-northern-ireland-financial-year-2024-25",
@@ -1449,7 +1449,7 @@
         "targets": 2,
         "zeroTargets": 0,
         "within10": 0.5,
-        "pinnedWithin10": 0.0,
+        "pinnedWithin10": 0.5,
         "urls": [
           "https://assets.publishing.service.gov.uk/media/691d9e662c6b98ecdbc5003f/slcsp052025.xlsx"
         ],
@@ -1487,7 +1487,7 @@
         "targets": 2,
         "zeroTargets": 0,
         "within10": 0.5,
-        "pinnedWithin10": 0.5,
+        "pinnedWithin10": 1.0,
         "urls": [
           "https://assets.publishing.service.gov.uk/media/691d9e662c6b98ecdbc5003f/slcsp052025.xlsx"
         ],
@@ -1522,7 +1522,7 @@
         ],
         "targets": 2,
         "zeroTargets": 0,
-        "within10": 1.0,
+        "within10": 0.5,
         "pinnedWithin10": 0.5,
         "urls": [
           "https://www.gov.uk/government/statistics/english-housing-survey-2023-to-2024-rented-sectors",
@@ -1571,24 +1571,15 @@
     ]
   },
   "validation": {
-    "modelVersion": "2.126.12",
+    "modelVersion": "2.130.1",
     "coreVersion": "3.33.0",
     "year": 2025,
-    "people": 69712844,
-    "households": 31245112,
+    "people": 69513955,
+    "households": 31166694,
     "targets": 645,
     "zeroTargets": 1,
-    "within10": 0.736025,
-    "within5": 0.521739,
-    "revisedTargets": [
-      "voa/council_tax/SCOTLAND/A",
-      "voa/council_tax/SCOTLAND/B",
-      "voa/council_tax/SCOTLAND/C",
-      "voa/council_tax/SCOTLAND/D",
-      "voa/council_tax/SCOTLAND/E",
-      "voa/council_tax/SCOTLAND/F",
-      "voa/council_tax/SCOTLAND/G",
-      "voa/council_tax/SCOTLAND/H"
-    ]
+    "within10": 0.782609,
+    "within5": 0.613354,
+    "revisedTargets": []
   }
 }
