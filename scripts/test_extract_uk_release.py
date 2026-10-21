@@ -520,83 +520,366 @@ def _read(path: str) -> str:
     return (Path(DATA_SOURCE) / "policyengine_uk_data" / path).read_text()
 
 
-@pytest.mark.skipif(
-    not DATA_SOURCE, reason="set UK_DATA_SOURCE to policyengine-uk-data at the pin"
-)
-def test_area_overrides_and_notes_restate_the_data_package():
+def _figure(text: str) -> float:
+    """1_100 -> 1100.0; 7.5e6 -> 7500000.0."""
+    return float(text.replace("_", ""))
+
+
+def _millions(x: float) -> str:
+    return f"{x / 1e6:g} million"
+
+
+def restatement_mismatches(ex, source: Path) -> list[str]:
+    """Each claim the extractor makes about how a target is built, checked
+    against the figure or rule the data package's code holds. Returns one
+    message per mismatch, so a missing, stale or altered note fails."""
     import re
 
-    obr = _read("targets/sources/obr.py")
+    def read(path: str) -> str:
+        return (source / "policyengine_uk_data" / path).read_text()
+
+    problems: list[str] = []
+
+    def need(cond: bool, message: str) -> None:
+        if not cond:
+            problems.append(message)
+
+    def note(key: tuple) -> str:
+        text = ex.GROUP_NOTES.get(key)
+        need(text is not None, f"no note for {key}")
+        return text or ""
+
+    local = {prefix: n or "" for prefix, _, _, n in ex.LOCAL_FAMILIES}
+
+    obr = read("targets/sources/obr.py")
+    # Areas: DWP benefit rows are GB lines built without a country restriction.
     rows = obr[
         obr.index("benefit_rows = {") : obr.index(
             "targets = []", obr.index("benefit_rows = {")
         )
     ]
-    benefit_targets = {
-        f"obr/{name}" for name in re.findall(r'^\s+"(\w+)": \(', rows, re.M)
-    }
-    great_britain = {
-        m for m, area in ex.AREA_BY_TARGET.items() if area == "Great Britain"
-    }
-    # Every DWP benefit row but Child Benefit (HMRC) is a Great Britain line
-    # built without a country restriction.
-    assert great_britain == benefit_targets - {"obr/child_benefit"}
-    assert "countries=" not in rows
-    assert "which covers Great Britain" in obr
-    assert '"NI domestic rates"' in obr and "obr/domestic_rates" in ex.AREA_BY_TARGET
-    assert "_PRIVATE_SCHOOL = {y: 557_000 for y in range(2018, 2032)}" in obr
-    for figure in (
-        "7_700_000",
-        "4_300_000",
-        "3_300_000",
-        "_SS_HEADCOUNT_GROWTH = 1.024",
+    names = {f"obr/{n}" for n in re.findall(r'^\s+"(\w+)": \(', rows, re.M)}
+    need("countries=" not in rows, "obr.py now restricts benefit_rows by country")
+    gb = {m for m, a in ex.AREA_BY_TARGET.items() if a == "Great Britain"}
+    need(
+        gb == names - {"obr/child_benefit"},
+        f"GB benefit areas {sorted(gb)} != {sorted(names - {'obr/child_benefit'})}",
+    )
+    for m in sorted(gb):
+        key = (
+            "obr",
+            "esa_income"
+            if m == "obr/esa"
+            else ("jsa" if m == "obr/jobseekers_allowance" else m.split("/")[1]),
+            "national",
+            None,
+        )
+        need(
+            "Scored on UK households" in note(key)
+            or "scored on UK households" in note(key),
+            f"{m}: no UK-scoring note",
+        )
+    need(
+        '"NI domestic rates"' in obr
+        and ex.AREA_BY_TARGET.get("obr/domestic_rates") == "Northern Ireland",
+        "domestic rates area",
+    )
+    # ESA and PIP scoring.
+    blm = read("targets/build_loss_matrix.py")
+    inc = read("targets/compute/income.py")
+    need(
+        'if name == "obr/esa":' in blm and 'calculate("esa_contrib")' in inc,
+        "obr/esa no longer adds contributory ESA",
+    )
+    need(
+        "income-related and contributory"
+        in ex.GROUP_LABELS[("obr", "esa_income", "national", None)],
+        "ESA label",
+    )
+    need(
+        '"Disability living allowance and personal independence p"' in obr,
+        "obr.py PIP row label changed",
+    )
+    need(
+        "Disability Living Allowance and PIP"
+        in ex.GROUP_LABELS[("obr", "pip", "national", None)],
+        "PIP label",
+    )
+    need(
+        'ctx.pe("council_tax_less_benefit")' in read("targets/compute/council_tax.py"),
+        "council tax scoring changed",
+    )
+    need(
+        "net of reductions" in note(("obr", "council_tax", "national", None)),
+        "council tax note",
+    )
+    # Independent schools.
+    m = re.search(
+        r"_PRIVATE_SCHOOL = \{y: ([\d_]+) for y in range\((\d+), (\d+)\)\}", obr
+    )
+    need(m is not None, "obr.py private school constant changed")
+    if m:
+        n = note(("obr", "attends_private_school", "national", None))
+        need(
+            f"{_figure(m[1]):,.0f}" in n and m[2] in n and str(int(m[3]) - 1) in n,
+            f"private school note: {n!r}",
+        )
+    # Salary sacrifice headcounts.
+    ss = note(("obr", "pension_contributions_via_salary_sacrifice", "national", None))
+    for const in ("_SS_TOTAL_USERS", "_SS_BELOW_CAP_USERS", "_SS_ABOVE_CAP_USERS"):
+        m = re.search(const + r" = \{\s*y: ([\d_]+) \*", obr)
+        need(
+            m is not None and _millions(_figure(m[1])) in ss,
+            f"{const} figure missing from note {ss!r}",
+        )
+    m = re.search(r"_SS_HEADCOUNT_GROWTH = ([\d.]+)", obr)
+    need(
+        m is not None and f"{(float(m[1]) - 1) * 100:g}%" in ss,
+        "salary sacrifice growth rate",
+    )
+    deflates = "price_adj" in inc
+    need(
+        ("2023 prices" in ss) == deflates,
+        "salary sacrifice £2,000 test: note and compute disagree on price basis",
+    )
+    # SPI income bands: the projections reuse the base-year names, and the
+    # registry keeps the first target of each name, so 2025 fits 2023-24.
+    spi = read("targets/sources/hmrc_spi.py")
+    registry_code = read("targets/registry.py")
+    dropped = (
+        "if target.name in seen_names:" in registry_code
+        and 'name = f"hmrc/{variable}_income_band_{band_label}"'
+        in spi[spi.index("def _read_projection_csv") :]
+    )
+    for variable in ex.SPI_GROUPS:
+        n = note(("hmrc_spi", variable, "national", "total_income"))
+        need(
+            dropped == ("fitted unchanged for 2025" in n),
+            f"SPI {variable}: projection note {n!r}",
+        )
+    # Mortgage, property income, capital gains, land.
+    m = re.search(
+        r"_MORTGAGE_TOTAL = ([\d_.e]+) \* 12 \* ([\d_.e]+)",
+        read("targets/sources/housing.py"),
+    )
+    mort = note(("ons", "mortgage_capital_repayment", "national", None))
+    need(
+        m is not None
+        and f"£{_figure(m[1]):,.0f}" in mort
+        and _millions(_figure(m[2])) in mort,
+        f"mortgage note {mort!r}",
+    )
+    need(
+        ex.PUBLISHER_BY_TARGET.get("housing/total_mortgage")
+        == "Assumption set in the build",
+        "mortgage publisher",
+    )
+    m = re.search(
+        r"_PROPERTY_INCOME_SCALE = ([\d.]+)", read("targets/sources/hmrc_spi.py")
+    )
+    need(
+        m is not None
+        and f"{m[1]} times"
+        in note(("hmrc_spi", "property_income", "national", "total_income")),
+        "property income scale",
+    )
+    cgt = read("targets/sources/hmrc_cgt.py")
+    need(
+        "float(_CGT_TAXPAYERS) for year in range" in cgt and "_project_gains(" in cgt,
+        "CGT construction changed",
+    )
+    cg = note(("hmrc", "capital_gains", "national", None))
+    need("gains uprated" in cg and "counts held flat" in cg, f"CGT note {cg!r}")
+    land = read("targets/sources/_land.py")
+    share_year = re.search(r"_ONS_(\d{4})_HOUSEHOLD", land)
+    flat = "2025: HOUSEHOLD_LAND_VALUES[2024]" in land
+    for key in (
+        ("ons", "household_land_value", "national", None),
+        ("ons", "corporate_land_value", "national", None),
     ):
-        assert figure in obr
-    # The £2,000 test applies to contributions as simulated, not deflated.
-    assert "mask = (ss > 0) & (ss <= 2000)" in _read("targets/compute/income.py")
-    assert (
-        "contributions as the model runs them"
-        in ex.GROUP_NOTES[
-            ("obr", "pension_contributions_via_salary_sacrifice", "national", None)
-        ]
+        n = note(key)
+        need(
+            share_year is not None and share_year[1] in n,
+            f"land share year missing from {n!r}",
+        )
+        need(flat == ("held flat for 2025" in n), f"land carry-forward: {n!r}")
+    need(
+        'df["dwellings"] * df["avg_house_price"]'
+        in read("targets/sources/mhclg_regional_land.py")
+        and "dwellings" in note(("ons", "household_land_value", "region", None)),
+        "regional land note",
     )
-    assert "Borrower counts for England only" in _read("targets/sources/slc.py")
-    assert "_MORTGAGE_TOTAL = 1_100 * 12 * 7.5e6" in _read("targets/sources/housing.py")
-    assert "_PROPERTY_INCOME_SCALE = 1.9" in _read("targets/sources/hmrc_spi.py")
-    land = _read("targets/sources/_land.py")
-    assert "_ONS_2020_HOUSEHOLD" in land
-    assert "2025: HOUSEHOLD_LAND_VALUES[2024]" in land
-    assert 'df["dwellings"] * df["avg_house_price"]' in _read(
-        "targets/sources/mhclg_regional_land.py"
+    # Publishers from the sources' own URLs.
+    need(
+        "www.gov.scot" in read("targets/sources/voa_council_tax.py")
+        and ex.PUBLISHER_BY_PREFIX.get("voa/council_tax/SCOTLAND/")
+        == "Scottish Government",
+        "VOA Scotland publisher",
     )
-    assert "float(_CGT_TAXPAYERS) for year in range" in _read(
-        "targets/sources/hmrc_cgt.py"
+    slc = read("targets/sources/slc.py")
+    need(
+        "explore-education-statistics" in slc
+        and ex.PUBLISHER_BY_PREFIX.get("slc/plan_") == "Explore Education Statistics",
+        "SLC plan publisher",
     )
+    need("Borrower counts for England only" in slc, "slc.py scope changed")
+    for prefix in sorted(
+        set(
+            re.findall(
+                r'name=f?"(slc/[a-z_]+?)(?:_spend|_recipients|_borrowers|\{)', slc
+            )
+        )
+    ):
+        need(
+            ex.area_override(prefix + "_x") == "England"
+            or ex.area_override(prefix) == "England",
+            f"{prefix}: not marked England",
+        )
+    # Local families.
+    uc = read("targets/sources/local_uc.py")
+    need("(positional order)" in uc, "local UC targets no longer positional")
+    if "(positional order)" in uc:
+        need(
+            "row order" in local.get("uc_households", "")
+            and "row order" in local.get("uc_hh_", ""),
+            "UC notes must flag row order",
+        )
+    need(
+        'scaled["N"] = gb_bucket_totals.copy()' in uc
+        and "Great Britain" in local.get("uc_hh_", ""),
+        "UC child split note",
+    )
+    for area in ("constituencies", "local_authorities"):
+        loss = read(f"datasets/local_areas/{area}/loss.py")
+        m = re.search(
+            r"y\[col\] \*= uk_total_population / targets_total_pop \* ([\d.]+)", loss
+        )
+        need(
+            m is not None and f"{float(m[1]) * 100:g}%" in local.get("age/", ""),
+            f"{area}: age rescale",
+        )
+        need(
+            "adjustment = national_target / local_target_sum" in loss
+            and "Rescaled" in local.get("hmrc/employment_income/amount", ""),
+            f"{area}: income rescale",
+        )
+        need(
+            re.search(
+                r'count"\] = \(\s*incomes\[f"\{income_variable\}_count"\]\.values \* adjustment',
+                loss,
+            )
+            is not None
+            and "same factor" in local.get("hmrc/employment_income/count", ""),
+            f"{area}: count scaling",
+        )
+    la = read("datasets/local_areas/local_authorities/loss.py")
+    need(
+        "VOA counts dwellings" in la
+        and "dwellings" in local.get("voa/council_tax/", "")
+        and "households" in local.get("voa/council_tax/", ""),
+        "VOA dwelling note",
+    )
+    extras = read("targets/sources/local_la_extras.py")
+    need(
+        'str.match(r"^E0[6789]")' in extras
+        and "England only" in local.get("rent/private_rent", ""),
+        "private rent scope",
+    )
+    need(
+        f'VALIDATION_ONLY_LOCAL_TARGETS = ["{ex.HELD_OUT_LOCAL}"]'
+        in read("datasets/create_datasets.py"),
+        "held-out metric",
+    )
+    return problems
 
 
 @pytest.mark.skipif(
     not DATA_SOURCE, reason="set UK_DATA_SOURCE to policyengine-uk-data at the pin"
 )
-def test_local_notes_restate_the_loss_builders():
-    import re
+def test_the_extractor_restates_the_data_package():
+    assert restatement_mismatches(ex, Path(DATA_SOURCE)) == []
 
-    uc = _read("targets/sources/local_uc.py")
-    assert "(positional order)" in uc
-    assert 'scaled["N"] = gb_bucket_totals.copy()' in uc  # NI takes GB's child shares
-    for area in ("constituencies", "local_authorities"):
-        loss = _read(f"datasets/local_areas/{area}/loss.py")
-        assert re.search(r'y\["uc_households"\] = get_\w+_uc_targets\(\)\.values', loss)
-        assert "y[col] *= uk_total_population / targets_total_pop * 0.9" in loss
-        assert re.search(
-            r'y\[f"hmrc/\{income_variable\}/count"\] = \(\s*incomes\[f"\{income_variable\}_count"\]\.values \* adjustment',
-            loss,
+
+@pytest.mark.skipif(
+    not DATA_SOURCE, reason="set UK_DATA_SOURCE to policyengine-uk-data at the pin"
+)
+@pytest.mark.parametrize(
+    "mutate",
+    [
+        lambda m: m.GROUP_NOTES.pop(
+            ("obr", "attends_private_school", "national", None)
+        ),
+        lambda m: m.GROUP_NOTES.update(
+            {
+                (
+                    "obr",
+                    "attends_private_school",
+                    "national",
+                    None,
+                ): "550,000 in every year from 2018 to 2031"
+            }
+        ),
+        lambda m: m.GROUP_NOTES.update(
+            {
+                (
+                    "ons",
+                    "mortgage_capital_repayment",
+                    "national",
+                    None,
+                ): "£1,000 a month for 7.5 million"
+            }
+        ),
+        lambda m: m.PUBLISHER_BY_PREFIX.pop("voa/council_tax/SCOTLAND/"),
+        lambda m: m.PUBLISHER_BY_PREFIX.update({"slc/plan_": "Student Loans Company"}),
+        lambda m: m.AREA_BY_TARGET.pop("obr/state_pension"),
+        lambda m: m.AREA_BY_TARGET.pop("obr/domestic_rates"),
+        lambda m: m.GROUP_LABELS.update(
+            {("obr", "esa_income", "national", None): "Income-related ESA"}
+        ),
+        lambda m: m.GROUP_NOTES.update(
+            {
+                (
+                    "obr",
+                    "pension_contributions_via_salary_sacrifice",
+                    "national",
+                    None,
+                ): "7.7 million users"
+            }
+        ),
+        lambda m: m.LOCAL_FAMILIES.__setitem__(
+            4, m.LOCAL_FAMILIES[4][:3] + ("Universal Credit households by area",)
+        ),
+        lambda m: m.LOCAL_FAMILIES.__setitem__(
+            0, m.LOCAL_FAMILIES[0][:3] + ("Rescaled to the UK population",)
+        ),
+    ],
+)
+def test_the_restatement_check_fails_when_a_claim_drifts(mutate):
+    import copy
+    import types
+
+    module = types.SimpleNamespace(
+        **{
+            name: copy.deepcopy(getattr(ex, name))
+            for name in (
+                "GROUP_NOTES",
+                "GROUP_LABELS",
+                "LOCAL_FAMILIES",
+                "AREA_BY_TARGET",
+                "PUBLISHER_BY_TARGET",
+                "PUBLISHER_BY_PREFIX",
+                "AREA_BY_PREFIX",
+                "HELD_OUT_LOCAL",
+                "SPI_GROUPS",
+            )
+        }
+    )
+    module.area_override = lambda metric: (
+        module.AREA_BY_TARGET.get(metric)
+        or next(
+            (a for p, a in module.AREA_BY_PREFIX.items() if metric.startswith(p)), None
         )
-    assert "mapping_matrix @ y.values" in _read(
-        "datasets/local_areas/constituencies/loss.py"
     )
-    fill = _read(
-        "datasets/local_areas/local_authorities/targets/create_total_incomes.py"
-    )
-    assert "df[col] = df[col].fillna(avg)" in fill
-    held = _read("datasets/create_datasets.py")
-    assert f'VALIDATION_ONLY_LOCAL_TARGETS = ["{ex.HELD_OUT_LOCAL}"]' in held
+    assert restatement_mismatches(module, Path(DATA_SOURCE)) == []
+    mutate(module)
+    assert restatement_mismatches(module, Path(DATA_SOURCE)) != []

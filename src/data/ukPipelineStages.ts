@@ -224,7 +224,8 @@ export const ukPipelineStages: PipelineStage[] = [
       'lookup gives every Output Area the same population in this release (policyengine-uk-data#587). The Output ' +
       'Area fixes the household’s ' +
       'local authority and constituency. The build then uprates the file to 2025, the year the calibration ' +
-      'targets describe.',
+      'targets describe, with the year-on-year growth its model applies when it loads a file; household weights ' +
+      'and fuel spending keep the build’s own indices.',
     icon: 'map-pin',
     inputSize: `${f.households} households`,
     outputSize: `${f.households} households`,

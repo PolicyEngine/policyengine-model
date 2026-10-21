@@ -132,6 +132,18 @@ def area_override(metric: str) -> str | None:
 # How a target family is built or scored, where its label alone would
 # mislead. Every note restates code in the release.
 GB_ON_UK_NOTE = "Scored on UK households (policyengine-uk-data#588)"
+# hmrc_spi.py's 2025 projections reuse the base-year targets' names, and
+# registry.get_all_targets keeps the first target of each name, so the
+# calibration fits the 2023-24 figures.
+SPI_NOTE = "HMRC's 2023-24 figures, fitted unchanged for 2025: the build's 2025 projections share their names and are dropped"
+SPI_GROUPS = [
+    "employment_income",
+    "self_employment_income",
+    "private_pension_income",
+    "state_pension",
+    "property_income",
+    "dividend_income",
+]
 GROUP_NOTES = {
     ("obr", "ni_employee", "national", None): (
         "OBR's total includes employer and self-employed contributions "
@@ -172,7 +184,7 @@ GROUP_NOTES = {
         "total_income",
     ): (
         "Amounts scaled up 1.9 times, the build's ratio of HMRC's property "
-        "rental income statistics to the SPI"
+        "rental income statistics to the SPI. " + SPI_NOTE
     ),
     # targets/sources/_land.py and mhclg_regional_land.py
     ("ons", "land_value", "national", None): "ONS's 2024 total, held flat for 2025",
@@ -470,6 +482,11 @@ GROUP_LABELS = {
         None,
     ): "Dwellings by region, in total and by council tax band",
 }
+
+for _variable in SPI_GROUPS:
+    GROUP_NOTES.setdefault(
+        ("hmrc_spi", _variable, "national", "total_income"), SPI_NOTE
+    )
 
 # Constituency and local authority loss builders (datasets/local_areas/*/loss.py).
 INCOME_NOTE = "Rescaled so the areas add to a projected UK total"

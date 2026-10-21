@@ -27,7 +27,7 @@ export async function fetchMetadata(country: string = 'us'): Promise<Metadata> {
   const variables: Record<string, Variable> = raw.variables ?? {};
 
   const result: Metadata = {
-    variables: await withModuleNames(country, variables),
+    variables: await withModuleNames(country, variables, raw.version),
     parameters: raw.parameters ?? {},
   };
 
@@ -35,52 +35,62 @@ export async function fetchMetadata(country: string = 'us'): Promise<Metadata> {
   return result;
 }
 
-/**
- * Fill missing modules from exact Variable class declarations. Older snapshots
- * can fall back to unique file stems; unmatched names stay unclassified.
- */
+// The repository each country's module map must come from.
+const MODULE_MAP_REPO: Record<string, string> = { uk: 'PolicyEngine/policyengine-uk' };
+
+export interface ModuleMapSnapshot {
+  source: { repo: string; version: string; commit: string };
+  modules: Record<string, string>;
+}
+
+/** Fill missing modules from a class-to-module map; names it lacks stay unclassified. */
 export function fillModuleNames(
   variables: Record<string, Variable>,
-  paths: string[],
-  modules?: Record<string, string>,
+  modules: Record<string, string>,
 ): Record<string, Variable> {
-  const pathSet = new Set(paths);
-  const byStem = new Map<string, string | null>();
-  for (const path of paths) {
-    const stem = path.split('/').pop()!.replace(/\.py$/, '');
-    byStem.set(stem, byStem.has(stem) ? null : path);
-  }
   return Object.fromEntries(
     Object.entries(variables).map(([name, v]) => {
       if (v.moduleName) return [name, v];
-      if (modules) {
-        const moduleName = Object.hasOwn(modules, name) ? modules[name] : undefined;
-        if (typeof moduleName !== 'string' || !pathSet.has(`${moduleName.replace(/\./g, '/')}.py`)) return [name, v];
-        return [name, { ...v, moduleName }];
-      }
-      const path = byStem.get(name);
-      if (!path) return [name, v];
-      return [name, { ...v, moduleName: path.replace(/\.py$/, '').replace(/\//g, '.') }];
+      const moduleName = Object.hasOwn(modules, name) ? modules[name] : undefined;
+      return typeof moduleName === 'string' && moduleName ? [name, { ...v, moduleName }] : [name, v];
     }),
   );
 }
 
-/** The UK API serves no module names; fill them from the build-time variable tree. */
+/**
+ * Whether a module map describes the variables an API response serves: it must
+ * come from the country's repository, at the package version the API reports.
+ */
+export function moduleMapMatches(snapshot: unknown, country: string, apiVersion: unknown): snapshot is ModuleMapSnapshot {
+  const s = snapshot as ModuleMapSnapshot | null;
+  return (
+    typeof apiVersion === 'string' &&
+    apiVersion !== '' &&
+    s?.source?.repo === MODULE_MAP_REPO[country] &&
+    s.source.version === apiVersion &&
+    typeof s.source.commit === 'string' &&
+    /^[0-9a-f]{40}$/.test(s.source.commit) &&
+    !!s.modules &&
+    typeof s.modules === 'object' &&
+    !Array.isArray(s.modules)
+  );
+}
+
+/** The UK API serves no module names; fill them from the build-time map for the same release. */
 async function withModuleNames(
   country: string,
   variables: Record<string, Variable>,
+  apiVersion: unknown,
 ): Promise<Record<string, Variable>> {
   const all = Object.values(variables);
   const missing = all.filter((v) => !v.moduleName).length;
-  if (all.length === 0 || missing < all.length / 2) return variables;
+  if (all.length === 0 || missing < all.length / 2 || !MODULE_MAP_REPO[country]) return variables;
   try {
     const prefix = typeof window === 'undefined' ? '' : publicBasePrefixFromPath(window.location.pathname);
-    const res = await fetch(`${prefix}/variable-tree-${country}.json`);
+    const res = await fetch(`${prefix}/variable-modules-${country}.json`);
     if (!res.ok) return variables;
-    const tree = await res.json();
-    const modules = tree?.modules && typeof tree.modules === 'object' && !Array.isArray(tree.modules)
-      ? tree.modules : undefined;
-    return Array.isArray(tree?.paths) ? fillModuleNames(variables, tree.paths, modules) : variables;
+    const snapshot = await res.json();
+    return moduleMapMatches(snapshot, country, apiVersion) ? fillModuleNames(variables, snapshot.modules) : variables;
   } catch {
     return variables;
   }

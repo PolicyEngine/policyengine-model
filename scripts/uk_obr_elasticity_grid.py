@@ -28,7 +28,9 @@ FUNCTIONS = (
 
 def load_functions(source: Path) -> dict:
     tree = ast.parse((source / "policyengine_uk/dynamics/progression.py").read_text())
-    found = [n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name in FUNCTIONS]
+    found = [
+        n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name in FUNCTIONS
+    ]
     if {n.name for n in found} != set(FUNCTIONS):
         raise SystemExit(f"progression.py no longer defines {FUNCTIONS}")
     namespace = {
@@ -36,7 +38,10 @@ def load_functions(source: Path) -> dict:
         "Simulation": object,
         "benunit_age_18_composition": lambda sim, year: sim.composition,
     }
-    exec(compile(ast.Module(body=found, type_ignores=[]), "progression.py", "exec"), namespace)
+    exec(
+        compile(ast.Module(body=found, type_ignores=[]), "progression.py", "exec"),
+        namespace,
+    )
     return {name: namespace[name] for name in FUNCTIONS}
 
 

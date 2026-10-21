@@ -164,6 +164,43 @@ export async function fetchVariableTreeSnapshot(country, source, {
   return { source, paths: await fetchVariableModulePaths(country, source, fetchImpl) };
 }
 
+/** The country package version the production API serves. */
+export async function fetchApiModelVersion(country, fetchImpl = globalThis.fetch) {
+  const metadata = await (await request(`https://api.policyengine.org/${country}/metadata`, fetchImpl)).json();
+  const version = (metadata.result ?? metadata).version;
+  if (typeof version !== 'string' || !/^\d+\.\d+\.\d+$/.test(version)) {
+    throw new Error('production API returned no package version');
+  }
+  return version;
+}
+
+/** The commit a release tag names, following an annotated tag to its commit. */
+export async function resolveTagCommit(repo, tag, fetchImpl = globalThis.fetch) {
+  const ref = await (await request(`https://api.github.com/repos/${repo}/git/ref/tags/${tag}`, fetchImpl)).json();
+  let target = ref.object;
+  if (target?.type === 'tag') {
+    target = (await (await request(`https://api.github.com/repos/${repo}/git/tags/${target.sha}`, fetchImpl)).json()).object;
+  }
+  if (target?.type !== 'commit' || !/^[0-9a-f]{40}$/.test(target.sha ?? '')) {
+    throw new Error(`tag ${tag} does not resolve to a commit`);
+  }
+  return target.sha;
+}
+
+/**
+ * The class-to-module map for the package release the production API serves.
+ * The explorer's variables come from that API, so the map is taken from the
+ * release with the same version, not from the default branch, and the browser
+ * applies it only when the versions still match.
+ */
+export async function fetchVariableModuleSnapshot(country, repo, fetchImpl = globalThis.fetch) {
+  const version = await fetchApiModelVersion(country, fetchImpl);
+  const commit = await resolveTagCommit(repo, version, fetchImpl);
+  const response = await request(`https://codeload.github.com/${repo}/tar.gz/${commit}`, fetchImpl);
+  const { modules } = extractVariableModules(country, gunzipSync(Buffer.from(await response.arrayBuffer())));
+  return { source: { repo, version, commit }, modules };
+}
+
 export async function fetchMetadataFiles({
   countries = ['us', 'uk'],
   outputDir = PUBLIC_DIR,
@@ -182,10 +219,11 @@ export async function fetchMetadataFiles({
     const snapshotPath = join(outputDir, `programs-${country}.json`);
     const parameterTreePath = join(outputDir, `param-tree-${country}.json`);
     const variableTreePath = join(outputDir, `variable-tree-${country}.json`);
+    const variableModulesPath = join(outputDir, `variable-modules-${country}.json`);
     let source;
     try {
-      // Clear all three before resolving HEAD, including when resolution fails.
-      for (const path of [snapshotPath, parameterTreePath, variableTreePath]) {
+      // Clear every snapshot before resolving HEAD, including when resolution fails.
+      for (const path of [snapshotPath, parameterTreePath, variableTreePath, variableModulesPath]) {
         rmSync(path, { force: true });
       }
       source = await resolveRepository(country, fetchImpl);
@@ -220,6 +258,17 @@ export async function fetchMetadataFiles({
           logger.log(`  ${country}: wrote ${variableTreePath} (${tree.paths.length} files)`);
         } catch (error) {
           logger.warn(`  ${country}: variable tree skipped — ${error.message}`);
+        }
+      })(),
+      (async () => {
+        // The UK API serves no module names; the US API does.
+        if (country !== 'uk') return;
+        try {
+          const snapshot = await fetchVariableModuleSnapshot(country, source.repo, fetchImpl);
+          writeFileSync(variableModulesPath, JSON.stringify(snapshot));
+          logger.log(`  ${country}: wrote ${variableModulesPath} (${Object.keys(snapshot.modules).length} classes, ${snapshot.source.version})`);
+        } catch (error) {
+          logger.warn(`  ${country}: variable module map skipped — ${error.message}`);
         }
       })(),
     ]);

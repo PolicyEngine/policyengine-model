@@ -8,6 +8,7 @@ import {
   fetchParameterYamlPaths,
   fetchRegistrySnapshot,
   fetchVariableModulePaths,
+  fetchVariableModuleSnapshot,
   parseProgramsYaml,
   readPackageVersion,
   resolveRepository,
@@ -265,8 +266,37 @@ describe('registry snapshot fetch script', () => {
       .resolves.toBeUndefined();
     expect(existsSync(snapshotPath)).toBe(false);
     expect(logger.warn).toHaveBeenCalledWith(expect.stringContaining('registry snapshot skipped'));
-    expect(fetchImpl).not.toHaveBeenCalledWith(
-      'https://api.policyengine.org/uk/metadata', expect.anything(),
-    );
+    // The module map is independent of the registry; with no reachable API or
+    // tag it is skipped, and no earlier map survives.
+    expect(existsSync(join(outputDir, 'variable-modules-uk.json'))).toBe(false);
+    expect(logger.warn).toHaveBeenCalledWith(expect.stringContaining('variable module map skipped'));
+  });
+
+  it('builds the UK module map from the release the API serves, recording its provenance', async () => {
+    const tagCommit = 'b'.repeat(40);
+    const archive = gzipSync(variableArchive([
+      { path: 'policyengine-uk-x/policyengine_uk/variables/gov/dwp/afip.py', contents: 'class armed_forces_independence_payment(Variable):\n    pass\n' },
+    ]));
+    const fetchImpl = mockFetch({
+      'https://api.policyengine.org/uk/metadata': { result: { version: '2.130.1' } },
+      'https://api.github.com/repos/PolicyEngine/policyengine-uk/git/ref/tags/2.130.1': { object: { type: 'tag', sha: 'tagobject' } },
+      'https://api.github.com/repos/PolicyEngine/policyengine-uk/git/tags/tagobject': { object: { type: 'commit', sha: tagCommit } },
+      [`https://codeload.github.com/PolicyEngine/policyengine-uk/tar.gz/${tagCommit}`]: new Response(archive),
+    });
+    const snapshot = await fetchVariableModuleSnapshot('uk', 'PolicyEngine/policyengine-uk', fetchImpl);
+    expect(snapshot).toEqual({
+      source: { repo: 'PolicyEngine/policyengine-uk', version: '2.130.1', commit: tagCommit },
+      modules: { armed_forces_independence_payment: 'gov.dwp.afip' },
+    });
+  });
+
+  it('refuses a module map when the API reports no version or the tag names no commit', async () => {
+    await expect(fetchVariableModuleSnapshot('uk', 'PolicyEngine/policyengine-uk', mockFetch({
+      'https://api.policyengine.org/uk/metadata': { result: {} },
+    }))).rejects.toThrow('no package version');
+    await expect(fetchVariableModuleSnapshot('uk', 'PolicyEngine/policyengine-uk', mockFetch({
+      'https://api.policyengine.org/uk/metadata': { result: { version: '2.130.1' } },
+      'https://api.github.com/repos/PolicyEngine/policyengine-uk/git/ref/tags/2.130.1': { object: { type: 'tree', sha: 'x' } },
+    }))).rejects.toThrow('does not resolve to a commit');
   });
 });

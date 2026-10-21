@@ -92,15 +92,15 @@ describe('UK coverage links use the registry snapshot', () => {
     expect(screen.queryByRole('link', { name: 'Computation tree' })).not.toBeInTheDocument();
   });
 
-  it('supports the unique exact file stems in older versioned snapshots', async () => {
-    await showProgramme({ variables: { source, paths: variableTree.paths } });
-    expect(screen.getByRole('link', { name: 'Computation tree' })).toBeInTheDocument();
-  });
-
-  it('omits links for ambiguous file stems in older versioned snapshots', async () => {
-    await showProgramme({ variables: { source, paths: ['gov/dwp/jsa.py', 'input/jsa.py'] } });
+  it.each([
+    ['a unique file stem', { source, paths: variableTree.paths }, 'jsa'],
+    // afip.py declares armed_forces_independence_payment, not afip.
+    ['a file named after the variable that declares another class', { source, paths: ['gov/dwp/afip.py'] }, 'afip'],
+  ])('emits no variable links from a paths-only tree: %s', async (_, variables, variable) => {
+    await showProgramme({ variables, variable });
     expect(screen.queryByRole('link', { name: 'Source code' })).not.toBeInTheDocument();
     expect(screen.queryByRole('link', { name: 'Computation tree' })).not.toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Parameters' })).toBeInTheDocument();
   });
 
   it.each([

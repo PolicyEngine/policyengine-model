@@ -112,13 +112,9 @@ async function loadTrees(source: ProgramsSource): Promise<SourceTrees | null> {
       const path = `${moduleName.replace(/\./g, '/')}.py`;
       if (paths.has(path)) variablePaths.set(name, path);
     }
-  } else if (vars && vars.modules === undefined) {
-    // Older snapshots have only paths: accept a unique, exact file stem.
-    for (const path of vars.paths) {
-      const stem = path.split('/').pop()!.replace(/\.py$/, '');
-      variablePaths.set(stem, variablePaths.has(stem) ? null : path);
-    }
   }
+  // A tree with only paths can't show that a variable exists (afip.py declares
+  // armed_forces_independence_payment), so it verifies no variable links.
   return { parameterPaths: new Set(params?.paths ?? []), variablePaths };
 }
 

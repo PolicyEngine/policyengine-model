@@ -98,36 +98,29 @@ describe('fillModuleNames', () => {
   const v = (name: string, moduleName: string | null = ''): Variable =>
     ({ name, moduleName } as unknown as Variable);
 
-  it('maps a variable to the one file named after it', () => {
+  it('maps a variable to its class’s module and keeps modules the API already gives', () => {
     const out = fillModuleNames(
-      { income_tax: v('income_tax'), pip: v('pip'), kept: v('kept', 'gov.dwp.kept') },
-      ['gov/hmrc/income_tax/income_tax.py', 'gov/dwp/pip/pip.py', 'gov/dwp/other/kept.py'],
+      { income_tax: v('income_tax'), CB_HITC: v('CB_HITC'), kept: v('kept', 'gov.dwp.kept') },
+      { income_tax: 'gov.hmrc.income_tax.income_tax', CB_HITC: 'gov.hmrc.income_tax.charges.child_benefit_hitc', kept: 'gov.other' },
     );
     expect(out.income_tax.moduleName).toBe('gov.hmrc.income_tax.income_tax');
-    expect(out.pip.moduleName).toBe('gov.dwp.pip.pip');
+    expect(out.CB_HITC.moduleName).toBe('gov.hmrc.income_tax.charges.child_benefit_hitc');
     expect(out.kept.moduleName).toBe('gov.dwp.kept');
   });
 
-  it('leaves ambiguous and unmatched names without a module', () => {
-    const out = fillModuleNames(
-      { rent: v('rent'), missing: v('missing') },
-      ['input/rent.py', 'household/consumption/rent.py'],
-    );
-    expect(out.rent.moduleName).toBe('');
-    expect(out.missing.moduleName).toBe('');
-  });
-
-  it('never invents a module that is not a file in the tree', () => {
-    const name = fc.stringMatching(/^[a-z][a-z_]{0,10}$/);
-    fc.assert(fc.property(fc.uniqueArray(name, { maxLength: 8 }), fc.array(name, { maxLength: 8 }), (vars, files) => {
-      const paths = files.map((f, i) => `gov/d${i % 3}/${f}.py`);
-      const out = fillModuleNames(Object.fromEntries(vars.map((n) => [n, v(n)])), paths);
-      for (const [n, variable] of Object.entries(out)) {
-        if (!variable.moduleName) continue;
-        expect(paths).toContain(`${variable.moduleName.replace(/\./g, '/')}.py`);
-        expect(variable.moduleName.endsWith(`.${n}`)).toBe(true);
-      }
-    }));
+  it('only ever assigns the module the map gives for that exact name', () => {
+    const name = fc.stringMatching(/^[a-zA-Z][a-zA-Z_]{0,10}$/);
+    fc.assert(fc.property(
+      fc.uniqueArray(name, { maxLength: 8 }),
+      fc.dictionary(name, fc.stringMatching(/^gov(\.[a-z_]{1,6}){1,3}$/), { maxKeys: 8 }),
+      (vars, modules) => {
+        const out = fillModuleNames(Object.fromEntries(vars.map((n) => [n, v(n)])), modules);
+        for (const [n, variable] of Object.entries(out)) {
+          if (Object.hasOwn(modules, n)) expect(variable.moduleName).toBe(modules[n]);
+          else expect(variable.moduleName).toBe('');
+        }
+      },
+    ));
   });
 });
 

@@ -8,6 +8,7 @@ import {
   labourSupplyParameters,
   obrElasticities,
   payParameters,
+  type ElasticityCase,
 } from '../data/ukBehaviouralResponses';
 
 vi.mock('next/navigation', () => ({
@@ -32,6 +33,11 @@ describe('UK behavioural responses page', () => {
     expect(text).toContain('off by default');
     expect(text).toContain('writes the change in earnings into the reform simulation');
     for (const row of [...payParameters, ...labourSupplyParameters, ...capitalGainsParameters]) expect(text).toContain(row.path);
+    // Each elasticity row renders its group and age band in one table row.
+    const rendered = [...container.querySelectorAll('tr')].map((tr) => [...tr.querySelectorAll('td')].map((td) => td.textContent));
+    for (const row of obrElasticities) {
+      expect(rendered.some((cells) => cells[0] === row.group && cells[1] === row.youngestChild)).toBe(true);
+    }
     const link = container.querySelector('a[href*="NICS-Cut-Impact-on-Labour-Supply"]');
     expect(link).not.toBeNull();
   });
@@ -48,6 +54,51 @@ describe('UK behavioural responses page', () => {
     }
   });
 });
+
+
+type Case = { gender: string; married: boolean; youngest: number | null };
+const AGES = Array.from({ length: 18 }, (_, i) => i);
+
+/** Expand row.covers into one case per youngest-child age. */
+function expandCovers(covers: ElasticityCase[]): Case[] {
+  return covers.flatMap((c) =>
+    c.youngest === 'none'
+      ? [{ gender: c.gender, married: c.married, youngest: null }]
+      : AGES.filter((a) => a >= (c.youngest as [number, number])[0] && a <= (c.youngest as [number, number])[1]).map((a) => ({
+          gender: c.gender,
+          married: c.married,
+          youngest: a,
+        })),
+  );
+}
+
+/** The cases a row's displayed labels describe, from a fixed vocabulary. */
+function casesFromLabels(group: string, youngestChild: string): Case[] {
+  const ages = (label: string): (number | null)[] => {
+    if (label === 'No children') return [null];
+    const m = label.match(/^(\d+)–(\d+)$/);
+    if (!m) throw new Error(`unknown youngest-child label: ${label}`);
+    return AGES.filter((a) => a >= Number(m[1]) && a <= Number(m[2]));
+  };
+  const make = (gender: string, married: boolean, youngest: (number | null)[]) => youngest.map((y) => ({ gender, married, youngest: y }));
+  switch (group) {
+    case 'Married women':
+      return make('FEMALE', true, ages(youngestChild));
+    case 'Unmarried women with children':
+      return make('FEMALE', false, ages(youngestChild).filter((a) => a !== null));
+    case 'Unmarried women without children':
+      if (youngestChild !== '–') throw new Error('unexpected age band');
+      return make('FEMALE', false, [null]);
+    case 'Men, except unmarried men with children':
+      if (youngestChild !== '–') throw new Error('unexpected age band');
+      return [...make('MALE', true, [null, ...AGES]), ...make('MALE', false, [null])];
+    case 'Unmarried men with children':
+      if (youngestChild !== '–') throw new Error('unexpected age band');
+      return make('MALE', false, AGES);
+    default:
+      throw new Error(`unknown group label: ${group}`);
+  }
+}
 
 /**
  * Differential check against the policyengine-uk source the page describes:
@@ -111,37 +162,48 @@ describe.skipIf(!source)('UK behavioural values match policyengine-uk', () => {
         encoding: 'utf8',
       }),
     );
-    const covered = new Set<Cell>();
+    const key = (g: Pick<Cell, 'gender' | 'married' | 'youngest'>) => `${g.gender}|${g.married}|${g.youngest}`;
+    const byKey = new Map(grid.map((g) => [key(g), g]));
+    const seen = new Map<string, number>();
     for (const row of obrElasticities) {
-      for (const c of row.covers) {
-        const cells = grid.filter(
-          (g) =>
-            g.gender === c.gender &&
-            g.married === c.married &&
-            (c.youngest === 'none' ? g.youngest === null : g.youngest !== null && g.youngest >= c.youngest[0] && g.youngest <= c.youngest[1]),
-        );
-        expect(cells.length).toBeGreaterThan(0);
-        for (const g of cells) {
-          expect([row.group, row.youngestChild, g.substitution, g.income]).toEqual([row.group, row.youngestChild, row.substitution, row.income]);
-          covered.add(g);
-        }
+      // Cells from the row's displayed labels, read independently of row.covers.
+      const cells = casesFromLabels(row.group, row.youngestChild);
+      expect(new Set(cells.map(key))).toEqual(new Set(expandCovers(row.covers).map(key)));
+      for (const cell of cells) {
+        const g = byKey.get(key(cell));
+        expect(g, key(cell)).toBeDefined();
+        expect([row.group, row.youngestChild, g!.substitution, g!.income]).toEqual([row.group, row.youngestChild, row.substitution, row.income]);
+        seen.set(key(cell), (seen.get(key(cell)) ?? 0) + 1);
       }
     }
     // Every family type the module distinguishes appears on the page exactly once.
-    expect(covered.size).toBe(grid.length);
-    expect(obrElasticities.flatMap((r) => r.covers).length).toBe(new Set(obrElasticities.flatMap((r) => r.covers.map((c) => JSON.stringify(c)))).size);
+    for (const g of grid) expect([key(g), seen.get(key(g))]).toEqual([key(g), 1]);
   });
 
   it('describes the pay channels as policyengine-uk computes them', () => {
-    const employer = read('variables/contrib/policyengine/employer_ni/employer_ni_fixed_employer_cost_change.py');
-    expect(employer).toMatch(/if employee_incidence == 0:\s*\n\s*return 0/);
-    expect(employer).toMatch(/c_b = ni_class_1_income \+ baseline_employer_ni/); // the employer's baseline cost
-    expect(employer).toMatch(/new_ni_class_1_income = \(c_b \+ r_r \* \(pen_con_subtracted_r \+ t_r\)\) \/ \(1 \+ r_r\)/); // above-threshold algebra
-    expect(employer).toMatch(/below_threshold = previous_employment_income < t_b/); // the baseline threshold
-    const haircut = read('variables/gov/hmrc/national_insurance/salary_sacrifice_broad_base_haircut.py');
-    expect(haircut).toMatch(/return -employment_income \* haircut_rate/);
-    expect(haircut).toMatch(/if np\.isinf\(cap\):\s*\n\s*return 0/);
-    const returned = read('variables/gov/hmrc/pensions/salary_sacrifice_returned_to_income.py');
-    expect(returned).toMatch(/excess = max_\(intended_ss - cap, 0\)/);
+    // scripts/uk_pay_channel_cases.py runs the three variables' own formulas.
+    type Case = { kind: string; label: string; pay?: number; sacrificed?: number; change: number; baselineCost?: number; reformCost?: number };
+    const cases: Case[] = JSON.parse(
+      execFileSync('uv', ['run', '--no-project', '--with', 'numpy', 'python', '-I', 'scripts/uk_pay_channel_cases.py', source!], { encoding: 'utf8' }),
+    );
+    const get = (kind: string, label: string) => cases.find((c) => c.kind === kind && c.label === label)!;
+    // "a formula meant to keep what each employer pays … the same … passes the whole change through to pay"
+    const passed = get('employer_ni', 'rate rise, pay above both thresholds');
+    expect(passed.change).toBeLessThan(0);
+    expect(passed.reformCost!).toBeCloseTo(passed.baselineCost!, 6);
+    expect(get('employer_ni', 'rate rise, incidence 0').change).toBe(0);
+    expect(get('employer_ni', 'no change').change).toBe(0);
+    // "Pay below the baseline employer threshold stays as it was."
+    expect(get('employer_ni', 'rate rise, pay below the baseline threshold').change).toBe(0);
+    // "a reform that lifts the threshold past someone's pay can raise what their employer pays"
+    const lifted = get('employer_ni', 'threshold lifted past pay');
+    expect(lifted.reformCost!).toBeGreaterThan(lifted.baselineCost!);
+    // "A separate haircut takes 0.16% off every worker's employment income" while the cap applies.
+    expect(get('haircut', 'cap off').change).toBe(0);
+    expect(get('haircut', 'cap £2,000').change).toBeCloseTo(-0.0016 * get('haircut', 'cap £2,000').pay!, 6);
+    // "contributions above the cap return to pay"
+    expect(get('returned', 'cap off').change).toBe(0);
+    expect(get('returned', 'cap £2,000, below it').change).toBe(0);
+    expect(get('returned', 'cap £2,000, above it').change).toBe(get('returned', 'cap £2,000, above it').sacrificed! - 2000);
   });
 });
