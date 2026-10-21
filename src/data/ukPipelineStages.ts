@@ -9,6 +9,13 @@ import { ukRelease as uk, ukFacts as f, fmtInt, fmtPct, fmtMillions } from './uk
  * release's own files and calibration logs.
  */
 
+/**
+ * The policyengine-uk-data release whose code the stage copy below was checked
+ * against. Counts update from the release file; mechanisms don't, so a test
+ * fails until someone rereads the copy against a newly pinned release.
+ */
+export const UK_DATA_VERSION_DESCRIBED = '1.58.1';
+
 const c = uk.enhanced.composition;
 const g = uk.enhanced.geography;
 const cal = uk.calibration;

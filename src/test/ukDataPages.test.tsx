@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import release from '../data/ukDataRelease.json';
-import { ukPipelineIntro, ukPipelineStages, ukBranchLabels, runtimeShortfall } from '../data/ukPipelineStages';
+import { ukPipelineIntro, ukPipelineStages, ukBranchLabels, runtimeShortfall, UK_DATA_VERSION_DESCRIBED } from '../data/ukPipelineStages';
 import { fmtInt, fmtPct, fmtTarget } from '../data/ukDataRelease';
 import { UK_MODEL_VERSION } from '../data/ukBehaviouralResponses';
 
@@ -113,6 +113,12 @@ describe('UK pipeline copy', () => {
     // A new pin must fail here until someone re-checks the behavioural page
     // against the new policyengine-uk (UK_MODEL_SOURCE=… bun run test).
     expect(UK_MODEL_VERSION).toBe(release.release.modelVersion);
+  });
+
+  it('describes the build of the data release the pin names', () => {
+    // A new data pin must fail here until someone rereads the stage copy
+    // against that release's create_datasets.py (UK_DATA_SOURCE=… pytest).
+    expect(UK_DATA_VERSION_DESCRIBED).toBe(release.release.dataVersion);
   });
 
   it('renders the UK intro and branch labels', () => {

@@ -854,7 +854,7 @@
         "label": "Dividend income: taxpayers and amounts, by total income band",
         "publisher": "HMRC Survey of Personal Incomes",
         "geography": "UK",
-        "note": "HMRC's 2023-24 figures, fitted unchanged for 2025: the build's 2025 projections share their names and are dropped",
+        "note": "HMRC's 2023-24 figures, fitted unchanged for 2025: the build's 2025 projections share their names and are dropped (fixed after this release, policyengine-uk-data#608)",
         "units": [
           "count",
           "gbp"
@@ -873,7 +873,7 @@
         "label": "Employment income: taxpayers and amounts, by total income band",
         "publisher": "HMRC Survey of Personal Incomes",
         "geography": "UK",
-        "note": "HMRC's 2023-24 figures, fitted unchanged for 2025: the build's 2025 projections share their names and are dropped",
+        "note": "HMRC's 2023-24 figures, fitted unchanged for 2025: the build's 2025 projections share their names and are dropped (fixed after this release, policyengine-uk-data#608)",
         "units": [
           "count",
           "gbp"
@@ -892,7 +892,7 @@
         "label": "Private pension income: taxpayers and amounts, by total income band",
         "publisher": "HMRC Survey of Personal Incomes",
         "geography": "UK",
-        "note": "HMRC's 2023-24 figures, fitted unchanged for 2025: the build's 2025 projections share their names and are dropped",
+        "note": "HMRC's 2023-24 figures, fitted unchanged for 2025: the build's 2025 projections share their names and are dropped (fixed after this release, policyengine-uk-data#608)",
         "units": [
           "count",
           "gbp"
@@ -911,7 +911,7 @@
         "label": "Property income: taxpayers and amounts, by total income band",
         "publisher": "HMRC Survey of Personal Incomes",
         "geography": "UK",
-        "note": "Amounts scaled up 1.9 times, the build's ratio of HMRC's property rental income statistics to the SPI. HMRC's 2023-24 figures, fitted unchanged for 2025: the build's 2025 projections share their names and are dropped",
+        "note": "Amounts scaled up 1.9 times, the build's ratio of HMRC's property rental income statistics to the SPI. HMRC's 2023-24 figures, fitted unchanged for 2025: the build's 2025 projections share their names and are dropped (fixed after this release, policyengine-uk-data#608)",
         "units": [
           "count",
           "gbp"
@@ -930,7 +930,7 @@
         "label": "Self-employment income: taxpayers and amounts, by total income band",
         "publisher": "HMRC Survey of Personal Incomes",
         "geography": "UK",
-        "note": "HMRC's 2023-24 figures, fitted unchanged for 2025: the build's 2025 projections share their names and are dropped",
+        "note": "HMRC's 2023-24 figures, fitted unchanged for 2025: the build's 2025 projections share their names and are dropped (fixed after this release, policyengine-uk-data#608)",
         "units": [
           "count",
           "gbp"
@@ -949,7 +949,7 @@
         "label": "State Pension: taxpayers and amounts, by total income band",
         "publisher": "HMRC Survey of Personal Incomes",
         "geography": "UK",
-        "note": "HMRC's 2023-24 figures, fitted unchanged for 2025: the build's 2025 projections share their names and are dropped",
+        "note": "HMRC's 2023-24 figures, fitted unchanged for 2025: the build's 2025 projections share their names and are dropped (fixed after this release, policyengine-uk-data#608)",
         "units": [
           "count",
           "gbp"

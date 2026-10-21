@@ -103,7 +103,8 @@ moves, regenerate them:
    the behavioural page. Then reread the pipeline stage copy in
    `src/data/ukPipelineStages.ts` against the new release's
    `datasets/create_datasets.py`: the counts update themselves, the mechanisms
-   do not.
+   do not. `UK_DATA_VERSION_DESCRIBED` (pipeline copy) and `UK_MODEL_VERSION`
+   (behavioural page) must name the new pin before the tests pass.
 
 The household files hold UK Data Service microdata. Only the aggregates the
 extractor writes may leave that folder.

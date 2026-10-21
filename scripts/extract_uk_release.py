@@ -135,7 +135,11 @@ GB_ON_UK_NOTE = "Scored on UK households (policyengine-uk-data#588)"
 # hmrc_spi.py's 2025 projections reuse the base-year targets' names, and
 # registry.get_all_targets keeps the first target of each name, so the
 # calibration fits the 2023-24 figures.
-SPI_NOTE = "HMRC's 2023-24 figures, fitted unchanged for 2025: the build's 2025 projections share their names and are dropped"
+SPI_NOTE = (
+    "HMRC's 2023-24 figures, fitted unchanged for 2025: the build's 2025 "
+    "projections share their names and are dropped (fixed after this release, "
+    "policyengine-uk-data#608)"
+)
 SPI_GROUPS = [
     "employment_income",
     "self_employment_income",
