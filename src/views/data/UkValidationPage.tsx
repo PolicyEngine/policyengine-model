@@ -58,7 +58,12 @@ export function fmtDifference(target: number, estimate: number): string {
   return `${pct >= 0 ? '+' : '−'}${Math.abs(pct).toFixed(1)}%`;
 }
 
-const KNOWN_ISSUES: { repo: string; n: number; text: string }[] = [
+// Targets that no household contributes to, so no weighting can meet them.
+export const unreachableTargets = rows.filter((r) => r.target !== 0 && r.estimate === 0);
+
+// `after` marks an issue the repository has addressed since the pinned
+// release; the release itself still has it.
+const KNOWN_ISSUES: { repo: string; n: number; text: string; after?: string }[] = [
   {
     repo: 'policyengine-uk-data',
     n: 581,
@@ -68,6 +73,7 @@ const KNOWN_ISSUES: { repo: string; n: number; text: string }[] = [
     repo: 'policyengine-uk-data',
     n: 537,
     text: 'The total National Insurance target is compared with employee contributions alone.',
+    after: 'changed on policyengine-uk-data’s main branch after this release',
   },
   {
     repo: 'policyengine-uk-data',
@@ -93,6 +99,7 @@ const KNOWN_ISSUES: { repo: string; n: number; text: string }[] = [
     repo: 'policyengine-uk-data',
     n: 468,
     text: `Both local calibrations assign Universal Credit household counts to areas by row order, which does not match the areas.`,
+    after: 'fixed on policyengine-uk-data’s main branch after this release',
   },
   {
     repo: 'policyengine-uk-data',
@@ -104,8 +111,23 @@ const KNOWN_ISSUES: { repo: string; n: number; text: string }[] = [
     n: 587,
     text: 'The Output Area lookup gives every Scottish Output Area the same population, and has no Output Areas for Cumberland, Westmorland and Furness, North Yorkshire or Somerset, so policyengine.py finds no households for those four authorities.',
   },
-  { repo: 'policyengine-uk', n: 1996, text: 'Modelled VAT exceeds OBR receipts.' },
-  { repo: 'policyengine-uk-data', n: 570, text: 'Capital gains fall short of HMRC’s totals.' },
+  {
+    repo: 'policyengine-uk-data',
+    n: 593,
+    text: `${unreachableTargets.length} non-zero targets have no household that contributes to them, among them the £1 million and over income bands and ages 85 to 90, so no weighting can meet them.`,
+  },
+  {
+    repo: 'policyengine-uk',
+    n: 1996,
+    text: 'Modelled VAT exceeds OBR receipts.',
+    after: `addressed in policyengine-uk after ${uk.release.modelVersion}`,
+  },
+  {
+    repo: 'policyengine-uk-data',
+    n: 570,
+    text: 'Capital gains fall short of HMRC’s totals.',
+    after: 'addressed on policyengine-uk-data’s main branch after this release',
+  },
   {
     repo: 'policyengine-uk-data',
     n: 580,
@@ -245,6 +267,7 @@ export default function UkValidationPage() {
             <li key={issue.text} style={{ marginBottom: spacing.sm }}>
               {issue.text}{' '}
               <ExternalLink href={issueUrl(issue.repo, issue.n)}>{`${issue.repo}#${issue.n}`}</ExternalLink>
+              {issue.after && ` (${issue.after})`}
             </li>
           ))}
         </ul>

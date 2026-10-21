@@ -125,7 +125,7 @@ describe('UK pipeline copy', () => {
 
 import fc from 'fast-check';
 import UkCalibrationPage, { listAreas } from '../views/data/UkCalibrationPage';
-import UkValidationPage, { fmtDifference, niClasses, niTotalTarget, obrRows } from '../views/data/UkValidationPage';
+import UkValidationPage, { fmtDifference, niClasses, niTotalTarget, obrRows, unreachableTargets } from '../views/data/UkValidationPage';
 import checks from '../data/ukTargetChecks.json';
 
 describe('UK calibration and validation pages', () => {
@@ -168,6 +168,17 @@ describe('UK calibration and validation pages', () => {
     for (const n of [537, 570, 580, 581, 582, 1996]) expect(text).toContain(`#${n}`);
     for (const phrase of STALE_DATA_PAGE_PHRASES) expect(text).not.toMatch(phrase);
     for (const id of release.validation.revisedTargets) expect(text).toContain(id);
+  });
+
+  it('counts the targets no household contributes to, with each model', () => {
+    const pinned = checks.filter((r) => r.target !== 0 && r.estimate === 0);
+    const fitted = checks.filter((r) => r.target !== 0 && r.calibrationEstimate === 0);
+    expect(unreachableTargets.length).toBe(pinned.length);
+    expect(pinned.length).toBeGreaterThan(0);
+    const validation = render(<UkValidationPage />).container.textContent ?? '';
+    expect(validation).toContain(`${pinned.length} non-zero targets have no household`);
+    const calibration = render(<UkCalibrationPage />).container.textContent ?? '';
+    expect(calibration).toContain(`${fitted.length} non-zero targets have no household`);
   });
 
   it('scores the pinned run against the values calibration fitted', () => {

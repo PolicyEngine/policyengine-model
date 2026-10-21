@@ -44,6 +44,8 @@ export function listAreas(byArea: Record<string, number>): string {
 }
 
 const zeroTargets = rows.filter((r) => r.target === 0);
+// Non-zero targets no household contributes to at the end of calibration.
+const unreachable = rows.filter((r) => r.target !== 0 && r.calibrationEstimate === 0);
 
 function groupValue(g: UkTargetGroup): string {
   if (g.value === undefined) return '–';
@@ -128,7 +130,9 @@ export default function UkCalibrationPage() {
           {f.nationalTargets} targets in {cal.nationalGroups.length} families: {listAreas(cal.nationalTargetsByArea)}.
           At epoch {cal.epoch}, {fmtPct(cal.nationalWithin10)} of the {fmtInt(scored)} non-zero targets lie within 10%
           of their value, and {fmtPct(cal.nationalWithin5)} within 5%. Each target counts once, whatever its size, so
-          a share says nothing about how far the misses are; the{' '}
+          a share says nothing about how far the misses are. {fmtInt(unreachable.length)} non-zero targets have no
+          household that contributes to them, so no weighting can meet them (
+          <ExternalLink href={issueUrl('policyengine-uk-data', 593)}>policyengine-uk-data#593</ExternalLink>). The{' '}
           <PageLink path="/data/validation">validation</PageLink> page gives each OBR line’s gap. Each family’s
           source links to the reference the build records for it.
           {zeroTargets.length > 0 &&
