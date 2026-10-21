@@ -47,7 +47,7 @@ export const obrRows = rows
   .map((r) => {
     const label = OBR_ROW_LABELS[r.id] ?? r.group;
     const area = areaOf.get(r.group);
-    return { ...r, label: area && area !== 'UK' ? `${label} (${area})` : label };
+    return { ...r, label: area && area !== 'UK' && !label.includes(area) ? `${label} (${area})` : label };
   })
   .sort((a, b) => b.target - a.target);
 
