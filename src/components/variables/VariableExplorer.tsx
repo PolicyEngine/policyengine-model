@@ -7,7 +7,7 @@ import { useDebounce } from '../../hooks/useDebounce';
 import {
   getLevel as getLevelFromPath, getSubGroup as getSubGroupFromPath,
   getSubGroupLabel, getSubGroupDescription,
-  LEVEL_CONFIG, LEVELS_ORDERED,
+  levelConfig, levelsFor, emptyLevelRecord,
   type Level,
 } from '../shared/categoryUtils';
 import VariableCard from './VariableCard';
@@ -26,12 +26,12 @@ interface VariableExplorerProps {
   onViewFlowchart?: (varName: string) => void;
 }
 
-function getLevel(v: Variable): Level {
-  return getLevelFromPath(v.moduleName);
+function getLevel(v: Variable, country: string): Level {
+  return getLevelFromPath(v.moduleName, country);
 }
 
-function getSubGroup(v: Variable): string {
-  return getSubGroupFromPath(v.moduleName);
+function getSubGroup(v: Variable, country: string): string {
+  return getSubGroupFromPath(v.moduleName, country);
 }
 
 function getFolderLabel(fullPath: string): string {
@@ -163,19 +163,21 @@ function StateTileGrid({
 function SubGroupCardGrid({
   subGroups,
   level,
+  country,
   levelColor,
   onSelect,
 }: {
   subGroups: [string, Variable[]][];
   level: Level;
+  country: string;
   levelColor: string;
   onSelect: (key: string) => void;
 }) {
   return (
     <div className="tw:grid tw:grid-cols-[repeat(auto-fill,minmax(250px,1fr))]" style={{ gap: spacing.md }}>
       {subGroups.map(([key, vars], i) => {
-        const label = getSubGroupLabel(key, level);
-        const desc = getSubGroupDescription(key, level);
+        const label = getSubGroupLabel(key, level, country);
+        const desc = getSubGroupDescription(key, level, country);
         return (
           <motion.button
             key={key}
@@ -344,10 +346,10 @@ export default function VariableExplorer({ variables, parameters, country, onVie
 
   // Count per level
   const levelCounts = useMemo(() => {
-    const counts: Record<Level, number> = { federal: 0, state: 0, local: 0, territory: 0, reform: 0, household: 0 };
-    for (const v of allVariables) counts[getLevel(v)]++;
+    const counts = emptyLevelRecord(() => 0);
+    for (const v of allVariables) counts[getLevel(v, country)]++;
     return counts;
-  }, [allVariables]);
+  }, [allVariables, country]);
 
   // Filtered list
   const filtered = useMemo(() => {
@@ -359,21 +361,21 @@ export default function VariableExplorer({ variables, parameters, country, onVie
         return words.every((w) => haystack.includes(w));
       });
     }
-    if (activeLevel) result = result.filter((v) => getLevel(v) === activeLevel);
+    if (activeLevel) result = result.filter((v) => getLevel(v, country) === activeLevel);
     return result;
-  }, [allVariables, debouncedSearch, activeLevel]);
+  }, [allVariables, debouncedSearch, activeLevel, country]);
 
   // Sub-groups for the active level
   const subGroups = useMemo(() => {
     if (!activeLevel) return [];
     const map = new Map<string, Variable[]>();
     for (const v of filtered) {
-      const key = getSubGroup(v);
+      const key = getSubGroup(v, country);
       if (!map.has(key)) map.set(key, []);
       map.get(key)!.push(v);
     }
     return [...map.entries()].sort(([a], [b]) => a.localeCompare(b));
-  }, [filtered, activeLevel]);
+  }, [filtered, activeLevel, country]);
 
   // Variables in active sub-group
   const subGroupVars = useMemo(() => {
@@ -406,9 +408,11 @@ export default function VariableExplorer({ variables, parameters, country, onVie
 
   // Folder contents at current level
   const folderContents = useMemo(() => {
-    if (!activeSubGroup || !currentFolder) return { folders: [], directVars: [] };
+    if (!activeSubGroup) return { folders: [], directVars: [] };
+    if (country === 'uk' && activeLevel === 'unclassified') return { folders: [], directVars: subGroupVars };
+    if (!currentFolder) return { folders: [], directVars: [] };
     return getVarFolderContents(subGroupVars, currentFolder);
-  }, [subGroupVars, currentFolder, activeSubGroup]);
+  }, [subGroupVars, currentFolder, activeSubGroup, activeLevel, country]);
 
   // Reset folder stack when sub-group changes
   // eslint-disable-next-line react-hooks/set-state-in-effect -- reset navigation when sub-group changes
@@ -466,13 +470,13 @@ export default function VariableExplorer({ variables, parameters, country, onVie
     const items: { label: string; onClick: () => void }[] = [];
     if (activeLevel) {
       items.push({
-        label: LEVEL_CONFIG[activeLevel].label,
+        label: levelConfig(activeLevel, country).label,
         onClick: () => { setActiveLevel(activeLevel); setActiveSubGroup(null); setFolderStack([]); setSelectedVar(null); },
       });
     }
     if (activeSubGroup && activeLevel) {
       items.push({
-        label: getSubGroupLabel(activeSubGroup, activeLevel),
+        label: getSubGroupLabel(activeSubGroup, activeLevel, country),
         onClick: () => { setFolderStack([]); setSelectedVar(null); },
       });
     }
@@ -484,13 +488,13 @@ export default function VariableExplorer({ variables, parameters, country, onVie
       });
     }
     return items;
-  }, [activeLevel, activeSubGroup, folderStack]);
+  }, [activeLevel, activeSubGroup, folderStack, country]);
 
   // Current heading
   const currentHeadingLabel = folderStack.length > 0
     ? getFolderLabel(currentFolder)
     : activeSubGroup && activeLevel
-      ? getSubGroupLabel(activeSubGroup, activeLevel)
+      ? getSubGroupLabel(activeSubGroup, activeLevel, country)
       : '';
 
 
@@ -518,9 +522,9 @@ export default function VariableExplorer({ variables, parameters, country, onVie
       {isSearching && (
         <div className="tw:flex tw:flex-wrap tw:items-center" style={{ gap: spacing.lg, marginBottom: spacing.xl }}>
           <div className="tw:flex tw:flex-wrap" style={{ gap: spacing.xs }}>
-            {([null, ...LEVELS_ORDERED] as (Level | null)[]).map((level) => {
-              const label = level ? LEVEL_CONFIG[level].label : 'All';
-              const clr = level ? LEVEL_CONFIG[level].color : colors.text.secondary;
+            {([null, ...levelsFor(country)] as (Level | null)[]).map((level) => {
+              const label = level ? levelConfig(level, country).label : 'All';
+              const clr = level ? levelConfig(level, country).color : colors.text.secondary;
               const isActive = activeLevel === level;
               return (
                 <button key={level ?? 'all'} onClick={() => setActiveLevel(level)} className="tw:cursor-pointer"
@@ -570,8 +574,8 @@ export default function VariableExplorer({ variables, parameters, country, onVie
       {/* ─── View: Level overview cards ─── */}
       {!isSearching && !activeLevel && (
         <div className="tw:grid tw:grid-cols-[repeat(auto-fill,minmax(280px,1fr))]" style={{ gap: spacing.lg }}>
-          {LEVELS_ORDERED.map((level) => {
-            const config = LEVEL_CONFIG[level];
+          {levelsFor(country).map((level) => {
+            const config = levelConfig(level, country);
             const count = levelCounts[level];
             if (!count) return null;
             return (
@@ -612,17 +616,17 @@ export default function VariableExplorer({ variables, parameters, country, onVie
         <div>
           <BreadcrumbNav items={breadcrumbItems} onBack={goBack} />
           <div style={{ marginBottom: spacing.xl }}>
-            <h2 style={{ fontSize: typography.fontSize['2xl'], fontWeight: typography.fontWeight.bold, color: LEVEL_CONFIG[activeLevel].color, margin: 0 }}>
-              {LEVEL_CONFIG[activeLevel].label}
+            <h2 style={{ fontSize: typography.fontSize['2xl'], fontWeight: typography.fontWeight.bold, color: levelConfig(activeLevel, country).color, margin: 0 }}>
+              {levelConfig(activeLevel, country).label}
             </h2>
             <span style={{ fontSize: typography.fontSize.xs, color: colors.text.tertiary }}>
               {filtered.length.toLocaleString()} variables across {subGroups.length} groups
             </span>
           </div>
           {activeLevel === 'state' ? (
-            <StateTileGrid subGroups={subGroups} levelColor={LEVEL_CONFIG[activeLevel].color} onSelect={setActiveSubGroup} />
+            <StateTileGrid subGroups={subGroups} levelColor={levelConfig(activeLevel, country).color} onSelect={setActiveSubGroup} />
           ) : (
-            <SubGroupCardGrid subGroups={subGroups} level={activeLevel} levelColor={LEVEL_CONFIG[activeLevel].color} onSelect={setActiveSubGroup} />
+            <SubGroupCardGrid subGroups={subGroups} level={activeLevel} country={country} levelColor={levelConfig(activeLevel, country).color} onSelect={setActiveSubGroup} />
           )}
         </div>
       )}
@@ -632,14 +636,14 @@ export default function VariableExplorer({ variables, parameters, country, onVie
         <div>
           <BreadcrumbNav items={breadcrumbItems} onBack={goBack} />
           <div style={{ marginBottom: spacing.xl }}>
-            <h2 style={{ fontSize: typography.fontSize['2xl'], fontWeight: typography.fontWeight.bold, color: LEVEL_CONFIG[activeLevel].color, margin: 0 }}>
+            <h2 style={{ fontSize: typography.fontSize['2xl'], fontWeight: typography.fontWeight.bold, color: levelConfig(activeLevel, country).color, margin: 0 }}>
               {currentHeadingLabel}
             </h2>
           </div>
           <FolderContentsView
             folders={folderContents.folders}
             directVars={folderContents.directVars}
-            levelColor={LEVEL_CONFIG[activeLevel].color}
+            levelColor={levelConfig(activeLevel, country).color}
             allVariables={variables}
             parameters={parameters}
             country={country}

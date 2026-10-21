@@ -47,14 +47,18 @@ export default function ThreeIngredients({ activeIngredient, country = 'us' }: T
     {
       title: 'Policy rules',
       description:
-        'Tax codes, benefit formulas, and eligibility rules encoded as executable logic. Over 55 federal, state, and local programs.',
+        country === 'uk'
+          ? 'Tax codes, benefit formulas, and eligibility rules encoded as executable logic, from income tax and National Insurance to Universal Credit and Scottish Child Payment.'
+          : 'Tax codes, benefit formulas, and eligibility rules encoded as executable logic. Over 55 federal, state, and local programs.',
       icon: <IconFileText size={36} stroke={1.5} />,
       key: 'policies' as const,
     },
     {
       title: 'Household data',
       description:
-        'A representative microdata sample of the population, with income, demographics, and program participation for each household.',
+        country === 'uk'
+          ? 'Family Resources Survey households, plus copies the build adds for top incomes and capital gains, each with incomes, demographics and benefit receipt, weighted towards official statistics.'
+          : 'A representative microdata sample of the population, with income, demographics, and program participation for each household.',
       icon: <IconUsers size={36} stroke={1.5} />,
       key: 'households' as const,
     },
@@ -62,7 +66,7 @@ export default function ThreeIngredients({ activeIngredient, country = 'us' }: T
       title: country === 'uk' ? 'Behavioural dynamics' : 'Behavioral dynamics',
       description:
         country === 'uk'
-          ? 'Elasticities capturing how people adjust their labour supply and income in response to tax and benefit changes.'
+          ? 'Optional elasticities for how labour supply and capital gains respond to tax and benefit changes, and pay that adjusts by default under employer National Insurance and salary sacrifice reforms.'
           : 'Elasticities capturing how people adjust their labor supply and income in response to tax and benefit changes.',
       icon: <IconTrendingUp size={36} stroke={1.5} />,
       key: 'dynamics' as const,
@@ -72,8 +76,9 @@ export default function ThreeIngredients({ activeIngredient, country = 'us' }: T
   return (
     <div className="tw:mb-12">
       <p className="tw:text-lg tw:text-[#5A5A5A] tw:leading-[1.7] tw:mb-8 tw:max-w-[720px]">
-        PolicyEngine's microsimulation model combines three ingredients to estimate the impact of any
-        tax or benefit reform on every household in the country.
+        {country === 'uk'
+          ? 'PolicyEngine UK combines three ingredients to estimate how a tax or benefit reform it models would affect households across the UK.'
+          : "PolicyEngine's microsimulation model combines three ingredients to estimate the impact of any tax or benefit reform on every household in the country."}
       </p>
       <div className="tw:flex tw:gap-6 tw:flex-wrap">
         {ingredients.map((ing, i) => (

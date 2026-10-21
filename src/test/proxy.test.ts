@@ -25,6 +25,9 @@ describe('country proxy', () => {
     ['/us/model/programs-uk.json', '/programs-uk.json'],
     ['/uk/model/programs-us.json', '/programs-us.json'],
     ['/uk/model/programs-uk.json', '/programs-uk.json'],
+    ['/uk/param-tree-uk.json', '/param-tree-uk.json'],
+    ['/uk/model/param-tree-uk.json', '/param-tree-uk.json'],
+    ['/us/model/param-tree-us.json', '/param-tree-us.json'],
   ])('matches and rewrites the registry snapshot at %s', (path, expected) => {
     expect(unstable_doesMiddlewareMatch({ config, url: `${ORIGIN}${path}` })).toBe(true);
 
@@ -37,6 +40,7 @@ describe('country proxy', () => {
     '/programs-us.json',
     '/us/model/logo.svg',
     '/us/model/programs-ca.json',
+    '/us/model/param-tree-ca.json',
     '/_next/static/chunks/main.js',
   ])('keeps unrelated static paths outside the proxy: %s', (path) => {
     expect(unstable_doesMiddlewareMatch({ config, url: `${ORIGIN}${path}` })).toBe(false);

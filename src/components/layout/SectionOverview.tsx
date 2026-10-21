@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { IconArrowRight } from '@tabler/icons-react';
 import { colors, spacing, typography } from '../../designTokens';
 import { usePublicBasePrefix } from '../../hooks/usePublicBasePrefix';
@@ -31,7 +32,9 @@ export default function SectionOverview({
   children,
 }: SectionOverviewProps) {
   const basePrefix = usePublicBasePrefix();
-  const href = (path: string) => `${basePrefix}${path}`;
+  // Keep ?country= and ?embed= on the way into a child page, as the sidebar does.
+  const search = useSearchParams().toString();
+  const href = (path: string) => `${basePrefix}${path}${search ? `?${search}` : ''}`;
 
   return (
     <div>

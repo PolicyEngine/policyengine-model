@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { colors, typography, spacing } from '../../designTokens';
 import { pipelineStages } from '../../data/pipelineStages';
-import { ukPipelineStages } from '../../data/ukPipelineStages';
+import { ukPipelineStages, ukPipelineIntro, ukBranchLabels } from '../../data/ukPipelineStages';
 import type { PipelineStage } from '../../data/pipelineStages';
 import type { Country } from '../../hooks/useCountry';
 import { usePublicBasePrefix } from '../../hooks/usePublicBasePrefix';
@@ -124,11 +124,11 @@ export default function DataPipeline({ country = 'us' }: { country?: Country }) 
   };
 
   const introText = country === 'uk'
-    ? 'PolicyEngine constructs its representative household dataset through a multi-stage pipeline, starting from the Family Resources Survey and producing two weight matrices: one for 650 parliamentary constituencies and one for 360 local authorities.'
+    ? ukPipelineIntro
     : 'PolicyEngine constructs its representative household dataset through a 14-step pipeline. Public survey data is merged, stratified, and cloned to 10 geographic variants per household. Each clone is simulated through PolicyEngine US with stochastic take-up, then calibrated via L0-regularized optimization against administrative targets at the national, state, and congressional district levels simultaneously, producing 488 geographically representative datasets.';
 
-  const nationalLabel = country === 'uk' ? 'Constituency (national)' : 'National';
-  const localLabel = country === 'uk' ? 'Local authority' : 'Geography-specific';
+  const nationalLabel = country === 'uk' ? ukBranchLabels.national : 'National';
+  const localLabel = country === 'uk' ? ukBranchLabels.local : 'Geography-specific';
 
   return (
     <div>
@@ -138,8 +138,8 @@ export default function DataPipeline({ country = 'us' }: { country?: Country }) 
 
       {/* Pipeline flow - branching layout */}
       <div className="tw:mb-8">
-        {/* Shared linear portion */}
-        <div className="tw:flex tw:items-stretch tw:gap-0">
+        {/* Shared linear portion; scrolls inside itself on narrow screens */}
+        <div className="tw:flex tw:items-stretch tw:gap-0 tw:overflow-x-auto tw:[contain:inline-size]">
           {sharedStages.map((s, i) => (
             <div key={s.id} className="tw:flex-1 tw:flex tw:items-stretch">
               <StageButton
@@ -165,14 +165,14 @@ export default function DataPipeline({ country = 'us' }: { country?: Country }) 
         {/* Two branches side by side */}
         <div className="tw:flex tw:gap-6">
           {/* National branch */}
-          <div className="tw:flex-1">
+          <div className="tw:flex-1 tw:min-w-0">
             <div
               className="tw:text-xs tw:font-semibold tw:text-center tw:mb-2 tw:uppercase tw:tracking-widest"
               style={{ color: colors.primary[700] }}
             >
               {nationalLabel}
             </div>
-            <div className="tw:flex tw:items-stretch tw:gap-0">
+            <div className="tw:flex tw:items-stretch tw:gap-0 tw:overflow-x-auto tw:[contain:inline-size]">
               {nationalStages.map((s, i) => (
                 <div key={s.id} className="tw:flex-1 tw:flex tw:items-stretch">
                   <StageButton
@@ -189,14 +189,14 @@ export default function DataPipeline({ country = 'us' }: { country?: Country }) 
           </div>
 
           {/* Local branch */}
-          <div className="tw:flex-1">
+          <div className="tw:flex-1 tw:min-w-0">
             <div
               className="tw:text-xs tw:font-semibold tw:text-center tw:mb-2 tw:uppercase tw:tracking-widest"
               style={{ color: colors.primary[700] }}
             >
               {localLabel}
             </div>
-            <div className="tw:flex tw:items-stretch tw:gap-0">
+            <div className="tw:flex tw:items-stretch tw:gap-0 tw:overflow-x-auto tw:[contain:inline-size]">
               {localStages.map((s, i) => (
                 <div key={s.id} className="tw:flex-1 tw:flex tw:items-stretch">
                   <StageButton

@@ -19,12 +19,12 @@ const entityColors: Record<string, string> = {
 
 export const entityLabels: Record<string, string> = {
   person: 'Person',
-  tax_unit: 'Tax Unit',
-  spm_unit: 'SPM Unit',
+  tax_unit: 'Tax unit',
+  spm_unit: 'SPM unit',
   household: 'Household',
   family: 'Family',
-  marital_unit: 'Marital Unit',
-  benunit: 'Benefit Unit',
+  marital_unit: 'Marital unit',
+  benunit: 'Benefit unit',
 };
 
 export default function VariableCard({ variable, isSelected, onClick }: VariableCardProps) {
