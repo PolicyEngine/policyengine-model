@@ -1,0 +1,4788 @@
+{
+  "schemaVersion": 1,
+  "country": "uk",
+  "policyengineVersion": "6.11.1",
+  "modelVersion": "2.151.0",
+  "calibrationYear": 2025,
+  "releases": {
+    "national": {
+      "buildId": "microcosm-uk-2024-25-national-20261025T091414Z-a6299504",
+      "dataset": "microcosm_uk_2024_25",
+      "diagnosticsSha256": "e61a60a1a8d57204be15600b2f98dbc864123589d48ede8414ebe43139d7c09b",
+      "households": 78234,
+      "targets": 1268
+    },
+    "localArea": {
+      "buildId": "microcosm-uk-2024-25-dense-20261026T105309Z-c9df4b86",
+      "dataset": "microcosm_uk_2024_25_dense",
+      "diagnosticsSha256": "44ab1c29d47c1899704be1a6f7036e00e2f281a7d305ecec69a77d0c51683e8d",
+      "households": 150000,
+      "targets": 24303
+    }
+  },
+  "totalTargets": {
+    "national": 1268,
+    "localArea": 24303,
+    "union": 24303
+  },
+  "levelCounts": {
+    "national": {
+      "uk": 368,
+      "gb": 192,
+      "englandAndWales": 4,
+      "nation": 198,
+      "region": 506,
+      "constituency": 0,
+      "localAuthority": 0,
+      "other": 0
+    },
+    "localArea": {
+      "uk": 368,
+      "gb": 195,
+      "englandAndWales": 4,
+      "nation": 200,
+      "region": 532,
+      "constituency": 12047,
+      "localAuthority": 10939,
+      "other": 18
+    },
+    "union": {
+      "uk": 368,
+      "gb": 195,
+      "englandAndWales": 4,
+      "nation": 200,
+      "region": 532,
+      "constituency": 12047,
+      "localAuthority": 10939,
+      "other": 18
+    }
+  },
+  "rows": [
+    {
+      "key": "ledger|dwp.attendance_allowance_cases_with_entitlement|aa_award_type,age_bands_and_single_year,gender",
+      "scope": "national",
+      "label": "Attendance Allowance cases with entitlement",
+      "breakdown": null,
+      "geoLevels": [
+        "nation"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 2,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [
+        "England",
+        "Wales"
+      ],
+      "targetCount": 2,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "DWP",
+      "sourceTables": [
+        "Attendance Allowance cases with entitlement by country, award type, age band and gender, February 2023 to March 2026"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|obr.attendance_allowance|",
+      "scope": "national",
+      "label": "Attendance Allowance spending",
+      "breakdown": null,
+      "geoLevels": [
+        "englandAndWales"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 1,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1,
+      "nationalValue": 8309942303.358463,
+      "nationalValueGeography": "England and Wales",
+      "unit": "gbp",
+      "source": "OBR",
+      "sourceTables": [
+        "EFO March 2026 detailed forecast tables: expenditure"
+      ],
+      "period": 2025,
+      "notes": [
+        "Calendar-year window of fiscal-year figures",
+        "The publisher’s forecast or projection"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|dwp.uc_capped_households_total|",
+      "scope": "national",
+      "label": "Benefit-capped households",
+      "breakdown": null,
+      "geoLevels": [
+        "gb"
+      ],
+      "nationalCount": 0,
+      "gbCount": 1,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1,
+      "nationalValue": 110637.0,
+      "nationalValueGeography": "Great Britain",
+      "unit": "count",
+      "source": "DWP",
+      "sourceTables": [
+        "Benefit cap: number of households capped to November 2025"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|dwp.uc_capped_households_by_band|",
+      "scope": "national",
+      "label": "Benefit-capped households",
+      "breakdown": "Monthly cap reduction",
+      "geoLevels": [
+        "gb"
+      ],
+      "nationalCount": 0,
+      "gbCount": 14,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 14,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "DWP",
+      "sourceTables": [
+        "Benefit cap: number of households capped to November 2025"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|scotgov.bus.government_support|funding_component",
+      "scope": "national",
+      "label": "Bus services: government support",
+      "breakdown": null,
+      "geoLevels": [
+        "nation"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 1,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [
+        "Scotland"
+      ],
+      "targetCount": 1,
+      "nationalValue": 499000000.0,
+      "nationalValueGeography": "Scotland",
+      "unit": "gbp",
+      "source": "Scottish Government",
+      "sourceTables": [
+        "Scottish Transport Statistics 2025 bus and coach reference tables"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|scotgov.bus.operator_revenue|revenue_component",
+      "scope": "national",
+      "label": "Bus services: passenger revenue",
+      "breakdown": null,
+      "geoLevels": [
+        "nation"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 1,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [
+        "Scotland"
+      ],
+      "targetCount": 1,
+      "nationalValue": 391000000.0,
+      "nationalValueGeography": "Scotland",
+      "unit": "gbp",
+      "source": "Scottish Government",
+      "sourceTables": [
+        "Scottish Transport Statistics 2025 bus and coach reference tables"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|hmrc.cgt_badr_ir_taxpayers|cgt_badr_ir_gain_band,cgt_badr_ir_qualifying_gain,taxpayer_type",
+      "scope": "national",
+      "label": "Capital Gains Tax: Business Asset Disposal or Investors’ Relief claimants",
+      "breakdown": "Qualifying gain",
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 8,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 8,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "HMRC",
+      "sourceTables": [
+        "Capital Gains Tax statistics Table 4: BADR and Investors' Relief by size of qualifying gain"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|hmrc.cgt_gains_total|",
+      "scope": "national",
+      "label": "Capital Gains Tax: gains",
+      "breakdown": null,
+      "geoLevels": [
+        "nation",
+        "region"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 3,
+      "regionCount": 9,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [
+        "Northern Ireland",
+        "Scotland",
+        "Wales"
+      ],
+      "targetCount": 12,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "gbp",
+      "source": "HMRC",
+      "sourceTables": [
+        "Capital Gains Tax statistics Table 5: taxpayers, gains and liabilities by UK country and region"
+      ],
+      "period": 2025,
+      "notes": [
+        "Rescaled to sum to its published higher-level control",
+        "Scaled by a ratio of published figures"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|hmrc.cgt_gains_individuals|",
+      "scope": "national",
+      "label": "Capital Gains Tax: gains of individuals",
+      "breakdown": null,
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 1,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1,
+      "nationalValue": 119258000000.0,
+      "nationalValueGeography": "United Kingdom",
+      "unit": "gbp",
+      "source": "HMRC",
+      "sourceTables": [
+        "Capital Gains Tax statistics Table 1: taxpayer numbers, gains and tax liabilities by year of disposal"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|hmrc.cgt_gains_individuals|age,age_band",
+      "scope": "national",
+      "label": "Capital Gains Tax: gains of individuals",
+      "breakdown": "Age",
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 8,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 8,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "gbp",
+      "source": "HMRC",
+      "sourceTables": [
+        "Capital Gains Tax statistics Table 6: individual taxpayers, gains and liabilities by age"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|hmrc.cgt_gains_individuals|cgt_gain,cgt_gain_band",
+      "scope": "national",
+      "label": "Capital Gains Tax: gains of individuals",
+      "breakdown": "Size of gain",
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 12,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 12,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "gbp",
+      "source": "HMRC",
+      "sourceTables": [
+        "Capital Gains Tax statistics Table 2: estimated number of taxpayers, amounts of gains and tax liabilities by size of gain"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|hmrc.cgt_gains_individuals|cgt_taxable_income_band,taxable_income",
+      "scope": "national",
+      "label": "Capital Gains Tax: gains of individuals",
+      "breakdown": "Taxable income",
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 6,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 6,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "gbp",
+      "source": "HMRC",
+      "sourceTables": [
+        "Capital Gains Tax statistics Table 3: individual taxpayers and gains by size of gain and taxable income"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|hmrc.cgt_badr_ir_qualifying_gains|cgt_badr_ir_gain_band,cgt_badr_ir_qualifying_gain,taxpayer_type",
+      "scope": "national",
+      "label": "Capital Gains Tax: gains qualifying for Business Asset Disposal or Investors’ Relief",
+      "breakdown": "Qualifying gain",
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 8,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 8,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "gbp",
+      "source": "HMRC",
+      "sourceTables": [
+        "Capital Gains Tax statistics Table 4: BADR and Investors' Relief by size of qualifying gain"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|hmrc.cgt_taxpayers_individuals|",
+      "scope": "national",
+      "label": "Capital Gains Tax: individual taxpayers",
+      "breakdown": null,
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 1,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1,
+      "nationalValue": 551000.0,
+      "nationalValueGeography": "United Kingdom",
+      "unit": "count",
+      "source": "HMRC",
+      "sourceTables": [
+        "Capital Gains Tax statistics Table 1: taxpayer numbers, gains and tax liabilities by year of disposal"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|hmrc.cgt_taxpayers_individuals|age,age_band",
+      "scope": "national",
+      "label": "Capital Gains Tax: individual taxpayers",
+      "breakdown": "Age",
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 8,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 8,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "HMRC",
+      "sourceTables": [
+        "Capital Gains Tax statistics Table 6: individual taxpayers, gains and liabilities by age"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|hmrc.cgt_taxpayers_individuals|cgt_gain,cgt_gain_band",
+      "scope": "national",
+      "label": "Capital Gains Tax: individual taxpayers",
+      "breakdown": "Size of gain",
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 12,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 12,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "HMRC",
+      "sourceTables": [
+        "Capital Gains Tax statistics Table 2: estimated number of taxpayers, amounts of gains and tax liabilities by size of gain"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|hmrc.cgt_taxpayers_individuals|cgt_taxable_income_band,taxable_income",
+      "scope": "national",
+      "label": "Capital Gains Tax: individual taxpayers",
+      "breakdown": "Taxable income",
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 6,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 6,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "HMRC",
+      "sourceTables": [
+        "Capital Gains Tax statistics Table 3: individual taxpayers and gains by size of gain and taxable income"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|hmrc.cgt_tax_individuals|",
+      "scope": "national",
+      "label": "Capital Gains Tax: liabilities of individuals",
+      "breakdown": null,
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 1,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1,
+      "nationalValue": 22503000000.0,
+      "nationalValueGeography": "United Kingdom",
+      "unit": "gbp",
+      "source": "HMRC",
+      "sourceTables": [
+        "Capital Gains Tax statistics Table 1: taxpayer numbers, gains and tax liabilities by year of disposal"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|hmrc.cgt_tax_individuals|age,age_band",
+      "scope": "national",
+      "label": "Capital Gains Tax: liabilities of individuals",
+      "breakdown": "Age",
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 8,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 8,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "gbp",
+      "source": "HMRC",
+      "sourceTables": [
+        "Capital Gains Tax statistics Table 6: individual taxpayers, gains and liabilities by age"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|hmrc.cgt_residential_property_gains|channel",
+      "scope": "national",
+      "label": "Capital Gains Tax: residential property gains",
+      "breakdown": null,
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 1,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1,
+      "nationalValue": 12242481474.688189,
+      "nationalValueGeography": "United Kingdom",
+      "unit": "gbp",
+      "source": "HMRC",
+      "sourceTables": [
+        "Capital Gains Tax statistics Table 8: residential property disposals"
+      ],
+      "period": 2025,
+      "notes": [
+        "Scaled by a ratio of published figures"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|hmrc.cgt_residential_property_taxpayers|channel",
+      "scope": "national",
+      "label": "Capital Gains Tax: residential property taxpayers",
+      "breakdown": null,
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 1,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1,
+      "nationalValue": 202630.0578034682,
+      "nationalValueGeography": "United Kingdom",
+      "unit": "count",
+      "source": "HMRC",
+      "sourceTables": [
+        "Capital Gains Tax statistics Table 8: residential property disposals"
+      ],
+      "period": 2025,
+      "notes": [
+        "Scaled by a ratio of published figures"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|hmrc.cgt_taxpayers_total|",
+      "scope": "national",
+      "label": "Capital Gains Tax: taxpayers",
+      "breakdown": null,
+      "geoLevels": [
+        "nation",
+        "region"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 3,
+      "regionCount": 9,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [
+        "Northern Ireland",
+        "Scotland",
+        "Wales"
+      ],
+      "targetCount": 12,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "HMRC",
+      "sourceTables": [
+        "Capital Gains Tax statistics Table 5: taxpayers, gains and liabilities by UK country and region"
+      ],
+      "period": 2025,
+      "notes": [
+        "Rescaled to sum to its published higher-level control",
+        "Scaled by a ratio of published figures"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|obr.carers_allowance|",
+      "scope": "national",
+      "label": "Carer’s Allowance spending",
+      "breakdown": null,
+      "geoLevels": [
+        "englandAndWales"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 1,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1,
+      "nationalValue": 4487029829.347929,
+      "nationalValueGeography": "England and Wales",
+      "unit": "gbp",
+      "source": "OBR",
+      "sourceTables": [
+        "EFO March 2026 detailed forecast tables: expenditure"
+      ],
+      "period": 2025,
+      "notes": [
+        "Calendar-year window of fiscal-year figures",
+        "The publisher’s forecast or projection"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|obr.child_benefit|",
+      "scope": "national",
+      "label": "Child Benefit spending",
+      "breakdown": null,
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 1,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1,
+      "nationalValue": 13368730968.878168,
+      "nationalValueGeography": "United Kingdom",
+      "unit": "gbp",
+      "source": "OBR",
+      "sourceTables": [
+        "EFO March 2026 detailed forecast tables: expenditure"
+      ],
+      "period": 2025,
+      "notes": [
+        "Calendar-year window of fiscal-year figures",
+        "The publisher’s forecast or projection"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|dwp.uc_tcl_headline_children_within_affected_households|two_child_limit_status",
+      "scope": "national",
+      "label": "Children in households affected by the two-child limit",
+      "breakdown": null,
+      "geoLevels": [
+        "gb"
+      ],
+      "nationalCount": 0,
+      "gbCount": 1,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1,
+      "nationalValue": 1665540.0,
+      "nationalValueGeography": "Great Britain",
+      "unit": "count",
+      "source": "DWP",
+      "sourceTables": [
+        "Universal Credit claimants: statistics on the two-child limit policy, April 2025 data tables"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|dwp.uc_tcl_children_by_disability|two_child_limit_status",
+      "scope": "national",
+      "label": "Children in households affected by the two-child limit",
+      "breakdown": "Disability",
+      "geoLevels": [
+        "gb"
+      ],
+      "nationalCount": 0,
+      "gbCount": 2,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 2,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "DWP",
+      "sourceTables": [
+        "Universal Credit claimants: statistics on the two-child limit policy, April 2025 data tables"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|dwp.uc_tcl_children_by_children|two_child_limit_status",
+      "scope": "national",
+      "label": "Children in households affected by the two-child limit",
+      "breakdown": "Number of children",
+      "geoLevels": [
+        "gb"
+      ],
+      "nationalCount": 0,
+      "gbCount": 4,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 4,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "DWP",
+      "sourceTables": [
+        "Universal Credit claimants: statistics on the two-child limit policy, April 2025 data tables"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|dwp.uc_tcl_headline_children_affected_by_policy|two_child_limit_status",
+      "scope": "national",
+      "label": "Children not receiving the child element under the two-child limit",
+      "breakdown": null,
+      "geoLevels": [
+        "gb"
+      ],
+      "nationalCount": 0,
+      "gbCount": 1,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1,
+      "nationalValue": 597920.0,
+      "nationalValueGeography": "Great Britain",
+      "unit": "count",
+      "source": "DWP",
+      "sourceTables": [
+        "Universal Credit claimants: statistics on the two-child limit policy, April 2025 data tables"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|mhclg.council_taxbase.empty_dwellings|",
+      "scope": "national",
+      "label": "Council Tax dwelling stock",
+      "breakdown": null,
+      "geoLevels": [
+        "region"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 9,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 9,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "MHCLG",
+      "sourceTables": [
+        "Council Taxbase: Local authority level data for 2025 (revised), Council Taxbase Data worksheet"
+      ],
+      "period": 2025,
+      "notes": [
+        "Rescaled to sum to its published higher-level control"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|scotgov.chargeable_dwellings_total|",
+      "scope": "national",
+      "label": "Council Tax dwelling stock",
+      "breakdown": null,
+      "geoLevels": [
+        "nation"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 1,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [
+        "Scotland"
+      ],
+      "targetCount": 1,
+      "nationalValue": 2570799.0,
+      "nationalValueGeography": "Scotland",
+      "unit": "count",
+      "source": "Scottish Government",
+      "sourceTables": [
+        "Number of chargeable dwellings, September 2025 (CTAXBASE 2025)"
+      ],
+      "period": 2025,
+      "notes": [
+        "Rescaled to sum to its published higher-level control"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|welshgov.council_tax_dwellings.total_chargeable_second_homes|",
+      "scope": "national",
+      "label": "Council Tax dwelling stock",
+      "breakdown": null,
+      "geoLevels": [
+        "nation"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 1,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [
+        "Wales"
+      ],
+      "targetCount": 1,
+      "nationalValue": 1387333.6411848539,
+      "nationalValueGeography": "Wales",
+      "unit": "count",
+      "source": "Welsh Government",
+      "sourceTables": [
+        "StatsWales: Council tax dwellings by authority and band (CT1 returns), full-dataset CSV export"
+      ],
+      "period": 2025,
+      "notes": [
+        "Rescaled to sum to its published higher-level control"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|mhclg.council_taxbase.empty_dwellings|council_tax_band",
+      "scope": "national",
+      "label": "Council Tax dwelling stock",
+      "breakdown": "Council tax band",
+      "geoLevels": [
+        "region"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 72,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 72,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "MHCLG",
+      "sourceTables": [
+        "Council Taxbase: Local authority level data for 2025 (revised), Council Taxbase Data worksheet"
+      ],
+      "period": 2025,
+      "notes": [
+        "Rescaled to sum to its published higher-level control"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|scotgov.chargeable_dwellings_by_band|",
+      "scope": "national",
+      "label": "Council Tax dwelling stock",
+      "breakdown": "Council tax band",
+      "geoLevels": [
+        "nation"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 8,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [
+        "Scotland"
+      ],
+      "targetCount": 8,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "Scottish Government",
+      "sourceTables": [
+        "Number of chargeable dwellings, September 2025 (CTAXBASE 2025)"
+      ],
+      "period": 2025,
+      "notes": [
+        "Rescaled to sum to its published higher-level control"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|welshgov.council_tax_dwellings.total_chargeable_second_homes|council_tax_band",
+      "scope": "national",
+      "label": "Council Tax dwelling stock",
+      "breakdown": "Council tax band",
+      "geoLevels": [
+        "nation"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 9,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [
+        "Wales"
+      ],
+      "targetCount": 9,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "Welsh Government",
+      "sourceTables": [
+        "StatsWales: Council tax dwellings by authority and band (CT1 returns), full-dataset CSV export"
+      ],
+      "period": 2025,
+      "notes": [
+        "Rescaled to sum to its published higher-level control"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|obr.council_tax_receipts_england_scotland_wales|",
+      "scope": "national",
+      "label": "Council Tax receipts (England, Scotland and Wales)",
+      "breakdown": null,
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 1,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1,
+      "nationalValue": 48774253146.51462,
+      "nationalValueGeography": "United Kingdom",
+      "unit": "gbp",
+      "source": "OBR",
+      "sourceTables": [
+        "EFO March 2026 detailed forecast tables: expenditure"
+      ],
+      "period": 2025,
+      "notes": [
+        "Calendar-year window of fiscal-year figures",
+        "The publisher’s forecast or projection"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|obr.dla_and_pip|",
+      "scope": "national",
+      "label": "Disability Living Allowance and Personal Independence Payment spending",
+      "breakdown": null,
+      "geoLevels": [
+        "englandAndWales"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 1,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1,
+      "nationalValue": 36103194307.639694,
+      "nationalValueGeography": "England and Wales",
+      "unit": "gbp",
+      "source": "OBR",
+      "sourceTables": [
+        "EFO March 2026 detailed forecast tables: expenditure"
+      ],
+      "period": 2025,
+      "notes": [
+        "Calendar-year window of fiscal-year figures",
+        "The publisher’s forecast or projection"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|mhclg.council_taxbase.single_adult_discount_dwellings|",
+      "scope": "national",
+      "label": "Dwellings with a Council Tax single-adult discount",
+      "breakdown": null,
+      "geoLevels": [
+        "nation"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 1,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [
+        "England"
+      ],
+      "targetCount": 1,
+      "nationalValue": 8496178.0,
+      "nationalValueGeography": "England",
+      "unit": "count",
+      "source": "MHCLG",
+      "sourceTables": [
+        "Council Taxbase: Local authority level data for 2025 (revised), Council Taxbase Data worksheet"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|obr.ni_employee|",
+      "scope": "national",
+      "label": "Employee National Insurance contributions",
+      "breakdown": null,
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 1,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1,
+      "nationalValue": 49002029830.141045,
+      "nationalValueGeography": "United Kingdom",
+      "unit": "gbp",
+      "source": "OBR",
+      "sourceTables": [
+        "EFO March 2026 detailed forecast tables: receipts"
+      ],
+      "period": 2025,
+      "notes": [
+        "Calendar-year window of fiscal-year figures",
+        "The publisher’s forecast or projection"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|dwp.workplace_pension_annual_saving|price_basis,saver_population,saving_component,sector",
+      "scope": "national",
+      "label": "Employer workplace pension contributions",
+      "breakdown": null,
+      "geoLevels": [
+        "gb"
+      ],
+      "nationalCount": 0,
+      "gbCount": 1,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1,
+      "nationalValue": 104200000000.0,
+      "nationalValueGeography": "Great Britain",
+      "unit": "gbp",
+      "source": "DWP",
+      "sourceTables": [
+        "Workplace pension participation and savings trends of employees: 2009 to 2025"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|dwp.esa_claimants|payment_type,phase_of_esa_claim",
+      "scope": "national",
+      "label": "Employment and Support Allowance claimants",
+      "breakdown": "Payment type",
+      "geoLevels": [
+        "gb"
+      ],
+      "nationalCount": 0,
+      "gbCount": 3,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 3,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "DWP",
+      "sourceTables": [
+        "Employment and Support Allowance caseload by payment type and phase of claim, May 2018 to March 2026"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|dfe.funded_childcare_registered_children_total|age,entitlement_type,provision,registration_basis",
+      "scope": "national",
+      "label": "Funded early education and childcare: registered children",
+      "breakdown": "Age × entitlement",
+      "geoLevels": [
+        "nation"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 7,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [
+        "England"
+      ],
+      "targetCount": 7,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "DfE",
+      "sourceTables": [
+        "Funded early education and childcare 2026, Headline figures"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|dfe.funded_childcare_registered_children_nursery|age,entitlement_type,provision,registration_basis",
+      "scope": "national",
+      "label": "Funded early education: 3-year-olds using the universal hours at a nursery",
+      "breakdown": null,
+      "geoLevels": [
+        "nation"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 1,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [
+        "England"
+      ],
+      "targetCount": 1,
+      "nationalValue": 565954.0,
+      "nationalValueGeography": "England",
+      "unit": "count",
+      "source": "DfE",
+      "sourceTables": [
+        "Funded early education and childcare 2026, Headline figures"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|ons.household_expenditure.personal_transport_fuels_lubricants|coicop,consumption_concept,frequency,price_basis,published_unit,seasonal_adjustment,source_sheet",
+      "scope": "national",
+      "label": "Household spending on fuels and lubricants for personal transport",
+      "breakdown": null,
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 1,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1,
+      "nationalValue": 37025000000.0,
+      "nationalValueGeography": "United Kingdom",
+      "unit": "gbp",
+      "source": "ONS",
+      "sourceTables": [
+        "Consumer Trends current price, not seasonally adjusted, 0CN, 01CN-12CN and TOURCN"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|nisra.census2021_households|",
+      "scope": "national",
+      "label": "Households",
+      "breakdown": null,
+      "geoLevels": [
+        "nation"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 1,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [
+        "Northern Ireland"
+      ],
+      "targetCount": 1,
+      "nationalValue": 794887.0879380013,
+      "nationalValueGeography": "Northern Ireland",
+      "unit": "count",
+      "source": "NISRA",
+      "sourceTables": [
+        "NISRA Census 2021 flexible table: number of households by LGD14"
+      ],
+      "period": 2025,
+      "notes": [
+        "Rolled forward by a ratio of published figures"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|nrs.households_total|",
+      "scope": "national",
+      "label": "Households",
+      "breakdown": null,
+      "geoLevels": [
+        "nation"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 1,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [
+        "Scotland"
+      ],
+      "targetCount": 1,
+      "nationalValue": 2570799.0,
+      "nationalValueGeography": "Scotland",
+      "unit": "count",
+      "source": "National Records of Scotland",
+      "sourceTables": [
+        "NRS households and dwellings by Scottish council area, 2024 and 2025"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|ons.households_total|",
+      "scope": "national",
+      "label": "Households",
+      "breakdown": null,
+      "geoLevels": [
+        "region"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 9,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 9,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "ONS",
+      "sourceTables": [
+        "Households by type of household and family, regions of England and GB constituent countries, Table 7"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|welshgov.households_total|Data description,Household Type",
+      "scope": "national",
+      "label": "Households",
+      "breakdown": null,
+      "geoLevels": [
+        "nation"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 1,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [
+        "Wales"
+      ],
+      "targetCount": 1,
+      "nationalValue": 1387333.6411848539,
+      "nationalValueGeography": "Wales",
+      "unit": "count",
+      "source": "Welsh Government",
+      "sourceTables": [
+        "Welsh Government household estimates, mid-2022 to mid-2024 (revised series)"
+      ],
+      "period": 2025,
+      "notes": [
+        "Rolled forward by a ratio of published figures"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|ons.households_by_type|household_type",
+      "scope": "national",
+      "label": "Households",
+      "breakdown": "Household type",
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 10,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 10,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "ONS",
+      "sourceTables": [
+        "Families and households in the UK 2025, Tables 1, 3, 5 and 7: families by type and presence of children, families with dependent children by number, household size and households by type"
+      ],
+      "period": 2025,
+      "notes": [
+        "Rescaled to sum to its published higher-level control"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|dwp.uc_tcl_headline_households_affected|two_child_limit_status",
+      "scope": "national",
+      "label": "Households affected by the two-child limit",
+      "breakdown": null,
+      "geoLevels": [
+        "gb"
+      ],
+      "nationalCount": 0,
+      "gbCount": 1,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1,
+      "nationalValue": 469780.0,
+      "nationalValueGeography": "Great Britain",
+      "unit": "count",
+      "source": "DWP",
+      "sourceTables": [
+        "Universal Credit claimants: statistics on the two-child limit policy, April 2025 data tables"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|dwp.uc_tcl_households_by_disability|two_child_limit_status",
+      "scope": "national",
+      "label": "Households affected by the two-child limit",
+      "breakdown": "Disability",
+      "geoLevels": [
+        "gb"
+      ],
+      "nationalCount": 0,
+      "gbCount": 2,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 2,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "DWP",
+      "sourceTables": [
+        "Universal Credit claimants: statistics on the two-child limit policy, April 2025 data tables"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|dwp.uc_tcl_households_by_children|two_child_limit_status",
+      "scope": "national",
+      "label": "Households affected by the two-child limit",
+      "breakdown": "Number of children",
+      "geoLevels": [
+        "gb"
+      ],
+      "nationalCount": 0,
+      "gbCount": 4,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 4,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "DWP",
+      "sourceTables": [
+        "Universal Credit claimants: statistics on the two-child limit policy, April 2025 data tables"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|dwp.hb_claimants|client_type,private_or_social_rented",
+      "scope": "national",
+      "label": "Housing Benefit claimants of pension age",
+      "breakdown": "Private or social rented",
+      "geoLevels": [
+        "gb"
+      ],
+      "nationalCount": 0,
+      "gbCount": 3,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 3,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "DWP",
+      "sourceTables": [
+        "Housing Benefit claimants by client type and tenure, January 2023 to February 2026"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|dwp.benefit_expenditure_amount|benefit_family,benefit_forecast_line",
+      "scope": "national",
+      "label": "Housing Benefit spending, pension age",
+      "breakdown": null,
+      "geoLevels": [
+        "gb"
+      ],
+      "nationalCount": 0,
+      "gbCount": 1,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1,
+      "nationalValue": 7048818510.96767,
+      "nationalValueGeography": "Great Britain",
+      "unit": "gbp",
+      "source": "DWP",
+      "sourceTables": [
+        "DWP benefit expenditure and caseload tables 2026: outturn and forecast, Spring Forecast 2026"
+      ],
+      "period": 2025,
+      "notes": [
+        "Calendar-year window of fiscal-year figures",
+        "The publisher’s forecast or projection"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|obr.incapacity_benefits|",
+      "scope": "national",
+      "label": "Incapacity benefits spending",
+      "breakdown": null,
+      "geoLevels": [
+        "gb"
+      ],
+      "nationalCount": 0,
+      "gbCount": 1,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1,
+      "nationalValue": 8507979735.87899,
+      "nationalValueGeography": "Great Britain",
+      "unit": "gbp",
+      "source": "OBR",
+      "sourceTables": [
+        "EFO March 2026 detailed forecast tables: expenditure"
+      ],
+      "period": 2025,
+      "notes": [
+        "Calendar-year window of fiscal-year figures",
+        "The publisher’s forecast or projection"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|hmrc.spi_total_tax_amount|sex,total_income",
+      "scope": "national",
+      "label": "Income Tax liabilities",
+      "breakdown": "Total income band",
+      "geoLevels": [
+        "nation",
+        "region"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 30,
+      "regionCount": 90,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [
+        "Northern Ireland",
+        "Scotland",
+        "Wales"
+      ],
+      "targetCount": 120,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "gbp",
+      "source": "HMRC",
+      "sourceTables": [
+        "SPI collated Tables 3.1 to 3.11, tax year 2023-24: Table 3.11 income and tax by sex, region and country"
+      ],
+      "period": 2025,
+      "notes": [
+        "Rescaled to sum to its published higher-level control",
+        "Uprated to 2025 with HMRC Income Tax liabilities statistics (tax growth by income band)"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|hmrc.spi_total_tax_amount|total_income",
+      "scope": "national",
+      "label": "Income Tax liabilities",
+      "breakdown": "Total income band",
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 11,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 11,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "gbp",
+      "source": "HMRC",
+      "sourceTables": [
+        "HMRC Income Tax liabilities statistics, collated Tables 2.1 to 2.6: tax year 2023-24 to tax year 2026-27"
+      ],
+      "period": 2025,
+      "notes": [
+        "Calendar-year window of fiscal-year figures",
+        "The publisher’s forecast or projection"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|hmrc.spi_taxpayer_count|marginal_rate",
+      "scope": "national",
+      "label": "Income Tax payers",
+      "breakdown": "Marginal tax rate",
+      "geoLevels": [
+        "nation",
+        "region"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 6,
+      "regionCount": 18,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [
+        "Northern Ireland",
+        "Scotland",
+        "Wales"
+      ],
+      "targetCount": 24,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "HMRC",
+      "sourceTables": [
+        "HMRC Income Tax liabilities statistics, collated Tables 2.1 to 2.6: tax year 2023-24 to tax year 2026-27"
+      ],
+      "period": 2025,
+      "notes": [
+        "Calendar-year window of fiscal-year figures",
+        "The publisher’s forecast or projection"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|hmrc.spi_taxpayer_count|total_income",
+      "scope": "national",
+      "label": "Income Tax payers",
+      "breakdown": "Total income band",
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 11,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 11,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "HMRC",
+      "sourceTables": [
+        "HMRC Income Tax liabilities statistics, collated Tables 2.1 to 2.6: tax year 2023-24 to tax year 2026-27"
+      ],
+      "period": 2025,
+      "notes": [
+        "Calendar-year window of fiscal-year figures",
+        "The publisher’s forecast or projection"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|obr.income_tax|",
+      "scope": "national",
+      "label": "Income Tax receipts",
+      "breakdown": null,
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 1,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1,
+      "nationalValue": 325054437305.83215,
+      "nationalValueGeography": "United Kingdom",
+      "unit": "gbp",
+      "source": "OBR",
+      "sourceTables": [
+        "EFO March 2026 detailed forecast tables: receipts"
+      ],
+      "period": 2025,
+      "notes": [
+        "Calendar-year window of fiscal-year figures",
+        "The publisher’s forecast or projection"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|hmrc.spi_dividend_income_amount|total_income",
+      "scope": "national",
+      "label": "Income: dividends",
+      "breakdown": "Total income band",
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 12,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 12,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "gbp",
+      "source": "HMRC",
+      "sourceTables": [
+        "SPI collated Tables 3.1 to 3.11, tax year 2023-24: income by range of total income"
+      ],
+      "period": 2025,
+      "notes": [
+        "Uprated to 2025 with OBR per-capita GDP (policyengine-uk)"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|hmrc.spi_employment_income_amount|total_income",
+      "scope": "national",
+      "label": "Income: employment",
+      "breakdown": "Total income band",
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 12,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 12,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "gbp",
+      "source": "HMRC",
+      "sourceTables": [
+        "SPI collated Tables 3.1 to 3.11, tax year 2023-24: income by range of total income"
+      ],
+      "period": 2025,
+      "notes": [
+        "Uprated to 2025 with HMRC Income Tax liabilities statistics (income growth by income band)"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|hmrc.spi_dividend_income_count|total_income",
+      "scope": "national",
+      "label": "Income: people with dividends",
+      "breakdown": "Total income band",
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 12,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 12,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "HMRC",
+      "sourceTables": [
+        "SPI collated Tables 3.1 to 3.11, tax year 2023-24: income by range of total income"
+      ],
+      "period": 2025,
+      "notes": [
+        "Uprated to 2025 with HMRC Income Tax liabilities statistics (taxpayer growth by income band)"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|hmrc.spi_employment_income_count|total_income",
+      "scope": "national",
+      "label": "Income: people with employment income",
+      "breakdown": "Total income band",
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 13,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 13,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "HMRC",
+      "sourceTables": [
+        "SPI collated Tables 3.1 to 3.11, tax year 2023-24: income by range of total income"
+      ],
+      "period": 2025,
+      "notes": [
+        "Uprated to 2025 with HMRC Income Tax liabilities statistics (taxpayer growth by income band)"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|hmrc.spi_total_income_before_tax_count|sex,total_income",
+      "scope": "national",
+      "label": "Income: people with income",
+      "breakdown": "Total income band",
+      "geoLevels": [
+        "nation",
+        "region"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 30,
+      "regionCount": 90,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [
+        "Northern Ireland",
+        "Scotland",
+        "Wales"
+      ],
+      "targetCount": 120,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "HMRC",
+      "sourceTables": [
+        "SPI collated Tables 3.1 to 3.11, tax year 2023-24: Table 3.11 income and tax by sex, region and country"
+      ],
+      "period": 2025,
+      "notes": [
+        "Rescaled to sum to its published higher-level control",
+        "Uprated to 2025 with HMRC Income Tax liabilities statistics (taxpayer growth by income band)"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|hmrc.spi_private_pension_income_count|total_income",
+      "scope": "national",
+      "label": "Income: people with private pension income",
+      "breakdown": "Total income band",
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 12,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 12,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "HMRC",
+      "sourceTables": [
+        "SPI collated Tables 3.1 to 3.11, tax year 2023-24: income by range of total income"
+      ],
+      "period": 2025,
+      "notes": [
+        "Uprated to 2025 with HMRC Income Tax liabilities statistics (taxpayer growth by income band)"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|hmrc.spi_property_income_count|total_income",
+      "scope": "national",
+      "label": "Income: people with property income",
+      "breakdown": "Total income band",
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 12,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 12,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "HMRC",
+      "sourceTables": [
+        "SPI collated Tables 3.1 to 3.11, tax year 2023-24: income by range of total income"
+      ],
+      "period": 2025,
+      "notes": [
+        "Uprated to 2025 with HMRC Income Tax liabilities statistics (taxpayer growth by income band)"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|hmrc.spi_savings_interest_income_count|total_income",
+      "scope": "national",
+      "label": "Income: people with savings interest",
+      "breakdown": "Total income band",
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 13,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 13,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "HMRC",
+      "sourceTables": [
+        "SPI collated Tables 3.1 to 3.11, tax year 2023-24: income by range of total income"
+      ],
+      "period": 2025,
+      "notes": [
+        "Uprated to 2025 with HMRC Income Tax liabilities statistics (taxpayer growth by income band)"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|hmrc.spi_self_employment_income_count|total_income",
+      "scope": "national",
+      "label": "Income: people with self-employment income",
+      "breakdown": "Total income band",
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 12,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 12,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "HMRC",
+      "sourceTables": [
+        "SPI collated Tables 3.1 to 3.11, tax year 2023-24: income by range of total income"
+      ],
+      "period": 2025,
+      "notes": [
+        "Uprated to 2025 with HMRC Income Tax liabilities statistics (taxpayer growth by income band)"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|hmrc.spi_state_pension_count|total_income",
+      "scope": "national",
+      "label": "Income: people with State Pension income",
+      "breakdown": "Total income band",
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 12,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 12,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "HMRC",
+      "sourceTables": [
+        "SPI collated Tables 3.1 to 3.11, tax year 2023-24: income by range of total income"
+      ],
+      "period": 2025,
+      "notes": [
+        "Uprated to 2025 with HMRC Income Tax liabilities statistics (taxpayer growth by income band)"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|hmrc.spi_private_pension_income_amount|total_income",
+      "scope": "national",
+      "label": "Income: private pensions",
+      "breakdown": "Total income band",
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 12,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 12,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "gbp",
+      "source": "HMRC",
+      "sourceTables": [
+        "SPI collated Tables 3.1 to 3.11, tax year 2023-24: income by range of total income"
+      ],
+      "period": 2025,
+      "notes": [
+        "Uprated to 2025 with HMRC Income Tax liabilities statistics (income growth by income band)"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|hmrc.spi_property_income_amount|total_income",
+      "scope": "national",
+      "label": "Income: property",
+      "breakdown": "Total income band",
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 13,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 13,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "gbp",
+      "source": "HMRC",
+      "sourceTables": [
+        "SPI collated Tables 3.1 to 3.11, tax year 2023-24: income by range of total income"
+      ],
+      "period": 2025,
+      "notes": [
+        "Uprated to 2025 with HMRC Income Tax liabilities statistics (income growth by income band)"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|hmrc.spi_savings_interest_income_amount|total_income",
+      "scope": "national",
+      "label": "Income: savings interest",
+      "breakdown": "Total income band",
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 13,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 13,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "gbp",
+      "source": "HMRC",
+      "sourceTables": [
+        "SPI collated Tables 3.1 to 3.11, tax year 2023-24: income by range of total income"
+      ],
+      "period": 2025,
+      "notes": [
+        "Uprated to 2025 with policyengine-uk’s household interest income index, then OBR per-capita GDP"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|hmrc.spi_self_employment_income_amount|total_income",
+      "scope": "national",
+      "label": "Income: self-employment",
+      "breakdown": "Total income band",
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 12,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 12,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "gbp",
+      "source": "HMRC",
+      "sourceTables": [
+        "SPI collated Tables 3.1 to 3.11, tax year 2023-24: income by range of total income"
+      ],
+      "period": 2025,
+      "notes": [
+        "Uprated to 2025 with HMRC Income Tax liabilities statistics (income growth by income band)"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|hmrc.spi_state_pension_amount|total_income",
+      "scope": "national",
+      "label": "Income: State Pension",
+      "breakdown": "Total income band",
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 12,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 12,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "gbp",
+      "source": "HMRC",
+      "sourceTables": [
+        "SPI collated Tables 3.1 to 3.11, tax year 2023-24: income by range of total income"
+      ],
+      "period": 2025,
+      "notes": [
+        "Uprated to 2025 with HMRC Income Tax liabilities statistics (taxpayer growth by income band) and the new State Pension rate"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|hmrc.spi_total_income_before_tax_amount|sex,total_income",
+      "scope": "national",
+      "label": "Income: total before tax",
+      "breakdown": "Total income band",
+      "geoLevels": [
+        "nation",
+        "region"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 30,
+      "regionCount": 90,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [
+        "Northern Ireland",
+        "Scotland",
+        "Wales"
+      ],
+      "targetCount": 120,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "gbp",
+      "source": "HMRC",
+      "sourceTables": [
+        "SPI collated Tables 3.1 to 3.11, tax year 2023-24: Table 3.11 income and tax by sex, region and country"
+      ],
+      "period": 2025,
+      "notes": [
+        "Rescaled to sum to its published higher-level control",
+        "Uprated to 2025 with HMRC Income Tax liabilities statistics (income growth by income band)"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|hmrc.spi_total_income_before_tax_amount|total_income",
+      "scope": "national",
+      "label": "Income: total before tax",
+      "breakdown": "Total income band",
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 11,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 11,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "gbp",
+      "source": "HMRC",
+      "sourceTables": [
+        "HMRC Income Tax liabilities statistics, collated Tables 2.1 to 2.6: tax year 2023-24 to tax year 2026-27"
+      ],
+      "period": 2025,
+      "notes": [
+        "Calendar-year window of fiscal-year figures",
+        "The publisher’s forecast or projection"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|obr.jobseekers_allowance|",
+      "scope": "national",
+      "label": "Jobseeker’s Allowance spending",
+      "breakdown": null,
+      "geoLevels": [
+        "gb"
+      ],
+      "nationalCount": 0,
+      "gbCount": 1,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1,
+      "nationalValue": 288407204.431046,
+      "nationalValueGeography": "Great Britain",
+      "unit": "gbp",
+      "source": "OBR",
+      "sourceTables": [
+        "EFO March 2026 detailed forecast tables: expenditure"
+      ],
+      "period": 2025,
+      "notes": [
+        "Calendar-year window of fiscal-year figures",
+        "The publisher’s forecast or projection"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|ons.nbs_land_value_households|publication_status",
+      "scope": "national",
+      "label": "Land held by households (national balance sheet)",
+      "breakdown": null,
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 1,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1,
+      "nationalValue": 4485171000000.0,
+      "nationalValueGeography": "United Kingdom",
+      "unit": "gbp",
+      "source": "ONS",
+      "sourceTables": [
+        "Preliminary UK national balance sheet estimates, 10 June 2026, Tables 2, 3 and 11"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|ons.nbs_land_value_nfc|publication_status",
+      "scope": "national",
+      "label": "Land held by non-financial corporations (national balance sheet)",
+      "breakdown": null,
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 1,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1,
+      "nationalValue": 2063534000000.0,
+      "nationalValueGeography": "United Kingdom",
+      "unit": "gbp",
+      "source": "ONS",
+      "sourceTables": [
+        "Preliminary UK national balance sheet estimates, 10 June 2026, Tables 2, 3 and 11"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|ons.nbs_land_value_total|publication_status",
+      "scope": "national",
+      "label": "Land, all sectors (national balance sheet)",
+      "breakdown": null,
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 1,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1,
+      "nationalValue": 6872455000000.0,
+      "nationalValueGeography": "United Kingdom",
+      "unit": "gbp",
+      "source": "ONS",
+      "sourceTables": [
+        "Preliminary UK national balance sheet estimates, 10 June 2026, Tables 2, 3 and 11"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|welshgov.local_transport.gross_expenditure|expenditure_component,service_line",
+      "scope": "national",
+      "label": "Local authority support to bus operators",
+      "breakdown": null,
+      "geoLevels": [
+        "nation"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 1,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [
+        "Wales"
+      ],
+      "targetCount": 1,
+      "nationalValue": 131489970.0,
+      "nationalValueGeography": "Wales",
+      "unit": "gbp",
+      "source": "Welsh Government",
+      "sourceTables": [
+        "Roads and transport revenue outturn expenditure by authority and service"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|dft.local_bus_passenger_fare_receipts|",
+      "scope": "national",
+      "label": "Local bus passenger fare receipts",
+      "breakdown": null,
+      "geoLevels": [
+        "nation",
+        "region"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 1,
+      "regionCount": 1,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [
+        "England"
+      ],
+      "targetCount": 2,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "gbp",
+      "source": "DfT",
+      "sourceTables": [
+        "BUS05i estimated operating revenue and net support for local bus services"
+      ],
+      "period": 2025,
+      "notes": [
+        "Uprated to 2025 with the DfT local bus fares index"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|dft.local_bus_passenger_journeys|",
+      "scope": "national",
+      "label": "Local bus passenger journeys",
+      "breakdown": null,
+      "geoLevels": [
+        "region"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 9,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 9,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "DfT",
+      "sourceTables": [
+        "BUS01a passenger journeys and BUS01c concessionary passenger journeys"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|dft.local_bus_total_estimated_net_support|",
+      "scope": "national",
+      "label": "Local bus services: estimated net government support",
+      "breakdown": null,
+      "geoLevels": [
+        "nation",
+        "region"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 1,
+      "regionCount": 1,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [
+        "England"
+      ],
+      "targetCount": 2,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "gbp",
+      "source": "DfT",
+      "sourceTables": [
+        "BUS05i estimated operating revenue and net support for local bus services"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|uk.dwelling.count|microcosm.value_threshold,uk.dwelling.tenure",
+      "scope": "national",
+      "label": "Owner-occupied homes above high-value thresholds",
+      "breakdown": "Value threshold",
+      "geoLevels": [
+        "nation",
+        "region"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 2,
+      "regionCount": 26,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [
+        "Wales"
+      ],
+      "targetCount": 28,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "Microcosm derivation from open data (HM Land Registry Price Paid, UK HPI, ONS NSPL, VOA council tax stock, Census 2021 tenure)",
+      "sourceTables": [
+        "HM Land Registry Price Paid Data, UK HPI and ONS NSPL, Microcosm derivation"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": true
+    },
+    {
+      "key": "ledger|dwp.pension_credit_benefit_units|",
+      "scope": "national",
+      "label": "Pension Credit caseload",
+      "breakdown": null,
+      "geoLevels": [
+        "nation"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 1,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [
+        "Northern Ireland"
+      ],
+      "targetCount": 1,
+      "nationalValue": 60195.0,
+      "nationalValueGeography": "Northern Ireland",
+      "unit": "count",
+      "source": "Department for Communities (NI)",
+      "sourceTables": [
+        "Benefits Statistics Summary Publication May 2026: Pension Credit workbook"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|dwp.pension_credit_benefit_units|age,age_bands_and_single_year,partner_indicator,type_of_pension_credit",
+      "scope": "national",
+      "label": "Pension Credit caseload",
+      "breakdown": "Age",
+      "geoLevels": [
+        "gb"
+      ],
+      "nationalCount": 0,
+      "gbCount": 6,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 6,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "DWP",
+      "sourceTables": [
+        "Pension Credit caseload and mean weekly award by type of Pension Credit, partner indicator and age band, February 2023 to March 2026"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|dwp.pension_credit_benefit_units|age_bands_and_single_year,partner_indicator,type_of_pension_credit",
+      "scope": "national",
+      "label": "Pension Credit caseload",
+      "breakdown": "Single or couple × Pension Credit type",
+      "geoLevels": [
+        "gb"
+      ],
+      "nationalCount": 0,
+      "gbCount": 7,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 7,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "DWP",
+      "sourceTables": [
+        "Pension Credit caseload and mean weekly award by type of Pension Credit, partner indicator and age band, February 2023 to March 2026"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|obr.pension_credit|",
+      "scope": "national",
+      "label": "Pension Credit spending",
+      "breakdown": null,
+      "geoLevels": [
+        "gb"
+      ],
+      "nationalCount": 0,
+      "gbCount": 1,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1,
+      "nationalValue": 6112217133.109846,
+      "nationalValueGeography": "Great Britain",
+      "unit": "gbp",
+      "source": "OBR",
+      "sourceTables": [
+        "EFO March 2026 detailed forecast tables: expenditure"
+      ],
+      "period": 2025,
+      "notes": [
+        "Calendar-year window of fiscal-year figures",
+        "The publisher’s forecast or projection"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|slc.student_loan_borrowers|borrower_status,repayment_plan,row_group",
+      "scope": "national",
+      "label": "Plan 5 student loan borrowers",
+      "breakdown": "Borrower status",
+      "geoLevels": [
+        "nation"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 2,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [
+        "England"
+      ],
+      "targetCount": 2,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "Student Loans Company",
+      "sourceTables": [
+        "Student loan forecasts for England, Table 6a: forecast borrowers liable to repay and earning above threshold, by product"
+      ],
+      "period": 2025,
+      "notes": [
+        "The publisher’s forecast or projection"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|ons.mid_year_population_estimate|",
+      "scope": "national",
+      "label": "Population",
+      "breakdown": null,
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 1,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1,
+      "nationalValue": 69483939.0,
+      "nationalValueGeography": "United Kingdom",
+      "unit": "count",
+      "source": "ONS",
+      "sourceTables": [
+        "ONS mid-2025 population estimates: UK, constituent countries and English regions by single year of age and sex"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|ons.mid_year_population_estimate|age",
+      "scope": "national",
+      "label": "Population",
+      "breakdown": "Age",
+      "geoLevels": [
+        "uk",
+        "nation",
+        "region"
+      ],
+      "nationalCount": 7,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 36,
+      "regionCount": 81,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [
+        "England",
+        "Northern Ireland",
+        "Scotland",
+        "Wales"
+      ],
+      "targetCount": 124,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "ONS",
+      "sourceTables": [
+        "ONS mid-2025 population estimates: UK, constituent countries and English regions by single year of age and sex"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|ons.mid_year_population_estimate|age,sex",
+      "scope": "national",
+      "label": "Population",
+      "breakdown": "Age × sex",
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 42,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 42,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "ONS",
+      "sourceTables": [
+        "ONS mid-2025 population estimates: UK, constituent countries and English regions by single year of age and sex"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|ons.pse_headcount_total_public_sector|",
+      "scope": "national",
+      "label": "Public sector employment",
+      "breakdown": null,
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 1,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1,
+      "nationalValue": 6176000.0,
+      "nationalValueGeography": "United Kingdom",
+      "unit": "count",
+      "source": "ONS",
+      "sourceTables": [
+        "ONS public sector employment reference table, June 2026 edition, Table 1"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|nithc.dfi_transaction_value|funding_component,mode_scope",
+      "scope": "national",
+      "label": "Public transport Public Service Obligation compensation",
+      "breakdown": null,
+      "geoLevels": [
+        "nation"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 1,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [
+        "Northern Ireland"
+      ],
+      "targetCount": 1,
+      "nationalValue": 111700000.0,
+      "nationalValueGeography": "Northern Ireland",
+      "unit": "gbp",
+      "source": "NI Transport Holding Company",
+      "sourceTables": [
+        "Northern Ireland Transport Holding Company Annual Report and Accounts 2024/25, note 23 Related Party Transactions"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|isc.pupils_at_member_schools|school_membership",
+      "scope": "national",
+      "label": "Pupils at Independent Schools Council schools",
+      "breakdown": null,
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 1,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1,
+      "nationalValue": 545640.0,
+      "nationalValueGeography": "United Kingdom",
+      "unit": "count",
+      "source": "Independent Schools Council",
+      "sourceTables": [
+        "ISC annual Census 2025"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|hmrc.ss_nics_relief_employee|",
+      "scope": "national",
+      "label": "Salary-sacrifice pension contributions: employee National Insurance relief",
+      "breakdown": null,
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 1,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1,
+      "nationalValue": 1000000000.0,
+      "nationalValueGeography": "United Kingdom",
+      "unit": "gbp",
+      "source": "HMRC",
+      "sourceTables": [
+        "Private pension statistics Tables 6.1 and 6.2: salary sacrifice pension contributions, income tax and NICs relief, tax year 2024 to 2025"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|hmrc.ss_nics_relief_employer|",
+      "scope": "national",
+      "label": "Salary-sacrifice pension contributions: employer National Insurance relief",
+      "breakdown": null,
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 1,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1,
+      "nationalValue": 3695652173.9130435,
+      "nationalValueGeography": "United Kingdom",
+      "unit": "gbp",
+      "source": "HMRC",
+      "sourceTables": [
+        "Private pension statistics Tables 6.1 and 6.2: salary sacrifice pension contributions, income tax and NICs relief, tax year 2024 to 2025"
+      ],
+      "period": 2025,
+      "notes": [
+        "Uprated to 2025 with the employer National Insurance rate (policyengine-uk)"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|hmrc.ss_income_tax_relief_additional_rate|",
+      "scope": "national",
+      "label": "Salary-sacrifice pension contributions: Income Tax relief at the additional rate",
+      "breakdown": null,
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 1,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1,
+      "nationalValue": 1800000000.0,
+      "nationalValueGeography": "United Kingdom",
+      "unit": "gbp",
+      "source": "HMRC",
+      "sourceTables": [
+        "Private pension statistics Tables 6.1 and 6.2: salary sacrifice pension contributions, income tax and NICs relief, tax year 2024 to 2025"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|hmrc.ss_income_tax_relief_basic_rate|",
+      "scope": "national",
+      "label": "Salary-sacrifice pension contributions: Income Tax relief at the basic rate",
+      "breakdown": null,
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 1,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1,
+      "nationalValue": 1600000000.0,
+      "nationalValueGeography": "United Kingdom",
+      "unit": "gbp",
+      "source": "HMRC",
+      "sourceTables": [
+        "Private pension statistics Tables 6.1 and 6.2: salary sacrifice pension contributions, income tax and NICs relief, tax year 2024 to 2025"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|hmrc.ss_income_tax_relief_higher_rate|",
+      "scope": "national",
+      "label": "Salary-sacrifice pension contributions: Income Tax relief at the higher rate",
+      "breakdown": null,
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 1,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1,
+      "nationalValue": 5500000000.0,
+      "nationalValueGeography": "United Kingdom",
+      "unit": "gbp",
+      "source": "HMRC",
+      "sourceTables": [
+        "Private pension statistics Tables 6.1 and 6.2: salary sacrifice pension contributions, income tax and NICs relief, tax year 2024 to 2025"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|hmrc.salary_sacrifice_pension_users|annual_salary_sacrificed,salary_sacrifice_threshold_position",
+      "scope": "national",
+      "label": "Salary-sacrifice pension users",
+      "breakdown": "Amount sacrificed",
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 2,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 2,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "HMRC",
+      "sourceTables": [
+        "Salary sacrifice reform for pension contributions (effective 6 April 2029), policy paper"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|scotgov.social_security_assistance_spending|social_security_line",
+      "scope": "national",
+      "label": "Scottish Child Payment spending",
+      "breakdown": null,
+      "geoLevels": [
+        "nation"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 1,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [
+        "Scotland"
+      ],
+      "targetCount": 1,
+      "nationalValue": 471000000.0,
+      "nationalValueGeography": "Scotland",
+      "unit": "gbp",
+      "source": "Scottish Government",
+      "sourceTables": [
+        "Scottish Budget 2026-27, Chapter 5 Social Justice, Table 5.08 Social Security Assistance"
+      ],
+      "period": 2025,
+      "notes": [
+        "The publisher’s forecast or projection"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|obr.ni_self_employed|",
+      "scope": "national",
+      "label": "Self-employed National Insurance contributions",
+      "breakdown": null,
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 1,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1,
+      "nationalValue": 2876506585.4950743,
+      "nationalValueGeography": "United Kingdom",
+      "unit": "gbp",
+      "source": "OBR",
+      "sourceTables": [
+        "EFO March 2026 detailed forecast tables: receipts"
+      ],
+      "period": 2025,
+      "notes": [
+        "Calendar-year window of fiscal-year figures",
+        "The publisher’s forecast or projection"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|obr.sdlt|",
+      "scope": "national",
+      "label": "Stamp Duty Land Tax receipts",
+      "breakdown": null,
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 1,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1,
+      "nationalValue": 10161716337.860817,
+      "nationalValueGeography": "United Kingdom",
+      "unit": "gbp",
+      "source": "OBR",
+      "sourceTables": [
+        "EFO March 2026 detailed forecast tables: receipts"
+      ],
+      "period": 2025,
+      "notes": [
+        "Calendar-year window of fiscal-year figures, scaled by a published ratio",
+        "The publisher’s forecast or projection"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|dwp.state_pension_mean_weekly_amount|",
+      "scope": "national",
+      "label": "State Pension paid",
+      "breakdown": null,
+      "geoLevels": [
+        "nation"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 1,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [
+        "Northern Ireland"
+      ],
+      "targetCount": 1,
+      "nationalValue": 3710881810.1898503,
+      "nationalValueGeography": "Northern Ireland",
+      "unit": "gbp",
+      "source": "Department for Communities (NI)",
+      "sourceTables": [
+        "Benefits Statistics Summary Publication May 2026: State Pension workbook"
+      ],
+      "period": 2025,
+      "notes": [
+        "Annual: 52 times the published weekly amount",
+        "Published caseload times published mean award",
+        "Uprated with the new State Pension rate (policyengine-uk)"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|dwp.state_pension_mean_weekly_amount|age_bands_and_single_year,category_of_pension,gender",
+      "scope": "national",
+      "label": "State Pension paid",
+      "breakdown": null,
+      "geoLevels": [
+        "gb"
+      ],
+      "nationalCount": 0,
+      "gbCount": 1,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1,
+      "nationalValue": 138623908111.01526,
+      "nationalValueGeography": "Great Britain",
+      "unit": "gbp",
+      "source": "DWP",
+      "sourceTables": [
+        "State Pension caseload and mean weekly amount by age, gender and type of pension, Great Britain residents, February 2023 to March 2026"
+      ],
+      "period": 2025,
+      "notes": [
+        "Annual: 52 times the published weekly amount",
+        "Published caseload times published mean award",
+        "Uprated with the new State Pension rate (policyengine-uk)"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|dwp.state_pension_recipients|",
+      "scope": "national",
+      "label": "State Pension recipients",
+      "breakdown": null,
+      "geoLevels": [
+        "nation"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 1,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [
+        "Northern Ireland"
+      ],
+      "targetCount": 1,
+      "nationalValue": 330147.5,
+      "nationalValueGeography": "Northern Ireland",
+      "unit": "count",
+      "source": "Department for Communities (NI)",
+      "sourceTables": [
+        "Benefits Statistics Summary Publication May 2026: State Pension workbook"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|dwp.state_pension_recipients|age_bands_and_single_year,category_of_pension,gender",
+      "scope": "national",
+      "label": "State Pension recipients",
+      "breakdown": null,
+      "geoLevels": [
+        "gb"
+      ],
+      "nationalCount": 0,
+      "gbCount": 1,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1,
+      "nationalValue": 12052874.0,
+      "nationalValueGeography": "Great Britain",
+      "unit": "count",
+      "source": "DWP",
+      "sourceTables": [
+        "State Pension caseload and mean weekly amount by age, gender and type of pension, Great Britain residents, February 2023 to March 2026"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|dwp.state_pension_recipients|age,age_bands_and_single_year,category_of_pension,gender",
+      "scope": "national",
+      "label": "State Pension recipients",
+      "breakdown": "Age × State Pension type × sex",
+      "geoLevels": [
+        "gb"
+      ],
+      "nationalCount": 0,
+      "gbCount": 14,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 14,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "DWP",
+      "sourceTables": [
+        "State Pension caseload and mean weekly amount by age, gender and type of pension, Great Britain residents, February 2023 to March 2026"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|dwp.state_pension_recipients|category_of_pension,gender",
+      "scope": "national",
+      "label": "State Pension recipients",
+      "breakdown": "State Pension type",
+      "geoLevels": [
+        "nation",
+        "region"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 4,
+      "regionCount": 18,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [
+        "Scotland",
+        "Wales"
+      ],
+      "targetCount": 22,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "DWP",
+      "sourceTables": [
+        "State Pension caseload and mean weekly amount by region, type of pension and gender, February 2023 to March 2026"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|dwp.state_pension_recipients|category_of_pension,grouped_amount_of_benefit",
+      "scope": "national",
+      "label": "State Pension recipients",
+      "breakdown": "State Pension type × weekly amount",
+      "geoLevels": [
+        "gb"
+      ],
+      "nationalCount": 0,
+      "gbCount": 19,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 19,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "DWP",
+      "sourceTables": [
+        "State Pension caseload by grouped weekly amount of benefit and type of pension, Great Britain residents, February 2023 to March 2026"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|obr.statutory_maternity_pay|",
+      "scope": "national",
+      "label": "Statutory Maternity Pay spending",
+      "breakdown": null,
+      "geoLevels": [
+        "gb"
+      ],
+      "nationalCount": 0,
+      "gbCount": 1,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1,
+      "nationalValue": 3179100661.1404104,
+      "nationalValueGeography": "Great Britain",
+      "unit": "gbp",
+      "source": "OBR",
+      "sourceTables": [
+        "EFO March 2026 detailed forecast tables: expenditure"
+      ],
+      "period": 2025,
+      "notes": [
+        "Calendar-year window of fiscal-year figures",
+        "The publisher’s forecast or projection"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|slc.student_loan_net_repayments_total_higher_education|",
+      "scope": "national",
+      "label": "Student loan net repayments: all higher education",
+      "breakdown": null,
+      "geoLevels": [
+        "nation"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 1,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [
+        "England"
+      ],
+      "targetCount": 1,
+      "nationalValue": 5339303976.37,
+      "nationalValueGeography": "England",
+      "unit": "gbp",
+      "source": "Student Loans Company",
+      "sourceTables": [
+        "Student loans in England, financial year 2025-26 (corrected 2 July 2026), Table 1A"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|slc.student_loan_net_repayments_plan_1|",
+      "scope": "national",
+      "label": "Student loan net repayments: Plan 1",
+      "breakdown": null,
+      "geoLevels": [
+        "nation"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 1,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [
+        "England"
+      ],
+      "targetCount": 1,
+      "nationalValue": 1604190700.89,
+      "nationalValueGeography": "England",
+      "unit": "gbp",
+      "source": "Student Loans Company",
+      "sourceTables": [
+        "Student loans in England, financial year 2025-26 (corrected 2 July 2026), Table 1A"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|slc.student_loan_net_repayments_plan_2_full_time|",
+      "scope": "national",
+      "label": "Student loan net repayments: Plan 2, full-time",
+      "breakdown": null,
+      "geoLevels": [
+        "nation"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 1,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [
+        "England"
+      ],
+      "targetCount": 1,
+      "nationalValue": 3234379913.2999997,
+      "nationalValueGeography": "England",
+      "unit": "gbp",
+      "source": "Student Loans Company",
+      "sourceTables": [
+        "Student loans in England, financial year 2025-26 (corrected 2 July 2026), Table 1A"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|slc.maintenance_loan_recipients|",
+      "scope": "national",
+      "label": "Student maintenance loan recipients",
+      "breakdown": null,
+      "geoLevels": [
+        "nation"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 1,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [
+        "England"
+      ],
+      "targetCount": 1,
+      "nationalValue": 1159761.0,
+      "nationalValueGeography": "England",
+      "unit": "count",
+      "source": "Student Loans Company",
+      "sourceTables": [
+        "Student support for higher education in England 2025, Tables 3A and 4C"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|slc.maintenance_loan_amount_paid|",
+      "scope": "national",
+      "label": "Student maintenance loans paid",
+      "breakdown": null,
+      "geoLevels": [
+        "nation"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 1,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [
+        "England"
+      ],
+      "targetCount": 1,
+      "nationalValue": 8591659718.080004,
+      "nationalValueGeography": "England",
+      "unit": "gbp",
+      "source": "Student Loans Company",
+      "sourceTables": [
+        "Student support for higher education in England 2025, Tables 3A and 4C"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|slc.targeted_support_amount_awarded|student_support_product",
+      "scope": "national",
+      "label": "Targeted student support awarded",
+      "breakdown": "Product",
+      "geoLevels": [
+        "nation"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 2,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [
+        "England"
+      ],
+      "targetCount": 2,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "gbp",
+      "source": "Student Loans Company",
+      "sourceTables": [
+        "Student support for higher education in England 2025, Tables 3A and 4C"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|slc.targeted_support_recipients|student_support_product",
+      "scope": "national",
+      "label": "Targeted student support recipients",
+      "breakdown": "Product",
+      "geoLevels": [
+        "nation"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 2,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [
+        "England"
+      ],
+      "targetCount": 2,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "Student Loans Company",
+      "sourceTables": [
+        "Student support for higher education in England 2025, Tables 3A and 4C"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|hmrc.tfc_children_with_used_accounts_annual_unique|account_status,count_basis,definition_regime,source_release",
+      "scope": "national",
+      "label": "Tax-Free Childcare: children with a used account",
+      "breakdown": null,
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 1,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1,
+      "nationalValue": 1151515.0,
+      "nationalValueGeography": "United Kingdom",
+      "unit": "count",
+      "source": "HMRC",
+      "sourceTables": [
+        "Tax-Free Childcare Statistics March 2026, Table 2: Numbers of Children with Open and Used Tax-Free Childcare Accounts and Government Top-up"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|hmrc.tfc_government_top_up|flow_basis,flow_type,source_release",
+      "scope": "national",
+      "label": "Tax-Free Childcare: government top-up",
+      "breakdown": null,
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 1,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1,
+      "nationalValue": 599800000.0,
+      "nationalValueGeography": "United Kingdom",
+      "unit": "gbp",
+      "source": "HMRC",
+      "sourceTables": [
+        "Tax-Free Childcare Statistics March 2026, Table 2: Numbers of Children with Open and Used Tax-Free Childcare Accounts and Government Top-up"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|obr.tv_licence_fee|",
+      "scope": "national",
+      "label": "TV licence fee receipts",
+      "breakdown": null,
+      "geoLevels": [
+        "uk"
+      ],
+      "nationalCount": 1,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1,
+      "nationalValue": 3858750000.0,
+      "nationalValueGeography": "United Kingdom",
+      "unit": "gbp",
+      "source": "OBR",
+      "sourceTables": [
+        "EFO March 2026 detailed forecast tables: expenditure"
+      ],
+      "period": 2025,
+      "notes": [
+        "Calendar-year window of fiscal-year figures",
+        "The publisher’s forecast or projection"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|dfi_ni.translink_bus.passenger_receipts|service",
+      "scope": "national",
+      "label": "Ulsterbus passenger receipts",
+      "breakdown": null,
+      "geoLevels": [
+        "nation"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 1,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [
+        "Northern Ireland"
+      ],
+      "targetCount": 1,
+      "nationalValue": 152500000.0,
+      "nationalValueGeography": "Northern Ireland",
+      "unit": "gbp",
+      "source": "Department for Infrastructure (NI)",
+      "sourceTables": [
+        "Public Transport Statistics Northern Ireland 2025-26, Figures 3 and 5 journeys and receipts"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|dwp.uc_benefit_units|family_type,monthly_award_amount_bands",
+      "scope": "national",
+      "label": "Universal Credit households",
+      "breakdown": "Family type × monthly award",
+      "geoLevels": [
+        "gb"
+      ],
+      "nationalCount": 0,
+      "gbCount": 89,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 89,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "DWP",
+      "sourceTables": [
+        "Households on Universal Credit by monthly award amount band and family type, April to December 2025"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|dwp.uc_benefit_units|child_entitlement,number_of_children,payment_indicator",
+      "scope": "national",
+      "label": "Universal Credit households",
+      "breakdown": "Number of children",
+      "geoLevels": [
+        "gb"
+      ],
+      "nationalCount": 0,
+      "gbCount": 4,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 4,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "DWP",
+      "sourceTables": [
+        "Households on Universal Credit by number of children, payment indicator and child entitlement, April 2023 to May 2026"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|dwp.uc_benefit_units_with_childcare_element|uc_element",
+      "scope": "national",
+      "label": "Universal Credit households receiving the childcare element",
+      "breakdown": null,
+      "geoLevels": [
+        "gb"
+      ],
+      "nationalCount": 0,
+      "gbCount": 1,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1,
+      "nationalValue": 178666.66666666666,
+      "nationalValueGeography": "Great Britain",
+      "unit": "count",
+      "source": "DWP",
+      "sourceTables": [
+        "Universal Credit childcare element statistics to May 2026, Tables 1 and 3"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|dwp.uc_benefit_units|age_of_youngest_child_bands_and_single_year",
+      "scope": "national",
+      "label": "Universal Credit households with a child under 1",
+      "breakdown": null,
+      "geoLevels": [
+        "nation"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 1,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [
+        "Scotland"
+      ],
+      "targetCount": 1,
+      "nationalValue": 14333.222222222223,
+      "nationalValueGeography": "Scotland",
+      "unit": "count",
+      "source": "DWP",
+      "sourceTables": [
+        "Households on Universal Credit in Scotland by single year of age of youngest child, April to December 2025"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|dwp.uc_benefit_units_with_deduction|",
+      "scope": "national",
+      "label": "Universal Credit households with a deduction",
+      "breakdown": null,
+      "geoLevels": [
+        "gb"
+      ],
+      "nationalCount": 0,
+      "gbCount": 1,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1,
+      "nationalValue": 3130000.0,
+      "nationalValueGeography": "Great Britain",
+      "unit": "count",
+      "source": "DWP",
+      "sourceTables": [
+        "Universal Credit deductions statistics March 2025 to February 2026, Table 1"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|dwp.uc_benefit_units|carer_entitlement,payment_indicator",
+      "scope": "national",
+      "label": "Universal Credit households with carer entitlement",
+      "breakdown": null,
+      "geoLevels": [
+        "gb"
+      ],
+      "nationalCount": 0,
+      "gbCount": 1,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1,
+      "nationalValue": 1078514.5,
+      "nationalValueGeography": "Great Britain",
+      "unit": "count",
+      "source": "DWP",
+      "sourceTables": [
+        "Households on Universal Credit by carer entitlement and payment indicator, January 2023 to May 2026"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|dwp.uc_benefit_units|child_entitlement,family_type,payment_indicator",
+      "scope": "national",
+      "label": "Universal Credit households with child entitlement",
+      "breakdown": "Family type",
+      "geoLevels": [
+        "gb"
+      ],
+      "nationalCount": 0,
+      "gbCount": 5,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 5,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "DWP",
+      "sourceTables": [
+        "Households on Universal Credit by family type, payment indicator and child entitlement, April 2023 to May 2026"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|dwp.uc_benefit_units|housing_entitlement_tenure,payment_indicator",
+      "scope": "national",
+      "label": "Universal Credit households with housing entitlement",
+      "breakdown": "Tenure",
+      "geoLevels": [
+        "gb"
+      ],
+      "nationalCount": 0,
+      "gbCount": 2,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 2,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "DWP",
+      "sourceTables": [
+        "Households on Universal Credit by housing entitlement tenure and payment indicator, January 2023 to May 2026"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|dwp.uc_benefit_units|limited_capability_for_work_entitlement,payment_indicator",
+      "scope": "national",
+      "label": "Universal Credit households with LCWRA entitlement",
+      "breakdown": null,
+      "geoLevels": [
+        "gb"
+      ],
+      "nationalCount": 0,
+      "gbCount": 1,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1,
+      "nationalValue": 2272425.1666666665,
+      "nationalValueGeography": "Great Britain",
+      "unit": "count",
+      "source": "DWP",
+      "sourceTables": [
+        "Households on Universal Credit by limited capability for work entitlement group and payment indicator, January 2023 to May 2026"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|obr.universal_credit_outside_cap|",
+      "scope": "national",
+      "label": "Universal Credit spending outside the welfare cap",
+      "breakdown": null,
+      "geoLevels": [
+        "gb"
+      ],
+      "nationalCount": 0,
+      "gbCount": 1,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1,
+      "nationalValue": 76054754387.77309,
+      "nationalValueGeography": "Great Britain",
+      "unit": "gbp",
+      "source": "OBR",
+      "sourceTables": [
+        "EFO March 2026 detailed forecast tables: expenditure"
+      ],
+      "period": 2025,
+      "notes": [
+        "Calendar-year window of fiscal-year figures",
+        "The publisher’s forecast or projection"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "ledger|obr.winter_fuel_payment|",
+      "scope": "national",
+      "label": "Winter Fuel Payment spending",
+      "breakdown": null,
+      "geoLevels": [
+        "englandAndWales"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 1,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1,
+      "nationalValue": 1508660934.2839375,
+      "nationalValueGeography": "England and Wales",
+      "unit": "gbp",
+      "source": "OBR",
+      "sourceTables": [
+        "EFO March 2026 detailed forecast tables: expenditure"
+      ],
+      "period": 2025,
+      "notes": [
+        "Calendar-year window of fiscal-year figures",
+        "The publisher’s forecast or projection"
+      ],
+      "localAreaFileOnly": false
+    },
+    {
+      "key": "local|council_tax|council_tax_band",
+      "scope": "local",
+      "label": "Council Tax dwelling stock",
+      "breakdown": "Council tax band",
+      "geoLevels": [
+        "localAuthority"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 2495,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 2495,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "MHCLG, Scottish Government, Welsh Government",
+      "sourceTables": [
+        "Council Taxbase: Local authority level data for 2025 (revised), Council Taxbase Data worksheet",
+        "Number of chargeable dwellings, September 2025 (CTAXBASE 2025)",
+        "StatsWales: Council tax dwellings by authority and band (CT1 returns), full-dataset CSV export"
+      ],
+      "period": 2025,
+      "notes": [
+        "Sum of published taxbase lines",
+        "Rescaled to sum to its published higher-level control"
+      ],
+      "localAreaFileOnly": true
+    },
+    {
+      "key": "local|energy/electricity_kwh|",
+      "scope": "local",
+      "label": "Domestic electricity consumption",
+      "breakdown": null,
+      "geoLevels": [
+        "localAuthority"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 348,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 348,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "kwh",
+      "source": "DESNZ",
+      "sourceTables": [
+        "Subnational electricity consumption, Great Britain, 2005 to 2024"
+      ],
+      "period": 2025,
+      "notes": [
+        "Uprated to 2025 with DESNZ Energy Trends (Great Britain domestic level)"
+      ],
+      "localAreaFileOnly": true
+    },
+    {
+      "key": "local|energy/gas_kwh|",
+      "scope": "local",
+      "label": "Domestic gas consumption",
+      "breakdown": null,
+      "geoLevels": [
+        "localAuthority"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 346,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 346,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "kwh",
+      "source": "DESNZ",
+      "sourceTables": [
+        "Subnational gas consumption, Great Britain, 2005 to 2024"
+      ],
+      "period": 2025,
+      "notes": [
+        "Uprated to 2025 with DESNZ Energy Trends (Great Britain domestic level)"
+      ],
+      "localAreaFileOnly": true
+    },
+    {
+      "key": "local|energy/gas_connected_households|",
+      "scope": "local",
+      "label": "Gas-connected households",
+      "breakdown": null,
+      "geoLevels": [
+        "localAuthority"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 346,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 346,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "ONS, National Records of Scotland",
+      "sourceTables": [
+        "Census 2021 TS041 number of households, local authority districts (April 2023), England and Wales",
+        "Scotland's Census 2022 UV404 tenure of household, council areas"
+      ],
+      "period": 2025,
+      "notes": [
+        "Census households times the DESNZ share of households with a gas meter"
+      ],
+      "localAreaFileOnly": true
+    },
+    {
+      "key": "local|hmrc/higher_rate_taxpayers/count|",
+      "scope": "local",
+      "label": "Higher-rate Income Tax payers",
+      "breakdown": null,
+      "geoLevels": [
+        "constituency",
+        "localAuthority"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 438,
+      "localAuthorityCount": 289,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 727,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "HMRC",
+      "sourceTables": [
+        "Personal Incomes Statistics tables 3.12 to 3.15a, tax year 2023 to 2024"
+      ],
+      "period": 2025,
+      "notes": [
+        "Uprated with HMRC Income Tax liabilities statistics",
+        "Rescaled to sum to its published higher-level control"
+      ],
+      "localAreaFileOnly": true
+    },
+    {
+      "key": "local|households|",
+      "scope": "local",
+      "label": "Households",
+      "breakdown": null,
+      "geoLevels": [
+        "constituency",
+        "localAuthority"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 650,
+      "localAuthorityCount": 361,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1011,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "ONS, National Records of Scotland, NISRA",
+      "sourceTables": [
+        "Census 2021 TS041 number of households, Westminster Parliamentary Constituencies (July 2024), England and Wales",
+        "Census 2021 TS041 number of households, local authority districts (April 2023), England and Wales",
+        "NISRA Census 2021 flexible table: number of households by LGD14",
+        "NISRA Census 2021 flexible table: number of households by PARLCON24",
+        "Scotland Census 2022 UV404 tenure of household, UK Parliamentary Constituencies 2024",
+        "Scotland's Census 2022 UV404 tenure of household, council areas"
+      ],
+      "period": 2025,
+      "notes": [
+        "Census 2021 counts (Scotland: Census 2022)",
+        "Rescaled to sum to its published higher-level control"
+      ],
+      "localAreaFileOnly": true
+    },
+    {
+      "key": "local|tenure|tenure",
+      "scope": "local",
+      "label": "Households",
+      "breakdown": "Tenure",
+      "geoLevels": [
+        "localAuthority"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 1436,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1436,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "ONS, National Records of Scotland, NISRA",
+      "sourceTables": [
+        "Census 2021 TS054 tenure of household, local authority districts (April 2023), England and Wales",
+        "NISRA Census 2021 flexible table: households by tenure and local government district",
+        "Scotland's Census 2022 UV404 tenure of household, council areas"
+      ],
+      "period": 2025,
+      "notes": [
+        "Census tenure counts moved to 2025 with ONS tenure shares",
+        "Rescaled to sum to its published higher-level control"
+      ],
+      "localAreaFileOnly": true
+    },
+    {
+      "key": "local|hmrc/employment_income/amount|",
+      "scope": "local",
+      "label": "Income: employment",
+      "breakdown": null,
+      "geoLevels": [
+        "constituency",
+        "localAuthority"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 650,
+      "localAuthorityCount": 358,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1008,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "gbp",
+      "source": "HMRC",
+      "sourceTables": [
+        "Personal Incomes Statistics tables 3.12 to 3.15a, tax year 2023 to 2024"
+      ],
+      "period": 2025,
+      "notes": [
+        "Published count times published mean, uprated with HMRC Income Tax liabilities statistics",
+        "Rescaled to sum to its published higher-level control"
+      ],
+      "localAreaFileOnly": true
+    },
+    {
+      "key": "local|hmrc/employment_income/count|",
+      "scope": "local",
+      "label": "Income: people with employment income",
+      "breakdown": null,
+      "geoLevels": [
+        "constituency",
+        "localAuthority"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 650,
+      "localAuthorityCount": 358,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1008,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "HMRC",
+      "sourceTables": [
+        "Personal Incomes Statistics tables 3.12 to 3.15a, tax year 2023 to 2024"
+      ],
+      "period": 2025,
+      "notes": [
+        "Uprated with HMRC Income Tax liabilities statistics",
+        "Rescaled to sum to its published higher-level control"
+      ],
+      "localAreaFileOnly": true
+    },
+    {
+      "key": "local|hmrc/self_employment_income/count|",
+      "scope": "local",
+      "label": "Income: people with self-employment income",
+      "breakdown": null,
+      "geoLevels": [
+        "constituency",
+        "localAuthority"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 650,
+      "localAuthorityCount": 358,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1008,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "HMRC",
+      "sourceTables": [
+        "Personal Incomes Statistics tables 3.12 to 3.15a, tax year 2023 to 2024"
+      ],
+      "period": 2025,
+      "notes": [
+        "Uprated with HMRC Income Tax liabilities statistics",
+        "Rescaled to sum to its published higher-level control"
+      ],
+      "localAreaFileOnly": true
+    },
+    {
+      "key": "local|hmrc/self_employment_income/amount|",
+      "scope": "local",
+      "label": "Income: self-employment",
+      "breakdown": null,
+      "geoLevels": [
+        "constituency",
+        "localAuthority"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 649,
+      "localAuthorityCount": 358,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 1007,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "gbp",
+      "source": "HMRC",
+      "sourceTables": [
+        "Personal Incomes Statistics tables 3.12 to 3.15a, tax year 2023 to 2024"
+      ],
+      "period": 2025,
+      "notes": [
+        "Published count times published mean, uprated with HMRC Income Tax liabilities statistics",
+        "Rescaled to sum to its published higher-level control"
+      ],
+      "localAreaFileOnly": true
+    },
+    {
+      "key": "local|high_value_homes|value_threshold",
+      "scope": "local",
+      "label": "Owner-occupied homes above high-value thresholds",
+      "breakdown": "Value threshold",
+      "geoLevels": [
+        "localAuthority"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 350,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 350,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "Microcosm derivation from open data (HM Land Registry Price Paid, UK HPI, ONS NSPL, VOA council tax stock, Census 2021 tenure)",
+      "sourceTables": [
+        "HM Land Registry Price Paid Data, UK HPI and ONS NSPL, Microcosm derivation"
+      ],
+      "period": 2025,
+      "notes": [],
+      "localAreaFileOnly": true
+    },
+    {
+      "key": "local|age|age_band",
+      "scope": "local",
+      "label": "Population",
+      "breakdown": "Age",
+      "geoLevels": [
+        "constituency",
+        "localAuthority"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 5200,
+      "localAuthorityCount": 2872,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 8072,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "ONS, National Records of Scotland, NISRA",
+      "sourceTables": [
+        "MYE01T013 Mid-year population estimates by Assembly Area (2024), five year age bands and sex",
+        "NRS revised mid-2011 to mid-2024 single-year age/sex population, UKPC24, 2022 data-zone method",
+        "Population estimates - local authority based by five year age band, United Kingdom, mid-2025",
+        "Population estimates - small area (2021 based) by single year of age, England and Wales - Westminster Parliamentary Constituencies (July 2024), mid-2024"
+      ],
+      "period": 2025,
+      "notes": [
+        "Published small-area and local-authority estimates summed to ten-year bands",
+        "Rescaled to sum to its published higher-level control"
+      ],
+      "localAreaFileOnly": true
+    },
+    {
+      "key": "local|rent/private_rent_brma|",
+      "scope": "local",
+      "label": "Private rents paid",
+      "breakdown": null,
+      "geoLevels": [
+        "other"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 0,
+      "otherCount": 18,
+      "nations": [],
+      "targetCount": 18,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "gbp",
+      "source": "ONS",
+      "sourceTables": [
+        "Price Index of Private Rents, UK: monthly price statistics, July 2026 edition (data to June 2026)"
+      ],
+      "period": 2025,
+      "notes": [
+        "12 times the ONS Price Index of Private Rents mean monthly rent for 2025, times private-renter households"
+      ],
+      "localAreaFileOnly": true
+    },
+    {
+      "key": "local|rent/private_rent|",
+      "scope": "local",
+      "label": "Private rents paid",
+      "breakdown": null,
+      "geoLevels": [
+        "localAuthority"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 0,
+      "localAuthorityCount": 316,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 316,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "gbp",
+      "source": "ONS",
+      "sourceTables": [
+        "Price Index of Private Rents, UK: monthly price statistics, July 2026 edition (data to June 2026)"
+      ],
+      "period": 2025,
+      "notes": [
+        "12 times the ONS Price Index of Private Rents mean monthly rent for 2025, times private-renter households"
+      ],
+      "localAreaFileOnly": true
+    },
+    {
+      "key": "local|uc_households|",
+      "scope": "local",
+      "label": "Universal Credit households",
+      "breakdown": null,
+      "geoLevels": [
+        "constituency",
+        "localAuthority"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 632,
+      "localAuthorityCount": 348,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 980,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "DWP",
+      "sourceTables": [
+        "DWP Stat-Xplore UC households by constituency and Payment Indicator, January 2025 to May 2026",
+        "DWP Stat-Xplore UC households by local authority and Payment Indicator, January 2025 to May 2026"
+      ],
+      "period": 2025,
+      "notes": [
+        "Average of the published 2025 months, paid claims only",
+        "Rescaled to sum to its published higher-level control"
+      ],
+      "localAreaFileOnly": true
+    },
+    {
+      "key": "local|uc_households_by_children|number_of_children",
+      "scope": "local",
+      "label": "Universal Credit households",
+      "breakdown": "Number of children",
+      "geoLevels": [
+        "constituency"
+      ],
+      "nationalCount": 0,
+      "gbCount": 0,
+      "englandAndWalesCount": 0,
+      "nationCount": 0,
+      "regionCount": 0,
+      "constituencyCount": 2528,
+      "localAuthorityCount": 0,
+      "otherCount": 0,
+      "nations": [],
+      "targetCount": 2528,
+      "nationalValue": null,
+      "nationalValueGeography": null,
+      "unit": "count",
+      "source": "DWP",
+      "sourceTables": [
+        "DWP Stat-Xplore UC households by constituency, number of children and Payment Indicator, January 2025 to May 2026"
+      ],
+      "period": 2025,
+      "notes": [
+        "Average of the published 2025 months, paid claims only",
+        "Rescaled to sum to its published higher-level control"
+      ],
+      "localAreaFileOnly": true
+    }
+  ]
+}
