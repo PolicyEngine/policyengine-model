@@ -37,6 +37,12 @@ official statistic or a Microcosm transformation of one.
 
 Labels come from the LABELS table below, keyed by row key. A row without a
 label stops the extraction, so a new release's new rows are named by hand.
+
+The Pipeline page describes the same build: ``ukPipelineSource`` in
+src/data/ukPipelineStages.ts names its Microcosm commit and policyengine-uk
+version. The script refuses releases built with another policyengine-uk
+version, so re-check that page against the releases' Microcosm commit and
+update ``ukPipelineSource`` first.
 """
 
 from __future__ import annotations
@@ -58,6 +64,10 @@ BUNDLE_MANIFEST_URL = (
 OUTPUT_PATH = os.path.join(
     os.path.dirname(__file__), "..", "src", "data", "ukCalibrationTargets.json"
 )
+PIPELINE_SOURCE_PATH = os.path.join(
+    os.path.dirname(__file__), "..", "src", "data", "ukPipelineStages.ts"
+)
+PIPELINE_MODEL_VERSION = re.compile(r"export const ukPipelineSource = \{[^}]*?modelVersion: '([^']+)'")
 
 # calibration_diagnostics.json schema versions this script understands.
 SUPPORTED_SCHEMA_VERSIONS = {8}
@@ -960,6 +970,19 @@ def assert_clean(obj, path="$"):
             assert_clean(v, f"{path}[{i}]")
 
 
+def check_pipeline_version(model_version: str, pipeline_source: str) -> None:
+    """Refuse targets from a build other than the one the Pipeline page describes."""
+    match = PIPELINE_MODEL_VERSION.search(pipeline_source)
+    if match is None:
+        raise UnsupportedDiagnostics("src/data/ukPipelineStages.ts has no ukPipelineSource.modelVersion")
+    if match.group(1) != model_version:
+        raise UnsupportedDiagnostics(
+            f"the Pipeline page describes policyengine-uk {match.group(1)}, but these releases were built with "
+            f"{model_version}: re-check src/data/ukPipelineStages.ts against the releases' Microcosm commit and "
+            "update ukPipelineSource first"
+        )
+
+
 def extract(bundle: dict, dense_manifest: dict, national_raw: bytes, dense_raw: bytes) -> tuple[dict, list[str]]:
     releases = verify_releases(bundle, dense_manifest, national_raw, dense_raw)
     national_info, national = read_release(national_raw, "national")
@@ -1007,6 +1030,8 @@ def main():
     bundle = json.loads(read_bytes(args.bundle_manifest))
     dense_manifest = json.loads(read_bytes(args.dense_release_manifest))
     output, unused = extract(bundle, dense_manifest, read_bytes(args.national), read_bytes(args.dense))
+    with open(PIPELINE_SOURCE_PATH) as f:
+        check_pipeline_version(output["modelVersion"], f.read())
 
     total = output["totalTargets"]
     print(

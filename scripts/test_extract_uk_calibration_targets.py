@@ -23,8 +23,11 @@ sys.path.insert(0, os.path.dirname(__file__))
 from extract_uk_calibration_targets import (  # noqa: E402
     FORBIDDEN_KEYS,
     LABELS,
+    PIPELINE_MODEL_VERSION,
+    PIPELINE_SOURCE_PATH,
     UnsupportedDiagnostics,
     assert_clean,
+    check_pipeline_version,
     extract,
     read_bytes,
     slim_target,
@@ -390,3 +393,22 @@ def test_committed_json_is_the_extraction():
     )
     with open(COMMITTED) as f:
         assert json.load(f) == json.loads(json.dumps(output))
+
+
+def test_releases_must_match_the_pipeline_pages_engine():
+    page = "export const ukPipelineSource = {\n  commit: 'abc',\n  modelVersion: '2.162.8',\n};\n"
+    check_pipeline_version("2.162.8", page)
+    with pytest.raises(
+        UnsupportedDiagnostics, match="describes policyengine-uk 2.162.8, but these releases were built with 2.151.0"
+    ):
+        check_pipeline_version("2.151.0", page)
+    with pytest.raises(UnsupportedDiagnostics, match="no ukPipelineSource"):
+        check_pipeline_version("2.162.8", "export const ukPipelineStages = [];")
+
+
+def test_the_pipeline_pages_engine_version_is_readable():
+    with open(PIPELINE_SOURCE_PATH) as f:
+        source = f.read()
+    match = PIPELINE_MODEL_VERSION.search(source)
+    assert match is not None
+    check_pipeline_version(match.group(1), source)
