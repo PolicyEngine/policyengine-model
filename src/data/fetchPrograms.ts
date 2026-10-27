@@ -109,9 +109,11 @@ function transformProgram(p: ApiProgram, githubBase: string): Program {
     coverage: p.coverage,
     hasStateVariation: p.has_state_variation,
     variable: p.variable,
+    parameterPrefix: p.parameter_prefix,
     notes: p.notes
       ? (verifiedYears ? `${p.notes}. Years: ${verifiedYears}` : p.notes)
       : (verifiedYears ? `Years: ${verifiedYears}` : undefined),
+    registryNotes: p.notes,
     verifiedYears,
     stateImplementations,
     githubLinks: buildGithubLinks(githubBase, p.parameter_prefix),
@@ -188,7 +190,8 @@ export async function fetchProgramsWithSource(country: Country = 'us'): Promise<
     return result;
   } catch (err) {
     console.warn('Failed to fetch programs from API, using fallback:', err);
-    // Fall back to hardcoded data
+    // The bundled fallback registry is the US one; never show it for another country.
+    if (country !== 'us') return { programs: [], source: { kind: 'fallback' } };
     const { programs } = await import('./programs');
     return { programs, source: { kind: 'fallback' } };
   }

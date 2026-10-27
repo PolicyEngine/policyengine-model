@@ -3,6 +3,7 @@ import { render, screen, within } from '@testing-library/react';
 import CoverageProvenance from '../components/rules/CoverageProvenance';
 import CoverageTrackerPage from '../views/rules/CoverageTrackerPage';
 import { fetchProgramsWithSource, type ProgramsSource } from '../data/fetchPrograms';
+import type { Program } from '../types/Program';
 
 vi.mock('../data/fetchPrograms', () => ({
   fetchProgramsWithSource: vi.fn(),
@@ -90,10 +91,26 @@ describe('Coverage provenance', () => {
     expect(within(partialCard).getByText('0')).toBeInTheDocument();
   });
 
-  it('preserves the static UK introduction without assigning it registry provenance', () => {
+  it('renders the UK registry with its own provenance instead of a static introduction', async () => {
+    vi.mocked(fetchProgramsWithSource).mockResolvedValue({
+      source: { ...snapshotSource, repo: 'PolicyEngine/policyengine-uk', version: '2.162.12', apiVersion: '2.132.6' },
+      programs: [{
+        id: 'universal_credit',
+        name: 'Universal Credit',
+        fullName: 'Universal Credit',
+        status: 'complete',
+        agency: 'DWP' as Program['agency'],
+        coverage: 'UK',
+        githubLinks: {},
+      }],
+    });
+
     render(<CoverageTrackerPage country="uk" />);
-    expect(screen.getByText(/PolicyEngine UK models over 50/)).toBeInTheDocument();
-    expect(screen.queryByText(/Coverage reflects/)).not.toBeInTheDocument();
-    expect(fetchProgramsWithSource).not.toHaveBeenCalled();
+
+    expect(await screen.findByText('Coverage reflects policyengine-uk 2.162.12 (main @ abcdef1, fetched 2026-09-08). The production API served 2.132.6 when the snapshot was fetched.')).toBeInTheDocument();
+    expect(fetchProgramsWithSource).toHaveBeenCalledWith('uk');
+    expect(fetchProgramsWithSource).not.toHaveBeenCalledWith('us');
+    expect(screen.getByRole('heading', { name: 'UK government programmes (1)' })).toBeInTheDocument();
+    expect(screen.queryByText(/PolicyEngine UK models over 50/)).not.toBeInTheDocument();
   });
 });
