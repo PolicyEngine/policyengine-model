@@ -350,7 +350,7 @@ LABELS: dict[str, dict] = {
     "ledger|hmrc.tfc_government_top_up|flow_basis,flow_type,source_release": {"label": "Tax-Free Childcare: government top-up"},
     # Expected in the release built from microcosm 90ff43f95 (HMRC Child
     # Benefit families by number of children); unused until then.
-    "ledger|hmrc.child_benefit_families_in_payment|number_of_children": {"label": "Child Benefit families in payment"},
+    "ledger|hmrc.child_benefit_families_in_payment|number_of_children,payment_status": {"label": "Child Benefit families in payment"},
     # Government receipts and spending, OBR
     "ledger|obr.attendance_allowance|": {"label": "Attendance Allowance spending"},
     "ledger|obr.carers_allowance|": {"label": "Carer’s Allowance spending"},
