@@ -229,6 +229,18 @@ describe('UK pipeline page', () => {
     }
   });
 
+  it('says the files are licensed and not public downloads', () => {
+    render(<PipelinePage country="uk" />);
+    const intro = screen.getByText(/runs on Microcosm UK/).textContent ?? '';
+    expect(intro).toContain('licensed through the UK Data Service');
+    expect(intro).toContain('available only to licensed users and are not public downloads');
+    const studies = ukPipelineStages.flatMap((s) => s.dataSources ?? []).filter((src) => /\bSN \d+/.test(src));
+    expect(studies).toHaveLength(6);
+    for (const src of studies) {
+      expect(src).toMatch(/\(UK Data Service SN \d+\)$/);
+    }
+  });
+
   it('links Microcosm and the build commit, not the working papers', { timeout: 20000 }, () => {
     const text = ukPipelineText();
     const { container } = render(<PipelinePage country="uk" />);

@@ -146,7 +146,9 @@ export default function DataPipeline({ country = 'us' }: { country?: Country }) 
         . A 49-stage spine turns Family Resources Survey 2024-25 households into one file: its stages give each record its
         characteristics, and calibration sets how many households each record represents. Two files are calibrated from
         that spine and certified together: a national file for UK and nation results, and a local-area file of 150,000
-        households for constituencies and local authorities.
+        households for constituencies and local authorities. Both are built from survey microdata licensed through the
+        UK Data Service, the SPI Public Use Tape included, so they are available only to licensed users and are not
+        public downloads.
       </>
     )
     : 'PolicyEngine constructs its representative household dataset through a 14-step pipeline. Public survey data is merged, stratified, and cloned to 10 geographic variants per household. Each clone is simulated through PolicyEngine US with stochastic take-up, then calibrated via L0-regularized optimization against administrative targets at the national, state, and congressional district levels simultaneously, producing 488 geographically representative datasets.';

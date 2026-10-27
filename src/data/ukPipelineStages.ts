@@ -49,7 +49,7 @@ export const ukPipelineStages: PipelineStage[] = [
     icon: 'building-bank',
     inputSize: 'FRS households',
     outputSize: '+10,000 SPI copies, band donors',
-    dataSources: ['HMRC SPI Public Use Tape 2022-23 (SN 9422)', 'HMRC Income Tax liabilities statistics', 'ONS ASHE 2024'],
+    dataSources: ['HMRC SPI Public Use Tape 2022-23 (UK Data Service SN 9422)', 'HMRC Income Tax liabilities statistics', 'ONS ASHE 2024'],
     details: [
       'SPI channel: 10,000 copies of FRS households (uniform draw, seed 42) start at zero weight; within each region they take 50% of the weight of households with nobody at or over State Pension age and 20% of the weight of the others',
       'Band donors: whole-household copies for the HMRC Income Tax liabilities Table 2.5 bands from £200,000 (£200k to £500k, £500k to £1m, £1m to £2m, £2m and over); each band seats max(120, ⌈published taxpayers ÷ 250⌉) donors at equal weight, summing to its published taxpayer count, with the weight taken from the donor’s region',
@@ -72,7 +72,7 @@ export const ukPipelineStages: PipelineStage[] = [
     subtitle: 'WAS, Land Registry, HMRC',
     description: 'Household wealth comes from the ONS Wealth and Assets Survey, round 8, by a chain of quantile regression forests. Home values are then re-levelled to published house prices, and landlords’ costs and property purchases are aligned to HMRC statistics.',
     icon: 'coin',
-    dataSources: ['ONS Wealth and Assets Survey round 8 (SN 7215)', 'HM Land Registry Price Paid', 'UK HPI', 'HMRC Property Rental Income Statistics', 'HMRC Annual Stamp Tax Statistics'],
+    dataSources: ['ONS Wealth and Assets Survey round 8 (UK Data Service SN 7215)', 'HM Land Registry Price Paid', 'UK HPI', 'HMRC Property Rental Income Statistics', 'HMRC Annual Stamp Tax Statistics'],
     details: [
       'WAS round 8 covers April 2020 to March 2022 in Great Britain; Northern Ireland households are predicted with the Wales pattern',
       'Wealth is not index-uprated; home values are re-levelled by the stages below, and on the local-area file by area',
@@ -96,7 +96,7 @@ export const ukPipelineStages: PipelineStage[] = [
     subtitle: 'LCFS, ETB, NTS',
     description: 'Spending comes from the ONS Living Costs and Food Survey 2024-25 by a chain of quantile regression forests over 25 spending targets, then is aligned to published totals. The Effects of Taxes and Benefits file supplies the VAT share and public services used, and the National Travel Survey bus use.',
     icon: 'shopping-cart',
-    dataSources: ['ONS Living Costs and Food Survey 2024-25 (SN 9603)', 'ONS Effects of Taxes and Benefits (SN 8856)', 'DfT National Travel Survey (SN 5340)'],
+    dataSources: ['ONS Living Costs and Food Survey 2024-25 (UK Data Service SN 9603)', 'ONS Effects of Taxes and Benefits (UK Data Service SN 8856)', 'DfT National Travel Survey (UK Data Service SN 5340)'],
     details: [
       'Spending by COICOP division, road fuel, domestic energy and bus fares from LCFS 2024-25 (2nd edition)',
       'Domestic energy is raked to DESNZ NEED 2024 and priced with Quarterly Energy Prices for calendar 2024; road fuel is levelled to ONS Consumer Trends (COICOP 07.2.2)',
@@ -188,7 +188,7 @@ export const ukPipelineStages: PipelineStage[] = [
       'The loss is the weighted mean over targets of min(|relative error|, 10), with relative error on the scale max(|target|, 1)',
       'Target weights (family_equal): each target family gets an equal share, split evenly within the family',
       'No weight may exceed 10 times its starting weight; the household total is free; there is no L0 or L2 penalty',
-      'Each household is measured at 2025 through policyengine-uk’s projection of its stored inputs; fiscal-year facts bind to calendar 2025 as 3/12 of one year plus 9/12 of the next',
+      'Each household is measured at 2025 through policyengine-uk’s projection of its stored inputs; fiscal-year figures bind to calendar 2025 as 3/12 of one year plus 9/12 of the next, though a few bind to one year’s figure instead, such as the Winter Fuel Payment, which is paid in November and December and binds to 2025-26',
       'Lower-grain targets are rescaled to sum to their published higher-grain controls; only target values move, never weights',
       'Some measures are held out of the fit and reported as diagnostics, such as OBR VAT, ORR rail support and employer National Insurance',
     ],
@@ -207,12 +207,12 @@ export const ukPipelineStages: PipelineStage[] = [
     branch: 'national-sub-1',
     title: 'National gates',
     subtitle: '19-gate release cut',
-    description: 'Before the national file is published it must pass the seven calibration-seam gates and a 19-gate release cut, and beat the pinned Enhanced FRS on their common target surface.',
+    description: 'Before the national file is published it must pass the seven calibration-seam gates and a 19-gate release cut, and have a lower calibration loss than the pinned Enhanced FRS on the targets both can be scored on.',
     icon: 'checkbox',
     details: [
       'The seam gates check target fit, CGT projection entrants, weight ratio, weight effective sample size, zero-weight strata, administrative totals and reference coverage',
       'Each national target’s |relative error| must be at most 0.25 unless a reviewed, signed register entry lifts it; the effective sample size must be at least 1% of records',
-      'The 19 release-cut gates cover input coverage, target and export surfaces, parity of weighted input totals with a pinned Enhanced FRS 2024-25 reference, take-up, support, category values and a weights audit',
+      'The 19 release-cut gates cover input coverage, target and export surfaces, parity of weighted input totals with a pinned Enhanced FRS 2024-25 reference, take-up, support, category values, no constant or negative columns, and a weights audit',
     ],
   },
   {
