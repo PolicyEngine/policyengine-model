@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { colors, typography, spacing } from '../../designTokens';
-import { cboDefaults, BLOG_URL, sources, ukCapitalGains, UK_CAPITAL_GAINS_SOURCE_URL, ukLabourSupply, OBR_LABOUR_SUPPLY_NOTE_URL } from '../../data/elasticities';
+import { cboDefaults, BLOG_URL, sources, ukCapitalGains, UK_CAPITAL_GAINS_SOURCE_URL, ukLabourSupply, OBR_LABOUR_SUPPLY_NOTE_URL, UK_BEHAVIOURAL_REPORT_URL } from '../../data/elasticities';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
 import type { Country } from '../../hooks/useCountry';
 
@@ -26,7 +26,10 @@ function generateBudgetData(substitutionElasticity: number, incomeElasticity: nu
 export default function BehavioralResponses({ country = 'us' }: { country?: Country }) {
   const currencySymbol = country === 'uk' ? '£' : '$';
   const avgSubstitution = cboDefaults.substitutionElasticities.reduce((a, b) => a + b.central, 0) / cboDefaults.substitutionElasticities.length;
-  const budgetData = generateBudgetData(avgSubstitution, cboDefaults.incomeElasticity.central);
+  // The UK chart uses the values PolicyEngine applies when the response is on.
+  const budgetData = country === 'uk'
+    ? generateBudgetData(ukLabourSupply.substitutionElasticity, ukLabourSupply.incomeElasticity)
+    : generateBudgetData(avgSubstitution, cboDefaults.incomeElasticity.central);
 
   return (
     <div>
@@ -104,8 +107,8 @@ export default function BehavioralResponses({ country = 'us' }: { country?: Coun
           </div>
           {country === 'uk' && (
             <p className="tw:text-xs tw:text-pe-gray-400 tw:mt-3 tw:text-center">
-              Illustration with a substitution elasticity of {avgSubstitution.toFixed(2)} and an income elasticity of{' '}
-              {cboDefaults.incomeElasticity.central.toFixed(2)}; the UK model’s defaults are 0.
+              Illustration with PolicyEngine’s central values: a substitution elasticity of{' '}
+              {ukLabourSupply.substitutionElasticity.toFixed(2)} and an income elasticity of {ukLabourSupply.incomeElasticity.toFixed(2)}.
             </p>
           )}
         </div>
@@ -268,8 +271,9 @@ function UkCapitalGains() {
   );
 }
 
-// policyengine-uk's labour supply response: static by default, with the two
-// elasticities policyengine.py reads.
+// policyengine-uk's labour supply response: off unless a reform sets the two
+// elasticities policyengine.py reads; the cards show the values PolicyEngine
+// uses when it turns the response on.
 function UkLabourSupply() {
   return (
     <div className="tw:mb-8">
@@ -277,31 +281,39 @@ function UkLabourSupply() {
         Labour supply elasticities
       </h3>
       <p className="tw:text-sm tw:text-[#5A5A5A] tw:leading-[1.6] tw:mb-6 tw:max-w-[720px]">
-        PolicyEngine’s UK model is static on labour supply by default: both elasticities are 0, and users can set either
-        one. A reform then changes each person’s employment income by the substitution elasticity times the percentage
-        change in their net-of-tax marginal wage (one minus their marginal tax rate), plus the income elasticity times the
-        percentage change in their household’s net income. Each change is capped at 100%, and the response applies to
-        employment income only.
+        PolicyEngine’s UK model is static on labour supply unless a reform turns the response on by setting its two
+        elasticities. When PolicyEngine turns it on, it uses the central values below. A reform then changes each
+        person’s employment income by the substitution elasticity times the percentage change in their net-of-tax
+        marginal wage (one minus their marginal tax rate), plus the income elasticity times the percentage change in
+        their household’s net income. Each change is capped at 100%, and the response applies to employment income only.
       </p>
       <div className="tw:flex tw:gap-6 tw:flex-wrap">
         {[
           { label: 'Income elasticity', value: ukLabourSupply.incomeElasticity },
           { label: 'Substitution elasticity', value: ukLabourSupply.substitutionElasticity },
         ].map(({ label, value }) => (
-          <div key={label} className="tw:py-3 tw:px-5 tw:rounded-lg tw:border tw:border-[#E2E8F0] tw:bg-white tw:text-center tw:min-w-[150px]">
+          <div key={label} className="tw:py-3 tw:px-5 tw:rounded-lg tw:border tw:border-pe-primary-300 tw:bg-pe-primary-50 tw:text-center tw:min-w-[150px]">
             <div className="tw:text-xs tw:text-pe-gray-400 tw:mb-1">{label}</div>
-            <div className="tw:text-lg tw:font-mono tw:text-black tw:font-bold">{value.toFixed(2)}</div>
-            <div className="tw:text-xs tw:text-pe-gray-400 tw:mt-1">default</div>
+            <div className="tw:text-lg tw:font-mono tw:text-pe-primary-700 tw:font-bold">{value.toFixed(2)}</div>
+            <div className="tw:text-xs tw:text-pe-gray-400 tw:mt-1">central</div>
           </div>
         ))}
       </div>
+      <p className="tw:text-xs tw:text-pe-gray-400 tw:mt-2 tw:max-w-[720px]">
+        {sources.laborSupply}; the substitution value is the CBO’s average over primary earners. Central values from{' '}
+        <a href={UK_BEHAVIOURAL_REPORT_URL} target="_blank" rel="noopener noreferrer" className="tw:underline">
+          PolicyEngine’s UK behavioural responses report
+        </a>
+        .
+      </p>
       <p className="tw:text-xs tw:text-pe-gray-400 tw:mt-3 tw:max-w-[720px]">
-        policyengine-uk also includes the OBR’s labour supply model, which separates participation from hours worked and
-        varies elasticities by demographic group (
+        policyengine-uk also includes the OBR’s labour supply model, whose elasticities vary by demographic group
+        (substitution 0.094 to 0.439, income −0.185 to 0;{' '}
         <a href={OBR_LABOUR_SUPPLY_NOTE_URL} target="_blank" rel="noopener noreferrer" className="tw:underline">
           OBR, February 2024
         </a>
-        ). It runs only when an analysis calls it directly; policyengine.py’s simulations use the two elasticities above.
+        ). It currently models hours worked only and runs only when an analysis calls it directly; policyengine.py’s
+        simulations use the two elasticities above.
       </p>
     </div>
   );

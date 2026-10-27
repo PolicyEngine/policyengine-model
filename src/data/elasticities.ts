@@ -42,14 +42,19 @@ export const ukCapitalGains = {
 };
 
 // UK labour supply response (policyengine-uk
-// gov.simulation.labour_supply_responses): both elasticities default to 0, and
-// each relative change is capped at 100% (bounds.*). policyengine.py reads only
-// these two elasticities; the OBR model in policyengine_uk.dynamics runs only
-// when an analysis calls it.
+// gov.simulation.labour_supply_responses): both elasticities are 0 unless a
+// reform sets them, and each relative change is capped at 100% (bounds.*).
+// These are the values PolicyEngine uses when it turns the response on, from
+// its UK behavioural responses report (the CBO's central estimates; the
+// substitution value is the CBO's average over primary earners).
+// policyengine.py reads only these two elasticities; the OBR model in
+// policyengine_uk.dynamics runs only when an analysis calls it.
 export const ukLabourSupply = {
-  incomeElasticity: 0,
-  substitutionElasticity: 0,
+  incomeElasticity: -0.05,
+  substitutionElasticity: 0.25,
 };
+
+export const UK_BEHAVIOURAL_REPORT_URL = 'https://www.policyengine.org/uk/research/behavioural-responses';
 
 export const OBR_LABOUR_SUPPLY_NOTE_URL = 'https://obr.uk/docs/dlm_uploads/NICS-Cut-Impact-on-Labour-Supply-Note.pdf';
 
