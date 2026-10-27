@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { colors, typography, spacing } from '../../designTokens';
-import { cboDefaults, BLOG_URL, sources } from '../../data/elasticities';
+import { cboDefaults, BLOG_URL, sources, ukCapitalGains, UK_CAPITAL_GAINS_SOURCE_URL } from '../../data/elasticities';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
 import type { Country } from '../../hooks/useCountry';
 
@@ -189,6 +189,8 @@ export default function BehavioralResponses({ country = 'us' }: { country?: Coun
         <h4 className="tw:text-base tw:font-semibold tw:text-black tw:mb-3">
           Capital gains elasticity
         </h4>
+        {country === 'uk' ? <UkCapitalGains /> : (
+          <>
         <div className="tw:flex tw:gap-6 tw:flex-wrap">
           {[
             { label: 'Persistent', value: cboDefaults.capitalGainsPersistent },
@@ -203,7 +205,44 @@ export default function BehavioralResponses({ country = 'us' }: { country?: Coun
         <p className="tw:text-xs tw:text-pe-gray-400 tw:mt-2">
           {sources.capitalGains}
         </p>
+          </>
+        )}
       </div>
     </div>
+  );
+}
+
+// policyengine-uk's capital gains realisation response, which PolicyEngine
+// applies by default to UK reforms that change marginal rates on gains.
+function UkCapitalGains() {
+  const cards = [
+    { label: 'Central', value: ukCapitalGains.retentionElasticity },
+    ...ukCapitalGains.sensitivities.map((value, i) => ({ label: i === 0 ? 'Low sensitivity' : 'High sensitivity', value })),
+  ];
+  return (
+    <>
+      <p className="tw:text-sm tw:text-[#5A5A5A] tw:leading-[1.6] tw:mb-4 tw:max-w-[720px]">
+        A capital gains tax reform changes how much gain people choose to realise. PolicyEngine scales each person’s
+        realised gains by ((1 − t₁) / (1 − t₀))<sup>ε</sup>, where t₀ and t₁ are their marginal tax rates on gains before
+        and after the reform and ε is the elasticity with respect to the retention rate, the share of each pound of gain
+        kept after tax. Gains qualifying for Business Asset Disposal Relief take the same elasticity, unless a separate
+        one ({ukCapitalGains.separateBadrElasticity.toFixed(1)}, the OBR’s) is switched on. Reforms that leave marginal
+        rates on gains unchanged are unaffected; setting the elasticity to 0 gives a static costing.
+      </p>
+      <div className="tw:flex tw:gap-6 tw:flex-wrap">
+        {cards.map(({ label, value }) => (
+          <div key={label} className="tw:py-3 tw:px-5 tw:rounded-lg tw:border tw:border-[#E2E8F0] tw:bg-white tw:text-center tw:min-w-[120px]">
+            <div className="tw:text-xs tw:text-pe-gray-400 tw:mb-1">{label}</div>
+            <div className="tw:text-lg tw:font-mono tw:text-black tw:font-bold">{value.toFixed(2)}</div>
+          </div>
+        ))}
+      </div>
+      <p className="tw:text-xs tw:text-pe-gray-400 tw:mt-2">
+        <a href={UK_CAPITAL_GAINS_SOURCE_URL} target="_blank" rel="noopener noreferrer" className="tw:underline">
+          {sources.ukCapitalGains}
+        </a>
+        ; the central value is their medium-term (five-year) effect, and the sensitivities the range they consider.
+      </p>
+    </>
   );
 }

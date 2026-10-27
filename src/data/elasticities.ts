@@ -30,10 +30,25 @@ export const cboDefaults: ElasticityDefaults = {
   capitalGainsTransitory: -1.20,
 };
 
+// UK capital gains realisation response (policyengine-uk
+// gov.simulation.capital_gains_responses): realised gains scale by
+// ((1 - t1) / (1 - t0)) ^ elasticity. The central value and the sensitivities
+// are Advani, Lonsdale and Summers's; the separate Business Asset Disposal
+// Relief value is the OBR's, used only when switched on.
+export const ukCapitalGains = {
+  retentionElasticity: 1.0,
+  sensitivities: [0.5, 2.0],
+  separateBadrElasticity: 1.4,
+};
+
 export const BLOG_URL = 'https://policyengine.org/us/research/us-behavioral-responses';
 
 export const sources = {
   laborSupply: 'CBO, "How the Supply of Labor Responds to Changes in Fiscal Policy" (2012)',
   elasticityReview: 'CBO, "A Review of Recent Research on Labor Supply Elasticities" (Working Paper 2012-12)',
   capitalGains: 'CBO, "New Evidence on the Tax Elasticity of Capital Gains" (Working Paper 2012-09)',
+  ukCapitalGains: 'Advani, Lonsdale and Summers (2024), "Reforming Capital Gains Tax", CenTax, pages 36-37',
 };
+
+export const UK_CAPITAL_GAINS_SOURCE_URL =
+  'https://centax.org.uk/wp-content/uploads/2024/10/AdvaniLonsdaleSummers2024_CGTReform.pdf';
