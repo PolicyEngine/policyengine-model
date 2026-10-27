@@ -37,6 +37,19 @@ const iconMap: Record<string, React.ComponentType<{ size?: number; stroke?: numb
   'arrows-split-2': IconArrowsSplit2,
 };
 
+// On narrow screens the UK's wider flow and stage tables scroll inside their
+// own box instead of widening the page; minWidth keeps the flow's stage
+// buttons at their 110px minimum. An inactive box renders its children
+// unwrapped, so other countries' layout is unchanged.
+function ScrollBox({ active, minWidth, children }: { active: boolean; minWidth?: number; children: React.ReactNode }) {
+  if (!active) return <>{children}</>;
+  return (
+    <div className="tw:overflow-x-auto tw:[contain:inline-size]">
+      {minWidth ? <div style={{ minWidth }}>{children}</div> : children}
+    </div>
+  );
+}
+
 function StageButton({ s, isActive, onClick, borderRadiusLeft, borderRadiusRight, marginLeft }: {
   s: PipelineStage;
   isActive: boolean;
@@ -124,11 +137,16 @@ export default function DataPipeline({ country = 'us' }: { country?: Country }) 
   };
 
   const introText = country === 'uk'
-    ? 'PolicyEngine constructs its representative household dataset through a multi-stage pipeline, starting from the Family Resources Survey and producing two weight matrices: one for 650 parliamentary constituencies and one for 360 local authorities.'
+    ? 'PolicyEngine’s UK model runs on Microcosm UK, built by Microcosm, PolicyEngine’s data build system; since version 6.10.0 of the policyengine Python package it has replaced the Enhanced FRS as the certified UK dataset. A 49-stage spine turns Family Resources Survey 2024-25 households, plus synthetic copies that carry high incomes, home values and capital gains, into one calibration-ready file. Two files are calibrated from it: a national file, reweighted to UK, nation and English region targets and certified as policyengine.py’s UK default, and a local-area file of exactly 150,000 households placed in small areas and calibrated to constituency and local-authority targets as well. UK and nation results come from the national file; constituency and local-authority results come from the local-area file, with its own weights. This page follows Microcosm commit 90ff43f (policyengine-uk 2.162.8); steps marked “new at 90ff43f” are not in the release pair policyengine.py 6.11.1 serves.'
     : 'PolicyEngine constructs its representative household dataset through a 14-step pipeline. Public survey data is merged, stratified, and cloned to 10 geographic variants per household. Each clone is simulated through PolicyEngine US with stochastic take-up, then calibrated via L0-regularized optimization against administrative targets at the national, state, and congressional district levels simultaneously, producing 488 geographically representative datasets.';
 
-  const nationalLabel = country === 'uk' ? 'Constituency (national)' : 'National';
-  const localLabel = country === 'uk' ? 'Local authority' : 'Geography-specific';
+  const nationalLabel = country === 'uk' ? 'National file' : 'National';
+  const localLabel = country === 'uk' ? 'Local-area file' : 'Geography-specific';
+  const scrollBoxes = country === 'uk';
+  const flowMinWidth = Math.max(
+    sharedStages.length * 110,
+    2 * Math.max(nationalStages.length, localStages.length, localSub2Stages.length, localSub4Stages.length) * 110 + 24,
+  );
 
   return (
     <div>
@@ -136,6 +154,7 @@ export default function DataPipeline({ country = 'us' }: { country?: Country }) 
         {introText}
       </p>
 
+      <ScrollBox active={scrollBoxes} minWidth={flowMinWidth}>
       {/* Pipeline flow - branching layout */}
       <div className="tw:mb-8">
         {/* Shared linear portion */}
@@ -347,6 +366,7 @@ export default function DataPipeline({ country = 'us' }: { country?: Country }) 
           </div>
         )}
       </div>
+      </ScrollBox>
 
       {/* Stage detail */}
       <AnimatePresence mode="wait">
@@ -630,6 +650,7 @@ export default function DataPipeline({ country = 'us' }: { country?: Country }) 
                       className="tw:overflow-hidden"
                     >
                       <div className="tw:py-3">
+                        <ScrollBox active={scrollBoxes}>
                         <table className="tw:w-full tw:border-collapse">
                           <thead>
                             <tr>
@@ -654,6 +675,7 @@ export default function DataPipeline({ country = 'us' }: { country?: Country }) 
                             ))}
                           </tbody>
                         </table>
+                        </ScrollBox>
                       </div>
                     </motion.div>
                   )}
@@ -694,6 +716,7 @@ export default function DataPipeline({ country = 'us' }: { country?: Country }) 
                       className="tw:overflow-hidden"
                     >
                       <div className="tw:py-3">
+                        <ScrollBox active={scrollBoxes}>
                         <table className="tw:w-full tw:border-collapse">
                           <thead>
                             <tr>
@@ -718,6 +741,7 @@ export default function DataPipeline({ country = 'us' }: { country?: Country }) 
                             ))}
                           </tbody>
                         </table>
+                        </ScrollBox>
                       </div>
                     </motion.div>
                   )}
