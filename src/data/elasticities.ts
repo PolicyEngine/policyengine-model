@@ -41,6 +41,18 @@ export const ukCapitalGains = {
   separateBadrElasticity: 1.4,
 };
 
+// UK labour supply response (policyengine-uk
+// gov.simulation.labour_supply_responses): both elasticities default to 0, and
+// each relative change is capped at 100% (bounds.*). policyengine.py reads only
+// these two elasticities; the OBR model in policyengine_uk.dynamics runs only
+// when an analysis calls it.
+export const ukLabourSupply = {
+  incomeElasticity: 0,
+  substitutionElasticity: 0,
+};
+
+export const OBR_LABOUR_SUPPLY_NOTE_URL = 'https://obr.uk/docs/dlm_uploads/NICS-Cut-Impact-on-Labour-Supply-Note.pdf';
+
 export const BLOG_URL = 'https://policyengine.org/us/research/us-behavioral-responses';
 
 export const sources = {

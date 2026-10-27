@@ -9,7 +9,7 @@ vi.mock('next/navigation', () => ({
 
 import ValidationPage from '../views/data/ValidationPage';
 import BehavioralResponses from '../components/theory/BehavioralResponses';
-import { cboDefaults, sources, ukCapitalGains, UK_CAPITAL_GAINS_SOURCE_URL } from '../data/elasticities';
+import { BLOG_URL, cboDefaults, OBR_LABOUR_SUPPLY_NOTE_URL, sources, ukCapitalGains, UK_CAPITAL_GAINS_SOURCE_URL } from '../data/elasticities';
 
 describe('Validation page', () => {
   it('points the UK to the scorecard, not TAXSIM', () => {
@@ -50,5 +50,32 @@ describe('Capital gains elasticity', () => {
     expect(screen.getByText(cboDefaults.capitalGainsTransitory.toFixed(2))).toBeInTheDocument();
     expect(screen.getByText(sources.capitalGains)).toBeInTheDocument();
     expect(screen.queryByText(/scales each person’s/)).toBeNull();
+  });
+});
+
+describe('Labour supply responses', () => {
+  it('shows the UK model’s static defaults, not the CBO presets', () => {
+    const { container } = render(<BehavioralResponses country="uk" />);
+    expect(screen.getByText('Labour supply elasticities')).toBeInTheDocument();
+    expect(screen.getByText(/static on labour supply by default/)).toBeInTheDocument();
+    expect(screen.getByText('Income elasticity')).toBeInTheDocument();
+    expect(screen.getByText('Substitution elasticity')).toBeInTheDocument();
+    expect(screen.getAllByText('default')).toHaveLength(2);
+    expect(screen.getByText(/the UK model’s defaults are 0/)).toBeInTheDocument();
+    expect(container.querySelector(`a[href="${OBR_LABOUR_SUPPLY_NOTE_URL}"]`)).not.toBeNull();
+    for (const gone of ['CBO preset elasticity parameters', 'Substitution elasticity by income decile', 'elasticity of taxable income', sources.laborSupply, sources.elasticityReview]) {
+      expect(container.textContent, gone).not.toContain(gone);
+    }
+    expect(container.querySelector(`a[href="${BLOG_URL}"]`)).toBeNull();
+  });
+
+  it('keeps the US CBO presets and methodology link', () => {
+    const { container } = render(<BehavioralResponses country="us" />);
+    expect(screen.getByText('CBO preset elasticity parameters')).toBeInTheDocument();
+    expect(screen.getByText('Substitution elasticity by income decile')).toBeInTheDocument();
+    expect(screen.getByText(sources.laborSupply)).toBeInTheDocument();
+    expect(container.querySelector(`a[href="${BLOG_URL}"]`)).toHaveTextContent('Read our full methodology');
+    expect(container.textContent).toContain('responses using the elasticity of taxable income framework');
+    expect(screen.queryByText('Labour supply elasticities')).toBeNull();
   });
 });
