@@ -30,10 +30,42 @@ export const cboDefaults: ElasticityDefaults = {
   capitalGainsTransitory: -1.20,
 };
 
+// UK capital gains realisation response (policyengine-uk
+// gov.simulation.capital_gains_responses): realised gains scale by
+// ((1 - t1) / (1 - t0)) ^ elasticity. The central value and the sensitivities
+// are Advani, Lonsdale and Summers's; the separate Business Asset Disposal
+// Relief value is the OBR's, used only when switched on.
+export const ukCapitalGains = {
+  retentionElasticity: 1.0,
+  sensitivities: [0.5, 2.0],
+  separateBadrElasticity: 1.4,
+};
+
+// UK labour supply response (policyengine-uk
+// gov.simulation.labour_supply_responses): both elasticities are 0 unless a
+// reform sets them, and each relative change is capped at 100% (bounds.*).
+// These are the values PolicyEngine uses when it turns the response on, from
+// its UK behavioural responses report (the CBO's central estimates; the
+// substitution value is the CBO's average over primary earners).
+// policyengine.py reads only these two elasticities; the OBR model in
+// policyengine_uk.dynamics runs only when an analysis calls it.
+export const ukLabourSupply = {
+  incomeElasticity: -0.05,
+  substitutionElasticity: 0.25,
+};
+
+export const UK_BEHAVIOURAL_REPORT_URL = 'https://www.policyengine.org/uk/research/behavioural-responses';
+
+export const OBR_LABOUR_SUPPLY_NOTE_URL = 'https://obr.uk/docs/dlm_uploads/NICS-Cut-Impact-on-Labour-Supply-Note.pdf';
+
 export const BLOG_URL = 'https://policyengine.org/us/research/us-behavioral-responses';
 
 export const sources = {
   laborSupply: 'CBO, "How the Supply of Labor Responds to Changes in Fiscal Policy" (2012)',
   elasticityReview: 'CBO, "A Review of Recent Research on Labor Supply Elasticities" (Working Paper 2012-12)',
   capitalGains: 'CBO, "New Evidence on the Tax Elasticity of Capital Gains" (Working Paper 2012-09)',
+  ukCapitalGains: 'Advani, Lonsdale and Summers (2024), "Reforming Capital Gains Tax", CenTax, pages 36-37',
 };
+
+export const UK_CAPITAL_GAINS_SOURCE_URL =
+  'https://centax.org.uk/wp-content/uploads/2024/10/AdvaniLonsdaleSummers2024_CGTReform.pdf';

@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { colors, typography, spacing } from '../../designTokens';
-import { cboDefaults, BLOG_URL, sources } from '../../data/elasticities';
+import { cboDefaults, BLOG_URL, sources, ukCapitalGains, UK_CAPITAL_GAINS_SOURCE_URL, ukLabourSupply, OBR_LABOUR_SUPPLY_NOTE_URL, UK_BEHAVIOURAL_REPORT_URL } from '../../data/elasticities';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
 import type { Country } from '../../hooks/useCountry';
 
@@ -26,13 +26,24 @@ function generateBudgetData(substitutionElasticity: number, incomeElasticity: nu
 export default function BehavioralResponses({ country = 'us' }: { country?: Country }) {
   const currencySymbol = country === 'uk' ? '£' : '$';
   const avgSubstitution = cboDefaults.substitutionElasticities.reduce((a, b) => a + b.central, 0) / cboDefaults.substitutionElasticities.length;
-  const budgetData = generateBudgetData(avgSubstitution, cboDefaults.incomeElasticity.central);
+  // The UK chart uses the values PolicyEngine applies when the response is on.
+  const budgetData = country === 'uk'
+    ? generateBudgetData(ukLabourSupply.substitutionElasticity, ukLabourSupply.incomeElasticity)
+    : generateBudgetData(avgSubstitution, cboDefaults.incomeElasticity.central);
 
   return (
     <div>
+      {country === 'uk' ? (
+        <p className="tw:text-lg tw:text-[#5A5A5A] tw:leading-[1.7] tw:mb-8 tw:max-w-[720px]">
+          Tax and benefit reforms change incentives to work, earn and realise capital gains. PolicyEngine’s UK model
+          can add labour supply responses, through substitution effects (changing work effort) and income effects
+          (adjusting for changes in after-tax income), and applies a capital gains realisation response by default.
+        </p>
+      ) : (
+        <>
       <p className="tw:text-lg tw:text-[#5A5A5A] tw:leading-[1.7] tw:mb-3 tw:max-w-[720px]">
         Tax and benefit reforms change incentives to work and earn. PolicyEngine models these
-        {country === 'uk' ? ' behavioural' : ' behavioral'} responses using the elasticity of taxable income framework, capturing both
+        {' behavioral'} responses using the elasticity of taxable income framework, capturing both
         substitution effects (changing work effort) and income effects (adjusting for changes in after-tax income).
       </p>
       <p className="tw:text-sm tw:text-pe-primary-600 tw:mb-8">
@@ -40,6 +51,8 @@ export default function BehavioralResponses({ country = 'us' }: { country?: Coun
           Read our full methodology →
         </a>
       </p>
+        </>
+      )}
 
       {/* Concepts + chart */}
       <div className="tw:grid tw:grid-cols-1 tw:md:grid-cols-2 tw:gap-8 tw:mb-12">
@@ -49,7 +62,7 @@ export default function BehavioralResponses({ country = 'us' }: { country?: Coun
               Substitution effect
             </h4>
             <p className="tw:text-sm tw:text-[#5A5A5A] tw:leading-[1.6]">
-              When tax rates fall, each hour of work yields more after-tax income. This encourages people to substitute toward more labor and less leisure, increasing earnings.
+              When tax rates fall, each hour of work yields more after-tax income. This encourages people to substitute toward more {country === 'uk' ? 'labour' : 'labor'} and less leisure, increasing earnings.
             </p>
           </div>
           <div className="tw:p-6 tw:rounded-xl tw:border tw:border-[#E2E8F0] tw:bg-white">
@@ -92,9 +105,17 @@ export default function BehavioralResponses({ country = 'us' }: { country?: Coun
               <span className="tw:text-xs tw:text-[#5A5A5A]">{country === 'uk' ? 'Reform (behavioural)' : 'Reform (behavioral)'}</span>
             </div>
           </div>
+          {country === 'uk' && (
+            <p className="tw:text-xs tw:text-pe-gray-400 tw:mt-3 tw:text-center">
+              Illustration with PolicyEngine’s central values: a substitution elasticity of{' '}
+              {ukLabourSupply.substitutionElasticity.toFixed(2)} and an income elasticity of {ukLabourSupply.incomeElasticity.toFixed(2)}.
+            </p>
+          )}
         </div>
       </div>
 
+      {country === 'uk' ? <UkLabourSupply /> : (
+        <>
       {/* CBO preset parameters */}
       <div className="tw:mb-6">
         <h3 className="tw:text-2xl tw:font-bold tw:text-pe-primary-900 tw:mb-2">
@@ -184,11 +205,16 @@ export default function BehavioralResponses({ country = 'us' }: { country?: Coun
         </p>
       </div>
 
+        </>
+      )}
+
       {/* Capital gains */}
       <div className="tw:mb-8">
         <h4 className="tw:text-base tw:font-semibold tw:text-black tw:mb-3">
           Capital gains elasticity
         </h4>
+        {country === 'uk' ? <UkCapitalGains /> : (
+          <>
         <div className="tw:flex tw:gap-6 tw:flex-wrap">
           {[
             { label: 'Persistent', value: cboDefaults.capitalGainsPersistent },
@@ -203,7 +229,92 @@ export default function BehavioralResponses({ country = 'us' }: { country?: Coun
         <p className="tw:text-xs tw:text-pe-gray-400 tw:mt-2">
           {sources.capitalGains}
         </p>
+          </>
+        )}
       </div>
+    </div>
+  );
+}
+
+// policyengine-uk's capital gains realisation response, which PolicyEngine
+// applies by default to UK reforms that change marginal rates on gains.
+function UkCapitalGains() {
+  const cards = [
+    { label: 'Central', value: ukCapitalGains.retentionElasticity },
+    ...ukCapitalGains.sensitivities.map((value, i) => ({ label: i === 0 ? 'Low sensitivity' : 'High sensitivity', value })),
+  ];
+  return (
+    <>
+      <p className="tw:text-sm tw:text-[#5A5A5A] tw:leading-[1.6] tw:mb-4 tw:max-w-[720px]">
+        A capital gains tax reform changes how much gain people choose to realise. PolicyEngine scales each person’s
+        realised gains by ((1 − t₁) / (1 − t₀))<sup>ε</sup>, where t₀ and t₁ are their marginal tax rates on gains before
+        and after the reform and ε is the elasticity with respect to the retention rate, the share of each pound of gain
+        kept after tax. Gains qualifying for Business Asset Disposal Relief take the same elasticity, unless a separate
+        one ({ukCapitalGains.separateBadrElasticity.toFixed(1)}, the OBR’s) is switched on. Reforms that leave marginal
+        rates on gains unchanged are unaffected; setting the elasticity to 0 gives a static costing.
+      </p>
+      <div className="tw:flex tw:gap-6 tw:flex-wrap">
+        {cards.map(({ label, value }) => (
+          <div key={label} className="tw:py-3 tw:px-5 tw:rounded-lg tw:border tw:border-[#E2E8F0] tw:bg-white tw:text-center tw:min-w-[120px]">
+            <div className="tw:text-xs tw:text-pe-gray-400 tw:mb-1">{label}</div>
+            <div className="tw:text-lg tw:font-mono tw:text-black tw:font-bold">{value.toFixed(2)}</div>
+          </div>
+        ))}
+      </div>
+      <p className="tw:text-xs tw:text-pe-gray-400 tw:mt-2">
+        <a href={UK_CAPITAL_GAINS_SOURCE_URL} target="_blank" rel="noopener noreferrer" className="tw:underline">
+          {sources.ukCapitalGains}
+        </a>
+        ; the central value is their medium-term (five-year) effect, and the sensitivities the range they consider.
+      </p>
+    </>
+  );
+}
+
+// policyengine-uk's labour supply response: off unless a reform sets the two
+// elasticities policyengine.py reads; the cards show the values PolicyEngine
+// uses when it turns the response on.
+function UkLabourSupply() {
+  return (
+    <div className="tw:mb-8">
+      <h3 className="tw:text-2xl tw:font-bold tw:text-pe-primary-900 tw:mb-2">
+        Labour supply elasticities
+      </h3>
+      <p className="tw:text-sm tw:text-[#5A5A5A] tw:leading-[1.6] tw:mb-6 tw:max-w-[720px]">
+        PolicyEngine’s UK model is static on labour supply unless a reform turns the response on by setting its two
+        elasticities. When PolicyEngine turns it on, it uses the central values below. A reform then changes each
+        person’s employment income by the substitution elasticity times the percentage change in their net-of-tax
+        marginal wage (one minus their marginal tax rate), plus the income elasticity times the percentage change in
+        their household’s net income. Each change is capped at 100%, and the response applies to employment income only.
+      </p>
+      <div className="tw:flex tw:gap-6 tw:flex-wrap">
+        {[
+          { label: 'Income elasticity', value: ukLabourSupply.incomeElasticity },
+          { label: 'Substitution elasticity', value: ukLabourSupply.substitutionElasticity },
+        ].map(({ label, value }) => (
+          <div key={label} className="tw:py-3 tw:px-5 tw:rounded-lg tw:border tw:border-pe-primary-300 tw:bg-pe-primary-50 tw:text-center tw:min-w-[150px]">
+            <div className="tw:text-xs tw:text-pe-gray-400 tw:mb-1">{label}</div>
+            <div className="tw:text-lg tw:font-mono tw:text-pe-primary-700 tw:font-bold">{value.toFixed(2)}</div>
+            <div className="tw:text-xs tw:text-pe-gray-400 tw:mt-1">central</div>
+          </div>
+        ))}
+      </div>
+      <p className="tw:text-xs tw:text-pe-gray-400 tw:mt-2 tw:max-w-[720px]">
+        {sources.laborSupply}; the substitution value is the CBO’s average over primary earners. Central values from{' '}
+        <a href={UK_BEHAVIOURAL_REPORT_URL} target="_blank" rel="noopener noreferrer" className="tw:underline">
+          PolicyEngine’s UK behavioural responses report
+        </a>
+        .
+      </p>
+      <p className="tw:text-xs tw:text-pe-gray-400 tw:mt-3 tw:max-w-[720px]">
+        policyengine-uk also includes the OBR’s labour supply model, whose elasticities vary by demographic group
+        (substitution 0.094 to 0.439, income −0.185 to 0;{' '}
+        <a href={OBR_LABOUR_SUPPLY_NOTE_URL} target="_blank" rel="noopener noreferrer" className="tw:underline">
+          OBR, February 2024
+        </a>
+        ). It currently models hours worked only and runs only when an analysis calls it directly; policyengine.py’s
+        simulations use the two elasticities above.
+      </p>
     </div>
   );
 }

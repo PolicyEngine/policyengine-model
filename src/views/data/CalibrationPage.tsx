@@ -4,6 +4,7 @@ import usCalibrationTargets from '../../data/calibrationTargets.json';
 import PageHeader from '../../components/layout/PageHeader';
 import SearchInput from '../../components/layout/SearchInput';
 import type { Country } from '../../hooks/useCountry';
+import UkCalibrationPage from './UkCalibrationPage';
 
 interface CalibrationRow {
   variable: string;
@@ -71,15 +72,7 @@ export default function CalibrationPage({ country }: { country: Country }) {
   );
 
   if (country !== 'us') {
-    return (
-      <div>
-        <PageHeader
-          category="Data"
-          title="Calibration targets"
-          description="Calibration target details are currently available for the US model only."
-        />
-      </div>
-    );
+    return <UkCalibrationPage />;
   }
 
   return (

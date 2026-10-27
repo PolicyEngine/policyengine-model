@@ -22,8 +22,8 @@ export interface PipelineStage {
   imputations?: ImputationVariable[];
   calibrationTargets?: CalibrationTarget[];
   dataSources?: string[];
-  /** 'shared' = linear portion, 'national' or 'local' = branched, 'local-sub-N' = rows below local */
-  branch: 'shared' | 'national' | 'local' | 'local-sub-1' | 'local-sub-2' | 'local-sub-3' | 'local-sub-4';
+  /** 'shared' = linear portion, 'national' or 'local' = branched, 'local-sub-N' / 'national-sub-N' = rows below local / national */
+  branch: 'shared' | 'national' | 'local' | 'local-sub-1' | 'local-sub-2' | 'local-sub-3' | 'local-sub-4' | 'national-sub-1' | 'national-sub-2' | 'national-sub-3' | 'national-sub-4';
   /** True if this is a final output dataset */
   isFinalDataset?: boolean;
   /** Optional legacy note shown as a banner on the stage detail */

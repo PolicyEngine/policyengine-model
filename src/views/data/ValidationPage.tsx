@@ -3,11 +3,30 @@ import { IconExternalLink } from '@tabler/icons-react';
 import PageHeader from '../../components/layout/PageHeader';
 import type { Country } from '../../hooks/useCountry';
 
+// What each country's page says, and where its full comparison lives. The US
+// validates against NBER's TAXSIM; TAXSIM models US taxes only, so the UK page
+// points to the scorecard, which compares UK estimates with published figures.
+const COPY: Record<Country, { intro: string; heading: string; body: string; href: string; link: string }> = {
+  us: {
+    intro:
+      "PolicyEngine validates its tax calculations against NBER's TAXSIM model, comparing results across thousands of household configurations. The full interactive comparison is available in our Jupyter Book documentation.",
+    heading: 'TAXSIM validation book',
+    body: 'Detailed comparison of PolicyEngine calculations vs. TAXSIM across federal income tax, payroll taxes, state income taxes, and credits for multiple filing statuses, income levels, and years.',
+    href: 'https://policyengine.github.io/policyengine-us',
+    link: 'View full validation',
+  },
+  uk: {
+    intro:
+      'PolicyEngine compares its UK estimates with figures that others publish, such as official statistics and other models’ estimates.',
+    heading: 'PolicyEngine scorecard',
+    body: 'Each published figure appears beside PolicyEngine’s estimate, with the gap between them and a note wherever the two measure different things. Large gaps stay on the page.',
+    href: 'https://www.policyengine.org/scorecard?country=uk',
+    link: 'Open the UK scorecard',
+  },
+};
+
 export default function ValidationPage({ country }: { country: Country }) {
-  const taxsimUrl =
-    country === 'uk'
-      ? 'https://policyengine.github.io/policyengine-uk'
-      : 'https://policyengine.github.io/policyengine-us';
+  const copy = COPY[country];
 
   return (
     <div>
@@ -22,9 +41,7 @@ export default function ValidationPage({ country }: { country: Country }) {
             marginBottom: spacing['2xl'],
           }}
         >
-          PolicyEngine validates its tax calculations against NBER's TAXSIM model, comparing
-          results across thousands of household configurations. The full interactive comparison
-          is available in our Jupyter Book documentation.
+          {copy.intro}
         </p>
 
         <div
@@ -43,7 +60,7 @@ export default function ValidationPage({ country }: { country: Country }) {
               marginBottom: spacing.sm,
             }}
           >
-            TAXSIM validation book
+            {copy.heading}
           </h3>
           <p
             style={{
@@ -53,12 +70,10 @@ export default function ValidationPage({ country }: { country: Country }) {
               marginBottom: spacing.lg,
             }}
           >
-            Detailed comparison of PolicyEngine calculations vs. TAXSIM across federal income
-            tax, payroll taxes, state income taxes, and credits for multiple filing statuses,
-            income levels, and years.
+            {copy.body}
           </p>
           <a
-            href={taxsimUrl}
+            href={copy.href}
             target="_blank"
             rel="noopener noreferrer"
             style={{
@@ -75,7 +90,7 @@ export default function ValidationPage({ country }: { country: Country }) {
               textDecoration: 'none',
             }}
           >
-            View full validation <IconExternalLink size={16} stroke={1.5} />
+            {copy.link} <IconExternalLink size={16} stroke={1.5} />
           </a>
         </div>
       </div>
