@@ -188,7 +188,7 @@ export const ukPipelineStages: PipelineStage[] = [
       'The loss is the weighted mean over targets of min(|relative error|, 10), with relative error on the scale max(|target|, 1)',
       'Target weights (family_equal): each target family gets an equal share, split evenly within the family',
       'No weight may exceed 10 times its starting weight; the household total is free; there is no L0 or L2 penalty',
-      'Each household is measured at 2025 through policyengine-uk’s projection of its stored inputs; fiscal-year figures bind to calendar 2025 as 3/12 of one year plus 9/12 of the next, though a few bind to one year’s figure instead, such as the Winter Fuel Payment, which is paid in November and December and binds to 2025-26',
+      'Most targets are measured at 2025 through policyengine-uk’s projection of each household’s stored inputs. Most OBR forecasts and HMRC Income Tax liabilities figures bind to calendar 2025 as 3/12 of one year plus 9/12 of the next; other fiscal-year figures are held at one year, such as the OBR alcohol, tobacco and gambling duties at 2024-25 and the Winter Fuel Payment, paid in November and December, at 2025-26',
       'Lower-grain targets are rescaled to sum to their published higher-grain controls; only target values move, never weights',
       'Some measures are held out of the fit and reported as diagnostics, such as OBR VAT, ORR rail support and employer National Insurance',
     ],
@@ -212,7 +212,7 @@ export const ukPipelineStages: PipelineStage[] = [
     details: [
       'The seam gates check target fit, CGT projection entrants, weight ratio, weight effective sample size, zero-weight strata, administrative totals and reference coverage',
       'Each national target’s |relative error| must be at most 0.25 unless a reviewed, signed register entry lifts it; the effective sample size must be at least 1% of records',
-      'The 19 release-cut gates cover input coverage, target and export surfaces, parity of weighted input totals with a pinned Enhanced FRS 2024-25 reference, take-up, support, category values, no constant or negative columns, and a weights audit',
+      'The 19 release-cut gates cover input and stage coverage, target and export surfaces, parity of the compiled targets with a signed reference and of weighted input totals with a pinned Enhanced FRS 2024-25 reference, administrative totals, take-up, support, category values, Universal Credit’s coherence with capital, no constant or negative columns, and a weights audit',
     ],
   },
   {
