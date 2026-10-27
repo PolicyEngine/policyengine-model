@@ -245,7 +245,7 @@ describe('UK pipeline page', () => {
   it('stacks national gates and the national dataset under national calibration', () => {
     const { container } = render(<PipelinePage country="uk" />);
     const order = ukPipelineStages.filter((s) => s.branch.startsWith('national')).map((s) => s.branch);
-    expect(order).toEqual(['national', 'national-sub-1', 'national-sub-2']);
+    expect(order).toEqual(['national', 'national-sub-1', 'national-sub-4']);
     for (const title of ['National calibration', 'National gates', 'National dataset']) {
       const button = Array.from(container.querySelectorAll('button')).find((b) => (b.textContent ?? '').startsWith(title));
       expect(button, title).toBeDefined();

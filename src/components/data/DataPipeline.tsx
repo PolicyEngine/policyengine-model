@@ -154,13 +154,18 @@ export default function DataPipeline({ country = 'us' }: { country?: Country }) 
   const nationalLabel = country === 'uk' ? 'National file' : 'National';
   const localLabel = country === 'uk' ? 'Local-area file' : 'Geography-specific';
   const scrollBoxes = country === 'uk';
-  // The national branch's own rows (UK: gates, then the dataset), drawn beside
-  // the local rows of the same number.
-  const nationalSub1Stages = allStages.filter(s => s.branch === 'national-sub-1');
-  const nationalSub2Stages = allStages.filter(s => s.branch === 'national-sub-2');
+  // The national branch's own rows (UK: gates beside the joint solve, and the
+  // dataset at the bottom beside the local-area dataset), drawn in the left
+  // half of the local sub-rows with the same number. Rows in between carry the
+  // national line straight down.
+  const nationalSubStages = [1, 2, 3, 4].map(n => allStages.filter(s => s.branch === `national-sub-${n}`));
+  const lastNationalRow = nationalSubStages.reduce((last, stages, i) => (stages.length > 0 ? i + 1 : last), 0);
+  // A national row ending in a taller final-dataset box (the US) pulls the
+  // first sub-row up to meet the local boxes.
+  const subRowPull = nationalStages.some(s => s.isFinalDataset) ? 25 : 0;
   const flowMinWidth = Math.max(
     sharedStages.length * 110,
-    2 * Math.max(nationalStages.length, localStages.length, localSub2Stages.length, localSub4Stages.length, nationalSub2Stages.length) * 110 + 24,
+    2 * Math.max(nationalStages.length, localStages.length, localSub2Stages.length, localSub4Stages.length, ...nationalSubStages.map(s => s.length)) * 110 + 24,
   );
   const stageRow = (stages: PipelineStage[]) => (
     <div className="tw:flex tw:items-stretch tw:gap-0">
@@ -178,27 +183,39 @@ export default function DataPipeline({ country = 'us' }: { country?: Country }) 
       ))}
     </div>
   );
-  // The left half of a local sub-row: empty, or the national row of that number.
-  // `overlap` is how far the row is pulled up over the boxes above it (the
-  // first sub-row's -25px), which a single national box would otherwise show
-  // the connector through.
-  const nationalConnector = (stages: PipelineStage[], overlap = 0) => stages.length === 0
+  // Left half of a connector row: the national line while the national branch
+  // continues, else empty. Connector rows have an 8px narrower gap than box
+  // rows, so the line sits 2px left of their centre to stay on the boxes' axis.
+  const nationalConnector = (row: number) => row > lastNationalRow
     ? <div className="tw:flex-1" />
     : (
       <div className="tw:flex-1 tw:relative">
-        <div
-          className="tw:absolute tw:left-1/2 tw:w-[2px]"
-          style={{ backgroundColor: colors.border.light, top: overlap, height: `calc(100% - ${overlap}px)` }}
-        />
+        <div className="tw:absolute tw:top-0 tw:w-[2px] tw:h-full" style={{ backgroundColor: colors.border.light, left: 'calc(50% - 3px)' }} />
       </div>
     );
-  const nationalCell = (stages: PipelineStage[], half: boolean) => stages.length === 0
-    ? <div className="tw:flex-1" />
-    : (
-      <div className="tw:flex-1">
-        {half ? <div className="tw:flex tw:justify-center"><div className="tw:w-1/2">{stageRow(stages)}</div></div> : stageRow(stages)}
-      </div>
-    );
+  // Left half of a box row: the national row with that number (half width in
+  // odd rows, full in even ones, as in the local branch), the national line
+  // passing on to a later row, or empty.
+  const nationalCell = (row: number) => {
+    const stages = nationalSubStages[row - 1];
+    if (stages.length > 0) {
+      return (
+        <div className="tw:flex-1">
+          {row % 2 === 1
+            ? <div className="tw:flex tw:justify-center"><div className="tw:w-1/2">{stageRow(stages)}</div></div>
+            : stageRow(stages)}
+        </div>
+      );
+    }
+    if (row < lastNationalRow) {
+      return (
+        <div className="tw:flex-1 tw:relative">
+          <div className="tw:absolute tw:top-0 tw:w-[2px] tw:h-full" style={{ backgroundColor: colors.border.light, left: 'calc(50% - 1px)' }} />
+        </div>
+      );
+    }
+    return <div className="tw:flex-1" />;
+  };
 
   return (
     <div>
@@ -286,17 +303,17 @@ export default function DataPipeline({ country = 'us' }: { country?: Country }) 
 
         {/* Local-sub-1: connector from center of local row → centered Simulation box */}
         {localSub1Stages.length > 0 && (
-          <div style={{ marginTop: '-25px' }}>
+          <div style={{ marginTop: -subRowPull }}>
             {/* Vertical connector from center of local branch */}
             <div className="tw:flex tw:gap-4 tw:relative tw:h-[30px]">
-              {nationalConnector(nationalSub1Stages, 25)}
+              {nationalConnector(1)}
               <div className="tw:flex-1 tw:relative">
                 <div className="tw:absolute tw:left-1/2 tw:top-0 tw:w-[2px] tw:h-full" style={{ backgroundColor: colors.border.light }} />
               </div>
             </div>
             {/* Simulation centered under local branch, same width as one of the two local boxes */}
             <div className="tw:flex tw:gap-6">
-              {nationalCell(nationalSub1Stages, true)}
+              {nationalCell(1)}
               <div className="tw:flex-1">
                 <div className="tw:flex tw:justify-center">
                   <div className="tw:w-1/2">
@@ -325,13 +342,13 @@ export default function DataPipeline({ country = 'us' }: { country?: Country }) 
         {localSub2Stages.length > 0 && (
           <>
             <div className="tw:flex tw:gap-4 tw:relative tw:h-[30px]">
-              {nationalConnector(nationalSub2Stages)}
+              {nationalConnector(2)}
               <div className="tw:flex-1 tw:relative">
                 <div className="tw:absolute tw:left-1/2 tw:top-0 tw:w-[2px] tw:h-full" style={{ backgroundColor: colors.border.light }} />
               </div>
             </div>
             <div className="tw:flex tw:gap-6">
-              {nationalCell(nationalSub2Stages, false)}
+              {nationalCell(2)}
               <div className="tw:flex-1">
                 <div className="tw:flex tw:items-stretch tw:gap-0">
                   {localSub2Stages.map((s, i) => (
@@ -356,13 +373,13 @@ export default function DataPipeline({ country = 'us' }: { country?: Country }) 
         {localSub3Stages.length > 0 && (
           <div style={{ marginTop: '0px' }}>
             <div className="tw:flex tw:gap-4 tw:relative tw:h-[30px]">
-              <div className="tw:flex-1" />
+              {nationalConnector(3)}
               <div className="tw:flex-1 tw:relative">
                 <div className="tw:absolute tw:left-1/2 tw:top-0 tw:w-[2px] tw:h-full" style={{ backgroundColor: colors.border.light }} />
               </div>
             </div>
             <div className="tw:flex tw:gap-6">
-              <div className="tw:flex-1" />
+              {nationalCell(3)}
               <div className="tw:flex-1">
                 <div className="tw:flex tw:justify-center">
                   <div className="tw:w-1/2">
@@ -391,13 +408,13 @@ export default function DataPipeline({ country = 'us' }: { country?: Country }) 
         {localSub4Stages.length > 0 && (
           <div style={{ marginTop: '0px' }}>
             <div className="tw:flex tw:gap-4 tw:relative tw:h-[30px]">
-              <div className="tw:flex-1" />
+              {nationalConnector(4)}
               <div className="tw:flex-1 tw:relative">
                 <div className="tw:absolute tw:left-1/2 tw:top-0 tw:w-[2px] tw:h-full" style={{ backgroundColor: colors.border.light }} />
               </div>
             </div>
             <div className="tw:flex tw:gap-6">
-              <div className="tw:flex-1" />
+              {nationalCell(4)}
               <div className="tw:flex-1">
                 <div className="tw:flex tw:items-stretch tw:gap-0">
                   {localSub4Stages.map((s, i) => (
