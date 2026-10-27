@@ -38,7 +38,7 @@ import CalibrationPage from '../views/data/CalibrationPage';
 import PipelinePage from '../views/data/PipelinePage';
 import usCalibrationTargets from '../data/calibrationTargets.json';
 import { pipelineStages } from '../data/pipelineStages';
-import { ukPipelineStages } from '../data/ukPipelineStages';
+import { ukPipelineSource, ukPipelineStages } from '../data/ukPipelineStages';
 import { describeUkTargets, formatUkValue, ukCalibration } from '../views/data/UkCalibrationPage';
 
 const n = (x: number) => x.toLocaleString('en-GB');
@@ -221,23 +221,34 @@ describe('UK pipeline page', () => {
 
   it('says PolicyEngine certifies both files together', { timeout: 20000 }, () => {
     const text = ukPipelineText();
-    expect(text).toContain('PolicyEngine certifies both together');
+    expect(text).toContain('certified together');
+    expect(text).toContain('PolicyEngine certifies it together with the local-area file');
     expect(text).toContain('PolicyEngine certifies it together with the national file');
     for (const wrong of ['not certified', 'uncertified', 'certificate covers', 'national file only']) {
       expect(text, wrong).not.toContain(wrong);
     }
   });
 
-  it('links the imputation and size-selection working papers', () => {
+  it('links Microcosm and the build commit, not the working papers', { timeout: 20000 }, () => {
+    const text = ukPipelineText();
     const { container } = render(<PipelinePage country="uk" />);
-    const papers: Record<string, string> = {
-      'High incomes': 'https://microcosm.institute/support/paper',
-      'Size selection': 'https://microcosm.institute/sparsity/paper',
-    };
-    for (const [title, href] of Object.entries(papers)) {
-      const stage = Array.from(container.querySelectorAll('button')).find((b) => (b.textContent ?? '').startsWith(title));
-      fireEvent.click(stage!);
-      expect(container.querySelector(`a[href="${href}"]`), title).not.toBeNull();
+    expect(container.querySelector('a[href="https://microcosm.institute"]')).not.toBeNull();
+    const footer = container.querySelector(`a[href="https://github.com/PolicyEngine/microcosm/tree/${ukPipelineSource.commit}"]`);
+    expect(footer).toHaveTextContent(ukPipelineSource.commit.slice(0, 7));
+    expect(footer!.parentElement).toHaveTextContent(`policyengine-uk ${ukPipelineSource.modelVersion}`);
+    expect(container.querySelector('a[href*="/paper"]')).toBeNull();
+    for (const gone of ['(new at', 'policyengine.py 6.11.1', 'years are not pooled', 'release_certification', 'cut tag', 'working paper below', 'in preparation']) {
+      expect(text, gone).not.toContain(gone);
+    }
+  });
+
+  it('stacks national gates and the national dataset under national calibration', () => {
+    const { container } = render(<PipelinePage country="uk" />);
+    const order = ukPipelineStages.filter((s) => s.branch.startsWith('national')).map((s) => s.branch);
+    expect(order).toEqual(['national', 'national-sub-1', 'national-sub-2']);
+    for (const title of ['National calibration', 'National gates', 'National dataset']) {
+      const button = Array.from(container.querySelectorAll('button')).find((b) => (b.textContent ?? '').startsWith(title));
+      expect(button, title).toBeDefined();
     }
   });
 

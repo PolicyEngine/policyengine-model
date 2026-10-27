@@ -1,15 +1,16 @@
 import type { PipelineStage } from './pipelineStages';
 
-// UK pipeline: the Microcosm UK build at PolicyEngine/microcosm 90ff43f
-// (policyengine-uk 2.162.8). The stage list, methods and parameters follow
-// the build code at that commit (packages/microcosm-build/src/microcosm/build/
-// uk/source_stages.json, uk/gates.json and uk_runtime/*_doctrine.py); the
-// serving rules follow policyengine.py's bundle manifest and UK regions.
-// Steps marked NEW are not in the release pair that policyengine.py 6.11.1
-// serves (built at microcosm 67ee2ddf3 with policyengine-uk 2.151.0).
-// No figure here comes from a build: they are code parameters, counts of
-// stages, gates and areas, and statistics their publishers state.
-const NEW = '(new at 90ff43f)';
+// UK pipeline: the Microcosm UK build at the commit below. The stage list,
+// methods and parameters follow the build code at that commit
+// (packages/microcosm-build/src/microcosm/build/uk/source_stages.json,
+// uk/gates.json and uk_runtime/*_doctrine.py); the serving rules follow
+// policyengine.py's bundle manifest and UK regions. No figure here comes from
+// a build: they are code parameters, counts of stages, gates and areas, and
+// statistics their publishers state.
+export const ukPipelineSource = {
+  commit: '90ff43f9575fb5ae5c0c4389ba4790ab4ade5722',
+  modelVersion: '2.162.8',
+};
 
 export const ukPipelineStages: PipelineStage[] = [
   {
@@ -17,7 +18,7 @@ export const ukPipelineStages: PipelineStage[] = [
     branch: 'shared',
     title: 'FRS base',
     subtitle: 'Family Resources Survey 2024-25',
-    description: 'Every record starts as a Family Resources Survey household for 2024-25, with its benefit units and people. Households keep their own reported incomes, benefits and housing, and start from the FRS grossing weight. Only the 2024-25 survey is used; years are not pooled. The first 13 stages of the spine map the survey to policyengine-uk’s inputs and draw the attributes the survey does not record.',
+    description: 'Every record starts as a Family Resources Survey household for 2024-25, with its benefit units and people. Households keep their own reported incomes, benefits and housing, and start from the FRS grossing weight. The first 13 stages of the spine map the survey to policyengine-uk’s inputs and draw the attributes the survey does not record.',
     icon: 'chart-bar',
     inputSize: 'FRS 2024-25 households',
     dataSources: ['DWP Family Resources Survey 2024-25 (UK Data Service SN 9563)'],
@@ -34,7 +35,7 @@ export const ukPipelineStages: PipelineStage[] = [
       { name: 'Ages 80 and over', source: 'ONS mid-year population estimates', method: 'Redrawn within 80 to 84, 85 to 89 and 90+' },
       { name: 'Take-up of Child Benefit, Pension Credit, Universal Credit, Tax-Free Childcare and the childcare entitlements', source: 'Microcosm take-up contract (published rates)', method: 'Keyed draw' },
       { name: 'Marriage Allowance, Scottish Child Payment, Tax-Free Childcare routing', source: 'Published rates', method: 'Keyed draw' },
-      { name: `Apprentice flag ${NEW}`, source: 'DfE apprenticeships 2024/25', method: 'Keyed draw: employees aged 21 to 24 until the flagged weight matches England’s rate of apprentices per head aged 19 to 24, applied UK-wide' },
+      { name: 'Apprentice flag', source: 'DfE apprenticeships 2024/25', method: 'Keyed draw: employees aged 21 to 24 until the flagged weight matches England’s rate of apprentices per head aged 19 to 24, applied UK-wide' },
       { name: 'TV licence, first-time buyer, property purchase', source: 'Published rates', method: 'Keyed draw' },
       { name: 'Broad Rental Market Area', source: 'Census private-rented households', method: 'Drawn within region and LHA category' },
     ],
@@ -52,7 +53,7 @@ export const ukPipelineStages: PipelineStage[] = [
     details: [
       'SPI channel: 10,000 copies of FRS households (uniform draw, seed 42) start at zero weight; within each region they take 50% of the weight of households with nobody at or over State Pension age and 20% of the weight of the others',
       'Band donors: whole-household copies for the HMRC Income Tax liabilities Table 2.5 bands from £200,000 (£200k to £500k, £500k to £1m, £1m to £2m, £2m and over); each band seats max(120, ⌈published taxpayers ÷ 250⌉) donors at equal weight, summing to its published taxpayer count, with the weight taken from the donor’s region',
-      'Income stage 1 draws 21 income items for each copy from the tape with a weighted quantile regression forest; the working paper below sets out the method',
+      'Income stage 1 draws 21 income items for each copy from the tape with a weighted quantile regression forest',
       'Tape incomes are rebased from 2022 to 2024 with each variable’s policyengine-uk uprating index; income stage 2 fills the items the tape lacks from a forest trained on FRS households',
       'Annual income spells describe the year before interview, so HMRC’s annual targets read annual income',
       'Draws are keyed on record ids, and imputed values stay within the donors’ observed range',
@@ -63,7 +64,6 @@ export const ukPipelineStages: PipelineStage[] = [
       { name: 'Items the tape does not carry', source: 'FRS 2024-25', method: 'Quantile regression forest' },
       { name: 'Housing of the SPI copies', source: 'FRS 2024-25', method: 'Classifiers and a quantile regression forest trained on FRS households' },
     ],
-    link: { label: 'Imputation working paper (weighted quantile regression forests)', path: 'https://microcosm.institute/support/paper' },
   },
   {
     id: 'wealth-property',
@@ -100,7 +100,7 @@ export const ukPipelineStages: PipelineStage[] = [
     details: [
       'Spending by COICOP division, road fuel, domestic energy and bus fares from LCFS 2024-25 (2nd edition)',
       'Domestic energy is raked to DESNZ NEED 2024 and priced with Quarterly Energy Prices for calendar 2024; road fuel is levelled to ONS Consumer Trends (COICOP 07.2.2)',
-      `Alcohol, tobacco and gambling duty inputs: LCFS shares, excise quantities levelled to HMRC and gambling participation topped up to the Gambling Survey for Great Britain 2025 ${NEW}`,
+      'Alcohol, tobacco and gambling duty inputs: LCFS shares, excise quantities levelled to HMRC and gambling participation topped up to the Gambling Survey for Great Britain 2025',
       'Full-rate VAT spending share and in-kind education, rail and bus subsidy from ETB (donor year FYE 2024); NHS spending is allocated per person by age and sex',
       'Bus use, trips and concessionary eligibility from the NTS (19th edition), fitted on survey years 2022 to 2024 for England residents',
       'LCFS amounts are uprated to 2024 with CPI, DESNZ fuel prices and NEED energy; ETB amounts with OBR earnings, CPI and ORR and DfT ratios',
@@ -191,7 +191,6 @@ export const ukPipelineStages: PipelineStage[] = [
       'Each household is measured at 2025 through policyengine-uk’s projection of its stored inputs; fiscal-year facts bind to calendar 2025 as 3/12 of one year plus 9/12 of the next',
       'Lower-grain targets are rescaled to sum to their published higher-grain controls; only target values move, never weights',
       'Some measures are held out of the fit and reported as diagnostics, such as OBR VAT, ORR rail support and employer National Insurance',
-      'Microcosm calibrates by gradient descent rather than classical raking; a working paper comparing the two is in preparation',
     ],
     calibrationTargets: [
       { variable: 'Incomes, Income Tax and Capital Gains Tax', target: 'UK, nations, regions; by income band', source: 'HMRC' },
@@ -204,21 +203,29 @@ export const ukPipelineStages: PipelineStage[] = [
     link: { label: 'View calibration targets', path: '/data/calibration' },
   },
   {
-    id: 'national-release',
-    branch: 'national',
+    id: 'national-gates',
+    branch: 'national-sub-1',
+    title: 'National gates',
+    subtitle: '19-gate release cut',
+    description: 'Before the national file is published it must pass the seven calibration-seam gates and a 19-gate release cut, and beat the pinned Enhanced FRS on their common target surface.',
+    icon: 'checkbox',
+    details: [
+      'The seam gates check target fit, CGT projection entrants, weight ratio, weight effective sample size, zero-weight strata, administrative totals and reference coverage',
+      'Each national target’s |relative error| must be at most 0.25 unless a reviewed, signed register entry lifts it; the effective sample size must be at least 1% of records',
+      'The 19 release-cut gates cover input coverage, target and export surfaces, parity of weighted input totals with a pinned Enhanced FRS 2024-25 reference, take-up, support, category values and a weights audit',
+    ],
+  },
+  {
+    id: 'national-dataset',
+    branch: 'national-sub-2',
     isFinalDataset: true,
-    title: 'National release',
-    subtitle: '19-gate cut, certified',
-    description: 'The national file, microcosm_uk_2024_25.h5, must pass a 19-gate release cut and beat the pinned Enhanced FRS on their common target surface before it is published and certified as policyengine.py’s UK default.',
+    title: 'National dataset',
+    subtitle: 'UK default',
+    description: 'The national file, microcosm_uk_2024_25.h5, is policyengine.py’s UK default dataset. PolicyEngine certifies it together with the local-area file.',
     icon: 'building-community',
     outputSize: 'microcosm_uk_2024_25',
     details: [
-      'Seven calibration-seam gates check target fit, CGT projection entrants, weight ratio, weight effective sample size, zero-weight strata, administrative totals and reference coverage',
-      'Each national target’s |relative error| must be at most 0.25 unless a reviewed, signed register entry lifts it; the effective sample size must be at least 1% of records',
-      'The 19 release-cut gates cover input coverage, target and export surfaces, parity of weighted input totals with a pinned Enhanced FRS 2024-25 reference, take-up, support, category values and a weights audit',
-      'release_certification.json combines the signed, digest-pinned spine, seam and release-cut reports; whether the file can ship is recomputed from those parts',
-      'Published by immutable cut tag (microcosm-uk-2024-25-national-<time>-<id>) to a Hugging Face dataset that only UK Data Service licence holders can open, and promoted as the latest national release',
-      'PolicyEngine certifies both files of a release together: policyengine.py’s bundle pins each by tag and digest with the policyengine-uk version they are certified for',
+      'policyengine.py pins both files of a release by digest with the policyengine-uk version they are certified for',
       'policyengine.py serves the UK from this file and each nation by filtering its region column; the file has no small-area codes',
     ],
   },
@@ -267,7 +274,7 @@ export const ukPipelineStages: PipelineStage[] = [
       'The solve is refused if domestic energy or bus journeys fall below their declared minimum shares of the loss',
       'Small published cells are not fitted, by a signed rule: council tax band cells under 50 dwellings, HMRC higher-rate taxpayer cells under 5,500 and high-value-home local-authority cells under 400 homes; deferred cells still count in their parent’s total',
       'Each lower grain is rescaled to sum to its higher-grain control, and the local pass must leave national targets unmoved',
-      `Constituency domestic energy targets, split from local-authority totals by DESNZ small-area figures, and English local authorities’ single-adult-discount dwellings ${NEW}`,
+      'Constituency domestic energy targets are local-authority totals split by DESNZ small-area figures; English local authorities also carry single-adult-discount dwelling targets',
     ],
     link: { label: 'View calibration targets', path: '/data/calibration' },
   },
@@ -281,10 +288,9 @@ export const ukPipelineStages: PipelineStage[] = [
     inputSize: 'Spine × 15 copies',
     outputSize: '150,000 households',
     details: [
-      'An L0 penalty decides which copies to keep, and the largest contributor to every target is protected; the working paper below sets out the method, tested on US data',
+      'An L0 penalty decides which copies to keep, and the largest contributor to every target is protected',
       'The penalty is set so that about 150,000 households stay in; households are then kept or drawn by Sampford sampling so that exactly 150,000 remain',
     ],
-    link: { label: 'Size-selection working paper (L0 penalty)', path: 'https://microcosm.institute/sparsity/paper' },
   },
   {
     id: 'refit',
@@ -317,17 +323,15 @@ export const ukPipelineStages: PipelineStage[] = [
     id: 'local-area-file',
     branch: 'local-sub-4',
     isFinalDataset: true,
-    title: 'Local-area release',
+    title: 'Local-area dataset',
     subtitle: 'Constituencies and authorities',
-    description: 'The local-area file, microcosm_uk_2024_25_dense.h5, ships with its signed local gate report and its reviewed limitations. It is published by tag only and is not a default dataset: policyengine.py routes constituency and local-authority regions to it.',
+    description: 'The local-area file, microcosm_uk_2024_25_dense.h5, ships with its signed local gate report and its reviewed limitations. It is not a default dataset: policyengine.py routes constituency and local-authority regions to it. PolicyEngine certifies it together with the national file.',
     icon: 'building-community',
     outputSize: 'microcosm_uk_2024_25_dense',
     details: [
-      'Published by immutable cut tag (microcosm-uk-2024-25-dense-<time>-<id>) to the same licensed dataset, without being promoted as latest',
       'Reviewed limitations shipped with it: engine measurement, no out-of-sample claim, no incumbent comparison and the size rule',
       'policyengine.py filters it on its constituency or local-authority code for each of the 650 constituencies and 361 local authorities',
       'Its weights are not the national file’s: constituency results add up to this file’s UK total, not the national file’s',
-      'PolicyEngine certifies it together with the national file',
     ],
   },
 ];

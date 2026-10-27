@@ -137,16 +137,68 @@ export default function DataPipeline({ country = 'us' }: { country?: Country }) 
   };
 
   const introText = country === 'uk'
-    ? 'PolicyEngine’s UK model runs on Microcosm UK, built by Microcosm, PolicyEngine’s data build system; since version 6.10.0 of the policyengine Python package it has replaced the Enhanced FRS as the certified UK dataset. A 49-stage spine turns Family Resources Survey 2024-25 households, plus synthetic copies that carry high incomes, home values and capital gains, into one calibration-ready file. The spine’s stages give each record its characteristics; calibration only changes how many households each record represents. Two files are calibrated from it, and PolicyEngine certifies both together: a national file, reweighted to UK, nation and English region targets, which is policyengine.py’s UK default, and a local-area file of exactly 150,000 households placed in small areas and calibrated to constituency and local-authority targets as well. UK and nation results come from the national file; constituency and local-authority results come from the local-area file, with its own weights. This page follows Microcosm commit 90ff43f (policyengine-uk 2.162.8); steps marked “new at 90ff43f” are not in the release pair policyengine.py 6.11.1 serves.'
+    ? (
+      <>
+        PolicyEngine’s UK model runs on Microcosm UK, built with{' '}
+        <a href="https://microcosm.institute" target="_blank" rel="noopener noreferrer" style={{ color: colors.primary[600] }}>
+          Microcosm
+        </a>
+        . A 49-stage spine turns Family Resources Survey 2024-25 households into one file: its stages give each record its
+        characteristics, and calibration sets how many households each record represents. Two files are calibrated from
+        that spine and certified together: a national file for UK and nation results, and a local-area file of 150,000
+        households for constituencies and local authorities.
+      </>
+    )
     : 'PolicyEngine constructs its representative household dataset through a 14-step pipeline. Public survey data is merged, stratified, and cloned to 10 geographic variants per household. Each clone is simulated through PolicyEngine US with stochastic take-up, then calibrated via L0-regularized optimization against administrative targets at the national, state, and congressional district levels simultaneously, producing 488 geographically representative datasets.';
 
   const nationalLabel = country === 'uk' ? 'National file' : 'National';
   const localLabel = country === 'uk' ? 'Local-area file' : 'Geography-specific';
   const scrollBoxes = country === 'uk';
+  // The national branch's own rows (UK: gates, then the dataset), drawn beside
+  // the local rows of the same number.
+  const nationalSub1Stages = allStages.filter(s => s.branch === 'national-sub-1');
+  const nationalSub2Stages = allStages.filter(s => s.branch === 'national-sub-2');
   const flowMinWidth = Math.max(
     sharedStages.length * 110,
-    2 * Math.max(nationalStages.length, localStages.length, localSub2Stages.length, localSub4Stages.length) * 110 + 24,
+    2 * Math.max(nationalStages.length, localStages.length, localSub2Stages.length, localSub4Stages.length, nationalSub2Stages.length) * 110 + 24,
   );
+  const stageRow = (stages: PipelineStage[]) => (
+    <div className="tw:flex tw:items-stretch tw:gap-0">
+      {stages.map((s, i) => (
+        <div key={s.id} className="tw:flex-1 tw:flex tw:items-stretch">
+          <StageButton
+            s={s}
+            isActive={allStages.indexOf(s) === activeStage}
+            onClick={() => selectStage(s.id)}
+            borderRadiusLeft={i === 0}
+            borderRadiusRight={i === stages.length - 1}
+            marginLeft={i > 0}
+          />
+        </div>
+      ))}
+    </div>
+  );
+  // The left half of a local sub-row: empty, or the national row of that number.
+  // `overlap` is how far the row is pulled up over the boxes above it (the
+  // first sub-row's -25px), which a single national box would otherwise show
+  // the connector through.
+  const nationalConnector = (stages: PipelineStage[], overlap = 0) => stages.length === 0
+    ? <div className="tw:flex-1" />
+    : (
+      <div className="tw:flex-1 tw:relative">
+        <div
+          className="tw:absolute tw:left-1/2 tw:w-[2px]"
+          style={{ backgroundColor: colors.border.light, top: overlap, height: `calc(100% - ${overlap}px)` }}
+        />
+      </div>
+    );
+  const nationalCell = (stages: PipelineStage[], half: boolean) => stages.length === 0
+    ? <div className="tw:flex-1" />
+    : (
+      <div className="tw:flex-1">
+        {half ? <div className="tw:flex tw:justify-center"><div className="tw:w-1/2">{stageRow(stages)}</div></div> : stageRow(stages)}
+      </div>
+    );
 
   return (
     <div>
@@ -237,14 +289,14 @@ export default function DataPipeline({ country = 'us' }: { country?: Country }) 
           <div style={{ marginTop: '-25px' }}>
             {/* Vertical connector from center of local branch */}
             <div className="tw:flex tw:gap-4 tw:relative tw:h-[30px]">
-              <div className="tw:flex-1" />
+              {nationalConnector(nationalSub1Stages, 25)}
               <div className="tw:flex-1 tw:relative">
                 <div className="tw:absolute tw:left-1/2 tw:top-0 tw:w-[2px] tw:h-full" style={{ backgroundColor: colors.border.light }} />
               </div>
             </div>
             {/* Simulation centered under local branch, same width as one of the two local boxes */}
             <div className="tw:flex tw:gap-6">
-              <div className="tw:flex-1" />
+              {nationalCell(nationalSub1Stages, true)}
               <div className="tw:flex-1">
                 <div className="tw:flex tw:justify-center">
                   <div className="tw:w-1/2">
@@ -273,13 +325,13 @@ export default function DataPipeline({ country = 'us' }: { country?: Country }) 
         {localSub2Stages.length > 0 && (
           <>
             <div className="tw:flex tw:gap-4 tw:relative tw:h-[30px]">
-              <div className="tw:flex-1" />
+              {nationalConnector(nationalSub2Stages)}
               <div className="tw:flex-1 tw:relative">
                 <div className="tw:absolute tw:left-1/2 tw:top-0 tw:w-[2px] tw:h-full" style={{ backgroundColor: colors.border.light }} />
               </div>
             </div>
             <div className="tw:flex tw:gap-6">
-              <div className="tw:flex-1" />
+              {nationalCell(nationalSub2Stages, false)}
               <div className="tw:flex-1">
                 <div className="tw:flex tw:items-stretch tw:gap-0">
                   {localSub2Stages.map((s, i) => (
@@ -751,7 +803,7 @@ export default function DataPipeline({ country = 'us' }: { country?: Country }) 
 
             {stage.link && (
               <Link
-                href={/^https?:\/\//.test(stage.link.path) ? stage.link.path : buildHref(stage.link.path)}
+                href={buildHref(stage.link.path)}
                 className="tw:w-full tw:text-left tw:flex tw:justify-between tw:items-center tw:no-underline"
                 style={{
                   padding: `${spacing.md} ${spacing.lg}`,
