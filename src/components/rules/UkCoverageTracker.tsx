@@ -17,6 +17,8 @@ import {
 
 const REPO = 'PolicyEngine/policyengine-uk';
 const REGISTRY_URL = `https://github.com/${REPO}/blob/main/policyengine_uk/programs.yaml`;
+const AHEAD_NOTE =
+  'The registry is read from the latest model code, so a programme marked complete here may not be in the live calculator yet.';
 
 export type UkLevel = 'uk' | 'devolved' | 'local' | 'other';
 
@@ -31,6 +33,7 @@ const AGENCIES: Record<string, { level: Exclude<UkLevel, 'other'>; name: string 
   DfE: { level: 'uk', name: 'Department for Education' },
   DfT: { level: 'uk', name: 'Department for Transport' },
   DCMS: { level: 'uk', name: 'Department for Culture, Media and Sport' },
+  DESNZ: { level: 'uk', name: 'Department for Energy Security and Net Zero' },
   Treasury: { level: 'uk', name: 'HM Treasury' },
   Ofgem: { level: 'uk', name: 'Ofgem' },
   'Revenue Scotland': { level: 'devolved', name: 'Revenue Scotland' },
@@ -351,7 +354,7 @@ export default function UkCoverageTracker() {
 
   return (
     <div>
-      <CoverageProvenance source={loaded.source} />
+      <CoverageProvenance source={loaded.source} aheadNote={AHEAD_NOTE} />
       {/* Summary stats */}
       <div className="tw:flex tw:flex-wrap" style={{ gap: spacing.md, marginBottom: spacing['3xl'] }}>
         <StatCard label="Total programmes" count={yearFiltered.length} color={colors.primary[900]} delay={0} />

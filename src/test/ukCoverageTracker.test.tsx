@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { describeVerifiedYears, groupByGovernment, parameterUrl } from '../components/rules/UkCoverageTracker';
+import { describeVerifiedYears, groupByGovernment, parameterUrl, ukAgency } from '../components/rules/UkCoverageTracker';
 import type { Program } from '../types/Program';
 
 // A pinned copy of the UK registry snapshot (public/programs-uk.json is generated at build time and not committed).
@@ -94,6 +94,9 @@ describe('UK coverage tracker over the pinned UK registry', () => {
     await renderUkTracker();
 
     expect(screen.getByText(/^Coverage reflects policyengine-uk \S+ \(main @ [0-9a-f]{7}, fetched \d{4}-\d{2}-\d{2}\)\./)).toBeInTheDocument();
+    // The pinned snapshot is ahead of the production API, so the page says the calculator may lag.
+    expect(ukSnapshot.apiVersion).not.toBe(ukSnapshot.version);
+    expect(screen.getByText(/may not be in the live calculator yet\.$/)).toBeInTheDocument();
     expect(statCount('Total programmes')).toBe(registry.length);
     expect(statCount('Complete')).toBe(registry.filter((p) => p.status === 'complete').length);
     expect(statCount('Partial')).toBe(registry.filter((p) => p.status === 'partial').length);
@@ -212,6 +215,8 @@ describe('UK coverage helpers', () => {
   it('names an agency it does not know under other programmes', () => {
     const programme = (id: string, agency: string): Program =>
       ({ id, name: id, fullName: id, status: 'complete', agency: agency as Program['agency'], githubLinks: {} });
+    // DESNZ is the agency proposed for the Energy Price Guarantee in policyengine-uk's registry.
+    expect(ukAgency(programme('energy_price_guarantee', 'DESNZ')).level).toBe('uk');
     const programs = [programme('universal_credit', 'DWP'), programme('ni_rate_relief', 'Department for Communities')];
     expect(groupByGovernment(programs, programs).map((s) => [s.heading, s.showAgencies, s.groups.map((g) => g.name)]))
       .toEqual([

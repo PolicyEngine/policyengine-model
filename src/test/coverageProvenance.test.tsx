@@ -62,6 +62,16 @@ describe('Coverage provenance', () => {
     expect(screen.getByText('Coverage reflects the bundled fallback registry.')).toBeInTheDocument();
   });
 
+  it.each([
+    ['is ahead of the production API', snapshotSource, true],
+    ['has no production API version to compare', { ...snapshotSource, apiVersion: undefined }, true],
+    ['matches the production API', { ...snapshotSource, apiVersion: '1.823.0' }, false],
+    ['came from the production API itself', { kind: 'api', repo: 'PolicyEngine/policyengine-us', apiVersion: '1.764.6' } as ProgramsSource, false],
+  ])('adds the note when a snapshot %s: %#', (_case, source, shown) => {
+    render(<CoverageProvenance source={source} aheadNote="Ahead of the live calculator." />);
+    expect(screen.queryByText(/Ahead of the live calculator\.$/) !== null).toBe(shown);
+  });
+
   it('renders the loaded source and derives TANF summary counts from the registry', async () => {
     vi.mocked(fetchProgramsWithSource).mockResolvedValue({
       source: snapshotSource,
@@ -107,7 +117,7 @@ describe('Coverage provenance', () => {
 
     render(<CoverageTrackerPage country="uk" />);
 
-    expect(await screen.findByText('Coverage reflects policyengine-uk 2.162.12 (main @ abcdef1, fetched 2026-09-08). The production API served 2.132.6 when the snapshot was fetched.')).toBeInTheDocument();
+    expect(await screen.findByText('Coverage reflects policyengine-uk 2.162.12 (main @ abcdef1, fetched 2026-09-08). The production API served 2.132.6 when the snapshot was fetched. The registry is read from the latest model code, so a programme marked complete here may not be in the live calculator yet.')).toBeInTheDocument();
     expect(fetchProgramsWithSource).toHaveBeenCalledWith('uk');
     expect(fetchProgramsWithSource).not.toHaveBeenCalledWith('us');
     expect(screen.getByRole('heading', { name: 'UK government programmes (1)' })).toBeInTheDocument();
