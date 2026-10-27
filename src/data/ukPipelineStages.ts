@@ -52,7 +52,7 @@ export const ukPipelineStages: PipelineStage[] = [
     details: [
       'SPI channel: 10,000 copies of FRS households (uniform draw, seed 42) start at zero weight; within each region they take 50% of the weight of households with nobody at or over State Pension age and 20% of the weight of the others',
       'Band donors: whole-household copies for the HMRC Income Tax liabilities Table 2.5 bands from £200,000 (£200k to £500k, £500k to £1m, £1m to £2m, £2m and over); each band seats max(120, ⌈published taxpayers ÷ 250⌉) donors at equal weight, summing to its published taxpayer count, with the weight taken from the donor’s region',
-      'Income stage 1: a quantile regression forest on a weighted resample of the tape draws 21 income items at the quantile of each copy’s FRS twin, given age, sex, region, main income source, whether there is pay or trading income, and State Pension age',
+      'Income stage 1 draws 21 income items for each copy from the tape with a weighted quantile regression forest; the working paper below sets out the method',
       'Tape incomes are rebased from 2022 to 2024 with each variable’s policyengine-uk uprating index; income stage 2 fills the items the tape lacks from a forest trained on FRS households',
       'Annual income spells describe the year before interview, so HMRC’s annual targets read annual income',
       'Draws are keyed on record ids, and imputed values stay within the donors’ observed range',
@@ -63,6 +63,7 @@ export const ukPipelineStages: PipelineStage[] = [
       { name: 'Items the tape does not carry', source: 'FRS 2024-25', method: 'Quantile regression forest' },
       { name: 'Housing of the SPI copies', source: 'FRS 2024-25', method: 'Classifiers and a quantile regression forest trained on FRS households' },
     ],
+    link: { label: 'Imputation working paper (weighted quantile regression forests)', path: 'https://microcosm.institute/support/paper' },
   },
   {
     id: 'wealth-property',
@@ -190,6 +191,7 @@ export const ukPipelineStages: PipelineStage[] = [
       'Each household is measured at 2025 through policyengine-uk’s projection of its stored inputs; fiscal-year facts bind to calendar 2025 as 3/12 of one year plus 9/12 of the next',
       'Lower-grain targets are rescaled to sum to their published higher-grain controls; only target values move, never weights',
       'Some measures are held out of the fit and reported as diagnostics, such as OBR VAT, ORR rail support and employer National Insurance',
+      'Microcosm calibrates by gradient descent rather than classical raking; a working paper comparing the two is in preparation',
     ],
     calibrationTargets: [
       { variable: 'Incomes, Income Tax and Capital Gains Tax', target: 'UK, nations, regions; by income band', source: 'HMRC' },
@@ -216,7 +218,7 @@ export const ukPipelineStages: PipelineStage[] = [
       'The 19 release-cut gates cover input coverage, target and export surfaces, parity of weighted input totals with a pinned Enhanced FRS 2024-25 reference, take-up, support, category values and a weights audit',
       'release_certification.json combines the signed, digest-pinned spine, seam and release-cut reports; whether the file can ship is recomputed from those parts',
       'Published by immutable cut tag (microcosm-uk-2024-25-national-<time>-<id>) to a Hugging Face dataset that only UK Data Service licence holders can open, and promoted as the latest national release',
-      'policyengine.py’s bundle pins the data build with the model version it is certified for; the certificate covers this national file',
+      'PolicyEngine certifies both files of a release together: policyengine.py’s bundle pins each by tag and digest with the policyengine-uk version they are certified for',
       'policyengine.py serves the UK from this file and each nation by filtering its region column; the file has no small-area codes',
     ],
   },
@@ -279,10 +281,10 @@ export const ukPipelineStages: PipelineStage[] = [
     inputSize: 'Spine × 15 copies',
     outputSize: '150,000 households',
     details: [
-      'Hard-concrete L0 gates (Louizos et al., 2018) start from each household’s contributions to the targets; the largest contributor to every target is protected',
-      'The penalty is searched by bisection on log₁₀ λ until the open gates hold within ±5% of 150,000 households, starting from the penalty the previous release chose',
-      'Gates of 0.5 or more are kept with certainty and the rest drawn by Sampford sampling with probability proportional to size, giving exactly 150,000 households',
+      'An L0 penalty decides which copies to keep, and the largest contributor to every target is protected; the working paper below sets out the method, tested on US data',
+      'The penalty is set so that about 150,000 households stay in; households are then kept or drawn by Sampford sampling so that exactly 150,000 remain',
     ],
+    link: { label: 'Size-selection working paper (L0 penalty)', path: 'https://microcosm.institute/sparsity/paper' },
   },
   {
     id: 'refit',
@@ -325,7 +327,7 @@ export const ukPipelineStages: PipelineStage[] = [
       'Reviewed limitations shipped with it: engine measurement, no out-of-sample claim, no incumbent comparison and the size rule',
       'policyengine.py filters it on its constituency or local-authority code for each of the 650 constituencies and 361 local authorities',
       'Its weights are not the national file’s: constituency results add up to this file’s UK total, not the national file’s',
-      'policyengine.py’s certificate covers the national file; constituency and local-authority results are not certified',
+      'PolicyEngine certifies it together with the national file',
     ],
   },
 ];

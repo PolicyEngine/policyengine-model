@@ -219,6 +219,28 @@ describe('UK pipeline page', () => {
     }
   });
 
+  it('says PolicyEngine certifies both files together', { timeout: 20000 }, () => {
+    const text = ukPipelineText();
+    expect(text).toContain('PolicyEngine certifies both together');
+    expect(text).toContain('PolicyEngine certifies it together with the national file');
+    for (const wrong of ['not certified', 'uncertified', 'certificate covers', 'national file only']) {
+      expect(text, wrong).not.toContain(wrong);
+    }
+  });
+
+  it('links the imputation and size-selection working papers', () => {
+    const { container } = render(<PipelinePage country="uk" />);
+    const papers: Record<string, string> = {
+      'High incomes': 'https://microcosm.institute/support/paper',
+      'Size selection': 'https://microcosm.institute/sparsity/paper',
+    };
+    for (const [title, href] of Object.entries(papers)) {
+      const stage = Array.from(container.querySelectorAll('button')).find((b) => (b.textContent ?? '').startsWith(title));
+      fireEvent.click(stage!);
+      expect(container.querySelector(`a[href="${href}"]`), title).not.toBeNull();
+    }
+  });
+
   it('mentions the Enhanced FRS only as the previous default or a reference', () => {
     render(<PipelinePage country="uk" />);
     const strings = [

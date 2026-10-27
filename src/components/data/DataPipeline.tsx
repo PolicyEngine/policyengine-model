@@ -137,7 +137,7 @@ export default function DataPipeline({ country = 'us' }: { country?: Country }) 
   };
 
   const introText = country === 'uk'
-    ? 'PolicyEngine’s UK model runs on Microcosm UK, built by Microcosm, PolicyEngine’s data build system; since version 6.10.0 of the policyengine Python package it has replaced the Enhanced FRS as the certified UK dataset. A 49-stage spine turns Family Resources Survey 2024-25 households, plus synthetic copies that carry high incomes, home values and capital gains, into one calibration-ready file. Two files are calibrated from it: a national file, reweighted to UK, nation and English region targets and certified as policyengine.py’s UK default, and a local-area file of exactly 150,000 households placed in small areas and calibrated to constituency and local-authority targets as well. UK and nation results come from the national file; constituency and local-authority results come from the local-area file, with its own weights. This page follows Microcosm commit 90ff43f (policyengine-uk 2.162.8); steps marked “new at 90ff43f” are not in the release pair policyengine.py 6.11.1 serves.'
+    ? 'PolicyEngine’s UK model runs on Microcosm UK, built by Microcosm, PolicyEngine’s data build system; since version 6.10.0 of the policyengine Python package it has replaced the Enhanced FRS as the certified UK dataset. A 49-stage spine turns Family Resources Survey 2024-25 households, plus synthetic copies that carry high incomes, home values and capital gains, into one calibration-ready file. The spine’s stages give each record its characteristics; calibration only changes how many households each record represents. Two files are calibrated from it, and PolicyEngine certifies both together: a national file, reweighted to UK, nation and English region targets, which is policyengine.py’s UK default, and a local-area file of exactly 150,000 households placed in small areas and calibrated to constituency and local-authority targets as well. UK and nation results come from the national file; constituency and local-authority results come from the local-area file, with its own weights. This page follows Microcosm commit 90ff43f (policyengine-uk 2.162.8); steps marked “new at 90ff43f” are not in the release pair policyengine.py 6.11.1 serves.'
     : 'PolicyEngine constructs its representative household dataset through a 14-step pipeline. Public survey data is merged, stratified, and cloned to 10 geographic variants per household. Each clone is simulated through PolicyEngine US with stochastic take-up, then calibrated via L0-regularized optimization against administrative targets at the national, state, and congressional district levels simultaneously, producing 488 geographically representative datasets.';
 
   const nationalLabel = country === 'uk' ? 'National file' : 'National';
@@ -751,7 +751,7 @@ export default function DataPipeline({ country = 'us' }: { country?: Country }) 
 
             {stage.link && (
               <Link
-                href={buildHref(stage.link.path)}
+                href={/^https?:\/\//.test(stage.link.path) ? stage.link.path : buildHref(stage.link.path)}
                 className="tw:w-full tw:text-left tw:flex tw:justify-between tw:items-center tw:no-underline"
                 style={{
                   padding: `${spacing.md} ${spacing.lg}`,
