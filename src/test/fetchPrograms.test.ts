@@ -67,6 +67,7 @@ describe('program source loading', () => {
       agency: 'HHS', category: 'Benefits', status: 'inProgress', coverage: 'US',
       hasStateVariation: true, variable: 'tanf', verifiedYears: '2021-2026',
       notes: 'Registry notes. Years: 2021-2026',
+      registryNotes: 'Registry notes', parameterPrefix: 'gov.hhs.tanf',
       stateImplementations: [
         { state: 'CA', status: 'complete', name: 'CalWORKs', fullName: 'California Work Opportunity', variable: 'ca_tanf', notes: 'State notes' },
         { state: 'NY', status: 'inProgress' },
@@ -201,6 +202,16 @@ describe('program source loading', () => {
     expect(fetch).toHaveBeenNthCalledWith(2, 'https://api.policyengine.org/us/metadata');
     expect(result.programs).toBe(programs);
     expect(result.source).toEqual({ kind: 'fallback' });
+  });
+
+  it('never falls back to the hardcoded US programs for the UK', async () => {
+    window.history.replaceState({}, '', '/uk/model/rules/coverage');
+    vi.mocked(fetch).mockRejectedValue(new Error('Offline'));
+    const { fetchProgramsWithSource } = await import('../data/fetchPrograms');
+    const result = await fetchProgramsWithSource('uk');
+    expect(fetch).toHaveBeenNthCalledWith(1, '/uk/model/programs-uk.json');
+    expect(fetch).toHaveBeenNthCalledWith(2, 'https://api.policyengine.org/uk/metadata');
+    expect(result).toEqual({ programs: [], source: { kind: 'fallback' } });
   });
 
   it('uses hardcoded programs when API metadata has no registry', async () => {

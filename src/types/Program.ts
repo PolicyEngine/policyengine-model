@@ -28,12 +28,14 @@ export interface Program {
   stateImplementations?: StateImplementation[];
   hasStateVariation?: boolean; // Indicates program has full state-by-state variation
   variable?: string; // Variable name for flowchart visualization
+  parameterPrefix?: string; // Registry parameter_prefix, e.g. gov.hmrc.income_tax
   githubLinks: {
     parameters?: string;
     variables?: string;
     tests?: string;
   };
   notes?: string;
+  registryNotes?: string; // Registry notes as written, without the years `notes` appends
   verifiedYears?: string;
   lastUpdated?: string;
 }
