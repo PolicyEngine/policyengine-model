@@ -1,4 +1,5 @@
 import type { CoverageStatus, Program } from '../types/Program';
+import type { ProgramsWithSource } from './fetchPrograms';
 
 export const ALL_STATES = [
   'AL','AK','AZ','AR','CA','CO','CT','DE','DC','FL','GA','HI','ID','IL','IN','IA',
@@ -169,4 +170,20 @@ export function computeStatusCount(programList: Program[]): StatusCounts {
     counts[deriveProgramStatus(program)]++;
   });
   return counts;
+}
+
+export interface RegistrySummary {
+  total: number;
+  complete: number;
+}
+
+/**
+ * Headline counts for citing the coverage registry elsewhere on the site.
+ * They match the coverage tracker's "Total programs" and "Complete" cards.
+ * Returns null when there is no registry to cite: the bundled fallback list
+ * is a stale hand-kept copy, not the registry.
+ */
+export function summarizeRegistry({ programs, source }: ProgramsWithSource): RegistrySummary | null {
+  if (source.kind === 'fallback' || programs.length === 0) return null;
+  return { total: programs.length, complete: computeStatusCount(programs).complete };
 }

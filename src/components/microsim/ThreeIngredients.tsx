@@ -1,12 +1,17 @@
-import { type ReactNode } from 'react';
+import { type ReactNode, useEffect, useState } from 'react';
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { colors } from '../../designTokens';
 import { IconFileText, IconUsers, IconTrendingUp } from '@tabler/icons-react';
 import type { Country } from '../../hooks/useCountry';
+import { usePublicBasePrefix } from '../../hooks/usePublicBasePrefix';
+import { fetchProgramsWithSource } from '../../data/fetchPrograms';
+import { summarizeRegistry, type RegistrySummary } from '../../data/programStatus';
 
 interface IngredientCardProps {
   title: string;
-  description: string;
+  description: ReactNode;
   icon: ReactNode;
   delay: number;
   isActive?: boolean;
@@ -42,12 +47,49 @@ interface ThreeIngredientsProps {
   country?: Country;
 }
 
+/** Cites the coverage registry's counts once they load, never a hardcoded figure. */
+function UsPolicyRulesDescription({ registry }: { registry: RegistrySummary | null }) {
+  const basePrefix = usePublicBasePrefix();
+  const search = useSearchParams().toString();
+  const trackerPath = `${basePrefix}/rules/coverage`;
+  const tracker = (
+    <Link
+      href={search ? `${trackerPath}?${search}` : trackerPath}
+      className="tw:text-pe-primary-600 tw:underline"
+    >
+      coverage tracker
+    </Link>
+  );
+  return (
+    <>
+      Tax codes, benefit formulas, and eligibility rules encoded as executable logic. The{' '}
+      {tracker}{' '}
+      {registry
+        ? `lists ${registry.total.toLocaleString('en-US')} federal, state, and local programs, ${registry.complete.toLocaleString('en-US')} of them marked complete.`
+        : 'lists federal, state, and local programs and the status of each.'}
+    </>
+  );
+}
+
 export default function ThreeIngredients({ activeIngredient, country = 'us' }: ThreeIngredientsProps) {
+  const [registry, setRegistry] = useState<RegistrySummary | null>(null);
+
+  useEffect(() => {
+    if (country !== 'us') return;
+    let active = true;
+    fetchProgramsWithSource(country).then(result => {
+      if (active) setRegistry(summarizeRegistry(result));
+    });
+    return () => { active = false; };
+  }, [country]);
+
   const ingredients = [
     {
       title: 'Policy rules',
       description:
-        'Tax codes, benefit formulas, and eligibility rules encoded as executable logic. Over 55 federal, state, and local programs.',
+        country === 'uk'
+          ? 'Tax codes, benefit formulas, and eligibility rules encoded as executable logic. Over 55 federal, state, and local programs.'
+          : <UsPolicyRulesDescription registry={registry} />,
       icon: <IconFileText size={36} stroke={1.5} />,
       key: 'policies' as const,
     },
