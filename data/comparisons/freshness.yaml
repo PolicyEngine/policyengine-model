@@ -25,9 +25,10 @@ freshness:
     notes: >
       Parameter YAML files use a date-indexed structure (`values:
       {2024-01-01: ..., 2026-01-01: ...}`) so future-dated changes can be
-      encoded as soon as legislation passes. Calibration is to enhanced
-      CPS calibrated to 2024 administrative totals; runtime can project
-      forward via CBO baseline uprating.
+      encoded as soon as legislation passes. The default microdata
+      (Microcosm US 2024) is calibrated to 2024 administrative totals; later
+      years are projected with per-variable uprating parameters, many tied
+      to CBO projections.
     sources:
       - label: policyengine-us OBBBA implementation (commits Apr-Jul 2025)
         url: https://github.com/PolicyEngine/policyengine-us/pulls?q=is%3Apr+obbba

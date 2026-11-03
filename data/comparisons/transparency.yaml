@@ -22,13 +22,17 @@ transparency:
     testSuitePublic: yes
     testCount: unknown
     datasetPublic: yes
-    datasetUrl: https://huggingface.co/policyengine
+    datasetUrl: https://huggingface.co/datasets/policyengine/populace-us
     reproducibleBuilds: yes
     notes: >
       All parameters are YAML files with inline references field pointing to
       statute, regulation, or administrative source. Tests are YAML files
-      executed via the rules engine. Dataset is published on Hugging Face
-      with pinned versions.
+      executed via the rules engine. The default US microdata file is public
+      on Hugging Face (policyengine/populace-us) with its release manifest,
+      build manifest and calibration diagnostics, and policyengine.py pins it
+      by SHA-256. The data build code (PolicyEngine/microcosm) is public, but
+      rebuilding the file needs the IRS Public Use File, which the build
+      reads from a non-public artifact.
     sources:
       - label: policyengine-us repository (browse code, license file, tests directory)
         url: https://github.com/PolicyEngine/policyengine-us
@@ -50,12 +54,16 @@ transparency:
         url: https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/parameters/gov/irs/credits/ctc/refundable/individual_max.yaml
         kind: self
         supports: [parameterSourcing]
-      - label: PolicyEngine US Data (Enhanced CPS) repository
-        url: https://github.com/PolicyEngine/policyengine-us-data
+      - label: Microcosm data build repository (MIT)
+        url: https://github.com/PolicyEngine/microcosm
         kind: self
         supports: [datasetPublic, reproducibleBuilds]
-      - label: PolicyEngine data on Hugging Face (pinned dataset versions)
-        url: https://huggingface.co/policyengine
+      - label: Default US microdata on Hugging Face (populace-us)
+        url: https://huggingface.co/datasets/policyengine/populace-us/tree/populace-us-2024-spm-20260915/releases/populace-us-2024-spm-20260915
+        kind: self
+        supports: [datasetPublic]
+      - label: policyengine.py 6.3.4 bundle (dataset pin and SHA-256)
+        url: https://github.com/PolicyEngine/policyengine.py/blob/9d0c7c5714231156dbdda9eac4d6e9d5998cf972/src/policyengine/data/bundle/manifest.json
         kind: self
         supports: [datasetPublic]
       - label: Issues tab (public bug tracker)

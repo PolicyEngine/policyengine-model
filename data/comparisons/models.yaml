@@ -19,7 +19,7 @@ models:
     codePublic: yes
     codeUrl: https://github.com/PolicyEngine/policyengine-us
     languages: [Python]
-    primaryDataset: Enhanced CPS (PolicyEngine US Data)
+    primaryDataset: Microcosm US 2024 (populace-us-2024-spm-20260915)
     documentationUrl: https://policyengine.github.io/policyengine-us/
     leads:
       - Nikhil Woodruff
@@ -27,8 +27,10 @@ models:
     summary: >
       Open-source rules-engine microsimulation of US federal, state, and
       select local tax and benefit policies. Built on policyengine-core (a
-      fork of OpenFisca-Core) with an enhanced CPS dataset calibrated to
-      administrative totals via L0 reweighting.
+      fork of OpenFisca-Core). Its default microdata, built by PolicyEngine's
+      Microcosm data system, pools CPS ASEC households with IRS PUF tax
+      detail and is calibrated to administrative totals by gradient-descent
+      reweighting.
     capabilities:
       reformImpact: yes
       integratedMicrodata: yes
@@ -51,6 +53,12 @@ models:
       - label: Ghenis & Woodruff — PolicyEngine paper (J. Open Source Software)
         url: https://joss.theoj.org/papers/10.21105/joss.04494
         kind: academic
+      - label: policyengine.py 6.3.4 bundle (default US dataset pin)
+        url: https://github.com/PolicyEngine/policyengine.py/blob/9d0c7c5714231156dbdda9eac4d6e9d5998cf972/src/policyengine/data/bundle/manifest.json
+        kind: self
+      - label: Default US microdata release (Hugging Face)
+        url: https://huggingface.co/datasets/policyengine/populace-us/tree/populace-us-2024-spm-20260915/releases/populace-us-2024-spm-20260915
+        kind: self
 
   - id: trim3
     name: TRIM3
