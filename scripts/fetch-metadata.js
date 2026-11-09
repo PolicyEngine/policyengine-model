@@ -149,10 +149,13 @@ export async function fetchMetadataFiles({
 
   for (const country of countries) {
     const snapshotPath = join(outputDir, `programs-${country}.json`);
+    const treePath = join(outputDir, `param-tree-${country}.json`);
     let source;
     try {
-      // A failed refresh must not leave a snapshot from an earlier build behind.
+      // A failed refresh must not leave a snapshot or parameter tree from an
+      // earlier build behind, so whatever is written comes from one commit.
       rmSync(snapshotPath, { force: true });
+      rmSync(treePath, { force: true });
       source = await resolveRepository(country, fetchImpl);
     } catch (error) {
       logger.warn(`  ${country}: could not resolve registry source — ${error.message}`);
@@ -172,7 +175,6 @@ export async function fetchMetadataFiles({
       (async () => {
         try {
           const paths = await fetchParameterYamlPaths(country, source, fetchImpl);
-          const treePath = join(outputDir, `param-tree-${country}.json`);
           writeFileSync(treePath, JSON.stringify(paths));
           logger.log(`  ${country}: wrote ${treePath} (${paths.length} files)`);
         } catch (error) {

@@ -11,6 +11,7 @@ import SearchInput from '../../components/layout/SearchInput';
 import CalibrationTargetsTable from './CalibrationTargetsTable';
 import { formatDate, formatSourceFamily, groupLabel } from './calibrationFormat';
 import type { Country } from '../../hooks/useCountry';
+import UkCalibrationPage from './UkCalibrationPage';
 
 export const DASHBOARD_URL = 'https://microcosm.institute/calibration/dashboard/microcosm?country=us';
 
@@ -42,15 +43,7 @@ export default function CalibrationPage({ country }: { country: Country }) {
   }, [allRows, search]);
 
   if (country !== 'us') {
-    return (
-      <div>
-        <PageHeader
-          category="Data"
-          title="Calibration targets"
-          description="Calibration target details are currently available for the US model only."
-        />
-      </div>
-    );
+    return <UkCalibrationPage />;
   }
 
   const levels = data.levelCounts;

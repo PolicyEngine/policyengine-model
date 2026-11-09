@@ -127,6 +127,9 @@ describe('registry snapshot fetch script', () => {
 
   it('writes the snapshot even when fetching the independent parameter tree fails', async () => {
     const outputDir = outputDirectory();
+    // A tree from an earlier build must not stand in for the new snapshot's commit.
+    const treePath = join(outputDir, 'param-tree-us.json');
+    writeFileSync(treePath, '["stale.yaml"]');
     const rawRoot = `https://raw.githubusercontent.com/${source.repo}/${commit}`;
     const fetchImpl = mockFetch({
       'https://api.github.com/repos/PolicyEngine/policyengine-us': { default_branch: 'main' },
@@ -140,19 +143,23 @@ describe('registry snapshot fetch script', () => {
     expect(JSON.parse(readFileSync(join(outputDir, 'programs-us.json'), 'utf8'))).toMatchObject({
       source, version: '1.823.4', apiVersion: '1.764.6',
     });
+    expect(existsSync(treePath)).toBe(false);
     expect(logger.warn).toHaveBeenCalledWith(expect.stringContaining('Tree unavailable'));
   });
 
-  it('removes an old snapshot and skips a country when its default branch cannot be fetched', async () => {
+  it('removes an old snapshot and tree and skips a country when its default branch cannot be fetched', async () => {
     const outputDir = outputDirectory();
     const snapshotPath = join(outputDir, 'programs-us.json');
+    const treePath = join(outputDir, 'param-tree-us.json');
     writeFileSync(snapshotPath, '{"stale":true}');
+    writeFileSync(treePath, '["stale.yaml"]');
     const fetchImpl = mockFetch({
       'https://api.github.com/repos/PolicyEngine/policyengine-us': new Error('Network unavailable'),
     });
     await expect(fetchMetadataFiles({ countries: ['us'], outputDir, fetchImpl, logger }))
       .resolves.toBeUndefined();
     expect(existsSync(snapshotPath)).toBe(false);
+    expect(existsSync(treePath)).toBe(false);
     expect(logger.warn).toHaveBeenCalledWith(expect.stringContaining('Network unavailable'));
   });
 
