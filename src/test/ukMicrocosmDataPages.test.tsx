@@ -302,14 +302,19 @@ describe('UK pipeline stage tables', () => {
 });
 
 describe('US pipeline page', () => {
-  it('keeps its own layout: no scroll box, plain stage tables, every stage shown', () => {
+  it('scrolls the flow and its stage tables inside their box on phones, and shows every stage', () => {
     const { container } = render(<PipelinePage country="us" />);
-    expect(container.querySelector('.tw\\:\\[contain\\:inline-size\\]')).toBeNull();
+    const box = container.querySelector('.tw\\:\\[contain\\:inline-size\\]');
+    expect(box).not.toBeNull();
+    expect(box!.className.split(/\s+/)).toContain('tw:overflow-x-auto');
+    expect((box!.firstElementChild as HTMLElement).style.minWidth).toBe(`${pipelineStages.filter((s) => s.branch === 'shared').length * 110}px`);
     const button = (prefix: string) =>
       Array.from(container.querySelectorAll('button')).find((b) => (b.textContent ?? '').startsWith(prefix));
     fireEvent.click(button('Survey imputations')!);
     fireEvent.click(button('Imputations and transformations')!);
-    expect(container.querySelector('table')!.parentElement!.className).toBe('tw:py-3');
+    const classes = container.querySelector('table')!.parentElement!.className.split(/\s+/);
+    expect(classes).toContain('tw:overflow-x-auto');
+    expect(classes).toContain('tw:[contain:inline-size]');
     for (const stage of pipelineStages) {
       expect(screen.getAllByText(stage.title).length).toBeGreaterThan(0);
     }

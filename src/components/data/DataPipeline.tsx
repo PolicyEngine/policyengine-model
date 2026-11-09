@@ -39,10 +39,10 @@ const iconMap: Record<string, React.ComponentType<{ size?: number; stroke?: numb
   'arrows-split-2': IconArrowsSplit2,
 };
 
-// On narrow screens the UK's wider flow and stage tables scroll inside their
+// On narrow screens a branching flow and its stage tables scroll inside their
 // own box instead of widening the page; minWidth keeps the flow's stage
 // buttons at their 110px minimum. An inactive box renders its children
-// unwrapped, so other countries' layout is unchanged.
+// unwrapped, so a linear flow lays out as before.
 function ScrollBox({ active, minWidth, children }: { active: boolean; minWidth?: number; children: React.ReactNode }) {
   if (!active) return <>{children}</>;
   return (
@@ -163,7 +163,7 @@ export default function DataPipeline({ country = 'us' }: { country?: Country }) 
 
   const nationalLabel = 'National file';
   const localLabel = 'Local-area file';
-  const scrollBoxes = country === 'uk';
+  const scrollBoxes = hasBranches;
   // The national branch's own rows (UK: gates beside the joint solve, and the
   // dataset at the bottom beside the local-area dataset), drawn in the left
   // half of the local sub-rows with the same number. Rows in between carry the
