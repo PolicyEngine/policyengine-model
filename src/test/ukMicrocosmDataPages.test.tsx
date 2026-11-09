@@ -36,7 +36,7 @@ vi.mock('framer-motion', () => {
 
 import CalibrationPage from '../views/data/CalibrationPage';
 import PipelinePage from '../views/data/PipelinePage';
-import usCalibrationTargets from '../data/calibrationTargets.json';
+import { usCalibration } from '../data/calibrationTargets';
 import { pipelineStages } from '../data/pipelineStages';
 import { ukPipelineSource, ukPipelineStages } from '../data/ukPipelineStages';
 import { describeUkTargets, formatUkValue, ukCalibration } from '../views/data/UkCalibrationPage';
@@ -152,19 +152,20 @@ describe('UK calibration page', () => {
 });
 
 describe('US calibration page', () => {
-  it('is unchanged', () => {
+  it('keeps its own table, not the UK page’s', () => {
     const { container } = render(<CalibrationPage country="us" />);
-    const rows = usCalibrationTargets as { nationalCount: number; stateCount: number; districtCount: number }[];
-    const targetCount = rows.reduce((s, t) => s + t.nationalCount + t.stateCount + t.districtCount, 0);
-    expect(
-      screen.getByText(
-        `PolicyEngine calibrates household survey weights using L0-regularized optimization so that weighted aggregates match ${targetCount.toLocaleString()} administrative targets from IRS, CBO, Census, CMS, and other agencies across national, state, and congressional district levels.`,
-      ),
-    ).toBeInTheDocument();
-    expect(container.querySelectorAll('tbody tr')).toHaveLength(rows.length);
-    expect(screen.getByText(`${rows.length} unique targets shown`)).toBeInTheDocument();
-    expect(screen.getByPlaceholderText('Search variables, domains, sources...')).toBeInTheDocument();
+    const groups = usCalibration.targets;
+    expect(container.querySelectorAll('tbody tr')).toHaveLength(groups.length);
+    expect(container.textContent).toContain(`${groups.length} target groups shown`);
+    expect(screen.getByPlaceholderText('Search targets and sources...')).toBeInTheDocument();
     expect(container.querySelector('tr[data-row-key]')).toBeNull();
+  });
+
+  it('keeps the table from widening the page on phones', () => {
+    const { container } = render(<CalibrationPage country="us" />);
+    const classes = container.querySelector('table')!.parentElement!.className.split(/\s+/);
+    expect(classes).toContain('tw:overflow-x-auto');
+    expect(classes).toContain('tw:[contain:inline-size]');
   });
 });
 
@@ -308,20 +309,19 @@ describe('UK pipeline stage tables', () => {
 });
 
 describe('US pipeline page', () => {
-  it('is unchanged', () => {
+  it('scrolls the flow and its stage tables inside their box on phones, and shows every stage', () => {
     const { container } = render(<PipelinePage country="us" />);
-    expect(
-      screen.getByText(
-        'PolicyEngine constructs its representative household dataset through a 14-step pipeline. Public survey data is merged, stratified, and cloned to 10 geographic variants per household. Each clone is simulated through PolicyEngine US with stochastic take-up, then calibrated via L0-regularized optimization against administrative targets at the national, state, and congressional district levels simultaneously, producing 488 geographically representative datasets.',
-      ),
-    ).toBeInTheDocument();
-    expect(screen.getByText('Geography-specific')).toBeInTheDocument();
-    expect(container.querySelector('.tw\\:\\[contain\\:inline-size\\]')).toBeNull();
-    const toggle = Array.from(container.querySelectorAll('button')).find((b) =>
-      (b.textContent ?? '').startsWith('Imputations and transformations'),
-    );
-    fireEvent.click(toggle!);
-    expect(container.querySelector('table')!.parentElement!.className).toBe('tw:py-3');
+    const box = container.querySelector('.tw\\:\\[contain\\:inline-size\\]');
+    expect(box).not.toBeNull();
+    expect(box!.className.split(/\s+/)).toContain('tw:overflow-x-auto');
+    expect((box!.firstElementChild as HTMLElement).style.minWidth).toBe(`${pipelineStages.filter((s) => s.branch === 'shared').length * 110}px`);
+    const button = (prefix: string) =>
+      Array.from(container.querySelectorAll('button')).find((b) => (b.textContent ?? '').startsWith(prefix));
+    fireEvent.click(button('Survey imputations')!);
+    fireEvent.click(button('Imputations and transformations')!);
+    const classes = container.querySelector('table')!.parentElement!.className.split(/\s+/);
+    expect(classes).toContain('tw:overflow-x-auto');
+    expect(classes).toContain('tw:[contain:inline-size]');
     for (const stage of pipelineStages) {
       expect(screen.getAllByText(stage.title).length).toBeGreaterThan(0);
     }
