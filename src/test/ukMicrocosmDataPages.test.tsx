@@ -160,6 +160,13 @@ describe('US calibration page', () => {
     expect(screen.getByPlaceholderText('Search targets and sources...')).toBeInTheDocument();
     expect(container.querySelector('tr[data-row-key]')).toBeNull();
   });
+
+  it('keeps the table from widening the page on phones', () => {
+    const { container } = render(<CalibrationPage country="us" />);
+    const classes = container.querySelector('table')!.parentElement!.className.split(/\s+/);
+    expect(classes).toContain('tw:overflow-x-auto');
+    expect(classes).toContain('tw:[contain:inline-size]');
+  });
 });
 
 // Everything the UK pipeline page can show: the intro, then each stage with

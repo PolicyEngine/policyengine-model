@@ -32,12 +32,14 @@ const mono = {
 };
 
 export default function CalibrationTargetsTable({ rows }: { rows: CalibrationGroup[] }) {
+  // contain: inline-size keeps the table's width from widening the page on
+  // phones; the table scrolls inside this box instead.
   return (
     <div
+      className="tw:overflow-x-auto tw:[contain:inline-size]"
       style={{
         borderRadius: spacing.radius.xl,
         border: `1px solid ${colors.border.light}`,
-        overflowX: 'auto',
         boxShadow: spacing.shadow.sm,
       }}
     >
