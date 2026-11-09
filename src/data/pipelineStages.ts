@@ -4,6 +4,7 @@ import {
   targetCountsByFamily,
   usCalibration,
 } from './calibrationTargets';
+import { usLocalAreaFile, usLocalAreaTargets } from './usLocalAreaFile';
 
 export interface ImputationVariable {
   name: string;
@@ -75,13 +76,28 @@ const calibrationDomains: CalibrationTarget[] = targetCountsByFamily(cal).map(([
   source: FAMILY_DOMAINS[family]?.source ?? family,
 }));
 
-// US pipeline: the Microcosm build of the one national file
-// (populace_us_2024.h5 on huggingface.co/datasets/policyengine/populace-us).
-// Target counts and fit come from calibrationTargets.json. Other figures come
-// from the default release's manifests (source_enrichment.json and the
-// parent build's build_manifest.json) and the released file itself; the
-// mechanism descriptions follow the build code at the calibrating commit
-// (PolicyEngine/microcosm cae8640).
+const local = usLocalAreaFile;
+const localTargets = usLocalAreaTargets;
+const percent = (share: number) => `${Math.round(share * 100)}%`;
+
+const localCalibrationDomains: CalibrationTarget[] = local.targetGroups.map(group => ({
+  variable: group.variable,
+  target: `${n(group.count)} target${group.count === 1 ? '' : 's'}`,
+  source: group.source,
+}));
+
+// US pipeline: the Microcosm builds of the two US files that policyengine.py's
+// bundle loads. The shared stages build the national file's households. The
+// national branch calibrates them to national and state targets; the
+// local-area branch adds ACS households and calibrates both sets of records to
+// state and congressional district targets. National target counts and fit
+// come from calibrationTargets.json, local-area figures from
+// usLocalAreaFile.ts. Other national figures come from the national release's
+// manifests (source_enrichment.json and the parent build's
+// build_manifest.json) and the released file itself. The mechanism
+// descriptions follow the build code at the calibrating commits:
+// PolicyEngine/microcosm cae8640 for the national file and 766b7c7 for the
+// local-area file.
 export const pipelineStages: PipelineStage[] = [
   {
     id: 'asec-pool',
@@ -183,10 +199,10 @@ export const pipelineStages: PipelineStage[] = [
   },
   {
     id: 'calibration',
-    branch: 'shared',
-    title: 'Calibration',
+    branch: 'national',
+    title: 'National calibration',
     subtitle: `Weights fit to ${n(cal.totalTargets)} targets`,
-    description: `Household weights are fit by gradient descent (Adam, 6,000 epochs, on log weights) so weighted totals match ${describeLevels(levels)} derived from statistics published by the IRS, Census Bureau, CMS, USDA, SSA, HHS, CBO, JCT, BEA, and Federal Reserve, plus ${levels.other === 1 ? 'one build-internal constraint' : `${n(levels.other)} build-internal constraints`}. The sum of household weights is held fixed, and no household’s weight may grow beyond five times its starting value. In the default release ${formatPercent(cal.withinTenPctShare)} of the ${n(cal.totalTargets)} targets land within 10% of their target value.`,
+    description: `Household weights are fit by gradient descent (Adam, 6,000 epochs, on log weights) so weighted totals match ${describeLevels(levels)} derived from statistics published by the IRS, Census Bureau, CMS, USDA, SSA, HHS, CBO, JCT, BEA, and Federal Reserve, plus ${levels.other === 1 ? 'one build-internal constraint' : `${n(levels.other)} build-internal constraints`}. The sum of household weights is held fixed, and no household’s weight may grow beyond five times its starting value. In the national file ${formatPercent(cal.withinTenPctShare)} of the ${n(cal.totalTargets)} targets land within 10% of their target value.`,
     icon: 'scale',
     inputSize: `${n(cal.households)} households`,
     outputSize: `${n(cal.totalTargets)} targets`,
@@ -195,7 +211,7 @@ export const pipelineStages: PipelineStage[] = [
       'The objective averages each target’s relative error, capped at 100%; dollar-amount and count targets each get half the total weight, and larger targets get more weight by a square-root rule',
       'IRS dollar amounts published for tax year 2022 are aged to 2024 with growth factors based on CBO’s income projections; counts are used as published',
       'One target surface: a state target is a row of the same matrix that counts only that state’s households, not a separate calibration',
-      'The default release calibrates national and state rows; congressional districts are a filter on the file, not calibrated rows',
+      'The national file calibrates national and state rows only; congressional district targets belong to the local-area file',
       'Fit for every target is published in calibration_diagnostics.json and on the Microcosm dashboard',
     ],
     calibrationTargets: calibrationDomains,
@@ -203,21 +219,81 @@ export const pipelineStages: PipelineStage[] = [
   },
   {
     id: 'release',
-    branch: 'shared',
+    branch: 'national',
     isFinalDataset: true,
-    title: 'Gates and release',
-    subtitle: 'One national file',
-    description: 'The build records a battery of release gates. In the build whose weights this release carries, all twelve pass-or-fail gates passed: calibration fit, target-profile coverage, population scale, input coverage against the previous US dataset, and checks that inputs such as hours worked, SNAP take-up, eligibility, pregnancy, immigration status, and health coverage vary plausibly. The release is published to Hugging Face with its manifests and diagnostics, and the policyengine Python package pins it by release id and file hash as the US default. The current default adds one person-level column to that build’s file and changes no other value or weight: each person’s role in their SPM unit, which lets 15- to 17-year-olds who head their SPM unit or family, or are the head’s spouse, count as adults, and reproduces the Census adult and child counts for every SPM unit in the file.',
+    title: 'National file',
+    subtitle: 'National analyses',
+    description: 'The build records a battery of release gates. In the build whose weights this release carries, all twelve pass-or-fail gates passed, among them calibration fit, target-profile coverage, population scale, and checks that inputs such as hours worked, SNAP take-up, eligibility, pregnancy, immigration status, and health coverage vary plausibly. The release is published to Hugging Face with its manifests and diagnostics, and the policyengine Python package pins it by release id and file hash as the default US dataset, which national analyses run on. The current default adds one person-level column to that build’s file and changes no other value or weight: each person’s role in their SPM unit, which lets 15- to 17-year-olds who head their SPM unit or family, or are the head’s spouse, count as adults, and reproduces the Census adult and child counts for every SPM unit in the file.',
     icon: 'map-pin',
     inputSize: `${n(cal.households)} households`,
     outputSize: '1 national file',
-    dataSources: ['huggingface.co/datasets/policyengine/populace-us'],
+    dataSources: ['Hugging Face'],
     details: [
-      `One national file: populace_us_2024.h5, with ${n(cal.households)} households and 166,321 people`,
-      'State, congressional district, and county analyses filter the same file by its geography columns — there are no per-area datasets',
+      `${n(cal.households)} households and 166,321 people`,
+      'policyengine.py runs national analyses on this file, and state and congressional district analyses on the local-area file',
       'Published with the release: calibration_diagnostics.json, source coverage, the build manifests, and a latest.json pointer to the current release',
-      `The default release is ${cal.releaseId}; its weights come unchanged from ${cal.calibrationReleaseId}`,
-      'A separate local-area build, loaded by name as populace_us_2024_acs_local, has about 1.59 million household records, most from the 2024 American Community Survey, and calibrates a 2020 Census population target for each of the 436 districts',
+      'The default release carries its weights unchanged from the build that fit them',
+    ],
+  },
+  {
+    id: 'acs-households',
+    branch: 'local',
+    title: 'ACS households',
+    subtitle: `${local.acsHouseholdsRounded} survey households`,
+    description: `The local-area file adds ${n(local.acsHouseholds)} households from the Census Bureau’s ${local.acsSurvey} public use microdata to the national file’s ${n(local.nationalHouseholds)}. The ACS reports where each household lives and much of what the model needs, but not every input. For each missing input, Microcosm fits weighted quantile regression forests on the national file’s households, conditioning on the variables an ACS household reports, and draws the household’s value from the predicted distribution. Values the ACS reports are kept; only missing inputs are filled.`,
+    icon: 'grid-dots',
+    inputSize: `${n(local.acsHouseholds)} ACS households`,
+    outputSize: `${n(local.households)} households`,
+    dataSources: ['Census Bureau ACS 2024 1-year PUMS', 'The national file'],
+    details: [
+      'One forest is fit for each pattern of reported predictors, on the national-file households that report the same predictors',
+      'The national file’s households enter with their own values and geography',
+      `The file holds ${n(local.households)} households and ${n(local.people)} people`,
+    ],
+  },
+  {
+    id: 'acs-geography',
+    branch: 'local',
+    title: 'PUMA geography',
+    subtitle: 'District and county',
+    description: 'The ACS identifies where a household lives only by state and 2020 Public Use Microdata Area (PUMA), and a PUMA can straddle several congressional districts and counties. Each ACS household keeps its PUMA and receives a congressional district (119th Congress boundaries) and a county, each drawn within its PUMA in proportion to the 2020 census population the PUMA shares with each district or county. The draws are seeded, so an assignment is reproducible. The national file’s households keep the district and county they carry there.',
+    icon: 'map',
+    dataSources: ['Census 2020 PUMA, district, and county population overlaps'],
+    details: [
+      'ACS households carry state, PUMA, congressional district, and county; only the national file’s households carry block, tract, place, and state legislative district columns',
+      'Columns follow the PolicyEngine US input names: state_fips, congressional_district_geoid, county_fips',
+    ],
+  },
+  {
+    id: 'local-calibration',
+    branch: 'local-sub-1',
+    title: 'Local calibration',
+    subtitle: `Weights fit to ${n(localTargets.total)} targets`,
+    description: `Household weights for all ${n(local.households)} records are fit together by gradient descent (Adam) so weighted totals match ${n(localTargets.total)} targets: ${n(localTargets.state)} for states and ${n(localTargets.district)} for congressional districts. State targets come from the IRS, USDA, CMS, and the Census Bureau; each congressional district has a 2020 Census population target. The sum of household weights is held fixed, and no household’s weight may grow beyond ${local.maxWeightRatio} times its starting value. ${formatPercent(localTargets.withinTenPct / localTargets.total)} of the targets land within 10% of their target value: ${formatPercent(localTargets.stateWithinTenPct / localTargets.state)} of the state targets and ${n(localTargets.districtWithinTenPct)} of the ${n(localTargets.district)} district targets.`,
+    icon: 'scale',
+    inputSize: `${n(local.households)} households`,
+    outputSize: `${n(localTargets.total)} targets`,
+    dataSources: ['IRS SOI', 'USDA FNS', 'CMS', 'Census Bureau'],
+    details: [
+      'Each target’s loss uses the national file’s weighting rule: dollar-amount and count targets each get half the total weight',
+      'District population targets use 2020 Census counts on 119th Congress boundaries',
+    ],
+    calibrationTargets: localCalibrationDomains,
+  },
+  {
+    id: 'local-area-file',
+    branch: 'local-sub-3',
+    isFinalDataset: true,
+    title: 'Local-area file',
+    subtitle: 'State and district analyses',
+    description: `All ${local.passFailGates} pass-or-fail gates recorded for the release passed, among them calibration fit, input coverage, the PUMA geography, a check that hours worked vary plausibly on both sets of households, and a check that the model defines every input the file stores. policyengine.py’s US region registry runs state and congressional district analyses on this file, selecting a region’s households by their state_fips or congressional_district_geoid column. The ACS households carry ${percent(local.acsWeightShare)} of the file’s total household weight and the national file’s households ${percent(local.nationalWeightShare)}. Calibration concentrates the weights: the file’s effective sample size is about ${n(Math.round(local.effectiveSampleSize / 100) * 100)} households.`,
+    icon: 'map-pin',
+    inputSize: `${n(local.households)} households`,
+    outputSize: '1 local-area file',
+    dataSources: ['Hugging Face'],
+    details: [
+      `${n(local.households)} households and ${n(local.people)} people: ${n(local.acsHouseholds)} from the ACS and the national file’s ${n(local.nationalHouseholds)}`,
+      'Published with the release: calibration_diagnostics.json for every target, a gate summary that lists the release’s reviewed limitations, and source coverage',
     ],
   },
 ];

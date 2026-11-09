@@ -6,14 +6,13 @@ import {
   joinList,
   usCalibration,
 } from '../../data/calibrationTargets';
+import { usLocalAreaFile, usLocalAreaTargets } from '../../data/usLocalAreaFile';
 import PageHeader from '../../components/layout/PageHeader';
 import SearchInput from '../../components/layout/SearchInput';
 import CalibrationTargetsTable from './CalibrationTargetsTable';
 import { formatDate, formatSourceFamily, groupLabel } from './calibrationFormat';
 import type { Country } from '../../hooks/useCountry';
 import UkCalibrationPage from './UkCalibrationPage';
-
-export const DASHBOARD_URL = 'https://microcosm.institute/calibration/dashboard/microcosm?country=us';
 
 const prose = {
   fontSize: typography.fontSize.base,
@@ -75,36 +74,29 @@ export default function CalibrationPage({ country }: { country: Country }) {
           lineHeight: 1.6,
         }}
       >
-        {data.households.toLocaleString()} households in release{' '}
-        <code style={{ fontFamily: typography.fontFamily.mono }}>{data.releaseId}</code>
+        {data.households.toLocaleString()} households in Microcosm’s national file
         {data.policyenginePackageVersion
-          ? `, the US default in version ${data.policyenginePackageVersion} of the policyengine Python package`
+          ? `, the default US dataset in version ${data.policyenginePackageVersion} of the policyengine Python package`
           : ''}
         .{' '}
-        {inherited ? (
-          <>
-            Its weights are those of{' '}
-            <code style={{ fontFamily: typography.fontFamily.mono }}>{data.calibrationReleaseId}</code>
-            {calibratedOn ? `, calibrated ${calibratedOn}` : ''}, unchanged.{' '}
-          </>
-        ) : calibratedOn ? (
-          `Calibrated ${calibratedOn}. `
-        ) : null}
-        <a href={DASHBOARD_URL} target="_blank" rel="noopener noreferrer" style={{ color: colors.primary[600] }}>
-          See the fit for every target on the Microcosm dashboard
-        </a>
-        .
+        {inherited
+          ? `Its weights come unchanged from the build that fit them${calibratedOn ? `, calibrated ${calibratedOn}` : ''}.`
+          : calibratedOn
+            ? `Calibrated ${calibratedOn}.`
+            : null}{' '}
+        The release publishes the fit for every target in calibration_diagnostics.json.
       </div>
 
       <p style={prose}>
-        Congressional districts are a filter on this same file, not separate datasets: every household carries one of
-        the 436 districts, and a district analysis selects those households and keeps their weights.{' '}
         {levels.district > 0
-          ? `This release calibrates ${levels.district.toLocaleString()} district-level targets alongside the national and state rows.`
-          : 'This release calibrates national and state targets; it has no district-level target rows.'}{' '}
-        District-level targets exist in two places. Microcosm’s local-area build calibrates a 2020 Census population
-        target for each of the 436 districts. The Microcosm build spec compiles one target surface that includes IRS
-        income targets by district alongside the national and state rows, and a release can calibrate a subset of it.
+          ? `This file calibrates ${levels.district.toLocaleString()} congressional district targets alongside the national and state rows.`
+          : 'This file calibrates national and state targets; it has no congressional district target rows.'}{' '}
+        policyengine.py runs national analyses on it, and state and congressional district analyses on Microcosm’s
+        local-area file. That file adds {usLocalAreaFile.acsHouseholdsRounded} households from the{' '}
+        {usLocalAreaFile.acsSurvey} to this file’s households and fits all of their weights to{' '}
+        {usLocalAreaTargets.total.toLocaleString()} targets of its own: {usLocalAreaTargets.state.toLocaleString()} for
+        states and a 2020 Census population target for each of the {usLocalAreaTargets.district.toLocaleString()}{' '}
+        districts. The table below lists the national file’s targets.
       </p>
 
       <SearchInput value={search} onChange={setSearch} placeholder="Search targets and sources..." />

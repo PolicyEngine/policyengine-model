@@ -20,11 +20,12 @@ import {
 } from '../data/calibrationTargets';
 import { formatConcept, formatValue, groupLabel } from '../views/data/calibrationFormat';
 import CalibrationTargetsTable from '../views/data/CalibrationTargetsTable';
+import { usLocalAreaFile, usLocalAreaTargets } from '../data/usLocalAreaFile';
 
 const data = usCalibration;
 const LEVELS = ['national', 'state', 'district', 'other'] as const;
 
-// Copy from the retired policyengine-us-data local-area pipeline, and words
+// Copy from the local-area pipeline that Microcosm replaced, and words
 // PolicyEngine does not use in outward copy.
 const STALE_OR_FORBIDDEN = [
   '37,758',
@@ -44,22 +45,66 @@ const STALE_OR_FORBIDDEN = [
   '2024 population estimate',
 ];
 
-describe('US pipeline stages describe the one-national-file build', () => {
-  it('is one linear flow: every stage is shared, with no national/local fork', () => {
-    expect(pipelineStages.every((s) => s.branch === 'shared')).toBe(true);
+// Microcosm's pre-August name and the dataset Microcosm replaced as the US
+// default, as PolicyEngine/ai-inequality's retired-name test spells them. The
+// published release ids still carry the old name, so no page may print them.
+const RETIRED_NAMES =
+  /populace|enhanced[\s_-]*(?:cps|current[\s_-]*population[\s_-]*survey)|\be[\s_-]?cps\b|policyengine[\s_-]*us[\s_-]*data/i;
+
+const stageText = (stages: typeof pipelineStages) => JSON.stringify(stages);
+
+describe('US pipeline stages describe the national and local-area files', () => {
+  it('builds shared stages first, then forks into a national and a local-area branch', () => {
+    const branches = pipelineStages.map((s) => s.branch);
+    const firstBranched = branches.findIndex((b) => b !== 'shared');
+    expect(firstBranched).toBeGreaterThan(0);
+    expect(branches.slice(firstBranched)).not.toContain('shared');
+    expect(branches).toContain('national');
+    expect(branches).toContain('local');
   });
 
-  it('has unique stage ids and ends in the single final dataset', () => {
+  it('has unique stage ids and ends each branch in its own final dataset', () => {
     const ids = pipelineStages.map((s) => s.id);
     expect(new Set(ids).size).toBe(ids.length);
     const finals = pipelineStages.filter((s) => s.isFinalDataset);
-    expect(finals).toHaveLength(1);
+    expect(finals.map((s) => s.title)).toEqual(['National file', 'Local-area file']);
+    expect(finals[0].branch.startsWith('national')).toBe(true);
+    expect(finals[1].branch.startsWith('local')).toBe(true);
     expect(pipelineStages[pipelineStages.length - 1].isFinalDataset).toBe(true);
   });
 
   it('does not describe the retired pipeline or use forbidden words', () => {
-    const text = JSON.stringify(pipelineStages);
+    const text = stageText(pipelineStages);
     for (const phrase of STALE_OR_FORBIDDEN) expect(text).not.toContain(phrase);
+  });
+
+  it('prints no retired name and no release id in any stage', () => {
+    expect(stageText(pipelineStages)).not.toMatch(RETIRED_NAMES);
+    expect(stageText(pipelineStages)).not.toContain(data.releaseId);
+    expect(stageText(pipelineStages)).not.toContain(data.calibrationReleaseId);
+  });
+
+  it('routes state and district analyses to the local-area file, not a filter on the national file', () => {
+    const text = stageText(pipelineStages);
+    expect(text).not.toMatch(/no per-area datasets/i);
+    expect(text).not.toMatch(/districts are a filter/i);
+    const localFile = pipelineStages.find((s) => s.id === 'local-area-file')!;
+    expect(localFile.description).toMatch(/state and congressional district analyses on this file/);
+  });
+
+  it('quotes the local-area counts from usLocalAreaFile', () => {
+    const calibration = pipelineStages.find((s) => s.id === 'local-calibration')!;
+    expect(calibration.subtitle).toContain(usLocalAreaTargets.total.toLocaleString());
+    expect(calibration.description).toContain(usLocalAreaTargets.state.toLocaleString());
+    expect(calibration.description).toContain(usLocalAreaTargets.district.toLocaleString());
+    const domainTotal = calibration.calibrationTargets!.reduce(
+      (sum, t) => sum + Number(t.target.replace(/[^0-9]/g, '')),
+      0,
+    );
+    expect(domainTotal).toBe(usLocalAreaTargets.total);
+    const acs = pipelineStages.find((s) => s.id === 'acs-households')!;
+    expect(acs.description).toContain(usLocalAreaFile.acsHouseholds.toLocaleString());
+    expect(acs.description).toContain(usLocalAreaFile.nationalHouseholds.toLocaleString());
   });
 
   it('quotes the release target counts, not hand-typed ones', () => {
@@ -215,31 +260,38 @@ describe('Target labels', () => {
   });
 });
 
-describe('Data pages state the one-file geography design', () => {
-  it('pipeline page intro describes one national file and quotes the release counts', () => {
+describe('Data pages state which file each analysis runs on', () => {
+  it('pipeline page intro names both files and quotes the release counts', () => {
     const { container } = render(<PipelinePage country="us" />);
-    expect(screen.getByText(/one national household file/i)).toBeInTheDocument();
+    expect(screen.getByText(/builds the two household files/i)).toBeInTheDocument();
     const text = container.textContent ?? '';
     expect(text).toContain(describeLevels(data.levelCounts));
+    expect(text).toContain(usLocalAreaFile.acsHouseholdsRounded);
+    expect(text).toMatch(/state and congressional district analyses on the local-area file/);
     for (const phrase of STALE_OR_FORBIDDEN) expect(text).not.toContain(phrase);
+    expect(text).not.toMatch(RETIRED_NAMES);
   });
 
   it('UK pipeline page keeps its constituency and local authority branches', () => {
     const { container } = render(<PipelinePage country="uk" />);
     const text = container.textContent ?? '';
-    expect(text).toContain('two weight matrices');
-    expect(text).toMatch(/Local authority/i);
+    expect(text).toMatch(/national file/i);
+    expect(text).toMatch(/local authorit/i);
   });
 
-  it('calibration page names the release, its calibration, and the district design', () => {
+  it('calibration page names the package version and the local-area file, but no release id', () => {
     const { container } = render(<CalibrationPage country="us" />);
-    expect(screen.getByText(data.releaseId)).toBeInTheDocument();
-    if (data.calibrationReleaseId !== data.releaseId) {
-      expect(screen.getByText(data.calibrationReleaseId)).toBeInTheDocument();
-    }
     const text = container.textContent ?? '';
-    expect(text).toMatch(/filter on this same file/i);
+    expect(text).not.toContain(data.releaseId);
+    expect(text).not.toContain(data.calibrationReleaseId);
+    expect(text).not.toMatch(RETIRED_NAMES);
+    expect(text).toContain(`version ${data.policyenginePackageVersion} of the policyengine Python package`);
+    expect(text).toMatch(/state and congressional district analyses on Microcosm’s\s+local-area file/);
+    expect(text).toContain(usLocalAreaTargets.total.toLocaleString());
+    expect(text).not.toMatch(/filter on this same file/i);
     expect(text).toContain(describeLevels(data.levelCounts));
     for (const phrase of STALE_OR_FORBIDDEN) expect(text).not.toContain(phrase);
+    // The Microcosm dashboard prints the old name, so the page does not link it.
+    expect(container.querySelector('a[href*="microcosm.institute"]')).toBeNull();
   });
 });

@@ -10,7 +10,7 @@ Usage:
 The default US release is the one the policyengine Python package pins in
 its bundle manifest (``data_releases.us``). The script reads that pin from
 policyengine.py's default branch, then reads the release's manifests from the
-policyengine/populace-us Hugging Face dataset at the release's own revision.
+Hugging Face dataset in HF_REPO at the release's own revision.
 
 A release can inherit its calibration from a parent build (a source-enrichment
 release adds input columns without refitting weights). In that case the
@@ -224,6 +224,19 @@ def validate(diagnostics) -> None:
         )
 
 
+# Microcosm's GitHub repository had another name before August 2026, and
+# targets built earlier cite its issues by that name. GitHub redirects the old
+# path, so the page cites the same issue under the current name.
+RENAMED_REPO_CITATIONS = (("PolicyEngine/populace#", "PolicyEngine/microcosm#"),)
+
+
+def display_source(text: str) -> str:
+    """Source text as the page shows it: repository citations renamed."""
+    for old, new in RENAMED_REPO_CITATIONS:
+        text = text.replace(old, new)
+    return text
+
+
 def suffix_from_name(name: str) -> str:
     """Final dot-path segment of the target name, without the @period suffix."""
     base = name.split("@", 1)[0]
@@ -249,6 +262,7 @@ def extract(diagnostics: dict) -> dict:
             family, table, url = INTERNAL_FAMILY, t["source"], ""
         else:
             family, table, _file, _vintage, url = (p.strip() for p in t["source"].split(" | "))
+        table = display_source(table)
         concept = suffix_from_name(t["name"])
         measure_concept = metadata.get("ledger_measure_concept") or ""
         level_totals[level] += 1

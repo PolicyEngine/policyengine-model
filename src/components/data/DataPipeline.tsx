@@ -7,6 +7,7 @@ import { colors, typography, spacing } from '../../designTokens';
 import { pipelineStages } from '../../data/pipelineStages';
 import { ukPipelineStages } from '../../data/ukPipelineStages';
 import { describeLevels, usCalibration } from '../../data/calibrationTargets';
+import { usLocalAreaFile } from '../../data/usLocalAreaFile';
 import type { PipelineStage } from '../../data/pipelineStages';
 import type { Country } from '../../hooks/useCountry';
 import { usePublicBasePrefix } from '../../hooks/usePublicBasePrefix';
@@ -114,9 +115,9 @@ export default function DataPipeline({ country = 'us' }: { country?: Country }) 
   const localSub2Stages = allStages.filter(s => s.branch === 'local-sub-2');
   const localSub3Stages = allStages.filter(s => s.branch === 'local-sub-3');
   const localSub4Stages = allStages.filter(s => s.branch === 'local-sub-4');
-  // A country whose stages are all 'shared' renders as one linear flow
-  // (the US build is one national file); the fork layout only appears
-  // when a country declares 'national' / 'local' branch stages (UK).
+  // A country whose stages are all 'shared' renders as one linear flow; the
+  // fork layout appears when a country declares 'national' / 'local' branch
+  // stages (the US and UK each build a national and a local-area file).
   const hasBranches = nationalStages.length > 0 || localStages.length > 0;
 
   const [activeStage, setActiveStage] = useState(0);
@@ -158,10 +159,10 @@ export default function DataPipeline({ country = 'us' }: { country?: Country }) 
         public downloads.
       </>
     )
-    : `PolicyEngine’s US simulations run on one national household file, built by Microcosm, PolicyEngine’s data build system. Census CPS ASEC households, and copies of them carrying tax-return detail from the IRS Public Use File, are enriched with survey imputations and program take-up flags, keep their survey state while being assigned a congressional district, county, and census block, and are reweighted so weighted totals match ${usTargetSummary} derived from government statistics. A state or congressional district analysis filters the same file — there are no per-area datasets.`;
+    : `Microcosm, PolicyEngine’s data build system, builds the two household files that PolicyEngine’s US simulations run on. It starts the national file from Census CPS ASEC households and copies of them that carry tax-return detail from the IRS Public Use File, adds survey imputations and program take-up flags, keeps each household’s survey state while assigning it a congressional district, county, and census block, and reweights the households so weighted totals match ${usTargetSummary} derived from government statistics. The local-area file adds ${usLocalAreaFile.acsHouseholdsRounded} households from the ${usLocalAreaFile.acsSurvey}, and Microcosm reweights all of its records to state and congressional district targets. policyengine.py runs national analyses on the national file, and state and congressional district analyses on the local-area file.`;
 
-  const nationalLabel = country === 'uk' ? 'National file' : 'National';
-  const localLabel = country === 'uk' ? 'Local-area file' : 'Geography-specific';
+  const nationalLabel = 'National file';
+  const localLabel = 'Local-area file';
   const scrollBoxes = country === 'uk';
   // The national branch's own rows (UK: gates beside the joint solve, and the
   // dataset at the bottom beside the local-area dataset), drawn in the left

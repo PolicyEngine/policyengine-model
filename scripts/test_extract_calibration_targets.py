@@ -21,6 +21,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from extract_calibration_targets import (  # noqa: E402
     LEVEL_KEYS,
     UnsupportedDiagnostics,
+    display_source,
     extract,
 )
 
@@ -241,13 +242,31 @@ def test_internal_constraint_keeps_its_family_whatever_its_source_looks_like():
     assert families == ["bea", "policyengine_build"]
 
 
+def test_source_text_cites_microcosm_issues_by_the_current_repository_name():
+    row = internal(source="Locked-source mass (PolicyEngine/populace#445; #434 protect-swap)")
+    out = extract(wrap([target(), row]))
+    tables = {r["sourceTable"] for r in out["targets"]}
+    assert "Locked-source mass (PolicyEngine/microcosm#445; #434 protect-swap)" in tables
+    assert not any("populace" in t.lower() for t in tables)
+
+
+@given(st.text(max_size=40), st.text(max_size=40))
+def test_display_source_renames_only_the_repository_path(before, after):
+    # Text around a citation is kept; a second pass changes nothing.
+    text = f"{before}PolicyEngine/populace#7{after}"
+    shown = display_source(text)
+    assert shown.startswith(display_source(before))
+    assert "PolicyEngine/microcosm#7" in shown
+    assert display_source(shown) == shown
+
+
 def test_empty_domain_is_treated_as_no_domain():
     out = extract(wrap([with_metadata(target(), ledger_domain="")]))
     assert out["targets"][0]["domain"] is None
 
 
 def test_rejects_the_legacy_local_area_schema():
-    # Shape of populace-us-2024-buildo-acs-local-77e2061-20260724T110908Z's
+    # Shape of the July 2026 ACS local-area release's
     # calibration_diagnostics.json: no schema_version, `households` instead of
     # n_records, and targets without metadata or relative_error.
     legacy = {
