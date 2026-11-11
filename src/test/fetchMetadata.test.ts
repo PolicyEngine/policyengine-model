@@ -42,7 +42,7 @@ describe('fetchMetadata through the dashboard API', () => {
     const { fetchMetadata } = await import('../data/fetchMetadata');
 
     // When
-    const metadata = await fetchMetadata('uk').catch(() => null);
+    const metadata = await fetchMetadata('uk');
 
     // Then
     expect(metadata).toEqual({
@@ -64,6 +64,18 @@ describe('fetchMetadata through the dashboard API', () => {
     expect(vi.mocked(fetch).mock.calls.map(([input]) => String(input))).toEqual([
       DASHBOARD_API_METADATA_URL,
     ]);
+  });
+
+  it('given a country the dashboard API does not serve then it refuses without a request', async () => {
+    // Given
+    const { fetchMetadataRaw } = await import('../data/fetchMetadata');
+
+    // When
+    const reading = fetchMetadataRaw('ca');
+
+    // Then
+    await expect(reading).rejects.toThrow('No metadata for country "ca"');
+    expect(fetch).not.toHaveBeenCalled();
   });
 
   it('given the dashboard API fails then the error carries its message', async () => {

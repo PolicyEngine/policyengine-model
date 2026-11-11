@@ -10,7 +10,7 @@ const policyengine = createPolicyEngineApiClient();
 const rawCache = new Map<string, any>();
 const metadataCache = new Map<string, Metadata>();
 
-/** Fetch and cache the raw API response (shared with fetchPrograms). */
+/** Fetch and cache a country's metadata `result` (shared with fetchPrograms). */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function fetchMetadataRaw(country: string = 'us'): Promise<any> {
   if (rawCache.has(country)) return rawCache.get(country)!;
