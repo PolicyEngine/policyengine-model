@@ -7,6 +7,7 @@
 import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { createPolicyEngineApiClient } from '@policyengine/api-client';
 import yaml from 'js-yaml';
 
 const PUBLIC_DIR = join(dirname(fileURLToPath(import.meta.url)), '..', 'public');
@@ -14,9 +15,11 @@ const REPO_MAP = {
   us: 'policyengine-us',
   uk: 'policyengine-uk',
 };
+const USER_AGENT = 'policyengine-model-registry-snapshot';
+const REQUEST_TIMEOUT_MILLISECONDS = 30_000;
 
 async function request(url, fetchImpl) {
-  const headers = { 'User-Agent': 'policyengine-model-registry-snapshot' };
+  const headers = { 'User-Agent': USER_AGENT };
   if (url.startsWith('https://api.github.com/')) {
     headers.Accept = 'application/vnd.github+json';
     const token = process.env.GITHUB_TOKEN || process.env.GH_TOKEN;
@@ -25,7 +28,7 @@ async function request(url, fetchImpl) {
 
   const response = await fetchImpl(url, {
     headers,
-    signal: AbortSignal.timeout(30_000),
+    signal: AbortSignal.timeout(REQUEST_TIMEOUT_MILLISECONDS),
   });
   if (!response.ok) throw new Error(`${url} returned HTTP ${response.status}`);
   return response;
@@ -97,19 +100,31 @@ export async function fetchRegistrySnapshot(country, source, {
     programs: parseProgramsYaml(registry),
   };
 
-  // A production API outage must not prevent a fresh registry snapshot.
+  // The production API's version, read through www.policyengine.org's
+  // dashboard API, which forwards it to the Public API with PolicyEngine's
+  // credential. A failed read must not prevent a fresh registry snapshot.
   try {
-    const metadata = await (await request(
-      `https://api.policyengine.org/${country}/metadata`,
-      fetchImpl,
-    )).json();
-    const apiVersion = (metadata.result ?? metadata).version;
+    const metadata = await dashboardApiClient(fetchImpl).getMetadata(country, {
+      signal: AbortSignal.timeout(REQUEST_TIMEOUT_MILLISECONDS),
+    });
+    const apiVersion = metadata?.version;
     if (typeof apiVersion === 'string' && apiVersion) snapshot.apiVersion = apiVersion;
     else logger.warn(`  ${country}: production API did not return a version`);
   } catch (error) {
     logger.warn(`  ${country}: could not read production API version — ${error.message}`);
   }
   return snapshot;
+}
+
+/** The dashboard API client, sending this script's User-Agent on each request. */
+function dashboardApiClient(fetchImpl) {
+  return createPolicyEngineApiClient({
+    fetch: (input, init = {}) => {
+      const headers = new Headers(init.headers);
+      headers.set('User-Agent', USER_AGENT);
+      return fetchImpl(input, { ...init, headers });
+    },
+  });
 }
 
 /** Fetch only the parameter subtree, using the same resolved commit as coverage. */

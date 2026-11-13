@@ -36,6 +36,20 @@ function mockFetch(routes: Record<string, unknown>) {
   });
 }
 
+/** www.policyengine.org's dashboard API, which forwards metadata reads to the Public API. */
+function dashboardMetadataUrl(country: string) {
+  return `https://www.policyengine.org/api/metadata/${country}`;
+}
+
+/** The dashboard API's answer envelope around the Public API's metadata result. */
+function dashboardAnswer(result: unknown) {
+  return { status: 'ok', message: null, result };
+}
+
+function requestedUrls(fetchImpl: ReturnType<typeof mockFetch>) {
+  return fetchImpl.mock.calls.map(([input]) => String(input));
+}
+
 function outputDirectory() {
   const directory = mkdtempSync(join(tmpdir(), 'policyengine-registry-test-'));
   tempDirectories.push(directory);
@@ -76,15 +90,12 @@ describe('registry snapshot fetch script', () => {
     expect(() => parseProgramsYaml('programs: invalid')).toThrow('programs array');
   });
 
-  it.each([
-    { version: '1.764.6' },
-    { result: { version: '1.764.6' } },
-  ])('writes commit-pinned registry provenance and optional API version (%j)', async metadata => {
+  it('writes commit-pinned registry provenance and the API version read through the dashboard API', async () => {
     const rawRoot = `https://raw.githubusercontent.com/${source.repo}/${commit}`;
     const fetchImpl = mockFetch({
       [`${rawRoot}/policyengine_us/programs.yaml`]: registry,
       [`${rawRoot}/pyproject.toml`]: '[project]\nversion = "1.823.4"',
-      'https://api.policyengine.org/us/metadata': metadata,
+      [dashboardMetadataUrl('us')]: dashboardAnswer({ version: '1.764.6' }),
     });
 
     await expect(fetchRegistrySnapshot('us', source, {
@@ -96,17 +107,110 @@ describe('registry snapshot fetch script', () => {
     expect(fetchImpl).toHaveBeenCalledTimes(3);
   });
 
-  it('keeps a registry snapshot when the optional production API fails', async () => {
+  it('names itself in the User-Agent of its dashboard API read and keeps the client\'s Accept header', async () => {
     const rawRoot = `https://raw.githubusercontent.com/${source.repo}/${commit}`;
     const fetchImpl = mockFetch({
       [`${rawRoot}/policyengine_us/programs.yaml`]: registry,
       [`${rawRoot}/pyproject.toml`]: '[project]\nversion = "1.823.4"',
-      'https://api.policyengine.org/us/metadata': new Error('API offline'),
+      [dashboardMetadataUrl('us')]: dashboardAnswer({ version: '1.764.6' }),
+    });
+    await fetchRegistrySnapshot('us', source, { fetchImpl, logger });
+
+    const dashboardRead = fetchImpl.mock.calls.find(
+      ([input]) => String(input) === dashboardMetadataUrl('us'),
+    );
+    expect(dashboardRead).toBeDefined();
+    const sentHeaders = new Headers(dashboardRead?.[1]?.headers);
+    expect(sentHeaders.get('user-agent')).toBe('policyengine-model-registry-snapshot');
+    expect(sentHeaders.get('accept')).toBe('application/json');
+  });
+
+  it('keeps a registry snapshot when the dashboard API cannot be reached', async () => {
+    const rawRoot = `https://raw.githubusercontent.com/${source.repo}/${commit}`;
+    const fetchImpl = mockFetch({
+      [`${rawRoot}/policyengine_us/programs.yaml`]: registry,
+      [`${rawRoot}/pyproject.toml`]: '[project]\nversion = "1.823.4"',
+      [dashboardMetadataUrl('us')]: new Error('Dashboard API offline'),
     });
     const snapshot = await fetchRegistrySnapshot('us', source, { fetchImpl, logger });
     expect(snapshot.version).toBe('1.823.4');
     expect(snapshot).not.toHaveProperty('apiVersion');
-    expect(logger.warn).toHaveBeenCalledWith(expect.stringContaining('API offline'));
+    expect(logger.warn).toHaveBeenCalledWith(expect.stringContaining('Dashboard API offline'));
+  });
+
+  it('keeps a registry snapshot when the dashboard API refuses the read', async () => {
+    const rawRoot = `https://raw.githubusercontent.com/${source.repo}/${commit}`;
+    const fetchImpl = mockFetch({
+      [`${rawRoot}/policyengine_us/programs.yaml`]: registry,
+      [`${rawRoot}/pyproject.toml`]: '[project]\nversion = "1.823.4"',
+      [dashboardMetadataUrl('us')]: new Response(
+        JSON.stringify({ status: 'error', message: 'Too many requests from this address.', result: null }),
+        { status: 429, headers: { 'Content-Type': 'application/json' } },
+      ),
+    });
+    const snapshot = await fetchRegistrySnapshot('us', source, { fetchImpl, logger });
+    expect(snapshot.version).toBe('1.823.4');
+    expect(snapshot).not.toHaveProperty('apiVersion');
+    expect(logger.warn).toHaveBeenCalledWith(
+      expect.stringContaining('Too many requests from this address.'),
+    );
+  });
+
+  it('keeps a registry snapshot when the firewall refuses the read with plain text', async () => {
+    const rawRoot = `https://raw.githubusercontent.com/${source.repo}/${commit}`;
+    const fetchImpl = mockFetch({
+      [`${rawRoot}/policyengine_us/programs.yaml`]: registry,
+      [`${rawRoot}/pyproject.toml`]: '[project]\nversion = "1.823.4"',
+      // Vercel's firewall answers its rate limit with plain text, not the dashboard API's JSON.
+      [dashboardMetadataUrl('us')]: new Response('Too Many Requests', {
+        status: 429, headers: { 'Content-Type': 'text/plain' },
+      }),
+    });
+    const snapshot = await fetchRegistrySnapshot('us', source, { fetchImpl, logger });
+    expect(snapshot.version).toBe('1.823.4');
+    expect(snapshot).not.toHaveProperty('apiVersion');
+    expect(logger.warn).toHaveBeenCalledWith(expect.stringContaining('HTTP 429'));
+  });
+
+  it('warns and leaves out the API version when the metadata has none', async () => {
+    const rawRoot = `https://raw.githubusercontent.com/${source.repo}/${commit}`;
+    const fetchImpl = mockFetch({
+      [`${rawRoot}/policyengine_us/programs.yaml`]: registry,
+      [`${rawRoot}/pyproject.toml`]: '[project]\nversion = "1.823.4"',
+      [dashboardMetadataUrl('us')]: dashboardAnswer({ variables: {} }),
+    });
+    const snapshot = await fetchRegistrySnapshot('us', source, { fetchImpl, logger });
+    expect(snapshot).not.toHaveProperty('apiVersion');
+    expect(logger.warn).toHaveBeenCalledWith(expect.stringContaining('did not return a version'));
+  });
+
+  it('never sends a request to the Public API at api.policyengine.org', async () => {
+    const outputDir = outputDirectory();
+    const routes: Record<string, unknown> = {};
+    for (const [country, name] of [['us', 'policyengine-us'], ['uk', 'policyengine-uk']]) {
+      const repo = `PolicyEngine/${name}`;
+      const rawRoot = `https://raw.githubusercontent.com/${repo}/${commit}`;
+      const treeRoot = `https://api.github.com/repos/${repo}/git/trees`;
+      Object.assign(routes, {
+        [`https://api.github.com/repos/${repo}`]: { default_branch: 'main' },
+        [`https://api.github.com/repos/${repo}/commits/main`]: { sha: commit },
+        [`${treeRoot}/${commit}`]: { tree: [{ path: `policyengine_${country}`, sha: 'package-tree' }] },
+        [`${treeRoot}/package-tree`]: { tree: [{ path: 'parameters', sha: 'parameter-tree' }] },
+        [`${treeRoot}/parameter-tree?recursive=1`]: { tree: [{ type: 'blob', path: 'gov/rate.yaml' }] },
+        [`${rawRoot}/policyengine_${country}/programs.yaml`]: registry,
+        [`${rawRoot}/pyproject.toml`]: '[project]\nversion = "1.823.4"',
+        [dashboardMetadataUrl(country)]: dashboardAnswer({ version: '1.764.6' }),
+      });
+    }
+    const fetchImpl = mockFetch(routes);
+    await fetchMetadataFiles({ outputDir, fetchImpl, logger });
+
+    expect(requestedUrls(fetchImpl).filter(url => url.startsWith('https://api.policyengine.org')))
+      .toEqual([]);
+    for (const country of ['us', 'uk']) {
+      expect(JSON.parse(readFileSync(join(outputDir, `programs-${country}.json`), 'utf8')))
+        .toMatchObject({ apiVersion: '1.764.6' });
+    }
   });
 
   it('reads the parameter tree from the resolved commit and filters calibration files', async () => {
@@ -137,7 +241,7 @@ describe('registry snapshot fetch script', () => {
       [`https://api.github.com/repos/${source.repo}/git/trees/${commit}`]: new Error('Tree unavailable'),
       [`${rawRoot}/policyengine_us/programs.yaml`]: registry,
       [`${rawRoot}/pyproject.toml`]: '[project]\nversion = "1.823.4"',
-      'https://api.policyengine.org/us/metadata': { version: '1.764.6' },
+      [dashboardMetadataUrl('us')]: dashboardAnswer({ version: '1.764.6' }),
     });
     await fetchMetadataFiles({ countries: ['us'], outputDir, fetchImpl, logger });
     expect(JSON.parse(readFileSync(join(outputDir, 'programs-us.json'), 'utf8'))).toMatchObject({
@@ -179,8 +283,7 @@ describe('registry snapshot fetch script', () => {
       .resolves.toBeUndefined();
     expect(existsSync(snapshotPath)).toBe(false);
     expect(logger.warn).toHaveBeenCalledWith(expect.stringContaining('registry snapshot skipped'));
-    expect(fetchImpl).not.toHaveBeenCalledWith(
-      'https://api.policyengine.org/uk/metadata', expect.anything(),
-    );
+    expect(requestedUrls(fetchImpl)).not.toContain(dashboardMetadataUrl('uk'));
+    expect(requestedUrls(fetchImpl)).not.toContain('https://api.policyengine.org/uk/metadata');
   });
 });

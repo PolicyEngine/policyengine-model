@@ -29,7 +29,10 @@ without failing the build.
 
 Each snapshot records the raw program registry, package version from
 `pyproject.toml`, repository, branch, commit, and fetch time. The production API's
-version is included when its metadata endpoint responds. The coverage page uses
+version is included when its metadata can be read through www.policyengine.org's
+dashboard API (`GET /api/metadata/{country}`, through `@policyengine/api-client`),
+which forwards the read to the Public API with PolicyEngine's credential. The
+coverage page uses
 this provenance to show which model version the coverage reflects and, when
 available, the version served by the production API.
 
@@ -42,8 +45,8 @@ www.policyengine.org's dashboard API (`@policyengine/api-client`), never from
 api.policyengine.org directly. That API answers pages on www.policyengine.org,
 this project's Vercel hosts, and `http://localhost` or `http://127.0.0.1` in
 development; open the dev server there rather than on a network address. The
-build script's version read above still calls the production API from the build
-machine.
+build script's version read above goes through the same dashboard API, so builds
+send no request to api.policyengine.org.
 
 ## Daily registry refresh
 
