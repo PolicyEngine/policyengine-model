@@ -45,8 +45,8 @@ www.policyengine.org's dashboard API (`@policyengine/api-client`), never from
 api.policyengine.org directly. That API answers pages on www.policyengine.org,
 this project's Vercel hosts, and `http://localhost` or `http://127.0.0.1` in
 development; open the dev server there rather than on a network address. The
-build script's version read above goes through the same dashboard API, so no part
-of this project calls api.policyengine.org.
+build script's version read above goes through the same dashboard API, so builds
+send no request to api.policyengine.org.
 
 ## Daily registry refresh
 

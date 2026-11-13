@@ -107,7 +107,7 @@ describe('registry snapshot fetch script', () => {
     expect(fetchImpl).toHaveBeenCalledTimes(3);
   });
 
-  it('names itself in the User-Agent of its dashboard API read', async () => {
+  it('names itself in the User-Agent of its dashboard API read and keeps the client\'s Accept header', async () => {
     const rawRoot = `https://raw.githubusercontent.com/${source.repo}/${commit}`;
     const fetchImpl = mockFetch({
       [`${rawRoot}/policyengine_us/programs.yaml`]: registry,
@@ -120,8 +120,9 @@ describe('registry snapshot fetch script', () => {
       ([input]) => String(input) === dashboardMetadataUrl('us'),
     );
     expect(dashboardRead).toBeDefined();
-    expect(new Headers(dashboardRead?.[1]?.headers).get('user-agent'))
-      .toBe('policyengine-model-registry-snapshot');
+    const sentHeaders = new Headers(dashboardRead?.[1]?.headers);
+    expect(sentHeaders.get('user-agent')).toBe('policyengine-model-registry-snapshot');
+    expect(sentHeaders.get('accept')).toBe('application/json');
   });
 
   it('keeps a registry snapshot when the dashboard API cannot be reached', async () => {
@@ -153,6 +154,22 @@ describe('registry snapshot fetch script', () => {
     expect(logger.warn).toHaveBeenCalledWith(
       expect.stringContaining('Too many requests from this address.'),
     );
+  });
+
+  it('keeps a registry snapshot when the firewall refuses the read with plain text', async () => {
+    const rawRoot = `https://raw.githubusercontent.com/${source.repo}/${commit}`;
+    const fetchImpl = mockFetch({
+      [`${rawRoot}/policyengine_us/programs.yaml`]: registry,
+      [`${rawRoot}/pyproject.toml`]: '[project]\nversion = "1.823.4"',
+      // Vercel's firewall answers its rate limit with plain text, not the dashboard API's JSON.
+      [dashboardMetadataUrl('us')]: new Response('Too Many Requests', {
+        status: 429, headers: { 'Content-Type': 'text/plain' },
+      }),
+    });
+    const snapshot = await fetchRegistrySnapshot('us', source, { fetchImpl, logger });
+    expect(snapshot.version).toBe('1.823.4');
+    expect(snapshot).not.toHaveProperty('apiVersion');
+    expect(logger.warn).toHaveBeenCalledWith(expect.stringContaining('HTTP 429'));
   });
 
   it('warns and leaves out the API version when the metadata has none', async () => {
