@@ -37,6 +37,14 @@ The program loader tries the static snapshot first, then production API metadata
 then the bundled hardcoded programs. Snapshot URLs use the public base prefix so
 they work both locally and under `/us/model`.
 
+In the browser, the parameter, variable and coverage pages read metadata through
+www.policyengine.org's dashboard API (`@policyengine/api-client`), never from
+api.policyengine.org directly. That API answers pages on www.policyengine.org,
+this project's Vercel hosts, and `http://localhost` or `http://127.0.0.1` in
+development; open the dev server there rather than on a network address. The
+build script's version read above still calls the production API from the build
+machine.
+
 ## Daily registry refresh
 
 The `Refresh registry` GitHub Actions workflow runs daily at 06:17 UTC and can

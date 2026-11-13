@@ -38,7 +38,17 @@ function snapshot(country = 'us') {
 }
 
 function response(data: unknown, status = 200) {
-  return { ok: status >= 200 && status < 300, status, json: async () => data } as Response;
+  return {
+    ok: status >= 200 && status < 300,
+    status,
+    json: async () => data,
+    text: async () => JSON.stringify(data),
+  } as Response;
+}
+
+/** The dashboard API's answer for a country's metadata. */
+function metadataAnswer(result: unknown) {
+  return response({ status: 'ok', message: null, result });
 }
 
 describe('program source loading', () => {
@@ -119,11 +129,11 @@ describe('program source loading', () => {
   ])('falls back to API metadata after %s', async (_label, snapshotResponse) => {
     vi.mocked(fetch)
       .mockResolvedValueOnce(snapshotResponse)
-      .mockResolvedValueOnce(response({ result: { version: '1.764.6', modelled_policies: { programs: [{ ...registryProgram, status: 'partial' }] } } }));
+      .mockResolvedValueOnce(metadataAnswer({ version: '1.764.6', modelled_policies: { programs: [{ ...registryProgram, status: 'partial' }] } }));
     const { fetchProgramsWithSource } = await import('../data/fetchPrograms');
     const result = await fetchProgramsWithSource();
     expect(fetch).toHaveBeenNthCalledWith(1, '/us/model/programs-us.json');
-    expect(fetch).toHaveBeenNthCalledWith(2, 'https://api.policyengine.org/us/metadata');
+    expect(fetch).toHaveBeenNthCalledWith(2, 'https://www.policyengine.org/api/metadata/us', expect.anything());
     expect(fetch).toHaveBeenCalledTimes(2);
     expect(result.programs[0].status).toBe('partial');
     expect(result.source).toEqual({ kind: 'api', repo: 'PolicyEngine/policyengine-us', apiVersion: '1.764.6' });
@@ -183,10 +193,10 @@ describe('program source loading', () => {
     expect(computeStatusCount(programs)).toEqual({ complete: 2, partial: 0, inProgress: 0, notStarted: 0 });
   });
 
-  it('accepts API metadata without an envelope or optional version', async () => {
+  it('accepts API metadata without an optional version', async () => {
     vi.mocked(fetch)
       .mockRejectedValueOnce(new Error('Snapshot unavailable'))
-      .mockResolvedValueOnce(response({ modelled_policies: { programs: [{ id: 'test', name: 'Test', status: 'complete', verified_years: '2024' }] } }));
+      .mockResolvedValueOnce(metadataAnswer({ modelled_policies: { programs: [{ id: 'test', name: 'Test', status: 'complete', verified_years: '2024' }] } }));
     const { fetchProgramsWithSource } = await import('../data/fetchPrograms');
     const result = await fetchProgramsWithSource();
     expect(result.source).toEqual({ kind: 'api', repo: 'PolicyEngine/policyengine-us' });
@@ -199,7 +209,7 @@ describe('program source loading', () => {
     const { programs } = await import('../data/programs');
     const result = await fetchProgramsWithSource();
     expect(fetch).toHaveBeenNthCalledWith(1, '/us/model/programs-us.json');
-    expect(fetch).toHaveBeenNthCalledWith(2, 'https://api.policyengine.org/us/metadata');
+    expect(fetch).toHaveBeenNthCalledWith(2, 'https://www.policyengine.org/api/metadata/us', expect.anything());
     expect(result.programs).toBe(programs);
     expect(result.source).toEqual({ kind: 'fallback' });
   });
@@ -210,12 +220,12 @@ describe('program source loading', () => {
     const { fetchProgramsWithSource } = await import('../data/fetchPrograms');
     const result = await fetchProgramsWithSource('uk');
     expect(fetch).toHaveBeenNthCalledWith(1, '/uk/model/programs-uk.json');
-    expect(fetch).toHaveBeenNthCalledWith(2, 'https://api.policyengine.org/uk/metadata');
+    expect(fetch).toHaveBeenNthCalledWith(2, 'https://www.policyengine.org/api/metadata/uk', expect.anything());
     expect(result).toEqual({ programs: [], source: { kind: 'fallback' } });
   });
 
   it('uses hardcoded programs when API metadata has no registry', async () => {
-    vi.mocked(fetch).mockResolvedValueOnce(response(null, 404)).mockResolvedValueOnce(response({ version: '1.764.6' }));
+    vi.mocked(fetch).mockResolvedValueOnce(response(null, 404)).mockResolvedValueOnce(metadataAnswer({ version: '1.764.6' }));
     const { fetchProgramsWithSource } = await import('../data/fetchPrograms');
     expect((await fetchProgramsWithSource()).source).toEqual({ kind: 'fallback' });
   });
